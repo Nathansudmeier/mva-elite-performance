@@ -97,13 +97,20 @@ export default function Players() {
             className="elite-card elite-card-hover p-4 block"
           >
             <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-xl bg-[#222] overflow-hidden flex items-center justify-center text-lg font-bold shrink-0">
+              <label
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-14 h-14 rounded-xl bg-[#222] overflow-hidden flex items-center justify-center text-lg font-bold shrink-0 cursor-pointer group"
+              >
                 {player.photo_url ? (
                   <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
                 ) : (
                   <User size={24} className="text-[#666]" />
                 )}
-              </div>
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Camera size={16} className="text-white" />
+                </div>
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleQuickPhoto(e, player)} />
+              </label>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   {player.shirt_number && (
