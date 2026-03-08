@@ -68,6 +68,15 @@ export default function Players() {
 
   const activePlayers = players.filter((p) => p.active !== false);
 
+  const handleQuickPhoto = async (e, player) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    if (!file) return;
+    const res = await base44.integrations.Core.UploadFile({ file });
+    await base44.entities.Player.update(player.id, { photo_url: res.file_url });
+    queryClient.invalidateQueries({ queryKey: ["players"] });
+  };
+
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
