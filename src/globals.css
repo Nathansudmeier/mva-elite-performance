@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --orange: #FF6B00;
+  --royal-blue: #1a3a8f;
+  --royal-blue-light: #2a4faf;
+  --dark-bg: #0a0a0a;
+  --dark-card: #141414;
+  --dark-card-hover: #1a1a1a;
+  --dark-border: #222222;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+}
+
+@layer base {
+  body {
+    @apply bg-[#0a0a0a] text-white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  :root {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 68% 33%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 222 68% 33%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 24 100% 50%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer components {
+  .elite-card {
+    @apply bg-[#141414] border border-[#222] rounded-xl;
+  }
+  .elite-card-hover {
+    @apply hover:border-[#333] hover:bg-[#1a1a1a] transition-all duration-300;
+  }
+  .accent-orange {
+    @apply text-[#FF6B00];
+  }
+  .bg-orange {
+    @apply bg-[#FF6B00] hover:bg-[#e06000];
+  }
+  .accent-blue {
+    @apply text-[#1a3a8f];
+  }
+  .bg-blue-royal {
+    @apply bg-[#1a3a8f] hover:bg-[#2a4faf];
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+/* Recharts dark theme */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #222 !important;
+}
+.recharts-text {
+  fill: #a0a0a0 !important;
+}
