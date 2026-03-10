@@ -38,12 +38,12 @@ export default function WinningTeamUpload({ players, onSaved }) {
   return (
     <div className="elite-card p-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-lg bg-[#1a3a8f]/20 flex items-center justify-center">
-          <Camera size={20} className="text-[#1a3a8f]" />
+        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor:'#FDE8DC'}}>
+          <Camera size={20} style={{color:'#D45A30'}} />
         </div>
         <div>
-          <h2 className="text-lg font-bold">Winnend Team</h2>
-          <p className="text-xs text-[#a0a0a0]">Registreer het winnende team van vandaag</p>
+          <h2 className="text-lg font-bold text-[#1A1F2E]">Winnend Team</h2>
+          <p className="text-xs text-[#2F3650]">Registreer het winnende team van vandaag</p>
         </div>
       </div>
 
@@ -51,7 +51,8 @@ export default function WinningTeamUpload({ players, onSaved }) {
         type="date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
-        className="mb-4 bg-[#0a0a0a] border-[#333] text-white"
+        className="mb-4 border-[#FDE8DC] text-[#1A1F2E]"
+        style={{backgroundColor:'#FFF5F0'}}
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4 max-h-48 overflow-y-auto">
@@ -59,11 +60,12 @@ export default function WinningTeamUpload({ players, onSaved }) {
           <button
             key={p.id}
             onClick={() => togglePlayer(p.id)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all font-medium ${
               selectedPlayers.includes(p.id)
-                ? "bg-[#FF6B00] text-white"
-                : "bg-[#0a0a0a] text-[#a0a0a0] hover:bg-[#1a1a1a]"
+                ? "text-white"
+                : "text-[#1A1F2E] hover:opacity-80"
             }`}
+            style={selectedPlayers.includes(p.id) ? {backgroundColor:'#D45A30'} : {backgroundColor:'#FDE8DC'}}
           >
             {selectedPlayers.includes(p.id) && <Check size={14} />}
             <span className="truncate">{p.name?.split(" ")[0]}</span>
@@ -71,9 +73,9 @@ export default function WinningTeamUpload({ players, onSaved }) {
         ))}
       </div>
 
-      <label className="flex items-center gap-2 px-4 py-3 rounded-lg border border-dashed border-[#333] bg-[#0a0a0a] cursor-pointer hover:border-[#FF6B00] transition-colors mb-4">
-        <Upload size={16} className="text-[#a0a0a0]" />
-        <span className="text-sm text-[#a0a0a0]">
+      <label className="flex items-center gap-2 px-4 py-3 rounded-lg border border-dashed cursor-pointer transition-colors mb-4" style={{borderColor:'#FDE8DC', backgroundColor:'#FFF5F0', color:'#2F3650'}}>
+        <Upload size={16} style={{color:'#D45A30'}} />
+        <span className="text-sm">
           {photoFile ? photoFile.name : "Upload teamfoto"}
         </span>
         <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files[0])} />
@@ -82,7 +84,8 @@ export default function WinningTeamUpload({ players, onSaved }) {
       <Button
         onClick={handleSave}
         disabled={saving || selectedPlayers.length === 0}
-        className="w-full bg-[#FF6B00] hover:bg-[#e06000] text-white font-semibold"
+        className="w-full text-white font-semibold"
+        style={{backgroundColor:'#D45A30'}}
       >
         {saving ? "Opslaan..." : `Opslaan (${selectedPlayers.length} speelsters)`}
       </Button>
