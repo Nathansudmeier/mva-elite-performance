@@ -50,7 +50,7 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </Link>
           </div>
-          <div className="text-xs text-[#a0a0a0] bg-[#141414] px-3 py-1.5 rounded-full border border-[#222]">
+          <div className="text-xs text-[#C8D0E0] px-3 py-1.5 rounded-full border" style={{backgroundColor: '#1A1F2E', borderColor: 'rgba(255,255,255,0.08)'}}>
             Seizoen 2025-26
           </div>
         </div>
