@@ -41,8 +41,8 @@ export default function Layout({ children, currentPageName }) {
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
             <Link to={createPageUrl("Dashboard")} className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-[#FF6B00] flex items-center justify-center">
-                <Shield size={20} className="text-white" />
+              <div className="w-9 h-9 rounded-full overflow-hidden">
+                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/f4c654af8_Artemis.png" alt="FC MV Artemis Noord" className="w-full h-full object-cover" />
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-base font-bold tracking-tight leading-none">MVA NOORD</h1>

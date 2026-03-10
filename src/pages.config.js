@@ -47,28 +47,28 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Dashboard from './pages/Dashboard';
-import Players from './pages/Players';
-import PlayerDetail from './pages/PlayerDetail';
 import Attendance from './pages/Attendance';
+import Dashboard from './pages/Dashboard';
 import PhysicalMonitor from './pages/PhysicalMonitor';
+import PlayerDetail from './pages/PlayerDetail';
+import Players from './pages/Players';
+import Reports from './pages/Reports';
+import SelfReflection from './pages/SelfReflection';
 import Tactics from './pages/Tactics';
 import VideoHub from './pages/VideoHub';
-import SelfReflection from './pages/SelfReflection';
-import Reports from './pages/Reports';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Dashboard": Dashboard,
-    "Players": Players,
-    "PlayerDetail": PlayerDetail,
     "Attendance": Attendance,
+    "Dashboard": Dashboard,
     "PhysicalMonitor": PhysicalMonitor,
+    "PlayerDetail": PlayerDetail,
+    "Players": Players,
+    "Reports": Reports,
+    "SelfReflection": SelfReflection,
     "Tactics": Tactics,
     "VideoHub": VideoHub,
-    "SelfReflection": SelfReflection,
-    "Reports": Reports,
 }
 
 export const pagesConfig = {
