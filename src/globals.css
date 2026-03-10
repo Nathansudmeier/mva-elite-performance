@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --color-bg-primary:    #0D1117;
-  --color-bg-surface:    #1A1F2E;
-  --color-bg-card:       #2A3045;
-  --color-accent-flame:  #FF6B2B;
-  --color-accent-ember:  #E84D0E;
-  --color-accent-molten: #FF8C4A;
-  --color-text-primary:  #F0F4FF;
-  --color-text-muted:    #C8D0E0;
+  --color-bg-primary:    #E8724A;
+  --color-bg-surface:    #D4613A;
+  --color-bg-card:       rgba(255,255,255,0.12);
+  --color-accent-flame:  #fff;
+  --color-accent-ember:  #ffe0d4;
+  --color-accent-molten: #ffd0bb;
+  --color-text-primary:  #FFFFFF;
+  --color-text-muted:    rgba(255,255,255,0.75);
 }
 
 @layer base {
