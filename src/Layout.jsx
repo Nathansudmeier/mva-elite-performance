@@ -67,9 +67,10 @@ export default function Layout({ children, currentPageName }) {
                 to={createPageUrl(item.page)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? "bg-[#1a3a8f] text-white"
-                    : "text-[#a0a0a0] hover:text-white hover:bg-[#141414]"
+                    ? "text-[#F0F4FF]"
+                    : "text-[#C8D0E0] hover:text-[#F0F4FF]"
                 }`}
+                style={isActive ? {backgroundColor: '#2A3045'} : undefined}
               >
                 <item.icon size={18} className={isActive ? "text-[#FF6B00]" : ""} />
                 {item.name}
