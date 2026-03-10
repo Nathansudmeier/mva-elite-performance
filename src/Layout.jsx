@@ -126,7 +126,7 @@ export default function Layout({ children, currentPageName }) {
                 key={item.page}
                 to={createPageUrl(item.page)}
                 className={`flex flex-col items-center gap-0.5 px-2 py-1 ${
-                  isActive ? "text-[#FF6B00]" : "text-[#666]"
+                  isActive ? "text-[#FF6B2B]" : "text-[#C8D0E0]"
                 }`}
               >
                 <item.icon size={18} />
