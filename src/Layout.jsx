@@ -72,7 +72,7 @@ export default function Layout({ children, currentPageName }) {
                 }`}
                 style={isActive ? {backgroundColor: '#2A3045'} : undefined}
               >
-                <item.icon size={18} className={isActive ? "text-[#FF6B00]" : ""} />
+                <item.icon size={18} style={isActive ? {color: '#FF6B2B'} : undefined} />
                 {item.name}
               </Link>
             );
@@ -83,7 +83,7 @@ export default function Layout({ children, currentPageName }) {
       {/* Mobile nav overlay */}
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
-          <div className="w-64 h-full bg-[#0a0a0a] border-r border-[#222] pt-20 px-3" onClick={(e) => e.stopPropagation()}>
+          <div className="w-64 h-full border-r pt-20 px-3" style={{backgroundColor: '#0D1117', borderColor: 'rgba(255,255,255,0.08)'}} onClick={(e) => e.stopPropagation()}>
             <nav className="space-y-1">
               {navItems.map((item) => {
                 const isActive = currentPageName === item.page;
@@ -94,11 +94,12 @@ export default function Layout({ children, currentPageName }) {
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all ${
                       isActive
-                        ? "bg-[#1a3a8f] text-white"
-                        : "text-[#a0a0a0] hover:text-white hover:bg-[#141414]"
+                        ? "text-[#F0F4FF]"
+                        : "text-[#C8D0E0] hover:text-[#F0F4FF]"
                     }`}
+                    style={isActive ? {backgroundColor: '#2A3045'} : undefined}
                   >
-                    <item.icon size={18} className={isActive ? "text-[#FF6B00]" : ""} />
+                    <item.icon size={18} style={isActive ? {color: '#FF6B2B'} : undefined} />
                     {item.name}
                   </Link>
                 );
