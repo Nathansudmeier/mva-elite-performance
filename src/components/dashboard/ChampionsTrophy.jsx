@@ -55,8 +55,8 @@ export default function ChampionsTrophy({ players, attendanceData, winningTeams 
               className="flex flex-col items-center"
             >
               <div className="relative mb-2">
-                {rank === 1 && <Crown size={16} className="text-[#FF6B00] absolute -top-5 left-1/2 -translate-x-1/2" />}
-                <div className="w-12 h-12 rounded-full bg-[#222] border-2 border-[#333] overflow-hidden flex items-center justify-center text-sm font-bold">
+                {rank === 1 && <Crown size={16} className="text-[#D45A30] absolute -top-5 left-1/2 -translate-x-1/2" />}
+                <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center text-sm font-bold text-white" style={{backgroundColor:'#2F3650', border:'2px solid #FDE8DC'}}>
                   {p.photo_url ? (
                     <img src={p.photo_url} alt={p.name} className="w-full h-full object-cover" />
                   ) : (
