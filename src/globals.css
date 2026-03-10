@@ -46,34 +46,36 @@
 
 @layer components {
   .elite-card {
-    background-color: #2A3045;
-    border: 1px solid rgba(255,255,255,0.08);
+    background-color: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
     border-radius: 0.75rem;
+    backdrop-filter: blur(8px);
   }
   .elite-card-hover {
-    @apply hover:border-white/15 transition-all duration-300;
-    background-color: #2A3045;
+    @apply hover:border-white/30 transition-all duration-300;
+    background-color: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
   }
   .elite-card-hover:hover {
-    background-color: #313850;
+    background-color: rgba(255,255,255,0.18);
   }
   .accent-orange {
-    color: #FF6B2B;
+    color: #fff;
   }
   .bg-orange {
-    background-color: #FF6B2B;
+    background-color: rgba(255,255,255,0.25);
   }
   .bg-orange:hover {
-    background-color: #E84D0E;
+    background-color: rgba(255,255,255,0.35);
   }
   .accent-blue {
-    color: #FF8C4A;
+    color: rgba(255,255,255,0.85);
   }
   .bg-blue-royal {
-    background-color: #1A1F2E;
+    background-color: rgba(255,255,255,0.08);
   }
   .bg-blue-royal:hover {
-    background-color: #2A3045;
+    background-color: rgba(255,255,255,0.15);
   }
 }
 
