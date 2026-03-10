@@ -45,8 +45,8 @@ export default function Layout({ children, currentPageName }) {
                 <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/f4c654af8_Artemis.png" alt="FC MV Artemis Noord" className="w-full h-full object-cover" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-base font-bold tracking-tight leading-none">MVA NOORD</h1>
-                <p className="text-[10px] text-[#a0a0a0] tracking-[0.2em] uppercase">MO17 Elite</p>
+                <h1 className="text-base font-bold tracking-tight leading-none text-white">MVA NOORD</h1>
+                <p className="text-[10px] text-white/70 tracking-[0.2em] uppercase">MO17 Elite</p>
               </div>
             </Link>
           </div>
