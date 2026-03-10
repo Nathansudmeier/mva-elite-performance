@@ -72,7 +72,7 @@ export default function Layout({ children, currentPageName }) {
                 }`}
                 style={isActive ? {backgroundColor: 'rgba(255,255,255,0.2)'} : undefined}
               >
-                <item.icon size={18} style={isActive ? {color: '#FF6B2B'} : undefined} />
+                <item.icon size={18} />
                 {item.name}
               </Link>
             );
@@ -82,8 +82,8 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Mobile nav overlay */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
-          <div className="w-64 h-full border-r pt-20 px-3" style={{backgroundColor: '#0D1117', borderColor: 'rgba(255,255,255,0.08)'}} onClick={(e) => e.stopPropagation()}>
+        <div className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
+          <div className="w-64 h-full border-r pt-20 px-3" style={{backgroundColor: 'rgba(200,85,45,0.99)', borderColor: 'rgba(255,255,255,0.2)'}} onClick={(e) => e.stopPropagation()}>
             <nav className="space-y-1">
               {navItems.map((item) => {
                 const isActive = currentPageName === item.page;
