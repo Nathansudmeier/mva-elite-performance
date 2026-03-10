@@ -44,7 +44,7 @@ export default function ChampionsTrophy({ players, attendanceData, winningTeams 
           const p = topThree[idx];
           if (!p) return <div key={idx} className="w-24" />;
           const heights = ["h-32", "h-24", "h-20"];
-          const bgColors = ["bg-[#FF6B00]", "bg-[#1a3a8f]", "bg-[#333]"];
+          const bgColors = ["bg-[#D45A30]", "bg-[#2F3650]", "bg-[#F0926E]"];
           const rank = idx === 0 ? 1 : idx === 1 ? 2 : 3;
           return (
             <motion.div
