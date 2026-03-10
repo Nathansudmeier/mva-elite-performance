@@ -31,7 +31,7 @@ export default function Layout({ children, currentPageName }) {
   return (
     <div className="min-h-screen text-[#F0F4FF]" style={{backgroundColor: '#0D1117'}}>
       {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#222]">
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b" style={{backgroundColor: 'rgba(13,17,23,0.95)', borderColor: 'rgba(255,255,255,0.08)'}}>
         <div className="flex items-center justify-between px-4 h-16">
           <div className="flex items-center gap-3">
             <button
