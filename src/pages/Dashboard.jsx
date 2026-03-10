@@ -39,8 +39,8 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
       <div>
-        <h1 className="text-2xl font-black">The Winning Team</h1>
-        <p className="text-sm text-[#a0a0a0]">MVA Noord MO17 — Dashboard</p>
+        <h1 className="text-2xl font-black text-white">The Winning Team</h1>
+        <p className="text-sm text-white/70">MVA Noord MO17 — Dashboard</p>
       </div>
 
       {/* Stats */}
