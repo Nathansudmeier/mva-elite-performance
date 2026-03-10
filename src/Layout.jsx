@@ -57,7 +57,7 @@ export default function Layout({ children, currentPageName }) {
       </header>
 
       {/* Sidebar desktop */}
-      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col bg-[#0a0a0a] border-r border-[#222] z-40">
+      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col border-r z-40" style={{backgroundColor: '#0D1117', borderColor: 'rgba(255,255,255,0.08)'}}>
         <nav className="flex-1 py-4 px-3 space-y-1">
           {navItems.map((item) => {
             const isActive = currentPageName === item.page;
