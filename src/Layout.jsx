@@ -29,7 +29,7 @@ export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen text-[#F0F4FF]" style={{backgroundColor: '#0D1117'}}>
+    <div className="min-h-screen text-white" style={{backgroundColor: '#E8724A'}}>
       {/* Top bar */}
       <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b" style={{backgroundColor: 'rgba(13,17,23,0.95)', borderColor: 'rgba(255,255,255,0.08)'}}>
         <div className="flex items-center justify-between px-4 h-16">
