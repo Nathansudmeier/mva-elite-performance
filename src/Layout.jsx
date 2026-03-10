@@ -36,7 +36,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-[#1A1F2E]"
+              className="lg:hidden p-2 rounded-lg hover:bg-white/20"
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
