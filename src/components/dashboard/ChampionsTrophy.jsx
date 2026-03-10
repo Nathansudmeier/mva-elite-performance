@@ -29,12 +29,12 @@ export default function ChampionsTrophy({ players, attendanceData, winningTeams 
   return (
     <div className="elite-card p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-lg bg-[#FF6B00]/20 flex items-center justify-center">
-          <Trophy size={20} className="text-[#FF6B00]" />
+        <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor:'#FDE8DC'}}>
+          <Trophy size={20} style={{color:'#D45A30'}} />
         </div>
         <div>
-          <h2 className="text-lg font-bold">MVA Champions Trophy</h2>
-          <p className="text-xs text-[#a0a0a0]">Interne Competitie Ranglijst</p>
+          <h2 className="text-lg font-bold text-[#1A1F2E]">MVA Champions Trophy</h2>
+          <p className="text-xs text-[#2F3650]">Interne Competitie Ranglijst</p>
         </div>
       </div>
 
