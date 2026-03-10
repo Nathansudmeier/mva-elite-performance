@@ -3,43 +3,49 @@
 @tailwind utilities;
 
 :root {
+  --terracotta:    #E8724A;
+  --fired-clay:    #D45A30;
+  --cream-blush:   #FDE8DC;
+  --pure-white:    #FFFFFF;
+  --ivory-mist:    #FFF5F0;
+  --midnight-navy: #1A1F2E;
+  --ash-navy:      #2F3650;
+  --sun-dust:      #F0926E;
+
   --color-bg-primary:    #E8724A;
-  --color-bg-surface:    #D4613A;
-  --color-bg-card:       rgba(255,255,255,0.12);
-  --color-accent-flame:  #fff;
-  --color-accent-ember:  #ffe0d4;
-  --color-accent-molten: #ffd0bb;
-  --color-text-primary:  #FFFFFF;
-  --color-text-muted:    rgba(255,255,255,0.75);
+  --color-bg-surface:    #D45A30;
+  --color-bg-card:       #FFF5F0;
+  --color-text-primary:  #1A1F2E;
+  --color-text-muted:    #2F3650;
 }
 
 @layer base {
   body {
     background-color: #E8724A;
-    color: #FFFFFF;
+    color: #1A1F2E;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
   
   :root {
     --background: 18 76% 60%;
-    --foreground: 0 0% 100%;
-    --card: 16 65% 52%;
-    --card-foreground: 0 0% 100%;
-    --popover: 16 65% 52%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 0 0% 100%;
-    --primary-foreground: 18 76% 60%;
-    --secondary: 15 55% 50%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 15 55% 48%;
-    --muted-foreground: 0 0% 80%;
-    --accent: 15 55% 50%;
-    --accent-foreground: 0 0% 100%;
+    --foreground: 225 26% 14%;
+    --card: 22 100% 97%;
+    --card-foreground: 225 26% 14%;
+    --popover: 22 100% 97%;
+    --popover-foreground: 225 26% 14%;
+    --primary: 225 26% 14%;
+    --primary-foreground: 22 100% 97%;
+    --secondary: 17 85% 89%;
+    --secondary-foreground: 225 26% 14%;
+    --muted: 22 100% 95%;
+    --muted-foreground: 222 22% 26%;
+    --accent: 17 85% 89%;
+    --accent-foreground: 225 26% 14%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 100% / 0.2;
-    --input: 15 55% 48%;
-    --ring: 0 0% 100%;
+    --border: 17 60% 80%;
+    --input: 22 100% 95%;
+    --ring: 225 26% 14%;
     --radius: 0.75rem;
   }
 }
