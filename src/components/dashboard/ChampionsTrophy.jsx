@@ -79,22 +79,25 @@ export default function ChampionsTrophy({ players, attendanceData, winningTeams 
         {leaderboard.map((p, i) => (
           <div
             key={p.id}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#0a0a0a] hover:bg-[#1a1a1a] transition-colors"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors"
+          style={{backgroundColor:'#FDE8DC'}}
+          onMouseEnter={e => e.currentTarget.style.backgroundColor='#FFF5F0'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor='#FDE8DC'}
           >
-            <span className={`w-6 text-center text-sm font-bold ${i < 3 ? "text-[#FF6B00]" : "text-[#666]"}`}>
+            <span className={`w-6 text-center text-sm font-bold ${i < 3 ? "text-[#D45A30]" : "text-[#2F3650]"}`}>
               {i + 1}
             </span>
-            <div className="w-8 h-8 rounded-full bg-[#222] overflow-hidden flex items-center justify-center text-xs font-bold">
+            <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center text-xs font-bold text-white" style={{backgroundColor:'#2F3650'}}>
               {p.photo_url ? (
                 <img src={p.photo_url} alt={p.name} className="w-full h-full object-cover" />
               ) : (
                 p.name?.charAt(0)
               )}
             </div>
-            <span className="flex-1 text-sm font-medium">{p.name}</span>
+            <span className="flex-1 text-sm font-medium text-[#1A1F2E]">{p.name}</span>
             <div className="text-right">
-              <span className="text-sm font-bold text-[#FF6B00]">{(p.winRatio * 100).toFixed(0)}%</span>
-              <span className="text-xs text-[#666] ml-2">{p.timesWon}W / {p.timesPresent}P</span>
+              <span className="text-sm font-bold text-[#D45A30]">{(p.winRatio * 100).toFixed(0)}%</span>
+              <span className="text-xs text-[#2F3650] ml-2">{p.timesWon}W / {p.timesPresent}P</span>
             </div>
           </div>
         ))}
