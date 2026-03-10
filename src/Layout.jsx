@@ -117,7 +117,7 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Bottom nav mobile */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 backdrop-blur-md border-t z-40" style={{backgroundColor: 'rgba(13,17,23,0.97)', borderColor: 'rgba(255,255,255,0.08)'}}>
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 backdrop-blur-md border-t z-40" style={{backgroundColor: 'rgba(200,85,45,0.99)', borderColor: 'rgba(255,255,255,0.2)'}}>
         <div className="flex justify-around py-2">
           {navItems.slice(0, 5).map((item) => {
             const isActive = currentPageName === item.page;
