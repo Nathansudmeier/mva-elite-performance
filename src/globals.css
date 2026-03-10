@@ -52,36 +52,49 @@
 
 @layer components {
   .elite-card {
-    background-color: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.18);
+    background-color: #FFF5F0;
+    border: 1px solid #FDE8DC;
     border-radius: 0.75rem;
-    backdrop-filter: blur(8px);
+    color: #1A1F2E;
   }
   .elite-card-hover {
-    @apply hover:border-white/30 transition-all duration-300;
-    background-color: rgba(255,255,255,0.12);
-    backdrop-filter: blur(8px);
+    background-color: #FFF5F0;
+    border: 1px solid #FDE8DC;
+    border-radius: 0.75rem;
+    color: #1A1F2E;
+    transition: all 0.3s;
   }
   .elite-card-hover:hover {
-    background-color: rgba(255,255,255,0.18);
+    background-color: #FFFFFF;
+    border-color: #F0926E;
+    box-shadow: 0 4px 20px rgba(212,90,48,0.15);
   }
   .accent-orange {
-    color: #fff;
+    color: #D45A30;
   }
   .bg-orange {
-    background-color: rgba(255,255,255,0.25);
+    background-color: #F0926E;
+    color: #1A1F2E;
   }
   .bg-orange:hover {
-    background-color: rgba(255,255,255,0.35);
+    background-color: #E8724A;
+    color: #FFFFFF;
   }
   .accent-blue {
-    color: rgba(255,255,255,0.85);
+    color: #2F3650;
   }
   .bg-blue-royal {
-    background-color: rgba(255,255,255,0.08);
+    background-color: #FDE8DC;
+    color: #1A1F2E;
   }
   .bg-blue-royal:hover {
-    background-color: rgba(255,255,255,0.15);
+    background-color: #FFF5F0;
+  }
+  .nav-text {
+    color: #FFFFFF;
+  }
+  .nav-text-muted {
+    color: rgba(255,255,255,0.8);
   }
 }
 
