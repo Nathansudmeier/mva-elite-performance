@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
-import { Activity, Timer, Zap, Heart, Plus } from "lucide-react";
+import { Activity, Timer, Heart, Plus } from "lucide-react";
 
 export default function PhysicalMonitor() {
   const queryClient = useQueryClient();
@@ -52,13 +52,11 @@ export default function PhysicalMonitor() {
     },
   });
 
-  // Yo-Yo chart data - latest per player
   const yoyoByPlayer = activePlayers.map((p) => {
     const tests = yoyoTests.filter((t) => t.player_id === p.id).sort((a, b) => new Date(b.date) - new Date(a.date));
     return { name: p.name?.split(" ")[0], level: tests[0] ? parseFloat(tests[0].level) || 0 : 0 };
   }).sort((a, b) => b.level - a.level);
 
-  // Yo-Yo progression over time (all players)
   const yoyoProgression = yoyoTests
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .map((t) => ({
@@ -67,41 +65,48 @@ export default function PhysicalMonitor() {
       player: players.find((p) => p.id === t.player_id)?.name?.split(" ")[0] || "",
     }));
 
+  const chartTooltipStyle = { backgroundColor: '#FFF5F0', border: '1px solid #FDE8DC', borderRadius: 8, color: '#1A1F2E' };
+
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black">Fysieke Monitor</h1>
-          <p className="text-sm text-[#a0a0a0]">Yo-Yo, Sprint, Sprongkracht & Belastbaarheid</p>
+          <h1 className="text-2xl font-black text-white">Fysieke Monitor</h1>
+          <p className="text-sm text-white/70">Yo-Yo, Sprint, Sprongkracht & Belastbaarheid</p>
         </div>
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="bg-[#141414] border border-[#222]">
-          <TabsTrigger value="yoyo" className="data-[state=active]:bg-[#1a3a8f]">Yo-Yo Test</TabsTrigger>
-          <TabsTrigger value="physical" className="data-[state=active]:bg-[#1a3a8f]">Sprint & Sprong</TabsTrigger>
-          <TabsTrigger value="wellness" className="data-[state=active]:bg-[#1a3a8f]">Belastbaarheid</TabsTrigger>
+        <TabsList className="border border-[#FDE8DC]" style={{ backgroundColor: '#FFF5F0' }}>
+          <TabsTrigger value="yoyo" className="data-[state=active]:text-white" style={{ '--tw-active-bg': '#1A1F2E' }} data-state={tab === 'yoyo' ? 'active' : undefined}>
+            <span style={tab === 'yoyo' ? { backgroundColor: '#1A1F2E', color: '#fff', borderRadius: '0.375rem', padding: '0.25rem 0.75rem' } : { color: '#2F3650' }}>Yo-Yo Test</span>
+          </TabsTrigger>
+          <TabsTrigger value="physical">
+            <span style={tab === 'physical' ? { backgroundColor: '#1A1F2E', color: '#fff', borderRadius: '0.375rem', padding: '0.25rem 0.75rem' } : { color: '#2F3650' }}>Sprint & Sprong</span>
+          </TabsTrigger>
+          <TabsTrigger value="wellness">
+            <span style={tab === 'wellness' ? { backgroundColor: '#1A1F2E', color: '#fff', borderRadius: '0.375rem', padding: '0.25rem 0.75rem' } : { color: '#2F3650' }}>Belastbaarheid</span>
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="yoyo" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button onClick={() => openDialog("yoyo")} className="bg-[#FF6B00] hover:bg-[#e06000]">
+            <Button onClick={() => openDialog("yoyo")} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
               <Plus size={16} className="mr-1" /> Yo-Yo Test
             </Button>
           </div>
-          {/* Bar-style overview */}
           <div className="elite-card p-6">
-            <h2 className="font-bold mb-4 flex items-center gap-2">
-              <Activity size={18} className="text-[#FF6B00]" /> Huidig Yo-Yo Niveau
+            <h2 className="font-bold mb-4 flex items-center gap-2 text-[#1A1F2E]">
+              <Activity size={18} style={{ color: '#D45A30' }} /> Huidig Yo-Yo Niveau
             </h2>
             <div className="space-y-2">
               {yoyoByPlayer.map((p) => (
                 <div key={p.name} className="flex items-center gap-3">
-                  <span className="text-sm w-20 truncate">{p.name}</span>
-                  <div className="flex-1 h-6 bg-[#0a0a0a] rounded-full overflow-hidden">
+                  <span className="text-sm w-20 truncate text-[#1A1F2E]">{p.name}</span>
+                  <div className="flex-1 h-6 rounded-full overflow-hidden" style={{ backgroundColor: '#FDE8DC' }}>
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#1a3a8f] to-[#FF6B00] flex items-center justify-end pr-2"
-                      style={{ width: `${Math.min((p.level / 23) * 100, 100)}%` }}
+                      className="h-full rounded-full flex items-center justify-end pr-2 text-white"
+                      style={{ width: `${Math.min((p.level / 23) * 100, 100)}%`, background: 'linear-gradient(90deg,#1A1F2E,#D45A30)' }}
                     >
                       <span className="text-[10px] font-bold">{p.level || "-"}</span>
                     </div>
@@ -110,18 +115,17 @@ export default function PhysicalMonitor() {
               ))}
             </div>
           </div>
-          {/* Progression chart */}
           {yoyoProgression.length > 0 && (
             <div className="elite-card p-6">
-              <h2 className="font-bold mb-4">Yo-Yo Progressie</h2>
+              <h2 className="font-bold mb-4 text-[#1A1F2E]">Yo-Yo Progressie</h2>
               <div className="h-56">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={yoyoProgression}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#222" />
-                    <XAxis dataKey="date" tick={{ fill: "#a0a0a0", fontSize: 11 }} />
-                    <YAxis tick={{ fill: "#a0a0a0", fontSize: 11 }} />
-                    <Tooltip contentStyle={{ backgroundColor: "#141414", border: "1px solid #333", borderRadius: 8, color: "#fff" }} />
-                    <Line type="monotone" dataKey="level" stroke="#FF6B00" strokeWidth={2} dot={{ fill: "#FF6B00", r: 4 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#FDE8DC" />
+                    <XAxis dataKey="date" tick={{ fill: '#2F3650', fontSize: 11 }} />
+                    <YAxis tick={{ fill: '#2F3650', fontSize: 11 }} />
+                    <Tooltip contentStyle={chartTooltipStyle} />
+                    <Line type="monotone" dataKey="level" stroke="#D45A30" strokeWidth={2} dot={{ fill: '#D45A30', r: 4 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -131,18 +135,18 @@ export default function PhysicalMonitor() {
 
         <TabsContent value="physical" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button onClick={() => openDialog("physical")} className="bg-[#FF6B00] hover:bg-[#e06000]">
+            <Button onClick={() => openDialog("physical")} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
               <Plus size={16} className="mr-1" /> Test Invoeren
             </Button>
           </div>
           <div className="elite-card p-6">
-            <h2 className="font-bold mb-4 flex items-center gap-2">
-              <Timer size={18} className="text-[#1a3a8f]" /> Sprint & Sprongkracht Resultaten
+            <h2 className="font-bold mb-4 flex items-center gap-2 text-[#1A1F2E]">
+              <Timer size={18} style={{ color: '#1A1F2E' }} /> Sprint & Sprongkracht Resultaten
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-[#a0a0a0] border-b border-[#222]">
+                  <tr className="border-b border-[#FDE8DC]" style={{ color: '#2F3650' }}>
                     <th className="text-left py-2">Speelster</th>
                     <th className="text-left py-2">Datum</th>
                     <th className="text-right py-2">Sprint 30m</th>
@@ -151,11 +155,11 @@ export default function PhysicalMonitor() {
                 </thead>
                 <tbody>
                   {physicalTests.sort((a, b) => new Date(b.date) - new Date(a.date)).map((t) => (
-                    <tr key={t.id} className="border-b border-[#111]">
-                      <td className="py-2 font-medium">{players.find((p) => p.id === t.player_id)?.name || "-"}</td>
-                      <td className="py-2 text-[#a0a0a0]">{format(new Date(t.date), "d MMM", { locale: nl })}</td>
-                      <td className="py-2 text-right text-[#FF6B00] font-bold">{t.sprint_30m ? `${t.sprint_30m}s` : "-"}</td>
-                      <td className="py-2 text-right text-[#1a3a8f] font-bold">{t.jump_height ? `${t.jump_height}cm` : "-"}</td>
+                    <tr key={t.id} className="border-b border-[#FDE8DC]">
+                      <td className="py-2 font-medium text-[#1A1F2E]">{players.find((p) => p.id === t.player_id)?.name || "-"}</td>
+                      <td className="py-2" style={{ color: '#2F3650' }}>{format(new Date(t.date), "d MMM", { locale: nl })}</td>
+                      <td className="py-2 text-right font-bold" style={{ color: '#D45A30' }}>{t.sprint_30m ? `${t.sprint_30m}s` : "-"}</td>
+                      <td className="py-2 text-right font-bold" style={{ color: '#1A1F2E' }}>{t.jump_height ? `${t.jump_height}cm` : "-"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -166,18 +170,18 @@ export default function PhysicalMonitor() {
 
         <TabsContent value="wellness" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button onClick={() => openDialog("wellness")} className="bg-[#FF6B00] hover:bg-[#e06000]">
+            <Button onClick={() => openDialog("wellness")} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
               <Plus size={16} className="mr-1" /> Log Invoeren
             </Button>
           </div>
           <div className="elite-card p-6">
-            <h2 className="font-bold mb-4 flex items-center gap-2">
-              <Heart size={18} className="text-red-500" /> Belastbaarheidslogboek
+            <h2 className="font-bold mb-4 flex items-center gap-2 text-[#1A1F2E]">
+              <Heart size={18} style={{ color: '#C0392B' }} /> Belastbaarheidslogboek
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-[#a0a0a0] border-b border-[#222]">
+                  <tr className="border-b border-[#FDE8DC]" style={{ color: '#2F3650' }}>
                     <th className="text-left py-2">Speelster</th>
                     <th className="text-left py-2">Datum</th>
                     <th className="text-center py-2">Slaap</th>
@@ -187,9 +191,9 @@ export default function PhysicalMonitor() {
                 </thead>
                 <tbody>
                   {wellness.sort((a, b) => new Date(b.date) - new Date(a.date)).map((w) => (
-                    <tr key={w.id} className="border-b border-[#111]">
-                      <td className="py-2 font-medium">{players.find((p) => p.id === w.player_id)?.name || "-"}</td>
-                      <td className="py-2 text-[#a0a0a0]">{format(new Date(w.date), "d MMM", { locale: nl })}</td>
+                    <tr key={w.id} className="border-b border-[#FDE8DC]">
+                      <td className="py-2 font-medium text-[#1A1F2E]">{players.find((p) => p.id === w.player_id)?.name || "-"}</td>
+                      <td className="py-2" style={{ color: '#2F3650' }}>{format(new Date(w.date), "d MMM", { locale: nl })}</td>
                       <td className="py-2 text-center">{renderScore(w.sleep)}</td>
                       <td className="py-2 text-center">{renderScore(w.fatigue)}</td>
                       <td className="py-2 text-center">{renderScore(w.muscle_pain)}</td>
@@ -202,71 +206,56 @@ export default function PhysicalMonitor() {
         </TabsContent>
       </Tabs>
 
-      {/* Dialog for adding data */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-[#141414] border-[#222] text-white max-w-sm">
+        <DialogContent className="max-w-sm border-[#FDE8DC]" style={{ backgroundColor: '#FFF5F0', color: '#1A1F2E' }}>
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle style={{ color: '#1A1F2E' }}>
               {dialogType === "yoyo" ? "Yo-Yo Test" : dialogType === "physical" ? "Sprint & Sprong Test" : "Belastbaarheid Log"}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <Select value={selectedPlayer} onValueChange={setSelectedPlayer}>
-              <SelectTrigger className="bg-[#0a0a0a] border-[#333]">
+              <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }}>
                 <SelectValue placeholder="Selecteer speelster" />
               </SelectTrigger>
               <SelectContent>
-                {activePlayers.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
-                ))}
+                {activePlayers.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Input type="date" value={form.date || ""} onChange={(e) => setForm({ ...form, date: e.target.value })} className="bg-[#0a0a0a] border-[#333]" />
+            <Input type="date" value={form.date || ""} onChange={(e) => setForm({ ...form, date: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
 
             {dialogType === "yoyo" && (
               <>
-                <Input placeholder="Yo-Yo niveau (bijv. 16.2)" value={form.level || ""} onChange={(e) => setForm({ ...form, level: e.target.value })} className="bg-[#0a0a0a] border-[#333]" />
-                <Input type="number" placeholder="Afstand (m)" value={form.distance || ""} onChange={(e) => setForm({ ...form, distance: e.target.value })} className="bg-[#0a0a0a] border-[#333]" />
+                <Input placeholder="Yo-Yo niveau (bijv. 16.2)" value={form.level || ""} onChange={(e) => setForm({ ...form, level: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+                <Input type="number" placeholder="Afstand (m)" value={form.distance || ""} onChange={(e) => setForm({ ...form, distance: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
               </>
             )}
-
             {dialogType === "physical" && (
               <>
-                <Input type="number" step="0.01" placeholder="Sprint 30m (sec)" value={form.sprint_30m || ""} onChange={(e) => setForm({ ...form, sprint_30m: e.target.value })} className="bg-[#0a0a0a] border-[#333]" />
-                <Input type="number" placeholder="Sprongkracht (cm)" value={form.jump_height || ""} onChange={(e) => setForm({ ...form, jump_height: e.target.value })} className="bg-[#0a0a0a] border-[#333]" />
+                <Input type="number" step="0.01" placeholder="Sprint 30m (sec)" value={form.sprint_30m || ""} onChange={(e) => setForm({ ...form, sprint_30m: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+                <Input type="number" placeholder="Sprongkracht (cm)" value={form.jump_height || ""} onChange={(e) => setForm({ ...form, jump_height: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
               </>
             )}
-
             {dialogType === "wellness" && (
               <>
-                <div>
-                  <label className="text-xs text-[#a0a0a0] mb-1 block">Slaapkwaliteit (1-5)</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map((v) => (
-                      <button key={v} onClick={() => setForm({ ...form, sleep: v })} className={`w-10 h-10 rounded-lg font-bold text-sm ${form.sleep === v ? "bg-[#FF6B00] text-white" : "bg-[#0a0a0a] text-[#666]"}`}>{v}</button>
-                    ))}
+                {[["sleep","Slaapkwaliteit"],["fatigue","Vermoeidheid"],["muscle_pain","Spierpijn"]].map(([key, label]) => (
+                  <div key={key}>
+                    <label className="text-xs mb-1 block font-medium" style={{ color: '#2F3650' }}>{label} (1-5)</label>
+                    <div className="flex gap-2">
+                      {[1,2,3,4,5].map((v) => (
+                        <button key={v} onClick={() => setForm({ ...form, [key]: v })}
+                          className="w-10 h-10 rounded-lg font-bold text-sm transition-all"
+                          style={form[key] === v ? { backgroundColor: '#D45A30', color: '#fff' } : { backgroundColor: '#FDE8DC', color: '#1A1F2E' }}>
+                          {v}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <label className="text-xs text-[#a0a0a0] mb-1 block">Vermoeidheid (1-5)</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map((v) => (
-                      <button key={v} onClick={() => setForm({ ...form, fatigue: v })} className={`w-10 h-10 rounded-lg font-bold text-sm ${form.fatigue === v ? "bg-[#FF6B00] text-white" : "bg-[#0a0a0a] text-[#666]"}`}>{v}</button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <label className="text-xs text-[#a0a0a0] mb-1 block">Spierpijn (1-5)</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map((v) => (
-                      <button key={v} onClick={() => setForm({ ...form, muscle_pain: v })} className={`w-10 h-10 rounded-lg font-bold text-sm ${form.muscle_pain === v ? "bg-[#FF6B00] text-white" : "bg-[#0a0a0a] text-[#666]"}`}>{v}</button>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </>
             )}
 
-            <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !selectedPlayer} className="w-full bg-[#FF6B00] hover:bg-[#e06000]">
+            <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !selectedPlayer} className="w-full text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
             </Button>
           </div>
@@ -277,7 +266,7 @@ export default function PhysicalMonitor() {
 }
 
 function renderScore(score) {
-  if (!score) return "-";
-  const colors = ["", "#ef4444", "#f97316", "#eab308", "#22c55e", "#10b981"];
-  return <span className="font-bold" style={{ color: colors[score] || "#666" }}>{score}</span>;
+  if (!score) return <span style={{ color: '#2F3650' }}>-</span>;
+  const colors = ["", "#C0392B", "#F0926E", "#eab308", "#4CAF82", "#10b981"];
+  return <span className="font-bold" style={{ color: colors[score] || '#2F3650' }}>{score}</span>;
 }

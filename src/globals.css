@@ -103,21 +103,21 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #FDE8DC;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #D45A30;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: #E8724A;
 }
 
-/* Recharts dark theme */
+/* Recharts theme */
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
-  stroke: #222 !important;
+  stroke: #FDE8DC !important;
 }
 .recharts-text {
-  fill: #a0a0a0 !important;
+  fill: #2F3650 !important;
 }

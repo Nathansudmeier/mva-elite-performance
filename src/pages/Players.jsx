@@ -32,9 +32,7 @@ export default function Players() {
         photo_url = res.file_url;
       }
       const payload = { ...data, photo_url, shirt_number: data.shirt_number ? Number(data.shirt_number) : undefined };
-      if (editing) {
-        return base44.entities.Player.update(editing.id, payload);
-      }
+      if (editing) return base44.entities.Player.update(editing.id, payload);
       return base44.entities.Player.create(payload);
     },
     onSuccess: () => {
@@ -48,15 +46,7 @@ export default function Players() {
 
   const openEdit = (player) => {
     setEditing(player);
-    setForm({
-      name: player.name || "",
-      position: player.position || "",
-      shirt_number: player.shirt_number || "",
-      iop_goal_1: player.iop_goal_1 || "",
-      iop_goal_2: player.iop_goal_2 || "",
-      iop_goal_3: player.iop_goal_3 || "",
-      photo_url: player.photo_url || "",
-    });
+    setForm({ name: player.name || "", position: player.position || "", shirt_number: player.shirt_number || "", iop_goal_1: player.iop_goal_1 || "", iop_goal_2: player.iop_goal_2 || "", iop_goal_3: player.iop_goal_3 || "", photo_url: player.photo_url || "" });
     setDialogOpen(true);
   };
 
@@ -81,58 +71,50 @@ export default function Players() {
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black">Speelsters</h1>
-          <p className="text-sm text-[#a0a0a0]">{activePlayers.length} speelsters in selectie</p>
+          <h1 className="text-2xl font-black text-white">Speelsters</h1>
+          <p className="text-sm text-white/70">{activePlayers.length} speelsters in selectie</p>
         </div>
-        <Button onClick={openNew} className="bg-[#FF6B00] hover:bg-[#e06000]">
+        <Button onClick={openNew} style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)', color: '#fff' }}>
           <Plus size={16} className="mr-1" /> Toevoegen
         </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {activePlayers.map((player) => (
-          <Link
-            key={player.id}
-            to={createPageUrl(`PlayerDetail?id=${player.id}`)}
-            className="elite-card elite-card-hover p-4 block"
-          >
+          <Link key={player.id} to={createPageUrl(`PlayerDetail?id=${player.id}`)} className="elite-card elite-card-hover p-4 block">
             <div className="flex items-start gap-4">
               <label
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-14 h-14 rounded-xl bg-[#222] overflow-hidden flex items-center justify-center text-lg font-bold shrink-0 cursor-pointer group"
+                className="relative w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center text-lg font-bold shrink-0 cursor-pointer group"
+                style={{ backgroundColor: '#FDE8DC' }}
               >
                 {player.photo_url ? (
                   <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
                 ) : (
-                  <User size={24} className="text-[#666]" />
+                  <User size={24} style={{ color: '#2F3650' }} />
                 )}
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: 'rgba(26,31,46,0.6)' }}>
                   <Camera size={16} className="text-white" />
                 </div>
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => handleQuickPhoto(e, player)} />
               </label>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  {player.shirt_number && (
-                    <span className="text-[#FF6B00] font-black text-sm">#{player.shirt_number}</span>
-                  )}
-                  <h3 className="font-bold text-sm truncate">{player.name}</h3>
+                  {player.shirt_number && <span className="font-black text-sm" style={{ color: '#D45A30' }}>#{player.shirt_number}</span>}
+                  <h3 className="font-bold text-sm truncate text-[#1A1F2E]">{player.name}</h3>
                 </div>
-                <p className="text-xs text-[#a0a0a0] mt-0.5">{player.position || "Geen positie"}</p>
+                <p className="text-xs mt-0.5" style={{ color: '#2F3650' }}>{player.position || "Geen positie"}</p>
                 {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
                   <div className="flex items-center gap-1 mt-2">
-                    <Target size={10} className="text-[#1a3a8f]" />
-                    <span className="text-[10px] text-[#666]">
+                    <Target size={10} style={{ color: '#D45A30' }} />
+                    <span className="text-[10px]" style={{ color: '#2F3650' }}>
                       {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).length} IOP doelen
                     </span>
                   </div>
                 )}
               </div>
-              <button
-                onClick={(e) => { e.preventDefault(); openEdit(player); }}
-                className="p-2 rounded-lg hover:bg-[#222] transition-colors"
-              >
-                <Edit2 size={14} className="text-[#666]" />
+              <button onClick={(e) => { e.preventDefault(); openEdit(player); }} className="p-2 rounded-lg transition-colors hover:bg-[#FDE8DC]">
+                <Edit2 size={14} style={{ color: '#2F3650' }} />
               </button>
             </div>
           </Link>
@@ -140,54 +122,35 @@ export default function Players() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-[#141414] border-[#222] text-white max-w-md">
+        <DialogContent className="max-w-md border-[#FDE8DC]" style={{ backgroundColor: '#FFF5F0', color: '#1A1F2E' }}>
           <DialogHeader>
-            <DialogTitle>{editing ? "Speelster Bewerken" : "Nieuwe Speelster"}</DialogTitle>
+            <DialogTitle style={{ color: '#1A1F2E' }}>{editing ? "Speelster Bewerken" : "Nieuwe Speelster"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <Input
-              placeholder="Naam"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="bg-[#0a0a0a] border-[#333]"
-            />
+            <Input placeholder="Naam" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
             <div className="grid grid-cols-2 gap-3">
               <Select value={form.position} onValueChange={(v) => setForm({ ...form, position: v })}>
-                <SelectTrigger className="bg-[#0a0a0a] border-[#333]">
+                <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }}>
                   <SelectValue placeholder="Positie" />
                 </SelectTrigger>
                 <SelectContent>
-                  {POSITIONS.map((p) => (
-                    <SelectItem key={p} value={p}>{p}</SelectItem>
-                  ))}
+                  {POSITIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
-              <Input
-                type="number"
-                placeholder="Rugnummer"
-                value={form.shirt_number}
-                onChange={(e) => setForm({ ...form, shirt_number: e.target.value })}
-                className="bg-[#0a0a0a] border-[#333]"
-              />
+              <Input type="number" placeholder="Rugnummer" value={form.shirt_number} onChange={(e) => setForm({ ...form, shirt_number: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
             </div>
-            <label className="flex items-center gap-2 px-4 py-3 rounded-lg border border-dashed border-[#333] bg-[#0a0a0a] cursor-pointer hover:border-[#FF6B00] transition-colors">
-              <Upload size={16} className="text-[#a0a0a0]" />
-              <span className="text-sm text-[#a0a0a0]">
-                {photoFile ? photoFile.name : "Upload foto"}
-              </span>
+            <label className="flex items-center gap-2 px-4 py-3 rounded-lg border border-dashed cursor-pointer transition-colors" style={{ borderColor: '#D45A30', backgroundColor: '#FFF5F0' }}>
+              <Upload size={16} style={{ color: '#D45A30' }} />
+              <span className="text-sm" style={{ color: '#2F3650' }}>{photoFile ? photoFile.name : "Upload foto"}</span>
               <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files[0])} />
             </label>
             <div className="space-y-2">
-              <p className="text-xs text-[#FF6B00] font-semibold uppercase tracking-wider">IOP Doelen</p>
-              <Input placeholder="Doel 1" value={form.iop_goal_1} onChange={(e) => setForm({ ...form, iop_goal_1: e.target.value })} className="bg-[#0a0a0a] border-[#333]" />
-              <Input placeholder="Doel 2" value={form.iop_goal_2} onChange={(e) => setForm({ ...form, iop_goal_2: e.target.value })} className="bg-[#0a0a0a] border-[#333]" />
-              <Input placeholder="Doel 3" value={form.iop_goal_3} onChange={(e) => setForm({ ...form, iop_goal_3: e.target.value })} className="bg-[#0a0a0a] border-[#333]" />
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#D45A30' }}>IOP Doelen</p>
+              <Input placeholder="Doel 1" value={form.iop_goal_1} onChange={(e) => setForm({ ...form, iop_goal_1: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+              <Input placeholder="Doel 2" value={form.iop_goal_2} onChange={(e) => setForm({ ...form, iop_goal_2: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+              <Input placeholder="Doel 3" value={form.iop_goal_3} onChange={(e) => setForm({ ...form, iop_goal_3: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
             </div>
-            <Button
-              onClick={() => saveMutation.mutate(form)}
-              disabled={saveMutation.isPending || !form.name}
-              className="w-full bg-[#FF6B00] hover:bg-[#e06000]"
-            >
+            <Button onClick={() => saveMutation.mutate(form)} disabled={saveMutation.isPending || !form.name} className="w-full text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
             </Button>
           </div>
