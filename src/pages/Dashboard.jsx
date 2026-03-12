@@ -23,9 +23,18 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
-      <div>
-        <h1 className="text-2xl font-black text-white">The Winning Team</h1>
-        <p className="text-sm text-white/70">MVA Noord MO17 — Dashboard</p>
+      {/* Hero */}
+      <div className="relative rounded-2xl overflow-hidden" style={{ minHeight: 200 }}>
+        <img
+          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/1a4715c8c_background-MVA.png"
+          alt="MVA Noord Hero"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(26,31,46,0.55) 0%, rgba(212,90,48,0.35) 100%)' }} />
+        <div className="relative z-10 px-6 py-10">
+          <h1 className="text-3xl font-black text-white drop-shadow-lg">The Winning Team</h1>
+          <p className="text-sm text-white/80 mt-1 drop-shadow">MVA Noord MO17 — Dashboard</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
