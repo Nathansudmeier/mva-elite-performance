@@ -33,7 +33,7 @@ export default function Dashboard() {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(26,31,46,0.55) 0%, rgba(212,90,48,0.35) 100%)' }} />
         <div className="relative z-10 px-6 py-10">
           <h1 className="text-3xl font-black text-white drop-shadow-lg">The Winning Team</h1>
-          <p className="text-sm text-white/80 mt-1 drop-shadow">MVA Noord MO17 — Dashboard</p>
+          <p className="text-sm text-white/80 mt-1 drop-shadow">MVA Noord Training Dashboard</p>
         </div>
       </div>
 
