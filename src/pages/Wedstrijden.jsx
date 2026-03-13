@@ -49,6 +49,7 @@ export default function Wedstrijden() {
     setEditingMatch(null);
     setForm({ date: new Date().toISOString().split("T")[0], opponent: "", home_away: "Thuis", score_home: "", score_away: "", formation: "4-3-3", ball_possession: "", pressing: "", transition: "", set_pieces: "", notes: "" });
     setLineupMap({});
+    setSubstitutes([]);
     setDialogOpen(true);
   };
 
