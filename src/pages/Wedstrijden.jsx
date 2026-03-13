@@ -85,6 +85,7 @@ export default function Wedstrijden() {
       score_home: form.score_home !== "" ? Number(form.score_home) : undefined,
       score_away: form.score_away !== "" ? Number(form.score_away) : undefined,
       lineup: lineupMapToArray(lineupMap),
+      substitutes,
     });
   };
 
