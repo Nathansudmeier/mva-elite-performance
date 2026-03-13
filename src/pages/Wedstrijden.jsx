@@ -267,6 +267,14 @@ export default function Wedstrijden() {
               />
             </div>
 
+            {/* Substitutes */}
+            <SubstitutesPicker
+              players={activePlayers}
+              lineupMap={lineupMap}
+              substitutes={substitutes}
+              onSubstitutesChange={setSubstitutes}
+            />
+
             {/* Tactical notes */}
             <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#D45A30" }}>Tactische Notities</p>
             <div className="grid sm:grid-cols-2 gap-3">
