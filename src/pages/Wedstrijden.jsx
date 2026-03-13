@@ -31,6 +31,7 @@ export default function Wedstrijden() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingMatch, setEditingMatch] = useState(null);
   const [lineupMap, setLineupMap] = useState({});
+  const [substitutes, setSubstitutes] = useState([]);
   const [form, setForm] = useState({
     date: new Date().toISOString().split("T")[0],
     opponent: "", home_away: "Thuis", score_home: "", score_away: "",
