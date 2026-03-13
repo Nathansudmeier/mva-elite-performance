@@ -11,12 +11,14 @@ import {
   BarChart3,
   Menu,
   X,
-  Shield
+  Shield,
+  Swords
 } from "lucide-react";
 
 const navItems = [
   { name: "Dashboard", icon: Trophy, page: "Dashboard" },
   { name: "Speelsters", icon: Users, page: "Players" },
+  { name: "Wedstrijden", icon: Swords, page: "Wedstrijden" },
   { name: "Aanwezigheid", icon: ClipboardCheck, page: "Attendance" },
   { name: "Fysiek", icon: Activity, page: "PhysicalMonitor" },
   { name: "Tactiek", icon: Target, page: "Tactics" },
