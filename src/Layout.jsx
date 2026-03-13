@@ -48,7 +48,7 @@ export default function Layout({ children, currentPageName }) {
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-base font-bold tracking-tight leading-none text-white">MVA NOORD</h1>
-                <p className="text-[10px] text-white/70 tracking-[0.2em] uppercase">MO17 Elite</p>
+                <p className="text-[10px] text-white/70 tracking-[0.2em] uppercase">MO17 / Dames 1</p>
               </div>
             </Link>
           </div>
