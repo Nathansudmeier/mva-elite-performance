@@ -10,6 +10,8 @@ import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { Plus, ChevronRight, Edit2, Trophy, Shield, Swords, ArrowLeftRight, Flag } from "lucide-react";
 import FieldLineup from "../components/wedstrijden/FieldLineup";
+import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
+import SelectieOverzicht from "../components/wedstrijden/SelectieOverzicht";
 
 const TEAMS = ["MO17", "Dames 1"];
 const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
