@@ -195,6 +195,15 @@ export default function Wedstrijden() {
                 </div>
               )}
 
+              {/* Selectie overzicht */}
+              {detailMatch.lineup && detailMatch.lineup.length > 0 && (
+                <SelectieOverzicht
+                  lineup={detailMatch.lineup}
+                  substitutes={detailMatch.substitutes}
+                  players={activePlayers}
+                />
+              )}
+
               {/* Tactical sections */}
               {(detailMatch.ball_possession || detailMatch.pressing || detailMatch.transition || detailMatch.set_pieces) && (
                 <div className="grid sm:grid-cols-2 gap-4">
