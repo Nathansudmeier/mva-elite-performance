@@ -63,6 +63,7 @@ export default function Wedstrijden() {
       set_pieces: match.set_pieces || "", notes: match.notes || "",
     });
     setLineupMap(lineupArrayToMap(match.lineup));
+    setSubstitutes(match.substitutes || []);
     setDialogOpen(true);
   };
 
