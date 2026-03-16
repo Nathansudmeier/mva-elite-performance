@@ -11,7 +11,7 @@ export default function RoleGuard({ allowedRoles, children }) {
     </div>
   );
 
-  if (!user || !allowedRoles.includes(user.role)) {
+  if (!user || (user.role !== "admin" && !allowedRoles.includes(user.role))) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">

@@ -9,10 +9,11 @@ export function useCurrentUser() {
     staleTime: 60000,
   });
 
+  const isAdmin = user?.role === "admin";
   return {
     user,
     isLoading,
-    isTrainer: user?.role === "trainer",
+    isTrainer: user?.role === "trainer" || isAdmin,
     isSpeelster: user?.role === "speelster",
     playerId: user?.player_id,
   };
