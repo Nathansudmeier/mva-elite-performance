@@ -87,19 +87,26 @@ export default function PlayerRatingForm() {
 
       {/* Speler selectie */}
       <div className="elite-card p-4">
-        <label className="text-xs text-[#2F3650] font-semibold uppercase tracking-wider mb-1 block">Speler</label>
-        <Select value={selectedPlayerId} onValueChange={handlePlayerChange}>
-          <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#fff" }}>
-            <SelectValue placeholder="Selecteer een speler..." />
-          </SelectTrigger>
-          <SelectContent>
-            {players.filter(p => p.active !== false).sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99)).map((p) => (
-              <SelectItem key={p.id} value={p.id}>
-                {p.shirt_number ? `#${p.shirt_number} ` : ""}{p.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <label className="text-xs text-[#2F3650] font-semibold uppercase tracking-wider mb-2 block">Speler</label>
+        {playersLoading ? (
+          <div className="h-10 bg-[#FDE8DC] rounded-md animate-pulse" />
+        ) : (
+          <Select value={selectedPlayerId} onValueChange={handlePlayerChange}>
+            <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E] w-full" style={{ backgroundColor: "#fff" }}>
+              <SelectValue placeholder="Selecteer een speler..." />
+            </SelectTrigger>
+            <SelectContent>
+              {players
+                .filter(p => p.active !== false)
+                .sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99))
+                .map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    {p.shirt_number ? `#${p.shirt_number} ` : ""}{p.name}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       {/* Meting & Datum */}
