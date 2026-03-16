@@ -14,7 +14,7 @@ export default function Attendance() {
   const [newSessionDialog, setNewSessionDialog] = useState(false);
   const [sessionDate, setSessionDate] = useState(new Date().toISOString().split("T")[0]);
   const [sessionType, setSessionType] = useState("Training");
-  const [selectedSession, setSelectedSession] = useState(null);
+  const [selectedSessionId, setSelectedSessionId] = useState(null);
 
   const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
   const { data: sessions = [] } = useQuery({ queryKey: ["sessions"], queryFn: () => base44.entities.TrainingSession.list("-date") });
