@@ -88,8 +88,8 @@ export default function ChampionsTrophy({ players, winningTeams }) {
             </div>
             <span className="flex-1 text-sm font-medium text-[#1A1F2E]">{p.name}</span>
             <div className="text-right">
-              <span className="text-sm font-bold text-[#D45A30]">{(p.winRatio * 100).toFixed(0)}%</span>
-              <span className="text-xs text-[#2F3650] ml-2">{p.timesWon}W / {p.timesPresent}P</span>
+              <span className="text-sm font-bold text-[#D45A30]">{p.timesWon}</span>
+              <span className="text-xs text-[#2F3650] ml-1">overwinningen</span>
             </div>
           </div>
         ))}
