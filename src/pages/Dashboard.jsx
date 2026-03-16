@@ -56,7 +56,7 @@ export default function Dashboard() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <ChampionsTrophy players={activePlayers} attendanceData={attendance} winningTeams={winningTeams} />
+          <ChampionsTrophy players={activePlayers} winningTeams={winningTeams} />
         </div>
         <div className="space-y-6">
           <WinningTeamUpload players={activePlayers} onSaved={() => queryClient.invalidateQueries({ queryKey: ["winningTeams"] })} />
