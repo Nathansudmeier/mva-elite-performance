@@ -196,13 +196,55 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
           })}
         </div>
 
-        {/* Bench — hidden droppable for drag-back support */}
+        {/* Bench — visible player list */}
         <Droppable droppableId="bench" direction="vertical">
-          {(provided) => (
-            <div ref={provided.innerRef} {...provided.droppableProps} style={{ display: "none" }}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              style={{
+                flex: 1,
+                minWidth: 0,
+                minHeight: 80,
+                borderRadius: 8,
+                padding: "6px 4px",
+                backgroundColor: snapshot.isDraggingOver ? "rgba(240,146,110,0.15)" : "transparent",
+                transition: "background-color 0.2s",
+              }}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: "rgba(255,255,255,0.5)" }}>
+                Selectie
+              </p>
               {benchPlayers.map((player, index) => (
                 <Draggable key={player.id} draggableId={player.id} index={index}>
-                  {(dp) => <div ref={dp.innerRef} {...dp.draggableProps} {...dp.dragHandleProps} />}
+                  {(dp, ds) => (
+                    <div
+                      ref={dp.innerRef}
+                      {...dp.draggableProps}
+                      {...dp.dragHandleProps}
+                      style={{ ...dp.draggableProps.style, marginBottom: 4 }}
+                      className="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-grab"
+                      style={{
+                        ...dp.draggableProps.style,
+                        marginBottom: 4,
+                        backgroundColor: ds.isDragging ? "#D45A30" : "rgba(255,255,255,0.12)",
+                        border: "1px solid rgba(255,255,255,0.15)",
+                        borderRadius: 8,
+                      }}
+                    >
+                      <div
+                        className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black text-white flex-shrink-0 overflow-hidden"
+                        style={{ backgroundColor: "#D45A30" }}
+                      >
+                        {player.photo_url
+                          ? <img src={player.photo_url} className="w-full h-full object-cover" alt="" />
+                          : player.name?.charAt(0)}
+                      </div>
+                      <span className="text-white text-[11px] font-semibold truncate leading-tight">
+                        {player.shirt_number ? `#${player.shirt_number} ` : ""}{player.name?.split(" ")[0]}
+                      </span>
+                    </div>
+                  )}
                 </Draggable>
               ))}
               {provided.placeholder}
