@@ -39,7 +39,13 @@ function AccountBeheerContent() {
 
   const handleInvite = async () => {
     setInviting(true);
-    await base44.users.inviteUser(inviteEmail, inviteRole);
+    // Platform only accepts "user" or "admin" — trainers get "user" role, role is stored separately
+    const platformRole = inviteRole === "trainer" ? "user" : "user";
+    const result = await base44.users.inviteUser(inviteEmail, platformRole);
+    // Store the app-specific role on the user record
+    if (result?.id) {
+      await base44.entities.User.update(result.id, { role: inviteRole });
+    }
     setInviting(false);
     setInviteOpen(false);
     setInviteEmail("");
