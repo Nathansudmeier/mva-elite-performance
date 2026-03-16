@@ -14,7 +14,7 @@ const TEAMS = ["MO17", "Dames 1"];
 export default function Dashboard() {
   const navigate = useNavigate();
   const { isSpeelster, isLoading: authLoading } = useCurrentUser();
-  const [activeTeam, setActiveTeam] = useState("MO17");
+
 
   useEffect(() => {
     if (!authLoading && isSpeelster) {
@@ -47,8 +47,8 @@ export default function Dashboard() {
     ? Math.round((recentAttendance.filter(a => a.present).length / (activePlayers.length * recentSessions.length)) * 100)
     : 0;
 
-  const teamMatches = matches.filter(m => m.team === activeTeam).sort((a, b) => new Date(a.date) - new Date(b.date));
-  const nextMatch = teamMatches.find(m => isAfter(new Date(m.date), new Date())) || null;
+  const allMatches = matches.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const nextMatch = allMatches.find(m => isAfter(new Date(m.date), new Date())) || null;
 
   const teamPlayers = activePlayers; // All active players for rating counts
   const meting1Count = playerRatings.filter(r => r.meting === "Meting 1").length;
@@ -113,7 +113,7 @@ export default function Dashboard() {
   const sprintDiff = avgPreviousSprint ? (parseFloat(avgLatestSprint) - parseFloat(avgPreviousSprint)).toFixed(2) : null;
 
   // === BLOK 5: RECENTE WEDSTRIJDEN ===
-  const recentMatches = teamMatches.slice(-3).reverse();
+  const recentMatches = allMatches.slice(-3).reverse();
 
   // === BLOK 6: ZELFREFLECTIES DEZE WEEK ===
   const thisWeekReflections = selfReflections
@@ -122,44 +122,30 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
-      {/* Team Toggle */}
-      <div className="flex rounded-xl p-1 gap-1 w-fit" style={{ backgroundColor: "#1A1F2E" }}>
-        {TEAMS.map((t) => (
-          <button
-            key={t}
-            onClick={() => setActiveTeam(t)}
-            className="px-5 py-2 rounded-lg text-sm font-bold transition-all"
-            style={activeTeam === t ? { backgroundColor: "#D45A30", color: "#fff" } : { color: "rgba(255,255,255,0.6)" }}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
       {/* BLOK 1: Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="elite-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#2F3650] mb-2">Aanwezigheid (4w)</p>
-          <p className="text-3xl font-black text-[#D45A30]">{avgAttendancePercent}%</p>
-          <p className="text-xs text-[#2F3650] mt-1">{activePlayers.length} speelsters</p>
+        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-2">Aanwezigheid (4w)</p>
+          <p className="text-3xl font-black text-white">{avgAttendancePercent}%</p>
+          <p className="text-xs text-white/70 mt-1">{activePlayers.length} speelsters</p>
         </div>
-        <div className="elite-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#2F3650] mb-2">Volgende Wedstrijd</p>
+        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-2">Volgende Wedstrijd</p>
           {nextMatch ? (
             <>
-              <p className="text-lg font-black text-[#1A1F2E]">vs. {nextMatch.opponent}</p>
-              <p className="text-xs text-[#2F3650] mt-1">{format(new Date(nextMatch.date), "d MMM yyyy", { locale: nl })}</p>
+              <p className="text-lg font-black text-white">vs. {nextMatch.opponent}</p>
+              <p className="text-xs text-white/70 mt-1">{format(new Date(nextMatch.date), "d MMM yyyy", { locale: nl })}</p>
             </>
           ) : (
-            <p className="text-sm text-[#2F3650]">Geen geplande wedstrijden</p>
+            <p className="text-sm text-white/70">Geen geplande wedstrijden</p>
           )}
         </div>
-        <div className="elite-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#2F3650] mb-2">Beoordelingen</p>
+        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-2">Beoordelingen</p>
           <div className="space-y-1 text-sm">
-            <p className="text-[#1A1F2E] font-semibold">M1: <span className="text-[#D45A30]">{meting1Count}/{totalRatingsNeeded}</span></p>
-            <p className="text-[#1A1F2E] font-semibold">M2: <span className="text-[#D45A30]">{meting2Count}/{totalRatingsNeeded}</span></p>
-            <p className="text-[#1A1F2E] font-semibold">M3: <span className="text-[#D45A30]">{meting3Count}/{totalRatingsNeeded}</span></p>
+            <p className="text-white font-semibold">M1: <span className="text-white/80">{meting1Count}/{totalRatingsNeeded}</span></p>
+            <p className="text-white font-semibold">M2: <span className="text-white/80">{meting2Count}/{totalRatingsNeeded}</span></p>
+            <p className="text-white font-semibold">M3: <span className="text-white/80">{meting3Count}/{totalRatingsNeeded}</span></p>
           </div>
         </div>
       </div>
