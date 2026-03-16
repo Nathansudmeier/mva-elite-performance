@@ -10,6 +10,7 @@ import PlayerDetail from './pages/PlayerDetail.jsx';
 import PlayerDashboard from './pages/PlayerDashboard.jsx';
 import AccountBeheer from './pages/AccountBeheer.jsx';
 import LiveMatch from './pages/LiveMatch.jsx';
+import Leaderboard from './pages/Leaderboard.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -69,6 +70,7 @@ const AuthenticatedApp = () => {
       <Route path="/PlayerDetail" element={<LayoutWrapper currentPageName="PlayerDetail"><PlayerDetail /></LayoutWrapper>} />
       <Route path="/PlayerDashboard" element={<LayoutWrapper currentPageName="PlayerDashboard"><PlayerDashboard /></LayoutWrapper>} />
       <Route path="/AccountBeheer" element={<LayoutWrapper currentPageName="AccountBeheer"><AccountBeheer /></LayoutWrapper>} />
+      <Route path="/Leaderboard" element={<LayoutWrapper currentPageName="Leaderboard"><Leaderboard /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
