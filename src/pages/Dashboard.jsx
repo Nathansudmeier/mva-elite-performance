@@ -184,12 +184,12 @@ export default function Dashboard() {
       </div>
 
       {/* Team of the Week Upload Card */}
-      <div className="elite-card p-5 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setUploadModalOpen(true)}>
+      <div className="p-5 rounded-xl backdrop-blur-sm cursor-pointer hover:shadow-lg transition-shadow" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }} onClick={() => setUploadModalOpen(true)}>
         <div className="flex items-center justify-center text-center">
           <div>
-            <Upload size={32} style={{ color: "#D45A30" }} className="mx-auto mb-2" />
-            <p className="font-semibold text-[#1A1F2E] text-sm">Team of the Week</p>
-            <p className="text-xs text-[#2F3650]">Klik om foto toe te voegen</p>
+            <Upload size={32} className="mx-auto mb-2 text-white" />
+            <p className="font-semibold text-white text-sm">Team of the Week</p>
+            <p className="text-xs text-white/70">Klik om foto toe te voegen</p>
           </div>
         </div>
       </div>
