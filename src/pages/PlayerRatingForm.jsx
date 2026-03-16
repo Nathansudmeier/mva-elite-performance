@@ -61,8 +61,8 @@ export default function PlayerRatingForm() {
       return base44.entities.PlayerRating.create(payload);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["playerRatings", playerId] });
-      navigate(createPageUrl(`PlayerDetail?id=${playerId}`));
+      queryClient.invalidateQueries({ queryKey: ["playerRatings", selectedPlayerId] });
+      navigate(createPageUrl(`PlayerDetail?id=${selectedPlayerId}`));
     },
   });
 
