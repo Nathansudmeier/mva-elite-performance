@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import Wedstrijden from './pages/Wedstrijden';
 import PlayerRatingForm from './pages/PlayerRatingForm';
-import PlayerDetail from './pages/PlayerDetail';
+import PlayerDetail from './pages/PlayerDetail.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
