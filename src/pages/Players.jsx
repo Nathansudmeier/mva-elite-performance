@@ -15,6 +15,10 @@ import { resizeImage } from "@/components/utils/imageResize";
 const POSITIONS = ["Keeper", "Centrale Verdediger", "Linksback", "Rechtsback", "Controleur", "Middenvelder", "Aanvallende Middenvelder", "Linksbuiten", "Rechtsbuiten", "Spits"];
 
 export default function Players() {
+  return <RoleGuard allowedRoles={["trainer"]}><PlayersContent /></RoleGuard>;
+}
+
+function PlayersContent() {
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
