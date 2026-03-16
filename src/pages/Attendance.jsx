@@ -44,6 +44,7 @@ export default function Attendance() {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["attendance"] }); },
   });
 
+  const selectedSession = sessions.find((s) => s.id === selectedSessionId) ?? null;
   const sessionAttendance = selectedSession ? attendance.filter((a) => a.session_id === selectedSession.id) : [];
 
   const getPlayerAttendancePct = (playerId) => {
