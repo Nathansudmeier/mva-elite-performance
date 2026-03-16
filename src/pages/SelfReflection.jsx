@@ -45,8 +45,8 @@ export default function SelfReflection() {
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white">Zelfreflectie</h1>
-          <p className="text-sm text-white/70">Wekelijkse wedstrijdbeoordeling</p>
+          <h1 className="text-2xl font-500 text-[#FF6B00]">Zelfreflectie</h1>
+          <p className="text-sm text-[#888888]">Wekelijkse wedstrijdbeoordeling</p>
         </div>
         <Button onClick={() => setDialogOpen(true)} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
           <Plus size={16} className="mr-1" /> Nieuwe Reflectie

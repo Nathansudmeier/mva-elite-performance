@@ -38,8 +38,8 @@ export default function VideoHub() {
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white">Video Hub</h1>
-          <p className="text-sm text-white/70">Tactische video-analyse</p>
+          <h1 className="text-2xl font-500 text-[#FF6B00]">Video Hub</h1>
+          <p className="text-sm text-[#888888]">Tactische video-analyse</p>
         </div>
         <Button onClick={() => setDialogOpen(true)} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
           <Plus size={16} className="mr-1" /> Video Toevoegen
@@ -48,7 +48,7 @@ export default function VideoHub() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wider mb-3">Video's</h2>
+          <h2 className="text-sm font-500 text-[#888888] uppercase tracking-wider mb-3">Video's</h2>
           {videos.map((v) => {
             const isActive = selectedVideo?.id === v.id;
             return (

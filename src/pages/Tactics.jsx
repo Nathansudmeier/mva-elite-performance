@@ -44,8 +44,8 @@ export default function Tactics() {
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white">Tactiek</h1>
-          <p className="text-sm text-white/70">Matchday plannen en tactische afspraken</p>
+          <h1 className="text-2xl font-500 text-[#FF6B00]">Tactiek</h1>
+          <p className="text-sm text-[#888888]">Matchday plannen en tactische afspraken</p>
         </div>
         <Button onClick={openNew} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
           <Plus size={16} className="mr-1" /> Nieuw Plan
@@ -54,7 +54,7 @@ export default function Tactics() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wider mb-3">Wedstrijdplannen</h2>
+          <h2 className="text-sm font-500 text-[#888888] uppercase tracking-wider mb-3">Wedstrijdplannen</h2>
           {plans.map((plan) => {
             const isActive = viewPlan?.id === plan.id;
             return (
