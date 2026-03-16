@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Check } from "lucide-react";
 
-export default function EventModal({ type, minute, players, onConfirm, onClose }) {
+export default function EventModal({ type, minute, players, substitutePlayers, onConfirm, onClose }) {
   const [step, setStep] = useState(1);
   const [scorerId, setScorerId] = useState(null);
   const [assistId, setAssistId] = useState(null);
