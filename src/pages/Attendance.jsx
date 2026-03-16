@@ -72,11 +72,11 @@ export default function Attendance() {
           {sessions.map((s) => {
             const sAtt = attendance.filter((a) => a.session_id === s.id);
             const present = sAtt.filter((a) => a.present).length;
-            const isActive = selectedSession?.id === s.id;
+            const isActive = selectedSessionId === s.id;
             return (
-              <button
-                key={s.id}
-                onClick={() => setSelectedSession(s)}
+            <button
+            key={s.id}
+            onClick={() => setSelectedSessionId(s.id)}
                 className="w-full text-left px-4 py-3 rounded-lg transition-all"
                 style={isActive ? { backgroundColor: '#1A1F2E', color: '#fff' } : undefined}
               >
