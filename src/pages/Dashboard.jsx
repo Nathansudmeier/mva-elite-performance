@@ -2,22 +2,18 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { AlertCircle, TrendingUp, TrendingDown, Calendar, Users, CheckSquare, Link as LinkIcon, Upload } from "lucide-react";
+import { AlertCircle, TrendingUp, TrendingDown, Upload } from "lucide-react";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import StatCard from "../components/common/StatCard";
 import ChampionsTrophy from "../components/dashboard/ChampionsTrophy";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
 import { format, subDays, isAfter } from "date-fns";
 import { nl } from "date-fns/locale";
-
-const TEAMS = ["MO17", "Dames 1"];
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { isSpeelster, isLoading: authLoading } = useCurrentUser();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
-
 
   useEffect(() => {
     if (!authLoading && isSpeelster) {
@@ -29,17 +25,16 @@ export default function Dashboard() {
   const { data: attendance = [] } = useQuery({ queryKey: ["attendance"], queryFn: () => base44.entities.Attendance.list() });
   const { data: sessions = [] } = useQuery({ queryKey: ["sessions"], queryFn: () => base44.entities.TrainingSession.list() });
   const { data: matches = [] } = useQuery({ queryKey: ["matches"], queryFn: () => base44.entities.Match.list("-date") });
-  const { data: winningTeams = [] } = useQuery({ queryKey: ["winningTeams"], queryFn: () => base44.entities.WinningTeam.list() });
+  const { data: winningTeamPhotos = [] } = useQuery({ queryKey: ["winningTeamPhotos"], queryFn: () => base44.entities.WinningTeam.list() });
   const { data: yoyoTests = [] } = useQuery({ queryKey: ["yoyoTests"], queryFn: () => base44.entities.YoYoTest.list("-date") });
   const { data: physicalTests = [] } = useQuery({ queryKey: ["physicalTests"], queryFn: () => base44.entities.PhysicalTest.list("-date") });
   const { data: playerRatings = [] } = useQuery({ queryKey: ["playerRatings"], queryFn: () => base44.entities.PlayerRating.list("-date") });
   const { data: wellnessLogs = [] } = useQuery({ queryKey: ["wellnessLogs"], queryFn: () => base44.entities.WellnessLog.list("-date") });
   const { data: selfReflections = [] } = useQuery({ queryKey: ["selfReflections"], queryFn: () => base44.entities.SelfReflection.list("-date") });
-  const { data: winningTeamPhotos = [] } = useQuery({ queryKey: ["winningTeamPhotos"], queryFn: () => base44.entities.WinningTeam.list() });
 
   const activePlayers = players.filter((p) => p.active !== false);
 
-  // === BLOK 1: SNEL OVERZICHT ===
+  // === BLOK 1: QUICK STATS ===
   const last4WeeksAgo = subDays(new Date(), 28);
   const recentSessions = sessions.filter(s => isAfter(new Date(s.date), last4WeeksAgo));
   const recentAttendance = attendance.filter(a => {
@@ -53,14 +48,13 @@ export default function Dashboard() {
   const allMatches = matches.sort((a, b) => new Date(a.date) - new Date(b.date));
   const nextMatch = allMatches.find(m => isAfter(new Date(m.date), new Date())) || null;
 
-  const teamPlayers = activePlayers; // All active players for rating counts
+  const teamPlayers = activePlayers;
   const meting1Count = playerRatings.filter(r => r.meting === "Meting 1").length;
   const meting2Count = playerRatings.filter(r => r.meting === "Meting 2").length;
   const meting3Count = playerRatings.filter(r => r.meting === "Meting 3").length;
   const totalRatingsNeeded = teamPlayers.length;
 
-  // === BLOK 2: AANDACHTSPUNTEN ===
-  const last4Weeks = subDays(new Date(), 28);
+  // === BLOK 2: ALERTS ===
   const recentPlayerAttendance = {};
   activePlayers.forEach(p => {
     const playerAttendance = recentAttendance.filter(a => a.player_id === p.id);
@@ -127,28 +121,28 @@ export default function Dashboard() {
     <div className="space-y-6 pb-20 lg:pb-6">
       {/* BLOK 1: Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
-          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-2">Aanwezigheid (4w)</p>
-          <p className="text-3xl font-black text-white">{avgAttendancePercent}%</p>
-          <p className="text-xs text-white/70 mt-1">{activePlayers.length} speelsters</p>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-2">Aanwezigheid (4w)</p>
+          <p className="text-4xl font-500 text-[#FF6B00]">{avgAttendancePercent}%</p>
+          <p className="text-sm text-[#888888] mt-2">{activePlayers.length} speelsters</p>
         </div>
-        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
-          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-2">Volgende Wedstrijd</p>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-2">Volgende Wedstrijd</p>
           {nextMatch ? (
             <>
-              <p className="text-lg font-black text-white">vs. {nextMatch.opponent}</p>
-              <p className="text-xs text-white/70 mt-1">{format(new Date(nextMatch.date), "d MMM yyyy", { locale: nl })}</p>
+              <p className="text-2xl font-500 text-[#1A1A1A]">vs. {nextMatch.opponent}</p>
+              <p className="text-sm text-[#888888] mt-2">{format(new Date(nextMatch.date), "d MMM", { locale: nl })}</p>
             </>
           ) : (
-            <p className="text-sm text-white/70">Geen geplande wedstrijden</p>
+            <p className="text-sm text-[#888888] mt-2">Geen geplande wedstrijden</p>
           )}
         </div>
-        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
-          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-2">Beoordelingen</p>
-          <div className="space-y-1 text-sm">
-            <p className="text-white font-semibold">M1: <span className="text-white/80">{meting1Count}/{totalRatingsNeeded}</span></p>
-            <p className="text-white font-semibold">M2: <span className="text-white/80">{meting2Count}/{totalRatingsNeeded}</span></p>
-            <p className="text-white font-semibold">M3: <span className="text-white/80">{meting3Count}/{totalRatingsNeeded}</span></p>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-2">Beoordelingen</p>
+          <div className="space-y-2 text-sm">
+            <p className="text-[#1A1A1A]">M1: <span className="text-[#888888]">{meting1Count}/{totalRatingsNeeded}</span></p>
+            <p className="text-[#1A1A1A]">M2: <span className="text-[#888888]">{meting2Count}/{totalRatingsNeeded}</span></p>
+            <p className="text-[#1A1A1A]">M3: <span className="text-[#888888]">{meting3Count}/{totalRatingsNeeded}</span></p>
           </div>
         </div>
       </div>
@@ -156,12 +150,12 @@ export default function Dashboard() {
       {/* BLOK 2: Alerts */}
       <div className="space-y-3">
         {lowAttendancePlayers.length > 0 && (
-          <div className="p-4 rounded-xl border-l-4" style={{ backgroundColor: "#FFF5F0", borderColor: "#F0926E" }}>
+          <div className="bg-white rounded-2xl p-4 border-l-4 border-[#FF6B00] shadow-sm">
             <div className="flex gap-3">
-              <AlertCircle size={20} style={{ color: "#F0926E" }} className="flex-shrink-0 mt-0.5" />
+              <AlertCircle size={20} color="#FF6B00" className="flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold text-[#D45A30] text-sm">Lage aanwezigheid</p>
-                <p className="text-sm text-[#2F3650] mt-1">
+                <p className="font-500 text-[#FF6B00] text-sm">Lage aanwezigheid</p>
+                <p className="text-sm text-[#888888] mt-1">
                   {lowAttendancePlayers.map(p => `${p.name} (${p.percentage}%)`).join(", ")}
                 </p>
               </div>
@@ -169,12 +163,12 @@ export default function Dashboard() {
           </div>
         )}
         {fatigueOrPainPlayers.length > 0 && (
-          <div className="p-4 rounded-xl border-l-4" style={{ backgroundColor: "#FFF5F0", borderColor: "#C0392B" }}>
+          <div className="bg-white rounded-2xl p-4 border-l-4 border-[#C0392B] shadow-sm">
             <div className="flex gap-3">
-              <AlertCircle size={20} style={{ color: "#C0392B" }} className="flex-shrink-0 mt-0.5" />
+              <AlertCircle size={20} color="#C0392B" className="flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold text-[#C0392B] text-sm">Vermoeidheid/Pijn gemeld</p>
-                <p className="text-sm text-[#2F3650] mt-1">
+                <p className="font-500 text-[#C0392B] text-sm">Vermoeidheid/Pijn gemeld</p>
+                <p className="text-sm text-[#888888] mt-1">
                   {fatigueOrPainPlayers.join(", ")}
                 </p>
               </div>
@@ -184,32 +178,34 @@ export default function Dashboard() {
       </div>
 
       {/* Team of the Week Upload Card */}
-      <div className="p-5 rounded-xl backdrop-blur-sm cursor-pointer hover:shadow-lg transition-shadow" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }} onClick={() => setUploadModalOpen(true)}>
+      <div 
+        className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] cursor-pointer hover:shadow-md transition-shadow"
+        onClick={() => setUploadModalOpen(true)}
+      >
         <div className="flex items-center justify-center text-center">
           <div>
-            <Upload size={32} className="mx-auto mb-2 text-white" />
-            <p className="font-semibold text-white text-sm">Team of the Week</p>
-            <p className="text-xs text-white/70">Klik om foto toe te voegen</p>
+            <Upload size={32} color="#FF6B00" className="mx-auto mb-3" />
+            <p className="font-500 text-[#1A1A1A] text-base">Team of the Week</p>
+            <p className="text-sm text-[#888888] mt-1">Klik om foto toe te voegen</p>
           </div>
         </div>
       </div>
 
       {/* Team of the Week Modal */}
       {uploadModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl p-6 max-w-lg w-full">
-            <h2 className="text-xl font-bold text-[#1A1F2E] mb-4">Team of the Week</h2>
+        <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-lg w-full shadow-lg">
+            <h2 className="text-2xl font-500 text-[#1A1A1A] mb-4">Team of the Week</h2>
             <WinningTeamUpload 
               players={activePlayers} 
               onSaved={() => {
-                queryClient.invalidateQueries({ queryKey: ["winningTeams"] });
+                queryClient.invalidateQueries({ queryKey: ["winningTeamPhotos"] });
                 setUploadModalOpen(false);
               }} 
             />
             <button 
               onClick={() => setUploadModalOpen(false)}
-              className="mt-4 w-full px-4 py-2 rounded-lg text-sm font-semibold text-white"
-              style={{ backgroundColor: "#D45A30" }}
+              className="mt-4 w-full px-4 py-3 rounded-xl text-sm font-500 text-white bg-[#FF6B00] hover:bg-[#E55A00] transition-colors"
             >
               Sluiten
             </button>
@@ -218,23 +214,26 @@ export default function Dashboard() {
       )}
 
       {/* BLOK 3: Champions Trophy Top 5 */}
-      <div className="elite-card p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-black text-[#1A1F2E]">🏆 Top 5 Winnaars</h2>
-          <button onClick={() => navigate("/Leaderboard")} className="text-xs font-semibold text-white hover:underline flex items-center gap-1">
-            Volledig leaderboard <LinkIcon size={12} />
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-500 text-[#1A1A1A]">Top 5 Winnaars</h2>
+          <button 
+            onClick={() => navigate("/Leaderboard")} 
+            className="text-sm font-500 text-[#FF6B00] hover:text-[#E55A00] transition-colors"
+          >
+            Volledig leaderboard →
           </button>
         </div>
         <div className="space-y-2">
           {topWinners.map((p, i) => (
-            <div key={p.id} className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: "#FDE8DC" }}>
-              <div className="flex items-center gap-3">
-                <span className="font-black text-lg text-[#D45A30] w-6">{i + 1}</span>
-                <span className="font-semibold text-[#1A1F2E]">{p.name}</span>
+            <div key={p.id} className="flex items-center justify-between p-4 rounded-xl bg-[#F7F5F2]">
+              <div className="flex items-center gap-4">
+                <span className="font-500 text-lg text-[#FF6B00] w-6">{i + 1}</span>
+                <span className="font-500 text-[#1A1A1A]">{p.name}</span>
               </div>
               <div className="text-right">
-                <p className="font-black text-[#D45A30]">{p.wins}</p>
-                <p className="text-xs text-[#2F3650]">{p.total > 0 ? ((p.wins / p.total) * 100).toFixed(0) : 0}%</p>
+                <p className="font-500 text-[#FF6B00]">{p.wins}</p>
+                <p className="text-xs text-[#888888]">{p.total > 0 ? ((p.wins / p.total) * 100).toFixed(0) : 0}%</p>
               </div>
             </div>
           ))}
@@ -243,33 +242,33 @@ export default function Dashboard() {
 
       {/* BLOK 4: Groepsfysiek */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
-          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-3">Avg. Yo-Yo Niveau</p>
-          <p className="text-3xl font-black text-white">{avgLatestYoyo}</p>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-3">Gemiddeld Yo-Yo Niveau</p>
+          <p className="text-4xl font-500 text-[#FF6B00]">{avgLatestYoyo}</p>
           {yoyoDiff && (
-            <div className="flex items-center gap-1 mt-2">
+            <div className="flex items-center gap-2 mt-3">
               {parseFloat(yoyoDiff) >= 0 ? (
-                <TrendingUp size={16} style={{ color: "#4CAF82" }} />
+                <TrendingUp size={16} color="#3B6D11" />
               ) : (
-                <TrendingDown size={16} style={{ color: "#C0392B" }} />
+                <TrendingDown size={16} color="#C0392B" />
               )}
-              <p className={`text-sm font-semibold ${parseFloat(yoyoDiff) >= 0 ? "text-green-600" : "text-red-600"}`}>
+              <p className={`text-sm font-500 ${parseFloat(yoyoDiff) >= 0 ? "text-[#3B6D11]" : "text-[#C0392B]"}`}>
                 {parseFloat(yoyoDiff) >= 0 ? "+" : ""}{yoyoDiff}
               </p>
             </div>
           )}
         </div>
-        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
-          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-3">Avg. 30m Sprint (sec)</p>
-          <p className="text-3xl font-black text-white">{avgLatestSprint}</p>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-3">Gemiddelde 30m Sprint (sec)</p>
+          <p className="text-4xl font-500 text-[#FF6B00]">{avgLatestSprint}</p>
           {sprintDiff && (
-            <div className="flex items-center gap-1 mt-2">
+            <div className="flex items-center gap-2 mt-3">
               {parseFloat(sprintDiff) <= 0 ? (
-                <TrendingUp size={16} style={{ color: "#4CAF82" }} />
+                <TrendingUp size={16} color="#3B6D11" />
               ) : (
-                <TrendingDown size={16} style={{ color: "#C0392B" }} />
+                <TrendingDown size={16} color="#C0392B" />
               )}
-              <p className={`text-sm font-semibold ${parseFloat(sprintDiff) <= 0 ? "text-green-600" : "text-red-600"}`}>
+              <p className={`text-sm font-500 ${parseFloat(sprintDiff) <= 0 ? "text-[#3B6D11]" : "text-[#C0392B]"}`}>
                 {parseFloat(sprintDiff) > 0 ? "+" : ""}{sprintDiff}s
               </p>
             </div>
@@ -278,11 +277,14 @@ export default function Dashboard() {
       </div>
 
       {/* BLOK 5: Recente Wedstrijden */}
-      <div className="elite-card p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-black text-[#1A1F2E]">Recente Wedstrijden</h2>
-          <button onClick={() => navigate("/Wedstrijden")} className="text-xs font-semibold text-[#D45A30] hover:underline flex items-center gap-1">
-            Alle wedstrijden <LinkIcon size={12} />
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-500 text-[#1A1A1A]">Recente Wedstrijden</h2>
+          <button 
+            onClick={() => navigate("/Wedstrijden")} 
+            className="text-sm font-500 text-[#FF6B00] hover:text-[#E55A00] transition-colors"
+          >
+            Alle wedstrijden →
           </button>
         </div>
         <div className="space-y-2">
@@ -291,18 +293,18 @@ export default function Dashboard() {
             if (m.score_home !== undefined && m.score_away !== undefined) {
               badge = m.score_home > m.score_away ? "W" : m.score_home < m.score_away ? "V" : "G";
             }
-            const badgeColor = badge === "W" ? "#4CAF82" : badge === "V" ? "#C0392B" : "#F0926E";
+            const badgeColor = badge === "W" ? "#3B6D11" : badge === "V" ? "#C0392B" : "#FF6B00";
             return (
-              <div key={m.id} className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: "#FDE8DC" }}>
+              <div key={m.id} className="flex items-center justify-between p-4 rounded-xl bg-[#F7F5F2]">
                 <div>
-                  <p className="font-semibold text-[#1A1F2E]">{m.home_away === "Uit" ? "@ " : ""}{m.opponent}</p>
-                  <p className="text-xs text-[#2F3650]">{format(new Date(m.date), "d MMM", { locale: nl })}</p>
+                  <p className="font-500 text-[#1A1A1A]">{m.home_away === "Uit" ? "@ " : ""}{m.opponent}</p>
+                  <p className="text-xs text-[#888888] mt-1">{format(new Date(m.date), "d MMM", { locale: nl })}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   {m.score_home !== undefined && m.score_away !== undefined && (
-                    <p className="font-black text-[#D45A30]">{m.score_home}–{m.score_away}</p>
+                    <p className="font-500 text-[#FF6B00]">{m.score_home}–{m.score_away}</p>
                   )}
-                  <p className="font-black text-white px-2.5 py-1 rounded text-sm" style={{ backgroundColor: badgeColor }}>{badge}</p>
+                  <p className="font-500 text-white px-3 py-1.5 rounded-lg text-sm" style={{ backgroundColor: badgeColor }}>{badge}</p>
                 </div>
               </div>
             );
@@ -311,11 +313,14 @@ export default function Dashboard() {
       </div>
 
       {/* BLOK 6: Zelfreflecties */}
-      <div className="elite-card p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-black text-[#1A1F2E]">Zelfreflecties (deze week)</h2>
-          <button onClick={() => navigate("/SelfReflection")} className="text-xs font-semibold text-[#D45A30] hover:underline flex items-center gap-1">
-            Alle reflecties <LinkIcon size={12} />
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-500 text-[#1A1A1A]">Zelfreflecties (deze week)</h2>
+          <button 
+            onClick={() => navigate("/SelfReflection")} 
+            className="text-sm font-500 text-[#FF6B00] hover:text-[#E55A00] transition-colors"
+          >
+            Alle reflecties →
           </button>
         </div>
         {thisWeekReflections.length > 0 ? (
@@ -323,12 +328,12 @@ export default function Dashboard() {
             {thisWeekReflections.map((r) => {
               const player = activePlayers.find(p => p.id === r.player_id);
               return (
-                <div key={r.id} className="p-3 rounded-lg" style={{ backgroundColor: "#FDE8DC" }}>
-                  <div className="flex items-start justify-between mb-1">
-                    <p className="font-semibold text-[#1A1F2E]">{player?.name || "–"}</p>
-                    <p className="text-xs text-[#2F3650]">{format(new Date(r.date), "d MMM", { locale: nl })}</p>
+                <div key={r.id} className="p-4 rounded-xl bg-[#F7F5F2]">
+                  <div className="flex items-start justify-between mb-2">
+                    <p className="font-500 text-[#1A1A1A]">{player?.name || "–"}</p>
+                    <p className="text-xs text-[#888888]">{format(new Date(r.date), "d MMM", { locale: nl })}</p>
                   </div>
-                  <p className="text-xs text-[#2F3650] line-clamp-2">
+                  <p className="text-sm text-[#888888] line-clamp-2">
                     {r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}
                   </p>
                 </div>
@@ -336,7 +341,7 @@ export default function Dashboard() {
             })}
           </div>
         ) : (
-          <p className="text-sm text-[#2F3650]">Geen reflecties deze week</p>
+          <p className="text-sm text-[#888888]">Geen reflecties deze week</p>
         )}
       </div>
     </div>
