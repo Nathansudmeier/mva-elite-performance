@@ -26,8 +26,8 @@ export default function Attendance() {
 
   const createSessionMutation = useMutation({
     mutationFn: async () => {
-      const session = await base44.entities.TrainingSession.create({ date: sessionDate, type: sessionType });
-      const records = activePlayers.map((p) => ({ session_id: session.id, player_id: p.id, present: false }));
+      const session = await base44.entities.TrainingSession.create({ date: sessionDate, type: sessionType, notes: sessionNotes });
+      const records = activePlayers.map((p) => ({ session_id: session.id, player_id: p.id, present: presentPlayerIds.includes(p.id) }));
       await base44.entities.Attendance.bulkCreate(records);
       return session;
     },
@@ -35,6 +35,8 @@ export default function Attendance() {
       queryClient.invalidateQueries({ queryKey: ["sessions"] });
       queryClient.invalidateQueries({ queryKey: ["attendance"] });
       setNewSessionDialog(false);
+      setSessionNotes("");
+      setPresentPlayerIds([]);
       setSelectedSessionId(session.id);
     },
   });
