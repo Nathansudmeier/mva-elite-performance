@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { AlertCircle, TrendingUp, TrendingDown, Calendar, Users, CheckSquare, Link as LinkIcon } from "lucide-react";
+import { AlertCircle, TrendingUp, TrendingDown, Calendar, Users, CheckSquare, Link as LinkIcon, Upload } from "lucide-react";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import StatCard from "../components/common/StatCard";
 import ChampionsTrophy from "../components/dashboard/ChampionsTrophy";
+import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
 import { format, subDays, isAfter } from "date-fns";
 import { nl } from "date-fns/locale";
 
@@ -13,7 +14,9 @@ const TEAMS = ["MO17", "Dames 1"];
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { isSpeelster, isLoading: authLoading } = useCurrentUser();
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
 
   useEffect(() => {
@@ -179,6 +182,40 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* Team of the Week Upload Card */}
+      <div className="elite-card p-5 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setUploadModalOpen(true)}>
+        <div className="flex items-center justify-center text-center">
+          <div>
+            <Upload size={32} style={{ color: "#D45A30" }} className="mx-auto mb-2" />
+            <p className="font-semibold text-[#1A1F2E] text-sm">Team of the Week</p>
+            <p className="text-xs text-[#2F3650]">Klik om foto toe te voegen</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Team of the Week Modal */}
+      {uploadModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-lg w-full">
+            <h2 className="text-xl font-bold text-[#1A1F2E] mb-4">Team of the Week</h2>
+            <WinningTeamUpload 
+              players={activePlayers} 
+              onSaved={() => {
+                queryClient.invalidateQueries({ queryKey: ["winningTeams"] });
+                setUploadModalOpen(false);
+              }} 
+            />
+            <button 
+              onClick={() => setUploadModalOpen(false)}
+              className="mt-4 w-full px-4 py-2 rounded-lg text-sm font-semibold text-white"
+              style={{ backgroundColor: "#D45A30" }}
+            >
+              Sluiten
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* BLOK 3: Champions Trophy Top 5 */}
       <div className="elite-card p-6">
