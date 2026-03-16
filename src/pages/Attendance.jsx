@@ -176,6 +176,33 @@ export default function Attendance() {
                 <SelectItem value="Fysieke Test">Fysieke Test</SelectItem>
               </SelectContent>
             </Select>
+            <Input
+              placeholder="Onderwerp (bijv. Positiespel, Afwerking...)"
+              value={sessionNotes}
+              onChange={(e) => setSessionNotes(e.target.value)}
+              className="border-[#FDE8DC] text-[#1A1F2E]"
+              style={{ backgroundColor: '#FFFFFF' }}
+            />
+            <div>
+              <p className="text-xs font-semibold text-[#2F3650] uppercase tracking-wider mb-2">Aanwezig ({presentPlayerIds.length}/{activePlayers.length})</p>
+              <div className="max-h-48 overflow-y-auto space-y-1 pr-1">
+                {activePlayers.map((p) => {
+                  const isPresent = presentPlayerIds.includes(p.id);
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setPresentPlayerIds(prev => isPresent ? prev.filter(id => id !== p.id) : [...prev, p.id])}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all text-sm"
+                      style={{ backgroundColor: isPresent ? '#4CAF82' : '#FDE8DC', color: isPresent ? '#fff' : '#1A1F2E' }}
+                    >
+                      <span>{p.name}</span>
+                      {isPresent ? <Check size={14} /> : <X size={14} style={{ opacity: 0.4 }} />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
             <Button onClick={() => createSessionMutation.mutate()} disabled={createSessionMutation.isPending} className="w-full text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
               {createSessionMutation.isPending ? "Aanmaken..." : "Sessie Aanmaken"}
             </Button>
