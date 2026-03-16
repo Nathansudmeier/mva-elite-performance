@@ -92,6 +92,15 @@ export default function Layout({ children, currentPageName }) {
             );
           })}
         </nav>
+        <div className="px-3 pb-4">
+          <button
+            onClick={() => base44.auth.logout()}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/75 hover:text-white hover:bg-white/10 w-full transition-all"
+          >
+            <LogOut size={18} />
+            Uitloggen
+          </button>
+        </div>
       </aside>
 
       {/* Mobile nav overlay */}
