@@ -87,9 +87,9 @@ export default function Reports() {
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={attendanceData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#FDE8DC" />
-                  <XAxis dataKey="name" tick={{ fill: '#2F3650', fontSize: 11 }} />
-                  <YAxis tick={{ fill: '#2F3650', fontSize: 11 }} domain={[0, 100]} />
+                   <CartesianGrid strokeDasharray="3 3" stroke="#E8E6E1" />
+                   <XAxis dataKey="name" tick={{ fill: '#888888', fontSize: 11 }} />
+                   <YAxis tick={{ fill: '#888888', fontSize: 11 }} domain={[0, 100]} />
                   <Tooltip contentStyle={chartTooltipStyle} />
                   <Bar dataKey="pct" fill="#FF6B00" radius={[8, 8, 0, 0]} name="Aanwezigheid %" />
                 </BarChart>
