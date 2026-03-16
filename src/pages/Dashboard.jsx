@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Users, Trophy, ClipboardCheck, Activity } from "lucide-react";
 import StatCard from "../components/common/StatCard";
 import ChampionsTrophy from "../components/dashboard/ChampionsTrophy";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
 import RecentWins from "../components/dashboard/RecentWins";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const { isSpeelster, isLoading: authLoading } = useCurrentUser();
+
+  useEffect(() => {
+    if (!authLoading && isSpeelster) {
+      navigate("/PlayerDashboard", { replace: true });
+    }
+  }, [isSpeelster, authLoading]);
   const queryClient = useQueryClient();
 
   const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
