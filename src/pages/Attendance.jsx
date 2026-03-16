@@ -77,22 +77,18 @@ export default function Attendance() {
             const present = sAtt.filter((a) => a.present).length;
             const isActive = selectedSessionId === s.id;
             return (
-            <button
-            key={s.id}
-            onClick={() => setSelectedSessionId(s.id)}
-                className="w-full text-left px-4 py-3 rounded-lg transition-all"
-                style={isActive ? { backgroundColor: '#1A1F2E', color: '#fff' } : undefined}
+              <button
+                key={s.id}
+                onClick={() => setSelectedSessionId(s.id)}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-all border ${isActive ? 'border-[#1A1F2E]' : 'border-[#FDE8DC] bg-[#FFF5F0] hover:border-[#F0926E]'}`}
+                style={isActive ? { backgroundColor: '#1A1F2E', color: '#fff' } : {}}
               >
-                {!isActive && <div className="elite-card-hover absolute inset-0 rounded-lg" />}
-                <div className={`relative elite-card px-4 py-3 rounded-lg ${isActive ? 'bg-[#1A1F2E] text-white border-[#1A1F2E]' : ''}`}
-                  style={isActive ? { backgroundColor: '#1A1F2E', borderColor: '#1A1F2E', color: '#fff' } : {}}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-semibold" style={isActive ? { color: '#fff' } : { color: '#1A1F2E' }}>{format(new Date(s.date), "d MMMM yyyy", { locale: nl })}</p>
-                      <p className="text-xs" style={isActive ? { color: 'rgba(255,255,255,0.7)' } : { color: '#2F3650' }}>{s.type}</p>
-                    </div>
-                    <span className="text-xs font-bold" style={{ color: isActive ? '#F0926E' : '#D45A30' }}>{present}/{sAtt.length}</span>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold" style={isActive ? { color: '#fff' } : { color: '#1A1F2E' }}>{format(new Date(s.date), "d MMMM yyyy", { locale: nl })}</p>
+                    <p className="text-xs" style={isActive ? { color: 'rgba(255,255,255,0.7)' } : { color: '#2F3650' }}>{s.type}</p>
                   </div>
+                  <span className="text-xs font-bold" style={{ color: isActive ? '#F0926E' : '#D45A30' }}>{present}/{sAtt.length}</span>
                 </div>
               </button>
             );
