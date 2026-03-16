@@ -49,9 +49,14 @@ export default function PlayerRatingForm() {
     }
   }, [ratingId, existingRatings]);
 
+  const handlePlayerChange = (id) => {
+    setSelectedPlayerId(id);
+    setForm({ ...EMPTY_FORM, player_id: id });
+  };
+
   const saveMutation = useMutation({
     mutationFn: async () => {
-      const payload = { ...form, player_id: playerId };
+      const payload = { ...form, player_id: selectedPlayerId };
       if (ratingId) return base44.entities.PlayerRating.update(ratingId, payload);
       return base44.entities.PlayerRating.create(payload);
     },
