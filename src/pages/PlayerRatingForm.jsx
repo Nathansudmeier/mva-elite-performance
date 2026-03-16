@@ -25,21 +25,22 @@ const EMPTY_FORM = {
 
 export default function PlayerRatingForm() {
   const urlParams = new URLSearchParams(window.location.search);
-  const playerId = urlParams.get("id");
   const ratingId = urlParams.get("ratingId");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [form, setForm] = useState({ ...EMPTY_FORM, player_id: playerId });
+  const [selectedPlayerId, setSelectedPlayerId] = useState(urlParams.get("id") || "");
+  const [form, setForm] = useState({ ...EMPTY_FORM, player_id: selectedPlayerId });
 
   const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
   const { data: existingRatings = [] } = useQuery({
-    queryKey: ["playerRatings", playerId],
-    queryFn: () => base44.entities.PlayerRating.filter({ player_id: playerId }),
-    enabled: !!playerId,
+    queryKey: ["playerRatings", selectedPlayerId],
+    queryFn: () => base44.entities.PlayerRating.filter({ player_id: selectedPlayerId }),
+    enabled: !!selectedPlayerId,
   });
 
-  const player = players.find((p) => p.id === playerId);
+  const playerId = selectedPlayerId;
+  const player = players.find((p) => p.id === selectedPlayerId);
 
   useEffect(() => {
     if (ratingId && existingRatings.length > 0) {
