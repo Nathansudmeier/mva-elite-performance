@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import {
   Trophy,
   Users,
@@ -11,12 +12,14 @@ import {
   BarChart3,
   Menu,
   X,
-  Shield,
   Swords,
-  Star
+  Star,
+  LayoutDashboard,
+  UserCog,
+  LogOut
 } from "lucide-react";
 
-const navItems = [
+const trainerNavItems = [
   { name: "Dashboard", icon: Trophy, page: "Dashboard" },
   { name: "Speelsters", icon: Users, page: "Players" },
   { name: "Wedstrijden", icon: Swords, page: "Wedstrijden" },
@@ -27,6 +30,11 @@ const navItems = [
   { name: "Video", icon: Video, page: "VideoHub" },
   { name: "Reflectie", icon: BarChart3, page: "SelfReflection" },
   { name: "Rapporten", icon: BarChart3, page: "Reports" },
+  { name: "Accounts", icon: UserCog, page: "AccountBeheer" },
+];
+
+const speelsterNavItems = [
+  { name: "Mijn Dashboard", icon: LayoutDashboard, page: "PlayerDashboard" },
 ];
 
 export default function Layout({ children, currentPageName }) {
