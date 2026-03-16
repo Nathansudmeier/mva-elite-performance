@@ -39,6 +39,8 @@ const speelsterNavItems = [
 
 export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isTrainer, isSpeelster } = useCurrentUser();
+  const navItems = isTrainer ? trainerNavItems : (isSpeelster ? speelsterNavItems : trainerNavItems);
 
   return (
     <div className="min-h-screen text-white" style={{backgroundColor: '#E8724A'}}>
