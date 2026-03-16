@@ -61,8 +61,20 @@ export default function EventModal({ type, minute, players, substitutePlayers, o
           )}
           {type === "substitution" && (
             <>
-              <PlayerList label="Speler eruit" selected={playerOutId} onSelect={setPlayerOutId} />
-              <PlayerList label="Speler erin" selected={playerInId} onSelect={(id) => setPlayerInId(id)} exclude={[]} />
+              <PlayerList label="Speler eruit (basiself)" selected={playerOutId} onSelect={setPlayerOutId} />
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#2F3650" }}>Speler erin (wissel)</p>
+                <div className="max-h-48 overflow-y-auto space-y-1">
+                  {(substitutePlayers || []).map(p => (
+                    <button key={p.id} onClick={() => setPlayerInId(p.id)}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all"
+                      style={{ backgroundColor: playerInId === p.id ? "#D45A30" : "#FDE8DC", color: playerInId === p.id ? "#fff" : "#1A1F2E" }}>
+                      <span>{p.name}</span>
+                      {playerInId === p.id && <Check size={14} />}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </>
           )}
           {type === "note" && (
