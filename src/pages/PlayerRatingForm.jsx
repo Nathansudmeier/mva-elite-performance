@@ -32,7 +32,7 @@ export default function PlayerRatingForm() {
   const [selectedPlayerId, setSelectedPlayerId] = useState(urlParams.get("id") || "");
   const [form, setForm] = useState({ ...EMPTY_FORM, player_id: selectedPlayerId });
 
-  const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
+  const { data: players = [], isLoading: playersLoading } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
   const { data: existingRatings = [] } = useQuery({
     queryKey: ["playerRatings", selectedPlayerId],
     queryFn: () => base44.entities.PlayerRating.filter({ player_id: selectedPlayerId }),
