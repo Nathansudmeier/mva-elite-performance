@@ -22,7 +22,8 @@ export default function WinningTeamUpload({ players, onSaved }) {
     setSaving(true);
     let photo_url = "";
     if (photoFile) {
-      const res = await base44.integrations.Core.UploadFile({ file: photoFile });
+      const resized = await resizeImage(photoFile);
+      const res = await base44.integrations.Core.UploadFile({ file: resized });
       photo_url = res.file_url;
     }
     await base44.entities.WinningTeam.create({

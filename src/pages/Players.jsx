@@ -29,7 +29,8 @@ export default function Players() {
     mutationFn: async (data) => {
       let photo_url = data.photo_url || "";
       if (photoFile) {
-        const res = await base44.integrations.Core.UploadFile({ file: photoFile });
+        const resized = await resizeImage(photoFile);
+        const res = await base44.integrations.Core.UploadFile({ file: resized });
         photo_url = res.file_url;
       }
       const payload = { ...data, photo_url, shirt_number: data.shirt_number ? Number(data.shirt_number) : undefined };
@@ -63,7 +64,8 @@ export default function Players() {
     e.preventDefault();
     const file = e.target.files[0];
     if (!file) return;
-    const res = await base44.integrations.Core.UploadFile({ file });
+    const resized = await resizeImage(file);
+    const res = await base44.integrations.Core.UploadFile({ file: resized });
     await base44.entities.Player.update(player.id, { photo_url: res.file_url });
     queryClient.invalidateQueries({ queryKey: ["players"] });
   };
