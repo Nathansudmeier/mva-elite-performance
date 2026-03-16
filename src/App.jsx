@@ -65,6 +65,8 @@ const AuthenticatedApp = () => {
       <Route path="/Wedstrijden" element={<LayoutWrapper currentPageName="Wedstrijden"><Wedstrijden /></LayoutWrapper>} />
       <Route path="/PlayerRatingForm" element={<LayoutWrapper currentPageName="PlayerRatingForm"><PlayerRatingForm /></LayoutWrapper>} />
       <Route path="/PlayerDetail" element={<LayoutWrapper currentPageName="PlayerDetail"><PlayerDetail /></LayoutWrapper>} />
+      <Route path="/PlayerDashboard" element={<LayoutWrapper currentPageName="PlayerDashboard"><PlayerDashboard /></LayoutWrapper>} />
+      <Route path="/AccountBeheer" element={<LayoutWrapper currentPageName="AccountBeheer"><AccountBeheer /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
