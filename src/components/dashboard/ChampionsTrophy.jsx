@@ -59,7 +59,7 @@ export default function ChampionsTrophy({ players, winningTeams }) {
               <p className="text-xs font-medium mb-1 text-center truncate w-20">{p.name?.split(" ")[0]}</p>
               <div className={`${heights[idx]} w-20 ${bgColors[idx]} rounded-t-lg flex flex-col items-center justify-start pt-3`}>
                 <span className="text-xl font-black">{rank}</span>
-                <span className="text-[10px] mt-1 opacity-80">{(p.winRatio * 100).toFixed(0)}%</span>
+                <span className="text-[10px] mt-1 opacity-80">{p.timesWon}W</span>
               </div>
             </motion.div>
           );
