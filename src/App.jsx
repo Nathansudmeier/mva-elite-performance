@@ -7,6 +7,8 @@ import PageNotFound from './lib/PageNotFound';
 import Wedstrijden from './pages/Wedstrijden';
 import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
+import PlayerDashboard from './pages/PlayerDashboard.jsx';
+import AccountBeheer from './pages/AccountBeheer.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
