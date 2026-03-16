@@ -3,25 +3,17 @@ import { Trophy, TrendingUp, Crown } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ChampionsTrophy({ players, attendanceData, winningTeams }) {
-  // Calculate win ratio for each player
+  // Calculate wins per player based solely on WinningTeam records
   const leaderboard = players.map((player) => {
-    const timesPresent = attendanceData.filter(
-      (a) => a.player_id === player.id && a.present
-    ).length;
-
     const timesWon = winningTeams.filter(
       (wt) => wt.winning_player_ids && wt.winning_player_ids.includes(player.id)
     ).length;
 
-    const winRatio = timesPresent > 0 ? timesWon / timesPresent : 0;
-
     return {
       ...player,
-      timesPresent,
       timesWon,
-      winRatio,
     };
-  }).sort((a, b) => b.winRatio - a.winRatio || b.timesWon - a.timesWon);
+  }).sort((a, b) => b.timesWon - a.timesWon);
 
   const topThree = leaderboard.slice(0, 3);
   const rest = leaderboard.slice(3);
