@@ -132,7 +132,8 @@ export default function PlayerRatingForm() {
       </div>
 
       {/* Category blocks */}
-      {Object.entries(CATEGORIES).map(([cat, criteria]) => (
+      {!selectedPlayerId && <p className="text-white/60 text-sm text-center py-4">Selecteer eerst een speler om de beoordeling in te vullen.</p>}
+      {selectedPlayerId && Object.entries(CATEGORIES).map(([cat, criteria]) => (
         <div key={cat} className="rounded-xl p-4" style={{ backgroundColor: "#1A1F2E" }}>
           <RatingCategoryBlock
             title={cat}
