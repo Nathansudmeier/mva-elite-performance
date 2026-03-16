@@ -76,23 +76,23 @@ export default function PlayerRatingForm() {
     <div className="pb-24 space-y-4 max-w-lg mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button onClick={() => navigate(createPageUrl(`PlayerDetail?id=${playerId}`))} className="p-2 rounded-lg hover:bg-white/10">
-          <ArrowLeft size={20} className="text-white" />
+        <button onClick={() => navigate(createPageUrl(`PlayerDetail?id=${playerId}`))} className="p-2 rounded-lg hover:bg-[#F7F5F2]">
+          <ArrowLeft size={20} color="#FF6B00" />
         </button>
         <div>
-          <h1 className="text-xl font-black text-white">Beoordeling</h1>
-          {player && <p className="text-sm text-white/70">{player.name}</p>}
+          <h1 className="text-xl font-500 text-[#FF6B00]">Beoordeling</h1>
+          {player && <p className="text-sm text-[#888888]">{player.name}</p>}
         </div>
       </div>
 
       {/* Speler selectie */}
-      <div className="elite-card p-4">
-        <label className="text-xs text-[#2F3650] font-semibold uppercase tracking-wider mb-2 block">Speler</label>
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+        <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-2 block">Speler</label>
         {playersLoading ? (
-          <div className="h-10 bg-[#FDE8DC] rounded-md animate-pulse" />
+          <div className="h-10 bg-[#F7F5F2] rounded-xl animate-pulse" />
         ) : (
           <Select value={selectedPlayerId} onValueChange={handlePlayerChange}>
-            <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E] w-full" style={{ backgroundColor: "#fff" }}>
+            <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] w-full" style={{ backgroundColor: "#FFFFFF" }}>
               <SelectValue placeholder="Selecteer een speler..." />
             </SelectTrigger>
             <SelectContent>
@@ -110,12 +110,12 @@ export default function PlayerRatingForm() {
       </div>
 
       {/* Meting & Datum */}
-      <div className="elite-card p-4 space-y-3">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-xs text-[#2F3650] font-semibold uppercase tracking-wider mb-1 block">Meetmoment</label>
+            <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-1 block">Meetmoment</label>
             <Select value={form.meting} onValueChange={(v) => setField("meting", v)}>
-              <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#fff" }}>
+              <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: "#FFFFFF" }}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -126,22 +126,22 @@ export default function PlayerRatingForm() {
             </Select>
           </div>
           <div>
-            <label className="text-xs text-[#2F3650] font-semibold uppercase tracking-wider mb-1 block">Datum</label>
-            <Input type="date" value={form.date} onChange={(e) => setField("date", e.target.value)} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#fff" }} />
+            <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-1 block">Datum</label>
+            <Input type="date" value={form.date} onChange={(e) => setField("date", e.target.value)} className="border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: "#FFFFFF" }} />
           </div>
         </div>
         {totalAvg > 0 && (
-          <div className="flex items-center justify-between rounded-lg px-4 py-2" style={{ backgroundColor: "#1A1F2E" }}>
-            <span className="text-white/70 text-sm">Totaalgemiddelde</span>
-            <span className="text-xl font-black" style={{ color: "#E8724A" }}>{totalAvg}/5</span>
+          <div className="flex items-center justify-between rounded-xl px-4 py-3" style={{ backgroundColor: "#FFF3EB" }}>
+            <span className="text-[#888888] text-sm font-500">Totaalgemiddelde</span>
+            <span className="text-xl font-500" style={{ color: "#FF6B00" }}>{totalAvg}/5</span>
           </div>
         )}
       </div>
 
       {/* Category blocks */}
-      {!selectedPlayerId && <p className="text-white/60 text-sm text-center py-4">Selecteer eerst een speler om de beoordeling in te vullen.</p>}
+      {!selectedPlayerId && <p className="text-[#888888] text-sm text-center py-4">Selecteer eerst een speler om de beoordeling in te vullen.</p>}
       {selectedPlayerId && Object.entries(CATEGORIES).map(([cat, criteria]) => (
-        <div key={cat} className="rounded-xl p-4" style={{ backgroundColor: "#1A1F2E" }}>
+        <div key={cat} className="rounded-2xl p-4 bg-white shadow-sm border border-[#E8E6E1]">
           <RatingCategoryBlock
             title={cat}
             criteria={criteria}
@@ -152,13 +152,12 @@ export default function PlayerRatingForm() {
       ))}
 
       {/* Save */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 lg:sticky lg:bottom-auto" style={{ backgroundColor: "rgba(232,114,74,0.97)", backdropFilter: "blur(8px)" }}>
+      <div className="fixed bottom-0 left-0 right-0 p-4 lg:sticky lg:bottom-auto bg-white border-t border-[#E8E6E1] shadow-lg">
         <div className="max-w-lg mx-auto">
           <Button
             onClick={() => saveMutation.mutate()}
             disabled={saveMutation.isPending}
-            className="w-full h-12 text-white font-bold text-base"
-            style={{ background: "linear-gradient(135deg,#1A1F2E,#2F3650)" }}
+            className="w-full h-12 text-white font-500 text-base bg-[#FF6B00] hover:bg-[#E55A00] transition-colors"
           >
             <Save size={16} className="mr-2" />
             {saveMutation.isPending ? "Opslaan..." : "Beoordeling Opslaan"}
