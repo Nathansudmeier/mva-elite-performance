@@ -196,51 +196,15 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
           })}
         </div>
 
-        {/* Bench */}
+        {/* Bench — hidden droppable for drag-back support */}
         <Droppable droppableId="bench" direction="vertical">
           {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className="flex-1 md:w-36 overflow-y-auto"
-              style={{ maxHeight: 420 }}
-            >
-              <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#2F3650" }}>
-                Wisselspelers ({benchPlayers.length})
-              </p>
-              <div className="space-y-1.5">
-                {benchPlayers.map((player, index) => (
-                  <Draggable key={player.id} draggableId={player.id} index={index}>
-                    {(dp, ds) => (
-                      <div
-                        ref={dp.innerRef}
-                        {...dp.draggableProps}
-                        {...dp.dragHandleProps}
-                        className="flex items-center gap-2 rounded-lg px-2 py-2 cursor-grab"
-                        style={{
-                          ...dp.draggableProps.style,
-                          backgroundColor: ds.isDragging ? "#FDE8DC" : "#FFF5F0",
-                          border: "1px solid #FDE8DC",
-                          opacity: ds.isDragging ? 0.85 : 1,
-                        }}
-                      >
-                        <div
-                          className="w-7 h-7 rounded-full overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold text-white"
-                          style={{ backgroundColor: "#2F3650" }}
-                        >
-                          {player.photo_url
-                            ? <img src={player.photo_url} className="w-full h-full object-cover" alt="" />
-                            : player.name?.charAt(0)}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-semibold truncate" style={{ color: "#1A1F2E" }}>{player.name?.split(" ")[0]}</p>
-                          {player.shirt_number && <p className="text-[10px]" style={{ color: "#D45A30" }}>#{player.shirt_number}</p>}
-                        </div>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-              </div>
+            <div ref={provided.innerRef} {...provided.droppableProps} style={{ display: "none" }}>
+              {benchPlayers.map((player, index) => (
+                <Draggable key={player.id} draggableId={player.id} index={index}>
+                  {(dp) => <div ref={dp.innerRef} {...dp.draggableProps} {...dp.dragHandleProps} />}
+                </Draggable>
+              ))}
               {provided.placeholder}
             </div>
           )}
