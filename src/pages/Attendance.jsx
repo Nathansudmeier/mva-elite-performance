@@ -51,9 +51,9 @@ export default function Attendance() {
   const sessionAttendance = selectedSession ? attendance.filter((a) => a.session_id === selectedSession.id) : [];
 
   const getPlayerAttendancePct = (playerId) => {
-    const records = attendance.filter((a) => a.player_id === playerId);
-    if (records.length === 0) return 0;
-    return ((records.filter((a) => a.present).length / records.length) * 100).toFixed(0);
+    if (sessions.length === 0) return 0;
+    const present = attendance.filter((a) => a.player_id === playerId && a.present).length;
+    return ((present / sessions.length) * 100).toFixed(0);
   };
 
   return (
