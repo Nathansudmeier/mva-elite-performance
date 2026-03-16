@@ -12,7 +12,8 @@ import {
   Menu,
   X,
   Shield,
-  Swords
+  Swords,
+  Star
 } from "lucide-react";
 
 const navItems = [
@@ -21,6 +22,7 @@ const navItems = [
   { name: "Wedstrijden", icon: Swords, page: "Wedstrijden" },
   { name: "Aanwezigheid", icon: ClipboardCheck, page: "Attendance" },
   { name: "Fysiek", icon: Activity, page: "PhysicalMonitor" },
+  { name: "Beoordeling", icon: Star, page: "PlayerRatingForm" },
   { name: "Tactiek", icon: Target, page: "Tactics" },
   { name: "Video", icon: Video, page: "VideoHub" },
   { name: "Reflectie", icon: BarChart3, page: "SelfReflection" },
