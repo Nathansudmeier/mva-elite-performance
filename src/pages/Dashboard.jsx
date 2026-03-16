@@ -206,9 +206,9 @@ export default function Dashboard() {
 
       {/* BLOK 4: Groepsfysiek */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="elite-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#2F3650] mb-3">Avg. Yo-Yo Niveau</p>
-          <p className="text-3xl font-black text-[#D45A30]">{avgLatestYoyo}</p>
+        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-3">Avg. Yo-Yo Niveau</p>
+          <p className="text-3xl font-black text-white">{avgLatestYoyo}</p>
           {yoyoDiff && (
             <div className="flex items-center gap-1 mt-2">
               {parseFloat(yoyoDiff) >= 0 ? (
@@ -222,9 +222,9 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-        <div className="elite-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#2F3650] mb-3">Avg. 30m Sprint (sec)</p>
-          <p className="text-3xl font-black text-[#D45A30]">{avgLatestSprint}</p>
+        <div className="p-5 rounded-xl backdrop-blur-sm" style={{ backgroundColor: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)" }}>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white mb-3">Avg. 30m Sprint (sec)</p>
+          <p className="text-3xl font-black text-white">{avgLatestSprint}</p>
           {sprintDiff && (
             <div className="flex items-center gap-1 mt-2">
               {parseFloat(sprintDiff) <= 0 ? (
