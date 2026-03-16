@@ -221,7 +221,7 @@ export default function Dashboard() {
       <div className="elite-card p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-black text-[#1A1F2E]">🏆 Top 5 Winnaars</h2>
-          <button onClick={() => navigate("/Dashboard")} className="text-xs font-semibold text-[#D45A30] hover:underline flex items-center gap-1">
+          <button onClick={() => navigate("/Dashboard#leaderboard")} className="text-xs font-semibold text-white hover:underline flex items-center gap-1">
             Volledig leaderboard <LinkIcon size={12} />
           </button>
         </div>
