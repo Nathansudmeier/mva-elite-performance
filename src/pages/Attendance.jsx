@@ -29,10 +29,11 @@ export default function Attendance() {
       await base44.entities.Attendance.bulkCreate(records);
       return session;
     },
-    onSuccess: () => {
+    onSuccess: (session) => {
       queryClient.invalidateQueries({ queryKey: ["sessions"] });
       queryClient.invalidateQueries({ queryKey: ["attendance"] });
       setNewSessionDialog(false);
+      setSelectedSessionId(session.id);
     },
   });
 
