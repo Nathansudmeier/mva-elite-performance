@@ -362,6 +362,7 @@ export default function LiveMatch() {
           type={activeModal}
           minute={seconds}
           players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
+          substitutePlayers={activePlayers.filter(p => substitutes.includes(p.id) && !substitutedIn.includes(p.id))}
           onConfirm={handleEvent}
           onClose={() => setActiveModal(null)}
         />
