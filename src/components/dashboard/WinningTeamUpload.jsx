@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Camera, Check, Upload, X } from "lucide-react";
+import { resizeImage } from "@/components/utils/imageResize";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
