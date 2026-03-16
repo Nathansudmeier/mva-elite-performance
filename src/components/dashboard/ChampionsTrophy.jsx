@@ -2,7 +2,7 @@ import React from "react";
 import { Trophy, TrendingUp, Crown } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function ChampionsTrophy({ players, attendanceData, winningTeams }) {
+export default function ChampionsTrophy({ players, winningTeams }) {
   // Calculate wins per player based solely on WinningTeam records
   const leaderboard = players.map((player) => {
     const timesWon = winningTeams.filter(
