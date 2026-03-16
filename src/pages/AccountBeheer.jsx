@@ -83,8 +83,8 @@ function AccountBeheerContent() {
     <div className="space-y-6 pb-20">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white">Accountbeheer</h1>
-          <p className="text-white/70 text-sm">{speelsters.length} speelsters · {trainers.length} trainers</p>
+          <h1 className="text-2xl font-500 text-[#FF6B00]">Accountbeheer</h1>
+          <p className="text-[#888888] text-sm">{speelsters.length} speelsters · {trainers.length} trainers</p>
         </div>
         <Button onClick={() => setInviteOpen(true)} style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)", color: "#fff" }}>
           <Plus size={16} className="mr-1" /> Uitnodigen

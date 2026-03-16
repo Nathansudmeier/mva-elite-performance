@@ -71,8 +71,8 @@ export default function PhysicalMonitor() {
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white">Fysieke Monitor</h1>
-          <p className="text-sm text-white/70">Yo-Yo, Sprint, Sprongkracht & Belastbaarheid</p>
+          <h1 className="text-2xl font-500 text-[#FF6B00]">Fysieke Monitor</h1>
+          <p className="text-sm text-[#888888]">Yo-Yo, Sprint, Sprongkracht & Belastbaarheid</p>
         </div>
       </div>
 
