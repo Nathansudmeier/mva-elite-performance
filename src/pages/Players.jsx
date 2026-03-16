@@ -76,7 +76,7 @@ function PlayersContent() {
   };
 
   return (
-    <div className="space-y-6 pb-20 lg:pb-6" id="players-content">
+    <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-black text-white">Speelsters</h1>
