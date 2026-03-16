@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
-import { Plus, ChevronRight, Edit2, Trophy, Shield, Swords, ArrowLeftRight, Flag, Radio } from "lucide-react";
+import { Plus, ChevronRight, Edit2, Trophy, Shield, Swords, ArrowLeftRight, Flag, Radio, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import FieldLineup from "../components/wedstrijden/FieldLineup";
 import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
@@ -76,6 +76,14 @@ export default function Wedstrijden() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["matches"] });
       setDialogOpen(false);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.Match.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["matches"] });
+      setSelectedMatch(null);
     },
   });
 
@@ -184,6 +192,13 @@ export default function Wedstrijden() {
                         <Radio size={12} className="mr-1" /> Live
                       </Button>
                     </Link>
+                    <Button size="sm" variant="outline" onClick={() => {
+                      if (confirm("Weet je zeker dat je deze wedstrijd wilt verwijderen?")) {
+                        deleteMutation.mutate(detailMatch.id);
+                      }
+                    }} className="border-[#FF6B6B] text-[#C0392B] hover:bg-red-50">
+                      <Trash2 size={12} className="mr-1" /> Verwijderen
+                    </Button>
                   </div>
                 </div>
               </div>
