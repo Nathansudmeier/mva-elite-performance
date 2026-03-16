@@ -132,7 +132,7 @@ export default function Wedstrijden() {
       <div className="grid lg:grid-cols-5 gap-6">
         {/* Match list */}
         <div className="lg:col-span-2 space-y-2">
-          <h2 className="text-sm font-semibold text-white/70 uppercase tracking-wider mb-3">
+          <h2 className="text-sm font-500 text-[#888888] uppercase tracking-wider mb-3">
             {activeTeam} — {teamMatches.length} wedstrijd{teamMatches.length !== 1 ? "en" : ""}
           </h2>
           {teamMatches.map((m) => {
