@@ -41,7 +41,10 @@ export default function Attendance() {
     mutationFn: async ({ attendanceId, present }) => {
       await base44.entities.Attendance.update(attendanceId, { present });
     },
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["attendance"] }); },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["attendance"] });
+      // Do NOT invalidate sessions here — would cause re-sort and session jump
+    },
   });
 
   const selectedSession = sessions.find((s) => s.id === selectedSessionId) ?? null;
