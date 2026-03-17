@@ -25,18 +25,19 @@ const QUILL_MODULES = {
 };
 
 function SpelprincipeModal({ item, onClose, onSave }) {
-  const [form, setForm] = useState(item || { title: "", category: "Algemeen", content: "", video_url: "", published: true });
-  const [uploading, setUploading] = useState(false);
-  const fileRef = useRef();
+  const [form, setForm] = useState(item || { title: "", category: "Algemeen", content: "", video_url: "", image_url: "", published: true });
+  const [uploading, setUploading] = useState(null); // null | "video" | "image"
+  const videoRef = useRef();
+  const imageRef = useRef();
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  const handleVideoUpload = async (e) => {
+  const handleUpload = async (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
-    setUploading(true);
+    setUploading(type);
     const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    set("video_url", file_url);
-    setUploading(false);
+    set(type === "video" ? "video_url" : "image_url", file_url);
+    setUploading(null);
   };
 
   return (
@@ -78,6 +79,8 @@ function SpelprincipeModal({ item, onClose, onSave }) {
               />
             </div>
           </div>
+
+          {/* Video upload */}
           <div>
             <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Video</label>
             {form.video_url ? (
@@ -91,20 +94,44 @@ function SpelprincipeModal({ item, onClose, onSave }) {
             ) : (
               <button
                 type="button"
-                onClick={() => fileRef.current.click()}
-                disabled={uploading}
+                onClick={() => videoRef.current.click()}
+                disabled={!!uploading}
                 className="w-full border-2 border-dashed border-[#E8E6E1] rounded-xl py-4 flex flex-col items-center gap-2 hover:border-[#FF6B00] hover:bg-[#FFF3EB] transition-colors"
               >
-                {uploading ? (
-                  <Loader2 size={20} className="text-[#FF6B00] animate-spin" />
-                ) : (
-                  <Upload size={20} className="text-[#888888]" />
-                )}
-                <span className="text-sm text-[#888888]">{uploading ? "Uploaden..." : "Klik om video te uploaden"}</span>
+                {uploading === "video" ? <Loader2 size={20} className="text-[#FF6B00] animate-spin" /> : <Upload size={20} className="text-[#888888]" />}
+                <span className="text-sm text-[#888888]">{uploading === "video" ? "Uploaden..." : "Klik om video te uploaden"}</span>
                 <span className="text-xs text-[#AAAAAA]">MP4, MOV, AVI</span>
               </button>
             )}
-            <input ref={fileRef} type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />
+            <input ref={videoRef} type="file" accept="video/*" className="hidden" onChange={e => handleUpload(e, "video")} />
+          </div>
+
+          {/* Image upload */}
+          <div>
+            <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Afbeelding</label>
+            {form.image_url ? (
+              <div className="relative rounded-xl overflow-hidden border border-[#E8E6E1]">
+                <img src={form.image_url} alt="preview" className="w-full max-h-48 object-cover" />
+                <button
+                  onClick={() => set("image_url", "")}
+                  className="absolute top-2 right-2 bg-white/90 p-1.5 rounded-lg hover:bg-white shadow-sm"
+                >
+                  <X size={14} className="text-[#888888]" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => imageRef.current.click()}
+                disabled={!!uploading}
+                className="w-full border-2 border-dashed border-[#E8E6E1] rounded-xl py-4 flex flex-col items-center gap-2 hover:border-[#FF6B00] hover:bg-[#FFF3EB] transition-colors"
+              >
+                {uploading === "image" ? <Loader2 size={20} className="text-[#FF6B00] animate-spin" /> : <ImageIcon size={20} className="text-[#888888]" />}
+                <span className="text-sm text-[#888888]">{uploading === "image" ? "Uploaden..." : "Klik om afbeelding te uploaden"}</span>
+                <span className="text-xs text-[#AAAAAA]">JPG, PNG, GIF</span>
+              </button>
+            )}
+            <input ref={imageRef} type="file" accept="image/*" className="hidden" onChange={e => handleUpload(e, "image")} />
           </div>
           <div className="flex items-center gap-2">
             <input type="checkbox" id="pub" checked={form.published} onChange={e => set("published", e.target.checked)} className="accent-[#FF6B00]" />
