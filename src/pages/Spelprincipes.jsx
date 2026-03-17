@@ -127,23 +127,20 @@ function SpelprincipeModal({ item, onClose, onSave }) {
 
 function SpelprincipeCard({ item, canEdit, onEdit, onDelete }) {
   const [expanded, setExpanded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
   const colors = CATEGORY_COLORS[item.category] || CATEGORY_COLORS.Algemeen;
-  const embedUrl = getYouTubeEmbedUrl(item.video_url);
+  const plainText = item.content?.replace(/<[^>]+>/g, "") || "";
+  const isLong = plainText.length > 200;
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm overflow-hidden">
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex-1">
-            <span
-              className="inline-block text-xs font-500 px-2 py-0.5 rounded-full mb-2"
-              style={{ backgroundColor: colors.bg, color: colors.text, border: `1px solid ${colors.border}` }}
-            >
-              {item.category}
-            </span>
-            <h3 className="font-500 text-[#1A1A1A] text-base">{item.title}</h3>
-          </div>
+    <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm overflow-hidden flex flex-col">
+      <div className="p-5 flex-1">
+        <div className="flex items-start justify-between gap-2 mb-3">
+          <span
+            className="inline-block text-xs font-500 px-2.5 py-1 rounded-full"
+            style={{ backgroundColor: colors.bg, color: colors.text, border: `1px solid ${colors.border}` }}
+          >
+            {item.category}
+          </span>
           {canEdit && (
             <div className="flex gap-1 shrink-0">
               <button onClick={() => onEdit(item)} className="p-1.5 rounded-lg hover:bg-[#FFF3EB] text-[#888888] hover:text-[#FF6B00]"><Pencil size={14} /></button>
@@ -152,12 +149,18 @@ function SpelprincipeCard({ item, canEdit, onEdit, onDelete }) {
           )}
         </div>
 
+        <h3 className="font-600 text-[#1A1A1A] text-lg mb-3">{item.title}</h3>
+
         {item.content && (
-          <div className="mt-2">
-            <p className={`text-sm text-[#555555] leading-relaxed ${!expanded ? "line-clamp-3" : ""}`}>{item.content}</p>
-            {item.content.length > 120 && (
-              <button onClick={() => setExpanded(!expanded)} className="text-xs text-[#FF6B00] mt-1 flex items-center gap-1">
-                {expanded ? "Minder" : "Meer lezen"}
+          <div>
+            <div
+              className={`prose prose-sm max-w-none text-[#555555] ${!expanded && isLong ? "line-clamp-4" : ""}`}
+              style={{ fontSize: 14, lineHeight: 1.7 }}
+              dangerouslySetInnerHTML={{ __html: item.content }}
+            />
+            {isLong && (
+              <button onClick={() => setExpanded(!expanded)} className="text-xs text-[#FF6B00] mt-2 flex items-center gap-1 font-500">
+                {expanded ? "Minder tonen" : "Alles lezen"}
                 <ChevronDown size={12} className={`transition-transform ${expanded ? "rotate-180" : ""}`} />
               </button>
             )}
@@ -165,31 +168,14 @@ function SpelprincipeCard({ item, canEdit, onEdit, onDelete }) {
         )}
       </div>
 
-      {(item.video_url) && (
+      {item.video_url && (
         <div className="border-t border-[#E8E6E1]">
-          {embedUrl && !videoError ? (
-            <div className="aspect-video relative">
-              <iframe
-                src={embedUrl}
-                className="w-full h-full"
-                allowFullScreen
-                title={item.title}
-                onError={() => setVideoError(true)}
-              />
-              {/* Fallback overlay for embed errors like error 153 */}
-              <div className="absolute inset-0 flex-col items-center justify-center bg-[#F7F5F2] hidden" id={`err-${item.id}`} />
-            </div>
-          ) : embedUrl && videoError ? (
-            <a href={item.video_url} target="_blank" rel="noreferrer"
-              className="flex items-center gap-2 px-4 py-3 text-sm text-[#FF6B00] hover:bg-[#FFF3EB]">
-              <Youtube size={16} /> Video kan niet worden ingesloten — klik om te openen
-            </a>
-          ) : (
-            <a href={item.video_url} target="_blank" rel="noreferrer"
-              className="flex items-center gap-2 px-4 py-3 text-sm text-[#FF6B00] hover:bg-[#FFF3EB]">
-              <Youtube size={16} /> Bekijk video
-            </a>
-          )}
+          <video
+            src={item.video_url}
+            controls
+            className="w-full max-h-64 bg-black"
+            preload="metadata"
+          />
         </div>
       )}
     </div>
