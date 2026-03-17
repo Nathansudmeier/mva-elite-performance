@@ -73,10 +73,10 @@ function AccountBeheerContent() {
 
   const linkMutation = useMutation({
     mutationFn: () => {
-      if (linkUser.role === "trainer") {
-        return base44.entities.User.update(linkUser.id, { trainer_id: linkTrainerId });
+      if (linkRole === "trainer") {
+        return base44.entities.User.update(linkUser.id, { role: linkRole, trainer_id: linkTrainerId, player_id: "" });
       }
-      return base44.entities.User.update(linkUser.id, { player_id: linkPlayerId });
+      return base44.entities.User.update(linkUser.id, { role: linkRole, player_id: linkPlayerId, trainer_id: "" });
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["users"]);
@@ -84,6 +84,7 @@ function AccountBeheerContent() {
       setLinkUser(null);
       setLinkPlayerId("");
       setLinkTrainerId("");
+      setLinkRole("");
     }
   });
 
