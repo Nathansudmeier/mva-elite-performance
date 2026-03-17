@@ -69,9 +69,11 @@ export default function Attendance() {
           <h1 className="text-2xl font-500 text-[#FF6B00]">Aanwezigheid</h1>
           <p className="text-sm text-[#888888]">{sessions.length} sessies geregistreerd</p>
         </div>
-        <Button onClick={() => setNewSessionDialog(true)} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
-          <Plus size={16} className="mr-1" /> Nieuwe Sessie
-        </Button>
+        {isTrainer && (
+          <Button onClick={() => setNewSessionDialog(true)} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
+            <Plus size={16} className="mr-1" /> Nieuwe Sessie
+          </Button>
+        )}
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -124,13 +126,19 @@ export default function Attendance() {
                         </div>
                         <span className="text-sm font-medium text-[#1A1F2E]">{player?.name}</span>
                       </div>
-                      <button
-                        onClick={() => toggleAttendance.mutate({ attendanceId: a.id, present: !a.present })}
-                        className="w-10 h-10 rounded-lg flex items-center justify-center transition-all text-white"
-                        style={{ backgroundColor: a.present ? '#4CAF82' : '#2F3650' }}
-                      >
-                        {a.present ? <Check size={18} /> : <X size={18} />}
-                      </button>
+                      {isTrainer ? (
+                        <button
+                          onClick={() => toggleAttendance.mutate({ attendanceId: a.id, present: !a.present })}
+                          className="w-10 h-10 rounded-lg flex items-center justify-center transition-all text-white"
+                          style={{ backgroundColor: a.present ? '#4CAF82' : '#2F3650' }}
+                        >
+                          {a.present ? <Check size={18} /> : <X size={18} />}
+                        </button>
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: a.present ? '#4CAF82' : '#E8E6E1' }}>
+                          {a.present ? <Check size={18} /> : <X size={18} className="text-[#888888]" />}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
