@@ -2,11 +2,14 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Star, Activity, Calendar, Heart } from "lucide-react";
+import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList } from "lucide-react";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import { Button } from "@/components/ui/button";
 
 export default function PlayerDetail() {
   const params = new URLSearchParams(window.location.search);
   const playerId = params.get("id");
+  const { isTrainer } = useCurrentUser();
 
   const { data: player } = useQuery({
     queryKey: ["player", playerId],
@@ -72,7 +75,7 @@ export default function PlayerDetail() {
         <Link to="/Players" className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
           <ArrowLeft size={18} className="text-[#1A1A1A]" />
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-1">
           {player.photo_url ? (
             <img src={player.photo_url} alt={player.name} className="w-16 h-16 rounded-full object-cover border-2 border-[#E8E6E1]" />
           ) : (
@@ -80,10 +83,18 @@ export default function PlayerDetail() {
               {player.name?.[0]}
             </div>
           )}
-          <div>
+          <div className="flex-1">
             <h1 className="text-2xl font-500 text-[#1A1A1A]">{player.name}</h1>
             <p className="text-[#888888] text-sm">{player.position} · #{player.shirt_number}</p>
           </div>
+          {isTrainer && (
+            <Link to={`/PlayerRatingForm?player_id=${playerId}`}>
+              <Button className="bg-[#FF6B00] hover:bg-[#E55A00] text-white gap-2">
+                <ClipboardList size={16} />
+                Beoordelen
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 
