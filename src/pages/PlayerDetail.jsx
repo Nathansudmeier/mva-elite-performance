@@ -127,21 +127,21 @@ export default function PlayerDetail() {
 
       {/* Physical Tests */}
       {(yoyoTests.length > 0 || physicalTests.length > 0) && (
-        <div className="elite-card p-4">
-          <h2 className="font-bold text-sm uppercase tracking-wide text-[#D45A30] mb-3 flex items-center gap-2">
+        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
             <Activity size={14} /> Fysieke Data
           </h2>
           <div className="space-y-2">
             {yoyoTests.slice(-3).map(t => (
               <div key={t.id} className="flex justify-between text-sm">
-                <span className="text-[#2F3650]">Yo-Yo {t.date}</span>
-                <span className="font-semibold text-[#1A1F2E]">Level {t.level} · {t.distance}m</span>
+                <span className="text-[#888888]">Yo-Yo {t.date}</span>
+                <span className="font-500 text-[#1A1A1A]">Level {t.level} · {t.distance}m</span>
               </div>
             ))}
             {physicalTests.slice(-3).map(t => (
               <div key={t.id} className="flex justify-between text-sm">
-                <span className="text-[#2F3650]">Sprint 30m {t.date}</span>
-                <span className="font-semibold text-[#1A1F2E]">{t.sprint_30m}s</span>
+                <span className="text-[#888888]">Sprint 30m {t.date}</span>
+                <span className="font-500 text-[#1A1A1A]">{t.sprint_30m}s</span>
               </div>
             ))}
           </div>
@@ -150,28 +150,28 @@ export default function PlayerDetail() {
 
       {/* Attendance */}
       {attendance.length > 0 && (
-        <div className="elite-card p-4">
-          <h2 className="font-bold text-sm uppercase tracking-wide text-[#D45A30] mb-3 flex items-center gap-2">
+        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
             <Calendar size={14} /> Aanwezigheid
           </h2>
           <div className="flex items-center gap-4">
-            <div className="text-3xl font-bold text-[#D45A30]">{attendancePct}%</div>
-            <div className="text-sm text-[#2F3650]">{presentCount} van {attendance.length} sessies aanwezig</div>
+            <div className="text-3xl font-500 text-[#FF6B00]">{attendancePct}%</div>
+            <div className="text-sm text-[#888888]">{presentCount} van {attendance.length} sessies aanwezig</div>
           </div>
         </div>
       )}
 
       {/* Wellness */}
       {wellness.length > 0 && (
-        <div className="elite-card p-4">
-          <h2 className="font-bold text-sm uppercase tracking-wide text-[#D45A30] mb-3 flex items-center gap-2">
+        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
             <Heart size={14} /> Belastbaarheid (laatste 5)
           </h2>
           <div className="space-y-2">
             {wellness.slice(-5).reverse().map(w => (
               <div key={w.id} className="flex justify-between text-sm">
-                <span className="text-[#2F3650]">{w.date}</span>
-                <span className="text-[#1A1F2E]">Slaap {w.sleep}/5 · Vermoeidheid {w.fatigue}/5</span>
+                <span className="text-[#888888]">{w.date}</span>
+                <span className="text-[#1A1A1A]">Slaap {w.sleep}/5 · Vermoeidheid {w.fatigue}/5</span>
               </div>
             ))}
           </div>
