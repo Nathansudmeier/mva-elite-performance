@@ -77,38 +77,32 @@ export default function PhysicalMonitor() {
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="border border-[#FDE8DC]" style={{ backgroundColor: '#FFF5F0' }}>
-          <TabsTrigger value="yoyo" className="data-[state=active]:text-white" style={{ '--tw-active-bg': '#1A1F2E' }} data-state={tab === 'yoyo' ? 'active' : undefined}>
-            <span style={tab === 'yoyo' ? { backgroundColor: '#1A1F2E', color: '#fff', borderRadius: '0.375rem', padding: '0.25rem 0.75rem' } : { color: '#2F3650' }}>Yo-Yo Test</span>
-          </TabsTrigger>
-          <TabsTrigger value="physical">
-            <span style={tab === 'physical' ? { backgroundColor: '#1A1F2E', color: '#fff', borderRadius: '0.375rem', padding: '0.25rem 0.75rem' } : { color: '#2F3650' }}>Sprint & Sprong</span>
-          </TabsTrigger>
-          <TabsTrigger value="wellness">
-            <span style={tab === 'wellness' ? { backgroundColor: '#1A1F2E', color: '#fff', borderRadius: '0.375rem', padding: '0.25rem 0.75rem' } : { color: '#2F3650' }}>Belastbaarheid</span>
-          </TabsTrigger>
+        <TabsList className="border border-[#E8E6E1] bg-[#F7F5F2]">
+          <TabsTrigger value="yoyo" className="data-[state=active]:bg-[#FF6B00] data-[state=active]:text-white text-[#888888]">Yo-Yo Test</TabsTrigger>
+          <TabsTrigger value="physical" className="data-[state=active]:bg-[#FF6B00] data-[state=active]:text-white text-[#888888]">Sprint & Sprong</TabsTrigger>
+          <TabsTrigger value="wellness" className="data-[state=active]:bg-[#FF6B00] data-[state=active]:text-white text-[#888888]">Belastbaarheid</TabsTrigger>
         </TabsList>
 
         <TabsContent value="yoyo" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button onClick={() => openDialog("yoyo")} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
+            <Button onClick={() => openDialog("yoyo")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
               <Plus size={16} className="mr-1" /> Yo-Yo Test
             </Button>
           </div>
-          <div className="elite-card p-6">
-            <h2 className="font-bold mb-4 flex items-center gap-2 text-[#1A1F2E]">
-              <Activity size={18} style={{ color: '#D45A30' }} /> Huidig Yo-Yo Niveau
+          <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
+            <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
+              <Activity size={18} className="text-[#FF6B00]" /> Huidig Yo-Yo Niveau
             </h2>
             <div className="space-y-2">
               {yoyoByPlayer.map((p) => (
                 <div key={p.name} className="flex items-center gap-3">
-                  <span className="text-sm w-20 truncate text-[#1A1F2E]">{p.name}</span>
-                  <div className="flex-1 h-6 rounded-full overflow-hidden" style={{ backgroundColor: '#FDE8DC' }}>
+                  <span className="text-sm w-20 truncate text-[#1A1A1A]">{p.name}</span>
+                  <div className="flex-1 h-6 rounded-full overflow-hidden bg-[#F7F5F2]">
                     <div
-                      className="h-full rounded-full flex items-center justify-end pr-2 text-white"
-                      style={{ width: `${Math.min((p.level / 23) * 100, 100)}%`, background: 'linear-gradient(90deg,#1A1F2E,#D45A30)' }}
+                      className="h-full rounded-full flex items-center justify-end pr-2 text-white bg-[#FF6B00]"
+                      style={{ width: `${Math.min((p.level / 23) * 100, 100)}%` }}
                     >
-                      <span className="text-[10px] font-bold">{p.level || "-"}</span>
+                      <span className="text-[10px] font-500">{p.level || "-"}</span>
                     </div>
                   </div>
                 </div>
@@ -116,16 +110,16 @@ export default function PhysicalMonitor() {
             </div>
           </div>
           {yoyoProgression.length > 0 && (
-            <div className="elite-card p-6">
-              <h2 className="font-bold mb-4 text-[#1A1F2E]">Yo-Yo Progressie</h2>
+            <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
+              <h2 className="font-500 mb-4 text-[#1A1A1A]">Yo-Yo Progressie</h2>
               <div className="h-56">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={yoyoProgression}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#FDE8DC" />
-                    <XAxis dataKey="date" tick={{ fill: '#2F3650', fontSize: 11 }} />
-                    <YAxis tick={{ fill: '#2F3650', fontSize: 11 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E8E6E1" />
+                    <XAxis dataKey="date" tick={{ fill: '#888888', fontSize: 11 }} />
+                    <YAxis tick={{ fill: '#888888', fontSize: 11 }} />
                     <Tooltip contentStyle={chartTooltipStyle} />
-                    <Line type="monotone" dataKey="level" stroke="#D45A30" strokeWidth={2} dot={{ fill: '#D45A30', r: 4 }} />
+                    <Line type="monotone" dataKey="level" stroke="#FF6B00" strokeWidth={2} dot={{ fill: '#FF6B00', r: 4 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -135,18 +129,18 @@ export default function PhysicalMonitor() {
 
         <TabsContent value="physical" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button onClick={() => openDialog("physical")} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
+            <Button onClick={() => openDialog("physical")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
               <Plus size={16} className="mr-1" /> Test Invoeren
             </Button>
           </div>
-          <div className="elite-card p-6">
-            <h2 className="font-bold mb-4 flex items-center gap-2 text-[#1A1F2E]">
-              <Timer size={18} style={{ color: '#1A1F2E' }} /> Sprint & Sprongkracht Resultaten
+          <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
+            <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
+              <Timer size={18} className="text-[#1A1A1A]" /> Sprint & Sprongkracht Resultaten
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#FDE8DC]" style={{ color: '#2F3650' }}>
+                  <tr className="border-b border-[#E8E6E1] text-[#888888]">
                     <th className="text-left py-2">Speelster</th>
                     <th className="text-left py-2">Datum</th>
                     <th className="text-right py-2">Sprint 30m</th>
@@ -155,11 +149,11 @@ export default function PhysicalMonitor() {
                 </thead>
                 <tbody>
                   {physicalTests.sort((a, b) => new Date(b.date) - new Date(a.date)).map((t) => (
-                    <tr key={t.id} className="border-b border-[#FDE8DC]">
-                      <td className="py-2 font-medium text-[#1A1F2E]">{players.find((p) => p.id === t.player_id)?.name || "-"}</td>
-                      <td className="py-2" style={{ color: '#2F3650' }}>{format(new Date(t.date), "d MMM", { locale: nl })}</td>
-                      <td className="py-2 text-right font-bold" style={{ color: '#D45A30' }}>{t.sprint_30m ? `${t.sprint_30m}s` : "-"}</td>
-                      <td className="py-2 text-right font-bold" style={{ color: '#1A1F2E' }}>{t.jump_height ? `${t.jump_height}cm` : "-"}</td>
+                    <tr key={t.id} className="border-b border-[#E8E6E1]">
+                      <td className="py-2 font-500 text-[#1A1A1A]">{players.find((p) => p.id === t.player_id)?.name || "-"}</td>
+                      <td className="py-2 text-[#888888]">{format(new Date(t.date), "d MMM", { locale: nl })}</td>
+                      <td className="py-2 text-right font-500 text-[#FF6B00]">{t.sprint_30m ? `${t.sprint_30m}s` : "-"}</td>
+                      <td className="py-2 text-right font-500 text-[#1A1A1A]">{t.jump_height ? `${t.jump_height}cm` : "-"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -170,18 +164,18 @@ export default function PhysicalMonitor() {
 
         <TabsContent value="wellness" className="space-y-4 mt-4">
           <div className="flex justify-end">
-            <Button onClick={() => openDialog("wellness")} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
+            <Button onClick={() => openDialog("wellness")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
               <Plus size={16} className="mr-1" /> Log Invoeren
             </Button>
           </div>
-          <div className="elite-card p-6">
-            <h2 className="font-bold mb-4 flex items-center gap-2 text-[#1A1F2E]">
-              <Heart size={18} style={{ color: '#C0392B' }} /> Belastbaarheidslogboek
+          <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
+            <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
+              <Heart size={18} className="text-[#C0392B]" /> Belastbaarheidslogboek
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#FDE8DC]" style={{ color: '#2F3650' }}>
+                  <tr className="border-b border-[#E8E6E1] text-[#888888]">
                     <th className="text-left py-2">Speelster</th>
                     <th className="text-left py-2">Datum</th>
                     <th className="text-center py-2">Slaap</th>
@@ -191,9 +185,9 @@ export default function PhysicalMonitor() {
                 </thead>
                 <tbody>
                   {wellness.sort((a, b) => new Date(b.date) - new Date(a.date)).map((w) => (
-                    <tr key={w.id} className="border-b border-[#FDE8DC]">
-                      <td className="py-2 font-medium text-[#1A1F2E]">{players.find((p) => p.id === w.player_id)?.name || "-"}</td>
-                      <td className="py-2" style={{ color: '#2F3650' }}>{format(new Date(w.date), "d MMM", { locale: nl })}</td>
+                    <tr key={w.id} className="border-b border-[#E8E6E1]">
+                      <td className="py-2 font-500 text-[#1A1A1A]">{players.find((p) => p.id === w.player_id)?.name || "-"}</td>
+                      <td className="py-2 text-[#888888]">{format(new Date(w.date), "d MMM", { locale: nl })}</td>
                       <td className="py-2 text-center">{renderScore(w.sleep)}</td>
                       <td className="py-2 text-center">{renderScore(w.fatigue)}</td>
                       <td className="py-2 text-center">{renderScore(w.muscle_pain)}</td>
