@@ -88,34 +88,33 @@ export default function TrainerDetail() {
       </Link>
 
       {/* Trainer Card */}
-      <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm overflow-hidden">
-        <div className="h-28 bg-gradient-to-r from-[#1A1A1A] to-[#333333] relative" />
-        <div className="px-6 pb-6">
-          <div className="flex items-end justify-between -mt-12 mb-4">
-            <div className="w-24 h-24 rounded-2xl border-4 border-white overflow-hidden bg-[#1A1A1A] flex items-center justify-center shadow-md">
-              {trainer.photo_url ? (
-                <img src={trainer.photo_url} alt={trainer.name} className="w-full h-full object-cover" />
-              ) : (
-                <User size={36} className="text-[#FF6B00]" />
-              )}
-            </div>
-            {isTrainer && (
-              <Link
-                to={createPageUrl("Staff")}
-                className="flex items-center gap-1 text-xs text-[#888888] border border-[#E8E6E1] rounded-lg px-3 py-1.5 hover:bg-[#FFF3EB] hover:text-[#FF6B00] transition-colors"
-              >
-                <Edit2 size={12} /> Bewerken
-              </Link>
+      <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm p-6">
+        <div className="flex items-center gap-5">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-[#F7F5F2] flex items-center justify-center flex-shrink-0">
+            {trainer.photo_url ? (
+              <img src={trainer.photo_url} alt={trainer.name} className="w-full h-full object-cover" />
+            ) : (
+              <User size={32} className="text-[#FF6B00]" />
             )}
           </div>
-          <h1 className="text-xl font-500 text-[#1A1A1A]">{trainer.name}</h1>
-          {trainer.role_title && (
-            <p className="text-sm text-[#FF6B00] mt-0.5">{trainer.role_title}</p>
-          )}
-          {trainer.phone && (
-            <a href={`tel:${trainer.phone}`} className="inline-flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#FF6B00] mt-3 transition-colors">
-              <Phone size={14} /> {trainer.phone}
-            </a>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl font-500 text-[#1A1A1A]">{trainer.name}</h1>
+            {trainer.role_title && (
+              <p className="text-sm text-[#FF6B00] mt-0.5">{trainer.role_title}</p>
+            )}
+            {trainer.phone && (
+              <a href={`tel:${trainer.phone}`} className="inline-flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#FF6B00] mt-2 transition-colors">
+                <Phone size={14} /> {trainer.phone}
+              </a>
+            )}
+          </div>
+          {isTrainer && (
+            <Link
+              to={createPageUrl("Staff")}
+              className="flex items-center gap-1 text-xs text-[#888888] border border-[#E8E6E1] rounded-lg px-3 py-1.5 hover:bg-[#FFF3EB] hover:text-[#FF6B00] transition-colors self-start"
+            >
+              <Edit2 size={12} /> Bewerken
+            </Link>
           )}
         </div>
       </div>
