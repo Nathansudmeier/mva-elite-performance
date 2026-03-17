@@ -90,6 +90,7 @@ function SpelprincipeModal({ item, onClose, onSave }) {
 
 function SpelprincipeCard({ item, canEdit, onEdit, onDelete }) {
   const [expanded, setExpanded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const colors = CATEGORY_COLORS[item.category] || CATEGORY_COLORS.Algemeen;
   const embedUrl = getYouTubeEmbedUrl(item.video_url);
 
