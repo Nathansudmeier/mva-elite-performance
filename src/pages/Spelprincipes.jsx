@@ -197,12 +197,12 @@ function SpelprincipeCard({ item, canEdit, onEdit, onDelete }) {
 
       {item.video_url && (
         <div className="border-t border-[#E8E6E1]">
-          <video
-            src={item.video_url}
-            controls
-            className="w-full max-h-64 bg-black"
-            preload="metadata"
-          />
+          <video src={item.video_url} controls className="w-full max-h-64 bg-black" preload="metadata" />
+        </div>
+      )}
+      {!item.video_url && item.image_url && (
+        <div className="border-t border-[#E8E6E1]">
+          <img src={item.image_url} alt={item.title} className="w-full max-h-64 object-cover" />
         </div>
       )}
     </div>
