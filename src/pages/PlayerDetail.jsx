@@ -115,8 +115,8 @@ export default function PlayerDetail() {
         </div>
       )}
 
-      {/* Latest Ratings */}
-      {latestRating && (
+      {/* Latest Ratings — only visible to trainer/admin or the player themselves */}
+      {latestRating && (isTrainer || isOwnProfile) && (
         <div className="rounded-2xl overflow-hidden border border-[#E8E6E1] shadow-sm">
           {/* Header with gradient */}
           <div className="relative p-5" style={{ background: "linear-gradient(135deg, #FF6B00 0%, #E55A00 100%)" }}>
