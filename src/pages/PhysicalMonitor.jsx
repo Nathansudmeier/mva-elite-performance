@@ -201,45 +201,45 @@ export default function PhysicalMonitor() {
       </Tabs>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-sm border-[#FDE8DC]" style={{ backgroundColor: '#FFF5F0', color: '#1A1F2E' }}>
+        <DialogContent className="max-w-sm border-[#E8E6E1] bg-white">
           <DialogHeader>
-            <DialogTitle style={{ color: '#1A1F2E' }}>
+            <DialogTitle className="text-[#1A1A1A]">
               {dialogType === "yoyo" ? "Yo-Yo Test" : dialogType === "physical" ? "Sprint & Sprong Test" : "Belastbaarheid Log"}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <Select value={selectedPlayer} onValueChange={setSelectedPlayer}>
-              <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }}>
+              <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
                 <SelectValue placeholder="Selecteer speelster" />
               </SelectTrigger>
               <SelectContent>
                 {activePlayers.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Input type="date" value={form.date || ""} onChange={(e) => setForm({ ...form, date: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+            <Input type="date" value={form.date || ""} onChange={(e) => setForm({ ...form, date: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
 
             {dialogType === "yoyo" && (
               <>
-                <Input placeholder="Yo-Yo niveau (bijv. 16.2)" value={form.level || ""} onChange={(e) => setForm({ ...form, level: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
-                <Input type="number" placeholder="Afstand (m)" value={form.distance || ""} onChange={(e) => setForm({ ...form, distance: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+                <Input placeholder="Yo-Yo niveau (bijv. 16.2)" value={form.level || ""} onChange={(e) => setForm({ ...form, level: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+                <Input type="number" placeholder="Afstand (m)" value={form.distance || ""} onChange={(e) => setForm({ ...form, distance: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
               </>
             )}
             {dialogType === "physical" && (
               <>
-                <Input type="number" step="0.01" placeholder="Sprint 30m (sec)" value={form.sprint_30m || ""} onChange={(e) => setForm({ ...form, sprint_30m: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
-                <Input type="number" placeholder="Sprongkracht (cm)" value={form.jump_height || ""} onChange={(e) => setForm({ ...form, jump_height: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+                <Input type="number" step="0.01" placeholder="Sprint 30m (sec)" value={form.sprint_30m || ""} onChange={(e) => setForm({ ...form, sprint_30m: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+                <Input type="number" placeholder="Sprongkracht (cm)" value={form.jump_height || ""} onChange={(e) => setForm({ ...form, jump_height: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
               </>
             )}
             {dialogType === "wellness" && (
               <>
                 {[["sleep","Slaapkwaliteit"],["fatigue","Vermoeidheid"],["muscle_pain","Spierpijn"]].map(([key, label]) => (
                   <div key={key}>
-                    <label className="text-xs mb-1 block font-medium" style={{ color: '#2F3650' }}>{label} (1-5)</label>
+                    <label className="text-xs mb-1 block font-500 text-[#888888]">{label} (1-5)</label>
                     <div className="flex gap-2">
                       {[1,2,3,4,5].map((v) => (
                         <button key={v} onClick={() => setForm({ ...form, [key]: v })}
-                          className="w-10 h-10 rounded-lg font-bold text-sm transition-all"
-                          style={form[key] === v ? { backgroundColor: '#D45A30', color: '#fff' } : { backgroundColor: '#FDE8DC', color: '#1A1F2E' }}>
+                          className="w-10 h-10 rounded-xl font-500 text-sm transition-all"
+                          style={form[key] === v ? { backgroundColor: '#FF6B00', color: '#fff' } : { backgroundColor: '#F7F5F2', color: '#1A1A1A' }}>
                           {v}
                         </button>
                       ))}
@@ -249,7 +249,7 @@ export default function PhysicalMonitor() {
               </>
             )}
 
-            <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !selectedPlayer} className="w-full text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
+            <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !selectedPlayer} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
             </Button>
           </div>
