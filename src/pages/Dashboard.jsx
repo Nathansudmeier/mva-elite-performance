@@ -127,6 +127,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
+      {/* Match Day Banner — only for speelsters */}
+      <MatchDayBanner />
+
       {/* BLOK 1: Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
