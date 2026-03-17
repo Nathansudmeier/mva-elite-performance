@@ -13,6 +13,7 @@ import LiveMatch from './pages/LiveMatch.jsx';
 import Spelprincipes from './pages/Spelprincipes.jsx';
 import Staff from './pages/Staff.jsx';
 import TrainerDetail from './pages/TrainerDetail.jsx';
+import Speelminuten from './pages/Speelminuten.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -77,6 +78,7 @@ const AuthenticatedApp = () => {
       <Route path="/Spelprincipes" element={<LayoutWrapper currentPageName="Spelprincipes"><Spelprincipes /></LayoutWrapper>} />
       <Route path="/Staff" element={<LayoutWrapper currentPageName="Staff"><Staff /></LayoutWrapper>} />
       <Route path="/TrainerDetail" element={<LayoutWrapper currentPageName="Staff"><TrainerDetail /></LayoutWrapper>} />
+      <Route path="/Speelminuten" element={<LayoutWrapper currentPageName="Speelminuten"><Speelminuten /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
