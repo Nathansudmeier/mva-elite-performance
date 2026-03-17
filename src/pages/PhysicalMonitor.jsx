@@ -86,11 +86,13 @@ export default function PhysicalMonitor() {
         </TabsList>
 
         <TabsContent value="yoyo" className="space-y-4 mt-4">
-          <div className="flex justify-end">
-            <Button onClick={() => openDialog("yoyo")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-              <Plus size={16} className="mr-1" /> Yo-Yo Test
-            </Button>
-          </div>
+          {isTrainer && (
+            <div className="flex justify-end">
+              <Button onClick={() => openDialog("yoyo")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
+                <Plus size={16} className="mr-1" /> Yo-Yo Test
+              </Button>
+            </div>
+          )}
           <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
             <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
               <Activity size={18} className="text-[#FF6B00]" /> Huidig Yo-Yo Niveau
@@ -130,11 +132,13 @@ export default function PhysicalMonitor() {
         </TabsContent>
 
         <TabsContent value="physical" className="space-y-4 mt-4">
-          <div className="flex justify-end">
-            <Button onClick={() => openDialog("physical")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-              <Plus size={16} className="mr-1" /> Test Invoeren
-            </Button>
-          </div>
+          {isTrainer && (
+            <div className="flex justify-end">
+              <Button onClick={() => openDialog("physical")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
+                <Plus size={16} className="mr-1" /> Test Invoeren
+              </Button>
+            </div>
+          )}
           <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
             <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
               <Timer size={18} className="text-[#1A1A1A]" /> Sprint & Sprongkracht Resultaten
@@ -165,11 +169,13 @@ export default function PhysicalMonitor() {
         </TabsContent>
 
         <TabsContent value="wellness" className="space-y-4 mt-4">
-          <div className="flex justify-end">
-            <Button onClick={() => openDialog("wellness")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-              <Plus size={16} className="mr-1" /> Log Invoeren
-            </Button>
-          </div>
+          {isTrainer && (
+            <div className="flex justify-end">
+              <Button onClick={() => openDialog("wellness")} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
+                <Plus size={16} className="mr-1" /> Log Invoeren
+              </Button>
+            </div>
+          )}
           <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
             <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
               <Heart size={18} className="text-[#C0392B]" /> Belastbaarheidslogboek
