@@ -208,7 +208,7 @@ export default function Layout({ children, currentPageName }) {
         <div 
           className="hidden lg:block fixed inset-0 left-56 top-16 bottom-0 z-0 pointer-events-none"
           style={{
-            backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/98a8a794b_Appbackground.jpg')",
+            backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/d23782f96_AppbackgroundWebsite.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
