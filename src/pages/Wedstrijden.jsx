@@ -278,42 +278,43 @@ export default function Wedstrijden() {
 
       {/* Dialog — new/edit match */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent
-          className="max-w-3xl max-h-[92vh] overflow-y-auto border-[#FDE8DC]"
-          style={{ backgroundColor: "#FFF5F0", color: "#1A1F2E" }}
-        >
+        <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto bg-[#F7F5F2] border-[#E8E6E1]">
           <DialogHeader>
-            <DialogTitle style={{ color: "#1A1F2E" }}>
+            <DialogTitle className="text-[#1A1A1A] text-lg font-semibold">
               {editingMatch ? "Wedstrijd Bewerken" : `Nieuwe Wedstrijd — ${activeTeam}`}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-5">
             {/* Basic info */}
-            <div className="grid grid-cols-2 gap-3">
-              <Input placeholder="Tegenstander" value={form.opponent} onChange={(e) => setForm({ ...form, opponent: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#FFFFFF" }} />
-              <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#FFFFFF" }} />
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              <Select value={form.home_away} onValueChange={(v) => setForm({ ...form, home_away: v })}>
-                <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#FFFFFF" }}><SelectValue /></SelectTrigger>
-                <SelectContent><SelectItem value="Thuis">Thuis</SelectItem><SelectItem value="Uit">Uit</SelectItem></SelectContent>
-              </Select>
-              <Input type="number" placeholder="Doelpunten (thuis)" value={form.score_home} onChange={(e) => setForm({ ...form, score_home: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#FFFFFF" }} />
-              <Input type="number" placeholder="Doelpunten (uit)" value={form.score_away} onChange={(e) => setForm({ ...form, score_away: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#FFFFFF" }} />
+            <div className="space-y-3">
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#888888]">Wedstrijdgegevens</label>
+              <div className="grid grid-cols-2 gap-3">
+                <Input placeholder="Tegenstander" value={form.opponent} onChange={(e) => setForm({ ...form, opponent: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB]" />
+                <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A]" />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <Select value={form.home_away} onValueChange={(v) => setForm({ ...form, home_away: v })}>
+                  <SelectTrigger className="bg-white border-[#E8E6E1] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                  <SelectContent><SelectItem value="Thuis">Thuis</SelectItem><SelectItem value="Uit">Uit</SelectItem></SelectContent>
+                </Select>
+                <Input type="number" placeholder="Score thuis" value={form.score_home} onChange={(e) => setForm({ ...form, score_home: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB]" />
+                <Input type="number" placeholder="Score uit" value={form.score_away} onChange={(e) => setForm({ ...form, score_away: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB]" />
+              </div>
             </div>
 
             {/* Formation */}
-            <Select value={form.formation} onValueChange={(v) => setForm({ ...form, formation: v })}>
-              <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#FFFFFF" }}><SelectValue /></SelectTrigger>
-              <SelectContent>{FORMATIONS.map((f) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent>
-            </Select>
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#888888]">Formatie</label>
+              <Select value={form.formation} onValueChange={(v) => setForm({ ...form, formation: v })}>
+                <SelectTrigger className="bg-white border-[#E8E6E1] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                <SelectContent>{FORMATIONS.map((f) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
 
             {/* Lineup drag & drop */}
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#D45A30" }}>
-                Opstelling — sleep speelsters naar het veld
-              </p>
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#888888]">Opstelling — sleep speelsters naar het veld</label>
               <FieldLineup
                 players={activePlayers}
                 lineupMap={lineupMap}
@@ -331,15 +332,17 @@ export default function Wedstrijden() {
             />
 
             {/* Tactical notes */}
-            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#D45A30" }}>Tactische Notities</p>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {[["ball_possession", "Balbezit (BB)..."], ["pressing", "Pressing (VB)..."], ["transition", "Omschakeling..."], ["set_pieces", "Dode spelmomenten..."]].map(([key, ph]) => (
-                <Textarea key={key} placeholder={ph} value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E] h-20" style={{ backgroundColor: "#FFFFFF" }} />
-              ))}
+            <div className="space-y-3">
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#888888]">Tactische Notities</label>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {[["ball_possession", "Balbezit (BB)..."], ["pressing", "Pressing (VB)..."], ["transition", "Omschakeling..."], ["set_pieces", "Dode spelmomenten..."]].map(([key, ph]) => (
+                  <Textarea key={key} placeholder={ph} value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB] h-20" />
+                ))}
+              </div>
+              <Textarea placeholder="Extra notities..." value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB] h-16" />
             </div>
-            <Textarea placeholder="Extra notities..." value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E] h-16" style={{ backgroundColor: "#FFFFFF" }} />
 
-            <Button onClick={handleSave} disabled={saveMutation.isPending || !form.opponent} className="w-full text-white" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
+            <Button onClick={handleSave} disabled={saveMutation.isPending || !form.opponent} className="w-full text-white font-semibold" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
             </Button>
           </div>
