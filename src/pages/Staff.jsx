@@ -17,6 +17,7 @@ export default function Staff() {
 
 function StaffContent() {
   const queryClient = useQueryClient();
+  const { isTrainer } = useCurrentUser();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: "", role_title: "", phone: "", photo_url: "" });
