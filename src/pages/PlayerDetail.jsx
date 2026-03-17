@@ -47,7 +47,7 @@ export default function PlayerDetail() {
 
   if (!player) return (
     <div className="flex items-center justify-center h-64">
-      <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-[#E8E6E1] border-t-[#FF6B00] rounded-full animate-spin" />
     </div>
   );
 

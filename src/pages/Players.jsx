@@ -82,7 +82,7 @@ function PlayersContent() {
           <h1 className="text-2xl font-500 text-[#FF6B00]">Speelsters</h1>
           <p className="text-sm text-[#888888]">{activePlayers.length} speelsters in selectie</p>
         </div>
-        <Button onClick={openNew} style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)', color: '#fff' }}>
+        <Button onClick={openNew} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
           <Plus size={16} className="mr-1" /> Toevoegen
         </Button>
       </div>

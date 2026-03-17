@@ -65,7 +65,7 @@ export default function PhysicalMonitor() {
       player: players.find((p) => p.id === t.player_id)?.name?.split(" ")[0] || "",
     }));
 
-  const chartTooltipStyle = { backgroundColor: '#FFF5F0', border: '1px solid #FDE8DC', borderRadius: 8, color: '#1A1F2E' };
+  const chartTooltipStyle = { backgroundColor: '#FFFFFF', border: '1px solid #E8E6E1', borderRadius: 12, color: '#1A1A1A' };
 
   return (
     <div className="space-y-6 pb-20 lg:pb-6">

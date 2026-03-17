@@ -109,9 +109,9 @@ export default function PlayerDashboard() {
   if (!playerId) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-3 text-center">
-        <Star size={40} className="text-white/40" />
-        <p className="text-white font-bold">Jouw account is nog niet gekoppeld aan een spelersprofiel.</p>
-        <p className="text-white/70 text-sm">Vraag de trainer om dit in te stellen.</p>
+        <Star size={40} className="text-[#E8E6E1]" />
+        <p className="text-[#1A1A1A] font-500">Jouw account is nog niet gekoppeld aan een spelersprofiel.</p>
+        <p className="text-[#888888] text-sm">Vraag de trainer om dit in te stellen.</p>
       </div>
     );
   }
