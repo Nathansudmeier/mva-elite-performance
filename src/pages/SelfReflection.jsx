@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { Plus, BookOpen, Target } from "lucide-react";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 export default function SelfReflection() {
   const queryClient = useQueryClient();

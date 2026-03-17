@@ -10,6 +10,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { Activity, Timer, Heart, Plus } from "lucide-react";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 export default function PhysicalMonitor() {
   const queryClient = useQueryClient();

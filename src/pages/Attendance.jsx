@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Plus, Check, X, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 export default function Attendance() {
   const queryClient = useQueryClient();
