@@ -12,6 +12,7 @@ import AccountBeheer from './pages/AccountBeheer.jsx';
 import LiveMatch from './pages/LiveMatch.jsx';
 import Spelprincipes from './pages/Spelprincipes.jsx';
 import Staff from './pages/Staff.jsx';
+import TrainerDetail from './pages/TrainerDetail.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
