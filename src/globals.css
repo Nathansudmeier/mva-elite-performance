@@ -96,6 +96,27 @@
   }
 }
 
+/* Quill editor styling */
+.ql-toolbar {
+  border: none !important;
+  border-bottom: 1px solid #E8E6E1 !important;
+  background: #F7F5F2;
+  border-radius: 12px 12px 0 0;
+}
+.ql-container {
+  border: none !important;
+  font-size: 14px;
+  min-height: 160px;
+}
+.ql-editor {
+  min-height: 160px;
+  color: #1A1A1A;
+}
+.ql-editor.ql-blank::before {
+  color: #BBBBBB !important;
+  font-style: normal !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
