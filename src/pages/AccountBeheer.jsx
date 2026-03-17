@@ -276,15 +276,28 @@ function AccountBeheerContent() {
       <Dialog open={linkOpen} onOpenChange={setLinkOpen}>
         <DialogContent className="max-w-sm border-[#E8E6E1] bg-white">
           <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A]">
-              {linkUser?.role === "trainer" ? "Koppel aan Trainersprofiel" : "Koppel aan Spelersprofiel"}
-            </DialogTitle>
+            <DialogTitle className="text-[#1A1A1A]">Gebruiker Bewerken</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-[#888888]">Account: <strong className="text-[#1A1A1A]">{linkUser?.full_name || linkUser?.email}</strong></p>
 
-            {linkUser?.role === "trainer" ? (
-              <>
+            <div>
+              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Rol</label>
+              <Select value={linkRole} onValueChange={(v) => { setLinkRole(v); setLinkPlayerId(""); setLinkTrainerId(""); }}>
+                <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="speelster">Speelster</SelectItem>
+                  <SelectItem value="trainer">Trainer</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {linkRole === "trainer" ? (
+              <div>
+                <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Koppel aan trainersprofiel</label>
                 <Select value={linkTrainerId} onValueChange={setLinkTrainerId}>
                   <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
                     <SelectValue placeholder="Selecteer trainersprofiel…" />
@@ -295,29 +308,32 @@ function AccountBeheerContent() {
                     ))}
                   </SelectContent>
                 </Select>
-                <Button variant="outline" onClick={() => setNewTrainerOpen(true)} className="w-full border-dashed border-[#FF6B00] text-[#FF6B00]">
+                <Button variant="outline" onClick={() => setNewTrainerOpen(true)} className="w-full border-dashed border-[#FF6B00] text-[#FF6B00] mt-2">
                   <Plus size={14} className="mr-1" /> Nieuw trainersprofiel aanmaken
                 </Button>
-              </>
-            ) : (
-              <Select value={linkPlayerId} onValueChange={setLinkPlayerId}>
-                <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
-                  <SelectValue placeholder="Selecteer spelersprofiel" />
-                </SelectTrigger>
-                <SelectContent>
-                  {players.map(p => (
-                    <SelectItem key={p.id} value={p.id}>{p.name} {p.shirt_number ? `(#${p.shirt_number})` : ""}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
+              </div>
+            ) : linkRole === "speelster" ? (
+              <div>
+                <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Koppel aan spelersprofiel</label>
+                <Select value={linkPlayerId} onValueChange={setLinkPlayerId}>
+                  <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
+                    <SelectValue placeholder="Selecteer spelersprofiel…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {players.filter(p => p.active !== false).map(p => (
+                      <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : null}
 
             <Button
               onClick={() => linkMutation.mutate()}
-              disabled={linkMutation.isPending || (linkUser?.role === "trainer" ? !linkTrainerId : !linkPlayerId)}
+              disabled={linkMutation.isPending}
               className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white"
             >
-              {linkMutation.isPending ? "Opslaan..." : "Koppeling Opslaan"}
+              {linkMutation.isPending ? "Opslaan..." : "Opslaan"}
             </Button>
           </div>
         </DialogContent>
