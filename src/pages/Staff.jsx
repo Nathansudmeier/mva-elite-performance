@@ -86,9 +86,11 @@ function StaffContent() {
           <h1 className="text-2xl font-500 text-[#FF6B00]">Staff</h1>
           <p className="text-sm text-[#888888]">{activeTrainers.length} stafleden</p>
         </div>
-        <Button onClick={openNew} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-          <Plus size={16} className="mr-1" /> Toevoegen
-        </Button>
+        {isTrainer && (
+          <Button onClick={openNew} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
+            <Plus size={16} className="mr-1" /> Toevoegen
+          </Button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
