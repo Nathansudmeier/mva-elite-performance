@@ -212,7 +212,7 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
                 transition: "background-color 0.2s",
               }}
             >
-              <p className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: "rgba(255,255,255,0.5)" }}>
+              <p className="text-[10px] font-bold uppercase tracking-wider mb-2 text-[#888888]">
                 Selectie
               </p>
               {benchPlayers.map((player, index) => (
@@ -222,13 +222,12 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
                       ref={dp.innerRef}
                       {...dp.draggableProps}
                       {...dp.dragHandleProps}
-                      style={{ ...dp.draggableProps.style, marginBottom: 4 }}
                       className="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-grab"
                       style={{
                         ...dp.draggableProps.style,
                         marginBottom: 4,
-                        backgroundColor: ds.isDragging ? "#D45A30" : "rgba(255,255,255,0.12)",
-                        border: "1px solid rgba(255,255,255,0.15)",
+                        backgroundColor: ds.isDragging ? "#D45A30" : "#FFFFFF",
+                        border: "1px solid #E8E6E1",
                         borderRadius: 8,
                       }}
                     >
@@ -240,7 +239,7 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
                           ? <img src={player.photo_url} className="w-full h-full object-cover" alt="" />
                           : player.name?.charAt(0)}
                       </div>
-                      <span className="text-white text-[11px] font-semibold truncate leading-tight">
+                      <span className="text-[11px] font-semibold truncate leading-tight text-[#1A1A1A]">
                         {player.shirt_number ? `#${player.shirt_number} ` : ""}{player.name?.split(" ")[0]}
                       </span>
                     </div>
