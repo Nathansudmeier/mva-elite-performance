@@ -105,6 +105,14 @@ export default function Wedstrijden() {
     return "–";
   };
 
+  const getResult = (m) => {
+    if (m.score_home === undefined || m.score_home === null || m.score_away === undefined || m.score_away === null) return null;
+    const isThuis = m.home_away === "Thuis";
+    const mva = isThuis ? m.score_home : m.score_away;
+    const opp = isThuis ? m.score_away : m.score_home;
+    return mva > opp ? "win" : mva < opp ? "loss" : "draw";
+  };
+
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
       {/* Header */}
@@ -131,28 +139,68 @@ export default function Wedstrijden() {
 
       <div className="grid lg:grid-cols-5 gap-6">
         {/* Match list */}
-        <div className="lg:col-span-2 space-y-2">
+        <div className="lg:col-span-2 space-y-3">
           <h2 className="text-sm font-500 text-[#888888] uppercase tracking-wider mb-3">
             {activeTeam} — {teamMatches.length} wedstrijd{teamMatches.length !== 1 ? "en" : ""}
           </h2>
           {teamMatches.map((m) => {
             const isActive = selectedMatch === m.id;
+            const matchDate = new Date(m.date);
+            const isThuis = m.home_away === "Thuis";
+            const hasScore = m.score_home !== undefined && m.score_home !== null && m.score_away !== undefined && m.score_away !== null;
+            const result = getResult(m);
+            const resultColor = result === "win" ? "#22C55E" : result === "loss" ? "#EF4444" : "#888888";
+            const resultLabel = result === "win" ? "W" : result === "loss" ? "V" : "G";
+
             return (
               <button key={m.id} onClick={() => setSelectedMatch(m.id)}
-                className="w-full text-left px-4 py-3 rounded-xl transition-all elite-card elite-card-hover"
-                style={isActive ? { backgroundColor: "#1A1F2E", borderColor: "#1A1F2E" } : {}}>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-bold" style={isActive ? { color: "#fff" } : { color: "#1A1F2E" }}>
-                      {m.home_away === "Uit" ? "@ " : ""}{m.opponent}
-                    </p>
-                    <p className="text-xs mt-0.5" style={isActive ? { color: "rgba(255,255,255,0.6)" } : { color: "#2F3650" }}>
-                      {format(new Date(m.date), "d MMM yyyy", { locale: nl })} · {m.home_away} · {m.formation}
-                    </p>
+                className="w-full text-left rounded-2xl transition-all"
+                style={{
+                  backgroundColor: isActive ? "#1A1F2E" : "#FFFFFF",
+                  boxShadow: isActive ? "0 4px 20px rgba(26,31,46,0.25)" : "0 2px 8px rgba(0,0,0,0.06)",
+                  border: isActive ? "2px solid #D45A30" : "2px solid transparent",
+                }}>
+                <div className="flex items-center gap-4 p-4">
+                  {/* Date block */}
+                  <div className="flex-shrink-0 w-14 rounded-xl overflow-hidden text-center"
+                    style={{ backgroundColor: isActive ? "#D45A30" : "#FDE8DC" }}>
+                    <div className="text-[10px] font-bold uppercase py-1" style={{ color: isActive ? "rgba(255,255,255,0.8)" : "#D45A30" }}>
+                      {format(matchDate, "MMM", { locale: nl })}
+                    </div>
+                    <div className="text-2xl font-black leading-none pb-2" style={{ color: isActive ? "#fff" : "#1A1F2E" }}>
+                      {format(matchDate, "d")}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-black" style={{ color: isActive ? "#F0926E" : "#D45A30" }}>{scoreLabel(m)}</span>
-                    <ChevronRight size={14} style={{ color: isActive ? "#F0926E" : "#D45A30" }} />
+
+                  {/* Match info */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold truncate" style={{ color: isActive ? "#fff" : "#1A1A1A" }}>
+                      {m.opponent}
+                    </p>
+                    <div className="mt-1">
+                      {isThuis
+                        ? <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                            style={{ backgroundColor: isActive ? "rgba(255,255,255,0.12)" : "#E8F5E9", color: isActive ? "#6EE7A0" : "#16A34A" }}>
+                            <Home size={9} /> Thuis
+                          </span>
+                        : <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                            style={{ backgroundColor: isActive ? "rgba(255,255,255,0.12)" : "#FFF3EB", color: isActive ? "#F0926E" : "#D45A30" }}>
+                            <Plane size={9} /> Uit
+                          </span>
+                      }
+                    </div>
+                  </div>
+
+                  {/* Score + result */}
+                  <div className="flex-shrink-0 text-right">
+                    {hasScore ? (
+                      <>
+                        <p className="text-lg font-black leading-none" style={{ color: isActive ? "#fff" : "#1A1F2E" }}>{scoreLabel(m)}</p>
+                        <p className="text-[10px] font-bold mt-1 uppercase" style={{ color: resultColor }}>{resultLabel}</p>
+                      </>
+                    ) : (
+                      <p className="text-sm" style={{ color: isActive ? "rgba(255,255,255,0.3)" : "#ccc" }}>–</p>
+                    )}
                   </div>
                 </div>
               </button>
@@ -183,7 +231,6 @@ export default function Wedstrijden() {
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <span className="text-3xl font-black" style={{ color: "#D45A30" }}>{scoreLabel(detailMatch)}</span>
-                    <span className="text-sm font-semibold" style={{ color: "#2F3650" }}>{detailMatch.formation}</span>
                     <Button variant="outline" size="sm" onClick={() => openEdit(detailMatch)} className="border-[#FDE8DC] text-[#1A1F2E] hover:bg-[#FDE8DC]">
                       <Edit2 size={12} className="mr-1" /> Bewerken
                     </Button>
@@ -202,28 +249,6 @@ export default function Wedstrijden() {
                   </div>
                 </div>
               </div>
-
-              {/* Lineup display */}
-              {detailMatch.lineup && detailMatch.lineup.length > 0 && (
-                <div className="elite-card p-6">
-                  <h3 className="font-bold text-[#1A1F2E] mb-4">Opstelling</h3>
-                  <FieldLineup
-                    players={activePlayers}
-                    lineupMap={lineupArrayToMap(detailMatch.lineup)}
-                    formation={detailMatch.formation || "4-3-3"}
-                    onLineupChange={() => {}}
-                  />
-                </div>
-              )}
-
-              {/* Selectie overzicht */}
-              {detailMatch.lineup && detailMatch.lineup.length > 0 && (
-                <SelectieOverzicht
-                  lineup={detailMatch.lineup}
-                  substitutes={detailMatch.substitutes}
-                  players={activePlayers}
-                />
-              )}
 
               {/* Tactical sections */}
               {(detailMatch.ball_possession || detailMatch.pressing || detailMatch.transition || detailMatch.set_pieces) && (
