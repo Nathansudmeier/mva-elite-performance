@@ -86,26 +86,26 @@ function AccountBeheerContent() {
           <h1 className="text-2xl font-500 text-[#FF6B00]">Accountbeheer</h1>
           <p className="text-[#888888] text-sm">{speelsters.length} speelsters · {trainers.length} trainers</p>
         </div>
-        <Button onClick={() => setInviteOpen(true)} style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)", color: "#fff" }}>
+        <Button onClick={() => setInviteOpen(true)} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
           <Plus size={16} className="mr-1" /> Uitnodigen
         </Button>
       </div>
 
       {/* Trainers */}
       {trainers.length > 0 && (
-        <div className="elite-card p-4">
-          <h2 className="font-bold text-sm uppercase tracking-wide text-[#D45A30] mb-3">Trainers</h2>
+        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3">Trainers</h2>
           <div className="space-y-2">
             {trainers.map(u => (
               <div key={u.id} className="flex items-center gap-3 py-2">
-                <div className="w-8 h-8 rounded-full bg-[#1A1F2E] flex items-center justify-center text-white text-sm font-bold">
+                <div className="w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center text-white text-sm font-500">
                   {u.full_name?.[0] || u.email?.[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-[#1A1F2E]">{u.full_name || u.email}</p>
-                  <p className="text-xs text-[#2F3650]">{u.email}</p>
+                  <p className="text-sm font-500 text-[#1A1A1A]">{u.full_name || u.email}</p>
+                  <p className="text-xs text-[#888888]">{u.email}</p>
                 </div>
-                <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: "#1A1F2E", color: "#E8724A" }}>Trainer</span>
+                <span className="text-xs px-2 py-0.5 rounded-lg font-500 bg-[#1A1A1A] text-[#FF6B00]">Trainer</span>
               </div>
             ))}
           </div>
@@ -113,31 +113,31 @@ function AccountBeheerContent() {
       )}
 
       {/* Speelsters */}
-      <div className="elite-card p-4">
-        <h2 className="font-bold text-sm uppercase tracking-wide text-[#D45A30] mb-3">Speelsters</h2>
+      <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+        <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3">Speelsters</h2>
         {speelsters.length === 0 ? (
-          <p className="text-sm text-[#2F3650]">Nog geen speelster-accounts aangemaakt.</p>
+          <p className="text-sm text-[#888888]">Nog geen speelster-accounts aangemaakt.</p>
         ) : (
           <div className="space-y-2">
             {speelsters.map(u => {
               const linked = getLinkedPlayer(u.id);
               return (
-                <div key={u.id} className="flex items-center gap-3 py-2 border-b border-[#FDE8DC] last:border-0">
-                  <div className="w-8 h-8 rounded-full bg-[#FDE8DC] flex items-center justify-center text-[#D45A30] text-sm font-bold">
+                <div key={u.id} className="flex items-center gap-3 py-2 border-b border-[#E8E6E1] last:border-0">
+                  <div className="w-8 h-8 rounded-full bg-[#FFF3EB] flex items-center justify-center text-[#FF6B00] text-sm font-500">
                     {u.full_name?.[0] || u.email?.[0]}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#1A1F2E] truncate">{u.full_name || u.email}</p>
-                    <p className="text-xs text-[#2F3650] truncate">{u.email}</p>
+                    <p className="text-sm font-500 text-[#1A1A1A] truncate">{u.full_name || u.email}</p>
+                    <p className="text-xs text-[#888888] truncate">{u.email}</p>
                     {linked ? (
-                      <p className="text-xs text-[#D45A30] flex items-center gap-1 mt-0.5">
+                      <p className="text-xs text-[#FF6B00] flex items-center gap-1 mt-0.5">
                         <UserCheck size={10} /> Gekoppeld aan {linked.name}
                       </p>
                     ) : (
-                      <p className="text-xs text-red-400 mt-0.5">Niet gekoppeld aan profiel</p>
+                      <p className="text-xs text-[#C0392B] mt-0.5">Niet gekoppeld aan profiel</p>
                     )}
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => openLink(u)} className="border-[#FDE8DC] text-[#D45A30] text-xs shrink-0">
+                  <Button variant="outline" size="sm" onClick={() => openLink(u)} className="border-[#E8E6E1] text-[#FF6B00] text-xs shrink-0">
                     <LinkIcon size={12} className="mr-1" /> Koppel
                   </Button>
                 </div>
@@ -149,14 +149,14 @@ function AccountBeheerContent() {
 
       {/* Invite Dialog */}
       <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
-        <DialogContent className="max-w-sm border-[#FDE8DC]" style={{ backgroundColor: "#FFF5F0", color: "#1A1F2E" }}>
+        <DialogContent className="max-w-sm border-[#E8E6E1] bg-white">
           <DialogHeader>
-            <DialogTitle style={{ color: "#1A1F2E" }}>Gebruiker Uitnodigen</DialogTitle>
+            <DialogTitle className="text-[#1A1A1A]">Gebruiker Uitnodigen</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <Input placeholder="E-mailadres" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} className="border-[#FDE8DC] text-[#1A1F2E] bg-white" />
+            <Input placeholder="E-mailadres" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
             <Select value={inviteRole} onValueChange={setInviteRole}>
-              <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E] bg-white">
+              <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -164,8 +164,8 @@ function AccountBeheerContent() {
                 <SelectItem value="trainer">Trainer</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-xs text-[#2F3650]">De gebruiker ontvangt een uitnodigingsmail om een wachtwoord in te stellen.</p>
-            <Button onClick={handleInvite} disabled={inviting || !inviteEmail} className="w-full text-white" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
+            <p className="text-xs text-[#888888]">De gebruiker ontvangt een uitnodigingsmail om een wachtwoord in te stellen.</p>
+            <Button onClick={handleInvite} disabled={inviting || !inviteEmail} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
               {inviting ? "Uitnodigen..." : "Uitnodiging Versturen"}
             </Button>
           </div>
@@ -174,14 +174,14 @@ function AccountBeheerContent() {
 
       {/* Link Player Dialog */}
       <Dialog open={linkOpen} onOpenChange={setLinkOpen}>
-        <DialogContent className="max-w-sm border-[#FDE8DC]" style={{ backgroundColor: "#FFF5F0", color: "#1A1F2E" }}>
+        <DialogContent className="max-w-sm border-[#E8E6E1] bg-white">
           <DialogHeader>
-            <DialogTitle style={{ color: "#1A1F2E" }}>Koppel aan Spelersprofiel</DialogTitle>
+            <DialogTitle className="text-[#1A1A1A]">Koppel aan Spelersprofiel</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-sm text-[#2F3650]">Account: <strong>{linkUser?.full_name || linkUser?.email}</strong></p>
+            <p className="text-sm text-[#888888]">Account: <strong className="text-[#1A1A1A]">{linkUser?.full_name || linkUser?.email}</strong></p>
             <Select value={linkPlayerId} onValueChange={setLinkPlayerId}>
-              <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E] bg-white">
+              <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
                 <SelectValue placeholder="Selecteer spelersprofiel" />
               </SelectTrigger>
               <SelectContent>
@@ -190,7 +190,7 @@ function AccountBeheerContent() {
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={() => linkMutation.mutate()} disabled={linkMutation.isPending || !linkPlayerId} className="w-full text-white" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
+            <Button onClick={() => linkMutation.mutate()} disabled={linkMutation.isPending || !linkPlayerId} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
               {linkMutation.isPending ? "Opslaan..." : "Koppeling Opslaan"}
             </Button>
           </div>
