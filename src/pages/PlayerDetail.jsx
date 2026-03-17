@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Activity, Calendar, Heart, ClipboardList, Zap, Brain, Shield, Dumbbell, TrendingUp } from "lucide-react";
+import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList, Zap, Brain, Shield, Dumbbell, TrendingUp } from "lucide-react";
 import PlayerMinutesBar from "@/components/minutes/PlayerMinutesBar";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { Button } from "@/components/ui/button";
