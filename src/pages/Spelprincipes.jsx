@@ -130,10 +130,23 @@ function SpelprincipeCard({ item, canEdit, onEdit, onDelete }) {
 
       {(item.video_url) && (
         <div className="border-t border-[#E8E6E1]">
-          {embedUrl ? (
-            <div className="aspect-video">
-              <iframe src={embedUrl} className="w-full h-full" allowFullScreen title={item.title} />
+          {embedUrl && !videoError ? (
+            <div className="aspect-video relative">
+              <iframe
+                src={embedUrl}
+                className="w-full h-full"
+                allowFullScreen
+                title={item.title}
+                onError={() => setVideoError(true)}
+              />
+              {/* Fallback overlay for embed errors like error 153 */}
+              <div className="absolute inset-0 flex-col items-center justify-center bg-[#F7F5F2] hidden" id={`err-${item.id}`} />
             </div>
+          ) : embedUrl && videoError ? (
+            <a href={item.video_url} target="_blank" rel="noreferrer"
+              className="flex items-center gap-2 px-4 py-3 text-sm text-[#FF6B00] hover:bg-[#FFF3EB]">
+              <Youtube size={16} /> Video kan niet worden ingesloten — klik om te openen
+            </a>
           ) : (
             <a href={item.video_url} target="_blank" rel="noreferrer"
               className="flex items-center gap-2 px-4 py-3 text-sm text-[#FF6B00] hover:bg-[#FFF3EB]">
