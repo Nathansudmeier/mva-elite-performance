@@ -151,24 +151,24 @@ export default function LiveMatch() {
     return (
       <div className="space-y-6 pb-20 lg:pb-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/Wedstrijden")} className="text-white/70 hover:text-white">
-            <ArrowLeft size={20} />
+          <button onClick={() => navigate("/Wedstrijden")} className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
+            <ArrowLeft size={20} className="text-[#1A1A1A]" />
           </button>
           <div>
-            <h1 className="text-2xl font-black text-white">Live Wedstrijd</h1>
-            {match && <p className="text-sm text-white/70">vs. {match.opponent} · {match.date}</p>}
+            <h1 className="text-2xl font-500 text-[#1A1A1A]">Live Wedstrijd</h1>
+            {match && <p className="text-sm text-[#888888]">vs. {match.opponent} · {match.date}</p>}
           </div>
         </div>
 
         {match && (
-          <div className="elite-card p-6 space-y-5">
+          <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm space-y-5">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-black text-[#1A1F2E]">vs. {match.opponent}</h2>
-                <p className="text-sm text-[#2F3650]">{match.home_away} · {match.date}</p>
+                <h2 className="text-xl font-500 text-[#1A1A1A]">vs. {match.opponent}</h2>
+                <p className="text-sm text-[#888888]">{match.home_away} · {match.date}</p>
               </div>
               <Select value={formation} onValueChange={setFormation}>
-                <SelectTrigger className="w-28 border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: "#FFFFFF" }}>
+                <SelectTrigger className="w-28 border-[#E8E6E1] text-[#1A1A1A] bg-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -178,7 +178,7 @@ export default function LiveMatch() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#D45A30" }}>Opstelling</p>
+              <p className="text-xs font-500 uppercase tracking-wider mb-3 text-[#FF6B00]">Opstelling</p>
               <FieldLineup
                 players={activePlayers}
                 lineupMap={lineupMap}
@@ -197,8 +197,7 @@ export default function LiveMatch() {
             <Button
               onClick={startMatch}
               disabled={Object.keys(lineupMap).length === 0}
-              className="w-full text-white text-lg py-6 font-black"
-              style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}
+              className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white text-lg py-6 font-500"
             >
               🚀 Start Wedstrijd
             </Button>
@@ -213,16 +212,16 @@ export default function LiveMatch() {
     return (
       <div className="space-y-6 pb-20 lg:pb-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/Wedstrijden")} className="text-white/70 hover:text-white">
-            <ArrowLeft size={20} />
+          <button onClick={() => navigate("/Wedstrijden")} className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
+            <ArrowLeft size={20} className="text-[#1A1A1A]" />
           </button>
           <div>
-            <h1 className="text-2xl font-black text-white">Wedstrijdverslag</h1>
-            <p className="text-sm text-white/70">vs. {match?.opponent}</p>
+            <h1 className="text-2xl font-500 text-[#1A1A1A]">Wedstrijdverslag</h1>
+            <p className="text-sm text-[#888888]">vs. {match?.opponent}</p>
           </div>
         </div>
         {match && <MatchReport match={{ ...match, live_events: events, halftime_notes: halftimeNotes }} players={activePlayers} />}
-        <Button onClick={() => navigate("/Wedstrijden")} className="w-full text-white" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
+        <Button onClick={() => navigate("/Wedstrijden")} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
           Terug naar Wedstrijden
         </Button>
       </div>
@@ -234,30 +233,28 @@ export default function LiveMatch() {
     return (
       <div className="space-y-6 pb-20 lg:pb-6">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/Wedstrijden")} className="text-white/70 hover:text-white">
-            <ArrowLeft size={20} />
+          <button onClick={() => navigate("/Wedstrijden")} className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
+            <ArrowLeft size={20} className="text-[#1A1A1A]" />
           </button>
-          <h1 className="text-2xl font-black text-white">Rust</h1>
+          <h1 className="text-2xl font-500 text-[#1A1A1A]">Rust</h1>
         </div>
 
-        <div className="elite-card p-6 text-center space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#2F3650]">Ruststand</p>
+        <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm text-center space-y-4">
+          <p className="text-xs font-500 uppercase tracking-widest text-[#888888]">Ruststand</p>
           <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
         </div>
 
-        <div className="elite-card p-6 space-y-3">
-          <h3 className="font-bold text-[#1A1F2E]">Rustbespreking</h3>
+        <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm space-y-3">
+          <h3 className="font-500 text-[#1A1A1A]">Rustbespreking</h3>
           <Textarea
             placeholder="Notities voor de rustbespreking..."
             value={halftimeNotes}
             onChange={(e) => setHalftimeNotes(e.target.value)}
-            className="border-[#FDE8DC] text-[#1A1F2E] h-32"
-            style={{ backgroundColor: "#FFFFFF" }}
+            className="border-[#E8E6E1] text-[#1A1A1A] bg-white h-32"
           />
           <Button
             onClick={startSecondHalf}
-            className="w-full text-white text-base py-4 font-bold"
-            style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}
+            className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white text-base py-4 font-500"
           >
             ▶ Start 2e Helft
           </Button>
@@ -272,26 +269,26 @@ export default function LiveMatch() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={() => { setRunning(false); }} className="text-white/70 hover:text-white">
-            <ArrowLeft size={20} />
+          <button onClick={() => { setRunning(false); }} className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
+            <ArrowLeft size={20} className="text-[#1A1A1A]" />
           </button>
           <div>
-            <h1 className="text-lg font-black text-white">Live — vs. {match?.opponent}</h1>
-            <p className="text-xs text-white/60">{match?.home_away} · {match?.team}</p>
+            <h1 className="text-lg font-500 text-[#1A1A1A]">Live — vs. {match?.opponent}</h1>
+            <p className="text-xs text-[#888888]">{match?.home_away} · {match?.team}</p>
           </div>
         </div>
       </div>
 
       {/* Clock */}
-      <div className="elite-card p-6">
+      <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
         <LiveMatchClock seconds={seconds} running={running} onToggle={handleToggleClock} onStop={handleStop} />
         {currentMinute >= 45 && running && (
-          <p className="text-center text-xs mt-2" style={{ color: "#D45A30" }}>Druk op Pauze om naar de rust te gaan</p>
+          <p className="text-center text-xs mt-2 text-[#FF6B00]">Druk op Pauze om naar de rust te gaan</p>
         )}
       </div>
 
       {/* Score */}
-      <div className="elite-card px-6 py-4">
+      <div className="bg-white rounded-2xl px-6 py-4 border border-[#E8E6E1] shadow-sm">
         <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
       </div>
 
@@ -333,17 +330,17 @@ export default function LiveMatch() {
 
       {/* Events log */}
       {events.length > 0 && (
-        <div className="elite-card p-4">
-          <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#2F3650" }}>Events</h3>
+        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+          <h3 className="text-xs font-500 uppercase tracking-wider mb-3 text-[#888888]">Events</h3>
           <div className="space-y-1 max-h-40 overflow-y-auto">
             {[...events].reverse().map((e, i) => {
               const player = activePlayers.find(p => p.id === e.player_id);
               const playerOut = activePlayers.find(p => p.id === e.player_out_id);
               const playerIn = activePlayers.find(p => p.id === e.player_in_id);
               return (
-                <div key={i} className="flex items-center gap-2 text-xs px-2 py-1 rounded" style={{ backgroundColor: "#FDE8DC" }}>
-                  <span className="font-bold w-8" style={{ color: "#D45A30" }}>{e.minute}'</span>
-                  <span className="text-[#1A1F2E]">
+                <div key={i} className="flex items-center gap-2 text-xs px-2 py-1 rounded-lg bg-[#FFF3EB]">
+                  <span className="font-500 w-8 text-[#FF6B00]">{e.minute}'</span>
+                  <span className="text-[#1A1A1A]">
                     {e.type === "goal_mva" && `⚽ Goal — ${player?.name}`}
                     {e.type === "goal_against" && "🔴 Goal Tegen"}
                     {e.type === "substitution" && `🔄 ${playerOut?.name} → ${playerIn?.name}`}
