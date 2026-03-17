@@ -34,7 +34,7 @@ const mainNavItems = [
 ];
 
 const secondaryNavItems = [
-  { name: "Opstelling", icon: Grid3x3, page: "Tactics" },
+  { name: "Spelprincipes", icon: Grid3x3, page: "Spelprincipes" },
   { name: "Instellingen", icon: Settings, page: "AccountBeheer" },
 ];
 
