@@ -26,6 +26,7 @@ const desenvolvidoItems = [
   { name: "Beoordeling", icon: ClipboardList, page: "PlayerRatingForm" },
   { name: "Reflectie", icon: MessageSquare, page: "SelfReflection" },
   { name: "Rapporten", icon: TrendingUp, page: "Reports" },
+  { name: "Speelminuten", icon: Activity, page: "Speelminuten" },
 ];
 
 const mainNavItems = [
