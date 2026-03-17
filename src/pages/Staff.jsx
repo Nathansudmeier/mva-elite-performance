@@ -9,6 +9,7 @@ import { Plus, Edit2, Upload, User, Camera, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { resizeImage } from "@/components/utils/imageResize";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 export default function Staff() {
   return <RoleGuard allowedRoles={["trainer", "speelster", "admin"]}><StaffContent /></RoleGuard>;
