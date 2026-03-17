@@ -50,25 +50,29 @@ export default function SelfReflection() {
           <h1 className="text-2xl font-500 text-[#FF6B00]">Zelfreflectie</h1>
           <p className="text-sm text-[#888888]">Wekelijkse wedstrijdbeoordeling</p>
         </div>
-        <Button onClick={() => setDialogOpen(true)} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
-          <Plus size={16} className="mr-1" /> Nieuwe Reflectie
-        </Button>
+        {isTrainer && (
+          <Button onClick={() => setDialogOpen(true)} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
+            <Plus size={16} className="mr-1" /> Nieuwe Reflectie
+          </Button>
+        )}
       </div>
 
-      <div className="flex gap-3">
-        <Select value={filterPlayer} onValueChange={setFilterPlayer}>
-          <SelectTrigger className="w-48 border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFF5F0' }}>
-            <SelectValue placeholder="Filter op speelster" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alle speelsters</SelectItem>
-            {activePlayers.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
-          </SelectContent>
-        </Select>
-      </div>
+      {isTrainer && (
+        <div className="flex gap-3">
+          <Select value={filterPlayer} onValueChange={setFilterPlayer}>
+            <SelectTrigger className="w-48 border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFF5F0' }}>
+              <SelectValue placeholder="Filter op speelster" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Alle speelsters</SelectItem>
+              {activePlayers.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredReflections.map((r) => {
+        {(isTrainer ? filteredReflections : reflections.filter(r => r.player_id === playerId)).map((r) => {
           const player = players.find((p) => p.id === r.player_id);
           return (
             <div key={r.id} className="elite-card p-5">
