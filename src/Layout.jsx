@@ -152,8 +152,29 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </Link>
           </div>
-          <div className="text-xs text-[#888888] px-3 py-2 rounded-full border border-[#E8E6E1] bg-[#F7F5F2]">
-            Seizoen 2025-26
+          <div className="flex items-center gap-3">
+            <div className="text-xs text-[#888888] px-3 py-2 rounded-full border border-[#E8E6E1] bg-[#F7F5F2]">
+              Seizoen 2025-26
+            </div>
+            {profileLink ? (
+              <Link to={profileLink} className="flex-shrink-0">
+                <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#E8E6E1] hover:border-[#FF6B00] transition-colors bg-[#F7F5F2] flex items-center justify-center">
+                  {user?.photo_url ? (
+                    <img src={user.photo_url} alt={user.full_name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-sm font-500 text-[#FF6B00]">
+                      {user?.full_name?.charAt(0)?.toUpperCase() || "?"}
+                    </span>
+                  )}
+                </div>
+              </Link>
+            ) : (
+              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#E8E6E1] bg-[#F7F5F2] flex items-center justify-center">
+                <span className="text-sm font-500 text-[#888888]">
+                  {user?.full_name?.charAt(0)?.toUpperCase() || "?"}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </header>
