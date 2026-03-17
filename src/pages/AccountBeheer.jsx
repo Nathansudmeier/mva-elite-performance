@@ -87,8 +87,11 @@ function AccountBeheerContent() {
     }
   });
 
+  const [linkRole, setLinkRole] = useState("");
+
   const openLink = (user) => {
     setLinkUser(user);
+    setLinkRole(user.role || "speelster");
     setLinkPlayerId(user.player_id || "");
     setLinkTrainerId(user.trainer_id || "");
     setLinkOpen(true);
