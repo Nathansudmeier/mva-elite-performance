@@ -74,6 +74,7 @@ export default function PlayerRatingForm() {
   const totalAvg = allVals.length > 0 ? Math.ceil(allVals.reduce((a, b) => a + b, 0) / allVals.length) : 0;
 
   return (
+    <RoleGuard allowedRoles={["trainer", "admin"]}>
     <div className="pb-24 space-y-4 max-w-lg mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3">
@@ -166,5 +167,6 @@ export default function PlayerRatingForm() {
         </div>
       </div>
     </div>
+    </RoleGuard>
   );
 }
