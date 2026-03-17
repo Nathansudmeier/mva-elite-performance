@@ -15,11 +15,14 @@ const CATEGORY_COLORS = {
   Algemeen: { bg: "#F0FDF4", text: "#10B981", border: "#A7F3D0" },
 };
 
-function getYouTubeEmbedUrl(url) {
-  if (!url) return null;
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
-  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
-}
+const QUILL_MODULES = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    ["bold", "italic", "underline"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["clean"],
+  ],
+};
 
 function SpelprincipeModal({ item, onClose, onSave }) {
   const [form, setForm] = useState(item || { title: "", category: "Algemeen", content: "", video_url: "", published: true });
