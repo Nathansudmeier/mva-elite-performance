@@ -113,8 +113,14 @@ function DeveloperGroup({ currentPageName, onItemClick }) {
 
 export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { isTrainer, isSpeelster } = useCurrentUser();
+  const { user, isTrainer, isSpeelster } = useCurrentUser();
   const isSpeelsterUser = !isTrainer && isSpeelster;
+
+  const profileLink = isSpeelsterUser
+    ? `/PlayerDashboard`
+    : isTrainer && user?.trainer_id
+    ? `/TrainerDetail?id=${user.trainer_id}`
+    : null;
 
   return (
     <div className="min-h-screen bg-[#F7F5F2]">
