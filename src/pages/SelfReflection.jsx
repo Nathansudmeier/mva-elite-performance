@@ -13,6 +13,7 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 export default function SelfReflection() {
   const queryClient = useQueryClient();
+  const { isTrainer, playerId } = useCurrentUser();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState("");
   const [filterPlayer, setFilterPlayer] = useState("all");

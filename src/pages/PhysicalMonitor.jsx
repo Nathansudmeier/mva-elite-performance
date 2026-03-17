@@ -14,6 +14,7 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 export default function PhysicalMonitor() {
   const queryClient = useQueryClient();
+  const { isTrainer } = useCurrentUser();
   const [tab, setTab] = useState("yoyo");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState("yoyo");
