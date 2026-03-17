@@ -12,7 +12,7 @@ import { nl } from "date-fns/locale";
 export default function Dashboard() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { isSpeelster, isLoading: authLoading } = useCurrentUser();
+  const { isSpeelster, isTrainer, isLoading: authLoading } = useCurrentUser();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
   useEffect(() => {
@@ -241,8 +241,8 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Team of the Week Upload Card */}
-      <div 
+      {/* Team of the Week Upload Card — trainer only */}
+      {isTrainer && <div 
         className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] cursor-pointer hover:shadow-md transition-shadow"
         onClick={() => setUploadModalOpen(true)}
       >
@@ -255,6 +255,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      }
       {/* Team of the Week Modal */}
       {uploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
