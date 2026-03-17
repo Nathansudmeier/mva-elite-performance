@@ -155,16 +155,38 @@ function AccountBeheerContent() {
             <DialogTitle className="text-[#1A1A1A]">Gebruiker Uitnodigen</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <Input placeholder="E-mailadres" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
-            <Select value={inviteRole} onValueChange={setInviteRole}>
-              <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="speelster">Speelster</SelectItem>
-                <SelectItem value="trainer">Trainer</SelectItem>
-              </SelectContent>
-            </Select>
+            <div>
+              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">E-mailadres *</label>
+              <Input placeholder="naam@email.nl" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+            </div>
+            <div>
+              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Rol</label>
+              <Select value={inviteRole} onValueChange={v => { setInviteRole(v); setInvitePlayerId(""); }}>
+                <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="speelster">Speelster</SelectItem>
+                  <SelectItem value="trainer">Trainer</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {inviteRole === "speelster" && (
+              <div>
+                <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Koppel aan speelster</label>
+                <Select value={invitePlayerId} onValueChange={setInvitePlayerId}>
+                  <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
+                    <SelectValue placeholder="Selecteer spelersprofiel…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {players.filter(p => p.active !== false).map(p => (
+                      <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-[#AAAAAA] mt-1">Optioneel — je kunt dit later ook nog koppelen.</p>
+              </div>
+            )}
             <p className="text-xs text-[#888888]">De gebruiker ontvangt een uitnodigingsmail om een wachtwoord in te stellen.</p>
             <Button onClick={handleInvite} disabled={inviting || !inviteEmail} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
               {inviting ? "Uitnodigen..." : "Uitnodiging Versturen"}
