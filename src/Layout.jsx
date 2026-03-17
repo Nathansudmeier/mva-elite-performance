@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import {
   LayoutDashboard,
   Users,
+  UserCog,
   Trophy,
   Grid3x3,
   Activity,
