@@ -26,16 +26,27 @@ const QUILL_MODULES = {
 
 function SpelprincipeModal({ item, onClose, onSave }) {
   const [form, setForm] = useState(item || { title: "", category: "Algemeen", content: "", video_url: "", published: true });
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef();
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const handleVideoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    set("video_url", file_url);
+    setUploading(false);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl">
-        <div className="flex items-center justify-between p-5 border-b border-[#E8E6E1]">
+      <div className="bg-white rounded-2xl w-full max-w-2xl shadow-xl max-h-[92vh] flex flex-col">
+        <div className="flex items-center justify-between p-5 border-b border-[#E8E6E1] shrink-0">
           <h2 className="font-500 text-[#1A1A1A]">{item ? "Bewerken" : "Nieuw spelprincipe"}</h2>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-[#F7F5F2]"><X size={18} /></button>
         </div>
-        <div className="p-5 space-y-4">
+        <div className="p-5 space-y-4 overflow-y-auto flex-1">
           <div>
             <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Titel *</label>
             <input
@@ -57,29 +68,50 @@ function SpelprincipeModal({ item, onClose, onSave }) {
           </div>
           <div>
             <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Inhoud</label>
-            <textarea
-              className="w-full border border-[#E8E6E1] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#FF6B00] resize-none"
-              rows={5}
-              value={form.content}
-              onChange={e => set("content", e.target.value)}
-              placeholder="Beschrijf het spelprincipe..."
-            />
+            <div className="border border-[#E8E6E1] rounded-xl overflow-hidden">
+              <ReactQuill
+                theme="snow"
+                value={form.content}
+                onChange={v => set("content", v)}
+                modules={QUILL_MODULES}
+                placeholder="Beschrijf het spelprincipe, voeg kopjes toe..."
+              />
+            </div>
           </div>
           <div>
-            <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Video URL (YouTube/VEO)</label>
-            <input
-              className="w-full border border-[#E8E6E1] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#FF6B00]"
-              value={form.video_url}
-              onChange={e => set("video_url", e.target.value)}
-              placeholder="https://youtube.com/watch?v=..."
-            />
+            <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Video</label>
+            {form.video_url ? (
+              <div className="flex items-center gap-3 p-3 bg-[#F7F5F2] rounded-xl border border-[#E8E6E1]">
+                <Video size={18} className="text-[#FF6B00] shrink-0" />
+                <span className="text-sm text-[#1A1A1A] truncate flex-1">Video geüpload</span>
+                <button onClick={() => set("video_url", "")} className="p-1 hover:bg-[#E8E6E1] rounded-lg">
+                  <X size={14} className="text-[#888888]" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileRef.current.click()}
+                disabled={uploading}
+                className="w-full border-2 border-dashed border-[#E8E6E1] rounded-xl py-4 flex flex-col items-center gap-2 hover:border-[#FF6B00] hover:bg-[#FFF3EB] transition-colors"
+              >
+                {uploading ? (
+                  <Loader2 size={20} className="text-[#FF6B00] animate-spin" />
+                ) : (
+                  <Upload size={20} className="text-[#888888]" />
+                )}
+                <span className="text-sm text-[#888888]">{uploading ? "Uploaden..." : "Klik om video te uploaden"}</span>
+                <span className="text-xs text-[#AAAAAA]">MP4, MOV, AVI</span>
+              </button>
+            )}
+            <input ref={fileRef} type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />
           </div>
           <div className="flex items-center gap-2">
             <input type="checkbox" id="pub" checked={form.published} onChange={e => set("published", e.target.checked)} className="accent-[#FF6B00]" />
             <label htmlFor="pub" className="text-sm text-[#1A1A1A]">Zichtbaar voor spelers</label>
           </div>
         </div>
-        <div className="p-5 pt-0 flex gap-3">
+        <div className="p-5 pt-0 flex gap-3 shrink-0">
           <button onClick={onClose} className="flex-1 border border-[#E8E6E1] rounded-xl py-2.5 text-sm text-[#888888] hover:bg-[#F7F5F2]">Annuleren</button>
           <button
             onClick={() => form.title && onSave(form)}
