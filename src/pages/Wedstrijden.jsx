@@ -269,6 +269,13 @@ export default function Wedstrijden() {
                   <p className="text-sm whitespace-pre-wrap" style={{ color: "#2F3650" }}>{detailMatch.notes}</p>
                 </div>
               )}
+
+              {isTrainer && (
+                <MatchCheckInOverview
+                  matchId={detailMatch.id}
+                  totalInSelectie={(detailMatch.lineup?.length ?? 0) + (detailMatch.substitutes?.length ?? 0)}
+                />
+              )}
             </div>
           ) : (
             <div className="elite-card p-16 text-center">
