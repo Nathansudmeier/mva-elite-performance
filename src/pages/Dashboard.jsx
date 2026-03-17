@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { AlertCircle, TrendingUp, TrendingDown, Upload, Trophy, Minus } from "lucide-react";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import MatchDayBanner from "@/components/checkin/MatchDayBanner";
 import ChampionsTrophy from "../components/dashboard/ChampionsTrophy";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
 import { format, subDays, isAfter } from "date-fns";

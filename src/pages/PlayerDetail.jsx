@@ -6,6 +6,7 @@ import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList, Zap, Brain, 
 import PlayerMinutesBar from "@/components/minutes/PlayerMinutesBar";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { Button } from "@/components/ui/button";
+import WedstrijdbelevingChart from "@/components/checkin/WedstrijdbelevingChart";
 
 export default function PlayerDetail() {
   const params = new URLSearchParams(window.location.search);

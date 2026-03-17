@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import FieldLineup from "../components/wedstrijden/FieldLineup";
 import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
 import SelectieOverzicht from "../components/wedstrijden/SelectieOverzicht";
+import MatchCheckInOverview from "../components/checkin/MatchCheckInOverview";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 const TEAMS = ["MO17", "Dames 1"];
 const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
