@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { Plus, Youtube, BookOpen, Pencil, Trash2, X, ChevronDown } from "lucide-react";
+import { Plus, BookOpen, Pencil, Trash2, X, ChevronDown, Upload, Video, Loader2 } from "lucide-react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const CATEGORIES = ["Alle", "Balbezit", "Verdediging", "Omschakeling", "Standaardsituaties", "Algemeen"];
 const CATEGORY_COLORS = {
