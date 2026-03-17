@@ -126,16 +126,42 @@ export default function Dashboard() {
           <p className="text-4xl font-500 text-[#FF6B00]">{avgAttendancePercent}%</p>
           <p className="text-sm text-[#888888] mt-2">{activePlayers.length} speelsters</p>
         </div>
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-2">Volgende Wedstrijd</p>
-          {nextMatch ? (
-            <>
-              <p className="text-2xl font-500 text-[#1A1A1A]">vs. {nextMatch.opponent}</p>
-              <p className="text-sm text-[#888888] mt-2">{format(new Date(nextMatch.date), "d MMM", { locale: nl })}</p>
-            </>
-          ) : (
-            <p className="text-sm text-[#888888] mt-2">Geen geplande wedstrijden</p>
-          )}
+        <div className="relative rounded-2xl overflow-hidden shadow-sm border border-[#E8E6E1] min-h-[130px]">
+          {/* Football field background */}
+          <div className="absolute inset-0" style={{
+            background: "linear-gradient(160deg, #2d6a2d 0%, #1e4d1e 50%, #163d16 100%)",
+          }}>
+            {/* Field markings */}
+            <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice">
+              <rect x="1" y="1" width="298" height="128" fill="none" stroke="white" strokeWidth="2"/>
+              <line x1="150" y1="1" x2="150" y2="129" stroke="white" strokeWidth="1.5"/>
+              <circle cx="150" cy="65" r="25" fill="none" stroke="white" strokeWidth="1.5"/>
+              <circle cx="150" cy="65" r="2" fill="white"/>
+              <rect x="1" y="35" width="40" height="60" fill="none" stroke="white" strokeWidth="1.5"/>
+              <rect x="259" y="35" width="40" height="60" fill="none" stroke="white" strokeWidth="1.5"/>
+              <rect x="1" y="50" width="18" height="30" fill="none" stroke="white" strokeWidth="1.5"/>
+              <rect x="281" y="50" width="18" height="30" fill="none" stroke="white" strokeWidth="1.5"/>
+            </svg>
+          </div>
+          {/* Content */}
+          <div className="relative z-10 p-5">
+            <p className="text-xs font-500 uppercase tracking-wider text-white/70 mb-3">Volgende Wedstrijd</p>
+            {nextMatch ? (
+              <div className="flex items-end justify-between">
+                <div>
+                  <p className="text-xs text-white/60 mb-1">{nextMatch.home_away === "Uit" ? "Uitwedstrijd" : "Thuiswedstrijd"}</p>
+                  <p className="text-2xl font-500 text-white leading-tight">vs. {nextMatch.opponent}</p>
+                </div>
+                <div className="flex flex-col items-center bg-white/20 backdrop-blur-sm rounded-xl p-2.5 min-w-[52px]">
+                  <span className="text-white/80 text-xs font-500 uppercase">{format(new Date(nextMatch.date), "MMM", { locale: nl })}</span>
+                  <span className="text-white text-2xl font-500 leading-tight">{format(new Date(nextMatch.date), "d")}</span>
+                  <span className="text-white/70 text-xs">{format(new Date(nextMatch.date), "EEE", { locale: nl })}</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-white/70 text-sm mt-2">Geen geplande wedstrijden</p>
+            )}
+          </div>
         </div>
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
           <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-2">Beoordelingen</p>
