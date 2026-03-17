@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
-import { Plus, ChevronRight, Edit2, Trophy, Shield, Swords, ArrowLeftRight, Flag, Radio, Trash2 } from "lucide-react";
+import { Plus, Edit2, Trophy, Shield, Swords, ArrowLeftRight, Flag, Radio, Trash2, Home, Plane } from "lucide-react";
 import { Link } from "react-router-dom";
 import FieldLineup from "../components/wedstrijden/FieldLineup";
 import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
