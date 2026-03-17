@@ -219,6 +219,17 @@ export default function PlayerDetail() {
           </div>
         </div>
       )}
+
+      {/* Wedstrijdbeleving */}
+      {(isTrainer || isOwnProfile) && (
+        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-4 flex items-center gap-2">
+            <Star size={14} /> Wedstrijdbeleving
+          </h2>
+          <p className="text-xs text-[#888888] mb-3">Pre-game mentaal vs. post-game tevredenheid per wedstrijd</p>
+          <WedstrijdbelevingChart playerId={playerId} />
+        </div>
+      )}
     </div>
   );
 }
