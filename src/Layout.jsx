@@ -194,8 +194,18 @@ export default function Layout({ children, currentPageName }) {
       )}
 
       {/* Main content */}
-      <main className="pt-16 lg:pl-56 pb-20 lg:pb-0">
-        <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+      <main className="pt-16 lg:pl-56 pb-20 lg:pb-0 relative min-h-screen">
+        <div 
+          className="fixed inset-0 lg:left-56 top-16 bottom-0 z-0 pointer-events-none"
+          style={{
+            backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/98a8a794b_Appbackground.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            opacity: 0.18
+          }}
+        />
+        <div className="relative z-10 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
           {children}
         </div>
       </main>
