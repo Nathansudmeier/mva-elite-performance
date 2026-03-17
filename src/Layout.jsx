@@ -31,7 +31,7 @@ const desenvolvidoItems = [
 const mainNavItems = [
   { name: "Dashboard", icon: LayoutDashboard, page: "Dashboard" },
   { name: "Spelers", icon: Users, page: "Players" },
-  { name: "Staff", icon: Users, page: "Staff" },
+  { name: "Staff", icon: UserCog, page: "Staff" },
   { name: "Wedstrijden", icon: Trophy, page: "Wedstrijden" },
 ];
 
