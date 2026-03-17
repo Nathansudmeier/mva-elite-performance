@@ -22,6 +22,7 @@ function AccountBeheerContent() {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("speelster");
+  const [invitePlayerId, setInvitePlayerId] = useState("");
   const [inviting, setInviting] = useState(false);
   const [linkOpen, setLinkOpen] = useState(false);
   const [linkUser, setLinkUser] = useState(null);
