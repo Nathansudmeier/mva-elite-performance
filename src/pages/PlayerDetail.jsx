@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 export default function PlayerDetail() {
   const params = new URLSearchParams(window.location.search);
   const playerId = params.get("id");
-  const { isTrainer } = useCurrentUser();
+  const { isTrainer, playerId: myPlayerId } = useCurrentUser();
+  const isOwnProfile = myPlayerId === playerId;
 
   const { data: player } = useQuery({
     queryKey: ["player", playerId],
