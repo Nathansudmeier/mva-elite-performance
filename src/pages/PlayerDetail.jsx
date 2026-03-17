@@ -115,23 +115,48 @@ export default function PlayerDetail() {
 
       {/* Latest Ratings */}
       {latestRating && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00]">Beoordeling ({latestRating.meting})</h2>
-            <Link to={`/PlayerRatingForm?player_id=${playerId}`} className="text-xs text-[#FF6B00] underline">+ Nieuwe meting</Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { label: "Technisch", keys: technicalKeys },
-              { label: "Tactisch", keys: tacticalKeys },
-              { label: "Persoonlijkheid", keys: personalityKeys },
-              { label: "Fysiek", keys: physicalRatingKeys },
-            ].map(({ label, keys }) => (
-              <div key={label} className="bg-[#FFF3EB] rounded-xl p-3 text-center">
-                <div className="text-2xl font-500 text-[#FF6B00]">{calcAvg(latestRating, keys)}</div>
-                <div className="text-xs text-[#888888] mt-1">{label}</div>
+        <div className="rounded-2xl overflow-hidden border border-[#E8E6E1] shadow-sm">
+          {/* Header with gradient */}
+          <div className="relative p-5" style={{ background: "linear-gradient(135deg, #FF6B00 0%, #E55A00 100%)" }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white/70 text-xs uppercase tracking-wider font-500">Laatste Beoordeling</p>
+                <p className="text-white text-lg font-500 mt-0.5">{latestRating.meting} · {latestRating.date}</p>
               </div>
-            ))}
+              <div className="bg-white/20 rounded-xl px-4 py-2 text-center">
+                <p className="text-white text-2xl font-500">
+                  {(() => {
+                    const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys];
+                    return calcAvg(latestRating, allKeys);
+                  })()}
+                </p>
+                <p className="text-white/70 text-xs">totaal</p>
+              </div>
+            </div>
+          </div>
+          {/* Score grid */}
+          <div className="bg-white p-4 grid grid-cols-2 gap-3">
+            {[
+              { label: "Technisch", keys: technicalKeys, icon: <Zap size={14} />, color: "#3B82F6", bg: "#EFF6FF" },
+              { label: "Tactisch", keys: tacticalKeys, icon: <Brain size={14} />, color: "#8B5CF6", bg: "#F5F3FF" },
+              { label: "Persoonlijkheid", keys: personalityKeys, icon: <Shield size={14} />, color: "#10B981", bg: "#ECFDF5" },
+              { label: "Fysiek", keys: physicalRatingKeys, icon: <Dumbbell size={14} />, color: "#F59E0B", bg: "#FFFBEB" },
+            ].map(({ label, keys, icon, color, bg }) => {
+              const avg = calcAvg(latestRating, keys);
+              const pct = avg !== "-" ? (parseFloat(avg) / 5) * 100 : 0;
+              return (
+                <div key={label} className="rounded-xl p-3" style={{ backgroundColor: bg }}>
+                  <div className="flex items-center gap-1.5 mb-2" style={{ color }}>
+                    {icon}
+                    <span className="text-xs font-500 uppercase tracking-wide">{label}</span>
+                  </div>
+                  <p className="text-2xl font-500" style={{ color }}>{avg}</p>
+                  <div className="mt-2 h-1.5 rounded-full bg-black/10">
+                    <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: color }} />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
