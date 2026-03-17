@@ -126,7 +126,7 @@ export default function Dashboard() {
           <p className="text-4xl font-500 text-[#FF6B00]">{avgAttendancePercent}%</p>
           <p className="text-sm text-[#888888] mt-2">{activePlayers.length} speelsters</p>
         </div>
-        <div className="relative rounded-2xl overflow-hidden shadow-sm border border-[#E8E6E1] min-h-[130px]">
+        <div className="relative rounded-2xl overflow-hidden shadow-sm border border-[#E8E6E1] min-h-[130px] cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
           {/* Football field background */}
           <div className="absolute inset-0" style={{
             background: "linear-gradient(160deg, #2d6a2d 0%, #1e4d1e 50%, #163d16 100%)",
