@@ -170,13 +170,44 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-2">Beoordelingen</p>
-          <div className="space-y-2 text-sm">
-            <p className="text-[#1A1A1A]">M1: <span className="text-[#888888]">{meting1Count}/{totalRatingsNeeded}</span></p>
-            <p className="text-[#1A1A1A]">M2: <span className="text-[#888888]">{meting2Count}/{totalRatingsNeeded}</span></p>
-            <p className="text-[#1A1A1A]">M3: <span className="text-[#888888]">{meting3Count}/{totalRatingsNeeded}</span></p>
-          </div>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/Wedstrijden")}>
+          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-3">Seizoensresultaten</p>
+          {playedMatches.length === 0 ? (
+            <p className="text-sm text-[#888888]">Nog geen wedstrijden gespeeld</p>
+          ) : (
+            <>
+              <div className="flex items-end gap-2 mb-3">
+                <p className="text-4xl font-500 text-[#FF6B00]">{winPct}%</p>
+                <p className="text-sm text-[#888888] mb-1">winst</p>
+              </div>
+              {/* Bar */}
+              <div className="w-full h-2 rounded-full bg-[#F0EDE9] overflow-hidden mb-4">
+                <div
+                  className="h-full rounded-full"
+                  style={{
+                    width: `${winPct}%`,
+                    background: "linear-gradient(90deg, #D45A30, #FF6B00)",
+                    transition: "width 0.6s ease"
+                  }}
+                />
+              </div>
+              {/* W / G / V */}
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="bg-[#EBF5E1] rounded-xl py-2">
+                  <p className="text-lg font-500 text-[#3B6D11]">{wins}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-[#3B6D11] font-500">Winst</p>
+                </div>
+                <div className="bg-[#FFF3EB] rounded-xl py-2">
+                  <p className="text-lg font-500 text-[#FF6B00]">{draws}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-[#FF6B00] font-500">Gelijk</p>
+                </div>
+                <div className="bg-[#FDECEA] rounded-xl py-2">
+                  <p className="text-lg font-500 text-[#C0392B]">{losses}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-[#C0392B] font-500">Verlies</p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
