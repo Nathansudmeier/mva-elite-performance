@@ -1,73 +1,83 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 export default function WedstrijdbelevingChart({ playerId }) {
   const { data: checkIns = [] } = useQuery({
-    queryKey: ["checkIns", playerId],
+    queryKey: ["matchCheckIns", playerId],
     queryFn: () => base44.entities.MatchCheckIn.filter({ player_id: playerId }),
     enabled: !!playerId,
   });
 
   const { data: matches = [] } = useQuery({
     queryKey: ["matches"],
-    queryFn: () => base44.entities.Match.list("-date"),
+    queryFn: () => base44.entities.Match.list(),
   });
 
-  const preIns = checkIns.filter((c) => c.type === "pre");
-  const postIns = checkIns.filter((c) => c.type === "post");
+  // Build chart data: pre-game and post-game per match
+  const chartData = matches
+    .map(match => {
+      const preCheckIn = checkIns.find(c => c.match_id === match.id && c.type === "pre");
+      const postCheckIn = checkIns.find(c => c.match_id === match.id && c.type === "post");
 
-  // Combine per match
-  const data = matches
-    .filter((m) => {
-      const hasPre = preIns.some((c) => c.match_id === m.id);
-      const hasPost = postIns.some((c) => c.match_id === m.id);
-      return hasPre || hasPost;
-    })
-    .map((m) => {
-      const pre = preIns.find((c) => c.match_id === m.id);
-      const post = postIns.find((c) => c.match_id === m.id);
+      if (!preCheckIn && !postCheckIn) return null;
+
       return {
-        name: m.opponent?.substring(0, 10) ?? m.date,
-        "Pre Mentaal": pre?.mental_score ?? null,
-        "Post Tevreden": post?.performance_score ?? null,
+        date: match.date,
+        opponent: match.opponent,
+        "Pre-game Mentaal": preCheckIn?.mental_score || null,
+        "Post-game Tevredenheid": postCheckIn?.performance_score || null,
       };
     })
-    .reverse();
+    .filter(Boolean)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(-10); // Last 10 matches
 
-  if (data.length < 2) {
+  if (chartData.length === 0) {
     return (
-      <div className="text-center text-sm text-[#888888] py-6">
-        Minimaal 2 wedstrijden nodig voor de grafiek.
-      </div>
+      <p className="text-xs text-[#888888]">Geen wedstrijdgegevens beschikbaar</p>
     );
   }
 
   return (
-    <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={data} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F0EDE8" />
-        <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#888888" }} />
-        <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 10, fill: "#888888" }} />
-        <Tooltip
-          contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E6E1", borderRadius: 12, fontSize: 12 }}
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={chartData}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#E8E6E1" />
+        <XAxis
+          dataKey="date"
+          tick={{ fontSize: 12 }}
+          stroke="#888888"
+          tickFormatter={(date) => new Date(date).toLocaleDateString("nl-NL", { month: "short", day: "numeric" })}
         />
-        <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
+        <YAxis
+          domain={[1, 5]}
+          tick={{ fontSize: 12 }}
+          stroke="#888888"
+        />
+        <Tooltip
+          contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid #E8E6E1", borderRadius: "8px" }}
+          labelStyle={{ color: "#1A1A1A" }}
+          formatter={(value) => (value !== null ? value.toFixed(1) : "–")}
+          labelFormatter={(label) => `${label}`}
+        />
+        <Legend wrapperStyle={{ paddingTop: "16px" }} />
         <Line
           type="monotone"
-          dataKey="Pre Mentaal"
+          dataKey="Pre-game Mentaal"
           stroke="#8B5CF6"
           strokeWidth={2}
-          dot={{ r: 4, fill: "#8B5CF6" }}
+          dot={{ fill: "#8B5CF6", r: 4 }}
+          activeDot={{ r: 6 }}
           connectNulls
         />
         <Line
           type="monotone"
-          dataKey="Post Tevreden"
+          dataKey="Post-game Tevredenheid"
           stroke="#FF6B00"
           strokeWidth={2}
-          dot={{ r: 4, fill: "#FF6B00" }}
+          dot={{ fill: "#FF6B00", r: 4 }}
+          activeDot={{ r: 6 }}
           connectNulls
         />
       </LineChart>
