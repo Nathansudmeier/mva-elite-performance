@@ -11,7 +11,7 @@ import { createPageUrl } from "@/utils";
 import { resizeImage } from "@/components/utils/imageResize";
 
 export default function Staff() {
-  return <RoleGuard allowedRoles={["trainer"]}><StaffContent /></RoleGuard>;
+  return <RoleGuard allowedRoles={["trainer", "speelster", "admin"]}><StaffContent /></RoleGuard>;
 }
 
 function StaffContent() {
