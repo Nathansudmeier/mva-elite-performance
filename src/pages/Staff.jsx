@@ -91,9 +91,10 @@ function StaffContent() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {activeTrainers.map((trainer) => (
-          <div key={trainer.id} className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+          <Link key={trainer.id} to={createPageUrl(`TrainerDetail?id=${trainer.id}`)} className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm hover:shadow-md transition-shadow block">
             <div className="flex items-start gap-4">
               <label
+                onClick={(e) => e.preventDefault()}
                 className="relative w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center shrink-0 cursor-pointer group bg-[#1A1A1A]"
               >
                 {trainer.photo_url ? (
@@ -104,7 +105,7 @@ function StaffContent() {
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
                   <Camera size={16} className="text-white" />
                 </div>
-                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleQuickPhoto(e, trainer)} />
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => { e.stopPropagation(); handleQuickPhoto(e, trainer); }} />
               </label>
               <div className="flex-1 min-w-0">
                 <h3 className="font-500 text-sm text-[#1A1A1A] truncate">{trainer.name}</h3>
@@ -117,11 +118,11 @@ function StaffContent() {
                   </p>
                 )}
               </div>
-              <button onClick={() => openEdit(trainer)} className="p-2 rounded-lg transition-colors hover:bg-[#FFF3EB]">
+              <button onClick={(e) => { e.preventDefault(); openEdit(trainer); }} className="p-2 rounded-lg transition-colors hover:bg-[#FFF3EB]">
                 <Edit2 size={14} className="text-[#888888]" />
               </button>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
