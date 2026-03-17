@@ -29,6 +29,7 @@ function lineupMapToArray(map) {
 
 export default function Wedstrijden() {
   const queryClient = useQueryClient();
+  const { isTrainer } = useCurrentUser();
   const [activeTeam, setActiveTeam] = useState("MO17");
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
