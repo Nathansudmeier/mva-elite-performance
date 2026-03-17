@@ -1,207 +1,163 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ChevronRight } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
-function ProgressBar({ current, total }) {
-  return (
-    <div className="flex gap-1.5 mb-6">
-      {Array.from({ length: total }).map((_, i) => (
-        <div
-          key={i}
-          className="h-1.5 flex-1 rounded-full transition-all duration-300"
-          style={{ backgroundColor: i < current ? "#FF6B00" : "#E8E6E1" }}
-        />
-      ))}
-    </div>
-  );
-}
+export default function CheckInFlow({ matchId, type, onClose, onCompleted }) {
+  const { playerId } = useCurrentUser();
+  const queryClient = useQueryClient();
+  const [currentStep, setCurrentStep] = useState(0);
 
-function SliderQuestion({ label, value, onChange, minLabel, midLabel, maxLabel }) {
-  return (
-    <div className="space-y-6">
-      <p className="text-xl font-500 text-[#1A1A1A] leading-snug">{label}</p>
-      <div className="px-2">
-        <input
-          type="range"
-          min={1}
-          max={5}
-          step={1}
-          value={value}
-          onChange={(e) => onChange(Number(e.target.value))}
-          className="w-full h-3 rounded-full appearance-none cursor-pointer"
-          style={{
-            background: `linear-gradient(to right, #FF6B00 0%, #FF6B00 ${(value - 1) * 25}%, #E8E6E1 ${(value - 1) * 25}%, #E8E6E1 100%)`,
-            accentColor: "#FF6B00",
-          }}
-        />
-        <div className="flex justify-between mt-3">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              onClick={() => onChange(n)}
-              className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-500 transition-all"
-              style={{
-                backgroundColor: value === n ? "#FF6B00" : "#F7F5F2",
-                color: value === n ? "#fff" : "#888888",
-                transform: value === n ? "scale(1.1)" : "scale(1)",
-              }}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-        <div className="flex justify-between mt-2 text-xs text-[#888888]">
-          <span>{minLabel}</span>
-          <span>{midLabel}</span>
-          <span>{maxLabel}</span>
-        </div>
-      </div>
-      <div className="text-center">
-        <div className="inline-flex items-center gap-2 bg-[#FFF3EB] rounded-2xl px-5 py-3">
-          <span className="text-3xl font-500 text-[#FF6B00]">{value}</span>
-          <span className="text-sm text-[#888888]">/ 5</span>
-        </div>
-      </div>
-    </div>
-  );
-}
+  const [formData, setFormData] = useState({
+    match_id: matchId,
+    player_id: playerId,
+    type: type,
+    physical_score: null,
+    mental_score: null,
+    focus_point: "",
+    performance_score: null,
+    focus_execution_score: null,
+    what_went_well: "",
+    what_to_improve: "",
+  });
 
-function TextQuestion({ label, value, onChange, placeholder, maxLength }) {
-  return (
-    <div className="space-y-4">
-      <p className="text-xl font-500 text-[#1A1A1A] leading-snug">{label}</p>
-      <Textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value.slice(0, maxLength))}
-        placeholder={placeholder}
-        className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB] rounded-2xl text-base min-h-[120px] resize-none focus:border-[#FF6B00] focus:ring-[#FF6B00]"
-      />
-      <p className="text-xs text-[#888888] text-right">{value.length}/{maxLength}</p>
-    </div>
-  );
-}
+  const createMutation = useMutation({
+    mutationFn: (data) => base44.entities.MatchCheckIn.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["matchCheckIns"] });
+      queryClient.invalidateQueries({ queryKey: ["myCheckIns"] });
+      onCompleted?.();
+    },
+  });
 
-export default function CheckInFlow({ type, matchOpponent, onSubmit, onDefer }) {
-  const isPost = type === "post";
-
-  const steps = isPost
+  const steps = type === "pre"
     ? [
-        { id: "performance", kind: "slider", label: "Hoe tevreden ben ik over mijn eigen prestatie?", minLabel: "Teleurstellend", midLabel: "Redelijk", maxLabel: "Uitstekend" },
-        { id: "focus_execution", kind: "slider", label: "Hoe goed heb ik mijn aandachtspunt uitgevoerd?", minLabel: "Helemaal niet", midLabel: "Deels", maxLabel: "Volledig" },
-        { id: "what_went_well", kind: "text", label: "Wat ging er goed vandaag?", placeholder: "Bijv. mijn positiespel was scherp", maxLength: 150 },
-        { id: "what_to_improve", kind: "text", label: "Wat wil ik volgende keer beter doen?", placeholder: "Bijv. eerder mijn positie kiezen bij omschakeling", maxLength: 150 },
+        { title: "Fysiek Gevoel", key: "physical_score", desc: "Hoe voel je je fysiek vandaag?" },
+        { title: "Mentaal Gevoel", key: "mental_score", desc: "Wat is je mentale toestand?" },
+        { title: "Aandachtspunt", key: "focus_point", desc: "Wat wil je vandaag focussen?" },
       ]
     : [
-        { id: "physical", kind: "slider", label: "Hoe voel ik me fysiek?", minLabel: "Beroerd", midLabel: "Oké", maxLabel: "Topfit" },
-        { id: "mental", kind: "slider", label: "Hoe voel ik me mentaal?", minLabel: "Gespannen", midLabel: "Neutraal", maxLabel: "Scherp" },
-        { id: "focus_point", kind: "text", label: "Mijn aandachtspunt voor vandaag", placeholder: "Bijv. meer diepte zoeken achter de linie", maxLength: 100 },
+        { title: "Tevredenheid", key: "performance_score", desc: "Hoe tevreden ben je met je prestatie?" },
+        { title: "Aandachtspunt Uitvoering", key: "focus_execution_score", desc: "Hoe ging je aandachtspunt?" },
+        { title: "Wat ging goed?", key: "what_went_well", desc: "Wat voelde goed vandaag?" },
+        { title: "Wat te verbeteren?", key: "what_to_improve", desc: "Wat kan beter volgende keer?" },
       ];
 
-  const [step, setStep] = useState(0);
-  const [values, setValues] = useState({
-    physical: 3, mental: 3, focus_point: "",
-    performance: 3, focus_execution: 3, what_went_well: "", what_to_improve: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
-
-  const current = steps[step];
-  const isLast = step === steps.length - 1;
-
-  const setValue = (id, val) => setValues((prev) => ({ ...prev, [id]: val }));
+  const step = steps[currentStep];
+  const isScoreStep = ["physical_score", "mental_score", "performance_score", "focus_execution_score"].includes(step.key);
+  const isTextStep = ["focus_point", "what_went_well", "what_to_improve"].includes(step.key);
 
   const handleNext = () => {
-    if (isLast) {
-      onSubmit(values);
-      setSubmitted(true);
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
     } else {
-      setStep((s) => s + 1);
+      // Submit
+      createMutation.mutate(formData);
     }
   };
 
-  if (submitted) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-6 space-y-4">
-        <div className="w-20 h-20 rounded-full bg-[#FFF3EB] flex items-center justify-center text-4xl">🎯</div>
-        <h2 className="text-2xl font-500 text-[#1A1A1A]">
-          {isPost ? "Goed gedaan!" : "Succes!"}
-        </h2>
-        <p className="text-[#888888]">
-          {isPost ? "Reflecteren maakt je beter." : "Veel plezier straks."}
-        </p>
-      </div>
-    );
-  }
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
-    <div className="max-w-md mx-auto px-4 py-6 min-h-screen flex flex-col">
-      {/* Header */}
-      <div className="mb-6">
-        <p className="text-xs text-[#888888] uppercase tracking-wider mb-1">vs. {matchOpponent}</p>
-        <h1 className="text-2xl font-500 text-[#1A1A1A]">
-          {isPost ? "Hoe kijk jij terug op vandaag?" : "Hoe ga jij er vandaag in?"}
-        </h1>
-      </div>
-
-      <ProgressBar current={step + 1} total={steps.length} />
-
-      <div className="flex-1">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
-            transition={{ duration: 0.2 }}
+    <div className="fixed inset-0 z-50 bg-black/40 flex items-end lg:items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-md shadow-lg overflow-hidden">
+        {/* Header with close button */}
+        <div className="flex items-center justify-between p-4 border-b border-[#E8E6E1]">
+          <p className="text-sm font-500 text-[#888888]">
+            Vraag {currentStep + 1} van {steps.length}
+          </p>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-lg hover:bg-[#F7F5F2] text-[#888888]"
           >
-            {current.kind === "slider" ? (
-              <SliderQuestion
-                label={current.label}
-                value={values[current.id]}
-                onChange={(v) => setValue(current.id, v)}
-                minLabel={current.minLabel}
-                midLabel={current.midLabel}
-                maxLabel={current.maxLabel}
-              />
-            ) : (
-              <TextQuestion
-                label={current.label}
-                value={values[current.id]}
-                onChange={(v) => setValue(current.id, v)}
-                placeholder={current.placeholder}
-                maxLength={current.maxLength}
-              />
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+            <X size={18} />
+          </button>
+        </div>
 
-      <div className="space-y-3 mt-8">
-        <Button
-          onClick={handleNext}
-          className="w-full h-14 text-white font-500 text-base rounded-2xl"
-          style={{ background: "linear-gradient(135deg,#D45A30,#FF6B00)" }}
-        >
-          {isLast ? "Verstuur" : (
-            <span className="flex items-center gap-2">
-              Volgende <ChevronRight size={18} />
-            </span>
+        {/* Progress bar */}
+        <div className="h-1 bg-[#F7F5F2]">
+          <div className="h-full bg-[#FF6B00] transition-all" style={{ width: `${progress}%` }} />
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-6">
+          <div>
+            <h2 className="text-2xl font-500 text-[#1A1A1A] mb-2">{step.title}</h2>
+            <p className="text-sm text-[#888888]">{step.desc}</p>
+          </div>
+
+          {/* Score slider */}
+          {isScoreStep && (
+            <div className="space-y-4">
+              <input
+                type="range"
+                min="1"
+                max="5"
+                value={formData[step.key] || 3}
+                onChange={(e) => setFormData({ ...formData, [step.key]: parseInt(e.target.value) })}
+                className="w-full h-2 bg-[#E8E6E1] rounded-lg appearance-none cursor-pointer"
+              />
+              <div className="flex justify-between text-xs text-[#888888]">
+                <span>1 (Slecht)</span>
+                <span className="text-lg font-500 text-[#FF6B00]">{formData[step.key] || 3}</span>
+                <span>5 (Excellent)</span>
+              </div>
+            </div>
           )}
-        </Button>
-        {!isPost && step === 0 && onDefer && (
-          <Button
-            variant="ghost"
-            onClick={onDefer}
-            className="w-full h-12 text-[#888888] text-sm"
-          >
-            Later invullen
-          </Button>
-        )}
-      </div>
 
-      <div className="text-center mt-4">
-        <p className="text-xs text-[#BBBBBB]">Stap {step + 1} van {steps.length}</p>
+          {/* Text input */}
+          {isTextStep && (
+            <textarea
+              value={formData[step.key] || ""}
+              onChange={(e) => setFormData({ ...formData, [step.key]: e.target.value })}
+              placeholder="Typ je antwoord..."
+              className="w-full p-3 border border-[#E8E6E1] rounded-xl text-sm focus:outline-none focus:border-[#FF6B00] resize-none"
+              rows="4"
+            />
+          )}
+        </div>
+
+        {/* Buttons */}
+        <div className="flex gap-3 p-4 border-t border-[#E8E6E1]">
+          <button
+            onClick={handlePrev}
+            disabled={currentStep === 0}
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#E8E6E1] text-sm font-500 text-[#888888] hover:bg-[#F7F5F2] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft size={16} />
+            Terug
+          </button>
+          <button
+            onClick={handleNext}
+            disabled={
+              (isScoreStep && !formData[step.key]) ||
+              (isTextStep && !formData[step.key]?.trim())
+            }
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#FF6B00] text-white text-sm font-500 hover:bg-[#E55A00] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {currentStep === steps.length - 1 ? "Verzenden" : "Volgende"}
+            {currentStep < steps.length - 1 && <ChevronRight size={16} />}
+          </button>
+        </div>
+
+        {/* Later button (only for pre-game) */}
+        {type === "pre" && currentStep === 0 && (
+          <div className="px-4 pb-4">
+            <button
+              onClick={onClose}
+              className="w-full px-4 py-2 text-sm font-500 text-[#888888] hover:text-[#FF6B00] rounded-xl hover:bg-[#FFF3EB] transition-colors"
+            >
+              Later invullen
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
