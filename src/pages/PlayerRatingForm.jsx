@@ -76,42 +76,44 @@ export default function PlayerRatingForm() {
   const totalAvg = allVals.length > 0 ? Math.ceil(allVals.reduce((a, b) => a + b, 0) / allVals.length) : 0;
 
   return (
-    <RoleGuard allowedRoles={["trainer", "admin"]}>
     <div className="pb-24 space-y-4 max-w-lg mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button onClick={() => navigate(createPageUrl(`PlayerDetail?id=${playerId}`))} className="p-2 rounded-lg hover:bg-[#F7F5F2]">
+        <button onClick={() => navigate(-1)} className="p-2 rounded-lg hover:bg-[#F7F5F2]">
           <ArrowLeft size={20} color="#FF6B00" />
         </button>
         <div>
           <h1 className="text-xl font-500 text-[#FF6B00]">Beoordeling</h1>
           {player && <p className="text-sm text-[#888888]">{player.name}</p>}
+          {isReadOnly && <p className="text-xs text-[#888888] mt-0.5">Alleen inzien</p>}
         </div>
       </div>
 
-      {/* Speler selectie */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-        <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-2 block">Speler</label>
-        {playersLoading ? (
-          <div className="h-10 bg-[#F7F5F2] rounded-xl animate-pulse" />
-        ) : (
-          <Select value={selectedPlayerId} onValueChange={handlePlayerChange}>
-            <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] w-full" style={{ backgroundColor: "#FFFFFF" }}>
-              <SelectValue placeholder="Selecteer een speler..." />
-            </SelectTrigger>
-            <SelectContent>
-              {players
-                .filter(p => p.active !== false)
-                .sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99))
-                .map((p) => (
-                  <SelectItem key={p.id} value={p.id}>
-                    {p.shirt_number ? `#${p.shirt_number} ` : ""}{p.name}
-                  </SelectItem>
-                ))}
-            </SelectContent>
-          </Select>
-        )}
-      </div>
+      {/* Speler selectie — alleen voor trainers */}
+      {!isReadOnly && (
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+          <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-2 block">Speler</label>
+          {playersLoading ? (
+            <div className="h-10 bg-[#F7F5F2] rounded-xl animate-pulse" />
+          ) : (
+            <Select value={selectedPlayerId} onValueChange={handlePlayerChange}>
+              <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] w-full" style={{ backgroundColor: "#FFFFFF" }}>
+                <SelectValue placeholder="Selecteer een speler..." />
+              </SelectTrigger>
+              <SelectContent>
+                {players
+                  .filter(p => p.active !== false)
+                  .sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99))
+                  .map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.shirt_number ? `#${p.shirt_number} ` : ""}{p.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+      )}
 
       {/* Meting & Datum */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] space-y-4">
