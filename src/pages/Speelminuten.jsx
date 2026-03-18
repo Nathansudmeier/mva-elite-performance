@@ -46,7 +46,7 @@ export default function Speelminuten() {
     queryFn: () => base44.entities.Match.list("-date"),
   });
 
-  const activePlayers = players.filter(p => p.active !== false);
+  const activePlayers = players.filter(p => p.active !== false && (!isReadOnly || p.id === myPlayerId));
   const finishedCount = matches.filter(m => m.live_status === "finished" && (teamFilter === "all" || m.team === teamFilter)).length;
 
   const playerStats = activePlayers
