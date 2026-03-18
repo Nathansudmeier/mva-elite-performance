@@ -177,8 +177,8 @@ export default function Layout({ children, currentPageName }) {
             {profileLink ? (
               <Link to={profileLink} className="flex-shrink-0">
                 <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#E8E6E1] hover:border-[#FF6B00] transition-colors bg-[#F7F5F2] flex items-center justify-center">
-                  {user?.photo_url ? (
-                    <img src={user.photo_url} alt={user.full_name} className="w-full h-full object-cover" />
+                  {profilePhoto ? (
+                    <img src={profilePhoto} alt={user.full_name} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-sm font-500 text-[#FF6B00]">
                       {user?.full_name?.charAt(0)?.toUpperCase() || "?"}
