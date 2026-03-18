@@ -41,7 +41,8 @@ export default function PhotoUpload({ onSaved }) {
     if (!file) return;
     setUploading(true);
     const compressed = await compressImage(file);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file: compressed });
+    const compressedFile = new File([compressed], file.name, { type: "image/jpeg" });
+    const { file_url } = await base44.integrations.Core.UploadFile({ file: compressedFile });
     await base44.entities.TeamPhoto.create({
       photo_url: file_url,
       date: form.date,
