@@ -122,9 +122,11 @@ function StaffContent() {
                   </p>
                 )}
               </div>
-              <button onClick={(e) => { e.preventDefault(); openEdit(trainer); }} className="p-2 rounded-lg transition-colors hover:bg-[#FFF3EB]">
-                <Edit2 size={14} className="text-[#888888]" />
-              </button>
+              {isTrainer && (
+                <button onClick={(e) => { e.preventDefault(); openEdit(trainer); }} className="p-2 rounded-lg transition-colors hover:bg-[#FFF3EB]">
+                  <Edit2 size={14} className="text-[#888888]" />
+                </button>
+              )}
             </div>
           </Link>
         ))}
