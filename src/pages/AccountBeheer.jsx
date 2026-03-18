@@ -201,8 +201,12 @@ function AccountBeheerContent() {
               const linked = getLinkedPlayer(u);
               return (
                 <div key={u.id} className="flex items-center gap-3 py-2 border-b border-[#E8E6E1] last:border-0">
-                  <div className="w-8 h-8 rounded-full bg-[#FFF3EB] flex items-center justify-center text-[#FF6B00] text-sm font-500">
-                    {u.full_name?.[0] || u.email?.[0]}
+                  <div className="w-8 h-8 rounded-full bg-[#FFF3EB] flex items-center justify-center text-[#FF6B00] text-sm font-500 overflow-hidden shrink-0">
+                    {linked?.photo_url ? (
+                      <img src={linked.photo_url} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      u.full_name?.[0] || u.email?.[0]
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-500 text-[#1A1A1A] truncate">{u.full_name || u.email}</p>
