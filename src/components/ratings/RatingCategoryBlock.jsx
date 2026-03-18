@@ -1,7 +1,7 @@
 import React from "react";
 import StarRating from "./StarRating";
 
-export default function RatingCategoryBlock({ title, criteria, form, onChange }) {
+export default function RatingCategoryBlock({ title, criteria, form, onChange, readOnly = false }) {
   const scores = criteria.map((c) => form[c.key] || 0).filter((v) => v > 0);
   const avg = scores.length > 0 ? Math.ceil(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
 
@@ -21,6 +21,7 @@ export default function RatingCategoryBlock({ title, criteria, form, onChange })
           label={c.label}
           value={form[c.key] || 0}
           onChange={(v) => onChange(c.key, v)}
+          readOnly={readOnly}
         />
       ))}
     </div>
