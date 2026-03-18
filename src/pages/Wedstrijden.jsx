@@ -236,21 +236,25 @@ export default function Wedstrijden() {
                   </div>
                   <div className="flex flex-col items-end gap-2">
                     <span className="text-3xl font-black" style={{ color: "#D45A30" }}>{scoreLabel(detailMatch)}</span>
-                    <Button variant="outline" size="sm" onClick={() => openEdit(detailMatch)} className="border-[#FDE8DC] text-[#1A1F2E] hover:bg-[#FDE8DC]">
-                      <Edit2 size={12} className="mr-1" /> Bewerken
-                    </Button>
-                    <Link to={`/LiveMatch?matchId=${detailMatch.id}`}>
-                      <Button size="sm" className="text-white" style={{ backgroundColor: "#D45A30" }}>
-                        <Radio size={12} className="mr-1" /> Live
-                      </Button>
-                    </Link>
-                    <Button size="sm" variant="outline" onClick={() => {
-                      if (confirm("Weet je zeker dat je deze wedstrijd wilt verwijderen?")) {
-                        deleteMutation.mutate(detailMatch.id);
-                      }
-                    }} className="border-[#FF6B6B] text-[#C0392B] hover:bg-red-50">
-                      <Trash2 size={12} className="mr-1" /> Verwijderen
-                    </Button>
+                    {isTrainer && (
+                      <>
+                        <Button variant="outline" size="sm" onClick={() => openEdit(detailMatch)} className="border-[#FDE8DC] text-[#1A1F2E] hover:bg-[#FDE8DC]">
+                          <Edit2 size={12} className="mr-1" /> Bewerken
+                        </Button>
+                        <Link to={`/LiveMatch?matchId=${detailMatch.id}`}>
+                          <Button size="sm" className="text-white" style={{ backgroundColor: "#D45A30" }}>
+                            <Radio size={12} className="mr-1" /> Live
+                          </Button>
+                        </Link>
+                        <Button size="sm" variant="outline" onClick={() => {
+                          if (confirm("Weet je zeker dat je deze wedstrijd wilt verwijderen?")) {
+                            deleteMutation.mutate(detailMatch.id);
+                          }
+                        }} className="border-[#FF6B6B] text-[#C0392B] hover:bg-red-50">
+                          <Trash2 size={12} className="mr-1" /> Verwijderen
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
