@@ -69,6 +69,11 @@ export default function PlayerDashboard() {
     enabled: !!playerId,
   });
 
+  const { data: matches = [] } = useQuery({
+    queryKey: ["allMatches"],
+    queryFn: () => base44.entities.Match.list(),
+  });
+
   const saveWellness = useMutation({
     mutationFn: () => base44.entities.WellnessLog.create({ ...wellnessForm, player_id: playerId, sleep: Number(wellnessForm.sleep), fatigue: Number(wellnessForm.fatigue), muscle_pain: Number(wellnessForm.muscle_pain) }),
     onSuccess: () => {
@@ -130,22 +135,11 @@ export default function PlayerDashboard() {
         yoyo={yoyo}
       />
 
+      {/* Metric Grid */}
+      <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} matches={matches} playerId={playerId} />
+
       {/* IOP Goals */}
-      {player && (player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
-            <Target size={14} /> Mijn IOP Doelen
-          </h2>
-          <div className="space-y-2">
-            {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).map((goal, i) => (
-              <div key={i} className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#FF6B00] text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
-                <p className="text-sm text-[#1A1A1A]">{goal}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <PlayerIOPGoals player={player} />
 
       {/* Radar Chart */}
       {chartData.length > 0 && radarData.length > 0 && (
