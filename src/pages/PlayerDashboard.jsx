@@ -120,10 +120,13 @@ export default function PlayerDashboard() {
   return (
     <div className="space-y-6 pb-24">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-500 text-[#1A1A1A]">Mijn Dashboard</h1>
-        {player && <p className="text-[#888888] text-sm">{player.name} · {player.position}</p>}
-      </div>
+      <PlayerGreetingHeader
+        user={user}
+        player={player}
+        attendance={attendance}
+        ratings={ratings}
+        yoyo={yoyo}
+      />
 
       {/* IOP Goals */}
       {player && (player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
