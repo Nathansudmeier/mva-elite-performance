@@ -121,6 +121,11 @@ function StaffContent() {
                     <Phone size={10} /> {trainer.phone}
                   </p>
                 )}
+                {trainer.email && (
+                  <p className="text-xs mt-1 text-[#888888] flex items-center gap-1">
+                    <Mail size={10} /> {trainer.email}
+                  </p>
+                )}
               </div>
               {isTrainer && (
                 <button onClick={(e) => { e.preventDefault(); openEdit(trainer); }} className="p-2 rounded-lg transition-colors hover:bg-[#FFF3EB]">
