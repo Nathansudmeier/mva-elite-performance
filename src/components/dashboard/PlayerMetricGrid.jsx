@@ -12,7 +12,8 @@ function Delta({ value, unit = "", lowerIsBetter = false }) {
   );
 }
 
-function MetricCard({ icon: Icon, label, value, unit, delta, deltaUnit, lowerIsBetter }) {
+function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowerIsBetter }) {
+  const Icon = IconComp;
   return (
     <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm flex flex-col gap-1">
       <div className="flex items-center gap-1.5 mb-1">

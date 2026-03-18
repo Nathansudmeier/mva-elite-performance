@@ -27,7 +27,7 @@ export default function PlayerIOPGoals({ player }) {
               />
               <div>
                 <p style={{ fontSize: 13 }} className="text-[#1A1A1A] leading-snug">{goal}</p>
-                <p style={{ fontSize: 11 }} className="mt-0.5 font-medium" style={{ color: status.color }}>
+                <p style={{ fontSize: 11, color: status.color }} className="mt-0.5 font-medium">
                   {status.label}
                 </p>
               </div>
