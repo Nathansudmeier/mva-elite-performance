@@ -119,6 +119,21 @@ export default function Layout({ children, currentPageName }) {
   const { user, isTrainer, isSpeelster } = useCurrentUser();
   const isSpeelsterUser = !isTrainer && isSpeelster;
 
+  // Fetch linked profile photo
+  const { data: trainerRecord } = useQuery({
+    queryKey: ["trainer", user?.trainer_id],
+    queryFn: () => b44.entities.Trainer.filter({ id: user.trainer_id }),
+    enabled: !!user?.trainer_id,
+    select: (data) => data[0],
+  });
+  const { data: playerRecord } = useQuery({
+    queryKey: ["player", user?.player_id],
+    queryFn: () => b44.entities.Player.filter({ id: user.player_id }),
+    enabled: !!user?.player_id,
+    select: (data) => data[0],
+  });
+  const profilePhoto = trainerRecord?.photo_url || playerRecord?.photo_url || null;
+
   const profileLink = isSpeelsterUser
     ? `/PlayerDashboard`
     : isTrainer && user?.trainer_id
