@@ -88,6 +88,11 @@ export default function PlayerDashboard() {
     queryFn: () => base44.entities.WinningTeam.list(),
   });
 
+  const { data: teamPhotos = [] } = useQuery({
+    queryKey: ["teamPhotos"],
+    queryFn: () => base44.entities.TeamPhoto.list("-date"),
+  });
+
   const saveWellness = useMutation({
     mutationFn: () => base44.entities.WellnessLog.create({ ...wellnessForm, player_id: playerId, sleep: Number(wellnessForm.sleep), fatigue: Number(wellnessForm.fatigue), muscle_pain: Number(wellnessForm.muscle_pain) }),
     onSuccess: () => {
