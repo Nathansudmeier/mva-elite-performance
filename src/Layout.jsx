@@ -242,7 +242,8 @@ export default function Layout({ children, currentPageName }) {
               {isSpeelsterUser ? (
                 <>
                   <NavLink item={mainNavItems[0]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <NavLink item={mainNavItems[3]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={mainNavItems[1]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={mainNavItems[4]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={{ name: "Spelprincipes", icon: Grid3x3, page: "Spelprincipes" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <DeveloperGroup currentPageName={currentPageName} onItemClick={() => setMobileOpen(false)} />
                 </>
