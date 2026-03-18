@@ -162,25 +162,27 @@ export default function PlayerRatingForm() {
             title={cat}
             criteria={criteria}
             form={form}
-            onChange={setField}
+            onChange={isReadOnly ? () => {} : setField}
+            readOnly={isReadOnly}
           />
         </div>
       ))}
 
-      {/* Save */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 lg:sticky lg:bottom-auto bg-white border-t border-[#E8E6E1] shadow-lg">
-        <div className="max-w-lg mx-auto">
-          <Button
-            onClick={() => saveMutation.mutate()}
-            disabled={saveMutation.isPending}
-            className="w-full h-12 text-white font-500 text-base bg-[#FF6B00] hover:bg-[#E55A00] transition-colors"
-          >
-            <Save size={16} className="mr-2" />
-            {saveMutation.isPending ? "Opslaan..." : "Beoordeling Opslaan"}
-          </Button>
+      {/* Save — alleen voor trainers */}
+      {!isReadOnly && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 lg:sticky lg:bottom-auto bg-white border-t border-[#E8E6E1] shadow-lg">
+          <div className="max-w-lg mx-auto">
+            <Button
+              onClick={() => saveMutation.mutate()}
+              disabled={saveMutation.isPending}
+              className="w-full h-12 text-white font-500 text-base bg-[#FF6B00] hover:bg-[#E55A00] transition-colors"
+            >
+              <Save size={16} className="mr-2" />
+              {saveMutation.isPending ? "Opslaan..." : "Beoordeling Opslaan"}
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
-    </RoleGuard>
   );
 }
