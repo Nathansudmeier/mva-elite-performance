@@ -282,32 +282,8 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* BLOK 3: Champions Trophy Top 5 */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-500 text-[#1A1A1A]">Top 5 Winnaars</h2>
-          <button 
-            onClick={() => navigate("/Leaderboard")} 
-            className="text-sm font-500 text-[#FF6B00] hover:text-[#E55A00] transition-colors"
-          >
-            Volledig leaderboard →
-          </button>
-        </div>
-        <div className="space-y-2">
-          {topWinners.map((p, i) => (
-            <div key={p.id} className="flex items-center justify-between p-4 rounded-xl bg-[#F7F5F2]">
-              <div className="flex items-center gap-4">
-                <span className="font-500 text-lg text-[#FF6B00] w-6">{i + 1}</span>
-                <span className="font-500 text-[#1A1A1A]">{p.name}</span>
-              </div>
-              <div className="text-right">
-                <p className="font-500 text-[#FF6B00]">{p.wins}</p>
-                <p className="text-xs text-[#888888]">{p.total > 0 ? ((p.wins / p.total) * 100).toFixed(0) : 0}%</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* BLOK 3: Champions Trophy */}
+      <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
 
       {/* BLOK 4: Groepsfysiek */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
