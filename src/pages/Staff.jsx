@@ -168,6 +168,13 @@ function StaffContent() {
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               className="border-[#E8E6E1] text-[#1A1A1A] bg-white"
             />
+            <Input
+              placeholder="E-mailadres"
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="border-[#E8E6E1] text-[#1A1A1A] bg-white"
+            />
             <label className="flex items-center gap-2 px-4 py-3 rounded-xl border border-dashed border-[#FF6B00] cursor-pointer bg-[#FFF3EB]">
               <Upload size={16} className="text-[#FF6B00]" />
               <span className="text-sm text-[#888888]">{photoFile ? photoFile.name : "Upload foto"}</span>
