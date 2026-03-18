@@ -10,6 +10,9 @@ import { Star, Heart, Save } from "lucide-react";
 import PlayerGreetingHeader from "../components/dashboard/PlayerGreetingHeader";
 import PlayerMetricGrid from "../components/dashboard/PlayerMetricGrid";
 import PlayerIOPGoals from "../components/dashboard/PlayerIOPGoals";
+import AttendanceDots from "../components/dashboard/AttendanceDots";
+import NextMatchCard from "../components/dashboard/NextMatchCard";
+import PlayerTrophySection from "../components/dashboard/PlayerTrophySection";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
 const TACTICAL = ["speelveld_groot", "omschakeling_balverlies", "speelveld_klein", "omschakeling_balbezit", "kijkgedrag"];
@@ -72,6 +75,16 @@ export default function PlayerDashboard() {
   const { data: matches = [] } = useQuery({
     queryKey: ["allMatches"],
     queryFn: () => base44.entities.Match.list(),
+  });
+
+  const { data: allPlayers = [] } = useQuery({
+    queryKey: ["allPlayers"],
+    queryFn: () => base44.entities.Player.list(),
+  });
+
+  const { data: winningTeams = [] } = useQuery({
+    queryKey: ["winningTeams"],
+    queryFn: () => base44.entities.WinningTeam.list(),
   });
 
   const saveWellness = useMutation({
