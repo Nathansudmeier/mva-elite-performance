@@ -290,8 +290,8 @@ export default function Layout({ children, currentPageName }) {
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#FFFFFF] border-t border-[#E8E6E1] z-40">
         <div className="flex justify-around">
           {(isSpeelsterUser 
-            ? [mainNavItems[0], mainNavItems[3], { name: "Spelprincipes", icon: Grid3x3, page: "Spelprincipes" }, { name: "Ontwikkeling", icon: TrendingUp, page: "SelfReflection" }]
-            : [mainNavItems[0], mainNavItems[1], mainNavItems[2], secondaryNavItems[0]]
+            ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], { name: "Ontwikkeling", icon: TrendingUp, page: "SelfReflection" }]
+            : [mainNavItems[0], mainNavItems[1], mainNavItems[2], mainNavItems[3]]
           ).map((item) => (
             <NavLink 
               key={item.page}
