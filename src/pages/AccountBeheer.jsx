@@ -136,6 +136,7 @@ function AccountBeheerContent() {
 
   const speelsters = users.filter(u => u.role === "speelster");
   const trainerUsers = users.filter(u => u.role === "trainer");
+  const ongekoppeld = users.filter(u => u.role !== "speelster" && u.role !== "trainer" && u.role !== "admin");
 
   return (
     <div className="space-y-6 pb-20">
