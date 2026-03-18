@@ -47,28 +47,48 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AccountBeheer from './pages/AccountBeheer';
 import Attendance from './pages/Attendance';
 import Dashboard from './pages/Dashboard';
+import Leaderboard from './pages/Leaderboard';
+import LiveMatch from './pages/LiveMatch';
 import PhysicalMonitor from './pages/PhysicalMonitor';
+import PlayerDashboard from './pages/PlayerDashboard';
 import PlayerDetail from './pages/PlayerDetail';
+import PlayerRatingForm from './pages/PlayerRatingForm';
 import Players from './pages/Players';
 import Reports from './pages/Reports';
 import SelfReflection from './pages/SelfReflection';
+import Speelminuten from './pages/Speelminuten';
+import Spelprincipes from './pages/Spelprincipes';
+import Staff from './pages/Staff';
 import Tactics from './pages/Tactics';
+import TrainerDetail from './pages/TrainerDetail';
 import VideoHub from './pages/VideoHub';
+import Wedstrijden from './pages/Wedstrijden';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AccountBeheer": AccountBeheer,
     "Attendance": Attendance,
     "Dashboard": Dashboard,
+    "Leaderboard": Leaderboard,
+    "LiveMatch": LiveMatch,
     "PhysicalMonitor": PhysicalMonitor,
+    "PlayerDashboard": PlayerDashboard,
     "PlayerDetail": PlayerDetail,
+    "PlayerRatingForm": PlayerRatingForm,
     "Players": Players,
     "Reports": Reports,
     "SelfReflection": SelfReflection,
+    "Speelminuten": Speelminuten,
+    "Spelprincipes": Spelprincipes,
+    "Staff": Staff,
     "Tactics": Tactics,
+    "TrainerDetail": TrainerDetail,
     "VideoHub": VideoHub,
+    "Wedstrijden": Wedstrijden,
 }
 
 export const pagesConfig = {

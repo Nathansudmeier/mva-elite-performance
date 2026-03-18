@@ -58,12 +58,8 @@ function AccountBeheerContent() {
 
   const handleInvite = async () => {
     setInviting(true);
-    const result = await base44.users.inviteUser(inviteEmail, "user");
-    if (result?.id) {
-      const updateData = { role: inviteRole };
-      if (inviteRole === "speelster" && invitePlayerId) updateData.player_id = invitePlayerId;
-      await base44.entities.User.update(result.id, updateData);
-    }
+    await base44.users.inviteUser(inviteEmail, "user");
+    // Role and player_id will be set manually via the Koppel button after the user accepts the invite
     setInviting(false);
     setInviteOpen(false);
     setInviteEmail("");
