@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { calcPlayerSeasonStats } from "@/utils/calculateMinutes";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Clock, AlertTriangle, Users } from "lucide-react";
-import RoleGuard from "@/components/auth/RoleGuard";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 function TeamFilter({ value, onChange }) {
   const options = [

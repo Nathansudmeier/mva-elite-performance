@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft, Save } from "lucide-react";
 import RatingCategoryBlock from "@/components/ratings/RatingCategoryBlock";
 import { CATEGORIES, calcCategoryAverages } from "@/components/ratings/ratingUtils";
-import RoleGuard from "@/components/auth/RoleGuard";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 const EMPTY_FORM = {
   meting: "Meting 1",
