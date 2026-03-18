@@ -166,6 +166,9 @@ export default function PlayerDashboard() {
       {/* Champions Trophy */}
       <PlayerTrophySection players={allPlayers} winningTeams={winningTeams} currentPlayerId={playerId} />
 
+      {/* Foto Tijdlijn */}
+      <PhotoTimeline photos={teamPhotos} />
+
       {/* Radar Chart */}
       {chartData.length > 0 && radarData.length > 0 && (
         <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">

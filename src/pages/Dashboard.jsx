@@ -360,6 +360,14 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Foto Upload (trainer only) */}
+      {isTrainer && (
+        <PhotoUpload onSaved={() => refetchPhotos()} />
+      )}
+
+      {/* Foto Tijdlijn */}
+      <PhotoTimeline photos={teamPhotos} />
+
       {/* BLOK 6: Zelfreflecties */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
         <div className="flex items-center justify-between mb-6">
