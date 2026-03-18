@@ -276,6 +276,35 @@ export default function Wedstrijden() {
                 </div>
               )}
 
+              {/* Opstelling veld — zichtbaar voor iedereen */}
+              {detailMatch.lineup && detailMatch.lineup.length > 0 && (
+                <div className="elite-card p-5">
+                  <p className="text-sm font-bold text-[#1A1F2E] mb-3">Opstelling — {detailMatch.formation}</p>
+                  <FieldLineup
+                    players={activePlayers}
+                    lineupMap={lineupArrayToMap(detailMatch.lineup)}
+                    formation={detailMatch.formation || "4-3-3"}
+                    readOnly
+                  />
+                  {detailMatch.substitutes && detailMatch.substitutes.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-[#E8E6E1]">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-[#888888] mb-2">Wissels</p>
+                      <div className="flex flex-wrap gap-2">
+                        {detailMatch.substitutes.map((pid) => {
+                          const p = activePlayers.find((pl) => pl.id === pid);
+                          return p ? (
+                            <span key={pid} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FDE8DC] text-[#D45A30]">
+                              <ArrowLeftRight size={10} />
+                              {p.name}
+                            </span>
+                          ) : null;
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {isTrainer && (
                 <MatchCheckInOverview
                   matchId={detailMatch.id}
