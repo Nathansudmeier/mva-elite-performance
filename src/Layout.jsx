@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 
 const desenvolvidoItems = [
-  { name: "Aanwezigheid", icon: ClipboardList, page: "Attendance" },
   { name: "Fysiek", icon: Activity, page: "PhysicalMonitor" },
   { name: "Beoordeling", icon: ClipboardList, page: "PlayerRatingForm" },
   { name: "Reflectie", icon: MessageSquare, page: "SelfReflection" },
