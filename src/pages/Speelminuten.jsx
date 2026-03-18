@@ -33,6 +33,8 @@ function TeamFilter({ value, onChange }) {
 
 export default function Speelminuten() {
   const [teamFilter, setTeamFilter] = useState("all");
+  const { isTrainer, user: currentUser, playerId: myPlayerId } = useCurrentUser();
+  const isReadOnly = !isTrainer && currentUser?.role !== "admin";
 
   const { data: players = [] } = useQuery({
     queryKey: ["players"],
