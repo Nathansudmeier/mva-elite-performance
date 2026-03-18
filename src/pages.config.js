@@ -87,6 +87,7 @@ export const PAGES = {
     "Spelprincipes": Spelprincipes,
     "Staff": Staff,
     "Tactics": Tactics,
+    "Trainingen": Trainingen,
     "TrainerDetail": TrainerDetail,
     "VideoHub": VideoHub,
     "Wedstrijden": Wedstrijden,
