@@ -135,7 +135,6 @@ export default function Layout({ children, currentPageName }) {
     enabled: !!user?.player_id,
   });
   const profilePhoto = trainerRecord?.photo_url || playerRecord?.photo_url || null;
-  // Also fix select removal
 
 
   const profileLink = isSpeelsterUser
