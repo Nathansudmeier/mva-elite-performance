@@ -69,12 +69,13 @@ const FORMATION_SLOTS = {
   ],
 };
 
-export default function FieldLineup({ players, lineupMap, formation, onLineupChange }) {
+export default function FieldLineup({ players, lineupMap, formation, onLineupChange, readOnly = false }) {
   const slots = FORMATION_SLOTS[formation] || FORMATION_SLOTS["4-3-3"];
   const assignedIds = new Set(Object.values(lineupMap));
   const benchPlayers = players.filter((p) => !assignedIds.has(p.id));
 
   const onDragEnd = (result) => {
+    if (readOnly) return;
     const { source, destination, draggableId } = result;
     if (!destination) return;
     const srcId = source.droppableId;
@@ -85,14 +86,12 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
 
     if (srcId === "bench") {
       if (dstId !== "bench") {
-        // Overwrite destination slot; previous occupant auto-returns to bench
         newLineup[dstId] = draggableId;
       }
     } else {
       if (dstId === "bench") {
         delete newLineup[srcId];
       } else {
-        // Field-to-field swap
         const dstOccupant = newLineup[dstId];
         newLineup[dstId] = draggableId;
         if (dstOccupant) {
@@ -105,6 +104,70 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
 
     onLineupChange(newLineup);
   };
+
+  // Read-only view: just the field, no bench/drag
+  if (readOnly) {
+    return (
+      <div
+        className="relative w-full mx-auto"
+        style={{
+          maxWidth: 300,
+          aspectRatio: "2/3",
+          borderRadius: 12,
+          overflow: "hidden",
+          background: "linear-gradient(180deg, #1a5228 0%, #1e5c2e 40%, #1e5c2e 60%, #1a5228 100%)",
+        }}
+      >
+        <FieldMarkings />
+        {slots.map((slot) => {
+          const playerId = lineupMap[slot.id];
+          const player = playerId ? players.find((p) => p.id === playerId) : null;
+          return (
+            <div
+              key={slot.id}
+              style={{
+                position: "absolute",
+                left: `${slot.x}%`,
+                top: `${slot.y}%`,
+                transform: "translate(-50%, -50%)",
+                width: 52,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                zIndex: 10,
+              }}
+            >
+              {player ? (
+                <>
+                  <div
+                    className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center text-sm font-black text-white"
+                    style={{ border: "2px solid #E8724A", backgroundColor: "#D45A30", boxShadow: "0 2px 6px rgba(0,0,0,0.4)" }}
+                  >
+                    {player.photo_url
+                      ? <img src={player.photo_url} className="w-full h-full object-cover" alt="" />
+                      : player.name?.charAt(0)}
+                  </div>
+                  <span
+                    className="text-white text-[9px] font-bold text-center leading-tight mt-0.5"
+                    style={{ maxWidth: 52, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
+                  >
+                    {player.shirt_number ? `#${player.shirt_number} ` : ""}{player.name?.split(" ")[0]}
+                  </span>
+                </>
+              ) : (
+                <div
+                  className="w-9 h-9 rounded-full border-2 border-dashed flex items-center justify-center"
+                  style={{ borderColor: "rgba(255,255,255,0.25)", backgroundColor: "rgba(0,0,0,0.1)" }}
+                >
+                  <span className="text-[8px] font-bold" style={{ color: "rgba(255,255,255,0.4)" }}>{slot.label}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
