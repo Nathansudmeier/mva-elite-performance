@@ -208,7 +208,12 @@ export default function Layout({ children, currentPageName }) {
       <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col border-r border-[#E8E6E1] z-40 overflow-y-auto bg-[#FFFFFF]">
         <nav className="flex-1 py-4 px-3 space-y-2">
           {isSpeelsterUser ? (
-            mainNavItems.slice(0, 1).map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} />)
+            <>
+              <NavLink item={mainNavItems[0]} currentPageName={currentPageName} />
+              <NavLink item={mainNavItems[3]} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Spelprincipes", icon: Grid3x3, page: "Spelprincipes" }} currentPageName={currentPageName} />
+              <DeveloperGroup currentPageName={currentPageName} />
+            </>
           ) : (
             <>
               {mainNavItems.map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} />)}
