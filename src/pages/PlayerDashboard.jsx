@@ -90,9 +90,6 @@ export default function PlayerDashboard() {
     }
   });
 
-  const presentCount = attendance.filter(a => a.present).length;
-  const attendancePct = attendance.length > 0 ? Math.round((presentCount / attendance.length) * 100) : null;
-
   const radarData = ["Meting 1", "Meting 2", "Meting 3"].map(m => {
     const r = ratings.find(x => x.meting === m);
     if (!r) return null;
