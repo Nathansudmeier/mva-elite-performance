@@ -145,11 +145,20 @@ export default function PlayerDashboard() {
         yoyo={yoyo}
       />
 
+      {/* Next Match Card */}
+      <NextMatchCard matches={matches} playerId={playerId} />
+
+      {/* Attendance Dots */}
+      <AttendanceDots attendance={attendance} />
+
       {/* Metric Grid */}
       <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} matches={matches} playerId={playerId} />
 
       {/* IOP Goals */}
       <PlayerIOPGoals player={player} />
+
+      {/* Champions Trophy */}
+      <PlayerTrophySection players={allPlayers} winningTeams={winningTeams} currentPlayerId={playerId} />
 
       {/* Radar Chart */}
       {chartData.length > 0 && radarData.length > 0 && (
