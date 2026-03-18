@@ -5,22 +5,7 @@ import { createPageUrl } from "@/utils";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useQuery } from "@tanstack/react-query";
 import { base44 as b44 } from "@/api/base44Client";
-import {
-  LayoutDashboard,
-  Users,
-  UserCog,
-  Trophy,
-  Grid3x3,
-  Activity,
-  ClipboardList,
-  MessageSquare,
-  Settings,
-  Menu,
-  X,
-  LogOut,
-  ChevronDown,
-  TrendingUp,
-} from "lucide-react";
+// Tabler Icons zijn nu beschikbaar via CDN
 
 const desenvolvidoItems = [
   { name: "Fysiek", icon: Activity, page: "PhysicalMonitor" },
