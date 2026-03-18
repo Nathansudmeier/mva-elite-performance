@@ -65,6 +65,7 @@ import Staff from './pages/Staff';
 import Tactics from './pages/Tactics';
 import TrainerDetail from './pages/TrainerDetail';
 import VideoHub from './pages/VideoHub';
+import Trainingen from './pages/Trainingen';
 import Wedstrijden from './pages/Wedstrijden';
 import __Layout from './Layout.jsx';
 
