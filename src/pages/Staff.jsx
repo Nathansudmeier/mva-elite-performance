@@ -63,7 +63,7 @@ function StaffContent() {
 
   const openNew = () => {
     setEditing(null);
-    setForm({ name: "", role_title: "", phone: "", photo_url: "" });
+    setForm({ name: "", role_title: "", phone: "", email: "", photo_url: "" });
     setPhotoFile(null);
     setDialogOpen(true);
   };
