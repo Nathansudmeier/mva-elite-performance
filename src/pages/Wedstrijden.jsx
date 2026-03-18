@@ -124,9 +124,11 @@ export default function Wedstrijden() {
           <h1 className="text-2xl font-500 text-[#FF6B00]">Wedstrijden</h1>
           <p className="text-sm text-[#888888]">Opstellingen, uitslagen & tactiek</p>
         </div>
-        <Button onClick={openNew} className="text-white" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
-          <Plus size={16} className="mr-1" /> Nieuwe Wedstrijd
-        </Button>
+        {isTrainer && (
+          <Button onClick={openNew} className="text-white" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
+            <Plus size={16} className="mr-1" /> Nieuwe Wedstrijd
+          </Button>
+        )}
       </div>
 
       {/* Team switch */}
