@@ -1,7 +1,7 @@
 import React from "react";
 import { Star } from "lucide-react";
 
-export default function StarRating({ value = 0, onChange, label }) {
+export default function StarRating({ value = 0, onChange, label, readOnly = false }) {
   return (
     <div className="flex items-center justify-between py-3 border-b border-[#FDE8DC] last:border-0">
       <span className="text-sm text-[#1A1A1A] flex-1 mr-3 font-400">{label}</span>
@@ -10,8 +10,9 @@ export default function StarRating({ value = 0, onChange, label }) {
           <button
             key={star}
             type="button"
-            onClick={() => onChange(star)}
-            className="p-1 touch-manipulation"
+            onClick={() => !readOnly && onChange(star)}
+            className={`p-1 touch-manipulation ${readOnly ? "cursor-default" : ""}`}
+            disabled={readOnly}
           >
             <Star
               size={28}
