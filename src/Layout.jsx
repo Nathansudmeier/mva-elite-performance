@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import { useQuery } from "@tanstack/react-query";
+import { base44 as b44 } from "@/api/base44Client";
 import {
   LayoutDashboard,
   Users,
