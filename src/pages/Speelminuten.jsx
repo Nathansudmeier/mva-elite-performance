@@ -182,6 +182,5 @@ export default function Speelminuten() {
           </div>
         )}
       </div>
-    </RoleGuard>
   );
 }
