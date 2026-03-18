@@ -55,6 +55,7 @@ function StaffContent() {
       name: trainer.name || "",
       role_title: trainer.role_title || "",
       phone: trainer.phone || "",
+      email: trainer.email || "",
       photo_url: trainer.photo_url || "",
     });
     setDialogOpen(true);
