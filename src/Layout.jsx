@@ -30,6 +30,7 @@ const secondaryNavItems = [
 
 function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
   const isActive = currentPageName === item.page;
+  const iconColor = isActive ? "#FF6B00" : "#888888";
   
   if (variant === "mobile-tab") {
     return (
@@ -39,10 +40,9 @@ function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
         onClick={onClick}
         className="flex flex-col items-center justify-center py-3 px-2 transition-colors"
       >
-        <item.icon 
-          size={22} 
-          strokeWidth={1.5}
-          color={isActive ? "#FF6B00" : "#888888"}
+        <i 
+          className={`ti ti-${item.icon}`}
+          style={{ fontSize: "22px", color: iconColor, strokeWidth: 1.5 }}
         />
         <span className={`text-[11px] mt-1 ${isActive ? "text-[#FF6B00]" : "text-[#888888]"}`}>
           {item.name}
@@ -62,7 +62,10 @@ function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
           : "text-[#888888] hover:text-[#FF6B00]"
       }`}
     >
-      <item.icon size={20} strokeWidth={1.5} />
+      <i 
+        className={`ti ti-${item.icon}`}
+        style={{ fontSize: "20px", color: iconColor, strokeWidth: 1.5 }}
+      />
       {item.name}
     </Link>
   );
