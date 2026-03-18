@@ -208,12 +208,7 @@ export default function Layout({ children, currentPageName }) {
       <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col border-r border-[#E8E6E1] z-40 overflow-y-auto bg-[#FFFFFF]">
         <nav className="flex-1 py-4 px-3 space-y-2">
           {isSpeelsterUser ? (
-            <>
-              <NavLink item={mainNavItems[0]} currentPageName={currentPageName} />
-              <NavLink item={mainNavItems[3]} currentPageName={currentPageName} />
-              <DeveloperGroup currentPageName={currentPageName} />
-              <NavLink item={secondaryNavItems[0]} currentPageName={currentPageName} />
-            </>
+            mainNavItems.slice(0, 1).map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} />)
           ) : (
             <>
               {mainNavItems.map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} />)}
@@ -239,12 +234,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="w-64 h-full pt-20 px-3 overflow-y-auto bg-[#FFFFFF] border-r border-[#E8E6E1]" onClick={(e) => e.stopPropagation()}>
             <nav className="space-y-2">
               {isSpeelsterUser ? (
-                <>
-                  <NavLink item={mainNavItems[0]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <NavLink item={mainNavItems[3]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <DeveloperGroup currentPageName={currentPageName} onItemClick={() => setMobileOpen(false)} />
-                  <NavLink item={secondaryNavItems[0]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                </>
+                mainNavItems.slice(0, 1).map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />)
               ) : (
                 <>
                   {mainNavItems.map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />)}
@@ -288,7 +278,7 @@ export default function Layout({ children, currentPageName }) {
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#FFFFFF] border-t border-[#E8E6E1] z-40">
         <div className="flex justify-around">
           {(isSpeelsterUser 
-            ? [mainNavItems[0], mainNavItems[3], secondaryNavItems[0]]
+            ? mainNavItems.slice(0, 1) 
             : [mainNavItems[0], mainNavItems[1], mainNavItems[2], secondaryNavItems[0]]
           ).map((item) => (
             <NavLink 
