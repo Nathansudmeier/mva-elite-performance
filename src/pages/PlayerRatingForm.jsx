@@ -120,20 +120,30 @@ export default function PlayerRatingForm() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-1 block">Meetmoment</label>
-            <Select value={form.meting} onValueChange={(v) => setField("meting", v)}>
-              <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: "#FFFFFF" }}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
+            {isReadOnly ? (
+              <div className="flex gap-2 flex-wrap">
                 {["Meting 1", "Meting 2", "Meting 3"].map((m) => (
-                  <SelectItem key={m} value={m}>{m}</SelectItem>
+                  <button key={m} onClick={() => setField("meting", m)}
+                    className={`px-3 py-1.5 rounded-full text-sm transition-colors ${form.meting === m ? "bg-[#FF6B00] text-white" : "bg-white text-[#888888] border border-[#E8E6E1] hover:border-[#FF6B00] hover:text-[#FF6B00]"}`}
+                  >{m}</button>
                 ))}
-              </SelectContent>
-            </Select>
+              </div>
+            ) : (
+              <Select value={form.meting} onValueChange={(v) => setField("meting", v)}>
+                <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: "#FFFFFF" }}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {["Meting 1", "Meting 2", "Meting 3"].map((m) => (
+                    <SelectItem key={m} value={m}>{m}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
           <div>
             <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-1 block">Datum</label>
-            <Input type="date" value={form.date} onChange={(e) => setField("date", e.target.value)} className="border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: "#FFFFFF" }} />
+            <Input type="date" value={form.date} onChange={(e) => setField("date", e.target.value)} className="border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: "#FFFFFF" }} readOnly={isReadOnly} />
           </div>
         </div>
         {totalAvg > 0 && (
