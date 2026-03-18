@@ -168,31 +168,6 @@ export default function PlayerDashboard() {
         </div>
       )}
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-2 gap-3">
-        {attendancePct !== null && (
-          <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm text-center">
-            <Calendar size={18} className="text-[#FF6B00] mx-auto mb-1" />
-            <div className="text-2xl font-500 text-[#FF6B00]">{attendancePct}%</div>
-            <div className="text-xs text-[#888888]">Aanwezigheid</div>
-          </div>
-        )}
-        {yoyo.length > 0 && (
-          <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm text-center">
-            <Activity size={18} className="text-[#FF6B00] mx-auto mb-1" />
-            <div className="text-2xl font-500 text-[#FF6B00]">{yoyo[yoyo.length - 1]?.level}</div>
-            <div className="text-xs text-[#888888]">Laatste Yo-Yo</div>
-          </div>
-        )}
-        {physical.length > 0 && (
-          <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm text-center">
-            <Activity size={18} className="text-[#FF6B00] mx-auto mb-1" />
-            <div className="text-2xl font-500 text-[#FF6B00]">{physical[physical.length - 1]?.sprint_30m}s</div>
-            <div className="text-xs text-[#888888]">Sprint 30m</div>
-          </div>
-        )}
-      </div>
-
       {/* Wellness Log */}
       <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
         <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
