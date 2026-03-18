@@ -69,7 +69,7 @@ export default function Speelminuten() {
   }
 
   return (
-      <div className="space-y-6 pb-20">
+    <div className="space-y-6 pb-20">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Link to="/Players" className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
