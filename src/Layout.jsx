@@ -127,10 +127,12 @@ export default function Layout({ children, currentPageName }) {
     select: (data) => data[0],
   });
   const { data: playerRecord } = useQuery({
-    queryKey: ["player", user?.player_id],
-    queryFn: () => b44.entities.Player.filter({ id: user.player_id }),
+    queryKey: ["player-layout", user?.player_id],
+    queryFn: async () => {
+      const results = await b44.entities.Player.list();
+      return results.find(p => p.id === user.player_id) || null;
+    },
     enabled: !!user?.player_id,
-    select: (data) => data[0],
   });
   const profilePhoto = trainerRecord?.photo_url || playerRecord?.photo_url || null;
 
