@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 /**
  * Extracts the YouTube video ID from various URL formats:
