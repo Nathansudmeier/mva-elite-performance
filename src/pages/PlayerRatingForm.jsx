@@ -29,6 +29,8 @@ export default function PlayerRatingForm() {
   const ratingId = urlParams.get("ratingId");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user, isTrainer, playerId: myPlayerId } = useCurrentUser();
+  const isReadOnly = !isTrainer && user?.role !== "admin";
 
   const [selectedPlayerId, setSelectedPlayerId] = useState(urlParams.get("player_id") || urlParams.get("id") || "");
   const [form, setForm] = useState({ ...EMPTY_FORM, player_id: selectedPlayerId });
