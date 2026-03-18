@@ -13,6 +13,7 @@ import PlayerIOPGoals from "../components/dashboard/PlayerIOPGoals";
 import AttendanceDots from "../components/dashboard/AttendanceDots";
 import NextMatchCard from "../components/dashboard/NextMatchCard";
 import PlayerTrophySection from "../components/dashboard/PlayerTrophySection";
+import PhotoTimeline from "../components/photos/PhotoTimeline";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
 const TACTICAL = ["speelveld_groot", "omschakeling_balverlies", "speelveld_klein", "omschakeling_balbezit", "kijkgedrag"];

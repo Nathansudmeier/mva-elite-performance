@@ -6,6 +6,8 @@ import { AlertCircle, TrendingUp, TrendingDown, Upload, Trophy, Minus } from "lu
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import MatchDayBanner from "@/components/checkin/MatchDayBanner";
 import TrainerChampionsTrophy from "../components/dashboard/TrainerChampionsTrophy";
+import PhotoTimeline from "../components/photos/PhotoTimeline";
+import PhotoUpload from "../components/photos/PhotoUpload";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
 import { format, subDays, isAfter } from "date-fns";
 import { nl } from "date-fns/locale";
