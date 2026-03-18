@@ -239,7 +239,12 @@ export default function Layout({ children, currentPageName }) {
           <div className="w-64 h-full pt-20 px-3 overflow-y-auto bg-[#FFFFFF] border-r border-[#E8E6E1]" onClick={(e) => e.stopPropagation()}>
             <nav className="space-y-2">
               {isSpeelsterUser ? (
-                mainNavItems.slice(0, 1).map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />)
+                <>
+                  <NavLink item={mainNavItems[0]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={mainNavItems[3]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <DeveloperGroup currentPageName={currentPageName} onItemClick={() => setMobileOpen(false)} />
+                  <NavLink item={secondaryNavItems[0]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                </>
               ) : (
                 <>
                   {mainNavItems.map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />)}
