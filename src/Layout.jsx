@@ -8,24 +8,24 @@ import { base44 as b44 } from "@/api/base44Client";
 // Tabler Icons zijn nu beschikbaar via CDN
 
 const desenvolvidoItems = [
-  { name: "Fysiek", icon: Activity, page: "PhysicalMonitor" },
-  { name: "Beoordeling", icon: ClipboardList, page: "PlayerRatingForm" },
-  { name: "Reflectie", icon: MessageSquare, page: "SelfReflection" },
-  { name: "Rapporten", icon: TrendingUp, page: "Reports" },
-  { name: "Speelminuten", icon: Activity, page: "Speelminuten" },
+  { name: "Fysiek", icon: "activity", page: "PhysicalMonitor" },
+  { name: "Beoordeling", icon: "list-check", page: "PlayerRatingForm" },
+  { name: "Reflectie", icon: "message", page: "SelfReflection" },
+  { name: "Rapporten", icon: "trending-up", page: "Reports" },
+  { name: "Speelminuten", icon: "activity", page: "Speelminuten" },
 ];
 
 const mainNavItems = [
-  { name: "Dashboard", icon: LayoutDashboard, page: "Dashboard" },
-  { name: "Trainingen", icon: ClipboardList, page: "Trainingen" },
-  { name: "Spelers", icon: Users, page: "Players" },
-  { name: "Staff", icon: UserCog, page: "Staff" },
-  { name: "Wedstrijden", icon: Trophy, page: "Wedstrijden" },
+  { name: "Dashboard", icon: "layout-grid", page: "Dashboard" },
+  { name: "Trainingen", icon: "list-check", page: "Trainingen" },
+  { name: "Spelers", icon: "users", page: "Players" },
+  { name: "Staff", icon: "user-cog", page: "Staff" },
+  { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
 ];
 
 const secondaryNavItems = [
-  { name: "Spelprincipes", icon: Grid3x3, page: "Spelprincipes" },
-  { name: "Instellingen", icon: Settings, page: "AccountBeheer" },
+  { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" },
+  { name: "Instellingen", icon: "settings", page: "AccountBeheer" },
 ];
 
 function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
