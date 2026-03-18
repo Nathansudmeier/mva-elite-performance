@@ -226,6 +226,30 @@ function AccountBeheerContent() {
         )}
       </div>
 
+      {/* Ongekoppelde users */}
+      {ongekoppeld.length > 0 && (
+        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
+          <h2 className="font-500 text-sm uppercase tracking-wide text-[#888888] mb-3">Ongekoppeld</h2>
+          <div className="space-y-2">
+            {ongekoppeld.map(u => (
+              <div key={u.id} className="flex items-center gap-3 py-2 border-b border-[#E8E6E1] last:border-0">
+                <div className="w-8 h-8 rounded-full bg-[#F7F5F2] flex items-center justify-center text-[#888888] text-sm font-500 shrink-0">
+                  {u.full_name?.[0] || u.email?.[0]}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-500 text-[#1A1A1A] truncate">{u.full_name || u.email}</p>
+                  <p className="text-xs text-[#888888] truncate">{u.email}</p>
+                  <p className="text-xs text-[#C0392B] mt-0.5">Nog niet gekoppeld aan profiel</p>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => openLink(u)} className="border-[#E8E6E1] text-[#FF6B00] text-xs shrink-0">
+                  <LinkIcon size={12} className="mr-1" /> Koppel
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Invite Dialog */}
       <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
         <DialogContent className="max-w-sm border-[#E8E6E1] bg-white">
