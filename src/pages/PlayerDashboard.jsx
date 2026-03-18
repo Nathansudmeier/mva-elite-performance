@@ -6,8 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, Tooltip } from "recharts";
-import { Star, Activity, Calendar, Heart, Save, Target } from "lucide-react";
+import { Star, Heart, Save } from "lucide-react";
 import PlayerGreetingHeader from "../components/dashboard/PlayerGreetingHeader";
+import PlayerMetricGrid from "../components/dashboard/PlayerMetricGrid";
+import PlayerIOPGoals from "../components/dashboard/PlayerIOPGoals";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
 const TACTICAL = ["speelveld_groot", "omschakeling_balverlies", "speelveld_klein", "omschakeling_balbezit", "kijkgedrag"];
