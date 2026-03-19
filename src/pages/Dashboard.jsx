@@ -175,31 +175,53 @@ export default function Dashboard() {
         </div>
 
         {/* Seizoensresultaten */}
-        <div className="glass p-6 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
-          <p className="t-label mb-3">Seizoensresultaten</p>
+        <div
+          className="relative cursor-pointer hover:opacity-90 transition-opacity"
+          onClick={() => navigate("/Wedstrijden")}
+          style={{
+            background: "rgba(255,255,255,0.09)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            border: "0.5px solid rgba(255,255,255,0.18)",
+            borderRadius: "22px",
+            padding: "24px",
+            overflow: "hidden",
+          }}
+        >
+          {/* Shine */}
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)" }} />
+
+          <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
+            SEIZOENSRESULTATEN
+          </p>
+
           {playedMatches.length === 0 ? (
-            <p className="t-secondary">Nog geen wedstrijden gespeeld</p>
+            <p className="t-secondary mt-3">Nog geen wedstrijden gespeeld</p>
           ) : (
             <>
-              <div className="flex items-end gap-2 mb-3">
-                <p className="t-metric-orange">{winPct}%</p>
-                <p className="t-secondary mb-1">winst</p>
+              <div className="flex items-baseline mt-2" style={{ gap: "8px" }}>
+                <span style={{ fontSize: "32px", fontWeight: 700, color: "#FF8C3A", lineHeight: 1 }}>{winPct}%</span>
+                <span style={{ fontSize: "14px", fontWeight: 400, color: "rgba(255,255,255,0.50)" }}>winst</span>
               </div>
-              <div className="progress-track mb-4">
-                <div className="progress-fill" style={{ width: `${winPct}%` }} />
+
+              {/* Progress bar */}
+              <div style={{ height: "3px", width: "100%", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginTop: "8px", marginBottom: "12px" }}>
+                <div style={{ height: "100%", width: `${winPct}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
               </div>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-xl py-2" style={{ background: "rgba(74,222,128,0.08)", border: "0.5px solid rgba(74,222,128,0.15)" }}>
-                  <p className="text-base font-bold text-[#4ade80]">{wins}</p>
-                  <p className="t-label" style={{ color: "rgba(134,239,172,0.8)" }}>Winst</p>
+
+              {/* Pills */}
+              <div className="flex" style={{ gap: "8px" }}>
+                <div className="flex-1 text-center" style={{ background: "rgba(74,222,128,0.10)", border: "0.5px solid rgba(74,222,128,0.20)", borderRadius: "10px", padding: "8px 6px" }}>
+                  <p style={{ fontSize: "20px", fontWeight: 700, color: "#4ade80", lineHeight: 1 }}>{wins}</p>
+                  <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: "3px" }}>WINST</p>
                 </div>
-                <div className="rounded-xl py-2" style={{ background: "rgba(251,191,36,0.08)", border: "0.5px solid rgba(251,191,36,0.15)" }}>
-                  <p className="text-base font-bold text-[#fbbf24]">{draws}</p>
-                  <p className="t-label" style={{ color: "rgba(251,191,36,0.8)" }}>Gelijk</p>
+                <div className="flex-1 text-center" style={{ background: "rgba(251,191,36,0.10)", border: "0.5px solid rgba(251,191,36,0.20)", borderRadius: "10px", padding: "8px 6px" }}>
+                  <p style={{ fontSize: "20px", fontWeight: 700, color: "#fbbf24", lineHeight: 1 }}>{draws}</p>
+                  <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: "3px" }}>GELIJK</p>
                 </div>
-                <div className="rounded-xl py-2" style={{ background: "rgba(248,113,113,0.08)", border: "0.5px solid rgba(248,113,113,0.15)" }}>
-                  <p className="text-base font-bold text-[#f87171]">{losses}</p>
-                  <p className="t-label" style={{ color: "rgba(248,113,113,0.8)" }}>Verlies</p>
+                <div className="flex-1 text-center" style={{ background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.20)", borderRadius: "10px", padding: "8px 6px" }}>
+                  <p style={{ fontSize: "20px", fontWeight: 700, color: "#f87171", lineHeight: 1 }}>{losses}</p>
+                  <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: "3px" }}>VERLIES</p>
                 </div>
               </div>
             </>
