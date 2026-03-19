@@ -26,7 +26,7 @@ const mainNavItems = [
 
 const secondaryNavItems = [
   { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" },
-  { name: "Instellingen", icon: "settings", page: "AccountBeheer" },
+  { name: "Beheer", icon: "settings", page: "AccountBeheer" },
 ];
 
 function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
