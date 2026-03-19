@@ -74,6 +74,7 @@ function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
 function DeveloperGroup({ currentPageName, onItemClick }) {
   const isAnyActive = desenvolvidoItems.some(item => item.page === currentPageName);
   const [open, setOpen] = useState(isAnyActive);
+  const iconColor = isAnyActive ? "#FF6B00" : "#888888";
 
   return (
     <div>
@@ -86,10 +87,16 @@ function DeveloperGroup({ currentPageName, onItemClick }) {
         }`}
       >
         <div className="flex items-center gap-3">
-          <TrendingUp size={20} strokeWidth={1.5} />
+          <i 
+            className="ti ti-trending-up"
+            style={{ fontSize: "20px", color: iconColor, strokeWidth: 1.5 }}
+          />
           Ontwikkeling
         </div>
-        <ChevronDown size={16} strokeWidth={1.5} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <i 
+          className={`ti ti-chevron-down transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          style={{ fontSize: "16px", color: iconColor, strokeWidth: 1.5 }}
+        />
       </button>
       {open && (
         <div className="ml-4 mt-1 space-y-1 border-l-2 border-[#FF6B00] pl-4">
