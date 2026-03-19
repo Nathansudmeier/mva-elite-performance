@@ -1,6 +1,27 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+function TrophyIcon() {
+  return (
+    <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <defs>
+          <linearGradient id="tg-trainer" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#FF8C3A" />
+          </linearGradient>
+        </defs>
+        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" stroke="url(#tg-trainer)" />
+        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" stroke="url(#tg-trainer)" />
+        <path d="M4 22h16" stroke="url(#tg-trainer)" />
+        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" stroke="url(#tg-trainer)" />
+        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" stroke="url(#tg-trainer)" />
+        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" stroke="url(#tg-trainer)" />
+      </svg>
+    </div>
+  );
+}
+
 const MEDALS = [
   { rank: 1, bg: "linear-gradient(135deg, #FFD700, #FFA500)", shadow: "0 4px 20px rgba(255,200,0,0.4)", label: "🥇", numColor: "#B8860B" },
   { rank: 2, bg: "linear-gradient(135deg, #C0C0C0, #A8A8A8)", shadow: "0 4px 16px rgba(180,180,180,0.4)", label: "🥈", numColor: "#808080" },
