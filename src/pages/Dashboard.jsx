@@ -130,22 +130,20 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
-      {/* Match Day Banner — only for speelsters */}
       <MatchDayBanner />
 
       {/* BLOK 1: Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-2">Aanwezigheid (4w)</p>
-          <p className="text-4xl font-500 text-[#FF6B00]">{avgAttendancePercent}%</p>
-          <p className="text-sm text-[#888888] mt-2">{activePlayers.length} speelsters</p>
+        {/* Aanwezigheid */}
+        <div className="glass p-6">
+          <p className="t-label mb-2">Aanwezigheid (4w)</p>
+          <p className="t-metric-orange">{avgAttendancePercent}%</p>
+          <p className="t-secondary mt-2">{activePlayers.length} speelsters</p>
         </div>
-        <div className="relative rounded-2xl overflow-hidden shadow-sm border border-[#E8E6E1] min-h-[130px] cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
-          {/* Football field background */}
-          <div className="absolute inset-0" style={{
-            background: "linear-gradient(160deg, #2d6a2d 0%, #1e4d1e 50%, #163d16 100%)",
-          }}>
-            {/* Field markings */}
+
+        {/* Volgende wedstrijd */}
+        <div className="relative rounded-[22px] overflow-hidden min-h-[130px] cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
+          <div className="absolute inset-0" style={{ background: "linear-gradient(160deg, #2d6a2d 0%, #1e4d1e 50%, #163d16 100%)" }}>
             <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice">
               <rect x="1" y="1" width="298" height="128" fill="none" stroke="white" strokeWidth="2"/>
               <line x1="150" y1="1" x2="150" y2="129" stroke="white" strokeWidth="1.5"/>
@@ -157,60 +155,52 @@ export default function Dashboard() {
               <rect x="281" y="50" width="18" height="30" fill="none" stroke="white" strokeWidth="1.5"/>
             </svg>
           </div>
-          {/* Content */}
           <div className="relative z-10 p-5">
-            <p className="text-xs font-500 uppercase tracking-wider text-white/70 mb-3">Volgende Wedstrijd</p>
+            <p className="t-label mb-3">Volgende Wedstrijd</p>
             {nextMatch ? (
               <div className="flex items-end justify-between">
                 <div>
-                  <p className="text-xs text-white/60 mb-1">{nextMatch.home_away === "Uit" ? "Uitwedstrijd" : "Thuiswedstrijd"}</p>
-                  <p className="text-2xl font-500 text-white leading-tight">vs. {nextMatch.opponent}</p>
+                  <p className="t-secondary-sm mb-1">{nextMatch.home_away === "Uit" ? "Uitwedstrijd" : "Thuiswedstrijd"}</p>
+                  <p className="text-xl font-bold text-white leading-tight" style={{ letterSpacing: "-0.3px" }}>vs. {nextMatch.opponent}</p>
                 </div>
                 <div className="flex flex-col items-center bg-white/20 backdrop-blur-sm rounded-xl p-2.5 min-w-[52px]">
-                  <span className="text-white/80 text-xs font-500 uppercase">{format(new Date(nextMatch.date), "MMM", { locale: nl })}</span>
-                  <span className="text-white text-2xl font-500 leading-tight">{format(new Date(nextMatch.date), "d")}</span>
-                  <span className="text-white/70 text-xs">{format(new Date(nextMatch.date), "EEE", { locale: nl })}</span>
+                  <span className="t-label uppercase">{format(new Date(nextMatch.date), "MMM", { locale: nl })}</span>
+                  <span className="t-metric text-white leading-tight">{format(new Date(nextMatch.date), "d")}</span>
+                  <span className="t-tertiary">{format(new Date(nextMatch.date), "EEE", { locale: nl })}</span>
                 </div>
               </div>
             ) : (
-              <p className="text-white/70 text-sm mt-2">Geen geplande wedstrijden</p>
+              <p className="t-secondary mt-2">Geen geplande wedstrijden</p>
             )}
           </div>
         </div>
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/Wedstrijden")}>
-          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-3">Seizoensresultaten</p>
+
+        {/* Seizoensresultaten */}
+        <div className="glass p-6 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
+          <p className="t-label mb-3">Seizoensresultaten</p>
           {playedMatches.length === 0 ? (
-            <p className="text-sm text-[#888888]">Nog geen wedstrijden gespeeld</p>
+            <p className="t-secondary">Nog geen wedstrijden gespeeld</p>
           ) : (
             <>
               <div className="flex items-end gap-2 mb-3">
-                <p className="text-4xl font-500 text-[#FF6B00]">{winPct}%</p>
-                <p className="text-sm text-[#888888] mb-1">winst</p>
+                <p className="t-metric-orange">{winPct}%</p>
+                <p className="t-secondary mb-1">winst</p>
               </div>
-              {/* Bar */}
-              <div className="w-full h-2 rounded-full bg-[#F0EDE9] overflow-hidden mb-4">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${winPct}%`,
-                    background: "linear-gradient(90deg, #D45A30, #FF6B00)",
-                    transition: "width 0.6s ease"
-                  }}
-                />
+              <div className="w-full h-1.5 rounded-full overflow-hidden mb-4" style={{ background: "rgba(255,255,255,0.12)" }}>
+                <div className="h-full rounded-full" style={{ width: `${winPct}%`, background: "linear-gradient(90deg, #D45A30, #FF8C3A)", transition: "width 0.6s ease" }} />
               </div>
-              {/* W / G / V */}
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-[#EBF5E1] rounded-xl py-2">
-                  <p className="text-lg font-500 text-[#3B6D11]">{wins}</p>
-                  <p className="text-[10px] uppercase tracking-wider text-[#3B6D11] font-500">Winst</p>
+                <div className="rounded-xl py-2" style={{ background: "rgba(59,109,17,0.18)" }}>
+                  <p className="text-base font-bold text-green-400">{wins}</p>
+                  <p className="t-label" style={{ color: "rgba(134,239,172,0.8)" }}>Winst</p>
                 </div>
-                <div className="bg-[#FFF3EB] rounded-xl py-2">
-                  <p className="text-lg font-500 text-[#FF6B00]">{draws}</p>
-                  <p className="text-[10px] uppercase tracking-wider text-[#FF6B00] font-500">Gelijk</p>
+                <div className="rounded-xl py-2" style={{ background: "rgba(255,140,58,0.14)" }}>
+                  <p className="text-base font-bold" style={{ color: "#FF8C3A" }}>{draws}</p>
+                  <p className="t-label" style={{ color: "rgba(255,140,58,0.7)" }}>Gelijk</p>
                 </div>
-                <div className="bg-[#FDECEA] rounded-xl py-2">
-                  <p className="text-lg font-500 text-[#C0392B]">{losses}</p>
-                  <p className="text-[10px] uppercase tracking-wider text-[#C0392B] font-500">Verlies</p>
+                <div className="rounded-xl py-2" style={{ background: "rgba(192,57,43,0.18)" }}>
+                  <p className="text-base font-bold text-red-400">{losses}</p>
+                  <p className="t-label" style={{ color: "rgba(248,113,113,0.8)" }}>Verlies</p>
                 </div>
               </div>
             </>
@@ -221,102 +211,77 @@ export default function Dashboard() {
       {/* BLOK 2: Alerts */}
       <div className="space-y-3">
         {lowAttendancePlayers.length > 0 && (
-          <div className="bg-white rounded-2xl p-4 border-l-4 border-[#FF6B00] shadow-sm">
+          <div className="glass-alert p-4" style={{ borderLeftWidth: "3px", borderLeftColor: "#FF8C3A", borderRadius: "18px" }}>
             <div className="flex gap-3">
-              <AlertCircle size={20} color="#FF6B00" className="flex-shrink-0 mt-0.5" />
+              <AlertCircle size={18} color="#FF8C3A" className="flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-500 text-[#FF6B00] text-sm">Lage aanwezigheid</p>
-                <p className="text-sm text-[#888888] mt-1">
-                  {lowAttendancePlayers.map(p => `${p.name} (${p.percentage}%)`).join(", ")}
-                </p>
+                <p className="t-card-title" style={{ color: "#FF8C3A" }}>Lage aanwezigheid</p>
+                <p className="t-secondary mt-1">{lowAttendancePlayers.map(p => `${p.name} (${p.percentage}%)`).join(", ")}</p>
               </div>
             </div>
           </div>
         )}
         {fatigueOrPainPlayers.length > 0 && (
-          <div className="bg-white rounded-2xl p-4 border-l-4 border-[#C0392B] shadow-sm">
+          <div className="glass p-4" style={{ borderLeftWidth: "3px", borderLeftColor: "#f87171", borderRadius: "18px" }}>
             <div className="flex gap-3">
-              <AlertCircle size={20} color="#C0392B" className="flex-shrink-0 mt-0.5" />
+              <AlertCircle size={18} color="#f87171" className="flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-500 text-[#C0392B] text-sm">Vermoeidheid/Pijn gemeld</p>
-                <p className="text-sm text-[#888888] mt-1">
-                  {fatigueOrPainPlayers.join(", ")}
-                </p>
+                <p className="t-card-title" style={{ color: "#f87171" }}>Vermoeidheid/Pijn gemeld</p>
+                <p className="t-secondary mt-1">{fatigueOrPainPlayers.join(", ")}</p>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Team of the Week Upload Card — trainer only */}
-      {isTrainer && <div 
-        className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] cursor-pointer hover:shadow-md transition-shadow"
-        onClick={() => setUploadModalOpen(true)}
-      >
-        <div className="flex items-center justify-center text-center">
-          <div>
-            <Upload size={32} color="#FF6B00" className="mx-auto mb-3" />
-            <p className="font-500 text-[#1A1A1A] text-base">Team of the Week</p>
-            <p className="text-sm text-[#888888] mt-1">Klik om foto toe te voegen</p>
+      {/* Team of the Week Upload */}
+      {isTrainer && (
+        <div className="glass p-6 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setUploadModalOpen(true)}>
+          <div className="flex items-center justify-center text-center">
+            <div>
+              <Upload size={28} color="#FF8C3A" className="mx-auto mb-3" />
+              <p className="t-section-title">Team of the Week</p>
+              <p className="t-secondary mt-1">Klik om foto toe te voegen</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      }
-      {/* Team of the Week Modal */}
       {uploadModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-lg w-full shadow-lg">
-            <h2 className="text-2xl font-500 text-[#1A1A1A] mb-4">Team of the Week</h2>
-            <WinningTeamUpload 
-              players={activePlayers} 
-              onSaved={() => {
-                queryClient.invalidateQueries({ queryKey: ["winningTeamPhotos"] });
-                setUploadModalOpen(false);
-              }} 
-            />
-            <button 
-              onClick={() => setUploadModalOpen(false)}
-              className="mt-4 w-full px-4 py-3 rounded-xl text-sm font-500 text-white bg-[#FF6B00] hover:bg-[#E55A00] transition-colors"
-            >
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="glass-dark p-6 max-w-lg w-full">
+            <h2 className="t-page-title mb-4">Team of the Week</h2>
+            <WinningTeamUpload players={activePlayers} onSaved={() => { queryClient.invalidateQueries({ queryKey: ["winningTeamPhotos"] }); setUploadModalOpen(false); }} />
+            <button onClick={() => setUploadModalOpen(false)} className="mt-4 w-full px-4 py-3 rounded-xl text-sm font-semibold text-white bg-[#FF6B00] hover:bg-[#E55A00] transition-colors">
               Sluiten
             </button>
           </div>
         </div>
       )}
 
-      {/* BLOK 3: Champions Trophy */}
       <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
 
       {/* BLOK 4: Groepsfysiek */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-3">Gemiddeld Yo-Yo Niveau</p>
-          <p className="text-4xl font-500 text-[#FF6B00]">{avgLatestYoyo}</p>
+        <div className="glass p-6">
+          <p className="t-label mb-3">Gemiddeld Yo-Yo Niveau</p>
+          <p className="t-metric-orange">{avgLatestYoyo}</p>
           {yoyoDiff && (
             <div className="flex items-center gap-2 mt-3">
-              {parseFloat(yoyoDiff) >= 0 ? (
-                <TrendingUp size={16} color="#3B6D11" />
-              ) : (
-                <TrendingDown size={16} color="#C0392B" />
-              )}
-              <p className={`text-sm font-500 ${parseFloat(yoyoDiff) >= 0 ? "text-[#3B6D11]" : "text-[#C0392B]"}`}>
+              {parseFloat(yoyoDiff) >= 0 ? <TrendingUp size={15} color="#4ade80" /> : <TrendingDown size={15} color="#f87171" />}
+              <p className="t-secondary" style={{ color: parseFloat(yoyoDiff) >= 0 ? "#4ade80" : "#f87171" }}>
                 {parseFloat(yoyoDiff) >= 0 ? "+" : ""}{yoyoDiff}
               </p>
             </div>
           )}
         </div>
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-          <p className="text-xs font-500 uppercase tracking-wider text-[#888888] mb-3">Gemiddelde 30m Sprint (sec)</p>
-          <p className="text-4xl font-500 text-[#FF6B00]">{avgLatestSprint}</p>
+        <div className="glass p-6">
+          <p className="t-label mb-3">Gemiddelde 30m Sprint (sec)</p>
+          <p className="t-metric-orange">{avgLatestSprint}</p>
           {sprintDiff && (
             <div className="flex items-center gap-2 mt-3">
-              {parseFloat(sprintDiff) <= 0 ? (
-                <TrendingUp size={16} color="#3B6D11" />
-              ) : (
-                <TrendingDown size={16} color="#C0392B" />
-              )}
-              <p className={`text-sm font-500 ${parseFloat(sprintDiff) <= 0 ? "text-[#3B6D11]" : "text-[#C0392B]"}`}>
+              {parseFloat(sprintDiff) <= 0 ? <TrendingUp size={15} color="#4ade80" /> : <TrendingDown size={15} color="#f87171" />}
+              <p className="t-secondary" style={{ color: parseFloat(sprintDiff) <= 0 ? "#4ade80" : "#f87171" }}>
                 {parseFloat(sprintDiff) > 0 ? "+" : ""}{sprintDiff}s
               </p>
             </div>
@@ -325,15 +290,10 @@ export default function Dashboard() {
       </div>
 
       {/* BLOK 5: Recente Wedstrijden */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-500 text-[#1A1A1A]">Recente Wedstrijden</h2>
-          <button 
-            onClick={() => navigate("/Wedstrijden")} 
-            className="text-sm font-500 text-[#FF6B00] hover:text-[#E55A00] transition-colors"
-          >
-            Alle wedstrijden →
-          </button>
+      <div className="glass p-6">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="t-section-title">Recente Wedstrijden</h2>
+          <button onClick={() => navigate("/Wedstrijden")} className="t-secondary" style={{ color: "#FF8C3A" }}>Alle →</button>
         </div>
         <div className="space-y-2">
           {recentMatches.map((m) => {
@@ -343,16 +303,16 @@ export default function Dashboard() {
             }
             const badgeColor = badge === "W" ? "#3B6D11" : badge === "V" ? "#C0392B" : "#FF6B00";
             return (
-              <div key={m.id} className="flex items-center justify-between p-4 rounded-xl bg-[#F7F5F2]">
+              <div key={m.id} className="flex items-center justify-between p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.06)" }}>
                 <div>
-                  <p className="font-500 text-[#1A1A1A]">{m.home_away === "Uit" ? "@ " : ""}{m.opponent}</p>
-                  <p className="text-xs text-[#888888] mt-1">{format(new Date(m.date), "d MMM", { locale: nl })}</p>
+                  <p className="t-card-title">{m.home_away === "Uit" ? "@ " : ""}{m.opponent}</p>
+                  <p className="t-secondary-sm mt-0.5">{format(new Date(m.date), "d MMM", { locale: nl })}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   {m.score_home !== undefined && m.score_away !== undefined && (
-                    <p className="font-500 text-[#FF6B00]">{m.score_home}–{m.score_away}</p>
+                    <p className="text-sm font-bold" style={{ color: "#FF8C3A" }}>{m.score_home}–{m.score_away}</p>
                   )}
-                  <p className="font-500 text-white px-3 py-1.5 rounded-lg text-sm" style={{ backgroundColor: badgeColor }}>{badge}</p>
+                  <p className="font-bold text-white px-2.5 py-1 rounded-lg text-xs" style={{ backgroundColor: badgeColor }}>{badge}</p>
                 </div>
               </div>
             );
@@ -360,44 +320,32 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Foto Upload (trainer only) */}
-      {isTrainer && (
-        <PhotoUpload onSaved={() => refetchPhotos()} />
-      )}
-
-      {/* Foto Tijdlijn */}
+      {isTrainer && <PhotoUpload onSaved={() => refetchPhotos()} />}
       <PhotoTimeline photos={teamPhotos} />
 
       {/* BLOK 6: Zelfreflecties */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-500 text-[#1A1A1A]">Zelfreflecties (deze week)</h2>
-          <button 
-            onClick={() => navigate("/SelfReflection")} 
-            className="text-sm font-500 text-[#FF6B00] hover:text-[#E55A00] transition-colors"
-          >
-            Alle reflecties →
-          </button>
+      <div className="glass p-6">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="t-section-title">Zelfreflecties (deze week)</h2>
+          <button onClick={() => navigate("/SelfReflection")} className="t-secondary" style={{ color: "#FF8C3A" }}>Alle →</button>
         </div>
         {thisWeekReflections.length > 0 ? (
           <div className="space-y-3">
             {thisWeekReflections.map((r) => {
               const player = activePlayers.find(p => p.id === r.player_id);
               return (
-                <div key={r.id} className="p-4 rounded-xl bg-[#F7F5F2]">
-                  <div className="flex items-start justify-between mb-2">
-                    <p className="font-500 text-[#1A1A1A]">{player?.name || "–"}</p>
-                    <p className="text-xs text-[#888888]">{format(new Date(r.date), "d MMM", { locale: nl })}</p>
+                <div key={r.id} className="p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <div className="flex items-start justify-between mb-1">
+                    <p className="t-card-title">{player?.name || "–"}</p>
+                    <p className="t-secondary-sm">{format(new Date(r.date), "d MMM", { locale: nl })}</p>
                   </div>
-                  <p className="text-sm text-[#888888] line-clamp-2">
-                    {r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}
-                  </p>
+                  <p className="t-secondary line-clamp-2">{r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}</p>
                 </div>
               );
             })}
           </div>
         ) : (
-          <p className="text-sm text-[#888888]">Geen reflecties deze week</p>
+          <p className="t-tertiary">Geen reflecties deze week</p>
         )}
       </div>
     </div>
