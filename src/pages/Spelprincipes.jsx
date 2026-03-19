@@ -241,11 +241,11 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
             {isTrainer && (
               <div className="flex gap-1 flex-shrink-0" onClick={e => e.stopPropagation()}>
                 <button onClick={() => onEdit(item)} className="p-1.5 hover:bg-[#F7F5F2] rounded-lg">
-                  <Pencil size={14} color="#888888" />
-                </button>
-                <button onClick={() => onDelete(item.id)} className="p-1.5 hover:bg-[#FDE8E8] rounded-lg">
-                  <Trash2 size={14} color="#C0392B" />
-                </button>
+                    <i className="ti ti-pencil" style={{ fontSize: "14px", color: "#888888", strokeWidth: 1.5 }} />
+                  </button>
+                  <button onClick={() => onDelete(item.id)} className="p-1.5 hover:bg-[#FDE8E8] rounded-lg">
+                    <i className="ti ti-trash" style={{ fontSize: "14px", color: "#C0392B", strokeWidth: 1.5 }} />
+                  </button>
               </div>
             )}
           </div>
