@@ -83,36 +83,31 @@ export default function TrainerDetail() {
   return (
     <div className="space-y-6 pb-20 lg:pb-6 max-w-2xl mx-auto">
       {/* Back */}
-      <Link to={createPageUrl("Staff")} className="inline-flex items-center gap-2 text-sm text-[#888888] hover:text-[#FF6B00] transition-colors">
+      <Link to={createPageUrl("Staff")} className="inline-flex items-center gap-2 t-secondary hover:opacity-70 transition-opacity">
         <ArrowLeft size={16} /> Terug naar Staff
       </Link>
 
       {/* Trainer Card */}
-      <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm p-6">
+      <div className="glass p-6">
         <div className="flex items-center gap-5">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-[#F7F5F2] flex items-center justify-center flex-shrink-0">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.10)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
             {trainer.photo_url ? (
               <img src={trainer.photo_url} alt={trainer.name} className="w-full h-full object-cover" />
             ) : (
-              <User size={32} className="text-[#FF6B00]" />
+              <User size={32} style={{ color: "#FF8C3A" }} />
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl font-500 text-[#1A1A1A]">{trainer.name}</h1>
-            {trainer.role_title && (
-              <p className="text-sm text-[#FF6B00] mt-0.5">{trainer.role_title}</p>
-            )}
+            <h1 className="t-page-title">{trainer.name}</h1>
+            {trainer.role_title && <p className="t-secondary-sm mt-0.5" style={{ color: "#FF8C3A" }}>{trainer.role_title}</p>}
             {trainer.phone && (
-              <a href={`tel:${trainer.phone}`} className="inline-flex items-center gap-1.5 text-sm text-[#888888] hover:text-[#FF6B00] mt-2 transition-colors">
+              <a href={`tel:${trainer.phone}`} className="inline-flex items-center gap-1.5 t-secondary mt-2 hover:opacity-70 transition-opacity">
                 <Phone size={14} /> {trainer.phone}
               </a>
             )}
           </div>
           {isTrainer && (
-            <Link
-              to={createPageUrl("Staff")}
-              className="flex items-center gap-1 text-xs text-[#888888] border border-[#E8E6E1] rounded-lg px-3 py-1.5 hover:bg-[#FFF3EB] hover:text-[#FF6B00] transition-colors self-start"
-            >
+            <Link to={createPageUrl("Staff")} className="btn-secondary self-start" style={{ height: "32px", fontSize: "12px", padding: "0 12px" }}>
               <Edit2 size={12} /> Bewerken
             </Link>
           )}
@@ -120,12 +115,12 @@ export default function TrainerDetail() {
       </div>
 
       {/* Messages */}
-      <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm p-5 space-y-4">
+      <div className="glass p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <MessageCircle size={18} className="text-[#FF6B00]" />
-          <h2 className="font-500 text-[#1A1A1A]">Berichten</h2>
+          <MessageCircle size={16} style={{ color: "#FF8C3A" }} />
+          <h2 className="t-section-title">Berichten</h2>
           {messages.length > 0 && (
-            <span className="ml-auto text-xs text-[#888888]">{topMessages.length} bericht{topMessages.length !== 1 ? "en" : ""}</span>
+            <span className="ml-auto t-tertiary">{topMessages.length} bericht{topMessages.length !== 1 ? "en" : ""}</span>
           )}
         </div>
 
@@ -136,77 +131,57 @@ export default function TrainerDetail() {
               placeholder={`Stuur een bericht naar ${trainer.name}…`}
               value={newMessage}
               onChange={e => setNewMessage(e.target.value)}
-              className="border-[#E8E6E1] bg-white text-[#1A1A1A] resize-none text-sm"
               rows={3}
+              style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", resize: "none" }}
             />
-            <Button
-              onClick={() => sendMutation.mutate(newMessage)}
-              disabled={sendMutation.isPending || !newMessage.trim()}
-              className="bg-[#FF6B00] hover:bg-[#E55A00] text-white text-sm"
-            >
-              <Send size={14} className="mr-1.5" />
+            <button onClick={() => sendMutation.mutate(newMessage)} disabled={sendMutation.isPending || !newMessage.trim()} className="btn-secondary">
+              <Send size={14} />
               {sendMutation.isPending ? "Versturen..." : "Verstuur bericht"}
-            </Button>
+            </button>
           </div>
         )}
 
         {/* Message list */}
         {topMessages.length === 0 ? (
-          <p className="text-sm text-[#AAAAAA] text-center py-4">Nog geen berichten.</p>
+          <p className="t-tertiary text-center py-4">Nog geen berichten.</p>
         ) : (
           <div className="space-y-4">
             {topMessages.map(msg => {
               const replies = getReplies(msg.id);
               return (
-                <div key={msg.id} className="border border-[#E8E6E1] rounded-xl overflow-hidden">
+                <div key={msg.id} className="rounded-xl overflow-hidden" style={{ border: "0.5px solid rgba(255,255,255,0.10)" }}>
                   {/* Original message */}
-                  <div className="p-4">
+                  <div className="p-4" style={{ background: "rgba(255,255,255,0.06)" }}>
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-sm font-500 text-[#1A1A1A]">{msg.sender_name || "Speler"}</span>
-                      <span className="text-[11px] text-[#AAAAAA]">
+                      <span className="t-card-title">{msg.sender_name || "Speler"}</span>
+                      <span className="t-tertiary">
                         {msg.created_date ? format(new Date(msg.created_date), "d MMM HH:mm", { locale: nl }) : ""}
                       </span>
                     </div>
-                    <p className="text-sm text-[#444444] leading-relaxed">{msg.text}</p>
+                    <p className="t-secondary leading-relaxed">{msg.text}</p>
 
-                    {/* Reply button for trainers */}
                     {isTrainer && replyingTo !== msg.id && (
-                      <button
-                        onClick={() => setReplyingTo(msg.id)}
-                        className="mt-2 text-xs text-[#FF6B00] hover:underline"
-                      >
+                      <button onClick={() => setReplyingTo(msg.id)} className="mt-2 text-xs" style={{ color: "#FF8C3A" }}>
                         Beantwoorden
                       </button>
                     )}
 
-                    {/* Reply input */}
                     {isTrainer && replyingTo === msg.id && (
                       <div className="mt-3 space-y-2">
                         <Textarea
                           placeholder="Schrijf een antwoord…"
                           value={replyText}
                           onChange={e => setReplyText(e.target.value)}
-                          className="border-[#E8E6E1] bg-[#F7F5F2] text-[#1A1A1A] resize-none text-sm"
                           rows={2}
+                          style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", resize: "none" }}
                         />
                         <div className="flex gap-2">
-                          <Button
-                            onClick={() => replyMutation.mutate({ text: replyText, replyToId: msg.id })}
-                            disabled={replyMutation.isPending || !replyText.trim()}
-                            size="sm"
-                            className="bg-[#FF6B00] hover:bg-[#E55A00] text-white text-xs"
-                          >
-                            <Send size={12} className="mr-1" />
-                            {replyMutation.isPending ? "..." : "Verstuur"}
-                          </Button>
-                          <Button
-                            onClick={() => { setReplyingTo(null); setReplyText(""); }}
-                            size="sm"
-                            variant="outline"
-                            className="text-xs border-[#E8E6E1]"
-                          >
+                          <button onClick={() => replyMutation.mutate({ text: replyText, replyToId: msg.id })} disabled={replyMutation.isPending || !replyText.trim()} className="btn-secondary" style={{ height: "34px", fontSize: "12px", padding: "0 12px" }}>
+                            <Send size={12} /> {replyMutation.isPending ? "..." : "Verstuur"}
+                          </button>
+                          <button onClick={() => { setReplyingTo(null); setReplyText(""); }} className="btn-secondary" style={{ height: "34px", fontSize: "12px", padding: "0 12px", background: "rgba(255,255,255,0.06)", borderColor: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.6)" }}>
                             Annuleer
-                          </Button>
+                          </button>
                         </div>
                       </div>
                     )}
@@ -214,14 +189,14 @@ export default function TrainerDetail() {
 
                   {/* Replies */}
                   {replies.map(reply => (
-                    <div key={reply.id} className="bg-[#FFF3EB] border-t border-[#E8E6E1] px-4 py-3">
+                    <div key={reply.id} className="px-4 py-3" style={{ background: "rgba(255,107,0,0.10)", borderTop: "0.5px solid rgba(255,107,0,0.2)" }}>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-500 text-[#FF6B00]">↩ {reply.sender_name || "Trainer"}</span>
-                        <span className="text-[11px] text-[#AAAAAA]">
+                        <span className="text-xs font-semibold" style={{ color: "#FF8C3A" }}>↩ {reply.sender_name || "Trainer"}</span>
+                        <span className="t-tertiary">
                           {reply.created_date ? format(new Date(reply.created_date), "d MMM HH:mm", { locale: nl }) : ""}
                         </span>
                       </div>
-                      <p className="text-sm text-[#444444] leading-relaxed">{reply.text}</p>
+                      <p className="t-secondary leading-relaxed">{reply.text}</p>
                     </div>
                   ))}
                 </div>
