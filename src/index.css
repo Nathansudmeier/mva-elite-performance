@@ -75,8 +75,6 @@
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -97,4 +95,85 @@
   h1 {
     letter-spacing: -1px;
   }
+}
+
+/* ── Glasmorfisme varianten ── */
+.glass {
+  position: relative;
+  background: rgba(255,255,255,0.09);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 0.5px solid rgba(255,255,255,0.18);
+  border-radius: 22px;
+  overflow: hidden;
+}
+.glass::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  border-radius: 22px 22px 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass-orange {
+  position: relative;
+  background: rgba(255,107,0,0.18);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 0.5px solid rgba(255,107,0,0.35);
+  border-radius: 22px;
+  overflow: hidden;
+}
+.glass-orange::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  border-radius: 22px 22px 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass-dark {
+  position: relative;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  overflow: hidden;
+}
+.glass-dark::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  border-radius: 22px 22px 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass-alert {
+  position: relative;
+  background: rgba(251,191,36,0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(251,191,36,0.2);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.glass-alert::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  border-radius: 18px 18px 0 0;
+  pointer-events: none;
+  z-index: 1;
 }
