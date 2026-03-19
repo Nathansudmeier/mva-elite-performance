@@ -57,7 +57,10 @@ export default function TrainerChampionsTrophy({ players, winningTeams }) {
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-5 pb-2">
         <div>
-          <h2 className="text-lg font-bold text-white tracking-wide">🏆 Champions Trophy</h2>
+          <div className="flex items-center gap-3">
+          <TrophyIcon />
+          <h2 className="text-lg font-bold text-white tracking-wide">Champions Trophy</h2>
+        </div>
           <p className="text-xs text-white/50 mt-0.5">Seizoen 2025-26 · Intern toernooi</p>
         </div>
         <button
@@ -80,7 +83,7 @@ export default function TrainerChampionsTrophy({ players, winningTeams }) {
             <div key={player.id} className="flex flex-col items-center" style={{ flex: isCenter ? "0 0 36%" : "0 0 28%" }}>
               {/* Flame badge */}
               {isHot && (
-                <span className="text-lg mb-1 animate-bounce">🔥</span>
+                <i className="ti ti-flame mb-1" style={{ fontSize: "16px", color: "#FF8C3A" }} />
               )}
               {/* Avatar */}
               <div
@@ -157,7 +160,7 @@ export default function TrainerChampionsTrophy({ players, winningTeams }) {
                   : player.name?.charAt(0)}
               </div>
               <span className="text-white/80 text-sm font-medium flex-1 truncate">
-                {player.name?.split(" ")[0]} {isHot && "🔥"}
+                {player.name?.split(" ")[0]} {isHot && <i className="ti ti-flame" style={{ fontSize: "14px", color: "#FF8C3A" }} />}
               </span>
               <span className="text-[#FF6B00] text-sm font-bold">{player.wins}</span>
             </div>
