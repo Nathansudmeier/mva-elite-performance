@@ -300,18 +300,21 @@ export default function Dashboard() {
             if (m.score_home !== undefined && m.score_away !== undefined) {
               badge = m.score_home > m.score_away ? "W" : m.score_home < m.score_away ? "V" : "G";
             }
-            const badgeColor = badge === "W" ? "#3B6D11" : badge === "V" ? "#C0392B" : "#FF6B00";
+            const badgeClass = badge === "W" ? "badge badge-win" : badge === "V" ? "badge badge-loss" : badge === "G" ? "badge badge-draw" : "badge";
             return (
               <div key={m.id} className="flex items-center justify-between p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.06)" }}>
-                <div>
-                  <p className="t-card-title">{m.home_away === "Uit" ? "@ " : ""}{m.opponent}</p>
-                  <p className="t-secondary-sm mt-0.5">{format(new Date(m.date), "d MMM", { locale: nl })}</p>
+                <div className="flex items-center gap-2.5">
+                  <span className={badge === "W" ? "dot-green" : badge === "V" ? "dot-red" : "dot-yellow"} />
+                  <div>
+                    <p className="t-card-title">{m.home_away === "Uit" ? "@ " : ""}{m.opponent}</p>
+                    <p className="t-secondary-sm mt-0.5">{format(new Date(m.date), "d MMM", { locale: nl })}</p>
+                  </div>
                 </div>
                 <div className="flex items-center gap-3">
                   {m.score_home !== undefined && m.score_away !== undefined && (
                     <p className="text-sm font-bold" style={{ color: "#FF8C3A" }}>{m.score_home}–{m.score_away}</p>
                   )}
-                  <p className="font-bold text-white px-2.5 py-1 rounded-lg text-xs" style={{ backgroundColor: badgeColor }}>{badge}</p>
+                  <span className={badgeClass}>{badge}</span>
                 </div>
               </div>
             );
