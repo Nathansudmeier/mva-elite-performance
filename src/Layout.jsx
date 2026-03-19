@@ -84,10 +84,12 @@ function DeveloperGroup({ currentPageName, onItemClick }) {
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-200"
+        className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-semibold transition-all duration-200"
         style={{
           color: isAnyActive ? "#FF8C3A" : "rgba(255,255,255,0.50)",
-          background: isAnyActive ? "rgba(255,140,58,0.12)" : "transparent",
+          background: isAnyActive ? "rgba(255,107,0,0.15)" : "transparent",
+          border: isAnyActive ? "0.5px solid rgba(255,107,0,0.20)" : "0.5px solid transparent",
+          borderRadius: "10px",
         }}
       >
         <div className="flex items-center gap-3">
