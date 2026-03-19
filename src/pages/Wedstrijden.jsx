@@ -121,22 +121,22 @@ export default function Wedstrijden() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-500 text-[#FF6B00]">Wedstrijden</h1>
-          <p className="text-sm text-[#888888]">Opstellingen, uitslagen & tactiek</p>
+          <h1 className="t-page-title">Wedstrijden</h1>
+          <p className="t-secondary">Opstellingen, uitslagen & tactiek</p>
         </div>
         {isTrainer && (
-          <Button onClick={openNew} className="text-white" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
-            <Plus size={16} className="mr-1" /> Nieuwe Wedstrijd
-          </Button>
+          <button onClick={openNew} className="btn-primary" style={{ width: "auto" }}>
+            <i className="ti ti-plus" style={{ fontSize: "16px" }} /> Nieuwe Wedstrijd
+          </button>
         )}
       </div>
 
       {/* Team switch */}
-      <div className="flex rounded-xl p-1 gap-1" style={{ backgroundColor: "#1A1F2E", width: "fit-content" }}>
+      <div className="flex rounded-xl p-1 gap-1" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", width: "fit-content" }}>
         {TEAMS.map((t) => (
           <button key={t} onClick={() => { setActiveTeam(t); setSelectedMatch(null); }}
             className="px-5 py-2 rounded-lg text-sm font-bold transition-all"
-            style={activeTeam === t ? { backgroundColor: "#D45A30", color: "#fff" } : { color: "rgba(255,255,255,0.6)" }}>
+            style={activeTeam === t ? { background: "#FF6B00", color: "#fff", borderRadius: "10px" } : { color: "rgba(255,255,255,0.50)" }}>
             {t}
           </button>
         ))}
