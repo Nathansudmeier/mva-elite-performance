@@ -76,32 +76,32 @@ function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
 function DeveloperGroup({ currentPageName, onItemClick }) {
   const isAnyActive = desenvolvidoItems.some(item => item.page === currentPageName);
   const [open, setOpen] = useState(isAnyActive);
-  const iconColor = isAnyActive ? "#FF6B00" : "#888888";
+  const iconColor = isAnyActive ? "#FF8C3A" : "rgba(255,255,255,0.40)";
 
   return (
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center justify-between w-full px-4 py-3 rounded-lg text-sm transition-colors duration-200 ${
-          isAnyActive 
-            ? "text-[#FF6B00] bg-[#FFF3EB]" 
-            : "text-[#888888] hover:text-[#FF6B00]"
-        }`}
+        className="flex items-center justify-between w-full px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-200"
+        style={{
+          color: isAnyActive ? "#FF8C3A" : "rgba(255,255,255,0.50)",
+          background: isAnyActive ? "rgba(255,140,58,0.12)" : "transparent",
+        }}
       >
         <div className="flex items-center gap-3">
-          <i 
+          <i
             className="ti ti-trending-up"
-            style={{ fontSize: "20px", color: iconColor, strokeWidth: 1.5 }}
+            style={{ fontSize: "20px", color: iconColor }}
           />
           Ontwikkeling
         </div>
-        <i 
+        <i
           className={`ti ti-chevron-down transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          style={{ fontSize: "16px", color: iconColor, strokeWidth: 1.5 }}
+          style={{ fontSize: "16px", color: iconColor }}
         />
       </button>
       {open && (
-        <div className="ml-4 mt-1 space-y-1 border-l-2 border-[#FF6B00] pl-4">
+        <div className="ml-4 mt-1 space-y-1 border-l-2 border-[#FF8C3A]/40 pl-4">
           {desenvolvidoItems.map((item) => (
             <NavLink key={item.page} item={item} currentPageName={currentPageName} onClick={onItemClick} />
           ))}
