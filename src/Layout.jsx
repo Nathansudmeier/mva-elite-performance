@@ -149,9 +149,9 @@ export default function Layout({ children, currentPageName }) {
               className="lg:hidden p-2 rounded-lg hover:bg-[#F7F5F2]"
             >
               {mobileOpen ? (
-                <X size={24} color="#1A1A1A" strokeWidth={1.5} />
+                <i className="ti ti-x" style={{ fontSize: "24px", color: "#1A1A1A", strokeWidth: 1.5 }} />
               ) : (
-                <Menu size={24} color="#1A1A1A" strokeWidth={1.5} />
+                <i className="ti ti-menu" style={{ fontSize: "24px", color: "#1A1A1A", strokeWidth: 1.5 }} />
               )}
             </button>
             <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2">
