@@ -92,9 +92,9 @@ function AccountBeheerContent() {
 
   const openLink = (user) => {
     setLinkUser(user);
-    setLinkRole(user.role || "speelster");
-    setLinkPlayerId(user.player_id || "");
-    setLinkTrainerId(user.trainer_id || "");
+    setLinkRole(getRole(user) === "admin" ? "admin" : getPlayerId(user) ? "speelster" : getTrainerId(user) ? "trainer" : "speelster");
+    setLinkPlayerId(getPlayerId(user));
+    setLinkTrainerId(getTrainerId(user));
     setLinkOpen(true);
   };
 
