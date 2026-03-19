@@ -141,6 +141,7 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen bg-[#F7F5F2]">
+      <IOSInstallBanner />
       {/* Top bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#FFFFFF] border-b border-[#E8E6E1]">
         <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto w-full">
