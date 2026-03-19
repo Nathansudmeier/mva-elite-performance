@@ -115,8 +115,10 @@ export default function PlayerGreetingHeader({ user, player, attendance = [], ra
 
   const firstName = user?.full_name?.split(" ")[0] || "Speelster";
   const initials = user?.full_name?.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) || "?";
-  const subline = getDaySubline(sessions, matches);
+  const dayType = getDayType(sessions, matches);
+  const subline = getDaySubline(dayType);
   const highlight = getWeeklyHighlight(player, attendance, ratings, yoyo);
+  const waveColor = (dayType === "training" || dayType === "match") ? "#FF8C3A" : "rgba(255,255,255,0.45)";
 
   return (
     <div className="space-y-4">
