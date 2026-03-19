@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { Plus, Pencil, Trash2, X, Upload, Link as LinkIcon } from "lucide-react";
+// Tabler Icons zijn beschikbaar via CDN
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ReactQuill from "react-quill";
