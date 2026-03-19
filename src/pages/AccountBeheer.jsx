@@ -79,7 +79,7 @@ function AccountBeheerContent() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["users"]);
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       setLinkOpen(false);
       setLinkUser(null);
       setLinkPlayerId("");
