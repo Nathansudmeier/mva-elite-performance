@@ -4,18 +4,72 @@ import { base44 } from "@/api/base44Client";
 import { format, addDays, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
-function getDaySubline(sessions, matches) {
+function getDayType(sessions, matches) {
   const today = new Date().toISOString().split("T")[0];
   const tomorrow = addDays(new Date(), 1).toISOString().split("T")[0];
 
-  const isTrainingToday = sessions.some(s => s.date === today && s.type === "Training");
   const isMatchToday = matches.some(m => m.date === today);
+  const isTrainingToday = sessions.some(s => s.date === today && s.type === "Training");
   const isMatchTomorrow = matches.some(m => m.date === tomorrow);
 
-  if (isMatchToday) return "⚽ Vandaag is wedstrijddag — veel succes!";
-  if (isMatchTomorrow) return "🔥 Morgen wedstrijd — zorg voor een goede avond!";
-  if (isTrainingToday) return "💪 Trainingsdag — geef alles op het veld!";
-  return "😴 Rustdag — herstel goed en laad op!";
+  if (isMatchToday) return "match";
+  if (isTrainingToday) return "training";
+  if (isMatchTomorrow) return "matchmorgen";
+  return "rust";
+}
+
+function getDaySubline(dayType) {
+  if (dayType === "match") return "Vandaag is wedstrijddag — veel succes!";
+  if (dayType === "matchmorgen") return "Morgen wedstrijd — zorg voor een goede avond!";
+  if (dayType === "training") return "Trainingsdag — geef alles op het veld!";
+  return "Rustdag — herstel goed en laad op!";
+}
+
+function HandWaveIcon({ color }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke={color}>
+      <path d="M18 11V9a2 2 0 0 0-4 0v-1a2 2 0 0 0-4 0v-1a2 2 0 0 0-4 0v7" />
+      <path d="M6 15a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-3H6v3Z" />
+      <path d="M11 6v-1a2 2 0 0 1 4 0" />
+    </svg>
+  );
+}
+
+function DayBadge({ dayType }) {
+  if (dayType === "training" || dayType === "matchmorgen") {
+    return (
+      <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 600, background: "rgba(74,222,128,0.12)", border: "0.5px solid rgba(74,222,128,0.25)", color: "#4ade80" }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#4ade80">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 6v6l4 2" />
+        </svg>
+        Training
+      </span>
+    );
+  }
+  if (dayType === "match") {
+    return (
+      <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 600, background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.30)", color: "#FF8C3A" }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#FF8C3A">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+          <path d="M4 22h16" />
+          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+        </svg>
+        Matchday
+      </span>
+    );
+  }
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 600, background: "rgba(96,165,250,0.12)", border: "0.5px solid rgba(96,165,250,0.25)", color: "#60a5fa" }}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#60a5fa">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+      </svg>
+      Rustdag
+    </span>
+  );
 }
 
 function getWeeklyHighlight(player, attendance, ratings, yoyo) {
