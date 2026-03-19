@@ -56,53 +56,52 @@ export default function PhotoUpload({ onSaved }) {
     if (onSaved) onSaved();
   };
 
+  const selectStyle = {
+    width: "100%",
+    background: "rgba(255,255,255,0.07)",
+    border: "0.5px solid rgba(255,255,255,0.15)",
+    borderRadius: "10px",
+    padding: "8px 12px",
+    fontSize: "13px",
+    color: "#ffffff",
+    outline: "none",
+  };
+
   return (
-    <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm space-y-3">
-      <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00]">📤 Foto Uploaden</h2>
+    <div className="glass p-4 space-y-3">
+      <h2 className="t-section-title">📤 Foto Uploaden</h2>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-xs text-[#888888] mb-1 block">Datum</label>
-          <Input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="border-[#E8E6E1]" />
+          <label className="t-label mb-1 block">Datum</label>
+          <Input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
+            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
         </div>
         <div>
-          <label className="text-xs text-[#888888] mb-1 block">Team</label>
-          <select
-            value={form.team}
-            onChange={e => setForm(f => ({ ...f, team: e.target.value }))}
-            className="w-full border border-[#E8E6E1] rounded-md px-3 py-2 text-sm text-[#1A1A1A] bg-white"
-          >
-            <option value="MO17">MO17</option>
-            <option value="Dames 1">Dames 1</option>
+          <label className="t-label mb-1 block">Team</label>
+          <select value={form.team} onChange={e => setForm(f => ({ ...f, team: e.target.value }))} style={selectStyle}>
+            <option value="MO17" style={{ background: "#1c0e04" }}>MO17</option>
+            <option value="Dames 1" style={{ background: "#1c0e04" }}>Dames 1</option>
           </select>
         </div>
         <div>
-          <label className="text-xs text-[#888888] mb-1 block">Type</label>
-          <select
-            value={form.type}
-            onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
-            className="w-full border border-[#E8E6E1] rounded-md px-3 py-2 text-sm text-[#1A1A1A] bg-white"
-          >
-            <option value="Training">Training</option>
-            <option value="Wedstrijd">Wedstrijd</option>
+          <label className="t-label mb-1 block">Type</label>
+          <select value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} style={selectStyle}>
+            <option value="Training" style={{ background: "#1c0e04" }}>Training</option>
+            <option value="Wedstrijd" style={{ background: "#1c0e04" }}>Wedstrijd</option>
           </select>
         </div>
         <div>
-          <label className="text-xs text-[#888888] mb-1 block">Label (optioneel)</label>
+          <label className="t-label mb-1 block">Label (optioneel)</label>
           <Input
             placeholder={form.type === "Wedstrijd" ? "bijv. AFC" : ""}
             value={form.label}
             onChange={e => setForm(f => ({ ...f, label: e.target.value }))}
-            className="border-[#E8E6E1]"
+            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }}
           />
         </div>
       </div>
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-      <button
-        onClick={() => fileRef.current.click()}
-        disabled={uploading}
-        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white transition-colors"
-        style={{ background: uploading ? "#CCAA88" : "#FF6B00" }}
-      >
+      <button onClick={() => fileRef.current.click()} disabled={uploading} className="btn-primary">
         {uploading ? <Loader2 size={16} className="animate-spin" /> : <Camera size={16} />}
         {uploading ? "Uploaden..." : "Foto kiezen & uploaden"}
       </button>

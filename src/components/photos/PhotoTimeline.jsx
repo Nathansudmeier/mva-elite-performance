@@ -13,8 +13,8 @@ export default function PhotoTimeline({ photos = [] }) {
   const filtered = activeFilter === "Alles" ? sorted : sorted.filter(p => p.type === activeFilter);
 
   return (
-    <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-      <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3">📸 Foto's</h2>
+    <div className="glass p-4">
+      <h2 className="t-section-title mb-3">📸 Foto's</h2>
 
       {/* Filter row */}
       <div className="flex gap-2 mb-4">
@@ -22,12 +22,12 @@ export default function PhotoTimeline({ photos = [] }) {
           <button
             key={f}
             onClick={() => setActiveFilter(f)}
-            className="px-4 py-1.5 text-xs font-semibold transition-colors"
+            className="px-4 py-1.5 text-xs font-semibold transition-all"
             style={{
               borderRadius: 20,
-              background: activeFilter === f ? "#FF6B00" : "#FFFFFF",
-              color: activeFilter === f ? "#FFFFFF" : "#FF6B00",
-              border: "1.5px solid #FF6B00",
+              background: activeFilter === f ? "#FF6B00" : "rgba(255,255,255,0.08)",
+              color: activeFilter === f ? "#ffffff" : "rgba(255,255,255,0.55)",
+              border: activeFilter === f ? "0.5px solid rgba(255,107,0,0.4)" : "0.5px solid rgba(255,255,255,0.12)",
             }}
           >
             {f}
@@ -37,39 +37,21 @@ export default function PhotoTimeline({ photos = [] }) {
 
       {/* Grid */}
       {filtered.length === 0 ? (
-        <div
-          className="flex items-center justify-center rounded-xl"
-          style={{
-            border: "2px dashed #D0CDC8",
-            height: 120,
-          }}
-        >
-          <p style={{ fontSize: 13, color: "#888888" }}>Nog geen foto's geüpload</p>
+        <div className="flex items-center justify-center rounded-xl" style={{ border: "1px dashed rgba(255,255,255,0.15)", height: 120 }}>
+          <p className="t-tertiary">Nog geen foto's geüpload</p>
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-2">
           {filtered.map(photo => (
-            <div
-              key={photo.id}
-              className="cursor-pointer group"
-              onClick={() => setSelected(photo)}
-            >
-              <div
-                className="w-full aspect-square overflow-hidden bg-[#F0EDE9] group-hover:opacity-90 transition-opacity"
-                style={{ borderRadius: 10 }}
-              >
-                <img
-                  src={photo.photo_url}
-                  alt={photo.label || photo.type}
-                  className="w-full h-full object-cover"
-                />
+            <div key={photo.id} className="cursor-pointer group" onClick={() => setSelected(photo)}>
+              <div className="w-full aspect-square overflow-hidden group-hover:opacity-85 transition-opacity"
+                style={{ borderRadius: 10, background: "rgba(255,255,255,0.08)" }}>
+                <img src={photo.photo_url} alt={photo.label || photo.type} className="w-full h-full object-cover" />
               </div>
-              <p className="text-[10px] text-[#888888] mt-1 truncate">
+              <p className="t-tertiary-sm mt-1 truncate">
                 {photo.date ? format(new Date(photo.date), "d MMM", { locale: nl }) : ""}
               </p>
-              <p className="text-[10px] text-[#1A1A1A] font-500 truncate leading-tight">
-                {photo.label || photo.type}
-              </p>
+              <p className="t-secondary-sm truncate leading-tight">{photo.label || photo.type}</p>
             </div>
           ))}
         </div>
