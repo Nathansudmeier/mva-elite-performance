@@ -207,37 +207,44 @@ export default function Wedstrijden() {
         <div className="lg:col-span-3">
           {detailMatch ? (
             <div className="space-y-4">
-              {/* Header card */}
-              <div className="elite-card p-6">
-                <div className="flex items-start justify-between">
+              {/* Header card — match hero */}
+              <div className="match-hero-card p-5 flex flex-col justify-between">
+                <div className="absolute inset-0">
+                  <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+                    <rect x="1" y="1" width="398" height="158" fill="none" stroke="white" strokeWidth="2"/>
+                    <line x1="200" y1="1" x2="200" y2="159" stroke="white" strokeWidth="1.5"/>
+                    <circle cx="200" cy="80" r="30" fill="none" stroke="white" strokeWidth="1.5"/>
+                    <rect x="1" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
+                    <rect x="354" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
+                  </svg>
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
+                </div>
+                <div className="relative z-10 flex items-start justify-between h-full">
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: "#1A1F2E" }}>{detailMatch.team}</span>
-                      <span className="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ backgroundColor: "#FDE8DC", color: "#D45A30" }}>{detailMatch.home_away}</span>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="badge" style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "0.5px solid rgba(255,255,255,0.2)" }}>{detailMatch.team}</span>
+                      <span className={detailMatch.home_away === "Thuis" ? "badge badge-win" : "badge badge-draw"}>{detailMatch.home_away}</span>
                     </div>
-                    <h2 className="text-xl font-black text-[#1A1F2E]">vs. {detailMatch.opponent}</h2>
-                    <p className="text-sm" style={{ color: "#2F3650" }}>{format(new Date(detailMatch.date), "d MMMM yyyy", { locale: nl })}</p>
+                    <h2 className="text-xl font-bold text-white" style={{ letterSpacing: "-0.3px" }}>vs. {detailMatch.opponent}</h2>
+                    <p className="t-secondary mt-1">{format(new Date(detailMatch.date), "d MMMM yyyy", { locale: nl })}</p>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <span className="text-3xl font-black" style={{ color: "#D45A30" }}>{scoreLabel(detailMatch)}</span>
+                    <span className="t-metric-orange" style={{ fontSize: "26px" }}>{scoreLabel(detailMatch)}</span>
                     {isTrainer && (
-                      <>
-                        <Button variant="outline" size="sm" onClick={() => openEdit(detailMatch)} className="border-[#FDE8DC] text-[#1A1F2E] hover:bg-[#FDE8DC]">
-                          <Edit2 size={12} className="mr-1" /> Bewerken
-                        </Button>
+                      <div className="flex flex-col gap-1.5">
+                        <button onClick={() => openEdit(detailMatch)} className="btn-secondary" style={{ height: "36px", fontSize: "12px", padding: "0 12px" }}>
+                          <Edit2 size={11} /> Bewerken
+                        </button>
                         <Link to={`/LiveMatch?matchId=${detailMatch.id}`}>
-                          <Button size="sm" className="text-white" style={{ backgroundColor: "#D45A30" }}>
-                            <Radio size={12} className="mr-1" /> Live
-                          </Button>
+                          <button className="btn-primary" style={{ height: "36px", fontSize: "12px", padding: "0 12px", width: "auto" }}>
+                            <Radio size={11} /> Live
+                          </button>
                         </Link>
-                        <Button size="sm" variant="outline" onClick={() => {
-                          if (confirm("Weet je zeker dat je deze wedstrijd wilt verwijderen?")) {
-                            deleteMutation.mutate(detailMatch.id);
-                          }
-                        }} className="border-[#FF6B6B] text-[#C0392B] hover:bg-red-50">
-                          <Trash2 size={12} className="mr-1" /> Verwijderen
-                        </Button>
-                      </>
+                        <button onClick={() => { if (confirm("Verwijderen?")) deleteMutation.mutate(detailMatch.id); }}
+                          className="badge badge-loss" style={{ cursor: "pointer", height: "28px" }}>
+                          <Trash2 size={10} className="mr-1" /> Verwijderen
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -245,25 +252,24 @@ export default function Wedstrijden() {
 
               {/* Tactical sections */}
               {(detailMatch.ball_possession || detailMatch.pressing || detailMatch.transition || detailMatch.set_pieces) && (
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {detailMatch.ball_possession && <TactSection icon={Shield} title="Balbezit (BB)" content={detailMatch.ball_possession} color="#1A1F2E" />}
-                  {detailMatch.pressing && <TactSection icon={Swords} title="Pressing (VB)" content={detailMatch.pressing} color="#D45A30" />}
-                  {detailMatch.transition && <TactSection icon={ArrowLeftRight} title="Omschakeling" content={detailMatch.transition} color="#4CAF82" />}
-                  {detailMatch.set_pieces && <TactSection icon={Flag} title="Dode Spelmomenten" content={detailMatch.set_pieces} color="#F0926E" />}
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {detailMatch.ball_possession && <TactSection icon={Shield} title="Balbezit (BB)" content={detailMatch.ball_possession} />}
+                  {detailMatch.pressing && <TactSection icon={Swords} title="Pressing (VB)" content={detailMatch.pressing} />}
+                  {detailMatch.transition && <TactSection icon={ArrowLeftRight} title="Omschakeling" content={detailMatch.transition} />}
+                  {detailMatch.set_pieces && <TactSection icon={Flag} title="Dode Spelmomenten" content={detailMatch.set_pieces} />}
                 </div>
               )}
 
               {detailMatch.notes && (
-                <div className="elite-card p-5">
-                  <p className="text-sm font-bold text-[#1A1F2E] mb-1">Extra Notities</p>
-                  <p className="text-sm whitespace-pre-wrap" style={{ color: "#2F3650" }}>{detailMatch.notes}</p>
+                <div className="glass p-4">
+                  <p className="t-card-title mb-1">Extra Notities</p>
+                  <p className="t-secondary whitespace-pre-wrap">{detailMatch.notes}</p>
                 </div>
               )}
 
-              {/* Opstelling veld — zichtbaar voor iedereen */}
               {detailMatch.lineup && detailMatch.lineup.length > 0 && (
-                <div className="elite-card p-5">
-                  <p className="text-sm font-bold text-[#1A1F2E] mb-3">Opstelling — {detailMatch.formation}</p>
+                <div className="glass p-4">
+                  <p className="t-card-title mb-3">Opstelling — {detailMatch.formation}</p>
                   <FieldLineup
                     players={activePlayers}
                     lineupMap={lineupArrayToMap(detailMatch.lineup)}
@@ -271,15 +277,14 @@ export default function Wedstrijden() {
                     readOnly
                   />
                   {detailMatch.substitutes && detailMatch.substitutes.length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-[#E8E6E1]">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-[#888888] mb-2">Wissels</p>
+                    <div className="mt-4 pt-3" style={{ borderTop: "0.5px solid rgba(255,255,255,0.10)" }}>
+                      <p className="t-label mb-2">Wissels</p>
                       <div className="flex flex-wrap gap-2">
                         {detailMatch.substitutes.map((pid) => {
                           const p = activePlayers.find((pl) => pl.id === pid);
                           return p ? (
-                            <span key={pid} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#FDE8DC] text-[#D45A30]">
-                              <ArrowLeftRight size={10} />
-                              {p.name}
+                            <span key={pid} className="badge" style={{ background: "rgba(255,107,0,0.12)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.2)" }}>
+                              ⇄ {p.name}
                             </span>
                           ) : null;
                         })}
@@ -297,9 +302,9 @@ export default function Wedstrijden() {
               )}
             </div>
           ) : (
-            <div className="elite-card p-16 text-center">
-              <Shield size={40} className="mx-auto mb-3" style={{ color: "#FDE8DC" }} />
-              <p style={{ color: "#2F3650" }}>Selecteer een wedstrijd</p>
+            <div className="glass p-16 text-center">
+              <Shield size={36} className="mx-auto mb-3" style={{ color: "rgba(255,255,255,0.15)" }} />
+              <p className="t-tertiary">Selecteer een wedstrijd</p>
             </div>
           )}
         </div>
