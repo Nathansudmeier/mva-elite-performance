@@ -33,14 +33,14 @@ export default function TrainerChampionsTrophy({ players, winningTeams }) {
 
   if (top3.length === 0 || top3.every((p) => p.wins === 0)) {
     return (
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
+      <div className="glass glow-gold p-6" style={{ borderColor: "rgba(234,179,8,0.2)" }}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-500 text-[#1A1A1A]">🏆 Champions Trophy</h2>
-          <button onClick={() => navigate("/Leaderboard")} className="text-sm font-500 text-[#FF6B00] hover:text-[#E55A00]">
+          <h2 className="t-section-title">🏆 Champions Trophy</h2>
+          <button onClick={() => navigate("/Leaderboard")} className="t-secondary" style={{ color: "#FF8C3A" }}>
             Volledig leaderboard →
           </button>
         </div>
-        <p className="text-sm text-[#888888]">Nog geen winnaars geregistreerd.</p>
+        <p className="t-tertiary">Nog geen winnaars geregistreerd.</p>
       </div>
     );
   }
@@ -51,8 +51,8 @@ export default function TrainerChampionsTrophy({ players, winningTeams }) {
 
   return (
     <div
-      className="rounded-2xl overflow-hidden shadow-sm border border-[#1A1F2E]"
-      style={{ background: "linear-gradient(160deg, #1A1F2E 0%, #2C3350 60%, #1A1F2E 100%)" }}
+      className="glass glow-gold"
+      style={{ borderColor: "rgba(234,179,8,0.2)" }}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-5 pb-2">
