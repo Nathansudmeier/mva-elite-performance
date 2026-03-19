@@ -142,18 +142,17 @@ export default function Dashboard() {
         </div>
 
         {/* Volgende wedstrijd */}
-        <div className="relative rounded-[22px] overflow-hidden min-h-[130px] cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
-          <div className="absolute inset-0" style={{ background: "linear-gradient(160deg, #2d6a2d 0%, #1e4d1e 50%, #163d16 100%)" }}>
-            <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice">
-              <rect x="1" y="1" width="298" height="128" fill="none" stroke="white" strokeWidth="2"/>
-              <line x1="150" y1="1" x2="150" y2="129" stroke="white" strokeWidth="1.5"/>
-              <circle cx="150" cy="65" r="25" fill="none" stroke="white" strokeWidth="1.5"/>
-              <circle cx="150" cy="65" r="2" fill="white"/>
-              <rect x="1" y="35" width="40" height="60" fill="none" stroke="white" strokeWidth="1.5"/>
-              <rect x="259" y="35" width="40" height="60" fill="none" stroke="white" strokeWidth="1.5"/>
-              <rect x="1" y="50" width="18" height="30" fill="none" stroke="white" strokeWidth="1.5"/>
-              <rect x="281" y="50" width="18" height="30" fill="none" stroke="white" strokeWidth="1.5"/>
+        <div className="match-hero-card cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
+          <div className="absolute inset-0">
+            <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 300 160" preserveAspectRatio="xMidYMid slice">
+              <rect x="1" y="1" width="298" height="158" fill="none" stroke="white" strokeWidth="2"/>
+              <line x1="150" y1="1" x2="150" y2="159" stroke="white" strokeWidth="1.5"/>
+              <circle cx="150" cy="80" r="28" fill="none" stroke="white" strokeWidth="1.5"/>
+              <circle cx="150" cy="80" r="2" fill="white"/>
+              <rect x="1" y="45" width="42" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
+              <rect x="257" y="45" width="42" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
             </svg>
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
           </div>
           <div className="relative z-10 p-5">
             <p className="t-label mb-3">Volgende Wedstrijd</p>
