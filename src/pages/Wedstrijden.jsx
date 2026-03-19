@@ -312,9 +312,9 @@ export default function Wedstrijden() {
 
       {/* Dialog — new/edit match */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto bg-[#F7F5F2] border-[#E8E6E1]">
+        <DialogContent className="max-w-3xl max-h-[92vh] overflow-y-auto" style={{ background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
           <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A] text-lg font-semibold">
+            <DialogTitle className="t-page-title">
               {editingMatch ? "Wedstrijd Bewerken" : `Nieuwe Wedstrijd — ${activeTeam}`}
             </DialogTitle>
           </DialogHeader>
@@ -376,9 +376,9 @@ export default function Wedstrijden() {
               <Textarea placeholder="Extra notities..." value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB] h-16" />
             </div>
 
-            <Button onClick={handleSave} disabled={saveMutation.isPending || !form.opponent} className="w-full text-white font-semibold" style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}>
+            <button onClick={handleSave} disabled={saveMutation.isPending || !form.opponent} className="btn-primary">
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>
@@ -386,14 +386,14 @@ export default function Wedstrijden() {
   );
 }
 
-function TactSection({ icon: Icon, title, content, color }) {
+function TactSection({ icon: Icon, title, content }) {
   return (
-    <div className="elite-card p-4">
+    <div className="glass p-4">
       <div className="flex items-center gap-2 mb-2">
-        <Icon size={15} style={{ color }} />
-        <h3 className="font-bold text-sm text-[#1A1F2E]">{title}</h3>
+        <Icon size={14} style={{ color: "#FF8C3A" }} />
+        <h3 className="t-card-title">{title}</h3>
       </div>
-      <p className="text-sm whitespace-pre-wrap" style={{ color: "#2F3650" }}>{content}</p>
+      <p className="t-secondary whitespace-pre-wrap">{content}</p>
     </div>
   );
 }
