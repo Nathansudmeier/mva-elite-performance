@@ -67,7 +67,7 @@ function AccountBeheerContent() {
     setInviteOpen(false);
     setInviteEmail("");
     setInvitePlayerId("");
-    queryClient.invalidateQueries(["users"]);
+    queryClient.invalidateQueries({ queryKey: ["users"] });
   };
 
   const linkMutation = useMutation({
