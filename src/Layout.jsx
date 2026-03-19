@@ -141,7 +141,8 @@ export default function Layout({ children, currentPageName }) {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#F7F5F2]">
+    <div className="min-h-screen" style={{ backgroundColor: "#1c0e04", position: "relative" }}>
+      <AppBackground />
       <IOSInstallBanner />
       {/* Top bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#FFFFFF] border-b border-[#E8E6E1]">
