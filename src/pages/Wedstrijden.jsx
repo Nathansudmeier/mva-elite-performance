@@ -267,32 +267,43 @@ export default function Wedstrijden() {
                 </div>
               )}
 
-              {detailMatch.lineup && detailMatch.lineup.length > 0 && (
-                <div className="glass p-4">
-                  <p className="t-card-title mb-3">Opstelling — {detailMatch.formation}</p>
-                  <FieldLineup
-                    players={activePlayers}
-                    lineupMap={lineupArrayToMap(detailMatch.lineup)}
-                    formation={detailMatch.formation || "4-3-3"}
-                    readOnly
-                  />
-                  {detailMatch.substitutes && detailMatch.substitutes.length > 0 && (
-                    <div className="mt-4 pt-3" style={{ borderTop: "0.5px solid rgba(255,255,255,0.10)" }}>
-                      <p className="t-label mb-2">Wissels</p>
-                      <div className="flex flex-wrap gap-2">
-                        {detailMatch.substitutes.map((pid) => {
-                          const p = activePlayers.find((pl) => pl.id === pid);
-                          return p ? (
-                            <span key={pid} className="badge" style={{ background: "rgba(255,107,0,0.12)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.2)" }}>
-                              ⇄ {p.name}
-                            </span>
-                          ) : null;
-                        })}
+              {detailMatch.lineup && detailMatch.lineup.length > 0 && (() => {
+                const today = new Date().toISOString().split("T")[0];
+                const isMatchDay = detailMatch.date === today;
+                const canSeeLineup = isTrainer || isMatchDay;
+                return canSeeLineup ? (
+                  <div className="glass p-4">
+                    <p className="t-card-title mb-3">Opstelling — {detailMatch.formation}</p>
+                    <FieldLineup
+                      players={activePlayers}
+                      lineupMap={lineupArrayToMap(detailMatch.lineup)}
+                      formation={detailMatch.formation || "4-3-3"}
+                      readOnly
+                    />
+                    {detailMatch.substitutes && detailMatch.substitutes.length > 0 && (
+                      <div className="mt-4 pt-3" style={{ borderTop: "0.5px solid rgba(255,255,255,0.10)" }}>
+                        <p className="t-label mb-2">Wissels</p>
+                        <div className="flex flex-wrap gap-2">
+                          {detailMatch.substitutes.map((pid) => {
+                            const p = activePlayers.find((pl) => pl.id === pid);
+                            return p ? (
+                              <span key={pid} className="badge" style={{ background: "rgba(255,107,0,0.12)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.2)" }}>
+                                ⇄ {p.name}
+                              </span>
+                            ) : null;
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
+                    )}
+                  </div>
+                ) : (
+                  <div className="glass p-6 text-center">
+                    <Shield size={28} className="mx-auto mb-2" style={{ color: "rgba(255,107,0,0.40)" }} />
+                    <p className="t-card-title mb-1">Opstelling nog niet beschikbaar</p>
+                    <p className="t-secondary">De opstelling wordt zichtbaar op de wedstrijddag.</p>
+                  </div>
+                );
+              })()}
 
               {isTrainer && (
                 <MatchCheckInOverview
