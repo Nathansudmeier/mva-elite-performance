@@ -152,17 +152,6 @@ export default function Layout({ children, currentPageName }) {
       <header className="fixed top-0 left-0 right-0 z-50" style={{ backgroundColor: "rgba(28,14,4,0.85)", borderBottom: "1px solid rgba(255,107,0,0.15)", backdropFilter: "blur(12px)" }}>
         <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3">
-            <button 
-              onClick={() => setMobileOpen(!mobileOpen)} 
-              className="lg:hidden p-2 rounded-lg"
-              style={{ background: "rgba(255,107,0,0.08)" }}
-            >
-              {mobileOpen ? (
-                <i className="ti ti-x" style={{ fontSize: "24px", color: "#ffffff" }} />
-              ) : (
-                <i className="ti ti-menu" style={{ fontSize: "24px", color: "#ffffff" }} />
-              )}
-            </button>
             <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full overflow-hidden" style={{ border: "2px solid rgba(255,107,0,0.5)" }}>
                 <img 
