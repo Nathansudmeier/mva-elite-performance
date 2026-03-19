@@ -58,10 +58,12 @@ function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
       key={item.page}
       to={createPageUrl(item.page)}
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-200`}
+      className={`flex items-center gap-3 px-3 py-2.5 text-sm font-semibold transition-all duration-200`}
       style={{
         color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.50)",
-        background: isActive ? "rgba(255,140,58,0.12)" : "transparent",
+        background: isActive ? "rgba(255,107,0,0.15)" : "transparent",
+        border: isActive ? "0.5px solid rgba(255,107,0,0.20)" : "0.5px solid transparent",
+        borderRadius: "10px",
       }}
     >
       <i
