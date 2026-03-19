@@ -68,23 +68,25 @@ export default function PlayerGreetingHeader({ user, player, attendance = [], ra
     <div className="space-y-4">
       {/* Greeting */}
       <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-full bg-[#FF6B00] flex items-center justify-center flex-shrink-0 shadow-md">
+        <div className="flex-shrink-0 w-14 h-14 rounded-full overflow-hidden flex items-center justify-center"
+          style={{ border: "1.5px solid rgba(255,107,0,0.4)", background: "rgba(255,107,0,0.15)" }}>
           {player?.photo_url ? (
-            <img src={player.photo_url} alt={firstName} className="w-full h-full rounded-full object-cover" />
+            <img src={player.photo_url} alt={firstName} className="w-full h-full object-cover" />
           ) : (
             <span className="text-white text-lg font-bold">{initials}</span>
           )}
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[#1A1A1A]">Hey {firstName} 👋</h1>
-          <p className="text-sm text-[#888888] mt-0.5">{subline}</p>
+          <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Hey {firstName} 👋</h1>
+          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", marginTop: "3px" }}>{subline}</p>
         </div>
       </div>
 
       {/* Weekly highlight card */}
-      <div className="rounded-2xl p-5 text-white" style={{ background: "linear-gradient(135deg, #FF6B00, #E55A00)" }}>
-        <p className="text-xs font-semibold uppercase tracking-wider opacity-75 mb-1">Seizoenshighlight</p>
-        <p className="text-base font-medium leading-snug">{highlight}</p>
+      <div className="relative" style={{ background: "rgba(255,107,0,0.18)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "22px", padding: "20px", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)" }} />
+        <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "6px" }}>SEIZOENSHIGHLIGHT</p>
+        <p style={{ fontSize: "14px", fontWeight: 500, color: "#ffffff", lineHeight: 1.5 }}>{highlight}</p>
       </div>
     </div>
   );

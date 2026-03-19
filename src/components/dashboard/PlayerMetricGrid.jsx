@@ -12,23 +12,22 @@ function Delta({ value, unit = "", lowerIsBetter = false }) {
   );
 }
 
-function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowerIsBetter }) {
+function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowerIsBetter, isSprint }) {
   const Icon = IconComp;
   return (
-    <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm flex flex-col gap-1">
-      <div className="flex items-center gap-1.5 mb-1">
-        <Icon size={14} className="text-[#FF6B00]" />
-        <span style={{ fontSize: 11 }} className="text-[#888888] uppercase tracking-wide font-medium">{label}</span>
-      </div>
+    <div className="relative overflow-hidden flex flex-col gap-1" style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,255,255,0.18)", borderRadius: "22px", padding: "16px" }}>
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)" }} />
+      <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>{label}</p>
       {value !== null && value !== undefined ? (
         <>
-          <div className="text-2xl font-bold text-[#1A1A1A]">
-            {value}<span className="text-base font-normal text-[#888888]">{unit}</span>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
+            <span style={{ fontSize: "32px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{value}</span>
+            {unit && <span style={{ fontSize: isSprint ? "16px" : "14px", color: "rgba(255,255,255,0.35)", fontWeight: 400 }}>{unit}</span>}
           </div>
           <Delta value={delta} unit={deltaUnit} lowerIsBetter={lowerIsBetter} />
         </>
       ) : (
-        <span style={{ fontSize: 12 }} className="text-[#BBBBBB]">Geen data</span>
+        <span style={{ fontSize: 12, color: "rgba(255,255,255,0.30)" }}>Geen data</span>
       )}
     </div>
   );
