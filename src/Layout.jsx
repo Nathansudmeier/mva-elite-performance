@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useQuery } from "@tanstack/react-query";
 import { base44 as b44 } from "@/api/base44Client";
 import IOSInstallBanner from "@/components/common/IOSInstallBanner";
+import AppBackground from "@/components/common/AppBackground";
 // Tabler Icons zijn nu beschikbaar via CDN
 
 const desenvolvidoItems = [
