@@ -74,7 +74,6 @@ function AccountBeheerContent() {
     mutationFn: () => {
       return base44.functions.invoke("updateUserLink", {
         userId: linkUser.id,
-        role: linkRole,
         player_id: linkRole === "speelster" ? linkPlayerId : "",
         trainer_id: linkRole === "trainer" ? linkTrainerId : "",
       });
