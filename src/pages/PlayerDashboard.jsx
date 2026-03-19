@@ -171,15 +171,13 @@ export default function PlayerDashboard() {
 
       {/* Radar Chart */}
       {chartData.length > 0 && radarData.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
-            <Star size={14} /> Mijn Beoordelingen
-          </h2>
+        <div className="glass p-4">
+          <p className="t-label mb-3">Mijn Beoordelingen</p>
           <ResponsiveContainer width="100%" height={220}>
             <RadarChart data={chartData}>
-              <PolarGrid stroke="#E8E6E1" />
-              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: "#888888" }} />
-              <Tooltip />
+              <PolarGrid stroke="rgba(255,255,255,0.12)" />
+              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: "rgba(255,255,255,0.50)" }} />
+              <Tooltip contentStyle={{ background: "rgba(20,10,2,0.95)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "12px", color: "#fff" }} />
               {radarData.map((r, i) => (
                 <Radar key={r.meting} name={r.meting} dataKey={r.meting} stroke={COLORS[i]} fill={COLORS[i]} fillOpacity={0.15} />
               ))}
@@ -187,7 +185,7 @@ export default function PlayerDashboard() {
           </ResponsiveContainer>
           <div className="flex gap-4 justify-center mt-2">
             {radarData.map((r, i) => (
-              <div key={r.meting} className="flex items-center gap-1.5 text-xs text-[#888888]">
+              <div key={r.meting} className="flex items-center gap-1.5" style={{ fontSize: "11px", color: "rgba(255,255,255,0.55)" }}>
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i] }} />
                 {r.meting}
               </div>
@@ -197,12 +195,11 @@ export default function PlayerDashboard() {
       )}
 
       {/* Wellness Log */}
-      <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-        <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
-          <Heart size={14} /> Belastbaarheid Invullen
-        </h2>
+      <div className="glass p-4">
+        <p className="t-label mb-3">Belastbaarheid Invullen</p>
         <div className="space-y-3">
-          <Input type="date" value={wellnessForm.date} onChange={e => setWellnessForm(f => ({ ...f, date: e.target.value }))} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+          <Input type="date" value={wellnessForm.date} onChange={e => setWellnessForm(f => ({ ...f, date: e.target.value }))}
+            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
           <div className="grid grid-cols-3 gap-2">
             {[
               { key: "sleep", label: "Slaap (1-5)" },
@@ -210,44 +207,49 @@ export default function PlayerDashboard() {
               { key: "muscle_pain", label: "Spierpijn (1-5)" },
             ].map(({ key, label }) => (
               <div key={key}>
-                <label className="text-xs text-[#888888] font-500 block mb-1">{label}</label>
-                <Input type="number" min="1" max="5" value={wellnessForm[key]} onChange={e => setWellnessForm(f => ({ ...f, [key]: e.target.value }))} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+                <label className="t-label mb-1 block">{label}</label>
+                <Input type="number" min="1" max="5" value={wellnessForm[key]} onChange={e => setWellnessForm(f => ({ ...f, [key]: e.target.value }))}
+                  style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
               </div>
             ))}
           </div>
-          <Textarea placeholder="Opmerkingen (optioneel)" value={wellnessForm.notes} onChange={e => setWellnessForm(f => ({ ...f, notes: e.target.value }))} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" rows={2} />
-          <Button onClick={() => saveWellness.mutate()} disabled={saveWellness.isPending || !wellnessForm.sleep} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-            <Save size={14} className="mr-2" />
+          <Textarea placeholder="Opmerkingen (optioneel)" value={wellnessForm.notes} onChange={e => setWellnessForm(f => ({ ...f, notes: e.target.value }))}
+            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} rows={2} />
+          <button onClick={() => saveWellness.mutate()} disabled={saveWellness.isPending || !wellnessForm.sleep} className="btn-primary">
+            <Save size={14} />
             {saveWellness.isPending ? "Opslaan..." : "Belastbaarheid Opslaan"}
-          </Button>
+          </button>
         </div>
       </div>
 
       {/* Self Reflection */}
-      <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-        <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
-          <Star size={14} /> Zelfreflectie Wedstrijd
-        </h2>
+      <div className="glass p-4">
+        <p className="t-label mb-3">Zelfreflectie Wedstrijd</p>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <Input type="date" value={reflectionForm.date} onChange={e => setReflectionForm(f => ({ ...f, date: e.target.value }))} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
-            <Input placeholder="Tegenstander" value={reflectionForm.match_opponent} onChange={e => setReflectionForm(f => ({ ...f, match_opponent: e.target.value }))} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+            <Input type="date" value={reflectionForm.date} onChange={e => setReflectionForm(f => ({ ...f, date: e.target.value }))}
+              style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+            <Input placeholder="Tegenstander" value={reflectionForm.match_opponent} onChange={e => setReflectionForm(f => ({ ...f, match_opponent: e.target.value }))}
+              style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
           </div>
           {player && [player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).map((goal, i) => (
-            <div key={i} className="bg-[#FFF3EB] rounded-xl p-3 space-y-2 border border-[#FDE8DC]">
-              <p className="text-xs font-500 text-[#FF6B00]">Doel {i + 1}: {goal}</p>
-              <div className="flex items-center gap-2">
-                <label className="text-xs text-[#888888] whitespace-nowrap">Cijfer (1-10):</label>
-                <Input type="number" min="1" max="10" value={reflectionForm[`goal_${i + 1}_rating`]} onChange={e => setReflectionForm(f => ({ ...f, [`goal_${i + 1}_rating`]: e.target.value }))} className="border-[#E8E6E1] text-[#1A1A1A] bg-white w-20" />
+            <div key={i} className="relative" style={{ background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)", borderRadius: "14px", padding: "12px" }}>
+              <p style={{ fontSize: "12px", fontWeight: 600, color: "#FF8C3A", marginBottom: "8px" }}>Doel {i + 1}: {goal}</p>
+              <div className="flex items-center gap-2 mb-2">
+                <label className="t-label whitespace-nowrap">Cijfer (1-10):</label>
+                <Input type="number" min="1" max="10" value={reflectionForm[`goal_${i + 1}_rating`]} onChange={e => setReflectionForm(f => ({ ...f, [`goal_${i + 1}_rating`]: e.target.value }))}
+                  style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", width: "80px" }} />
               </div>
-              <Textarea placeholder="Toelichting..." value={reflectionForm[`goal_${i + 1}_notes`]} onChange={e => setReflectionForm(f => ({ ...f, [`goal_${i + 1}_notes`]: e.target.value }))} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" rows={2} />
+              <Textarea placeholder="Toelichting..." value={reflectionForm[`goal_${i + 1}_notes`]} onChange={e => setReflectionForm(f => ({ ...f, [`goal_${i + 1}_notes`]: e.target.value }))}
+                style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} rows={2} />
             </div>
           ))}
-          <Textarea placeholder="Algemene reflectie..." value={reflectionForm.general_notes} onChange={e => setReflectionForm(f => ({ ...f, general_notes: e.target.value }))} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" rows={3} />
-          <Button onClick={() => saveReflection.mutate()} disabled={saveReflection.isPending} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-            <Save size={14} className="mr-2" />
+          <Textarea placeholder="Algemene reflectie..." value={reflectionForm.general_notes} onChange={e => setReflectionForm(f => ({ ...f, general_notes: e.target.value }))}
+            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} rows={3} />
+          <button onClick={() => saveReflection.mutate()} disabled={saveReflection.isPending} className="btn-primary">
+            <Save size={14} />
             {saveReflection.isPending ? "Opslaan..." : "Reflectie Opslaan"}
-          </Button>
+          </button>
         </div>
       </div>
     </div>

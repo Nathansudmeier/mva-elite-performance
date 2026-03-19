@@ -6,9 +6,9 @@ function Delta({ value, unit = "", lowerIsBetter = false }) {
   const positive = lowerIsBetter ? value < 0 : value > 0;
   const sign = value > 0 ? "+" : "";
   return (
-    <span style={{ fontSize: 11 }} className={positive ? "text-[#3B6D11]" : value === 0 ? "text-[#888888]" : "text-[#C0392B]"}>
-      {sign}{value}{unit} t.o.v. M1
-    </span>
+  <span style={{ fontSize: 11, color: positive ? "#4ade80" : value === 0 ? "rgba(255,255,255,0.40)" : "#f87171" }}>
+    {sign}{value}{unit} t.o.v. M1
+  </span>
   );
 }
 
@@ -80,7 +80,7 @@ export default function PlayerMetricGrid({ yoyo, physical, attendance, matches, 
 
   const metrics = [
     { icon: TrendingUp, label: "Yo-Yo niveau", value: yoyoVal, unit: "", delta: yoyoDelta, deltaUnit: "", lowerIsBetter: false },
-    { icon: Activity, label: "30m sprint", value: sprintVal, unit: "s", delta: sprintDelta, deltaUnit: "s", lowerIsBetter: true },
+    { icon: Activity, label: "30m sprint", value: sprintVal, unit: "s", delta: sprintDelta, deltaUnit: "s", lowerIsBetter: true, isSprint: true },
     { icon: Calendar, label: "Aanwezigheid", value: attendancePct, unit: "%", delta: null },
     { icon: Timer, label: "Speelminuten", value: totalMinutes, unit: "min", delta: null },
   ];
