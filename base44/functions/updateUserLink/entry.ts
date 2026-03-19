@@ -9,10 +9,9 @@ Deno.serve(async (req) => {
             return Response.json({ error: 'Forbidden' }, { status: 403 });
         }
 
-        const { userId, role, player_id, trainer_id } = await req.json();
+        const { userId, player_id, trainer_id } = await req.json();
 
         const updated = await base44.asServiceRole.entities.User.update(userId, {
-            role,
             player_id: player_id || "",
             trainer_id: trainer_id || "",
         });
