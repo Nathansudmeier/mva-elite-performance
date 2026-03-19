@@ -63,117 +63,94 @@ export default function Speelminuten() {
 
   return (
     <div className="space-y-6 pb-20">
-        {/* Header */}
-        <div className="flex items-center gap-4">
-          <Link to="/Players" className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
-            <ArrowLeft size={18} className="text-[#1A1A1A]" />
-          </Link>
-          <div className="flex-1">
-            <h1 className="text-2xl font-500 text-[#1A1A1A] flex items-center gap-2">
-              <Clock size={22} className="text-[#FF6B00]" /> Speelminuten Overzicht
-            </h1>
-            <p className="text-sm text-[#888888]">{finishedCount} gespeelde wedstrijd{finishedCount !== 1 ? "en" : ""}</p>
-          </div>
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <Link to="/Players" className="p-2 rounded-xl" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
+          <ArrowLeft size={18} className="text-white" />
+        </Link>
+        <div className="flex-1">
+          <h1 className="t-page-title flex items-center gap-2">
+            <Clock size={18} style={{ color: "#FF8C3A" }} /> Speelminuten Overzicht
+          </h1>
+          <p className="t-secondary">{finishedCount} gespeelde wedstrijd{finishedCount !== 1 ? "en" : ""}</p>
         </div>
-
-        {/* Filter */}
-        <TeamFilter value={teamFilter} onChange={setTeamFilter} />
-
-        {/* Summary cards */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm text-center">
-            <div className="text-2xl font-500 text-[#FF6B00]">{playerStats.length}</div>
-            <div className="text-xs text-[#888888] mt-0.5">Speelsters</div>
-          </div>
-          <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm text-center">
-            <div className="text-2xl font-500 text-[#FF6B00]">{finishedCount}</div>
-            <div className="text-xs text-[#888888] mt-0.5">Wedstrijden</div>
-          </div>
-          <div className={`rounded-2xl p-4 border shadow-sm text-center ${attentionCount > 0 ? "bg-amber-50 border-amber-200" : "bg-white border-[#E8E6E1]"}`}>
-            <div className={`text-2xl font-500 ${attentionCount > 0 ? "text-amber-500" : "text-[#888888]"}`}>{attentionCount}</div>
-            <div className="text-xs text-[#888888] mt-0.5 flex items-center justify-center gap-1">
-              {attentionCount > 0 && <AlertTriangle size={10} className="text-amber-500" />}
-              Aandachtspunten
-            </div>
-          </div>
-        </div>
-
-        {/* Player list */}
-        {playerStats.length === 0 ? (
-          <div className="bg-white rounded-2xl p-8 border border-[#E8E6E1] shadow-sm text-center text-[#888888]">
-            <Users size={32} className="mx-auto mb-3 opacity-30" />
-            <p>Nog geen voltooide wedstrijden gevonden.</p>
-          </div>
-        ) : (
-          <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm overflow-hidden">
-            {playerStats.map(({ player, stats }, index) => (
-              <Link
-                key={player.id}
-                to={`/PlayerDetail?id=${player.id}`}
-                className={`flex items-center gap-4 px-4 py-3 hover:bg-[#FFF8F4] transition-colors ${
-                  index !== playerStats.length - 1 ? "border-b border-[#F0EEE9]" : ""
-                } ${stats.isAttentionPoint ? "bg-amber-50 hover:bg-amber-100" : ""}`}
-              >
-                {/* Rank */}
-                <div className="w-6 text-center text-sm font-500 text-[#888888] shrink-0">{index + 1}</div>
-
-                {/* Photo */}
-                <div className="w-9 h-9 rounded-full overflow-hidden bg-[#FFF3EB] flex items-center justify-center shrink-0">
-                  {player.photo_url ? (
-                    <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-sm font-500 text-[#FF6B00]">{player.name?.[0]}</span>
-                  )}
-                </div>
-
-                {/* Name & position */}
-                <div className="w-28 shrink-0">
-                  <div className="text-sm font-500 text-[#1A1A1A] truncate">{player.name}</div>
-                  <div className="text-xs text-[#888888] truncate">{player.position || "—"}</div>
-                </div>
-
-                {/* Bar */}
-                <div className="flex-1 min-w-0">
-                  <div className="h-5 bg-[#F0EEE9] rounded-md overflow-hidden">
-                    <div
-                      className="h-full rounded-md transition-all"
-                      style={{
-                        width: `${(stats.totalMinutes / (finishedCount * 90)) * 100}%`,
-                        backgroundColor: stats.isAttentionPoint ? "#F59E0B" : "#FF6B00",
-                        opacity: 0.85,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {/* Minutes */}
-                <div className="w-10 text-right shrink-0">
-                  <span className="text-sm font-500 text-[#1A1A1A]">{stats.totalMinutes}'</span>
-                </div>
-
-                {/* Stats mini */}
-                <div className="hidden sm:flex gap-3 text-xs text-[#888888] shrink-0 w-32">
-                  <span title="Basis">{stats.gamesStarted}× basis</span>
-                  <span title="Invaller">{stats.gamesAsSubstitute}× inv.</span>
-                </div>
-
-                {/* Attention */}
-                {stats.isAttentionPoint && (
-                  <AlertTriangle size={14} className="text-amber-500 shrink-0" />
-                )}
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {attentionCount > 0 && (
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
-            <AlertTriangle size={16} className="text-amber-500 mt-0.5 shrink-0" />
-            <p className="text-sm text-amber-800">
-              <strong>{attentionCount} speelster{attentionCount !== 1 ? "s" : ""}</strong> {attentionCount !== 1 ? "hebben" : "heeft"} minder dan 30% van de beschikbare speelminuten gemaakt. Dit zijn aandachtspunten voor de trainer.
-            </p>
-          </div>
-        )}
       </div>
+
+      {/* Filter */}
+      <TeamFilter value={teamFilter} onChange={setTeamFilter} />
+
+      {/* Summary cards */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="glass p-4 text-center">
+          <p className="t-metric-orange">{playerStats.length}</p>
+          <p className="t-label mt-0.5">Speelsters</p>
+        </div>
+        <div className="glass p-4 text-center">
+          <p className="t-metric-orange">{finishedCount}</p>
+          <p className="t-label mt-0.5">Wedstrijden</p>
+        </div>
+        <div className="p-4 text-center rounded-[22px]" style={attentionCount > 0 ? { background: "rgba(251,191,36,0.12)", border: "0.5px solid rgba(251,191,36,0.3)" } : { background: "rgba(255,255,255,0.09)", border: "0.5px solid rgba(255,255,255,0.18)" }}>
+          <p className="t-metric" style={{ color: attentionCount > 0 ? "#fbbf24" : "rgba(255,255,255,0.5)" }}>{attentionCount}</p>
+          <p className="t-label mt-0.5 flex items-center justify-center gap-1">
+            {attentionCount > 0 && <AlertTriangle size={9} style={{ color: "#fbbf24" }} />}
+            Aandacht
+          </p>
+        </div>
+      </div>
+
+      {/* Player list */}
+      {playerStats.length === 0 ? (
+        <div className="glass p-8 text-center">
+          <Users size={32} className="mx-auto mb-3" style={{ color: "rgba(255,255,255,0.2)" }} />
+          <p className="t-tertiary">Nog geen voltooide wedstrijden gevonden.</p>
+        </div>
+      ) : (
+        <div className="glass overflow-hidden">
+          {playerStats.map(({ player, stats }, index) => (
+            <Link key={player.id} to={`/PlayerDetail?id=${player.id}`}
+              className="flex items-center gap-4 px-4 py-3 transition-opacity hover:opacity-80"
+              style={{ borderBottom: index !== playerStats.length - 1 ? "0.5px solid rgba(255,255,255,0.08)" : "none", background: stats.isAttentionPoint ? "rgba(251,191,36,0.06)" : "transparent" }}
+            >
+              <div className="w-6 text-center t-tertiary shrink-0">{index + 1}</div>
+
+              <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
+                {player.photo_url ? <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" /> : <span className="text-sm font-bold">{player.name?.[0]}</span>}
+              </div>
+
+              <div className="w-28 shrink-0">
+                <div className="t-card-title truncate">{player.name}</div>
+                <div className="t-tertiary truncate">{player.position || "—"}</div>
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="h-5 rounded-md overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+                  <div className="h-full rounded-md transition-all" style={{ width: `${(stats.totalMinutes / (finishedCount * 90)) * 100}%`, backgroundColor: stats.isAttentionPoint ? "#fbbf24" : "#FF6B00" }} />
+                </div>
+              </div>
+
+              <div className="w-10 text-right shrink-0">
+                <span className="t-card-title">{stats.totalMinutes}'</span>
+              </div>
+
+              <div className="hidden sm:flex gap-3 shrink-0 w-32">
+                <span className="t-tertiary">{stats.gamesStarted}× basis</span>
+                <span className="t-tertiary">{stats.gamesAsSubstitute}× inv.</span>
+              </div>
+
+              {stats.isAttentionPoint && <AlertTriangle size={14} style={{ color: "#fbbf24" }} className="shrink-0" />}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {attentionCount > 0 && (
+        <div className="glass-alert p-4 flex items-start gap-3">
+          <AlertTriangle size={16} style={{ color: "#fbbf24" }} className="mt-0.5 shrink-0" />
+          <p className="t-secondary" style={{ color: "#fbbf24" }}>
+            <strong>{attentionCount} speelster{attentionCount !== 1 ? "s" : ""}</strong> {attentionCount !== 1 ? "hebben" : "heeft"} minder dan 30% van de beschikbare speelminuten gemaakt.
+          </p>
+        </div>
+      )}
+    </div>
   );
 }
