@@ -346,11 +346,11 @@ export default function Spelprincipes() {
         <h1 className="text-2xl font-500 text-[#1A1A1A]">Spelprincipes</h1>
         {isTrainer && (
           <Button
-            onClick={() => { setEditItem(null); setShowModal(true); }}
-            className="bg-[#FF6B00] hover:bg-[#E55A00] text-white gap-2"
-          >
-            <Plus size={16} /> Toevoegen
-          </Button>
+             onClick={() => { setEditItem(null); setShowModal(true); }}
+             className="bg-[#FF6B00] hover:bg-[#E55A00] text-white gap-2 flex items-center"
+           >
+             <i className="ti ti-plus" style={{ fontSize: "16px", color: "white", strokeWidth: 1.5 }} /> Toevoegen
+           </Button>
         )}
       </div>
 
