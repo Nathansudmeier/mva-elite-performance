@@ -55,7 +55,7 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
             {initial?.id ? "Spelprincipe bewerken" : "Spelprincipe toevoegen"}
           </h2>
           <button onClick={onClose} className="p-2 hover:bg-[#F7F5F2] rounded-lg">
-            <X size={20} color="#888888" />
+            <i className="ti ti-x" style={{ fontSize: "20px", color: "#888888", strokeWidth: 1.5 }} />
           </button>
         </div>
 
