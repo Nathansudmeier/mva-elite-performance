@@ -150,12 +150,12 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
             <label className="text-xs font-500 text-[#888888] uppercase tracking-wide mb-2 block">Afbeelding (optioneel)</label>
             <input type="file" accept="image/*" className="hidden" id="image-upload" onChange={handleImageUpload} />
             <label
-              htmlFor="image-upload"
-              className="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-[#E8E6E1] rounded-xl cursor-pointer hover:border-[#FF6B00] text-sm text-[#888888] hover:text-[#FF6B00] transition-colors"
-            >
-              <Upload size={16} />
-              {uploading ? "Uploaden..." : form.image_url ? "Afbeelding geüpload ✓" : "Klik om afbeelding te kiezen"}
-            </label>
+               htmlFor="image-upload"
+               className="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-[#E8E6E1] rounded-xl cursor-pointer hover:border-[#FF6B00] text-sm text-[#888888] hover:text-[#FF6B00] transition-colors"
+             >
+               <i className="ti ti-upload" style={{ fontSize: "16px", color: "inherit", strokeWidth: 1.5 }} />
+               {uploading ? "Uploaden..." : form.image_url ? "Afbeelding geüpload ✓" : "Klik om afbeelding te kiezen"}
+             </label>
             {form.image_url && (
               <img src={form.image_url} alt="" className="mt-2 rounded-xl max-h-40 object-cover w-full" />
             )}
