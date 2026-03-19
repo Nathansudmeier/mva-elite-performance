@@ -185,20 +185,20 @@ export default function Dashboard() {
                 <p className="t-metric-orange">{winPct}%</p>
                 <p className="t-secondary mb-1">winst</p>
               </div>
-              <div className="w-full h-1.5 rounded-full overflow-hidden mb-4" style={{ background: "rgba(255,255,255,0.12)" }}>
-                <div className="h-full rounded-full" style={{ width: `${winPct}%`, background: "linear-gradient(90deg, #D45A30, #FF8C3A)", transition: "width 0.6s ease" }} />
+              <div className="progress-track mb-4">
+                <div className="progress-fill" style={{ width: `${winPct}%` }} />
               </div>
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-xl py-2" style={{ background: "rgba(59,109,17,0.18)" }}>
-                  <p className="text-base font-bold text-green-400">{wins}</p>
+                <div className="rounded-xl py-2" style={{ background: "rgba(74,222,128,0.08)", border: "0.5px solid rgba(74,222,128,0.15)" }}>
+                  <p className="text-base font-bold text-[#4ade80]">{wins}</p>
                   <p className="t-label" style={{ color: "rgba(134,239,172,0.8)" }}>Winst</p>
                 </div>
-                <div className="rounded-xl py-2" style={{ background: "rgba(255,140,58,0.14)" }}>
-                  <p className="text-base font-bold" style={{ color: "#FF8C3A" }}>{draws}</p>
-                  <p className="t-label" style={{ color: "rgba(255,140,58,0.7)" }}>Gelijk</p>
+                <div className="rounded-xl py-2" style={{ background: "rgba(251,191,36,0.08)", border: "0.5px solid rgba(251,191,36,0.15)" }}>
+                  <p className="text-base font-bold text-[#fbbf24]">{draws}</p>
+                  <p className="t-label" style={{ color: "rgba(251,191,36,0.8)" }}>Gelijk</p>
                 </div>
-                <div className="rounded-xl py-2" style={{ background: "rgba(192,57,43,0.18)" }}>
-                  <p className="text-base font-bold text-red-400">{losses}</p>
+                <div className="rounded-xl py-2" style={{ background: "rgba(248,113,113,0.08)", border: "0.5px solid rgba(248,113,113,0.15)" }}>
+                  <p className="text-base font-bold text-[#f87171]">{losses}</p>
                   <p className="t-label" style={{ color: "rgba(248,113,113,0.8)" }}>Verlies</p>
                 </div>
               </div>
