@@ -224,7 +224,7 @@ export default function Layout({ children, currentPageName }) {
             onClick={() => base44.auth.logout()}
             className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-[#C0392B] hover:bg-[#FFE6E6] w-full transition-colors"
           >
-            <LogOut size={20} strokeWidth={1.5} />
+            <i className="ti ti-logout" style={{ fontSize: "20px", color: "#C0392B", strokeWidth: 1.5 }} />
             Uitloggen
           </button>
         </div>
