@@ -138,9 +138,15 @@ function AccountBeheerContent() {
     return trainers.find(t => t.id === u.trainer_id);
   };
 
-  const speelsters = users.filter(u => u.role === "speelster");
-  const trainerUsers = users.filter(u => u.role === "trainer");
-  const ongekoppeld = users.filter(u => u.role !== "speelster" && u.role !== "trainer" && u.role !== "admin");
+  // The platform stores role in u.role, but custom role is saved in u.data.role
+  // player_id/trainer_id are in u.data.*
+  const getRole = (u) => u.data?.role || u.role;
+  const getPlayerId = (u) => u.data?.player_id || u.player_id || "";
+  const getTrainerId = (u) => u.data?.trainer_id || u.trainer_id || "";
+
+  const speelsters = users.filter(u => getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin");
+  const trainerUsers = users.filter(u => getTrainerId(u) && getRole(u) !== "admin");
+  const ongekoppeld = users.filter(u => !getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin");
 
   const inputStyle = { background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" };
   const selectStyle = { background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" };
