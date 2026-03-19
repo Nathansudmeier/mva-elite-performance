@@ -6,13 +6,11 @@ export default function RatingCategoryBlock({ title, criteria, form, onChange, r
   const avg = scores.length > 0 ? Math.ceil(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
 
   return (
-    <div className="rounded-xl p-4 mb-4 bg-[#FFF3EB] border border-[#FDE8DC]">
+    <div className="rounded-xl p-4 mb-4" style={{ background: "rgba(255,107,0,0.08)", border: "0.5px solid rgba(255,107,0,0.2)" }}>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-500 text-[#1A1A1A] text-sm uppercase tracking-wider">{title}</h3>
+        <h3 className="t-label">{title}</h3>
         {avg > 0 && (
-          <span className="text-xs font-500 px-2 py-1 rounded-lg" style={{ backgroundColor: "#FF6B00", color: "#fff" }}>
-            ⌀ {avg}/5
-          </span>
+          <span className="badge" style={{ background: "#FF6B00", color: "#fff" }}>⌀ {avg}/5</span>
         )}
       </div>
       {criteria.map((c) => (

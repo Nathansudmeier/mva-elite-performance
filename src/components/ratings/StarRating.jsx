@@ -3,8 +3,8 @@ import { Star } from "lucide-react";
 
 export default function StarRating({ value = 0, onChange, label, readOnly = false }) {
   return (
-    <div className="flex items-center justify-between py-3 border-b border-[#FDE8DC] last:border-0">
-      <span className="text-sm text-[#1A1A1A] flex-1 mr-3 font-400">{label}</span>
+    <div className="flex items-center justify-between py-3 last:border-0" style={{ borderBottom: "0.5px solid rgba(255,107,0,0.15)" }}>
+      <span className="t-secondary flex-1 mr-3">{label}</span>
       <div className="flex gap-1 shrink-0">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
@@ -17,7 +17,7 @@ export default function StarRating({ value = 0, onChange, label, readOnly = fals
             <Star
               size={28}
               fill={star <= value ? "#FF6B00" : "transparent"}
-              stroke={star <= value ? "#FF6B00" : "#E8E6E1"}
+              stroke={star <= value ? "#FF6B00" : "rgba(255,255,255,0.2)"}
               strokeWidth={1.5}
             />
           </button>
