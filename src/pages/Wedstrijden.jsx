@@ -145,66 +145,50 @@ export default function Wedstrijden() {
       <div className="grid lg:grid-cols-5 gap-6">
         {/* Match list */}
         <div className="lg:col-span-2 space-y-3">
-          <h2 className="text-sm font-500 text-[#888888] uppercase tracking-wider mb-3">
-            {activeTeam} — {teamMatches.length} wedstrijd{teamMatches.length !== 1 ? "en" : ""}
-          </h2>
+          <p className="t-label mb-3">{activeTeam} — {teamMatches.length} wedstrijd{teamMatches.length !== 1 ? "en" : ""}</p>
           {teamMatches.map((m) => {
             const isActive = selectedMatch === m.id;
             const matchDate = new Date(m.date);
             const isThuis = m.home_away === "Thuis";
             const hasScore = m.score_home !== undefined && m.score_home !== null && m.score_away !== undefined && m.score_away !== null;
             const result = getResult(m);
-            const resultColor = result === "win" ? "#22C55E" : result === "loss" ? "#EF4444" : "#888888";
             const resultLabel = result === "win" ? "W" : result === "loss" ? "V" : "G";
+            const badgeClass = result === "win" ? "badge badge-win" : result === "loss" ? "badge badge-loss" : result === "draw" ? "badge badge-draw" : "";
 
             return (
               <button key={m.id} onClick={() => setSelectedMatch(m.id)}
-                className="w-full text-left rounded-2xl transition-all"
+                className="w-full text-left transition-all"
                 style={{
-                  backgroundColor: isActive ? "#1A1F2E" : "#FFFFFF",
-                  boxShadow: isActive ? "0 4px 20px rgba(26,31,46,0.25)" : "0 2px 8px rgba(0,0,0,0.06)",
-                  border: isActive ? "2px solid #D45A30" : "2px solid transparent",
+                  background: isActive ? "rgba(255,107,0,0.15)" : "rgba(255,255,255,0.07)",
+                  border: isActive ? "0.5px solid rgba(255,107,0,0.35)" : "0.5px solid rgba(255,255,255,0.10)",
+                  borderRadius: "18px",
                 }}>
-                <div className="flex items-center gap-4 p-4">
+                <div className="flex items-center gap-3 p-4">
                   {/* Date block */}
-                  <div className="flex-shrink-0 w-14 rounded-xl overflow-hidden text-center"
-                    style={{ backgroundColor: isActive ? "#D45A30" : "#FDE8DC" }}>
-                    <div className="text-[10px] font-bold uppercase py-1" style={{ color: isActive ? "rgba(255,255,255,0.8)" : "#D45A30" }}>
-                      {format(matchDate, "MMM", { locale: nl })}
-                    </div>
-                    <div className="text-2xl font-black leading-none pb-2" style={{ color: isActive ? "#fff" : "#1A1F2E" }}>
-                      {format(matchDate, "d")}
-                    </div>
+                  <div className="flex-shrink-0 w-12 rounded-xl overflow-hidden text-center"
+                    style={{ background: isActive ? "rgba(255,107,0,0.30)" : "rgba(255,255,255,0.10)" }}>
+                    <div className="t-label py-1">{format(matchDate, "MMM", { locale: nl })}</div>
+                    <div className="t-metric pb-2" style={{ fontSize: "22px" }}>{format(matchDate, "d")}</div>
                   </div>
 
                   {/* Match info */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold truncate" style={{ color: isActive ? "#fff" : "#1A1A1A" }}>
-                      {m.opponent}
-                    </p>
-                    <div className="mt-1">
-                      {isThuis
-                        ? <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                            style={{ backgroundColor: isActive ? "rgba(255,255,255,0.12)" : "#E8F5E9", color: isActive ? "#6EE7A0" : "#16A34A" }}>
-                            <Home size={9} /> Thuis
-                          </span>
-                        : <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                            style={{ backgroundColor: isActive ? "rgba(255,255,255,0.12)" : "#FFF3EB", color: isActive ? "#F0926E" : "#D45A30" }}>
-                            <Plane size={9} /> Uit
-                          </span>
-                      }
+                    <p className="t-card-title truncate">{m.opponent}</p>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <span className={isThuis ? "dot-green" : "dot-yellow"} />
+                      <span className="t-secondary-sm">{isThuis ? "Thuis" : "Uit"}</span>
                     </div>
                   </div>
 
                   {/* Score + result */}
                   <div className="flex-shrink-0 text-right">
                     {hasScore ? (
-                      <>
-                        <p className="text-lg font-black leading-none" style={{ color: isActive ? "#fff" : "#1A1F2E" }}>{scoreLabel(m)}</p>
-                        <p className="text-[10px] font-bold mt-1 uppercase" style={{ color: resultColor }}>{resultLabel}</p>
-                      </>
+                      <div className="flex flex-col items-end gap-1">
+                        <p className="text-base font-bold text-white">{scoreLabel(m)}</p>
+                        {result && <span className={badgeClass}>{resultLabel}</span>}
+                      </div>
                     ) : (
-                      <p className="text-sm" style={{ color: isActive ? "rgba(255,255,255,0.3)" : "#ccc" }}>–</p>
+                      <p className="t-tertiary">–</p>
                     )}
                   </div>
                 </div>
@@ -212,9 +196,9 @@ export default function Wedstrijden() {
             );
           })}
           {teamMatches.length === 0 && (
-            <div className="elite-card p-10 text-center">
-              <Trophy size={32} className="mx-auto mb-2" style={{ color: "#FDE8DC" }} />
-              <p className="text-sm" style={{ color: "#2F3650" }}>Nog geen wedstrijden voor {activeTeam}</p>
+            <div className="glass p-10 text-center">
+              <Trophy size={28} className="mx-auto mb-2 ic-muted" style={{ color: "rgba(255,255,255,0.25)" }} />
+              <p className="t-tertiary">Nog geen wedstrijden voor {activeTeam}</p>
             </div>
           )}
         </div>
