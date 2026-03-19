@@ -6,7 +6,6 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useQuery } from "@tanstack/react-query";
 import { base44 as b44 } from "@/api/base44Client";
 import IOSInstallBanner from "@/components/common/IOSInstallBanner";
-import AppBackground from "@/components/common/AppBackground";
 // Tabler Icons zijn nu beschikbaar via CDN
 
 const desenvolvidoItems = [
@@ -141,25 +140,26 @@ export default function Layout({ children, currentPageName }) {
     : null;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#1c0e04", position: "relative" }}>
-      <AppBackground />
+    <div className="min-h-screen" style={{ backgroundColor: "#1c0e04" }}>
       <IOSInstallBanner />
+
       {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b" style={{ backgroundColor: "rgba(28,14,4,0.85)", borderColor: "rgba(255,255,255,0.10)", backdropFilter: "blur(12px)" }}>
+      <header className="fixed top-0 left-0 right-0 z-50" style={{ backgroundColor: "rgba(28,14,4,0.85)", borderBottom: "1px solid rgba(255,107,0,0.15)", backdropFilter: "blur(12px)" }}>
         <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setMobileOpen(!mobileOpen)} 
-              className="lg:hidden p-2 rounded-lg hover:bg-[#F7F5F2]"
+              className="lg:hidden p-2 rounded-lg"
+              style={{ background: "rgba(255,107,0,0.08)" }}
             >
               {mobileOpen ? (
-                <i className="ti ti-x" style={{ fontSize: "24px", color: "#1A1A1A", strokeWidth: 1.5 }} />
+                <i className="ti ti-x" style={{ fontSize: "24px", color: "#ffffff" }} />
               ) : (
-                <i className="ti ti-menu" style={{ fontSize: "24px", color: "#1A1A1A", strokeWidth: 1.5 }} />
+                <i className="ti ti-menu" style={{ fontSize: "24px", color: "#ffffff" }} />
               )}
             </button>
             <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-[#FF6B00]">
+              <div className="w-10 h-10 rounded-full overflow-hidden" style={{ border: "2px solid rgba(255,107,0,0.5)" }}>
                 <img 
                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/f4c654af8_Artemis.png" 
                   alt="FC MV Artemis Noord" 
@@ -167,33 +167,33 @@ export default function Layout({ children, currentPageName }) {
                 />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-sm font-500 leading-tight text-[#1A1A1A]">MVA NOORD</h1>
-                <p className="text-[11px] text-[#888888]">MO17 / Dames 1</p>
+                <h1 className="text-sm font-bold leading-tight text-white" style={{ letterSpacing: "-0.5px" }}>MVA NOORD</h1>
+                <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>MO17 / Dames 1</p>
               </div>
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <div className="text-xs text-[#888888] px-3 py-2 rounded-full border border-[#E8E6E1] bg-[#F7F5F2]">
+            <div className="text-xs px-3 py-1.5 rounded-full" style={{ color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,107,0,0.25)", background: "rgba(255,107,0,0.08)" }}>
               Seizoen 2025-26
             </div>
             {profileLink ? (
               <Link to={profileLink} className="flex-shrink-0">
-                <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#E8E6E1] hover:border-[#FF6B00] transition-colors bg-[#F7F5F2] flex items-center justify-center">
+                <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center transition-all" style={{ border: "2px solid rgba(255,107,0,0.4)" }}>
                   {profilePhoto ? (
                     <img src={profilePhoto} alt={user.full_name} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-sm font-500 text-[#FF6B00]">
+                    <span className="text-sm font-bold text-[#FF6B00]">
                       {user?.full_name?.charAt(0)?.toUpperCase() || "?"}
                     </span>
                   )}
                 </div>
               </Link>
             ) : (
-              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#E8E6E1] bg-[#F7F5F2] flex items-center justify-center">
+              <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center" style={{ border: "2px solid rgba(255,107,0,0.4)" }}>
                 {profilePhoto ? (
                   <img src={profilePhoto} alt={user?.full_name} className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-sm font-500 text-[#888888]">
+                  <span className="text-sm font-bold" style={{ color: "rgba(255,255,255,0.5)" }}>
                     {user?.full_name?.charAt(0)?.toUpperCase() || "?"}
                   </span>
                 )}
@@ -204,15 +204,15 @@ export default function Layout({ children, currentPageName }) {
       </header>
 
       {/* Sidebar desktop */}
-      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col border-r z-40 overflow-y-auto" style={{ backgroundColor: "rgba(28,14,4,0.80)", borderColor: "rgba(255,255,255,0.10)", backdropFilter: "blur(12px)" }}>
-        <nav className="flex-1 py-4 px-3 space-y-2">
+      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col z-40 overflow-y-auto" style={{ backgroundColor: "rgba(28,14,4,0.90)", borderRight: "1px solid rgba(255,107,0,0.15)", backdropFilter: "blur(12px)" }}>
+        <nav className="flex-1 py-4 px-3 space-y-1">
           {isSpeelsterUser ? (
             <>
               <NavLink item={mainNavItems[0]} currentPageName={currentPageName} />
               <NavLink item={mainNavItems[1]} currentPageName={currentPageName} />
               <NavLink item={mainNavItems[4]} currentPageName={currentPageName} />
               <NavLink item={mainNavItems[3]} currentPageName={currentPageName} />
-              <NavLink item={{ name: "Spelprincipes", icon: Grid3x3, page: "Spelprincipes" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }} currentPageName={currentPageName} />
               <DeveloperGroup currentPageName={currentPageName} />
             </>
           ) : (
@@ -226,9 +226,10 @@ export default function Layout({ children, currentPageName }) {
         <div className="px-3 pb-4">
           <button
             onClick={() => base44.auth.logout()}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-[#C0392B] hover:bg-[#FFE6E6] w-full transition-colors"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm w-full transition-colors"
+            style={{ color: "#f87171" }}
           >
-            <i className="ti ti-logout" style={{ fontSize: "20px", color: "#C0392B", strokeWidth: 1.5 }} />
+            <i className="ti ti-logout" style={{ fontSize: "20px", color: "#f87171" }} />
             Uitloggen
           </button>
         </div>
@@ -236,16 +237,16 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Mobile nav overlay */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
-          <div className="w-64 h-full pt-20 px-3 overflow-y-auto border-r" style={{ backgroundColor: "rgba(28,14,4,0.95)", borderColor: "rgba(255,255,255,0.10)" }} onClick={(e) => e.stopPropagation()}>
-            <nav className="space-y-2">
+        <div className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
+          <div className="w-64 h-full pt-20 px-3 overflow-y-auto" style={{ backgroundColor: "rgba(28,14,4,0.97)", borderRight: "1px solid rgba(255,107,0,0.15)" }} onClick={(e) => e.stopPropagation()}>
+            <nav className="space-y-1">
               {isSpeelsterUser ? (
                 <>
                   <NavLink item={mainNavItems[0]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={mainNavItems[1]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={mainNavItems[4]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={mainNavItems[3]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <NavLink item={{ name: "Spelprincipes", icon: Grid3x3, page: "Spelprincipes" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <DeveloperGroup currentPageName={currentPageName} onItemClick={() => setMobileOpen(false)} />
                 </>
               ) : (
@@ -261,37 +262,23 @@ export default function Layout({ children, currentPageName }) {
       )}
 
       {/* Main content */}
-      <main className="pt-16 lg:pl-56 pb-20 lg:pb-0 relative min-h-screen">
-        <div 
-          className="lg:hidden fixed inset-0 top-16 bottom-0 z-0 pointer-events-none"
-          style={{
-            backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/98a8a794b_Appbackground.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            opacity: 0.18
-          }}
-        />
-        <div 
-          className="hidden lg:block fixed inset-0 left-56 top-16 bottom-0 z-0 pointer-events-none"
-          style={{
-            backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/d23782f96_AppbackgroundWebsite.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            opacity: 0.18
-          }}
-        />
-        <div className="relative z-10 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+      <main className="pt-16 lg:pl-56 pb-20 lg:pb-0 relative min-h-screen overflow-hidden">
+        {/* Light orbs background layer */}
+        <div className="pointer-events-none" style={{ position: "fixed", top: "64px", left: 0, right: 0, bottom: 0, zIndex: 1, overflow: "hidden" }}>
+          <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: "rgba(255,107,0,0.55)", top: -160, left: -100, filter: "blur(80px)" }} />
+          <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", background: "rgba(255,150,0,0.30)", top: 380, right: -80, filter: "blur(70px)" }} />
+          <div style={{ position: "absolute", width: 250, height: 250, borderRadius: "50%", background: "rgba(255,107,0,0.20)", bottom: 100, left: -40, filter: "blur(60px)" }} />
+        </div>
+        <div className="relative p-4 md:p-6 lg:p-8 max-w-7xl mx-auto" style={{ zIndex: 2 }}>
           {children}
         </div>
       </main>
 
       {/* Bottom nav mobile */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#FFFFFF] border-t border-[#E8E6E1] z-40">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40" style={{ backgroundColor: "rgba(28,14,4,0.95)", borderTop: "1px solid rgba(255,107,0,0.15)", backdropFilter: "blur(12px)" }}>
         <div className="flex justify-around">
           {(isSpeelsterUser 
-            ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], { name: "Ontwikkeling", icon: TrendingUp, page: "SelfReflection" }]
+            ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], { name: "Ontwikkeling", icon: "trending-up", page: "SelfReflection" }]
             : [mainNavItems[0], mainNavItems[1], mainNavItems[2], mainNavItems[3]]
           ).map((item) => (
             <NavLink 
