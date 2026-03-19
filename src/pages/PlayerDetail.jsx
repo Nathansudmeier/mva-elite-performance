@@ -75,27 +75,26 @@ export default function PlayerDetail() {
     <div className="space-y-6 pb-20">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link to="/Players" className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
-          <ArrowLeft size={18} className="text-[#1A1A1A]" />
+        <Link to="/Players" className="p-2 rounded-xl" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
+          <ArrowLeft size={18} className="text-white" />
         </Link>
         <div className="flex items-center gap-4 flex-1">
           {player.photo_url ? (
-            <img src={player.photo_url} alt={player.name} className="w-16 h-16 rounded-full object-cover border-2 border-[#E8E6E1]" />
+            <img src={player.photo_url} alt={player.name} className="w-16 h-16 rounded-full object-cover" style={{ border: "2px solid rgba(255,107,0,0.4)" }} />
           ) : (
-            <div className="w-16 h-16 rounded-full bg-[#FFF3EB] flex items-center justify-center text-[#FF6B00] text-xl font-500">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A", border: "2px solid rgba(255,107,0,0.3)" }}>
               {player.name?.[0]}
             </div>
           )}
           <div className="flex-1">
-            <h1 className="text-2xl font-500 text-[#1A1A1A]">{player.name}</h1>
-            <p className="text-[#888888] text-sm">{player.position} · #{player.shirt_number}</p>
+            <h1 className="t-page-title text-2xl">{player.name}</h1>
+            <p className="t-secondary">{player.position} · #{player.shirt_number}</p>
           </div>
           {isTrainer && (
             <Link to={`/PlayerRatingForm?player_id=${playerId}`}>
-              <Button className="bg-[#FF6B00] hover:bg-[#E55A00] text-white gap-2">
-                <ClipboardList size={16} />
-                Beoordelen
-              </Button>
+              <button className="btn-secondary">
+                <ClipboardList size={14} /> Beoordelen
+              </button>
             </Link>
           )}
         </div>
@@ -103,59 +102,54 @@ export default function PlayerDetail() {
 
       {/* IOP Goals */}
       {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3">IOP Doelen</h2>
+        <div className="glass p-4">
+          <p className="t-label mb-3">IOP Doelen</p>
           <div className="space-y-2">
             {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).map((goal, i) => (
               <div key={i} className="flex items-start gap-2">
-                <span className="mt-1 w-5 h-5 rounded-full bg-[#FF6B00] text-white text-xs flex items-center justify-center flex-shrink-0">{i + 1}</span>
-                <p className="text-sm text-[#1A1A1A]">{goal}</p>
+                <span className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{ background: "#FF6B00" }}>{i + 1}</span>
+                <p className="t-secondary">{goal}</p>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Latest Ratings — only visible to trainer/admin or the player themselves */}
+      {/* Latest Ratings */}
       {latestRating && (isTrainer || isOwnProfile) && (
-        <div className="rounded-2xl overflow-hidden border border-[#E8E6E1] shadow-sm">
-          {/* Header with gradient */}
-          <div className="relative p-5" style={{ background: "linear-gradient(135deg, #FF6B00 0%, #E55A00 100%)" }}>
+        <div className="glass overflow-hidden">
+          <div className="relative p-5" style={{ background: "linear-gradient(135deg, rgba(255,107,0,0.35) 0%, rgba(229,90,0,0.25) 100%)", borderBottom: "0.5px solid rgba(255,107,0,0.3)" }}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-white/70 text-xs uppercase tracking-wider font-500">Laatste Beoordeling</p>
-                <p className="text-white text-lg font-500 mt-0.5">{latestRating.meting} · {latestRating.date}</p>
+                <p className="t-label">Laatste Beoordeling</p>
+                <p className="t-card-title mt-0.5">{latestRating.meting} · {latestRating.date}</p>
               </div>
-              <div className="bg-white/20 rounded-xl px-4 py-2 text-center">
-                <p className="text-white text-2xl font-500">
-                  {(() => {
-                    const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys];
-                    return calcAvg(latestRating, allKeys);
-                  })()}
+              <div className="rounded-xl px-4 py-2 text-center" style={{ background: "rgba(255,255,255,0.15)" }}>
+                <p className="t-metric">
+                  {(() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })()}
                 </p>
-                <p className="text-white/70 text-xs">totaal</p>
+                <p className="t-tertiary">totaal</p>
               </div>
             </div>
           </div>
-          {/* Score grid */}
-          <div className="bg-white p-4 grid grid-cols-2 gap-3">
+          <div className="p-4 grid grid-cols-2 gap-3">
             {[
-              { label: "Technisch", keys: technicalKeys, icon: <Zap size={14} />, color: "#3B82F6", bg: "#EFF6FF" },
-              { label: "Tactisch", keys: tacticalKeys, icon: <Brain size={14} />, color: "#8B5CF6", bg: "#F5F3FF" },
-              { label: "Persoonlijkheid", keys: personalityKeys, icon: <Shield size={14} />, color: "#10B981", bg: "#ECFDF5" },
-              { label: "Fysiek", keys: physicalRatingKeys, icon: <Dumbbell size={14} />, color: "#F59E0B", bg: "#FFFBEB" },
-            ].map(({ label, keys, icon, color, bg }) => {
+              { label: "Technisch", keys: technicalKeys, icon: <Zap size={14} />, color: "#60a5fa" },
+              { label: "Tactisch", keys: tacticalKeys, icon: <Brain size={14} />, color: "#a78bfa" },
+              { label: "Persoonlijkheid", keys: personalityKeys, icon: <Shield size={14} />, color: "#4ade80" },
+              { label: "Fysiek", keys: physicalRatingKeys, icon: <Dumbbell size={14} />, color: "#fbbf24" },
+            ].map(({ label, keys, icon, color }) => {
               const avg = calcAvg(latestRating, keys);
               const pct = avg !== "-" ? (parseFloat(avg) / 5) * 100 : 0;
               return (
-                <div key={label} className="rounded-xl p-3" style={{ backgroundColor: bg }}>
+                <div key={label} className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
                   <div className="flex items-center gap-1.5 mb-2" style={{ color }}>
                     {icon}
-                    <span className="text-xs font-500 uppercase tracking-wide">{label}</span>
+                    <span className="text-xs font-semibold uppercase tracking-wide">{label}</span>
                   </div>
-                  <p className="text-2xl font-500" style={{ color }}>{avg}</p>
-                  <div className="mt-2 h-1.5 rounded-full bg-black/10">
-                    <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: color }} />
+                  <p className="text-2xl font-bold" style={{ color }}>{avg}</p>
+                  <div className="progress-track mt-2">
+                    <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
                   </div>
                 </div>
               );
@@ -166,21 +160,19 @@ export default function PlayerDetail() {
 
       {/* Physical Tests */}
       {(yoyoTests.length > 0 || physicalTests.length > 0) && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
-            <Activity size={14} /> Fysieke Data
-          </h2>
+        <div className="glass p-4">
+          <p className="t-label mb-3 flex items-center gap-2"><Activity size={12} /> Fysieke Data</p>
           <div className="space-y-2">
             {yoyoTests.slice(-3).map(t => (
-              <div key={t.id} className="flex justify-between text-sm">
-                <span className="text-[#888888]">Yo-Yo {t.date}</span>
-                <span className="font-500 text-[#1A1A1A]">Level {t.level} · {t.distance}m</span>
+              <div key={t.id} className="flex justify-between">
+                <span className="t-secondary">Yo-Yo {t.date}</span>
+                <span className="t-card-title">Level {t.level} · {t.distance}m</span>
               </div>
             ))}
             {physicalTests.slice(-3).map(t => (
-              <div key={t.id} className="flex justify-between text-sm">
-                <span className="text-[#888888]">Sprint 30m {t.date}</span>
-                <span className="font-500 text-[#1A1A1A]">{t.sprint_30m}s</span>
+              <div key={t.id} className="flex justify-between">
+                <span className="t-secondary">Sprint 30m {t.date}</span>
+                <span className="t-card-title">{t.sprint_30m}s</span>
               </div>
             ))}
           </div>
@@ -189,13 +181,11 @@ export default function PlayerDetail() {
 
       {/* Attendance */}
       {attendance.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
-            <Calendar size={14} /> Aanwezigheid
-          </h2>
+        <div className="glass p-4">
+          <p className="t-label mb-3 flex items-center gap-2"><Calendar size={12} /> Aanwezigheid</p>
           <div className="flex items-center gap-4">
-            <div className="text-3xl font-500 text-[#FF6B00]">{attendancePct}%</div>
-            <div className="text-sm text-[#888888]">{presentCount} van {attendance.length} sessies aanwezig</div>
+            <p className="t-metric-orange">{attendancePct}%</p>
+            <p className="t-secondary">{presentCount} van {attendance.length} sessies aanwezig</p>
           </div>
         </div>
       )}
@@ -205,15 +195,13 @@ export default function PlayerDetail() {
 
       {/* Wellness */}
       {wellness.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3 flex items-center gap-2">
-            <Heart size={14} /> Belastbaarheid (laatste 5)
-          </h2>
+        <div className="glass p-4">
+          <p className="t-label mb-3 flex items-center gap-2"><Heart size={12} /> Belastbaarheid (laatste 5)</p>
           <div className="space-y-2">
             {wellness.slice(-5).reverse().map(w => (
-              <div key={w.id} className="flex justify-between text-sm">
-                <span className="text-[#888888]">{w.date}</span>
-                <span className="text-[#1A1A1A]">Slaap {w.sleep}/5 · Vermoeidheid {w.fatigue}/5</span>
+              <div key={w.id} className="flex justify-between">
+                <span className="t-secondary">{w.date}</span>
+                <span className="t-card-title">Slaap {w.sleep}/5 · Vermoeidheid {w.fatigue}/5</span>
               </div>
             ))}
           </div>
@@ -222,11 +210,9 @@ export default function PlayerDetail() {
 
       {/* Wedstrijdbeleving */}
       {(isTrainer || isOwnProfile) && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-4 flex items-center gap-2">
-            <Star size={14} /> Wedstrijdbeleving
-          </h2>
-          <p className="text-xs text-[#888888] mb-3">Pre-game mentaal vs. post-game tevredenheid per wedstrijd</p>
+        <div className="glass p-4">
+          <p className="t-label mb-1 flex items-center gap-2"><Star size={12} /> Wedstrijdbeleving</p>
+          <p className="t-tertiary mb-4">Pre-game mentaal vs. post-game tevredenheid per wedstrijd</p>
           <WedstrijdbelevingChart playerId={playerId} />
         </div>
       )}

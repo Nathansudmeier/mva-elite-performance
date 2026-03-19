@@ -58,17 +58,19 @@ export default function Reports() {
     { subject: player?.iop_goal_3 || "Doel 3", A: avgGoalRatings.goal3.toFixed(1), fullMark: 10 },
   ] : [];
 
-  const chartTooltipStyle = { backgroundColor: '#FFFFFF', border: '1px solid #E8E6E1', borderRadius: 12, color: '#1A1A1A' };
+  const chartTooltipStyle = { backgroundColor: 'rgba(20,10,2,0.95)', border: '0.5px solid rgba(255,255,255,0.15)', borderRadius: 12, color: '#fff' };
+  const chartGrid = "rgba(255,255,255,0.08)";
+  const chartTick = { fill: 'rgba(255,255,255,0.45)', fontSize: 11 };
 
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-500 text-[#FF6B00]">Rapporten</h1>
-          <p className="text-sm text-[#888888]">Voortgangsgesprekken & data-overzicht</p>
+          <h1 className="t-page-title">Rapporten</h1>
+          <p className="t-secondary">Voortgangsgesprekken & data-overzicht</p>
         </div>
         <Select value={selectedPlayer} onValueChange={setSelectedPlayer}>
-          <SelectTrigger className="w-48 border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: '#FFFFFF' }}>
+          <SelectTrigger className="w-48" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }}>
             <SelectValue placeholder="Selecteer speelster" />
           </SelectTrigger>
           <SelectContent>
@@ -80,16 +82,14 @@ export default function Reports() {
 
       {selectedPlayer === "all" ? (
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-            <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
-              <Users size={18} style={{ color: '#FF6B00' }} /> Aanwezigheidspercentage
-            </h2>
+          <div className="glass p-6">
+            <p className="t-label mb-4 flex items-center gap-2"><Users size={14} /> Aanwezigheidspercentage</p>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={attendanceData}>
-                   <CartesianGrid strokeDasharray="3 3" stroke="#E8E6E1" />
-                   <XAxis dataKey="name" tick={{ fill: '#888888', fontSize: 11 }} />
-                   <YAxis tick={{ fill: '#888888', fontSize: 11 }} domain={[0, 100]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartGrid} />
+                  <XAxis dataKey="name" tick={chartTick} />
+                  <YAxis tick={chartTick} domain={[0, 100]} />
                   <Tooltip contentStyle={chartTooltipStyle} />
                   <Bar dataKey="pct" fill="#FF6B00" radius={[8, 8, 0, 0]} name="Aanwezigheid %" />
                 </BarChart>
@@ -97,16 +97,14 @@ export default function Reports() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-            <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
-              <TrendingUp size={18} style={{ color: '#FF6B00' }} /> Yo-Yo Niveau Vergelijking
-            </h2>
+          <div className="glass p-6">
+            <p className="t-label mb-4 flex items-center gap-2"><TrendingUp size={14} /> Yo-Yo Niveau Vergelijking</p>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={yoyoData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E8E6E1" />
-                  <XAxis dataKey="name" tick={{ fill: '#888888', fontSize: 11 }} />
-                  <YAxis tick={{ fill: '#888888', fontSize: 11 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartGrid} />
+                  <XAxis dataKey="name" tick={chartTick} />
+                  <YAxis tick={chartTick} />
                   <Tooltip contentStyle={chartTooltipStyle} />
                   <Bar dataKey="level" fill="#FF6B00" radius={[8, 8, 0, 0]} name="Yo-Yo Niveau" />
                 </BarChart>
@@ -114,16 +112,14 @@ export default function Reports() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-            <h2 className="font-500 mb-4 flex items-center gap-2 text-[#1A1A1A]">
-              <BarChart3 size={18} style={{ color: '#FF6B00' }} /> Champions Trophy — Win Ratio
-            </h2>
+          <div className="glass p-6">
+            <p className="t-label mb-4 flex items-center gap-2"><BarChart3 size={14} /> Champions Trophy — Win Ratio</p>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={winData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E8E6E1" />
-                  <XAxis dataKey="name" tick={{ fill: '#888888', fontSize: 11 }} />
-                  <YAxis tick={{ fill: '#888888', fontSize: 11 }} domain={[0, 100]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartGrid} />
+                  <XAxis dataKey="name" tick={chartTick} />
+                  <YAxis tick={chartTick} domain={[0, 100]} />
                   <Tooltip contentStyle={chartTooltipStyle} />
                   <Bar dataKey="ratio" fill="#FF6B00" radius={[8, 8, 0, 0]} name="Win Ratio %" />
                 </BarChart>
@@ -133,22 +129,22 @@ export default function Reports() {
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-            <h2 className="text-xl font-500 text-[#FF6B00]">{player?.name}</h2>
-            <p className="text-sm text-[#888888]">{player?.position} {player?.shirt_number ? `#${player.shirt_number}` : ""}</p>
+          <div className="glass p-6">
+            <h2 className="t-section-title" style={{ color: "#FF8C3A" }}>{player?.name}</h2>
+            <p className="t-secondary">{player?.position} {player?.shirt_number ? `#${player.shirt_number}` : ""}</p>
           </div>
 
           {playerYoyoProgression.length > 0 && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-              <h2 className="font-500 mb-4 text-[#1A1A1A]">Yo-Yo Progressie</h2>
+            <div className="glass p-6">
+              <p className="t-label mb-4">Yo-Yo Progressie</p>
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={playerYoyoProgression}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#E8E6E1" />
-                     <XAxis dataKey="date" tick={{ fill: '#888888', fontSize: 11 }} />
-                     <YAxis tick={{ fill: '#888888', fontSize: 11 }} />
-                     <Tooltip contentStyle={chartTooltipStyle} />
-                     <Line type="monotone" dataKey="level" stroke="#FF6B00" strokeWidth={2} dot={{ fill: '#FF6B00', r: 4 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke={chartGrid} />
+                    <XAxis dataKey="date" tick={chartTick} />
+                    <YAxis tick={chartTick} />
+                    <Tooltip contentStyle={chartTooltipStyle} />
+                    <Line type="monotone" dataKey="level" stroke="#FF6B00" strokeWidth={2} dot={{ fill: '#FF6B00', r: 4 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -156,15 +152,15 @@ export default function Reports() {
           )}
 
           {radarData.length > 0 && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-              <h2 className="font-500 mb-4 text-[#1A1A1A]">Gemiddelde Zelfreflectie per IOP Doel</h2>
+            <div className="glass p-6">
+              <p className="t-label mb-4">Gemiddelde Zelfreflectie per IOP Doel</p>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData}>
-                    <PolarGrid stroke="#E8E6E1" />
-                     <PolarAngleAxis dataKey="subject" tick={{ fill: '#888888', fontSize: 10 }} />
-                     <PolarRadiusAxis domain={[0, 10]} tick={{ fill: '#888888', fontSize: 10 }} />
-                     <Radar name="Score" dataKey="A" stroke="#FF6B00" fill="#FF6B00" fillOpacity={0.25} />
+                    <PolarGrid stroke={chartGrid} />
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: 'rgba(255,255,255,0.55)', fontSize: 10 }} />
+                    <PolarRadiusAxis domain={[0, 10]} tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10 }} />
+                    <Radar name="Score" dataKey="A" stroke="#FF6B00" fill="#FF6B00" fillOpacity={0.25} />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
@@ -172,12 +168,12 @@ export default function Reports() {
           )}
 
           {playerReflections.length > 0 && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-              <h2 className="font-500 mb-4 text-[#1A1A1A]">Reflectie Geschiedenis</h2>
+            <div className="glass p-6">
+              <p className="t-label mb-4">Reflectie Geschiedenis</p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-[#E8E6E1]" style={{ color: '#888888' }}>
+                    <tr style={{ borderBottom: "0.5px solid rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.45)" }}>
                       <th className="text-left py-2">Datum</th>
                       <th className="text-left py-2">Wedstrijd</th>
                       <th className="text-center py-2">Doel 1</th>
@@ -187,12 +183,12 @@ export default function Reports() {
                   </thead>
                   <tbody>
                     {playerReflections.sort((a, b) => new Date(b.date) - new Date(a.date)).map((r) => (
-                      <tr key={r.id} className="border-b border-[#E8E6E1]">
-                        <td className="py-2 text-[#1A1A1A]">{format(new Date(r.date), "d MMM", { locale: nl })}</td>
-                        <td className="py-2 text-[#1A1A1A]">{r.match_opponent || "-"}</td>
-                        <td className="py-2 text-center font-500" style={{ color: '#FF6B00' }}>{r.goal_1_rating || "-"}</td>
-                        <td className="py-2 text-center font-500" style={{ color: '#1A1A1A' }}>{r.goal_2_rating || "-"}</td>
-                        <td className="py-2 text-center font-500" style={{ color: '#888888' }}>{r.goal_3_rating || "-"}</td>
+                      <tr key={r.id} style={{ borderBottom: "0.5px solid rgba(255,255,255,0.07)" }}>
+                        <td className="py-2 t-secondary">{format(new Date(r.date), "d MMM", { locale: nl })}</td>
+                        <td className="py-2 t-card-title">{r.match_opponent || "-"}</td>
+                        <td className="py-2 text-center font-bold" style={{ color: '#FF8C3A' }}>{r.goal_1_rating || "-"}</td>
+                        <td className="py-2 text-center font-bold text-white">{r.goal_2_rating || "-"}</td>
+                        <td className="py-2 text-center t-secondary">{r.goal_3_rating || "-"}</td>
                       </tr>
                     ))}
                   </tbody>

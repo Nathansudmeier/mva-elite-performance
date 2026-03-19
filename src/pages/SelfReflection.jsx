@@ -47,20 +47,20 @@ export default function SelfReflection() {
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-500 text-[#FF6B00]">Zelfreflectie</h1>
-          <p className="text-sm text-[#888888]">Wekelijkse wedstrijdbeoordeling</p>
+          <h1 className="t-page-title">Zelfreflectie</h1>
+          <p className="t-secondary">Wekelijkse wedstrijdbeoordeling</p>
         </div>
         {isTrainer && (
-          <Button onClick={() => setDialogOpen(true)} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
-            <Plus size={16} className="mr-1" /> Nieuwe Reflectie
-          </Button>
+          <button onClick={() => setDialogOpen(true)} className="btn-secondary">
+            <Plus size={14} /> Nieuwe Reflectie
+          </button>
         )}
       </div>
 
       {isTrainer && (
         <div className="flex gap-3">
           <Select value={filterPlayer} onValueChange={setFilterPlayer}>
-            <SelectTrigger className="w-48 border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFF5F0' }}>
+            <SelectTrigger className="w-48" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }}>
               <SelectValue placeholder="Filter op speelster" />
             </SelectTrigger>
             <SelectContent>
@@ -75,13 +75,13 @@ export default function SelfReflection() {
         {(isTrainer ? filteredReflections : reflections.filter(r => r.player_id === playerId)).map((r) => {
           const player = players.find((p) => p.id === r.player_id);
           return (
-            <div key={r.id} className="elite-card p-5">
+            <div key={r.id} className="glass p-5">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <p className="text-sm font-bold text-[#1A1F2E]">{player?.name || "Onbekend"}</p>
-                  <p className="text-xs" style={{ color: '#2F3650' }}>vs. {r.match_opponent || "-"}</p>
+                  <p className="t-card-title">{player?.name || "Onbekend"}</p>
+                  <p className="t-secondary-sm">vs. {r.match_opponent || "-"}</p>
                 </div>
-                <span className="text-xs" style={{ color: '#2F3650' }}>{format(new Date(r.date), "d MMM", { locale: nl })}</span>
+                <span className="t-secondary-sm">{format(new Date(r.date), "d MMM", { locale: nl })}</span>
               </div>
               <div className="space-y-2">
                 {r.goal_1_rating && <GoalRating label={player?.iop_goal_1 || "Doel 1"} rating={r.goal_1_rating} notes={r.goal_1_notes} color={goalColors[0]} />}
@@ -89,27 +89,27 @@ export default function SelfReflection() {
                 {r.goal_3_rating && <GoalRating label={player?.iop_goal_3 || "Doel 3"} rating={r.goal_3_rating} notes={r.goal_3_notes} color={goalColors[2]} />}
               </div>
               {r.general_notes && (
-                <p className="text-xs mt-3 border-t border-[#FDE8DC] pt-2" style={{ color: '#2F3650' }}>{r.general_notes}</p>
+                <p className="t-tertiary mt-3 pt-2" style={{ borderTop: "0.5px solid rgba(255,255,255,0.10)" }}>{r.general_notes}</p>
               )}
             </div>
           );
         })}
       </div>
       {filteredReflections.length === 0 && (
-        <div className="elite-card p-12 text-center">
-          <BookOpen size={40} className="mx-auto mb-3" style={{ color: '#FDE8DC' }} />
-          <p style={{ color: '#2F3650' }}>Nog geen reflecties ingevoerd</p>
+        <div className="glass p-12 text-center">
+          <BookOpen size={40} className="mx-auto mb-3" style={{ color: "rgba(255,255,255,0.2)" }} />
+          <p className="t-tertiary">Nog geen reflecties ingevoerd</p>
         </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto border-[#FDE8DC]" style={{ backgroundColor: '#FFF5F0', color: '#1A1F2E' }}>
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto" style={{ background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
           <DialogHeader>
-            <DialogTitle style={{ color: '#1A1F2E' }}>Nieuwe Zelfreflectie</DialogTitle>
+            <DialogTitle className="t-page-title">Nieuwe Zelfreflectie</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <Select value={selectedPlayer} onValueChange={setSelectedPlayer}>
-              <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }}>
+              <SelectTrigger style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }}>
                 <SelectValue placeholder="Selecteer speelster" />
               </SelectTrigger>
               <SelectContent>
@@ -117,31 +117,29 @@ export default function SelfReflection() {
               </SelectContent>
             </Select>
             <div className="grid grid-cols-2 gap-3">
-              <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
-              <Input placeholder="Tegenstander" value={form.match_opponent} onChange={(e) => setForm({ ...form, match_opponent: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+              <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+              <Input placeholder="Tegenstander" value={form.match_opponent} onChange={(e) => setForm({ ...form, match_opponent: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
             </div>
-
             {selectedPlayerData && (
               <div className="space-y-4">
                 {[[selectedPlayerData.iop_goal_1,'goal_1_rating','goal_1_notes',goalColors[0]],
                   [selectedPlayerData.iop_goal_2,'goal_2_rating','goal_2_notes',goalColors[1]],
                   [selectedPlayerData.iop_goal_3,'goal_3_rating','goal_3_notes',goalColors[2]]].map(([goal, ratingKey, notesKey, color]) => goal && (
-                  <div key={ratingKey} className="rounded-lg p-3 space-y-2 border border-[#FDE8DC]" style={{ backgroundColor: '#FFFFFF' }}>
+                  <div key={ratingKey} className="rounded-xl p-3 space-y-2" style={{ background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
                     <div className="flex items-center gap-2">
                       <Target size={12} style={{ color }} />
                       <span className="text-xs font-semibold" style={{ color }}>{goal}</span>
                     </div>
-                    <Input type="number" min="1" max="10" placeholder="Score (1-10)" value={form[ratingKey]} onChange={(e) => setForm({ ...form, [ratingKey]: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFF5F0' }} />
-                    <Textarea placeholder="Toelichting..." value={form[notesKey]} onChange={(e) => setForm({ ...form, [notesKey]: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E] h-16" style={{ backgroundColor: '#FFF5F0' }} />
+                    <Input type="number" min="1" max="10" placeholder="Score (1-10)" value={form[ratingKey]} onChange={(e) => setForm({ ...form, [ratingKey]: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+                    <Textarea placeholder="Toelichting..." value={form[notesKey]} onChange={(e) => setForm({ ...form, [notesKey]: e.target.value })} className="h-16" style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
                   </div>
                 ))}
               </div>
             )}
-
-            <Textarea placeholder="Algemene notities..." value={form.general_notes} onChange={(e) => setForm({ ...form, general_notes: e.target.value })} className="border-[#FDE8DC] text-[#1A1F2E] h-20" style={{ backgroundColor: '#FFFFFF' }} />
-            <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !selectedPlayer} className="w-full text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
+            <Textarea placeholder="Algemene notities..." value={form.general_notes} onChange={(e) => setForm({ ...form, general_notes: e.target.value })} className="h-20" style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+            <button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending || !selectedPlayer} className="btn-primary">
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>
@@ -151,12 +149,12 @@ export default function SelfReflection() {
 
 function GoalRating({ label, rating, notes, color }) {
   return (
-    <div className="rounded-lg p-2.5" style={{ backgroundColor: '#FDE8DC' }}>
+    <div className="rounded-xl p-2.5" style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
       <div className="flex items-center justify-between">
-        <span className="text-xs truncate flex-1" style={{ color }}>{label}</span>
+        <span className="t-secondary-sm truncate flex-1" style={{ color }}>{label}</span>
         <span className="text-sm font-black ml-2" style={{ color }}>{rating}/10</span>
       </div>
-      {notes && <p className="text-[10px] mt-1" style={{ color: '#2F3650' }}>{notes}</p>}
+      {notes && <p className="t-tertiary mt-1">{notes}</p>}
     </div>
   );
 }
