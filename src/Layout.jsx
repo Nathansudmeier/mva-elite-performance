@@ -31,8 +31,8 @@ const secondaryNavItems = [
 
 function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
   const isActive = currentPageName === item.page;
-  const iconColor = isActive ? "#FF6B00" : "#888888";
-  
+  const iconColor = isActive ? "#FF8C3A" : "rgba(255,255,255,0.40)";
+
   if (variant === "mobile-tab") {
     return (
       <Link
@@ -41,11 +41,12 @@ function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
         onClick={onClick}
         className="flex flex-col items-center justify-center py-3 px-2 transition-colors"
       >
-        <i 
+        <i
           className={`ti ti-${item.icon}`}
-          style={{ fontSize: "22px", color: iconColor, strokeWidth: 1.5 }}
+          style={{ fontSize: "22px", color: iconColor }}
         />
-        <span className={`text-[11px] mt-1 ${isActive ? "text-[#FF6B00]" : "text-[#888888]"}`}>
+        <span className={`text-[11px] mt-1 font-semibold ${isActive ? "t-nav-active" : "t-nav-inactive"}`}
+          style={{ color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.50)" }}>
           {item.name}
         </span>
       </Link>
@@ -57,15 +58,15 @@ function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
       key={item.page}
       to={createPageUrl(item.page)}
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors duration-200 ${
-        isActive 
-          ? "text-[#FF6B00] bg-[#FFF3EB]" 
-          : "text-[#888888] hover:text-[#FF6B00]"
-      }`}
+      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-colors duration-200`}
+      style={{
+        color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.50)",
+        background: isActive ? "rgba(255,140,58,0.12)" : "transparent",
+      }}
     >
-      <i 
+      <i
         className={`ti ti-${item.icon}`}
-        style={{ fontSize: "20px", color: iconColor, strokeWidth: 1.5 }}
+        style={{ fontSize: "20px", color: iconColor }}
       />
       {item.name}
     </Link>
