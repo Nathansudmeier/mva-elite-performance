@@ -92,7 +92,7 @@ export default function PlayerTrophySection({ players, winningTeams, currentPlay
       {/* Header */}
       <div className="relative flex items-start justify-between mb-5">
         <div className="flex items-center gap-3">
-          <span style={{ fontSize: "28px", lineHeight: 1 }}>🏆</span>
+          <TrophyIcon />
           <div>
             <p style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2, letterSpacing: "-0.3px" }}>Champions Trophy</p>
             <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", marginTop: "2px" }}>Seizoen 2025-26 · Intern toernooi</p>

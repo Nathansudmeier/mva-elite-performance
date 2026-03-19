@@ -35,7 +35,7 @@ export default function TrainerChampionsTrophy({ players, winningTeams }) {
     return (
       <div className="glass glow-gold p-6" style={{ borderColor: "rgba(234,179,8,0.2)" }}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="t-section-title">🏆 Champions Trophy</h2>
+          <h2 className="t-section-title flex items-center gap-2"><TrophyIcon /> Champions Trophy</h2>
           <button onClick={() => navigate("/Leaderboard")} className="t-secondary" style={{ color: "#FF8C3A" }}>
             Volledig leaderboard →
           </button>
