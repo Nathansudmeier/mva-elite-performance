@@ -132,7 +132,7 @@ export default function PlayerTrophySection({ players, winningTeams, currentPlay
             <div key={meta.rank} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
               {/* Flame */}
               {player.isRecentWinner && (meta.rank === 1 || meta.rank === 2) && (
-                <span style={{ fontSize: "16px", marginBottom: "2px" }}>🔥</span>
+                <i className="ti ti-flame" style={{ fontSize: "16px", color: "#FF8C3A", marginBottom: "2px" }} />
               )}
               {/* Avatar */}
               <Avatar player={player} size={meta.size} border={meta.border} />
@@ -165,7 +165,7 @@ export default function PlayerTrophySection({ players, winningTeams, currentPlay
                 </div>
                 <span style={{ flex: 1, fontSize: "13px", color: "rgba(255,255,255,0.85)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {p.name?.split(" ")[0]}
-                  {p.isRecentWinner && <span style={{ marginLeft: "4px" }}>🔥</span>}
+                  {p.isRecentWinner && <i className="ti ti-flame" style={{ fontSize: "14px", color: "#FF8C3A", marginLeft: "4px" }} />}
                 </span>
                 <span style={{ background: "rgba(255,107,0,0.12)", border: "0.5px solid rgba(255,107,0,0.20)", color: "#FF8C3A", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 600 }}>
                   {p.wins}W
