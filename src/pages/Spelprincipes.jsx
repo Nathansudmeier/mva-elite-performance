@@ -103,7 +103,7 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
                   borderColor: "#FF6B00",
                 }}
               >
-                <LinkIcon size={12} /> YouTube URL
+                <i className="ti ti-link" style={{ fontSize: "12px", color: "inherit", strokeWidth: 1.5 }} /> YouTube URL
               </button>
               <button
                 type="button"
