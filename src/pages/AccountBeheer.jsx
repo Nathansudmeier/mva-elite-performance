@@ -129,13 +129,15 @@ function AccountBeheerContent() {
   };
 
   const getLinkedPlayer = (u) => {
-    if (!u?.player_id) return null;
-    return players.find(p => p.id === u.player_id);
+    const pid = u?.data?.player_id || u?.player_id;
+    if (!pid) return null;
+    return players.find(p => p.id === pid);
   };
 
   const getLinkedTrainer = (u) => {
-    if (!u?.trainer_id) return null;
-    return trainers.find(t => t.id === u.trainer_id);
+    const tid = u?.data?.trainer_id || u?.trainer_id;
+    if (!tid) return null;
+    return trainers.find(t => t.id === tid);
   };
 
   // The platform stores role in u.role, but custom role is saved in u.data.role
