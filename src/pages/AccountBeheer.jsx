@@ -121,7 +121,7 @@ function AccountBeheerContent() {
     setNewTrainerTitle("");
     setNewTrainerPhone("");
     setNewTrainerPhoto("");
-    queryClient.invalidateQueries(["trainers"]);
+    queryClient.invalidateQueries({ queryKey: ["trainers"] });
     // If opened from link dialog, auto-select the new trainer
     if (linkOpen && created?.id) {
       setLinkTrainerId(created.id);
