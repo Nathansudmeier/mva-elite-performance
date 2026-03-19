@@ -273,7 +273,7 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
                 </span>
               </div>
               <button onClick={() => setOpen(false)} className="p-2 hover:bg-[#F7F5F2] rounded-lg">
-                <X size={20} color="#888888" />
+                <i className="ti ti-x" style={{ fontSize: "20px", color: "#888888", strokeWidth: 1.5 }} />
               </button>
             </div>
             <div className="p-5 space-y-4">
