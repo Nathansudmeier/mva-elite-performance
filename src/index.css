@@ -97,6 +97,120 @@
   }
 }
 
+/* ── Typografiehiërarchie ── */
+
+/* Hero stat — grote vrijstaande cijfers, geen container */
+.t-hero {
+  font-size: clamp(32px, 6vw, 40px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.t-hero-orange {
+  font-size: clamp(32px, 6vw, 40px);
+  font-weight: 700;
+  color: #FF8C3A;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+/* Paginatitel */
+.t-page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+/* Sectietitel */
+.t-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+  line-height: 1.3;
+}
+
+/* Kaarttitel */
+.t-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+/* Metric waarde in kaart */
+.t-metric {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.t-metric-orange {
+  font-size: 28px;
+  font-weight: 700;
+  color: #FF8C3A;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.t-metric-lg {
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+/* Label boven metric */
+.t-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+}
+
+/* Secundaire tekst — datums, subtitels, meta */
+.t-secondary {
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.4;
+}
+.t-secondary-sm {
+  font-size: 11px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.4;
+}
+
+/* Tertiaire tekst — hints, inactieve states */
+.t-tertiary {
+  font-size: 11px;
+  color: rgba(255,255,255,0.40);
+  line-height: 1.4;
+}
+.t-tertiary-sm {
+  font-size: 10px;
+  color: rgba(255,255,255,0.40);
+  line-height: 1.4;
+}
+
+/* Navigatielabels */
+.t-nav-inactive {
+  color: rgba(255,255,255,0.50);
+}
+.t-nav-active {
+  color: #FF8C3A;
+}
+
+/* Icoon kleuren */
+.ic-white  { color: #ffffff; }
+.ic-orange { color: #FF8C3A; }
+.ic-muted  { color: rgba(255,255,255,0.40); }
+
 /* ── Glasmorfisme varianten ── */
 .glass {
   position: relative;
