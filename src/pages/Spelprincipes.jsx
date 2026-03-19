@@ -135,12 +135,12 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
               <div>
                 <input type="file" accept="video/*" className="hidden" id="video-upload" onChange={handleVideoUpload} />
                 <label
-                  htmlFor="video-upload"
-                  className="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-[#E8E6E1] rounded-xl cursor-pointer hover:border-[#FF6B00] text-sm text-[#888888] hover:text-[#FF6B00] transition-colors"
-                >
-                  <Upload size={16} />
-                  {uploading ? "Uploaden..." : form.video_url ? "Video geüpload ✓" : "Klik om video te kiezen"}
-                </label>
+                   htmlFor="video-upload"
+                   className="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-[#E8E6E1] rounded-xl cursor-pointer hover:border-[#FF6B00] text-sm text-[#888888] hover:text-[#FF6B00] transition-colors"
+                 >
+                   <i className="ti ti-upload" style={{ fontSize: "16px", color: "inherit", strokeWidth: 1.5 }} />
+                   {uploading ? "Uploaden..." : form.video_url ? "Video geüpload ✓" : "Klik om video te kiezen"}
+                 </label>
               </div>
             )}
           </div>
