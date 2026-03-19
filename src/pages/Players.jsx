@@ -79,49 +79,50 @@ function PlayersContent() {
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-500 text-[#FF6B00]">Speelsters</h1>
-          <p className="text-sm text-[#888888]">{activePlayers.length} speelsters in selectie</p>
+          <h1 className="t-page-title">Speelsters</h1>
+          <p className="t-secondary">{activePlayers.length} speelsters in selectie</p>
         </div>
-        <Button onClick={openNew} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-          <Plus size={16} className="mr-1" /> Toevoegen
-        </Button>
+        <button onClick={openNew} className="btn-secondary">
+          <Plus size={14} /> Toevoegen
+        </button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {activePlayers.map((player) => (
-          <Link key={player.id} to={createPageUrl(`PlayerDetail?id=${player.id}`)} className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm hover:shadow-md transition-shadow block">
-            <div className="flex items-start gap-4">
+          <Link key={player.id} to={createPageUrl(`PlayerDetail?id=${player.id}`)} className="glass block transition-opacity hover:opacity-80">
+            <div className="flex items-start gap-4 p-4">
               <label
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center text-lg font-bold shrink-0 cursor-pointer group bg-[#FFF3EB]"
+                className="relative w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center shrink-0 cursor-pointer group"
+                style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.3)" }}
               >
                 {player.photo_url ? (
                   <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
                 ) : (
-                  <User size={24} className="text-[#FF6B00]" />
+                  <User size={22} style={{ color: "#FF8C3A" }} />
                 )}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
-                  <Camera size={16} className="text-white" />
+                  <Camera size={14} className="text-white" />
                 </div>
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => handleQuickPhoto(e, player)} />
               </label>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  {player.shirt_number && <span className="font-500 text-sm text-[#FF6B00]">#{player.shirt_number}</span>}
-                  <h3 className="font-500 text-sm truncate text-[#1A1A1A]">{player.name}</h3>
+                  {player.shirt_number && <span className="t-secondary" style={{ color: "#FF8C3A" }}>#{player.shirt_number}</span>}
+                  <h3 className="t-card-title truncate">{player.name}</h3>
                 </div>
-                <p className="text-xs mt-0.5 text-[#888888]">{player.position || "Geen positie"}</p>
+                <p className="t-secondary-sm mt-0.5">{player.position || "Geen positie"}</p>
                 {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
                   <div className="flex items-center gap-1 mt-2">
-                    <Target size={10} className="text-[#FF6B00]" />
-                    <span className="text-[10px] text-[#888888]">
+                    <Target size={10} style={{ color: "#FF8C3A" }} />
+                    <span className="t-tertiary">
                       {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).length} IOP doelen
                     </span>
                   </div>
                 )}
               </div>
-              <button onClick={(e) => { e.preventDefault(); openEdit(player); }} className="p-2 rounded-lg transition-colors hover:bg-[#FFF3EB]">
-                <Edit2 size={14} className="text-[#888888]" />
+              <button onClick={(e) => { e.preventDefault(); openEdit(player); }} className="p-2 rounded-lg transition-colors" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <Edit2 size={14} style={{ color: "rgba(255,255,255,0.5)" }} />
               </button>
             </div>
           </Link>
@@ -129,37 +130,37 @@ function PlayersContent() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md border-[#E8E6E1] bg-white">
+        <DialogContent className="max-w-md" style={{ background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
           <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A]">{editing ? "Speelster Bewerken" : "Nieuwe Speelster"}</DialogTitle>
+            <DialogTitle className="t-page-title">{editing ? "Speelster Bewerken" : "Nieuwe Speelster"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <Input placeholder="Naam" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+            <Input placeholder="Naam" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
             <div className="grid grid-cols-2 gap-3">
               <Select value={form.position} onValueChange={(v) => setForm({ ...form, position: v })}>
-                <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
+                <SelectTrigger style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }}>
                   <SelectValue placeholder="Positie" />
                 </SelectTrigger>
                 <SelectContent>
                   {POSITIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
-              <Input type="number" placeholder="Rugnummer" value={form.shirt_number} onChange={(e) => setForm({ ...form, shirt_number: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+              <Input type="number" placeholder="Rugnummer" value={form.shirt_number} onChange={(e) => setForm({ ...form, shirt_number: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
             </div>
-            <label className="flex items-center gap-2 px-4 py-3 rounded-xl border border-dashed border-[#FF6B00] cursor-pointer bg-[#FFF3EB] transition-colors">
-              <Upload size={16} className="text-[#FF6B00]" />
-              <span className="text-sm text-[#888888]">{photoFile ? photoFile.name : "Upload foto"}</span>
+            <label className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer" style={{ border: "1px dashed rgba(255,107,0,0.5)", background: "rgba(255,107,0,0.08)" }}>
+              <Upload size={16} style={{ color: "#FF8C3A" }} />
+              <span className="t-secondary">{photoFile ? photoFile.name : "Upload foto"}</span>
               <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files[0])} />
             </label>
             <div className="space-y-2">
-              <p className="text-xs font-500 uppercase tracking-wider text-[#FF6B00]">IOP Doelen</p>
-              <Input placeholder="Doel 1" value={form.iop_goal_1} onChange={(e) => setForm({ ...form, iop_goal_1: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
-              <Input placeholder="Doel 2" value={form.iop_goal_2} onChange={(e) => setForm({ ...form, iop_goal_2: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
-              <Input placeholder="Doel 3" value={form.iop_goal_3} onChange={(e) => setForm({ ...form, iop_goal_3: e.target.value })} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+              <p className="t-label">IOP Doelen</p>
+              <Input placeholder="Doel 1" value={form.iop_goal_1} onChange={(e) => setForm({ ...form, iop_goal_1: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+              <Input placeholder="Doel 2" value={form.iop_goal_2} onChange={(e) => setForm({ ...form, iop_goal_2: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+              <Input placeholder="Doel 3" value={form.iop_goal_3} onChange={(e) => setForm({ ...form, iop_goal_3: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
             </div>
-            <Button onClick={() => saveMutation.mutate(form)} disabled={saveMutation.isPending || !form.name} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
+            <button onClick={() => saveMutation.mutate(form)} disabled={saveMutation.isPending || !form.name} className="btn-primary">
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>

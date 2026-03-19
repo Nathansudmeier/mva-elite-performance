@@ -99,36 +99,32 @@ export default function Trainingen() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-500 text-[#FF6B00]">Trainingen</h1>
-          <p className="text-sm text-[#888888]">{sessions.filter(s => s.type === "Training").length} trainingen geregistreerd</p>
+          <h1 className="t-page-title">Trainingen</h1>
+          <p className="t-secondary">{sessions.filter(s => s.type === "Training").length} trainingen geregistreerd</p>
         </div>
         {isTrainer && (
-          <Button
-            onClick={() => { setSessionDate(""); setNewSessionDialog(true); }}
-            className="text-white"
-            style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}
-          >
-            <Plus size={16} className="mr-1" /> Extra Sessie
-          </Button>
+          <button onClick={() => { setSessionDate(""); setNewSessionDialog(true); }} className="btn-secondary">
+            <Plus size={14} /> Extra Sessie
+          </button>
         )}
       </div>
 
       {/* Week navigator */}
-      <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#E8E6E1]">
-          <button onClick={() => setWeekOffset((w) => w - 1)} className="p-1.5 rounded-lg hover:bg-[#F7F5F2]">
-            <ChevronLeft size={18} className="text-[#1A1A1A]" />
+      <div className="glass overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "0.5px solid rgba(255,255,255,0.10)" }}>
+          <button onClick={() => setWeekOffset((w) => w - 1)} className="p-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.08)" }}>
+            <ChevronLeft size={18} className="text-white" />
           </button>
-          <span className="text-sm font-500 text-[#1A1A1A]">
+          <span className="t-card-title">
             {format(weekStart, "d MMM", { locale: nl })} – {format(weekEnd, "d MMM yyyy", { locale: nl })}
           </span>
-          <button onClick={() => setWeekOffset((w) => w + 1)} className="p-1.5 rounded-lg hover:bg-[#F7F5F2]">
-            <ChevronRight size={18} className="text-[#1A1A1A]" />
+          <button onClick={() => setWeekOffset((w) => w + 1)} className="p-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.08)" }}>
+            <ChevronRight size={18} className="text-white" />
           </button>
         </div>
 
         {/* Day slots */}
-        <div className="grid grid-cols-3 divide-x divide-[#E8E6E1]">
+        <div className="grid grid-cols-3" style={{ borderTop: "0" }}>
           {daySlots.map(({ day, dateStr, session }, i) => {
             const isPast = isBefore(day, today);
             const isToday = format(day, "yyyy-MM-dd") === format(today, "yyyy-MM-dd");
@@ -137,47 +133,23 @@ export default function Trainingen() {
             const presentCount = sAtt.filter((a) => a.present).length;
 
             return (
-              <div key={dateStr} className="p-3 text-center">
-                <p className="text-xs text-[#888888] mb-0.5">{dayNames[i]}</p>
-                <p className={`text-lg font-500 mb-2 ${isToday ? "text-[#FF6B00]" : "text-[#1A1A1A]"}`}>
-                  {format(day, "d")}
-                </p>
+              <div key={dateStr} className="p-3 text-center" style={{ borderRight: i < 2 ? "0.5px solid rgba(255,255,255,0.10)" : "none" }}>
+                <p className="t-label mb-0.5">{dayNames[i]}</p>
+                <p className={`text-lg font-bold mb-2 ${isToday ? "text-[#FF8C3A]" : "text-white"}`}>{format(day, "d")}</p>
                 {session ? (
                   <button
                     onClick={() => setSelectedSessionId(isSelected ? null : session.id)}
-                    className={`w-full py-2 px-1 rounded-xl text-xs font-500 transition-all ${
-                      isSelected
-                        ? "bg-[#FF6B00] text-white"
-                        : "bg-[#FFF3EB] text-[#FF6B00] hover:bg-[#FFE5CC]"
-                    }`}
+                    className="w-full py-2 px-1 rounded-xl text-xs font-bold transition-all"
+                    style={isSelected ? { background: "#FF6B00", color: "#fff" } : { background: "rgba(255,107,0,0.15)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.3)" }}
                   >
-                    {presentCount}/{sAtt.length || activePlayers.length}
-                    <br />aanwezig
+                    {presentCount}/{sAtt.length || activePlayers.length}<br />aanwezig
                   </button>
                 ) : (
-                  <div className="w-full py-2 px-1 rounded-xl text-xs text-[#888888]">
+                  <div className="w-full py-2 px-1 rounded-xl text-xs">
                     {isPast ? (
-                      isTrainer ? (
-                        <button
-                          onClick={() => createSessionMutation.mutate(dateStr)}
-                          className="text-[#FF6B00] underline text-xs"
-                        >
-                          Toevoegen
-                        </button>
-                      ) : (
-                        <span>–</span>
-                      )
+                      isTrainer ? <button onClick={() => createSessionMutation.mutate(dateStr)} className="t-secondary" style={{ color: "#FF8C3A", textDecoration: "underline" }}>Toevoegen</button> : <span className="t-tertiary">–</span>
                     ) : (
-                      isTrainer ? (
-                        <button
-                          onClick={() => createSessionMutation.mutate(dateStr)}
-                          className="text-[#FF6B00] underline text-xs"
-                        >
-                          Aanmaken
-                        </button>
-                      ) : (
-                        <span className="text-[#BBBBBB]">Gepland</span>
-                      )
+                      isTrainer ? <button onClick={() => createSessionMutation.mutate(dateStr)} className="t-secondary" style={{ color: "#FF8C3A", textDecoration: "underline" }}>Aanmaken</button> : <span className="t-tertiary">Gepland</span>
                     )}
                   </div>
                 )}
@@ -189,67 +161,50 @@ export default function Trainingen() {
 
       {/* Session detail */}
       {selectedSession && (
-        <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm p-5">
+        <div className="glass p-5">
           <div className="flex items-center gap-3 mb-4">
-            <Calendar size={18} className="text-[#FF6B00]" />
+            <Calendar size={16} style={{ color: "#FF8C3A" }} />
             <div>
-              <h2 className="font-500 text-[#1A1A1A]">
-                {format(parseISO(selectedSession.date), "EEEE d MMMM yyyy", { locale: nl })}
-              </h2>
-              {selectedSession.notes && (
-                <p className="text-xs text-[#888888]">{selectedSession.notes}</p>
-              )}
+              <h2 className="t-card-title">{format(parseISO(selectedSession.date), "EEEE d MMMM yyyy", { locale: nl })}</h2>
+              {selectedSession.notes && <p className="t-secondary-sm mt-0.5">{selectedSession.notes}</p>}
             </div>
           </div>
 
-          {/* Player self check-in (speelster only) */}
           {!isTrainer && myPlayerId && myAttendanceRecord && (
-            <div className="mb-4 p-4 rounded-xl bg-[#FFF3EB] flex items-center justify-between">
+            <div className="mb-4 p-4 rounded-xl flex items-center justify-between" style={{ background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)" }}>
               <div>
-                <p className="font-500 text-[#1A1A1A] text-sm">Mijn aanwezigheid</p>
-                <p className="text-xs text-[#888888]">Klik om jouw status te wijzigen</p>
+                <p className="t-card-title">Mijn aanwezigheid</p>
+                <p className="t-secondary-sm">Klik om jouw status te wijzigen</p>
               </div>
               <button
                 onClick={() => toggleAttendance.mutate({ attendanceId: myAttendanceRecord.id, present: !myAttendanceRecord.present })}
                 className="w-12 h-12 rounded-xl flex items-center justify-center text-white transition-all"
-                style={{ backgroundColor: myAttendanceRecord.present ? "#4CAF82" : "#E8E6E1" }}
+                style={{ backgroundColor: myAttendanceRecord.present ? "#4ade80" : "rgba(255,255,255,0.15)" }}
               >
-                {myAttendanceRecord.present ? <Check size={20} /> : <X size={20} className="text-[#888888]" />}
+                {myAttendanceRecord.present ? <Check size={20} /> : <X size={20} className="text-white" />}
               </button>
             </div>
           )}
 
-          {/* Full attendance list (trainer can toggle all, speelster sees overview) */}
           <div className="space-y-2">
             {sessionAttendance.map((a) => {
               const player = players.find((p) => p.id === a.player_id);
               const canToggle = isTrainer || a.player_id === myPlayerId;
               return (
-                <div key={a.id} className="flex items-center justify-between rounded-xl px-4 py-3 bg-[#F7F5F2]">
+                <div key={a.id} className="flex items-center justify-between rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.06)" }}>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-[#FFF3EB] flex items-center justify-center text-xs font-500 text-[#FF6B00]">
-                      {player?.photo_url ? (
-                        <img src={player.photo_url} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        player?.name?.charAt(0)
-                      )}
+                    <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center text-xs font-bold" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
+                      {player?.photo_url ? <img src={player.photo_url} alt="" className="w-full h-full object-cover" /> : player?.name?.charAt(0)}
                     </div>
-                    <span className="text-sm font-500 text-[#1A1A1A]">{player?.name}</span>
+                    <span className="t-card-title">{player?.name}</span>
                   </div>
                   {canToggle ? (
-                    <button
-                      onClick={() => toggleAttendance.mutate({ attendanceId: a.id, present: !a.present })}
-                      className="w-10 h-10 rounded-lg flex items-center justify-center transition-all text-white"
-                      style={{ backgroundColor: a.present ? "#4CAF82" : "#E8E6E1" }}
-                    >
-                      {a.present ? <Check size={18} /> : <X size={18} className="text-[#888888]" />}
+                    <button onClick={() => toggleAttendance.mutate({ attendanceId: a.id, present: !a.present })} className="w-10 h-10 rounded-lg flex items-center justify-center text-white transition-all" style={{ backgroundColor: a.present ? "#4ade80" : "rgba(255,255,255,0.12)" }}>
+                      {a.present ? <Check size={18} /> : <X size={18} className="text-white" />}
                     </button>
                   ) : (
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center text-white"
-                      style={{ backgroundColor: a.present ? "#4CAF82" : "#E8E6E1" }}
-                    >
-                      {a.present ? <Check size={18} /> : <X size={18} className="text-[#888888]" />}
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: a.present ? "#4ade80" : "rgba(255,255,255,0.12)" }}>
+                      {a.present ? <Check size={18} /> : <X size={18} className="text-white" />}
                     </div>
                   )}
                 </div>
@@ -259,68 +214,45 @@ export default function Trainingen() {
         </div>
       )}
 
-      {/* Attendance overview (when no session selected) */}
+      {/* Attendance overview */}
       {!selectedSession && (
-        <div className="bg-white rounded-2xl border border-[#E8E6E1] shadow-sm p-5">
-          <h2 className="font-500 text-[#1A1A1A] mb-4">Aanwezigheidsoverzicht</h2>
+        <div className="glass p-5">
+          <h2 className="t-section-title mb-4">Aanwezigheidsoverzicht</h2>
           <div className="space-y-2">
-            {[...activePlayers]
-              .sort((a, b) => getPlayerAttendancePct(b.id) - getPlayerAttendancePct(a.id))
-              .map((p) => {
-                const pct = getPlayerAttendancePct(p.id);
-                return (
-                  <div key={p.id} className="flex items-center gap-3 rounded-xl px-4 py-3 bg-[#F7F5F2]">
-                    <span className="text-sm font-500 flex-1 text-[#1A1A1A]">{p.name}</span>
-                    <div className="w-24 h-2 rounded-full overflow-hidden bg-[#E8E6E1]">
-                      <div
-                        className="h-full rounded-full transition-all"
-                        style={{
-                          width: `${pct}%`,
-                          backgroundColor: pct >= 80 ? "#4CAF82" : pct >= 60 ? "#F0926E" : "#C0392B",
-                        }}
-                      />
-                    </div>
-                    <span className="text-sm font-500 w-12 text-right text-[#FF6B00]">{pct}%</span>
+            {[...activePlayers].sort((a, b) => getPlayerAttendancePct(b.id) - getPlayerAttendancePct(a.id)).map((p) => {
+              const pct = getPlayerAttendancePct(p.id);
+              return (
+                <div key={p.id} className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <span className="t-card-title flex-1">{p.name}</span>
+                  <div className="progress-track w-24">
+                    <div className="progress-fill" style={{ width: `${pct}%`, background: pct >= 80 ? "#4ade80" : pct >= 60 ? "#fbbf24" : "#f87171" }} />
                   </div>
-                );
-              })}
+                  <span className="t-secondary w-12 text-right" style={{ color: "#FF8C3A" }}>{pct}%</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* Extra session dialog (trainer only) */}
+      {/* Extra session dialog */}
       <Dialog open={newSessionDialog} onOpenChange={setNewSessionDialog}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm" style={{ background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
           <DialogHeader>
-            <DialogTitle>Extra Sessie Toevoegen</DialogTitle>
+            <DialogTitle className="t-page-title">Extra Sessie Toevoegen</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-1 block">Datum</label>
-              <Input
-                type="date"
-                value={sessionDate}
-                onChange={(e) => setSessionDate(e.target.value)}
-                className="border-[#E8E6E1]"
-              />
+              <label className="t-label mb-1 block">Datum</label>
+              <Input type="date" value={sessionDate} onChange={(e) => setSessionDate(e.target.value)} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
             </div>
             <div>
-              <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-1 block">Onderwerp (optioneel)</label>
-              <Input
-                placeholder="bijv. Positiespel, Afwerking..."
-                value={sessionNotes}
-                onChange={(e) => setSessionNotes(e.target.value)}
-                className="border-[#E8E6E1]"
-              />
+              <label className="t-label mb-1 block">Onderwerp (optioneel)</label>
+              <Input placeholder="bijv. Positiespel, Afwerking..." value={sessionNotes} onChange={(e) => setSessionNotes(e.target.value)} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
             </div>
-            <Button
-              onClick={() => sessionDate && createSessionMutation.mutate(sessionDate)}
-              disabled={!sessionDate || createSessionMutation.isPending}
-              className="w-full text-white"
-              style={{ background: "linear-gradient(135deg,#D45A30,#E8724A)" }}
-            >
+            <button onClick={() => sessionDate && createSessionMutation.mutate(sessionDate)} disabled={!sessionDate || createSessionMutation.isPending} className="btn-primary">
               {createSessionMutation.isPending ? "Aanmaken..." : "Sessie Aanmaken"}
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>

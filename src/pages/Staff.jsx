@@ -84,52 +84,42 @@ function StaffContent() {
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-500 text-[#FF6B00]">Staff</h1>
-          <p className="text-sm text-[#888888]">{activeTrainers.length} stafleden</p>
+          <h1 className="t-page-title">Staff</h1>
+          <p className="t-secondary">{activeTrainers.length} stafleden</p>
         </div>
         {isTrainer && (
-          <Button onClick={openNew} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-            <Plus size={16} className="mr-1" /> Toevoegen
-          </Button>
+          <button onClick={openNew} className="btn-secondary">
+            <Plus size={14} /> Toevoegen
+          </button>
         )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {activeTrainers.map((trainer) => (
-          <Link key={trainer.id} to={createPageUrl(`TrainerDetail?id=${trainer.id}`)} className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm hover:shadow-md transition-shadow block">
-            <div className="flex items-start gap-4">
-              <div className="relative w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center shrink-0 bg-[#1A1A1A]">
+          <Link key={trainer.id} to={createPageUrl(`TrainerDetail?id=${trainer.id}`)} className="glass block transition-opacity hover:opacity-80">
+            <div className="flex items-start gap-4 p-4">
+              <div className="relative w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center shrink-0" style={{ background: "rgba(255,255,255,0.10)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
                 {trainer.photo_url ? (
                   <img src={trainer.photo_url} alt={trainer.name} className="w-full h-full object-cover" />
                 ) : (
-                  <User size={24} className="text-[#FF6B00]" />
+                  <User size={22} style={{ color: "#FF8C3A" }} />
                 )}
                 {isTrainer && (
                   <label onClick={(e) => e.preventDefault()} className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40 cursor-pointer">
-                    <Camera size={16} className="text-white" />
+                    <Camera size={14} className="text-white" />
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => { e.stopPropagation(); handleQuickPhoto(e, trainer); }} />
                   </label>
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-500 text-sm text-[#1A1A1A] truncate">{trainer.name}</h3>
-                {trainer.role_title && (
-                  <p className="text-xs mt-0.5 text-[#FF6B00]">{trainer.role_title}</p>
-                )}
-                {trainer.phone && (
-                  <p className="text-xs mt-1 text-[#888888] flex items-center gap-1">
-                    <Phone size={10} /> {trainer.phone}
-                  </p>
-                )}
-                {trainer.email && (
-                  <p className="text-xs mt-1 text-[#888888] flex items-center gap-1">
-                    <Mail size={10} /> {trainer.email}
-                  </p>
-                )}
+                <h3 className="t-card-title truncate">{trainer.name}</h3>
+                {trainer.role_title && <p className="t-secondary-sm mt-0.5" style={{ color: "#FF8C3A" }}>{trainer.role_title}</p>}
+                {trainer.phone && <p className="t-tertiary flex items-center gap-1 mt-1"><Phone size={10} /> {trainer.phone}</p>}
+                {trainer.email && <p className="t-tertiary flex items-center gap-1 mt-1"><Mail size={10} /> {trainer.email}</p>}
               </div>
               {isTrainer && (
-                <button onClick={(e) => { e.preventDefault(); openEdit(trainer); }} className="p-2 rounded-lg transition-colors hover:bg-[#FFF3EB]">
-                  <Edit2 size={14} className="text-[#888888]" />
+                <button onClick={(e) => { e.preventDefault(); openEdit(trainer); }} className="p-2 rounded-lg" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <Edit2 size={14} style={{ color: "rgba(255,255,255,0.5)" }} />
                 </button>
               )}
             </div>
@@ -138,55 +128,30 @@ function StaffContent() {
       </div>
 
       {activeTrainers.length === 0 && (
-        <div className="bg-white rounded-2xl p-8 border border-[#E8E6E1] text-center">
-          <User size={32} className="text-[#E8E6E1] mx-auto mb-2" />
-          <p className="text-sm text-[#888888]">Nog geen stafleden toegevoegd.</p>
+        <div className="glass p-8 text-center">
+          <User size={32} className="mx-auto mb-2 ic-muted" style={{ color: "rgba(255,255,255,0.2)" }} />
+          <p className="t-tertiary">Nog geen stafleden toegevoegd.</p>
         </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md border-[#E8E6E1] bg-white">
+        <DialogContent className="max-w-md" style={{ background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
           <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A]">{editing ? "Staflid Bewerken" : "Nieuw Staflid"}</DialogTitle>
+            <DialogTitle className="t-page-title">{editing ? "Staflid Bewerken" : "Nieuw Staflid"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <Input
-              placeholder="Naam *"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="border-[#E8E6E1] text-[#1A1A1A] bg-white"
-            />
-            <Input
-              placeholder="Functietitel (bijv. Hoofdtrainer, Assistent)"
-              value={form.role_title}
-              onChange={(e) => setForm({ ...form, role_title: e.target.value })}
-              className="border-[#E8E6E1] text-[#1A1A1A] bg-white"
-            />
-            <Input
-              placeholder="Telefoonnummer"
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              className="border-[#E8E6E1] text-[#1A1A1A] bg-white"
-            />
-            <Input
-              placeholder="E-mailadres"
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="border-[#E8E6E1] text-[#1A1A1A] bg-white"
-            />
-            <label className="flex items-center gap-2 px-4 py-3 rounded-xl border border-dashed border-[#FF6B00] cursor-pointer bg-[#FFF3EB]">
-              <Upload size={16} className="text-[#FF6B00]" />
-              <span className="text-sm text-[#888888]">{photoFile ? photoFile.name : "Upload foto"}</span>
+            <Input placeholder="Naam *" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+            <Input placeholder="Functietitel (bijv. Hoofdtrainer, Assistent)" value={form.role_title} onChange={(e) => setForm({ ...form, role_title: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+            <Input placeholder="Telefoonnummer" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+            <Input placeholder="E-mailadres" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+            <label className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer" style={{ border: "1px dashed rgba(255,107,0,0.5)", background: "rgba(255,107,0,0.08)" }}>
+              <Upload size={16} style={{ color: "#FF8C3A" }} />
+              <span className="t-secondary">{photoFile ? photoFile.name : "Upload foto"}</span>
               <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files[0])} />
             </label>
-            <Button
-              onClick={() => saveMutation.mutate(form)}
-              disabled={saveMutation.isPending || !form.name}
-              className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white"
-            >
+            <button onClick={() => saveMutation.mutate(form)} disabled={saveMutation.isPending || !form.name} className="btn-primary">
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>
