@@ -133,8 +133,13 @@ export default function PlayerGreetingHeader({ user, player, attendance = [], ra
           )}
         </div>
         <div>
-          <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2 }}>Hey {firstName} 👋</h1>
-          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", marginTop: "3px" }}>{subline}</p>
+          <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2, display: "flex", alignItems: "center", gap: "6px" }}>
+            Hey {firstName} <HandWaveIcon color={waveColor} />
+          </h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "5px", flexWrap: "wrap" }}>
+            <DayBadge dayType={dayType} />
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", margin: 0 }}>{subline}</p>
+          </div>
         </div>
       </div>
 
