@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useQuery } from "@tanstack/react-query";
 import { base44 as b44 } from "@/api/base44Client";
 import IOSInstallBanner from "@/components/common/IOSInstallBanner";
+import AppBackground from "@/components/common/AppBackground";
 // Tabler Icons zijn nu beschikbaar via CDN
 
 const desenvolvidoItems = [
@@ -140,10 +141,11 @@ export default function Layout({ children, currentPageName }) {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#F7F5F2]">
+    <div className="min-h-screen" style={{ backgroundColor: "#1c0e04", position: "relative" }}>
+      <AppBackground />
       <IOSInstallBanner />
       {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#FFFFFF] border-b border-[#E8E6E1]">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b" style={{ backgroundColor: "rgba(28,14,4,0.85)", borderColor: "rgba(255,255,255,0.10)", backdropFilter: "blur(12px)" }}>
         <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3">
             <button 
@@ -202,7 +204,7 @@ export default function Layout({ children, currentPageName }) {
       </header>
 
       {/* Sidebar desktop */}
-      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col border-r border-[#E8E6E1] z-40 overflow-y-auto bg-[#FFFFFF]">
+      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col border-r z-40 overflow-y-auto" style={{ backgroundColor: "rgba(28,14,4,0.80)", borderColor: "rgba(255,255,255,0.10)", backdropFilter: "blur(12px)" }}>
         <nav className="flex-1 py-4 px-3 space-y-2">
           {isSpeelsterUser ? (
             <>
