@@ -136,7 +136,7 @@ export default function Dashboard() {
       <div className="md:hidden px-1 pt-1">
         <div className="flex items-baseline gap-2">
           <span style={{ fontSize: "36px", fontWeight: 700, color: "#ffffff", letterSpacing: "-1px", lineHeight: 1 }}>{winPct}%</span>
-          <span style={{ fontSize: "12px", fontWeight: 600, color: "#FF8C3A" }}>winst</span>
+          <span style={{ fontSize: "18px", fontWeight: 600, color: "#FF8C3A" }}>winst</span>
         </div>
         <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "4px" }}>
           {wins} overwinningen · {draws} gelijk · {losses} verlies
