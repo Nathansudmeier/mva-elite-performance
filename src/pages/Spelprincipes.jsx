@@ -115,7 +115,7 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
                   borderColor: "#FF6B00",
                 }}
               >
-                <Upload size={12} /> Bestand uploaden
+                <i className="ti ti-upload" style={{ fontSize: "12px", color: "inherit", strokeWidth: 1.5 }} /> Bestand uploaden
               </button>
             </div>
 
