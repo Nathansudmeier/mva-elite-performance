@@ -205,7 +205,7 @@ export default function Layout({ children, currentPageName }) {
       </header>
 
       {/* Sidebar desktop */}
-      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col z-40 overflow-y-auto" style={{ backgroundColor: "rgba(28,14,4,0.90)", borderRight: "1px solid rgba(255,107,0,0.15)", backdropFilter: "blur(12px)" }}>
+      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col z-40 overflow-y-auto" style={{ backgroundColor: "rgba(0,0,0,0.35)", borderRight: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)" }}>
         <nav className="flex-1 py-4 px-3 space-y-1">
           {isSpeelsterUser ? (
             <>
@@ -276,7 +276,7 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Bottom nav mobile */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40" style={{ backgroundColor: "rgba(28,14,4,0.95)", borderTop: "1px solid rgba(255,107,0,0.15)", backdropFilter: "blur(12px)" }}>
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40" style={{ backgroundColor: "rgba(20,10,2,0.90)", borderTop: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", paddingBottom: "20px", paddingTop: "10px" }}>
         <div className="flex justify-around">
           {(isSpeelsterUser 
             ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], { name: "Ontwikkeling", icon: "trending-up", page: "SelfReflection" }]
