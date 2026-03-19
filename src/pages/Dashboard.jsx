@@ -136,7 +136,7 @@ export default function Dashboard() {
       <div className="md:hidden px-1 pt-1">
         <div className="flex items-baseline gap-2">
           <span style={{ fontSize: "36px", fontWeight: 700, color: "#ffffff", letterSpacing: "-1px", lineHeight: 1 }}>{winPct}%</span>
-          <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.50)" }}>winst</span>
+          <span style={{ fontSize: "12px", fontWeight: 600, color: "#FF8C3A" }}>winst</span>
         </div>
         <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "4px" }}>
           {wins} overwinningen · {draws} gelijk · {losses} verlies
@@ -144,7 +144,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── MOBIEL 2×2 METRIC GRID ── */}
-      <div className="md:hidden" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", margin: "0 0 0 0" }}>
+      <div className="md:hidden" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "20px" }}>
 
         {/* Card 1: Aanwezigheid */}
         <div className="glass p-4">
@@ -364,7 +364,7 @@ export default function Dashboard() {
       <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
 
       {/* BLOK 4: Groepsfysiek */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
         <div className="glass p-6">
           <p className="t-label mb-3">Gemiddeld Yo-Yo Niveau</p>
           <p className="t-metric-orange">{avgLatestYoyo}</p>

@@ -149,7 +149,7 @@ export default function Layout({ children, currentPageName }) {
       <IOSInstallBanner />
 
       {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 z-50" style={{ backgroundColor: "rgba(28,14,4,0.85)", borderBottom: "1px solid rgba(255,107,0,0.15)", backdropFilter: "blur(12px)" }}>
+      <header className="fixed top-0 left-0 right-0 z-50" style={{ background: "linear-gradient(180deg, rgba(255,107,0,0.22) 0%, rgba(28,14,4,0.88) 100%)", borderBottom: "1px solid rgba(255,107,0,0.20)", backdropFilter: "blur(14px)" }}>
         <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3">
             <Link to={createPageUrl("Dashboard")} className="flex items-center gap-2">
@@ -268,21 +268,23 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </main>
 
-      {/* Bottom nav mobile */}
+      {/* Bottom nav mobile — scrollable */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40" style={{ backgroundColor: "rgba(20,10,2,0.90)", borderTop: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", paddingBottom: "20px", paddingTop: "10px" }}>
-        <div className="flex justify-around">
-          {(isSpeelsterUser 
-            ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], { name: "Ontwikkeling", icon: "trending-up", page: "SelfReflection" }]
-            : [mainNavItems[0], mainNavItems[1], mainNavItems[2], mainNavItems[3]]
-          ).map((item) => (
-            <NavLink 
-              key={item.page}
-              item={item} 
-              currentPageName={currentPageName} 
-              onClick={() => setMobileOpen(false)}
-              variant="mobile-tab"
-            />
-          ))}
+        <div className="overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+          <div className="flex" style={{ minWidth: "max-content", paddingLeft: "8px", paddingRight: "8px" }}>
+            {(isSpeelsterUser
+              ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], mainNavItems[3], { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }, ...desenvolvidoItems]
+              : [...mainNavItems, ...secondaryNavItems, ...desenvolvidoItems]
+            ).map((item) => (
+              <NavLink
+                key={item.page}
+                item={item}
+                currentPageName={currentPageName}
+                onClick={() => setMobileOpen(false)}
+                variant="mobile-tab"
+              />
+            ))}
+          </div>
         </div>
       </nav>
     </div>
