@@ -138,135 +138,78 @@ function AccountBeheerContent() {
   const trainerUsers = users.filter(u => u.role === "trainer");
   const ongekoppeld = users.filter(u => u.role !== "speelster" && u.role !== "trainer" && u.role !== "admin");
 
+  const inputStyle = { background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" };
+  const selectStyle = { background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" };
+  const dialogStyle = { background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" };
+
+  const UserRow = ({ u, linked, onLink, linkLabel }) => (
+    <div className="flex items-center gap-3 py-3" style={{ borderBottom: "0.5px solid rgba(255,255,255,0.08)" }}>
+      <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold overflow-hidden shrink-0" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
+        {linked?.photo_url ? <img src={linked.photo_url} alt="" className="w-full h-full object-cover" /> : (u.full_name?.[0] || u.email?.[0])}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="t-card-title truncate">{u.full_name || u.email}</p>
+        <p className="t-tertiary truncate">{u.email}</p>
+        {linked ? (
+          <p className="flex items-center gap-1 mt-0.5" style={{ fontSize: "11px", color: "#FF8C3A" }}>
+            <UserCheck size={10} /> {linkLabel}
+          </p>
+        ) : (
+          <p style={{ fontSize: "11px", color: "#f87171", marginTop: "2px" }}>Niet gekoppeld</p>
+        )}
+      </div>
+      <button onClick={() => onLink(u)} className="badge" style={{ background: "rgba(255,107,0,0.12)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.25)", cursor: "pointer", height: "30px" }}>
+        <LinkIcon size={10} className="mr-1" /> Koppel
+      </button>
+    </div>
+  );
+
   return (
     <div className="space-y-6 pb-20">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-500 text-[#FF6B00]">Accountbeheer</h1>
-          <p className="text-[#888888] text-sm">{speelsters.length} speelsters · {trainerUsers.length} trainers</p>
+          <h1 className="t-page-title">Accountbeheer</h1>
+          <p className="t-secondary">{speelsters.length} speelsters · {trainerUsers.length} trainers</p>
         </div>
-        <Button onClick={() => setInviteOpen(true)} className="bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-          <Plus size={16} className="mr-1" /> Uitnodigen
-        </Button>
+        <button onClick={() => setInviteOpen(true)} className="btn-secondary">
+          <Plus size={14} /> Uitnodigen
+        </button>
       </div>
 
-      {/* Trainers */}
       {trainerUsers.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3">Trainers</h2>
-          <div className="space-y-2">
-            {trainerUsers.map(u => {
-              const linked = getLinkedTrainer(u);
-              return (
-                <div key={u.id} className="flex items-center gap-3 py-2 border-b border-[#E8E6E1] last:border-0">
-                  <div className="w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center text-white text-sm font-500 overflow-hidden shrink-0">
-                    {linked?.photo_url ? (
-                      <img src={linked.photo_url} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      u.full_name?.[0] || u.email?.[0]
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-500 text-[#1A1A1A] truncate">{u.full_name || u.email}</p>
-                    <p className="text-xs text-[#888888] truncate">{u.email}</p>
-                    {linked ? (
-                      <p className="text-xs text-[#FF6B00] flex items-center gap-1 mt-0.5">
-                        <UserCheck size={10} /> {linked.name}{linked.role_title ? ` · ${linked.role_title}` : ""}
-                      </p>
-                    ) : (
-                      <p className="text-xs text-[#C0392B] mt-0.5">Niet gekoppeld aan trainersprofiel</p>
-                    )}
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => openLink(u)} className="border-[#E8E6E1] text-[#FF6B00] text-xs shrink-0">
-                    <LinkIcon size={12} className="mr-1" /> Koppel
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
+        <div className="glass p-4">
+          <p className="t-label mb-3">Trainers</p>
+          <div>{trainerUsers.map(u => { const linked = getLinkedTrainer(u); return <UserRow key={u.id} u={u} linked={linked} onLink={openLink} linkLabel={`${linked?.name}${linked?.role_title ? ` · ${linked.role_title}` : ""}`} />; })}</div>
         </div>
       )}
 
-      {/* Speelsters */}
-      <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-        <h2 className="font-500 text-sm uppercase tracking-wide text-[#FF6B00] mb-3">Speelsters</h2>
-        {speelsters.length === 0 ? (
-          <p className="text-sm text-[#888888]">Nog geen speelster-accounts aangemaakt.</p>
-        ) : (
-          <div className="space-y-2">
-            {speelsters.map(u => {
-              const linked = getLinkedPlayer(u);
-              return (
-                <div key={u.id} className="flex items-center gap-3 py-2 border-b border-[#E8E6E1] last:border-0">
-                  <div className="w-8 h-8 rounded-full bg-[#FFF3EB] flex items-center justify-center text-[#FF6B00] text-sm font-500 overflow-hidden shrink-0">
-                    {linked?.photo_url ? (
-                      <img src={linked.photo_url} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      u.full_name?.[0] || u.email?.[0]
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-500 text-[#1A1A1A] truncate">{u.full_name || u.email}</p>
-                    <p className="text-xs text-[#888888] truncate">{u.email}</p>
-                    {linked ? (
-                      <p className="text-xs text-[#FF6B00] flex items-center gap-1 mt-0.5">
-                        <UserCheck size={10} /> Gekoppeld aan {linked.name}
-                      </p>
-                    ) : (
-                      <p className="text-xs text-[#C0392B] mt-0.5">Niet gekoppeld aan profiel</p>
-                    )}
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => openLink(u)} className="border-[#E8E6E1] text-[#FF6B00] text-xs shrink-0">
-                    <LinkIcon size={12} className="mr-1" /> Koppel
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
+      <div className="glass p-4">
+        <p className="t-label mb-3">Speelsters</p>
+        {speelsters.length === 0 ? <p className="t-tertiary">Nog geen speelster-accounts aangemaakt.</p> : (
+          <div>{speelsters.map(u => { const linked = getLinkedPlayer(u); return <UserRow key={u.id} u={u} linked={linked} onLink={openLink} linkLabel={`Gekoppeld aan ${linked?.name}`} />; })}</div>
         )}
       </div>
 
-      {/* Ongekoppelde users */}
       {ongekoppeld.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h2 className="font-500 text-sm uppercase tracking-wide text-[#888888] mb-3">Ongekoppeld</h2>
-          <div className="space-y-2">
-            {ongekoppeld.map(u => (
-              <div key={u.id} className="flex items-center gap-3 py-2 border-b border-[#E8E6E1] last:border-0">
-                <div className="w-8 h-8 rounded-full bg-[#F7F5F2] flex items-center justify-center text-[#888888] text-sm font-500 shrink-0">
-                  {u.full_name?.[0] || u.email?.[0]}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-500 text-[#1A1A1A] truncate">{u.full_name || u.email}</p>
-                  <p className="text-xs text-[#888888] truncate">{u.email}</p>
-                  <p className="text-xs text-[#C0392B] mt-0.5">Nog niet gekoppeld aan profiel</p>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => openLink(u)} className="border-[#E8E6E1] text-[#FF6B00] text-xs shrink-0">
-                  <LinkIcon size={12} className="mr-1" /> Koppel
-                </Button>
-              </div>
-            ))}
-          </div>
+        <div className="glass p-4">
+          <p className="t-label mb-3">Ongekoppeld</p>
+          <div>{ongekoppeld.map(u => <UserRow key={u.id} u={u} linked={null} onLink={openLink} linkLabel="" />)}</div>
         </div>
       )}
 
       {/* Invite Dialog */}
       <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
-        <DialogContent className="max-w-sm border-[#E8E6E1] bg-white">
-          <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A]">Gebruiker Uitnodigen</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-sm" style={dialogStyle}>
+          <DialogHeader><DialogTitle className="t-page-title">Gebruiker Uitnodigen</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">E-mailadres *</label>
-              <Input placeholder="naam@email.nl" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} className="border-[#E8E6E1] text-[#1A1A1A] bg-white" />
+              <label className="t-label mb-1 block">E-mailadres *</label>
+              <Input placeholder="naam@email.nl" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} style={inputStyle} />
             </div>
             <div>
-              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Rol</label>
+              <label className="t-label mb-1 block">Rol</label>
               <Select value={inviteRole} onValueChange={v => { setInviteRole(v); setInvitePlayerId(""); }}>
-                <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
-                  <SelectValue />
-                </SelectTrigger>
+                <SelectTrigger style={selectStyle}><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="speelster">Speelster</SelectItem>
                   <SelectItem value="trainer">Trainer</SelectItem>
@@ -275,43 +218,32 @@ function AccountBeheerContent() {
             </div>
             {inviteRole === "speelster" && (
               <div>
-                <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Koppel aan speelster</label>
+                <label className="t-label mb-1 block">Koppel aan speelster</label>
                 <Select value={invitePlayerId} onValueChange={setInvitePlayerId}>
-                  <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
-                    <SelectValue placeholder="Selecteer spelersprofiel…" />
-                  </SelectTrigger>
+                  <SelectTrigger style={selectStyle}><SelectValue placeholder="Selecteer spelersprofiel…" /></SelectTrigger>
                   <SelectContent>
-                    {players.filter(p => p.active !== false).map(p => (
-                      <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>
-                    ))}
+                    {players.filter(p => p.active !== false).map(p => <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>)}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-[#AAAAAA] mt-1">Optioneel — je kunt dit later ook nog koppelen.</p>
+                <p className="t-tertiary mt-1">Optioneel — je kunt dit later ook nog koppelen.</p>
               </div>
             )}
-            <p className="text-xs text-[#888888]">De gebruiker ontvangt een uitnodigingsmail om een wachtwoord in te stellen.</p>
-            <Button onClick={handleInvite} disabled={inviting || !inviteEmail} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-              {inviting ? "Uitnodigen..." : "Uitnodiging Versturen"}
-            </Button>
+            <p className="t-tertiary">De gebruiker ontvangt een uitnodigingsmail om een wachtwoord in te stellen.</p>
+            <button onClick={handleInvite} disabled={inviting || !inviteEmail} className="btn-primary">{inviting ? "Uitnodigen..." : "Uitnodiging Versturen"}</button>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Link Dialog */}
       <Dialog open={linkOpen} onOpenChange={setLinkOpen}>
-        <DialogContent className="max-w-sm border-[#E8E6E1] bg-white">
-          <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A]">Gebruiker Bewerken</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-sm" style={dialogStyle}>
+          <DialogHeader><DialogTitle className="t-page-title">Gebruiker Bewerken</DialogTitle></DialogHeader>
           <div className="space-y-4">
-            <p className="text-sm text-[#888888]">Account: <strong className="text-[#1A1A1A]">{linkUser?.full_name || linkUser?.email}</strong></p>
-
+            <p className="t-secondary">Account: <strong className="text-white">{linkUser?.full_name || linkUser?.email}</strong></p>
             <div>
-              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Rol</label>
+              <label className="t-label mb-1 block">Rol</label>
               <Select value={linkRole} onValueChange={(v) => { setLinkRole(v); setLinkPlayerId(""); setLinkTrainerId(""); }}>
-                <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
-                  <SelectValue />
-                </SelectTrigger>
+                <SelectTrigger style={selectStyle}><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="speelster">Speelster</SelectItem>
                   <SelectItem value="trainer">Trainer</SelectItem>
@@ -319,84 +251,50 @@ function AccountBeheerContent() {
                 </SelectContent>
               </Select>
             </div>
-
             {linkRole === "trainer" ? (
               <div>
-                <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Koppel aan trainersprofiel</label>
+                <label className="t-label mb-1 block">Koppel aan trainersprofiel</label>
                 <Select value={linkTrainerId} onValueChange={setLinkTrainerId}>
-                  <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
-                    <SelectValue placeholder="Selecteer trainersprofiel…" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {trainers.map(t => (
-                      <SelectItem key={t.id} value={t.id}>{t.name}{t.role_title ? ` · ${t.role_title}` : ""}</SelectItem>
-                    ))}
-                  </SelectContent>
+                  <SelectTrigger style={selectStyle}><SelectValue placeholder="Selecteer trainersprofiel…" /></SelectTrigger>
+                  <SelectContent>{trainers.map(t => <SelectItem key={t.id} value={t.id}>{t.name}{t.role_title ? ` · ${t.role_title}` : ""}</SelectItem>)}</SelectContent>
                 </Select>
-                <Button variant="outline" onClick={() => setNewTrainerOpen(true)} className="w-full border-dashed border-[#FF6B00] text-[#FF6B00] mt-2">
-                  <Plus size={14} className="mr-1" /> Nieuw trainersprofiel aanmaken
-                </Button>
+                <button onClick={() => setNewTrainerOpen(true)} className="btn-secondary w-full mt-2" style={{ width: "100%" }}>
+                  <Plus size={14} /> Nieuw trainersprofiel aanmaken
+                </button>
               </div>
             ) : linkRole === "speelster" ? (
               <div>
-                <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Koppel aan spelersprofiel</label>
+                <label className="t-label mb-1 block">Koppel aan spelersprofiel</label>
                 <Select value={linkPlayerId} onValueChange={setLinkPlayerId}>
-                  <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] bg-white">
-                    <SelectValue placeholder="Selecteer spelersprofiel…" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {players.filter(p => p.active !== false).map(p => (
-                      <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>
-                    ))}
-                  </SelectContent>
+                  <SelectTrigger style={selectStyle}><SelectValue placeholder="Selecteer spelersprofiel…" /></SelectTrigger>
+                  <SelectContent>{players.filter(p => p.active !== false).map(p => <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
             ) : null}
-
-            <Button
-              onClick={() => linkMutation.mutate()}
-              disabled={linkMutation.isPending}
-              className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white"
-            >
-              {linkMutation.isPending ? "Opslaan..." : "Opslaan"}
-            </Button>
+            <button onClick={() => linkMutation.mutate()} disabled={linkMutation.isPending} className="btn-primary">{linkMutation.isPending ? "Opslaan..." : "Opslaan"}</button>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* New Trainer Profile Dialog */}
       <Dialog open={newTrainerOpen} onOpenChange={setNewTrainerOpen}>
-        <DialogContent className="max-w-sm border-[#E8E6E1] bg-white">
-          <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A]">Nieuw Trainersprofiel</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-sm" style={dialogStyle}>
+          <DialogHeader><DialogTitle className="t-page-title">Nieuw Trainersprofiel</DialogTitle></DialogHeader>
           <div className="space-y-4">
-            {/* Photo */}
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-[#F7F5F2] border border-[#E8E6E1] overflow-hidden flex items-center justify-center text-[#888888] text-xl font-500 shrink-0">
+              <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center font-bold text-xl shrink-0" style={{ background: "rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.5)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
                 {newTrainerPhoto ? <img src={newTrainerPhoto} alt="" className="w-full h-full object-cover" /> : (newTrainerName?.[0] || "?")}
               </div>
-              <label className="cursor-pointer flex items-center gap-2 text-sm text-[#FF6B00] border border-[#FF6B00] rounded-lg px-3 py-2">
+              <label className="cursor-pointer btn-secondary" style={{ height: "36px", fontSize: "13px" }}>
                 <Upload size={14} />
                 {uploadingPhoto ? "Uploaden..." : "Foto uploaden"}
                 <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} disabled={uploadingPhoto} />
               </label>
             </div>
-            <div>
-              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Naam *</label>
-              <Input placeholder="Volledige naam" value={newTrainerName} onChange={e => setNewTrainerName(e.target.value)} className="border-[#E8E6E1] bg-white" />
-            </div>
-            <div>
-              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Functietitel</label>
-              <Input placeholder="bijv. Hoofdtrainer, Assistent" value={newTrainerTitle} onChange={e => setNewTrainerTitle(e.target.value)} className="border-[#E8E6E1] bg-white" />
-            </div>
-            <div>
-              <label className="text-xs text-[#888888] uppercase tracking-wide mb-1 block">Telefoonnummer</label>
-              <Input placeholder="+31 6 ..." value={newTrainerPhone} onChange={e => setNewTrainerPhone(e.target.value)} className="border-[#E8E6E1] bg-white" />
-            </div>
-            <Button onClick={handleCreateTrainer} disabled={savingTrainer || !newTrainerName} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-              {savingTrainer ? "Opslaan..." : "Profiel Aanmaken"}
-            </Button>
+            <div><label className="t-label mb-1 block">Naam *</label><Input placeholder="Volledige naam" value={newTrainerName} onChange={e => setNewTrainerName(e.target.value)} style={inputStyle} /></div>
+            <div><label className="t-label mb-1 block">Functietitel</label><Input placeholder="bijv. Hoofdtrainer, Assistent" value={newTrainerTitle} onChange={e => setNewTrainerTitle(e.target.value)} style={inputStyle} /></div>
+            <div><label className="t-label mb-1 block">Telefoonnummer</label><Input placeholder="+31 6 ..." value={newTrainerPhone} onChange={e => setNewTrainerPhone(e.target.value)} style={inputStyle} /></div>
+            <button onClick={handleCreateTrainer} disabled={savingTrainer || !newTrainerName} className="btn-primary">{savingTrainer ? "Opslaan..." : "Profiel Aanmaken"}</button>
           </div>
         </DialogContent>
       </Dialog>
