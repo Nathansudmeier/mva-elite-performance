@@ -79,36 +79,31 @@ export default function PlayerRatingForm() {
     <div className="pb-24 space-y-4 max-w-lg mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button onClick={() => navigate(-1)} className="p-2 rounded-lg hover:bg-[#F7F5F2]">
-          <ArrowLeft size={20} color="#FF6B00" />
+        <button onClick={() => navigate(-1)} className="p-2 rounded-xl" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
+          <ArrowLeft size={20} className="text-white" />
         </button>
         <div>
-          <h1 className="text-xl font-500 text-[#FF6B00]">Beoordeling</h1>
-          {player && <p className="text-sm text-[#888888]">{player.name}</p>}
-          {isReadOnly && <p className="text-xs text-[#888888] mt-0.5">Alleen inzien</p>}
+          <h1 className="t-page-title">Beoordeling</h1>
+          {player && <p className="t-secondary">{player.name}</p>}
+          {isReadOnly && <p className="t-tertiary mt-0.5">Alleen inzien</p>}
         </div>
       </div>
 
       {/* Speler selectie — alleen voor trainers */}
       {!isReadOnly && (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1]">
-          <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-2 block">Speler</label>
+        <div className="glass p-5">
+          <label className="t-label mb-2 block">Speler</label>
           {playersLoading ? (
-            <div className="h-10 bg-[#F7F5F2] rounded-xl animate-pulse" />
+            <div className="h-10 rounded-xl animate-pulse" style={{ background: "rgba(255,255,255,0.08)" }} />
           ) : (
             <Select value={selectedPlayerId} onValueChange={handlePlayerChange}>
-              <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A] w-full" style={{ backgroundColor: "#FFFFFF" }}>
+              <SelectTrigger style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }}>
                 <SelectValue placeholder="Selecteer een speler..." />
               </SelectTrigger>
               <SelectContent>
-                {players
-                  .filter(p => p.active !== false)
-                  .sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99))
-                  .map((p) => (
-                    <SelectItem key={p.id} value={p.id}>
-                      {p.shirt_number ? `#${p.shirt_number} ` : ""}{p.name}
-                    </SelectItem>
-                  ))}
+                {players.filter(p => p.active !== false).sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99)).map((p) => (
+                  <SelectItem key={p.id} value={p.id}>{p.shirt_number ? `#${p.shirt_number} ` : ""}{p.name}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           )}
@@ -116,48 +111,47 @@ export default function PlayerRatingForm() {
       )}
 
       {/* Meting & Datum */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] space-y-4">
+      <div className="glass p-5 space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-1 block">Meetmoment</label>
+            <label className="t-label mb-1 block">Meetmoment</label>
             {isReadOnly ? (
               <div className="flex gap-2 flex-wrap">
                 {["Meting 1", "Meting 2", "Meting 3"].map((m) => (
                   <button key={m} onClick={() => setField("meting", m)}
-                    className={`px-3 py-1.5 rounded-full text-sm transition-colors ${form.meting === m ? "bg-[#FF6B00] text-white" : "bg-white text-[#888888] border border-[#E8E6E1] hover:border-[#FF6B00] hover:text-[#FF6B00]"}`}
+                    className="px-3 py-1.5 rounded-full text-xs font-bold transition-all"
+                    style={form.meting === m ? { background: "#FF6B00", color: "#fff" } : { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", border: "0.5px solid rgba(255,255,255,0.15)" }}
                   >{m}</button>
                 ))}
               </div>
             ) : (
               <Select value={form.meting} onValueChange={(v) => setField("meting", v)}>
-                <SelectTrigger className="border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: "#FFFFFF" }}>
+                <SelectTrigger style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {["Meting 1", "Meting 2", "Meting 3"].map((m) => (
-                    <SelectItem key={m} value={m}>{m}</SelectItem>
-                  ))}
+                  {["Meting 1", "Meting 2", "Meting 3"].map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
                 </SelectContent>
               </Select>
             )}
           </div>
           <div>
-            <label className="text-xs text-[#888888] font-500 uppercase tracking-wider mb-1 block">Datum</label>
-            <Input type="date" value={form.date} onChange={(e) => setField("date", e.target.value)} className="border-[#E8E6E1] text-[#1A1A1A]" style={{ backgroundColor: "#FFFFFF" }} readOnly={isReadOnly} />
+            <label className="t-label mb-1 block">Datum</label>
+            <Input type="date" value={form.date} onChange={(e) => setField("date", e.target.value)} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} readOnly={isReadOnly} />
           </div>
         </div>
         {totalAvg > 0 && (
-          <div className="flex items-center justify-between rounded-xl px-4 py-3" style={{ backgroundColor: "#FFF3EB" }}>
-            <span className="text-[#888888] text-sm font-500">Totaalgemiddelde</span>
-            <span className="text-xl font-500" style={{ color: "#FF6B00" }}>{totalAvg}/5</span>
+          <div className="flex items-center justify-between rounded-xl px-4 py-3" style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.3)" }}>
+            <span className="t-secondary">Totaalgemiddelde</span>
+            <span className="t-metric-orange" style={{ fontSize: "20px" }}>{totalAvg}/5</span>
           </div>
         )}
       </div>
 
       {/* Category blocks */}
-      {!selectedPlayerId && <p className="text-[#888888] text-sm text-center py-4">Selecteer eerst een speler om de beoordeling in te vullen.</p>}
+      {!selectedPlayerId && <p className="t-tertiary text-center py-4">Selecteer eerst een speler om de beoordeling in te vullen.</p>}
       {selectedPlayerId && Object.entries(CATEGORIES).map(([cat, criteria]) => (
-        <div key={cat} className="rounded-2xl p-4 bg-white shadow-sm border border-[#E8E6E1]">
+        <div key={cat} className="glass p-4">
           <RatingCategoryBlock
             title={cat}
             criteria={criteria}
@@ -170,16 +164,12 @@ export default function PlayerRatingForm() {
 
       {/* Save — alleen voor trainers */}
       {!isReadOnly && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 lg:sticky lg:bottom-auto bg-white border-t border-[#E8E6E1] shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 p-4 lg:sticky lg:bottom-auto" style={{ background: "rgba(20,10,2,0.90)", borderTop: "0.5px solid rgba(255,255,255,0.10)", backdropFilter: "blur(20px)" }}>
           <div className="max-w-lg mx-auto">
-            <Button
-              onClick={() => saveMutation.mutate()}
-              disabled={saveMutation.isPending}
-              className="w-full h-12 text-white font-500 text-base bg-[#FF6B00] hover:bg-[#E55A00] transition-colors"
-            >
-              <Save size={16} className="mr-2" />
+            <button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending} className="btn-primary">
+              <Save size={16} />
               {saveMutation.isPending ? "Opslaan..." : "Beoordeling Opslaan"}
-            </Button>
+            </button>
           </div>
         </div>
       )}

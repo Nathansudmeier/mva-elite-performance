@@ -15,17 +15,10 @@ function TeamFilter({ value, onChange }) {
   return (
     <div className="flex gap-2">
       {options.map(o => (
-        <button
-          key={o.value}
-          onClick={() => onChange(o.value)}
-          className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-            value === o.value
-              ? "bg-[#FF6B00] text-white"
-              : "bg-white text-[#888888] border border-[#E8E6E1] hover:border-[#FF6B00] hover:text-[#FF6B00]"
-          }`}
-        >
-          {o.label}
-        </button>
+        <button key={o.value} onClick={() => onChange(o.value)}
+          className="px-3 py-1.5 rounded-full text-xs font-bold transition-all"
+          style={value === o.value ? { background: "#FF6B00", color: "#fff" } : { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", border: "0.5px solid rgba(255,255,255,0.15)" }}
+        >{o.label}</button>
       ))}
     </div>
   );
