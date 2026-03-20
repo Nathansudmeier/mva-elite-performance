@@ -135,10 +135,10 @@ export default function Dashboard() {
       {/* ── HERO STAT (alle viewports) ── */}
       <div className="px-1 pt-2">
         <div className="flex items-baseline gap-2">
-          <span style={{ fontSize: "42px", fontWeight: 700, color: "#ffffff", letterSpacing: "-1.5px", lineHeight: 1 }}>{winPct}%</span>
+          <span style={{ fontSize: "48px", fontWeight: 700, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{winPct}%</span>
           <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.50)" }}>winst</span>
         </div>
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "4px" }}>
+        <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.45)", marginTop: "4px" }}>
           {wins} overwinningen · {draws} gelijk · {losses} verlies · Seizoen 2025-26
         </p>
       </div>
