@@ -212,13 +212,13 @@ export default function Layout({ children, currentPageName }) {
             </>
           )}
         </nav>
-        <div className="px-3 pb-4">
+        <div className="px-3 pb-4" style={{ borderTop: "0.5px solid rgba(255,255,255,0.06)", paddingTop: "12px" }}>
           <button
             onClick={() => base44.auth.logout()}
             className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm w-full transition-colors"
-            style={{ color: "#f87171" }}
+            style={{ color: "rgba(248,113,113,0.65)" }}
           >
-            <i className="ti ti-logout" style={{ fontSize: "20px", color: "#f87171" }} />
+            <i className="ti ti-logout" style={{ fontSize: "20px", color: "rgba(248,113,113,0.65)" }} />
             Uitloggen
           </button>
         </div>
