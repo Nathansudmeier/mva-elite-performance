@@ -316,8 +316,8 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* ── 3-KOLOMS GRID ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px" }}>
+      {/* ── 3-KOLOMS GRID (1-col op mobiel) ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px" }} className="mobile-grid-1col">
 
         {/* Kolom 1: Wedstrijden */}
         <div className="glass p-4">
