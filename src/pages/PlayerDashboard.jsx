@@ -136,6 +136,9 @@ export default function PlayerDashboard() {
         yoyo={yoyo}
       />
 
+      {/* Today Training Card */}
+      <TodayTrainingCard playerId={playerId} />
+
       {/* Next Match Card */}
       <NextMatchCard matches={matches} playerId={playerId} />
 
