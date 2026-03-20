@@ -19,7 +19,6 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
   const [expanded, setExpanded] = useState(true);
   const [newPoint, setNewPoint] = useState("");
   const [mobile] = useState(isMobile);
-  const [diagramMode, setDiagramMode] = useState(exercise.field_photo ? "photo" : "draw");
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
 

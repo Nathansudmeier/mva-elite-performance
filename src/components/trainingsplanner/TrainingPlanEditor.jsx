@@ -90,6 +90,8 @@ export default function TrainingPlanEditor({ players }) {
   // Drag & drop reorder (simple touch/mouse)
   const [dragging, setDragging] = useState(null);
   const [dragOver, setDragOver] = useState(null);
+  const [showLibrary, setShowLibrary] = useState(false);
+  const [libraryTargetIdx, setLibraryTargetIdx] = useState(null);
 
   function onDragStart(i) { setDragging(i); }
   function onDragEnter(i) { setDragOver(i); }
