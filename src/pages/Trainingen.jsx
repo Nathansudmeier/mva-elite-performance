@@ -281,7 +281,8 @@ export default function Trainingen() {
           </div>
         </DialogContent>
       </Dialog>
-      </>)}
+      </>
+      )}
     </div>
   );
 }
