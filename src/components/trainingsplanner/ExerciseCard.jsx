@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { ChevronDown, ChevronUp, Plus, X, GripVertical } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { ChevronDown, ChevronUp, Plus, X, GripVertical, Camera, Pencil } from "lucide-react";
 import FieldWhiteboard from "./FieldWhiteboard";
+import { base44 } from "@/api/base44Client";
 
 const GROUP_COLORS = [
   { id: "red", label: "Rood", hex: "#f87171" },
