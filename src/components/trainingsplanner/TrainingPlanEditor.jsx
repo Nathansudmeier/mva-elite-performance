@@ -72,6 +72,7 @@ export default function TrainingPlanEditor({ players }) {
     setSaving(true);
     await updatePlan.mutateAsync({ id: editingPlan.id, data: editingPlan });
     setSaving(false);
+    closePlan();
   }
 
   function updateExercise(idx, updated) {
