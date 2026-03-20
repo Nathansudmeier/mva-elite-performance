@@ -155,6 +155,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-5 pb-20 lg:pb-6">
       <MatchDayBanner />
+      <TrainerDayBadge />
 
       {/* ── HERO STAT (alle viewports) ── */}
       <div className="px-1 pt-2">
