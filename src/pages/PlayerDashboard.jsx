@@ -33,14 +33,6 @@ export default function PlayerDashboard() {
     date: new Date().toISOString().split("T")[0],
     sleep: "", fatigue: "", muscle_pain: "", notes: ""
   });
-  const [reflectionForm, setReflectionForm] = useState({
-    date: new Date().toISOString().split("T")[0],
-    match_opponent: "",
-    goal_1_rating: "", goal_1_notes: "",
-    goal_2_rating: "", goal_2_notes: "",
-    goal_3_rating: "", goal_3_notes: "",
-    general_notes: ""
-  });
 
   const { data: player } = useQuery({
     queryKey: ["myPlayer", playerId],
