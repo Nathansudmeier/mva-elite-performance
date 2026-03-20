@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Play, ChevronLeft } from "lucide-react";
+import { Plus, Play, ChevronLeft, BookOpen } from "lucide-react";
+import ExerciseLibraryModal from "./ExerciseLibraryModal";
 import ExerciseCard from "./ExerciseCard";
 import LiveTrainingMode from "./LiveTrainingMode";
 import { format, parseISO } from "date-fns";
