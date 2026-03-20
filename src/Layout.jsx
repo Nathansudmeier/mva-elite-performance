@@ -264,25 +264,67 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </main>
 
-      {/* Bottom nav mobile — scrollable */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40" style={{ backgroundColor: "rgba(20,10,2,0.90)", borderTop: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", paddingBottom: "20px", paddingTop: "10px" }}>
-        <div className="overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-          <div className="flex" style={{ minWidth: "max-content", paddingLeft: "8px", paddingRight: "8px" }}>
-            {(isSpeelsterUser
-              ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], mainNavItems[3], { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }, ...desenvolvidoItems]
-              : [...mainNavItems, ...secondaryNavItems, ...desenvolvidoItems]
-            ).map((item) => (
-              <NavLink
-                key={item.page}
-                item={item}
-                currentPageName={currentPageName}
-                onClick={() => setMobileOpen(false)}
-                variant="mobile-tab"
-              />
-            ))}
-          </div>
-        </div>
-      </nav>
+      {/* Bottom nav mobile — max 5 items + Meer knop */}
+      {(() => {
+        const allMobileItems = isSpeelsterUser
+          ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], mainNavItems[3], { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }, ...desenvolvidoItems]
+          : [...mainNavItems, ...secondaryNavItems, ...desenvolvidoItems];
+        const visibleItems = allMobileItems.slice(0, 5);
+        const overflowItems = allMobileItems.slice(5);
+        return (
+          <>
+            <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40" style={{ backgroundColor: "rgba(20,10,2,0.90)", borderTop: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", paddingBottom: "20px", paddingTop: "10px" }}>
+              <div className="flex justify-around" style={{ paddingLeft: "8px", paddingRight: "8px" }}>
+                {visibleItems.map((item) => (
+                  <NavLink
+                    key={item.page}
+                    item={item}
+                    currentPageName={currentPageName}
+                    onClick={() => setMobileOpen(false)}
+                    variant="mobile-tab"
+                  />
+                ))}
+                {overflowItems.length > 0 && (
+                  <button
+                    onClick={() => setMeerOpen(true)}
+                    className="flex flex-col items-center justify-center py-3 px-2 transition-colors"
+                  >
+                    <i className="ti ti-dots" style={{ fontSize: "22px", color: "rgba(255,255,255,0.40)" }} />
+                    <span style={{ fontSize: "11px", marginTop: "4px", fontWeight: 600, color: "rgba(255,255,255,0.50)" }}>Meer</span>
+                  </button>
+                )}
+              </div>
+            </nav>
+            {/* Bottom sheet voor extra items */}
+            {meerOpen && (
+              <div className="lg:hidden fixed inset-0 z-50" onClick={() => setMeerOpen(false)}>
+                <div
+                  className="absolute bottom-0 left-0 right-0"
+                  style={{ background: "rgba(20,10,2,0.95)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", borderTop: "0.5px solid rgba(255,255,255,0.08)", borderRadius: "20px 20px 0 0", padding: "20px 16px 36px" }}
+                  onClick={e => e.stopPropagation()}
+                >
+                  <div style={{ width: "36px", height: "4px", borderRadius: "2px", background: "rgba(255,255,255,0.20)", margin: "0 auto 16px" }} />
+                  <p style={{ fontSize: "13px", fontWeight: 600, color: "rgba(255,255,255,0.50)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.07em" }}>Meer</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
+                    {overflowItems.map((item) => {
+                      const isActive = currentPageName === item.page;
+                      return (
+                        <NavLink
+                          key={item.page}
+                          item={item}
+                          currentPageName={currentPageName}
+                          onClick={() => setMeerOpen(false)}
+                          variant="mobile-tab"
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        );
+      })()}
     </div>
   );
 }
