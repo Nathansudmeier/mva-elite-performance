@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, Tooltip } from "recharts";
-import { Star } from "lucide-react";
+import { Star, Save } from "lucide-react";
 import PlayerGreetingHeader from "../components/dashboard/PlayerGreetingHeader";
 import PlayerMetricGrid from "../components/dashboard/PlayerMetricGrid";
 import PlayerIOPGoals from "../components/dashboard/PlayerIOPGoals";
