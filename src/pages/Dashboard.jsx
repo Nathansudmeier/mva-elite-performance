@@ -40,6 +40,7 @@ export default function Dashboard() {
   const { data: wellnessLogs = [] } = useQuery({ queryKey: ["wellnessLogs"], queryFn: () => base44.entities.WellnessLog.list("-date") });
   const { data: selfReflections = [] } = useQuery({ queryKey: ["selfReflections"], queryFn: () => base44.entities.SelfReflection.list("-date") });
   const { data: teamPhotos = [], refetch: refetchPhotos } = useQuery({ queryKey: ["teamPhotos"], queryFn: () => base44.entities.TeamPhoto.list("-date") });
+  const { data: trainingPlans = [] } = useQuery({ queryKey: ["trainingPlans"], queryFn: () => base44.entities.TrainingPlan.list() });
 
   const activePlayers = players.filter((p) => p.active !== false);
 
