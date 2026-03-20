@@ -132,7 +132,8 @@ export default function Trainingen() {
       )}
 
       {/* Aanwezigheid tab content — only shown when active */}
-      {activeTab !== "planner" && (<>
+      {activeTab !== "planner" && (
+        <>
 
       {/* Week navigator */}
       <div className="glass overflow-hidden">
