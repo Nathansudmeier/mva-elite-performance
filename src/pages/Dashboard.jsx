@@ -9,6 +9,7 @@ import TrainerChampionsTrophy from "../components/dashboard/TrainerChampionsTrop
 import PhotoTimeline from "../components/photos/PhotoTimeline";
 import PhotoUpload from "../components/photos/PhotoUpload";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
+import TrainerDayBadge from "../components/dashboard/TrainerDayBadge";
 import { format, subDays, isAfter } from "date-fns";
 import { nl } from "date-fns/locale";
 
