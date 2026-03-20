@@ -267,6 +267,12 @@ export default function Dashboard() {
           onChange={e => setPlanDate(e.target.value)}
           style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#ffffff", outline: "none", colorScheme: "dark", marginBottom: "8px" }}
         />
+        {planDateHasPlan && planType === "Training" && (
+          <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "6px" }}>
+            <i className="ti ti-circle-check-filled" style={{ fontSize: "13px", color: "#4ade80" }} />
+            <span style={{ fontSize: "11px", color: "#4ade80", fontWeight: 600 }}>Plan aanwezig</span>
+          </div>
+        )}
         {planType === "Wedstrijd" && (
           <input
             type="text"
