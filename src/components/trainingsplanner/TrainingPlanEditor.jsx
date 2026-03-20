@@ -217,7 +217,12 @@ export default function TrainingPlanEditor({ players }) {
             {saving ? "Opslaan..." : "Opslaan"}
           </button>
           <button
-            onClick={async () => { await savePlan(); setLivePlan({ ...editingPlan }); }}
+            onClick={async () => {
+              setSaving(true);
+              await updatePlan.mutateAsync({ id: editingPlan.id, data: editingPlan });
+              setSaving(false);
+              setLivePlan({ ...editingPlan });
+            }}
             style={{ flex: 2, minHeight: "52px", background: "#FF6B00", border: "none", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
           >
             <Play size={16} /> Start training
