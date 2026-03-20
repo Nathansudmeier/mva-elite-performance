@@ -21,6 +21,7 @@ export default function Dashboard() {
   const [planDate, setPlanDate] = useState("");
   const [planOpponent, setPlanOpponent] = useState("");
   const [planSaving, setPlanSaving] = useState(false);
+  const [planExpanded, setPlanExpanded] = useState(false);
 
   useEffect(() => {
     if (!authLoading && isSpeelster) {
