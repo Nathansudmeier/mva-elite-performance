@@ -47,30 +47,30 @@ export default function TodayTrainingCard({ playerId }) {
           const groupColor = playerGroup ? (GROUP_COLOR_MAP[playerGroup.color] || "#FF8C3A") : null;
 
           return (
-            <div key={ex.id || i} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", background: "rgba(0,0,0,0.18)", borderRadius: "12px" }}>
-              {/* Foto thumbnail */}
+            <div key={ex.id || i} style={{ background: "rgba(0,0,0,0.18)", borderRadius: "12px", overflow: "hidden" }}>
+              {/* Foto bovenaan als aanwezig */}
               {ex.field_photo && (
-                <img src={ex.field_photo} alt="" style={{ width: "60px", height: "60px", borderRadius: "8px", objectFit: "cover", flexShrink: 0 }} />
+                <img src={ex.field_photo} alt="" style={{ width: "100%", maxHeight: "160px", objectFit: "cover", display: "block" }} />
               )}
-
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                  <span style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>{ex.name || "Oefenvorm"}</span>
-                  {playerGroup ? (
-                    <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "20px", background: groupColor + "30", border: `0.5px solid ${groupColor}`, color: groupColor, whiteSpace: "nowrap" }}>
-                      {playerGroup.name}
-                    </span>
-                  ) : (
-                    <span style={{ fontSize: "10px", fontWeight: 600, padding: "2px 8px", borderRadius: "20px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.45)", whiteSpace: "nowrap" }}>
-                      Niet ingedeeld
-                    </span>
-                  )}
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px" }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                    <span style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>{ex.name || "Oefenvorm"}</span>
+                    {playerGroup ? (
+                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "20px", background: groupColor + "30", border: `0.5px solid ${groupColor}`, color: groupColor, whiteSpace: "nowrap" }}>
+                        {playerGroup.name}
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: "10px", fontWeight: 600, padding: "2px 8px", borderRadius: "20px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.45)", whiteSpace: "nowrap" }}>
+                        Niet ingedeeld
+                      </span>
+                    )}
+                  </div>
                 </div>
+                {ex.duration_minutes > 0 && (
+                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", flexShrink: 0 }}>{ex.duration_minutes} min</span>
+                )}
               </div>
-
-              {ex.duration_minutes > 0 && (
-                <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", flexShrink: 0 }}>{ex.duration_minutes} min</span>
-              )}
             </div>
           );
         })}
