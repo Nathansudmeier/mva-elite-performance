@@ -155,7 +155,7 @@ export default function Dashboard() {
             <rect x="257" y="45" width="42" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
           </svg>
           <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
-          <div style={{ position: "absolute", top: "-40px", right: "-40px", width: "150px", height: "150px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,0,0.45) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: "-60px", right: "-40px", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,0,0.50) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
         </div>
         <div className="relative z-10 p-5">
           <p className="t-label mb-3">Volgende Wedstrijd</p>
