@@ -419,32 +419,6 @@ export default function Dashboard() {
 
       {isTrainer && <PhotoUpload onSaved={() => refetchPhotos()} />}
       <PhotoTimeline photos={teamPhotos} />
-
-      {/* BLOK 6: Zelfreflecties */}
-      <div className="glass p-6">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="t-section-title">Zelfreflecties (deze week)</h2>
-          <button onClick={() => navigate("/SelfReflection")} className="t-secondary" style={{ color: "#FF8C3A" }}>Alle →</button>
-        </div>
-        {thisWeekReflections.length > 0 ? (
-          <div className="space-y-3">
-            {thisWeekReflections.map((r) => {
-              const player = activePlayers.find(p => p.id === r.player_id);
-              return (
-                <div key={r.id} className="p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.06)" }}>
-                  <div className="flex items-start justify-between mb-1">
-                    <p className="t-card-title">{player?.name || "–"}</p>
-                    <p className="t-secondary-sm">{format(new Date(r.date), "d MMM", { locale: nl })}</p>
-                  </div>
-                  <p className="t-secondary line-clamp-2">{r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}</p>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <p className="t-tertiary">Geen reflecties deze week</p>
-        )}
-      </div>
     </div>
   );
 }
