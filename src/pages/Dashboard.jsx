@@ -144,6 +144,8 @@ export default function Dashboard() {
     setPlanSaving(false);
   };
 
+  const planDateHasPlan = planDate ? trainingPlans.some(p => p.date === planDate) : false;
+
   // === BLOK 6: ZELFREFLECTIES DEZE WEEK ===
   const thisWeekReflections = selfReflections
     .filter(r => isAfter(new Date(r.date), last7Days))
