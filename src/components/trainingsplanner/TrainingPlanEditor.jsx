@@ -10,8 +10,12 @@ import { nl } from "date-fns/locale";
 
 function genId() { return Math.random().toString(36).slice(2, 10); }
 
-function newExercise() {
-  return { id: genId(), name: "", description: "", duration_minutes: 10, coaching_points: [], groups: [], field_drawing: null };
+function newExercise(name = "") {
+  return { id: genId(), name, description: "", duration_minutes: 10, coaching_points: [], groups: [], field_photo: null };
+}
+
+function warmupExercise() {
+  return { id: genId(), name: "Warming-up", description: "", duration_minutes: 10, coaching_points: [], groups: [], field_photo: null };
 }
 
 const glassStyle = {
@@ -227,7 +231,7 @@ export default function TrainingPlanEditor({ players }) {
             <input value={newObjective} onChange={e => setNewObjective(e.target.value)} placeholder="Bijv. Pressing en omschakeling..." style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#fff", outline: "none", minHeight: "44px" }} />
           </div>
           <button
-            onClick={() => newDate && createPlan.mutate({ date: newDate, objective: newObjective, exercises: [], status: "draft" })}
+            onClick={() => newDate && createPlan.mutate({ date: newDate, objective: newObjective, exercises: [warmupExercise()], status: "draft" })}
             disabled={!newDate || createPlan.isPending}
             style={{ width: "100%", minHeight: "52px", background: "#FF6B00", border: "none", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}
           >
