@@ -127,6 +127,21 @@ export default function Dashboard() {
   // === BLOK 5: RECENTE WEDSTRIJDEN ===
   const recentMatches = allMatches.slice(-3).reverse();
 
+  const handlePlanSave = async () => {
+    if (!planDate) return;
+    setPlanSaving(true);
+    if (planType === "Wedstrijd") {
+      await base44.entities.Match.create({ team: "MO17", date: planDate, opponent: planOpponent || "Onbekend", home_away: "Thuis" });
+      queryClient.invalidateQueries({ queryKey: ["matches"] });
+    } else {
+      await base44.entities.TrainingSession.create({ date: planDate, type: planType });
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+    }
+    setPlanDate("");
+    setPlanOpponent("");
+    setPlanSaving(false);
+  };
+
   // === BLOK 6: ZELFREFLECTIES DEZE WEEK ===
   const thisWeekReflections = selfReflections
     .filter(r => isAfter(new Date(r.date), last7Days))
