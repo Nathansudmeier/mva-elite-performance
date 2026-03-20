@@ -206,36 +206,6 @@ export default function PlayerDashboard() {
         </div>
       </div>
 
-      {/* Self Reflection */}
-      <div className="glass p-4">
-        <p className="t-label mb-3">Zelfreflectie Wedstrijd</p>
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
-            <Input type="date" value={reflectionForm.date} onChange={e => setReflectionForm(f => ({ ...f, date: e.target.value }))}
-              style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
-            <Input placeholder="Tegenstander" value={reflectionForm.match_opponent} onChange={e => setReflectionForm(f => ({ ...f, match_opponent: e.target.value }))}
-              style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
-          </div>
-          {player && [player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).map((goal, i) => (
-            <div key={i} className="relative" style={{ background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)", borderRadius: "14px", padding: "12px" }}>
-              <p style={{ fontSize: "12px", fontWeight: 600, color: "#FF8C3A", marginBottom: "8px" }}>Doel {i + 1}: {goal}</p>
-              <div className="flex items-center gap-2 mb-2">
-                <label className="t-label whitespace-nowrap">Cijfer (1-10):</label>
-                <Input type="number" min="1" max="10" value={reflectionForm[`goal_${i + 1}_rating`]} onChange={e => setReflectionForm(f => ({ ...f, [`goal_${i + 1}_rating`]: e.target.value }))}
-                  style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", width: "80px" }} />
-              </div>
-              <Textarea placeholder="Toelichting..." value={reflectionForm[`goal_${i + 1}_notes`]} onChange={e => setReflectionForm(f => ({ ...f, [`goal_${i + 1}_notes`]: e.target.value }))}
-                style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} rows={2} />
-            </div>
-          ))}
-          <Textarea placeholder="Algemene reflectie..." value={reflectionForm.general_notes} onChange={e => setReflectionForm(f => ({ ...f, general_notes: e.target.value }))}
-            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} rows={3} />
-          <button onClick={() => saveReflection.mutate()} disabled={saveReflection.isPending} className="btn-primary">
-            <Save size={14} />
-            {saveReflection.isPending ? "Opslaan..." : "Reflectie Opslaan"}
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
