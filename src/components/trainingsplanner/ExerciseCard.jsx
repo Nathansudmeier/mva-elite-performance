@@ -73,6 +73,15 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
     update({ groups: updated });
   }
 
+  async function handlePhotoUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    update({ field_photo: file_url });
+    setUploading(false);
+  }
+
   function getAssignedGroup(playerId) {
     return (exercise.groups || []).find(g => g.player_ids.includes(playerId));
   }
