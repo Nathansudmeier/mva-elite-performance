@@ -104,12 +104,35 @@ export default function Trainingen() {
           <h1 className="t-page-title">Trainingen</h1>
           <p className="t-secondary">{sessions.filter(s => s.type === "Training").length} trainingen geregistreerd</p>
         </div>
-        {isTrainer && (
+        {isTrainer && activeTab === "aanwezigheid" && (
           <button onClick={() => { setSessionDate(""); setNewSessionDialog(true); }} className="btn-secondary">
             <Plus size={14} /> Extra Sessie
           </button>
         )}
       </div>
+
+      {/* Tab switcher */}
+      {isTrainer && (
+        <div style={{ display: "flex", gap: "6px", background: "rgba(255,255,255,0.06)", borderRadius: "14px", padding: "4px" }}>
+          {[{ id: "aanwezigheid", label: "Aanwezigheid" }, { id: "planner", label: "Trainingsplanner" }].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              style={{ flex: 1, padding: "8px", borderRadius: "10px", fontSize: "13px", fontWeight: 600, cursor: "pointer", minHeight: "44px", background: activeTab === tab.id ? "#FF6B00" : "transparent", color: activeTab === tab.id ? "#fff" : "rgba(255,255,255,0.50)", border: "none", transition: "all 0.2s" }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Trainingsplanner tab */}
+      {isTrainer && activeTab === "planner" && (
+        <TrainingPlanEditor players={activePlayers} />
+      )}
+
+      {/* Aanwezigheid tab content — only shown when active */}
+      {activeTab !== "planner" && (<>
 
       {/* Week navigator */}
       <div className="glass overflow-hidden">
