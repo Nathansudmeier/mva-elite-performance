@@ -406,6 +406,60 @@ export default function Dashboard() {
           )}
         </div>
 
+        {/* Kolom 2: Activiteit inplannen */}
+        <div className="glass p-4">
+          <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff", marginBottom: "12px" }}>Activiteit inplannen</p>
+
+          {/* Type toggle */}
+          <div style={{ display: "flex", gap: "6px", marginBottom: "12px" }}>
+            {["Training", "Wedstrijd", "Fysieke Test"].map(t => (
+              <button
+                key={t}
+                onClick={() => setPlanType(t)}
+                style={{
+                  flex: 1, padding: "6px 4px", borderRadius: "8px", fontSize: "10px", fontWeight: 600, cursor: "pointer",
+                  background: planType === t ? "rgba(255,107,0,0.25)" : "rgba(255,255,255,0.06)",
+                  border: planType === t ? "0.5px solid rgba(255,107,0,0.45)" : "0.5px solid rgba(255,255,255,0.10)",
+                  color: planType === t ? "#FF8C3A" : "rgba(255,255,255,0.50)",
+                }}
+              >{t}</button>
+            ))}
+          </div>
+
+          {/* Datum */}
+          <div style={{ marginBottom: "8px" }}>
+            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Datum</p>
+            <input
+              type="date"
+              value={planDate}
+              onChange={e => setPlanDate(e.target.value)}
+              style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#ffffff", outline: "none", colorScheme: "dark" }}
+            />
+          </div>
+
+          {/* Tegenstander (alleen bij wedstrijd) */}
+          {planType === "Wedstrijd" && (
+            <div style={{ marginBottom: "8px" }}>
+              <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Tegenstander</p>
+              <input
+                type="text"
+                placeholder="bijv. AFC"
+                value={planOpponent}
+                onChange={e => setPlanOpponent(e.target.value)}
+                style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#ffffff", outline: "none" }}
+              />
+            </div>
+          )}
+
+          <button
+            onClick={handlePlanSave}
+            disabled={!planDate || planSaving}
+            style={{ width: "100%", marginTop: "4px", padding: "9px", borderRadius: "10px", fontSize: "13px", fontWeight: 600, cursor: planDate ? "pointer" : "not-allowed", background: planDate ? "#FF6B00" : "rgba(255,255,255,0.08)", color: planDate ? "#ffffff" : "rgba(255,255,255,0.30)", border: "none", transition: "opacity 0.15s" }}
+          >
+            {planSaving ? "Opslaan..." : "+ Toevoegen"}
+          </button>
+        </div>
+
       </div>
 
       <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
