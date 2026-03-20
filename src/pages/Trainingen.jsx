@@ -8,6 +8,7 @@ import { Plus, Check, X, Calendar, ChevronLeft, ChevronRight } from "lucide-reac
 import { format, startOfWeek, addDays, subWeeks, addWeeks, isAfter, isBefore, parseISO, startOfDay } from "date-fns";
 import { nl } from "date-fns/locale";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import TrainingPlanEditor from "@/components/trainingsplanner/TrainingPlanEditor";
 
 // Generate Mon/Wed/Fri for a given week start (Monday)
 function getTrainingDaysForWeek(weekStart) {
