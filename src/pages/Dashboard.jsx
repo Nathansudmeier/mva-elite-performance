@@ -353,6 +353,68 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ── 2-KOLOMS GRID: Zelfreflecties + Seizoensresultaten ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+
+        {/* Kolom 1: Zelfreflecties */}
+        <div className="glass p-4">
+          <div className="flex items-center justify-between mb-3">
+            <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>Zelfreflecties deze week</p>
+            <button onClick={() => navigate("/SelfReflection")} style={{ fontSize: "12px", color: "#FF8C3A" }}>Alle →</button>
+          </div>
+          {thisWeekReflections.length > 0 ? (
+            <div>
+              {thisWeekReflections.map((r, i) => {
+                const player = activePlayers.find(p => p.id === r.player_id);
+                const initials = player?.name?.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() || "?";
+                const avgScore = [r.goal_1_rating, r.goal_2_rating, r.goal_3_rating].filter(Boolean);
+                const scoreAvg = avgScore.length > 0 ? (avgScore.reduce((a, b) => a + b, 0) / avgScore.length).toFixed(1) : null;
+                return (
+                  <div key={r.id} style={{ display: "flex", alignItems: "flex-start", gap: "8px", padding: "8px 0", borderBottom: i < thisWeekReflections.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none" }}>
+                    <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <span style={{ fontSize: "9px", fontWeight: 700, color: "#FF8C3A" }}>{initials}</span>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.80)", lineHeight: 1.2 }}>{player?.name || "–"}</p>
+                      <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", lineHeight: 1.4, marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}</p>
+                    </div>
+                    {scoreAvg && <p style={{ fontSize: "13px", fontWeight: 700, color: "#FF8C3A", flexShrink: 0 }}>{scoreAvg}</p>}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>Geen reflecties deze week</p>
+          )}
+        </div>
+
+        {/* Kolom 2: Seizoensresultaten */}
+        <div className="glass p-4">
+          <p style={{ fontSize: "14px", fontWeight: 600, color: "#ffffff", marginBottom: "10px" }}>Seizoensresultaten</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "8px" }}>
+            <span style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{winPct}%</span>
+            <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.40)" }}>winst</span>
+          </div>
+          <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginBottom: "12px" }}>
+            <div style={{ height: "100%", width: `${winPct}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
+          </div>
+          <div style={{ display: "flex", gap: "6px" }}>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(74,222,128,0.10)", border: "0.5px solid rgba(74,222,128,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 700, color: "#4ade80", lineHeight: 1 }}>{wins}</p>
+              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "3px" }}>Winst</p>
+            </div>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(251,191,36,0.10)", border: "0.5px solid rgba(251,191,36,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 700, color: "#fbbf24", lineHeight: 1 }}>{draws}</p>
+              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "3px" }}>Gelijk</p>
+            </div>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 700, color: "#f87171", lineHeight: 1 }}>{losses}</p>
+              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "3px" }}>Verlies</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
 
       {isTrainer && <PhotoUpload onSaved={() => refetchPhotos()} />}
