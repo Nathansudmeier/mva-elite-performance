@@ -164,7 +164,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── VOLGENDE WEDSTRIJD ── */}
-      <div className="match-hero-card cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
+      <div className="match-hero-card cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")} style={{ height: undefined }} >
         <div className="absolute inset-0">
           <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 300 160" preserveAspectRatio="xMidYMid slice">
             <rect x="1" y="1" width="298" height="158" fill="none" stroke="white" strokeWidth="2"/>
