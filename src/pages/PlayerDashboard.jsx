@@ -93,14 +93,6 @@ export default function PlayerDashboard() {
     }
   });
 
-  const saveReflection = useMutation({
-    mutationFn: () => base44.entities.SelfReflection.create({ ...reflectionForm, player_id: playerId }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["myReflections"]);
-      setReflectionForm({ date: new Date().toISOString().split("T")[0], match_opponent: "", goal_1_rating: "", goal_1_notes: "", goal_2_rating: "", goal_2_notes: "", goal_3_rating: "", goal_3_notes: "", general_notes: "" });
-    }
-  });
-
   const radarData = ["Meting 1", "Meting 2", "Meting 3"].map(m => {
     const r = ratings.find(x => x.meting === m);
     if (!r) return null;
