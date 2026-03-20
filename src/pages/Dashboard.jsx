@@ -197,8 +197,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── 4-KOLOMS METRIC GRID ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
+      {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }} className="mobile-grid-2col">
 
         {/* Card 1: Aanwezigheid */}
         <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
