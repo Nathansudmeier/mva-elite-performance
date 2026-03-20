@@ -19,6 +19,7 @@ export default function Trainingen() {
   const queryClient = useQueryClient();
   const { isTrainer, user, playerId: myPlayerId } = useCurrentUser();
 
+  const [activeTab, setActiveTab] = useState("aanwezigheid");
   const [weekOffset, setWeekOffset] = useState(0);
   const [selectedSessionId, setSelectedSessionId] = useState(null);
   const [newSessionDialog, setNewSessionDialog] = useState(false);
