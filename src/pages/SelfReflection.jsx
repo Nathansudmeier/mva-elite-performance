@@ -50,11 +50,9 @@ export default function SelfReflection() {
           <h1 className="t-page-title">Zelfreflectie</h1>
           <p className="t-secondary">Wekelijkse wedstrijdbeoordeling</p>
         </div>
-        {isTrainer && (
-          <button onClick={() => setDialogOpen(true)} className="btn-secondary">
-            <Plus size={14} /> Nieuwe Reflectie
-          </button>
-        )}
+        <button onClick={() => { setSelectedPlayer(isTrainer ? "" : playerId); setDialogOpen(true); }} className="btn-secondary">
+          <Plus size={14} /> Nieuwe Reflectie
+        </button>
       </div>
 
       {isTrainer && (
