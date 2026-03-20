@@ -17,6 +17,10 @@ export default function Dashboard() {
   const queryClient = useQueryClient();
   const { isSpeelster, isTrainer, isLoading: authLoading } = useCurrentUser();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [planType, setPlanType] = useState("Training");
+  const [planDate, setPlanDate] = useState("");
+  const [planOpponent, setPlanOpponent] = useState("");
+  const [planSaving, setPlanSaving] = useState(false);
 
   useEffect(() => {
     if (!authLoading && isSpeelster) {
