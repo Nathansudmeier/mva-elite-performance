@@ -387,31 +387,6 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* Kolom 2: Seizoensresultaten */}
-        <div className="glass p-4">
-          <p style={{ fontSize: "14px", fontWeight: 600, color: "#ffffff", marginBottom: "10px" }}>Seizoensresultaten</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "8px" }}>
-            <span style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{winPct}%</span>
-            <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.40)" }}>winst</span>
-          </div>
-          <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginBottom: "12px" }}>
-            <div style={{ height: "100%", width: `${winPct}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
-          </div>
-          <div style={{ display: "flex", gap: "6px" }}>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(74,222,128,0.10)", border: "0.5px solid rgba(74,222,128,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 700, color: "#4ade80", lineHeight: 1 }}>{wins}</p>
-              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "3px" }}>Winst</p>
-            </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(251,191,36,0.10)", border: "0.5px solid rgba(251,191,36,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 700, color: "#fbbf24", lineHeight: 1 }}>{draws}</p>
-              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "3px" }}>Gelijk</p>
-            </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 700, color: "#f87171", lineHeight: 1 }}>{losses}</p>
-              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "3px" }}>Verlies</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
