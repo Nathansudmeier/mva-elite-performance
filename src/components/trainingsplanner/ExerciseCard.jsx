@@ -191,14 +191,57 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
             </div>
           </div>
 
-          {/* Field whiteboard */}
+          {/* Field whiteboard / photo */}
           <div style={{ marginBottom: "14px" }}>
-            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "6px" }}>Velddiagram</p>
-            <FieldWhiteboard
-              value={exercise.field_drawing}
-              onChange={val => update({ field_drawing: val })}
-              mobile={mobile}
-            />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+              <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Velddiagram</p>
+              <div style={{ display: "flex", gap: "4px" }}>
+                <button
+                  onClick={() => setDiagramMode("draw")}
+                  style={{ display: "flex", alignItems: "center", gap: "4px", padding: "4px 10px", borderRadius: "8px", fontSize: "11px", fontWeight: 600, cursor: "pointer", background: diagramMode === "draw" ? "#FF6B00" : "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: diagramMode === "draw" ? "#fff" : "rgba(255,255,255,0.55)", minHeight: "32px" }}
+                >
+                  <Pencil size={11} /> Tekenen
+                </button>
+                <button
+                  onClick={() => setDiagramMode("photo")}
+                  style={{ display: "flex", alignItems: "center", gap: "4px", padding: "4px 10px", borderRadius: "8px", fontSize: "11px", fontWeight: 600, cursor: "pointer", background: diagramMode === "photo" ? "#FF6B00" : "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: diagramMode === "photo" ? "#fff" : "rgba(255,255,255,0.55)", minHeight: "32px" }}
+                >
+                  <Camera size={11} /> Foto
+                </button>
+              </div>
+            </div>
+
+            {diagramMode === "draw" ? (
+              <FieldWhiteboard
+                value={exercise.field_drawing}
+                onChange={val => update({ field_drawing: val })}
+                mobile={mobile}
+              />
+            ) : (
+              <div>
+                {exercise.field_photo ? (
+                  <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden" }}>
+                    <img src={exercise.field_photo} alt="Velddiagram" style={{ width: "100%", borderRadius: "12px", display: "block" }} />
+                    <button
+                      onClick={() => { update({ field_photo: null }); fileInputRef.current && (fileInputRef.current.value = ""); }}
+                      style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.55)", border: "none", borderRadius: "8px", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+                    >
+                      <X size={14} color="#fff" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    style={{ width: "100%", minHeight: "100px", background: "rgba(255,255,255,0.05)", border: "0.5px dashed rgba(255,255,255,0.20)", borderRadius: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", cursor: "pointer", color: "rgba(255,255,255,0.45)", fontSize: "13px" }}
+                  >
+                    <Camera size={24} color="rgba(255,255,255,0.35)" />
+                    {uploading ? "Uploaden..." : "Foto uploaden"}
+                  </button>
+                )}
+                <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoUpload} />
+              </div>
+            )}
           </div>
 
           {/* Groups */}
