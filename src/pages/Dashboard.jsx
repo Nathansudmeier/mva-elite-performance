@@ -380,7 +380,10 @@ export default function Dashboard() {
               })}
             </div>
           ) : (
-            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>Geen reflecties deze week</p>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "16px 0" }}>
+              <i className="ti ti-message-2" style={{ fontSize: "24px", color: "rgba(255,255,255,0.20)" }} />
+              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", marginTop: "8px" }}>Nog geen reflecties deze week</p>
+            </div>
           )}
         </div>
 
