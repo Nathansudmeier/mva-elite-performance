@@ -243,19 +243,6 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Team of the Week Upload */}
-      {isTrainer && (
-        <div className="glass p-6 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setUploadModalOpen(true)}>
-          <div className="flex items-center justify-center text-center">
-            <div>
-              <Upload size={28} color="#FF8C3A" className="mx-auto mb-3" />
-              <p className="t-section-title">Team of the Week</p>
-              <p className="t-secondary mt-1">Klik om foto toe te voegen</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {uploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
           <div className="glass-dark p-6 max-w-lg w-full">
@@ -268,41 +255,105 @@ export default function Dashboard() {
         </div>
       )}
 
-      <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
+      {/* ── 3-KOLOMS GRID ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px" }}>
 
-      {/* BLOK 5: Recente Wedstrijden */}
-      <div className="glass p-6">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="t-section-title">Recente Wedstrijden</h2>
-          <button onClick={() => navigate("/Wedstrijden")} className="t-secondary" style={{ color: "#FF8C3A" }}>Alle →</button>
-        </div>
-        <div className="space-y-2">
-          {recentMatches.map((m) => {
-            let badge = "–";
-            if (m.score_home !== undefined && m.score_away !== undefined) {
-              badge = m.score_home > m.score_away ? "W" : m.score_home < m.score_away ? "V" : "G";
-            }
-            const badgeClass = badge === "W" ? "badge badge-win" : badge === "V" ? "badge badge-loss" : badge === "G" ? "badge badge-draw" : "badge";
-            return (
-              <div key={m.id} className="flex items-center justify-between p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.06)" }}>
-                <div className="flex items-center gap-2.5">
-                  <span className={badge === "W" ? "dot-green" : badge === "V" ? "dot-red" : "dot-yellow"} />
-                  <div>
-                    <p className="t-card-title">{m.home_away === "Uit" ? "@ " : ""}{m.opponent}</p>
-                    <p className="t-secondary-sm mt-0.5">{format(new Date(m.date), "d MMM", { locale: nl })}</p>
+        {/* Kolom 1: Wedstrijden */}
+        <div className="glass p-4">
+          <div className="flex items-center justify-between mb-3">
+            <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>Wedstrijden</p>
+            <button onClick={() => navigate("/Wedstrijden")} style={{ fontSize: "12px", color: "#FF8C3A" }}>Alle →</button>
+          </div>
+          <div>
+            {(() => {
+              const displayMatches = allMatches.slice(-4).reverse();
+              return displayMatches.map((m, i) => {
+                const hasScore = m.score_home !== null && m.score_away !== null && m.score_home !== undefined && m.score_away !== undefined;
+                const isPlanned = !hasScore;
+                let result = "–";
+                let dotColor = "#60a5fa";
+                let badgeBg = "rgba(96,165,250,0.12)";
+                let badgeColor = "#60a5fa";
+                if (hasScore) {
+                  const isWin = m.home_away === "Thuis" ? m.score_home > m.score_away : m.score_away > m.score_home;
+                  const isDraw = m.score_home === m.score_away;
+                  result = isWin ? "W" : isDraw ? "G" : "V";
+                  dotColor = isWin ? "#4ade80" : isDraw ? "#fbbf24" : "#f87171";
+                  badgeBg = isWin ? "rgba(74,222,128,0.12)" : isDraw ? "rgba(251,191,36,0.12)" : "rgba(248,113,113,0.12)";
+                  badgeColor = isWin ? "#4ade80" : isDraw ? "#fbbf24" : "#f87171";
+                }
+                return (
+                  <div key={m.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < displayMatches.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
+                      <div>
+                        <p style={{ fontSize: "12px", fontWeight: 600, color: "#ffffff", lineHeight: 1.2 }}>{m.opponent}</p>
+                        <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", marginTop: "2px" }}>{format(new Date(m.date), "d MMM", { locale: nl })}</p>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: "10px", fontWeight: 700, padding: "3px 8px", borderRadius: "8px", background: badgeBg, color: badgeColor }}>
+                      {isPlanned ? "gepland" : result}
+                    </span>
                   </div>
+                );
+              });
+            })()}
+          </div>
+        </div>
+
+        {/* Kolom 2: Match hero */}
+        <div style={{ position: "relative", borderRadius: "20px", overflow: "hidden", border: "0.5px solid rgba(255,107,0,0.28)", background: "linear-gradient(135deg, #1a4a2e, #0d2b1a)", cursor: "pointer" }} onClick={() => navigate("/Wedstrijden")}>
+          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.08 }} viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice">
+            <rect x="1" y="1" width="298" height="198" fill="none" stroke="white" strokeWidth="2"/>
+            <line x1="150" y1="1" x2="150" y2="199" stroke="white" strokeWidth="1.5"/>
+            <circle cx="150" cy="100" r="32" fill="none" stroke="white" strokeWidth="1.5"/>
+            <circle cx="150" cy="100" r="2" fill="white"/>
+            <rect x="1" y="55" width="46" height="90" fill="none" stroke="white" strokeWidth="1.5"/>
+            <rect x="253" y="55" width="46" height="90" fill="none" stroke="white" strokeWidth="1.5"/>
+          </svg>
+          <div style={{ position: "absolute", inset: 0, background: "rgba(255,107,0,0.10)" }} />
+          <div style={{ position: "absolute", top: "-60px", right: "-40px", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,0,0.50) 0%, transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "relative", zIndex: 1, padding: "20px" }}>
+            <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "10px" }}>Volgende wedstrijd</p>
+            {nextMatch ? (
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "10px" }}>
+                <div>
+                  <p style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2, letterSpacing: "-0.3px" }}>vs. {nextMatch.opponent}</p>
+                  <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", marginTop: "6px" }}>{nextMatch.home_away === "Uit" ? "Uitwedstrijd" : "Thuiswedstrijd"}</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  {m.score_home !== undefined && m.score_away !== undefined && (
-                    <p className="text-sm font-bold" style={{ color: "#FF8C3A" }}>{m.score_home}–{m.score_away}</p>
-                  )}
-                  <span className={badgeClass}>{badge}</span>
+                <div style={{ flexShrink: 0, background: "rgba(255,107,0,0.22)", border: "0.5px solid rgba(255,107,0,0.40)", borderRadius: "10px", padding: "8px 10px", textAlign: "center", minWidth: "48px" }}>
+                  <p style={{ fontSize: "8px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{format(new Date(nextMatch.date), "MMM", { locale: nl })}</p>
+                  <p style={{ fontSize: "22px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{format(new Date(nextMatch.date), "d")}</p>
+                  <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.45)" }}>{format(new Date(nextMatch.date), "EEE", { locale: nl })}</p>
                 </div>
               </div>
-            );
-          })}
+            ) : (
+              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.45)", marginTop: "8px" }}>Geen geplande wedstrijden</p>
+            )}
+          </div>
+        </div>
+
+        {/* Kolom 3: Snelle acties */}
+        <div className="glass p-4">
+          <p style={{ fontSize: "12px", fontWeight: 600, textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: "10px", letterSpacing: "0.05em" }}>Snelle acties</p>
+          {[
+            { icon: "ti-list-check", label: "Aanwezigheid registreren", sub: "Training van vandaag", action: () => navigate("/Trainingen") },
+            { icon: "ti-camera", label: "Foto uploaden", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
+            { icon: "ti-star", label: "Beoordeling invullen", sub: `${totalRatingsNeeded - meting1Count} spelers wachten`, action: () => navigate("/PlayerRatingForm") },
+            { icon: "ti-player-play", label: "Wedstrijd starten", sub: "Live modus activeren", action: () => navigate("/Wedstrijden") },
+          ].map((item, i) => (
+            <button key={i} onClick={item.action} style={{ display: "flex", gap: "8px", alignItems: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "8px 10px", marginBottom: "6px", width: "100%", textAlign: "left", cursor: "pointer" }}>
+              <i className={`ti ${item.icon}`} style={{ fontSize: "14px", color: "#FF8C3A", flexShrink: 0 }} />
+              <div>
+                <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", lineHeight: 1.2 }}>{item.label}</p>
+                <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>{item.sub}</p>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
+
+      <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
 
       {isTrainer && <PhotoUpload onSaved={() => refetchPhotos()} />}
       <PhotoTimeline photos={teamPhotos} />
