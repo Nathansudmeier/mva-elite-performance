@@ -333,9 +333,9 @@ export default function Dashboard() {
         <div className="glass p-4">
           <p style={{ fontSize: "12px", fontWeight: 600, textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: "10px", letterSpacing: "0.05em" }}>Snelle acties</p>
           {[
-            { icon: "ti-list-check", label: "Aanwezigheid registreren", sub: "Training van vandaag", action: () => navigate("/Trainingen") },
-            { icon: "ti-camera", label: "Foto uploaden", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
-            { icon: "ti-star", label: "Beoordeling invullen", sub: `${totalRatingsNeeded - meting1Count} spelers wachten`, action: () => navigate("/PlayerRatingForm") },
+            { icon: "ti-users", label: "Aanwezigheid registreren", sub: "Training van vandaag", action: () => navigate("/Trainingen") },
+            { icon: "ti-upload", label: "Foto uploaden", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
+            { icon: "ti-clipboard-list", label: "Beoordeling invullen", sub: `${totalRatingsNeeded - meting1Count} spelers wachten`, action: () => navigate("/PlayerRatingForm") },
             { icon: "ti-player-play", label: "Wedstrijd starten", sub: "Live modus activeren", action: () => navigate("/Wedstrijden") },
           ].map((item, i) => (
             <button key={i} onClick={item.action} style={{ display: "flex", gap: "8px", alignItems: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "8px 10px", marginBottom: "6px", width: "100%", textAlign: "left", cursor: "pointer" }}>
