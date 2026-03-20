@@ -117,6 +117,7 @@ function DeveloperGroup({ currentPageName, onItemClick }) {
 
 export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [meerOpen, setMeerOpen] = useState(false);
   const { user, isTrainer, isSpeelster } = useCurrentUser();
   const isSpeelsterUser = !isTrainer && isSpeelster;
 
