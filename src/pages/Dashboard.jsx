@@ -393,20 +393,91 @@ export default function Dashboard() {
         {/* Kolom 3: Snelle acties */}
         <div className="glass p-4">
           <p style={{ fontSize: "12px", fontWeight: 600, textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: "10px", letterSpacing: "0.05em" }}>Snelle acties</p>
-          {[
-            { icon: "ti-users", label: "Aanwezigheid registreren", sub: "Training van vandaag", action: () => navigate("/Trainingen") },
-            { icon: "ti-upload", label: "Foto uploaden", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
-            { icon: "ti-clipboard-list", label: "Beoordeling invullen", sub: `${totalRatingsNeeded - meting1Count} spelers wachten`, action: () => navigate("/PlayerRatingForm") },
-            { icon: "ti-player-play", label: "Wedstrijd starten", sub: "Live modus activeren", action: () => navigate("/Wedstrijden") },
-          ].map((item, i) => (
-            <button key={i} onClick={item.action} style={{ display: "flex", gap: "8px", alignItems: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "8px 10px", marginBottom: "6px", width: "100%", textAlign: "left", cursor: "pointer" }}>
-              <i className={`ti ${item.icon}`} style={{ fontSize: "14px", color: "#FF8C3A", flexShrink: 0 }} />
-              <div>
-                <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", lineHeight: 1.2 }}>{item.label}</p>
-                <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>{item.sub}</p>
+          {/* Desktop: verticale lijst */}
+          <div className="desktop-only">
+            {[
+              { icon: "ti-users", label: "Aanwezigheid registreren", sub: "Training van vandaag", action: () => navigate("/Trainingen") },
+              { icon: "ti-upload", label: "Foto uploaden", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
+              { icon: "ti-clipboard-list", label: "Beoordeling invullen", sub: `${totalRatingsNeeded - meting1Count} spelers wachten`, action: () => navigate("/PlayerRatingForm") },
+              { icon: "ti-player-play", label: "Wedstrijd starten", sub: "Live modus activeren", action: () => navigate("/Wedstrijden") },
+            ].map((item, i) => (
+              <button key={i} onClick={item.action} style={{ display: "flex", gap: "8px", alignItems: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "8px 10px", marginBottom: "6px", width: "100%", textAlign: "left", cursor: "pointer" }}>
+                <i className={`ti ${item.icon}`} style={{ fontSize: "14px", color: "#FF8C3A", flexShrink: 0 }} />
+                <div>
+                  <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", lineHeight: 1.2 }}>{item.label}</p>
+                  <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>{item.sub}</p>
+                </div>
+              </button>
+            ))}
+            {/* Desktop: uitklapbare Activiteit inplannen */}
+            <button
+              onClick={() => setPlanExpanded(!planExpanded)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)", borderRadius: "10px", padding: "8px 10px", marginTop: "4px", cursor: "pointer" }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <i className="ti ti-calendar-plus" style={{ fontSize: "14px", color: "#FF8C3A" }} />
+                <p style={{ fontSize: "12px", color: "#FF8C3A", fontWeight: 600 }}>Activiteit inplannen</p>
               </div>
+              <i className={`ti ti-chevron-down`} style={{ fontSize: "14px", color: "#FF8C3A", transform: planExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }} />
             </button>
-          ))}
+            {planExpanded && (
+              <div style={{ marginTop: "8px", padding: "10px", background: "rgba(255,255,255,0.04)", borderRadius: "10px", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                <div style={{ display: "flex", gap: "5px", marginBottom: "8px" }}>
+                  {["Training", "Wedstrijd", "Fysieke Test"].map(t => (
+                    <button
+                      key={t}
+                      onClick={() => setPlanType(t)}
+                      style={{
+                        flex: 1, padding: "6px 4px", borderRadius: "10px", fontSize: "9px", fontWeight: 600, cursor: "pointer",
+                        background: planType === t ? "#FF6B00" : "rgba(255,255,255,0.08)",
+                        border: planType === t ? "none" : "0.5px solid rgba(255,255,255,0.12)",
+                        color: planType === t ? "#ffffff" : "rgba(255,255,255,0.55)",
+                      }}
+                    >{t}</button>
+                  ))}
+                </div>
+                <input
+                  type="date"
+                  value={planDate}
+                  onChange={e => setPlanDate(e.target.value)}
+                  style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "7px 10px", fontSize: "12px", color: "#ffffff", outline: "none", colorScheme: "dark", marginBottom: "6px" }}
+                />
+                {planType === "Wedstrijd" && (
+                  <input
+                    type="text"
+                    placeholder="Tegenstander"
+                    value={planOpponent}
+                    onChange={e => setPlanOpponent(e.target.value)}
+                    style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "7px 10px", fontSize: "12px", color: "#ffffff", outline: "none", marginBottom: "6px" }}
+                  />
+                )}
+                <button
+                  onClick={handlePlanSave}
+                  disabled={!planDate || planSaving}
+                  style={{ width: "100%", padding: "8px", borderRadius: "12px", fontSize: "13px", fontWeight: 600, cursor: planDate ? "pointer" : "not-allowed", background: "rgba(255,107,0,0.20)", border: "0.5px solid rgba(255,107,0,0.35)", color: "#FF8C3A", height: "40px", display: "flex", alignItems: "center", justifyContent: "center" }}
+                >
+                  {planSaving ? "Opslaan..." : "+ Toevoegen"}
+                </button>
+              </div>
+            )}
+          </div>
+          {/* Mobiel: 2x2 grid */}
+          <div className="mobile-only">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: "8px" }}>
+              {[
+                { icon: "ti-users", label: "Aanwezigheid", sub: "Vandaag", action: () => navigate("/Trainingen") },
+                { icon: "ti-upload", label: "Foto", sub: "Team of Week", action: () => setUploadModalOpen(true) },
+                { icon: "ti-clipboard-list", label: "Beoordeling", sub: `${totalRatingsNeeded - meting1Count} wachten`, action: () => navigate("/PlayerRatingForm") },
+                { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => navigate("/Wedstrijden") },
+              ].map((item, i) => (
+                <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "12px 8px", cursor: "pointer", textAlign: "center" }}>
+                  <i className={`ti ${item.icon}`} style={{ fontSize: "20px", color: "#FF8C3A", marginBottom: "6px" }} />
+                  <p style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.75)", lineHeight: 1.2 }}>{item.label}</p>
+                  <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>{item.sub}</p>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
