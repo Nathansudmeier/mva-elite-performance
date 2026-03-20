@@ -301,35 +301,31 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Kolom 2: Match hero */}
-        <div style={{ position: "relative", borderRadius: "20px", overflow: "hidden", border: "0.5px solid rgba(255,107,0,0.28)", background: "linear-gradient(135deg, #1a4a2e, #0d2b1a)", cursor: "pointer" }} onClick={() => navigate("/Wedstrijden")}>
-          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.08 }} viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice">
-            <rect x="1" y="1" width="298" height="198" fill="none" stroke="white" strokeWidth="2"/>
-            <line x1="150" y1="1" x2="150" y2="199" stroke="white" strokeWidth="1.5"/>
-            <circle cx="150" cy="100" r="32" fill="none" stroke="white" strokeWidth="1.5"/>
-            <circle cx="150" cy="100" r="2" fill="white"/>
-            <rect x="1" y="55" width="46" height="90" fill="none" stroke="white" strokeWidth="1.5"/>
-            <rect x="253" y="55" width="46" height="90" fill="none" stroke="white" strokeWidth="1.5"/>
-          </svg>
-          <div style={{ position: "absolute", inset: 0, background: "rgba(255,107,0,0.10)" }} />
-          <div style={{ position: "absolute", top: "-60px", right: "-40px", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,0,0.50) 0%, transparent 70%)", pointerEvents: "none" }} />
-          <div style={{ position: "relative", zIndex: 1, padding: "20px" }}>
-            <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "10px" }}>Volgende wedstrijd</p>
-            {nextMatch ? (
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "10px" }}>
-                <div>
-                  <p style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2, letterSpacing: "-0.3px" }}>vs. {nextMatch.opponent}</p>
-                  <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", marginTop: "6px" }}>{nextMatch.home_away === "Uit" ? "Uitwedstrijd" : "Thuiswedstrijd"}</p>
-                </div>
-                <div style={{ flexShrink: 0, background: "rgba(255,107,0,0.22)", border: "0.5px solid rgba(255,107,0,0.40)", borderRadius: "10px", padding: "8px 10px", textAlign: "center", minWidth: "48px" }}>
-                  <p style={{ fontSize: "8px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{format(new Date(nextMatch.date), "MMM", { locale: nl })}</p>
-                  <p style={{ fontSize: "22px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{format(new Date(nextMatch.date), "d")}</p>
-                  <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.45)" }}>{format(new Date(nextMatch.date), "EEE", { locale: nl })}</p>
-                </div>
-              </div>
-            ) : (
-              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.45)", marginTop: "8px" }}>Geen geplande wedstrijden</p>
-            )}
+        {/* Kolom 2: Seizoensresultaten */}
+        <div className="glass p-4" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div>
+            <p style={{ fontSize: "14px", fontWeight: 600, color: "#ffffff", marginBottom: "10px" }}>Seizoensresultaten</p>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "8px" }}>
+              <span style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{winPct}%</span>
+              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.40)" }}>winst</span>
+            </div>
+            <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginBottom: "14px" }}>
+              <div style={{ height: "100%", width: `${winPct}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: "6px" }}>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(74,222,128,0.10)", border: "0.5px solid rgba(74,222,128,0.18)", borderRadius: "10px", padding: "8px 6px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 700, color: "#4ade80", lineHeight: 1 }}>{wins}</p>
+              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "2px" }}>WINST</p>
+            </div>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(251,191,36,0.10)", border: "0.5px solid rgba(251,191,36,0.18)", borderRadius: "10px", padding: "8px 6px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 700, color: "#fbbf24", lineHeight: 1 }}>{draws}</p>
+              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "2px" }}>GELIJK</p>
+            </div>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.18)", borderRadius: "10px", padding: "8px 6px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 700, color: "#f87171", lineHeight: 1 }}>{losses}</p>
+              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "2px" }}>VERLIES</p>
+            </div>
           </div>
         </div>
 
