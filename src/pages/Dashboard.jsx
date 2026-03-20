@@ -129,75 +129,22 @@ export default function Dashboard() {
     .slice(0, 3);
 
   return (
-    <div className="space-y-6 pb-20 lg:pb-6">
+    <div className="space-y-5 pb-20 lg:pb-6">
       <MatchDayBanner />
 
-      {/* ── MOBIEL HERO STAT ── */}
-      <div className="md:hidden px-1 pt-1">
+      {/* ── HERO STAT (alle viewports) ── */}
+      <div className="px-1 pt-2">
         <div className="flex items-baseline gap-2">
-          <span style={{ fontSize: "36px", fontWeight: 700, color: "#ffffff", letterSpacing: "-1px", lineHeight: 1 }}>{winPct}%</span>
-          <span style={{ fontSize: "18px", fontWeight: 600, color: "#FF8C3A" }}>winst</span>
+          <span style={{ fontSize: "42px", fontWeight: 700, color: "#ffffff", letterSpacing: "-1.5px", lineHeight: 1 }}>{winPct}%</span>
+          <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.50)" }}>winst</span>
         </div>
         <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "4px" }}>
-          {wins} overwinningen · {draws} gelijk · {losses} verlies
+          {wins} overwinningen · {draws} gelijk · {losses} verlies · Seizoen 2025-26
         </p>
       </div>
 
-      {/* ── MOBIEL 2×2 METRIC GRID ── */}
-      <div className="md:hidden" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "20px" }}>
-
-        {/* Card 1: Aanwezigheid */}
-        <div className="glass p-4">
-          <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Aanwezigheid (4w)</p>
-          <p style={{ fontSize: "30px", fontWeight: 700, color: "#FF8C3A", lineHeight: 1, marginTop: "6px" }}>{avgAttendancePercent}%</p>
-          <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginTop: "8px" }}>
-            <div style={{ height: "100%", width: `${avgAttendancePercent}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
-          </div>
-          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "6px" }}>{activePlayers.length} spelers</p>
-        </div>
-
-        {/* Card 2: Seizoenswinst */}
-        <div className="glass p-4 cursor-pointer" onClick={() => navigate("/Wedstrijden")}>
-          <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Seizoenswinst</p>
-          <p style={{ fontSize: "30px", fontWeight: 700, color: "#ffffff", lineHeight: 1, marginTop: "6px" }}>{winPct}%</p>
-          <div style={{ display: "flex", gap: "5px", marginTop: "8px" }}>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(74,222,128,0.10)", border: "0.5px solid rgba(74,222,128,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
-              <p style={{ fontSize: "16px", fontWeight: 700, color: "#4ade80", lineHeight: 1 }}>{wins}</p>
-              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", marginTop: "2px" }}>W</p>
-            </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(251,191,36,0.10)", border: "0.5px solid rgba(251,191,36,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
-              <p style={{ fontSize: "16px", fontWeight: 700, color: "#fbbf24", lineHeight: 1 }}>{draws}</p>
-              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", marginTop: "2px" }}>G</p>
-            </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.18)", borderRadius: "8px", padding: "5px 4px" }}>
-              <p style={{ fontSize: "16px", fontWeight: 700, color: "#f87171", lineHeight: 1 }}>{losses}</p>
-              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", marginTop: "2px" }}>V</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: Yo-Yo */}
-        <div className="glass p-4">
-          <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Yo-Yo niveau</p>
-          <p style={{ fontSize: "30px", fontWeight: 700, color: "#ffffff", lineHeight: 1, marginTop: "6px" }}>{avgLatestYoyo}</p>
-          <p style={{ fontSize: "11px", color: "#6ee7b7", marginTop: "6px" }}>
-            {yoyoDiff ? (parseFloat(yoyoDiff) >= 0 ? `+${yoyoDiff}` : yoyoDiff) : "stabiel"}
-          </p>
-        </div>
-
-        {/* Card 4: Sprint */}
-        <div className="glass p-4">
-          <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>30m sprint</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "2px", marginTop: "6px" }}>
-            <p style={{ fontSize: "30px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{avgLatestSprint}</p>
-            <span style={{ fontSize: "15px", color: "rgba(255,255,255,0.35)" }}>s</span>
-          </div>
-          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "6px" }}>gemiddeld</p>
-        </div>
-      </div>
-
-      {/* ── MOBIEL VOLGENDE WEDSTRIJD ── */}
-      <div className="md:hidden match-hero-card cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
+      {/* ── VOLGENDE WEDSTRIJD ── */}
+      <div className="match-hero-card cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
         <div className="absolute inset-0">
           <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 300 160" preserveAspectRatio="xMidYMid slice">
             <rect x="1" y="1" width="298" height="158" fill="none" stroke="white" strokeWidth="2"/>
@@ -208,7 +155,6 @@ export default function Dashboard() {
             <rect x="257" y="45" width="42" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
           </svg>
           <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
-          {/* Orange glow top-right */}
           <div style={{ position: "absolute", top: "-40px", right: "-40px", width: "150px", height: "150px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,0,0.45) 0%, transparent 70%)", pointerEvents: "none" }} />
         </div>
         <div className="relative z-10 p-5">
@@ -231,106 +177,67 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── DESKTOP BLOK 1: Quick Stats (unchanged) ── */}
-      <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Aanwezigheid */}
-        <div className="glass p-6">
-          <p className="t-label mb-2">Aanwezigheid (4w)</p>
-          <p className="t-metric-orange">{avgAttendancePercent}%</p>
-          <p className="t-secondary mt-2">{activePlayers.length} spelers</p>
+      {/* ── 4-KOLOMS METRIC GRID ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
+
+        {/* Card 1: Aanwezigheid */}
+        <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
+          <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.50)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Aanwezigheid (4w)</p>
+          <p style={{ fontSize: "28px", fontWeight: 700, color: "#FF8C3A", lineHeight: 1, marginTop: "6px" }}>{avgAttendancePercent}%</p>
+          <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginTop: "8px" }}>
+            <div style={{ height: "100%", width: `${avgAttendancePercent}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
+          </div>
+          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "6px" }}>{activePlayers.length} spelers</p>
         </div>
 
-        {/* Volgende wedstrijd */}
-        <div className="match-hero-card cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}>
-          <div className="absolute inset-0">
-            <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 300 160" preserveAspectRatio="xMidYMid slice">
-              <rect x="1" y="1" width="298" height="158" fill="none" stroke="white" strokeWidth="2"/>
-              <line x1="150" y1="1" x2="150" y2="159" stroke="white" strokeWidth="1.5"/>
-              <circle cx="150" cy="80" r="28" fill="none" stroke="white" strokeWidth="1.5"/>
-              <circle cx="150" cy="80" r="2" fill="white"/>
-              <rect x="1" y="45" width="42" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
-              <rect x="257" y="45" width="42" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
-            </svg>
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
-            <div style={{ position: "absolute", top: "-40px", right: "-40px", width: "150px", height: "150px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,0,0.45) 0%, transparent 70%)", pointerEvents: "none" }} />
-          </div>
-          <div className="relative z-10 p-5">
-            <p className="t-label mb-3">Volgende Wedstrijd</p>
-            {nextMatch ? (
-              <div className="flex items-end justify-between">
-                <div>
-                  <p className="t-secondary-sm mb-1">{nextMatch.home_away === "Uit" ? "Uitwedstrijd" : "Thuiswedstrijd"}</p>
-                  <p className="text-xl font-bold text-white leading-tight" style={{ letterSpacing: "-0.3px" }}>vs. {nextMatch.opponent}</p>
-                </div>
-                <div className="flex flex-col items-center bg-white/20 backdrop-blur-sm rounded-xl p-2.5 min-w-[52px]">
-                  <span className="t-label uppercase">{format(new Date(nextMatch.date), "MMM", { locale: nl })}</span>
-                  <span className="t-metric text-white leading-tight">{format(new Date(nextMatch.date), "d")}</span>
-                  <span className="t-tertiary">{format(new Date(nextMatch.date), "EEE", { locale: nl })}</span>
-                </div>
-              </div>
-            ) : (
-              <p className="t-secondary mt-2">Geen geplande wedstrijden</p>
-            )}
-          </div>
+        {/* Card 2: Yo-Yo */}
+        <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
+          <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.50)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Yo-Yo niveau</p>
+          <p style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1, marginTop: "6px" }}>{avgLatestYoyo}</p>
+          <p style={{ fontSize: "11px", color: "#6ee7b7", marginTop: "8px" }}>
+            {yoyoDiff ? (parseFloat(yoyoDiff) >= 0 ? `+${yoyoDiff}` : yoyoDiff) : "stabiel"}
+          </p>
         </div>
 
-        {/* Seizoensresultaten */}
-        <div className="relative cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")}
-          style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,255,255,0.18)", borderRadius: "22px", padding: "24px", overflow: "hidden" }}
-        >
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)" }} />
-          <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>SEIZOENSRESULTATEN</p>
-          {playedMatches.length === 0 ? (
-            <p className="t-secondary mt-3">Nog geen wedstrijden gespeeld</p>
-          ) : (
-            <>
-              <div className="flex items-baseline mt-2" style={{ gap: "8px" }}>
-                <span style={{ fontSize: "32px", fontWeight: 700, color: "#FF8C3A", lineHeight: 1 }}>{winPct}%</span>
-                <span style={{ fontSize: "14px", fontWeight: 400, color: "rgba(255,255,255,0.50)" }}>winst</span>
-              </div>
-              <div style={{ height: "3px", width: "100%", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginTop: "8px", marginBottom: "12px" }}>
-                <div style={{ height: "100%", width: `${winPct}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
-              </div>
-              <div className="flex" style={{ gap: "8px" }}>
-                <div className="flex-1 text-center" style={{ background: "rgba(74,222,128,0.10)", border: "0.5px solid rgba(74,222,128,0.20)", borderRadius: "10px", padding: "8px 6px" }}>
-                  <p style={{ fontSize: "20px", fontWeight: 700, color: "#4ade80", lineHeight: 1 }}>{wins}</p>
-                  <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: "3px" }}>WINST</p>
-                </div>
-                <div className="flex-1 text-center" style={{ background: "rgba(251,191,36,0.10)", border: "0.5px solid rgba(251,191,36,0.20)", borderRadius: "10px", padding: "8px 6px" }}>
-                  <p style={{ fontSize: "20px", fontWeight: 700, color: "#fbbf24", lineHeight: 1 }}>{draws}</p>
-                  <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: "3px" }}>GELIJK</p>
-                </div>
-                <div className="flex-1 text-center" style={{ background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.20)", borderRadius: "10px", padding: "8px 6px" }}>
-                  <p style={{ fontSize: "20px", fontWeight: 700, color: "#f87171", lineHeight: 1 }}>{losses}</p>
-                  <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: "3px" }}>VERLIES</p>
-                </div>
-              </div>
-            </>
-          )}
+        {/* Card 3: Sprint */}
+        <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
+          <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.50)", textTransform: "uppercase", letterSpacing: "0.07em" }}>30m sprint</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "2px", marginTop: "6px" }}>
+            <p style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{avgLatestSprint}</p>
+            <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.30)" }}>s</span>
+          </div>
+          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "8px" }}>gemiddeld</p>
+        </div>
+
+        {/* Card 4: Beoordelingen */}
+        <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
+          <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.50)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Beoordelingen</p>
+          <p style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1, marginTop: "6px" }}>{meting1Count}/{totalRatingsNeeded}</p>
+          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "8px" }}>meting 1 lopend</p>
         </div>
       </div>
 
-      {/* BLOK 2: Alerts */}
-      <div className="space-y-3">
+      {/* ── ALERTS ── */}
+      <div className="space-y-2">
         {lowAttendancePlayers.length > 0 && (
-          <div className="glass-alert p-4" style={{ borderLeftWidth: "3px", borderLeftColor: "#FF8C3A", borderRadius: "18px" }}>
-            <div className="flex gap-3">
-              <AlertCircle size={18} color="#FF8C3A" className="flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="t-card-title" style={{ color: "#FF8C3A" }}>Lage aanwezigheid</p>
-                <p className="t-secondary mt-1">{lowAttendancePlayers.map(p => `${p.name} (${p.percentage}%)`).join(", ")}</p>
-              </div>
+          <div style={{ background: "rgba(251,191,36,0.08)", border: "0.5px solid rgba(251,191,36,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+            <i className="ti ti-alert-triangle flex-shrink-0 mt-0.5" style={{ fontSize: "14px", color: "#fbbf24" }} />
+            <div>
+              <p style={{ fontSize: "12px", fontWeight: 600, color: "#fbbf24" }}>{lowAttendancePlayers.length} spelers onder 60% aanwezigheid</p>
+              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginTop: "2px" }}>{lowAttendancePlayers.map(p => p.name).join(", ")}</p>
             </div>
           </div>
         )}
         {fatigueOrPainPlayers.length > 0 && (
-          <div className="glass p-4" style={{ borderLeftWidth: "3px", borderLeftColor: "#f87171", borderRadius: "18px" }}>
-            <div className="flex gap-3">
-              <AlertCircle size={18} color="#f87171" className="flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="t-card-title" style={{ color: "#f87171" }}>Vermoeidheid/Pijn gemeld</p>
-                <p className="t-secondary mt-1">{fatigueOrPainPlayers.join(", ")}</p>
-              </div>
+          <div style={{ background: "rgba(248,113,113,0.08)", border: "0.5px solid rgba(248,113,113,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+            <i className="ti ti-alert-triangle flex-shrink-0 mt-0.5" style={{ fontSize: "14px", color: "#f87171" }} />
+            <div>
+              <p style={{ fontSize: "12px", fontWeight: 600, color: "#f87171" }}>Vermoeidheid / pijn gemeld</p>
+              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginTop: "2px" }}>{fatigueOrPainPlayers.join(", ")}</p>
             </div>
           </div>
         )}
@@ -362,34 +269,6 @@ export default function Dashboard() {
       )}
 
       <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
-
-      {/* BLOK 4: Groepsfysiek */}
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-        <div className="glass p-6">
-          <p className="t-label mb-3">Gemiddeld Yo-Yo Niveau</p>
-          <p className="t-metric-orange">{avgLatestYoyo}</p>
-          {yoyoDiff && (
-            <div className="flex items-center gap-2 mt-3">
-              {parseFloat(yoyoDiff) >= 0 ? <TrendingUp size={15} color="#4ade80" /> : <TrendingDown size={15} color="#f87171" />}
-              <p className="t-secondary" style={{ color: parseFloat(yoyoDiff) >= 0 ? "#4ade80" : "#f87171" }}>
-                {parseFloat(yoyoDiff) >= 0 ? "+" : ""}{yoyoDiff}
-              </p>
-            </div>
-          )}
-        </div>
-        <div className="glass p-6">
-          <p className="t-label mb-3">Gemiddelde 30m Sprint (sec)</p>
-          <p className="t-metric-orange">{avgLatestSprint}</p>
-          {sprintDiff && (
-            <div className="flex items-center gap-2 mt-3">
-              {parseFloat(sprintDiff) <= 0 ? <TrendingUp size={15} color="#4ade80" /> : <TrendingDown size={15} color="#f87171" />}
-              <p className="t-secondary" style={{ color: parseFloat(sprintDiff) <= 0 ? "#4ade80" : "#f87171" }}>
-                {parseFloat(sprintDiff) > 0 ? "+" : ""}{sprintDiff}s
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
 
       {/* BLOK 5: Recente Wedstrijden */}
       <div className="glass p-6">
