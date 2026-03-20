@@ -481,8 +481,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── 2-KOLOMS GRID: Zelfreflecties + Activiteit inplannen ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+      {/* ── 2-KOLOMS GRID: Zelfreflecties (+ Activiteit inplannen verplaatst) ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
 
         {/* Kolom 1: Zelfreflecties */}
         <div className="glass p-4">
