@@ -427,6 +427,27 @@
   border-radius: 18px;
   overflow: hidden;
 }
+/* ── Responsive utility classes ── */
+.mobile-only { display: none; }
+.desktop-only { display: block; }
+
+@media (max-width: 768px) {
+  .mobile-only { display: block; }
+  .desktop-only { display: none; }
+
+  .mobile-grid-2col {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .mobile-grid-1col {
+    grid-template-columns: 1fr !important;
+  }
+
+  .match-hero-card {
+    height: 140px !important;
+  }
+}
+
 .glass-alert::before {
   content: "";
   position: absolute;
