@@ -124,7 +124,7 @@ export default function MobileMatchDetail({
            </button>
 
            {/* Team logos left and right */}
-           <div style={{ position: "absolute", bottom: "16px", left: "16px", zIndex: 10 }}>
+           <div style={{ position: "absolute", bottom: "16px", left: "16px", zIndex: 2 }}>
              <div style={{
                width: "48px",
                height: "48px",
