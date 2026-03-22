@@ -25,6 +25,21 @@ function TactSection({ icon: Icon, title, content }) {
   );
 }
 
+function CheckInContent({ matchId, totalInSelectie }) {
+  const { data: checkIns = [] } = React.useContext(MatchCheckInOverview) || { data: [] };
+  
+  if (!checkIns || checkIns.length === 0) {
+    return (
+      <div style={{ textAlign: "center", paddingTop: "12px", paddingBottom: "12px" }}>
+        <Users size={20} style={{ color: "rgba(255,255,255,0.20)", margin: "0 auto 8px" }} />
+        <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "14px" }}>Nog geen reacties</p>
+      </div>
+    );
+  }
+  
+  return <MatchCheckInOverview matchId={matchId} totalInSelectie={totalInSelectie} />;
+}
+
 function scoreLabel(m) {
   if (m.score_home !== undefined && m.score_home !== null && m.score_away !== undefined && m.score_away !== null) {
     return `${m.score_home} – ${m.score_away}`;
