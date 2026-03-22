@@ -33,7 +33,7 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
       <div style={{
         borderRadius: "22px",
         overflow: "hidden",
-        height: "160px",
+        height: "180px",
         position: "relative",
         border: `0.5px solid ${borderColor}`,
       }}>
@@ -132,7 +132,7 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
         style={{
           borderRadius: "22px",
           overflow: "hidden",
-          height: "160px",
+          height: "180px",
           position: "relative",
           border: `0.5px solid ${borderColor}`,
           background: "transparent",
@@ -265,20 +265,25 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
               }}>
                 <img src={MVA_LOGO_URL} alt="MVA Noord" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.85)", textAlign: "center", maxWidth: "50px" }}>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "white", textAlign: "center", letterSpacing: "-0.2px", maxWidth: "50px" }}>
                 {teamLabel}
               </div>
             </div>
 
             {/* Center VS */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", flex: "0 0 auto" }}>
-              <div style={{ fontSize: "18px", fontWeight: 300, color: "rgba(255,255,255,0.35)" }}>
-                vs
-              </div>
-              <div style={{ fontSize: "9px", color: "rgba(255,255,255,0.50)" }}>
-                {format(matchDate, "d MMM", { locale: nl })}
-              </div>
-            </div>
+             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", flex: "0 0 auto" }}>
+               <div style={{ fontSize: "28px", fontWeight: 800, color: "white", letterSpacing: "-1px", lineHeight: 1 }}>
+                 VS
+               </div>
+               <div style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.60)", textAlign: "center" }}>
+                 {format(matchDate, "d MMM", { locale: nl })}
+               </div>
+               {nextMatch.start_time && (
+                 <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)" }}>
+                   {nextMatch.start_time}
+                 </div>
+               )}
+             </div>
 
             {/* Right logo */}
             <div style={{
@@ -312,7 +317,7 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                     .toUpperCase()
                 )}
               </div>
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.85)", textAlign: "center", maxWidth: "50px" }}>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: "white", textAlign: "center", letterSpacing: "-0.2px", maxWidth: "50px" }}>
                 {nextMatch.opponent.split(" ")[0]}
               </div>
             </div>
@@ -329,7 +334,7 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                   background: isHome ? "#4ade80" : "#fbbf24",
                 }}
               />
-              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)", fontWeight: 500 }}>
+              <span style={{ fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.65)" }}>
                 {isHome ? "Thuis" : "Uit"}
               </span>
             </div>
