@@ -159,6 +159,7 @@ function PlayersContent() {
         </div>
       )}
 
+      {isTrainer && (
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-md" style={{ background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
           <DialogHeader>
