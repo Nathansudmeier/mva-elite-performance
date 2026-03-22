@@ -306,7 +306,10 @@ export default function Dashboard() {
         <div className="glass p-4">
           <div className="flex items-center justify-between mb-3">
             <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>Wedstrijden</p>
-            <button onClick={() => navigate("/Wedstrijden")} style={{ fontSize: "12px", color: "#FF8C3A" }}>Alle →</button>
+            <div className="flex items-center gap-3">
+              <button onClick={() => navigate("/Agenda")} style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)" }}>Agenda →</button>
+              <button onClick={() => navigate("/Wedstrijden")} style={{ fontSize: "12px", color: "#FF8C3A" }}>Alle →</button>
+            </div>
           </div>
           <div>
             {(() => {
