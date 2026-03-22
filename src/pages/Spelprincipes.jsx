@@ -49,6 +49,7 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-hidden">
       <div
         className="glass-dark w-full my-8"
+        className="modal-scroll-content"
         style={{
           maxWidth: "720px",
           borderRadius: "24px",
@@ -272,7 +273,7 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
           onClick={() => setOpen(false)}
         >
           <div
-            className="glass-dark w-full max-w-2xl my-8"
+            className="glass-dark modal-scroll-content w-full max-w-2xl my-8"
             style={{ overflowY: "auto", maxHeight: "90vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
             onClick={e => e.stopPropagation()}
           >
