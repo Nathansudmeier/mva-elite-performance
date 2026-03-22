@@ -4,34 +4,22 @@ const BACKGROUND_URL = "https://media.base44.com/images/public/69ad40ab17517be2e
 
 export default function DashboardBackground() {
   return (
-    <>
-      {/* Background image */}
-      <img
-        src={BACKGROUND_URL}
-        alt="Dashboard background"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center top',
-          zIndex: 0,
-        }}
-        onError={(e) => {
-          // Fallback: hide image if it fails to load
-          e.target.style.display = 'none';
-        }}
-      />
-
-      {/* Dark overlay */}
-      <div style={{
+    <img
+      src={BACKGROUND_URL}
+      alt="Dashboard background"
+      style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(10,4,0,0.55)',
-        zIndex: 1,
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition: 'center top',
+        zIndex: 0,
         pointerEvents: 'none',
-      }} />
-    </>
+      }}
+      onError={(e) => {
+        e.target.style.display = 'none';
+      }}
+    />
   );
 }
