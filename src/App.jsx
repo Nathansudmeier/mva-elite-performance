@@ -80,6 +80,7 @@ const AuthenticatedApp = () => {
       <Route path="/Staff" element={<LayoutWrapper currentPageName="Staff"><Staff /></LayoutWrapper>} />
       <Route path="/TrainerDetail" element={<LayoutWrapper currentPageName="Staff"><TrainerDetail /></LayoutWrapper>} />
       <Route path="/Speelminuten" element={<LayoutWrapper currentPageName="Speelminuten"><Speelminuten /></LayoutWrapper>} />
+      <Route path="/MijnReflecties" element={<LayoutWrapper currentPageName="MijnReflecties"><MijnReflecties /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
