@@ -199,9 +199,9 @@ export default function MobileMatchDetail({
               </button>
             </div>
           </div>
-        )}
+          )}
 
-        {/* Opstelling */}
+          {/* Opstelling */}
         {match.lineup && match.lineup.length > 0 && (
           <div className="glass p-4">
             {canSeeLineup ? (
