@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { TYPE_CONFIG } from "./agendaUtils";
 import { Clock, MapPin } from "lucide-react";
+import AttendanceButtons from "@/components/attendance/AttendanceButtons";
 
 function formatDateNL(dateStr) {
   if (!dateStr) return "";
@@ -71,90 +72,19 @@ export default function AgendaConfirmCard({ item, playerId, existingRecord }) {
         )}
       </div>
 
-      {/* Knoppen */}
-      {!showReason && (
-        <div className="grid grid-cols-2 gap-2 pt-1">
-          <button
-            onClick={() => upsert.mutate({ status: "aanwezig", notes: "" })}
-            disabled={upsert.isPending}
-            style={{
-              minHeight: 52,
-              background: "rgba(74,222,128,0.15)",
-              border: "0.5px solid rgba(74,222,128,0.25)",
-              color: "#4ade80",
-              borderRadius: 14,
-              fontWeight: 600,
-              fontSize: 14,
-              cursor: "pointer",
-            }}
-          >
-            Ik ben erbij
-          </button>
-          <button
-            onClick={() => setShowReason(true)}
-            style={{
-              minHeight: 52,
-              background: "rgba(248,113,113,0.15)",
-              border: "0.5px solid rgba(248,113,113,0.25)",
-              color: "#f87171",
-              borderRadius: 14,
-              fontWeight: 600,
-              fontSize: 14,
-              cursor: "pointer",
-            }}
-          >
-            Ik kan niet
-          </button>
-        </div>
-      )}
-
-      {/* Reden veld */}
-      {showReason && (
-        <div className="space-y-2 pt-1">
-          <label className="t-label block">Wat is de reden van je afwezigheid?</label>
-          <textarea
-            value={reason}
-            onChange={e => setReason(e.target.value)}
-            placeholder="Geef een reden op (min. 10 tekens)..."
-            rows={3}
-            style={{
-              width: "100%",
-              background: "rgba(255,255,255,0.07)",
-              border: "0.5px solid rgba(255,255,255,0.15)",
-              borderRadius: 10,
-              color: "#fff",
-              padding: "10px 12px",
-              fontSize: 14,
-              resize: "none",
-            }}
-          />
-          <div className="flex gap-2">
-            <button
-              onClick={() => { setShowReason(false); setReason(""); }}
-              style={{
-                flex: 1, minHeight: 44, background: "rgba(255,255,255,0.07)",
-                border: "0.5px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.6)",
-                borderRadius: 12, fontWeight: 600, fontSize: 13, cursor: "pointer",
-              }}
-            >
-              Terug
-            </button>
-            <button
-              onClick={() => upsert.mutate({ status: "afwezig", notes: reason })}
-              disabled={reason.trim().length < 10 || upsert.isPending}
-              style={{
-                flex: 2, minHeight: 44,
-                background: reason.trim().length >= 10 ? "rgba(248,113,113,0.15)" : "rgba(255,255,255,0.05)",
-                border: "0.5px solid rgba(248,113,113,0.25)",
-                color: reason.trim().length >= 10 ? "#f87171" : "rgba(255,255,255,0.3)",
-                borderRadius: 12, fontWeight: 600, fontSize: 13, cursor: reason.trim().length >= 10 ? "pointer" : "not-allowed",
-              }}
-            >
-              {upsert.isPending ? "Opslaan..." : "Afwezigheid doorgeven"}
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Attendance Buttons */}
+      <div className="pt-1">
+        <AttendanceButtons
+          currentStatus={null}
+          loading={upsert.isPending}
+          showAbsentInput={showReason}
+          absentReason={reason}
+          onAbsentReasonChange={setReason}
+          onPresent={() => upsert.mutate({ status: "aanwezig", notes: "" })}
+          onAbsent={() => setShowReason(true)}
+          onConfirmAbsent={() => upsert.mutate({ status: "afwezig", notes: reason })}
+        />
+      </div>
     </div>
   );
 }
