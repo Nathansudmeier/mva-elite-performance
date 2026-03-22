@@ -104,6 +104,29 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
           {item.notes && (
             <p className="t-secondary mt-3 p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.05)" }}>{item.notes}</p>
           )}
+
+          {/* RSVP voor speler (niet-trainer) */}
+          {!isTrainer && myPlayer && (
+            <div className="mt-4 p-3 rounded-xl flex items-center justify-between gap-3" style={{ background: "rgba(255,255,255,0.05)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
+              <p className="t-secondary text-sm font-semibold">Jouw aanwezigheid:</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => rsvpMutation.mutate("aanwezig")}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                  style={{ background: myAttendance?.status === "aanwezig" ? "#4ade80" : "rgba(74,222,128,0.10)", color: myAttendance?.status === "aanwezig" ? "#fff" : "#4ade80", border: "0.5px solid rgba(74,222,128,0.30)" }}
+                >
+                  <Check size={13} /> Ik kom
+                </button>
+                <button
+                  onClick={() => rsvpMutation.mutate("afwezig")}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                  style={{ background: myAttendance?.status === "afwezig" ? "#f87171" : "rgba(248,113,113,0.10)", color: myAttendance?.status === "afwezig" ? "#fff" : "#f87171", border: "0.5px solid rgba(248,113,113,0.30)" }}
+                >
+                  <X size={13} /> Ik kom niet
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Tabs */}
