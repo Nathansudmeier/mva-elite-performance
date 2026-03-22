@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import YouTubeEmbed, { isYouTubeUrl } from "@/components/common/YouTubeEmbed";
 import { useScrollLock } from "@/hooks/useScrollLock";
+import RichTextEditor from "@/components/spelprincipes/RichTextEditor";
 
 const CATEGORIES = ["Alles", "Balbezit", "Verdediging", "Omschakeling", "Standaardsituaties", "Algemeen"];
 const MODAL_CATEGORIES = ["Algemeen", "Balbezit", "Balverlies", "Omschakeling", "Dode spelmomenten"];
