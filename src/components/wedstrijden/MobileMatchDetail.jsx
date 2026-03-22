@@ -70,14 +70,23 @@ export default function MobileMatchDetail({
   const canSeeLineup = isTrainer || isMatchDay;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto" style={{ backgroundColor: "#1c0e04", paddingTop: "calc(52px + 8px)" }}>
-      {/* Background orbs */}
-      <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
-        <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "rgba(255,107,0,0.40)", top: -80, left: -60, filter: "blur(70px)" }} />
-        <div style={{ position: "absolute", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,150,0,0.20)", top: 300, right: -40, filter: "blur(60px)" }} />
-      </div>
+    <div className="fixed inset-0 z-50 overflow-y-auto" style={{ paddingTop: "calc(52px + 8px)" }}>
+      {/* Background image — fixed */}
+      <img
+        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e47690dd6_wedstrijd.jpg"
+        alt=""
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center",
+          zIndex: 0,
+        }}
+      />
 
-      <div className="relative" style={{ zIndex: 1 }}>
+      <div className="relative" style={{ zIndex: 2 }}>
          {/* Hero section with field background */}
          <div style={{
            position: "relative",
