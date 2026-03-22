@@ -38,7 +38,7 @@ export default function Dashboard() {
   const { data: wellnessLogs = [] } = useQuery({ queryKey: ["wellnessLogs"], queryFn: () => base44.entities.WellnessLog.list("-date") });
   const { data: selfReflections = [] } = useQuery({ queryKey: ["selfReflections"], queryFn: () => base44.entities.SelfReflection.list("-date") });
   const { data: teamPhotos = [], refetch: refetchPhotos } = useQuery({ queryKey: ["teamPhotos"], queryFn: () => base44.entities.TeamPhoto.list("-date") });
-  const { data: trainingPlans = [] } = useQuery({ queryKey: ["trainingPlans"], queryFn: () => base44.entities.TrainingPlan.list() });
+
 
   const activePlayers = players.filter((p) => p.active !== false);
 
@@ -125,23 +125,6 @@ export default function Dashboard() {
 
   // === BLOK 5: RECENTE WEDSTRIJDEN ===
   const recentMatches = allMatches.slice(-3).reverse();
-
-  const handlePlanSave = async () => {
-    if (!planDate) return;
-    setPlanSaving(true);
-    if (planType === "Wedstrijd") {
-      await base44.entities.Match.create({ team: "MO17", date: planDate, opponent: planOpponent || "Onbekend", home_away: "Thuis" });
-      queryClient.invalidateQueries({ queryKey: ["matches"] });
-    } else {
-      await base44.entities.TrainingSession.create({ date: planDate, type: planType });
-      queryClient.invalidateQueries({ queryKey: ["sessions"] });
-    }
-    setPlanDate("");
-    setPlanOpponent("");
-    setPlanSaving(false);
-  };
-
-  const planDateHasPlan = planDate ? trainingPlans.some(p => p.date === planDate) : false;
 
   // === BLOK 6: ZELFREFLECTIES DEZE WEEK ===
   const thisWeekReflections = selfReflections
