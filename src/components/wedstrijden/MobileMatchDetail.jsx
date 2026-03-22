@@ -8,6 +8,8 @@ import MatchCheckInOverview from "../checkin/MatchCheckInOverview";
 import { useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 
+const MVA_LOGO_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/c0045a171_MVAlogo.png";
+
 function lineupArrayToMap(arr) {
   if (!arr) return {};
   return arr.reduce((acc, { slot, player_id }) => { if (slot && player_id) acc[slot] = player_id; return acc; }, {});
