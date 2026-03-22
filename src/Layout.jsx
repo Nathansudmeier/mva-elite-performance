@@ -209,7 +209,14 @@ export default function Layout({ children, currentPageName }) {
       {/* Bottom nav mobile — max 5 items + Meer knop */}
       {(() => {
         const allMobileItems = isSpeelsterUser
-          ? [mainNavItems[0], mainNavItems[1], mainNavItems[4], mainNavItems[3], { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }, ...desenvolvidoItems]
+          ? [
+              { name: "Dashboard", icon: "layout-grid", page: "Dashboard" },
+              { name: "Agenda", icon: "calendar", page: "Agenda" },
+              { name: "Trainingen", icon: "list-check", page: "Trainingen" },
+              { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
+              { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" },
+              ...desenvolvidoItems
+            ]
           : [...mainNavItems, ...secondaryNavItems, ...desenvolvidoItems];
         const visibleItems = allMobileItems.slice(0, 5);
         const overflowItems = allMobileItems.slice(5);
