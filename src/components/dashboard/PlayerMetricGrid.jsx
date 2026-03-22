@@ -95,7 +95,7 @@ export default function PlayerMetricGrid({ yoyo, physical, attendance, agendaAtt
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-[10px]">
       {metrics.map((m, i) => <MetricCard key={i} {...m} />)}
     </div>
   );
