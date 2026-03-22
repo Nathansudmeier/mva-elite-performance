@@ -7,6 +7,7 @@ import { nl } from "date-fns/locale";
 import CheckInFlow from "@/components/checkin/CheckInFlow";
 
 function MatchCard({ team, teamLabel, teamPill, nextMatch, showCheckIn: showCheckInProp, playerId }) {
+  const navigate = useNavigate();
   const [showCheckIn, setShowCheckIn] = useState(false);
   const [checkInDone, setCheckInDone] = useState(false);
 
