@@ -242,18 +242,18 @@ export default function Wedstrijden() {
 
       {/* Team switch */}
       <div className="flex rounded-xl p-1 gap-1" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", width: "fit-content" }}>
-        {TEAMS.map((t) => (
-          <button key={t} onClick={() => { setActiveTeam(t); setSelectedMatch(null); }}
-            className="px-5 py-2 rounded-lg text-sm font-bold transition-all"
-            style={activeTeam === t ? { background: "#FF6B00", color: "#fff", borderRadius: "10px" } : { color: "rgba(255,255,255,0.50)" }}>
-            {t}
-          </button>
-        ))}
-      </div>
+         {TEAMS.map((t) => (
+           <button key={t} onClick={() => { setActiveTeam(t); setSelectedMatch(null); }}
+             className="py-2 rounded-lg text-sm font-bold transition-all"
+             style={{ minWidth: "80px", textAlign: "center", ...(activeTeam === t ? { background: "#FF6B00", color: "#fff", borderRadius: "10px" } : { color: "rgba(255,255,255,0.50)" }) }}>
+             {t}
+           </button>
+         ))}
+       </div>
 
-      <div className="grid lg:grid-cols-5 gap-6">
-        {/* Match list */}
-        <div className="lg:col-span-2 space-y-3">
+       <div className="grid lg:grid-cols-5 gap-6">
+         {/* Match list */}
+         <div className="lg:col-span-2 space-y-2 px-4 lg:px-0">
           <p className="t-label mb-3">{activeTeam} — {teamMatches.length} wedstrijd{teamMatches.length !== 1 ? "en" : ""}</p>
           {teamMatches.map((m) => {
             const isActive = selectedMatch === m.id;
@@ -265,48 +265,48 @@ export default function Wedstrijden() {
             const badgeClass = result === "win" ? "badge badge-win" : result === "loss" ? "badge badge-loss" : result === "draw" ? "badge badge-draw" : "";
 
             return (
-              <button key={m.id} onClick={() => setSelectedMatch(m.id)}
-                className="w-full text-left transition-all"
-                style={{
-                  background: isActive ? "rgba(255,107,0,0.15)" : "rgba(255,255,255,0.07)",
-                  border: isActive ? "0.5px solid rgba(255,107,0,0.35)" : "0.5px solid rgba(255,255,255,0.10)",
-                  borderRadius: "18px",
-                }}>
-                <div className="flex items-center gap-3 p-4">
-                  {/* Date block */}
-                  <div className="flex-shrink-0 w-12 rounded-xl overflow-hidden text-center"
-                    style={{ background: isActive ? "rgba(255,107,0,0.30)" : "rgba(255,255,255,0.10)" }}>
-                    <div className="t-label py-1">{format(matchDate, "MMM", { locale: nl })}</div>
-                    <div className="t-metric pb-2" style={{ fontSize: "22px" }}>{format(matchDate, "d")}</div>
-                  </div>
+               <button key={m.id} onClick={() => setSelectedMatch(m.id)}
+                 className="w-full text-left transition-all"
+                 style={{
+                   background: isActive ? "rgba(255,107,0,0.15)" : "rgba(255,255,255,0.07)",
+                   border: isActive ? "0.5px solid rgba(255,107,0,0.35)" : "0.5px solid rgba(255,255,255,0.10)",
+                   borderRadius: "18px",
+                 }}>
+                 <div className="flex items-center gap-3.5" style={{ padding: "1rem 1.25rem" }}>
+                   {/* Date block */}
+                   <div className="flex-shrink-0 rounded-xl overflow-hidden text-center"
+                     style={{ minWidth: "52px", padding: "6px 8px", borderRadius: "10px", background: isActive ? "rgba(255,107,0,0.30)" : "rgba(255,255,255,0.10)" }}>
+                     <div className="t-label" style={{ fontSize: "9px", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", letterSpacing: "0.06em", lineHeight: "1.2" }}>{format(matchDate, "MMM", { locale: nl })}</div>
+                     <div style={{ fontSize: "22px", fontWeight: 700, color: "white", lineHeight: 1, marginTop: "2px" }}>{format(matchDate, "d")}</div>
+                   </div>
 
-                  {/* Match info */}
-                  <div className="flex-1 min-w-0">
-                    <p className="t-card-title truncate">{m.opponent}</p>
-                    <div className="flex items-center gap-1.5 mt-1">
-                      <span className={isThuis ? "dot-green" : "dot-yellow"} />
-                      <span className="t-secondary-sm">{isThuis ? "Thuis" : "Uit"}</span>
-                    </div>
-                  </div>
+                   {/* Match info */}
+                   <div className="flex-1 min-w-0" style={{ minWidth: 0 }}>
+                     <p style={{ fontSize: "15px", fontWeight: 600, color: "white", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.opponent}</p>
+                     <div className="flex items-center gap-1.5 mt-1">
+                       <span className={isThuis ? "dot-green" : "dot-yellow"} />
+                       <span className="t-secondary-sm">{isThuis ? "Thuis" : "Uit"}</span>
+                     </div>
+                   </div>
 
-                  {/* Score + result */}
-                  <div className="flex-shrink-0 text-right flex items-center gap-2">
-                    <div>
-                      {hasScore ? (
-                        <div className="flex flex-col items-end gap-1">
-                          <p className="text-base font-bold text-white">{scoreLabel(m)}</p>
-                          {result && <span className={badgeClass}>{resultLabel}</span>}
-                        </div>
-                      ) : (
-                        <p className="t-tertiary">–</p>
-                      )}
-                    </div>
-                    {/* Chevron alleen op mobiel */}
-                    <ChevronRight size={16} className="lg:hidden flex-shrink-0" style={{ color: "rgba(255,255,255,0.30)" }} />
-                  </div>
-                </div>
-              </button>
-            );
+                   {/* Score + result */}
+                   <div className="flex-shrink-0 text-right flex items-center gap-2">
+                     <div>
+                       {hasScore ? (
+                         <div className="flex flex-col items-end gap-1">
+                           <p className="text-base font-bold text-white">{scoreLabel(m)}</p>
+                           {result && <span className={badgeClass}>{resultLabel}</span>}
+                         </div>
+                       ) : (
+                         <p className="t-tertiary">–</p>
+                       )}
+                     </div>
+                     {/* Chevron alleen op mobiel */}
+                     <ChevronRight size={16} className="lg:hidden flex-shrink-0" style={{ color: "rgba(255,255,255,0.30)", marginRight: "4px" }} />
+                   </div>
+                 </div>
+               </button>
+             );
           })}
           {teamMatches.length === 0 && (
             <div className="glass p-10 text-center">
