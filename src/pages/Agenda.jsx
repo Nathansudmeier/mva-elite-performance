@@ -142,10 +142,10 @@ export default function Agenda() {
             <div className="glass-dark rounded-2xl p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="t-card-title capitalize">{formatDate(selectedDay.dateStr)}</h3>
-                <button onClick={() => setSelectedDay(null)} className="t-tertiary hover:text-white">✕</button>
+                <button onClick={() => setSelectedDay(null)} style={{ fontSize: 18, color: "rgba(255,255,255,0.4)", lineHeight: 1 }}>✕</button>
               </div>
               {selectedDay.dayItems.length === 0 ? (
-                <p className="t-secondary">Geen activiteiten op deze dag.</p>
+                <p className="t-secondary">Geen activiteiten gepland.</p>
               ) : (
                 <div className="space-y-2">
                   {selectedDay.dayItems.map(item => (
