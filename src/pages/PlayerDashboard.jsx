@@ -11,7 +11,7 @@ import PlayerGreetingHeader from "../components/dashboard/PlayerGreetingHeader";
 import PlayerMetricGrid from "../components/dashboard/PlayerMetricGrid";
 import PlayerIOPGoals from "../components/dashboard/PlayerIOPGoals";
 import AttendanceDots from "../components/dashboard/AttendanceDots";
-import NextMatchCard from "../components/dashboard/NextMatchCard";
+import NextMatchGrid from "../components/dashboard/NextMatchGrid";
 import PlayerTrophySection from "../components/dashboard/PlayerTrophySection";
 import PhotoTimeline from "../components/photos/PhotoTimeline";
 import TodayTrainingCard from "../components/trainingsplanner/TodayTrainingCard";
