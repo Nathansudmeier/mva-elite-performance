@@ -196,7 +196,7 @@ export default function Layout({ children, currentPageName }) {
       {/* Mobile nav overlay */}
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
-          <div className="w-64 h-full pt-20 px-3 overflow-y-auto" style={{ backgroundColor: "rgba(28,14,4,0.97)", borderRight: "1px solid rgba(255,107,0,0.15)" }} onClick={(e) => e.stopPropagation()}>
+          <div className="w-64 h-full pt-[60px] px-3 overflow-y-auto" style={{ backgroundColor: "rgba(28,14,4,0.97)", borderRight: "1px solid rgba(255,107,0,0.15)" }} onClick={(e) => e.stopPropagation()}>
             <nav className="space-y-1">
               {isSpeelsterUser ? (
                 <>
