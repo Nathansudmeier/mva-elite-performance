@@ -139,8 +139,9 @@ export default function MobileMatchDetail({
                color: "white",
                fontSize: "12px",
                fontWeight: 700,
+               overflow: "hidden",
              }}>
-               MVA
+               <img src={MVA_LOGO_URL} alt="MVA Noord" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
              </div>
            </div>
 
@@ -186,8 +187,13 @@ export default function MobileMatchDetail({
                fontWeight: 700,
                textAlign: "center",
                padding: "4px",
+               overflow: "hidden",
              }}>
-               {match.opponent.split(" ").slice(0, 2).map(w => w[0]).join("")}
+               {match.opponent_logo ? (
+                 <img src={match.opponent_logo} alt={match.opponent} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+               ) : (
+                 match.opponent.split(" ").slice(0, 2).map(w => w[0]).join("")
+               )}
              </div>
            </div>
          </div>
