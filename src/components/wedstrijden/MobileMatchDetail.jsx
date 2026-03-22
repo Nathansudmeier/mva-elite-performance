@@ -65,24 +65,23 @@ export default function MobileMatchDetail({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto" style={{ backgroundColor: "#1c0e04" }}>
-      {/* Topbar */}
-      <div className="sticky top-0 z-50 flex items-center justify-between px-4 py-3"
-        style={{ backgroundColor: "rgba(28,14,4,0.95)", borderBottom: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}>
-        <button onClick={onBack} className="flex items-center justify-center w-9 h-9 rounded-xl flex-shrink-0"
-          style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
-          <i className="ti ti-arrow-left" style={{ fontSize: "18px", color: "#fff" }} />
-        </button>
-        <h1 className="t-page-title truncate flex-1 text-center">vs. {match.opponent}</h1>
-        <div className="w-9" />
-      </div>
-
       {/* Background orbs */}
       <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
         <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "rgba(255,107,0,0.40)", top: -80, left: -60, filter: "blur(70px)" }} />
         <div style={{ position: "absolute", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,150,0,0.20)", top: 300, right: -40, filter: "blur(60px)" }} />
       </div>
 
-      <div className="relative p-4 space-y-4 pb-24 pt-16" style={{ zIndex: 1 }}>
+      <div className="relative p-4 space-y-4 pb-24" style={{ zIndex: 1 }}>
+        {/* Topbar */}
+        <div className="flex items-center justify-between -mx-4 px-4 py-3 mb-2"
+          style={{ backgroundColor: "rgba(28,14,4,0.95)", borderBottom: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}>
+          <button onClick={onBack} className="flex items-center justify-center w-9 h-9 rounded-xl flex-shrink-0"
+            style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
+            <i className="ti ti-arrow-left" style={{ fontSize: "18px", color: "#fff" }} />
+          </button>
+          <h1 className="t-page-title truncate flex-1 text-center">vs. {match.opponent}</h1>
+          <div className="w-9" />
+        </div>
         {/* Match hero card */}
         <div className="match-hero-card p-5">
           <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
