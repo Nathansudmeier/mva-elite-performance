@@ -453,6 +453,16 @@
   .match-hero-card {
     height: 140px !important;
   }
+
+  .match-hero-bg {
+    height: 220px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .match-hero-bg {
+    height: 260px !important;
+  }
 }
 
 .glass-alert::before {
