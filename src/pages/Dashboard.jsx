@@ -259,10 +259,10 @@ export default function Dashboard() {
                   badgeColor = isWin ? "#4ade80" : isDraw ? "#fbbf24" : "#f87171";
                 }
                 return (
-                  <div key={m.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < displayMatches.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none" }}>
+                  <button key={m.id} onClick={() => navigate("/LiveMatch", { state: { matchId: m.id } })} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < displayMatches.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none", background: "none", border: "none", width: "100%", cursor: "pointer", transition: "opacity 0.2s" }} onMouseEnter={e => e.currentTarget.style.opacity = "0.8"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
-                      <div>
+                      <div style={{ textAlign: "left" }}>
                         <p style={{ fontSize: "12px", fontWeight: 600, color: "#ffffff", lineHeight: 1.2 }}>{m.opponent}</p>
                         <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", marginTop: "2px" }}>{format(new Date(m.date), "d MMM", { locale: nl })}</p>
                       </div>
@@ -270,7 +270,7 @@ export default function Dashboard() {
                     <span style={{ fontSize: "10px", fontWeight: 700, padding: "3px 8px", borderRadius: "8px", background: badgeBg, color: badgeColor }}>
                       {isPlanned ? "gepland" : result}
                     </span>
-                  </div>
+                  </button>
                 );
               });
             })()}
