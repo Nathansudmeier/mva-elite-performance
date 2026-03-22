@@ -69,7 +69,22 @@ export default function PhotoUpload({ onSaved }) {
 
   return (
     <div className="glass p-4 space-y-3">
-      <h2 className="t-section-title">📤 Foto Uploaden</h2>
+      <div className="flex items-center gap-3 mb-1">
+        <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="uploadGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#fbbf24" />
+                <stop offset="100%" stopColor="#FF8C3A" />
+              </linearGradient>
+            </defs>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="url(#uploadGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points="17 8 12 3 7 8" stroke="url(#uploadGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <line x1="12" y1="3" x2="12" y2="15" stroke="url(#uploadGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <h2 className="t-section-title">Foto Uploaden</h2>
+      </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="t-label mb-1 block">Datum</label>
