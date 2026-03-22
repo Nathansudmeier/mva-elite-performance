@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Upload } from "lucide-react";
+import AgendaForm from "@/components/agenda/AgendaForm";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import MatchDayBanner from "@/components/checkin/MatchDayBanner";
 import TrainerChampionsTrophy from "../components/dashboard/TrainerChampionsTrophy";
