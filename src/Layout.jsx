@@ -229,7 +229,7 @@ export default function Layout({ children, currentPageName }) {
         
         return (
           <>
-            <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-[100]" style={{ backgroundColor: "rgba(15,7,2,0.40)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", padding: "8px 8px 20px" }}>
+            <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-[100]" style={{ backgroundColor: "rgba(15,7,2,0.20)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", padding: "8px 8px 20px" }}>
               {/* Orange gradient accent line */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,107,0,0.60), transparent)" }} />
               
