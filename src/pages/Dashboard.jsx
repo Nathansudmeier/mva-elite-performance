@@ -218,50 +218,14 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── ACTIVITEIT INPLANNEN (mobiel only, compact) ── */}
-      <div className="mobile-only" style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,255,255,0.18)", borderRadius: "18px", padding: "14px", overflow: "hidden" }}>
-        <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff", marginBottom: "10px" }}>Activiteit inplannen</p>
-        <div style={{ display: "flex", gap: "6px", marginBottom: "10px" }}>
-          {["Training", "Wedstrijd", "Fysieke Test"].map(t => (
-            <button
-              key={t}
-              onClick={() => setPlanType(t)}
-              style={{
-                flex: 1, padding: "7px 4px", borderRadius: "10px", fontSize: "10px", fontWeight: 600, cursor: "pointer",
-                background: planType === t ? "#FF6B00" : "rgba(255,255,255,0.08)",
-                border: planType === t ? "none" : "0.5px solid rgba(255,255,255,0.12)",
-                color: planType === t ? "#ffffff" : "rgba(255,255,255,0.55)",
-              }}
-            >{t}</button>
-          ))}
-        </div>
-        <input
-          type="date"
-          value={planDate}
-          onChange={e => setPlanDate(e.target.value)}
-          style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#ffffff", outline: "none", colorScheme: "dark", marginBottom: "8px" }}
-        />
-        {planDateHasPlan && planType === "Training" && (
-          <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "6px" }}>
-            <i className="ti ti-circle-check-filled" style={{ fontSize: "13px", color: "#4ade80" }} />
-            <span style={{ fontSize: "11px", color: "#4ade80", fontWeight: 600 }}>Plan aanwezig</span>
-          </div>
-        )}
-        {planType === "Wedstrijd" && (
-          <input
-            type="text"
-            placeholder="Tegenstander (bijv. AFC)"
-            value={planOpponent}
-            onChange={e => setPlanOpponent(e.target.value)}
-            style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#ffffff", outline: "none", marginBottom: "8px" }}
-          />
-        )}
+      {/* ── ACTIVITEIT TOEVOEGEN (mobiel only, compact) ── */}
+      <div className="mobile-only">
         <button
-          onClick={handlePlanSave}
-          disabled={!planDate || planSaving}
-          style={{ width: "100%", padding: "10px", borderRadius: "12px", fontSize: "13px", fontWeight: 600, cursor: planDate ? "pointer" : "not-allowed", background: "rgba(255,107,0,0.20)", border: "0.5px solid rgba(255,107,0,0.35)", color: "#FF8C3A", height: "40px", display: "flex", alignItems: "center", justifyContent: "center" }}
+          onClick={() => setAgendaFormOpen(true)}
+          style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.30)", borderRadius: "18px", padding: "14px", cursor: "pointer" }}
         >
-          {planSaving ? "Opslaan..." : "+ Toevoegen"}
+          <i className="ti ti-calendar-plus" style={{ fontSize: "18px", color: "#FF8C3A" }} />
+          <span style={{ fontSize: "14px", fontWeight: 600, color: "#FF8C3A" }}>Activiteit toevoegen</span>
         </button>
       </div>
 
