@@ -11,6 +11,7 @@ import PlayerDashboard from './pages/PlayerDashboard.jsx';
 import AccountBeheer from './pages/AccountBeheer.jsx';
 import LiveMatch from './pages/LiveMatch.jsx';
 import Spelprincipes from './pages/Spelprincipes.jsx';
+import MijnReflecties from './pages/MijnReflecties.jsx';
 import Staff from './pages/Staff.jsx';
 import TrainerDetail from './pages/TrainerDetail.jsx';
 import Speelminuten from './pages/Speelminuten.jsx';
