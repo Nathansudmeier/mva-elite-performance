@@ -103,13 +103,13 @@ export default function Dashboard() {
   const winPct = playedMatches.length > 0 ? Math.round((wins / playedMatches.length) * 100) : 0;
 
   // === BLOK 2: ALERTS ===
-  // Recalc with combined data (use playerAttendanceByDate from dashboard)
+  // Use Agenda data only
   const recentPlayerAttendanceCombined = {};
   activePlayers.forEach(p => {
     const dates = playerAttendanceByDate[p.id] || {};
     let present = 0;
-    uniqueTrainingDates.forEach(date => {
-      if (dates[date] === "present") {
+    recentAgendaTrainings.forEach(ai => {
+      if (dates[ai.date] === "present") {
         present++;
       }
     });
