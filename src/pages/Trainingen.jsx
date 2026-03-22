@@ -142,9 +142,20 @@ export default function Trainingen() {
           <p className="t-secondary">{sessions.filter(s => s.type === "Training").length} trainingen geregistreerd</p>
         </div>
         {isTrainer && activeTab === "aanwezigheid" && (
-          <button onClick={() => { setSessionDate(""); setNewSessionDialog(true); }} className="btn-secondary">
-            <Plus size={14} /> Extra Sessie
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => syncAllMutation.mutate()}
+              disabled={syncAllMutation.isPending}
+              className="btn-secondary"
+              style={{ fontSize: "12px" }}
+              title="Synchroniseer trainingen naar Agenda"
+            >
+              {syncAllMutation.isPending ? "Syncing..." : "↻ Sync Agenda"}
+            </button>
+            <button onClick={() => { setSessionDate(""); setNewSessionDialog(true); }} className="btn-secondary">
+              <Plus size={14} /> Extra Sessie
+            </button>
+          </div>
         )}
       </div>
 
