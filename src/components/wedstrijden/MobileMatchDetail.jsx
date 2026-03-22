@@ -268,7 +268,7 @@ export default function MobileMatchDetail({
 
           {/* Aanwezigheid (speler) */}
           {!isTrainer && myPlayer && linkedAgendaItem && (
-            <div className="glass p-4 flex items-center justify-between gap-3">
+            <div className="glass p-4 flex items-center justify-between gap-3" style={{ marginTop: "32px" }}>
               <div>
                 <p className="t-card-title">Mijn aanwezigheid</p>
                 <p className="t-secondary-sm">Geef aan of je erbij bent</p>
