@@ -49,8 +49,7 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-hidden">
       <div
-        className="glass-dark w-full my-8"
-        className="modal-scroll-content"
+        className="glass-dark modal-scroll-content w-full my-8"
         style={{
           maxWidth: "720px",
           borderRadius: "24px",
