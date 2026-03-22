@@ -9,7 +9,7 @@ import TrainerChampionsTrophy from "../components/dashboard/TrainerChampionsTrop
 import PhotoTimeline from "../components/photos/PhotoTimeline";
 import PhotoUpload from "../components/photos/PhotoUpload";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
-import TrainerDayBadge from "../components/dashboard/TrainerDayBadge";
+import TrainerGreetingPill from "../components/dashboard/TrainerGreetingPill";
 import DashboardBackground from "../components/dashboard/DashboardBackground";
 import { format, subDays, isAfter } from "date-fns";
 import NextMatchGrid from "../components/dashboard/NextMatchGrid";
@@ -136,17 +136,23 @@ export default function Dashboard() {
     <div className="space-y-5 pb-20 lg:pb-6 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
       {/* Trainer greeting */}
-      <div style={{ position: "relative", zIndex: 10, paddingX: "1rem" }}>
-        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", marginBottom: "8px", padding: "0.75rem 0 0 0" }}>
-          {(() => {
-            const hour = new Date().getHours();
-            let greeting = "Goedemorgen";
-            if (hour >= 12 && hour < 18) greeting = "Goedemiddag";
-            if (hour >= 18) greeting = "Goedenavond";
-            return greeting;
-          })()}, {currentUser?.full_name?.split(" ")[0] || "Trainer"}
-        </p>
-        <TrainerDayBadge />
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1.25rem 0.5rem", position: "relative", zIndex: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff", letterSpacing: "-0.3px", margin: 0 }}>
+              {(() => {
+                const hour = new Date().getHours();
+                let greeting = "Goedemorgen";
+                if (hour >= 12 && hour < 18) greeting = "Goedemiddag";
+                if (hour >= 18) greeting = "Goedenavond";
+                return greeting;
+              })()}, {currentUser?.full_name?.split(" ")[0] || "Trainer"}
+            </h2>
+          </div>
+          <div>
+            <TrainerGreetingPill />
+          </div>
+        </div>
       </div>
 
       {/* ── HERO STAT (alle viewports) ── */}
