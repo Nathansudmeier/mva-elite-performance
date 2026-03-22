@@ -144,14 +144,14 @@ export default function PlayerDashboard() {
         yoyo={yoyo}
       />
 
-      {/* Aanwezigheidsbevestiging agenda */}
+      {/* Komende activiteiten (agenda) */}
+      <KomendeActiviteiten playerId={playerId} />
+
+      {/* Aanwezigheidsbevestiging voor items zonder reactie */}
       <UpcomingConfirmations playerId={playerId} />
 
       {/* Today Training Card */}
       <TodayTrainingCard playerId={playerId} />
-
-      {/* Next Match Grid */}
-      <NextMatchGrid matches={matches} playerId={playerId} />
 
       {/* Attendance Dots */}
       <AttendanceDots attendance={attendance} />
