@@ -13,6 +13,7 @@ export default function Messages() {
   const [chats, setChats] = useState([]);
   const [showUserPicker, setShowUserPicker] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [chatToDelete, setChatToDelete] = useState(null);
 
   const { data: chatMembers = [] } = useQuery({
     queryKey: ["chatMembers", user?.email],
