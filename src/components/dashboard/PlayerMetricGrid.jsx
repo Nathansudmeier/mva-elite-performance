@@ -12,7 +12,7 @@ function Delta({ value, unit = "", lowerIsBetter = false }) {
   );
 }
 
-function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowerIsBetter, isSprint }) {
+function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowerIsBetter, isSprint, confirmationPct }) {
   const Icon = IconComp;
   return (
     <div className="relative overflow-hidden flex flex-col gap-1" style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,255,255,0.18)", borderRadius: "22px", padding: "16px" }}>
@@ -25,6 +25,9 @@ function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowe
             {unit && <span style={{ fontSize: isSprint ? "16px" : "14px", color: "rgba(255,255,255,0.35)", fontWeight: 400 }}>{unit}</span>}
           </div>
           <Delta value={delta} unit={deltaUnit} lowerIsBetter={lowerIsBetter} />
+          {confirmationPct !== null && confirmationPct !== undefined && (
+            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.40)" }}>{confirmationPct}% bevestigd vooraf</span>
+          )}
         </>
       ) : (
         <span style={{ fontSize: 12, color: "rgba(255,255,255,0.30)" }}>Geen data</span>
