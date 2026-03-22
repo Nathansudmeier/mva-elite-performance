@@ -48,14 +48,7 @@ export default function Dashboard() {
   // === BLOK 1: QUICK STATS ===
    const last4WeeksAgo = subDays(new Date(), 28);
 
-   // Combine both systems: TrainingSession + Attendance AND AgendaItem (Training type) + AgendaAttendance
-   const recentTrainingSessions = sessions.filter(s => isAfter(new Date(s.date), last4WeeksAgo) && (!s.type || s.type === "Training"));
-   const recentTrainingAttendance = attendance.filter(a => {
-     const session = sessions.find(s => s.id === a.session_id);
-     return session && isAfter(new Date(session.date), last4WeeksAgo) && (!session.type || session.type === "Training");
-   });
-
-   // From Agenda: Training type items in last 4 weeks
+   // Agenda only: Training type items in last 4 weeks
    const recentAgendaTrainings = agendaItems.filter(ai => 
      ai.type === "Training" && isAfter(new Date(ai.date), last4WeeksAgo)
    );
@@ -64,23 +57,12 @@ export default function Dashboard() {
      return item && (aa.status === "aanwezig" || aa.status === "afwezig");
    });
 
-   // Total training count (avoid double-count)
-   const uniqueTrainingDates = new Set([
-     ...recentTrainingSessions.map(s => s.date),
-     ...recentAgendaTrainings.map(ai => ai.date)
-   ]);
-   const totalRecentTrainings = uniqueTrainingDates.size;
+   const totalRecentTrainings = recentAgendaTrainings.length;
 
    // Calculate attendance: per player, per training date
    const playerAttendanceByDate = {};
    activePlayers.forEach(p => {
      playerAttendanceByDate[p.id] = {};
-     // From TrainingSession + Attendance
-     recentTrainingSessions.forEach(s => {
-       const att = recentTrainingAttendance.find(a => a.player_id === p.id && a.session_id === s.id);
-       playerAttendanceByDate[p.id][s.date] = att?.present ? "present" : playerAttendanceByDate[p.id][s.date];
-     });
-     // From AgendaItem + AgendaAttendance
      recentAgendaTrainings.forEach(ai => {
        const att = recentAgendaTrainingAttendance.find(aa => aa.player_id === p.id && aa.agenda_item_id === ai.id);
        if (att?.status === "aanwezig") {
@@ -93,10 +75,9 @@ export default function Dashboard() {
    let totalPlayerDateSessions = 0;
    let totalPresentPlayerDateSessions = 0;
    Object.keys(playerAttendanceByDate).forEach(playerId => {
-     const dates = playerAttendanceByDate[playerId];
-     uniqueTrainingDates.forEach(date => {
+     recentAgendaTrainings.forEach(ai => {
        totalPlayerDateSessions++;
-       if (dates[date] === "present") {
+       if (playerAttendanceByDate[playerId][ai.date] === "present") {
          totalPresentPlayerDateSessions++;
        }
      });
