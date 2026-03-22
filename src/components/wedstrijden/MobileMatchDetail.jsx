@@ -77,9 +77,8 @@ export default function MobileMatchDetail({
 
       <div className="relative space-y-4 pb-24" style={{ zIndex: 1 }}>
          {/* Hero section with field background */}
-         <div style={{
+         <div className="match-hero-bg" style={{
            position: "relative",
-           height: "220px",
            backgroundImage: "url('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/3b2601fe6_wedstrijd.jpg')",
            backgroundSize: "cover",
            backgroundPosition: "center top",
