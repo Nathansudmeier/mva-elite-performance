@@ -208,99 +208,54 @@ export default function Layout({ children, currentPageName }) {
 
       {/* New Tab Bar */}
       {(() => {
-        const tabItems = isSpeelsterUser
-          ? [
-              { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
-              { name: "Agenda", icon: "calendar", page: "Agenda" },
-              { name: "Trainingen", icon: "clipboard-list", page: "Trainingen" },
-              { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
-              { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
-            ]
-          : [
-              { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
-              { name: "Agenda", icon: "calendar", page: "Agenda" },
-              { name: "Trainingen", icon: "clipboard-list", page: "Trainingen" },
-              { name: "Spelers", icon: "users", page: "Players" },
-              { name: "Meer", icon: "dots", page: null, onClick: () => setMeerOpen(true) },
-            ];
+        const trainerTabItems = [
+          { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
+          { name: "Agenda", icon: "calendar", page: "Agenda" },
+          { name: "Trainingen", icon: "clipboard-list", page: "Trainingen" },
+          { name: "Spelers", icon: "users", page: "Players" },
+          { name: "Staff", icon: "user-cog", page: "Staff" },
+          { name: "Berichten", icon: "message-circle", page: "Messages" },
+          { name: "Beheer", icon: "settings", page: "AccountBeheer" },
+          { name: "Leaderboard", icon: "trophy", page: "Leaderboard" },
+        ];
         
-        const activeIndex = tabItems.findIndex(item => item.page === currentPageName);
-        const accentLeft = activeIndex >= 0 ? `calc(${(100 / tabItems.length) * activeIndex + (50 / tabItems.length)}% - 20px)` : "50%";
+        const speelsterTabItems = [
+          { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
+          { name: "Agenda", icon: "calendar", page: "Agenda" },
+          { name: "Trainingen", icon: "clipboard-list", page: "Trainingen" },
+          { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
+          { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
+        ];
+        
+        const tabItems = isSpeelsterUser ? speelsterTabItems : trainerTabItems;
         
         return (
-          <>
-            <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-[100]" style={{ backgroundColor: "rgba(15,7,2,0.20)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", padding: "8px 8px 20px" }}>
-              {/* Orange gradient accent line */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,107,0,0.60), transparent)" }} />
-              
-              {/* Moving accent line under active tab */}
-              <div style={{ position: "absolute", top: 0, width: "40px", height: "2px", borderRadius: "1px", background: "#FF6B00", opacity: 0.8, left: accentLeft, transition: "left 0.2s ease", pointerEvents: "none" }} />
+          <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-[100]" style={{ backgroundColor: "rgba(15,7,2,0.20)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", padding: "8px 8px 20px" }}>
+            {/* Orange gradient accent line */}
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,107,0,0.60), transparent)" }} />
 
-              <div className="flex gap-1">
-                {tabItems.map((item, idx) => {
+            <div className="overflow-x-auto" style={{ scrollBehavior: "smooth" }}>
+              <div style={{ display: "flex", gap: "6px", minWidth: "min-content", paddingRight: "8px" }}>
+                {tabItems.map((item) => {
                   const isActive = item.page === currentPageName;
                   return (
                     <Link
-                      key={item.page || item.name}
-                      to={item.page ? createPageUrl(item.page) : "#"}
-                      onClick={(e) => {
-                        if (item.onClick) {
-                          e.preventDefault();
-                          item.onClick();
-                        } else {
-                          setMobileOpen(false);
-                        }
-                      }}
-                      style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", padding: "6px 4px", borderRadius: "12px", textDecoration: "none", background: isActive ? "rgba(255,107,0,0.15)" : "transparent", border: isActive ? "0.5px solid rgba(255,107,0,0.25)" : "none", transition: "all 0.15s ease" }}
+                      key={item.page}
+                      to={createPageUrl(item.page)}
+                      onClick={() => setMobileOpen(false)}
+                      style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", padding: "6px 8px", borderRadius: "12px", textDecoration: "none", background: isActive ? "rgba(255,107,0,0.15)" : "transparent", border: isActive ? "0.5px solid rgba(255,107,0,0.25)" : "none", transition: "all 0.15s ease", flexShrink: 0 }}
                     >
                       {isActive && <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#FF6B00", marginBottom: "2px" }} />}
                       <i className={`ti ti-${item.icon}`} style={{ fontSize: "22px", stroke: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", strokeWidth: 1.5, color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)" }} />
-                      <span style={{ fontSize: "10px", color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", fontWeight: isActive ? 600 : 400 }}>
+                      <span style={{ fontSize: "10px", color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", fontWeight: isActive ? 600 : 400, whiteSpace: "nowrap" }}>
                         {item.name}
                       </span>
                     </Link>
                   );
                 })}
               </div>
-            </nav>
-
-            {/* Bottom sheet voor extra items (Staff, AccountBeheer, etc.) */}
-            {meerOpen && (
-              <div className="lg:hidden fixed inset-0 z-50" onClick={() => setMeerOpen(false)}>
-                <div
-                  className="absolute bottom-0 left-0 right-0"
-                  style={{ background: "rgba(20,10,2,0.95)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", borderTop: "0.5px solid rgba(255,255,255,0.08)", borderRadius: "20px 20px 0 0", padding: "20px 16px 36px" }}
-                  onClick={e => e.stopPropagation()}
-                >
-                  <div style={{ width: "36px", height: "4px", borderRadius: "2px", background: "rgba(255,255,255,0.20)", margin: "0 auto 16px" }} />
-                  <p style={{ fontSize: "13px", fontWeight: 600, color: "rgba(255,255,255,0.50)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.07em" }}>Meer</p>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
-                    {[
-                      { name: "Staff", icon: "user-cog", page: "Staff" },
-                      { name: "Berichten", icon: "message-circle", page: "Messages" },
-                      { name: "Beheer", icon: "settings", page: "AccountBeheer" },
-                      { name: "Leaderboard", icon: "trophy", page: "Leaderboard" },
-                    ].map((item) => {
-                      const isActive = currentPageName === item.page;
-                      return (
-                        <Link
-                          key={item.page}
-                          to={createPageUrl(item.page)}
-                          onClick={() => setMeerOpen(false)}
-                          style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", padding: "6px 4px", borderRadius: "12px", textDecoration: "none" }}
-                        >
-                          <i className={`ti ti-${item.icon}`} style={{ fontSize: "22px", stroke: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", strokeWidth: 1.5, color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)" }} />
-                          <span style={{ fontSize: "10px", color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", fontWeight: isActive ? 600 : 400 }}>
-                            {item.name}
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
+            </div>
+          </nav>
         );
       })()}
     </div>
