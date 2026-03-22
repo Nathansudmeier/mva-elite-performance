@@ -159,38 +159,7 @@ export default function Layout({ children, currentPageName }) {
       <IOSInstallBanner />
 
       {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 z-50" style={{ background: "rgba(0,0,0,0.20)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", borderBottom: "0.5px solid rgba(255,255,255,0.05)" }}>
-        <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto w-full">
-          {/* Left: logo + page title */}
-          <div className="flex items-center gap-3">
-            <Link to={createPageUrl("Dashboard")} className="flex-shrink-0">
-              <div className="w-9 h-9 rounded-full overflow-hidden" style={{ border: "1.5px solid rgba(255,107,0,0.45)" }}>
-                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/f4c654af8_Artemis.png" alt="MVA Noord" className="w-full h-full object-cover" />
-              </div>
-            </Link>
-            <div className="hidden sm:block">
-              <p style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", lineHeight: 1.1, letterSpacing: "-0.4px" }}>MVA Noord</p>
-              <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", marginTop: "1px" }}>{greeting}, {user?.full_name?.split(" ")[0] || "trainer"}</p>
-            </div>
-          </div>
-          {/* Right: team toggle + seizoen + avatar */}
-          <div className="flex items-center gap-2">
-
-            <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.50)", background: "rgba(255,255,255,0.07)", borderRadius: "20px", padding: "4px 10px" }}>2025-26</div>
-            {profileLink ? (
-              <Link to={profileLink} className="flex-shrink-0">
-                <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#FF6B00", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  {profilePhoto ? <img src={profilePhoto} alt={user?.full_name} className="w-full h-full object-cover" /> : <span style={{ fontSize: "13px", fontWeight: 700, color: "#fff" }}>{user?.full_name?.charAt(0)?.toUpperCase() || "?"}</span>}
-                </div>
-              </Link>
-            ) : (
-              <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#FF6B00", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                {profilePhoto ? <img src={profilePhoto} alt={user?.full_name} className="w-full h-full object-cover" /> : <span style={{ fontSize: "13px", fontWeight: 700, color: "#fff" }}>{user?.full_name?.charAt(0)?.toUpperCase() || "?"}</span>}
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
+      <TopBar />
 
       {/* Sidebar desktop */}
       <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col z-40 overflow-y-auto" style={{ backgroundColor: "rgba(0,0,0,0.38)", borderRight: "0.5px solid rgba(255,255,255,0.07)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)" }}>
