@@ -72,12 +72,50 @@ export default function Wedstrijden() {
   };
 
   const saveMutation = useMutation({
-    mutationFn: (data) => {
-      if (editingMatch) return base44.entities.Match.update(editingMatch.id, data);
-      return base44.entities.Match.create(data);
+    mutationFn: async (data) => {
+      let match;
+      if (editingMatch) {
+        match = await base44.entities.Match.update(editingMatch.id, data);
+        // Sync: update bestaand AgendaItem als datum/tegenstander wijzigt
+        const existing = await base44.entities.AgendaItem.filter({ type: "Wedstrijd", match_id: editingMatch.id });
+        if (existing && existing.length > 0) {
+          await base44.entities.AgendaItem.update(existing[0].id, {
+            title: `Wedstrijd vs. ${data.opponent}`,
+            date: data.date,
+            team: data.team === "MO17" ? "MO17" : "Dames 1",
+          });
+        } else {
+          // Probeer op datum+type te vinden (oud)
+          const byDate = await base44.entities.AgendaItem.filter({ type: "Wedstrijd", date: editingMatch.date });
+          const byTitle = byDate.find(ai => ai.title && ai.title.includes(editingMatch.opponent));
+          if (byTitle) {
+            await base44.entities.AgendaItem.update(byTitle.id, {
+              title: `Wedstrijd vs. ${data.opponent}`,
+              date: data.date,
+              team: data.team === "MO17" ? "MO17" : "Dames 1",
+              match_id: editingMatch.id,
+            });
+          }
+        }
+      } else {
+        match = await base44.entities.Match.create(data);
+        // Sync: maak AgendaItem aan
+        await base44.entities.AgendaItem.create({
+          type: "Wedstrijd",
+          title: `Wedstrijd vs. ${data.opponent}`,
+          date: data.date,
+          start_time: "14:00",
+          team: data.team === "MO17" ? "MO17" : "Dames 1",
+          notes: data.notes || "",
+          match_id: match.id,
+        });
+      }
+      return match;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["matches"] });
+      queryClient.invalidateQueries({ queryKey: ["agendaItems"] });
+      queryClient.invalidateQueries({ queryKey: ["agendaItems-upcoming"] });
       setDialogOpen(false);
     },
   });
