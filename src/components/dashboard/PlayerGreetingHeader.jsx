@@ -105,6 +105,7 @@ function getWeeklyHighlight(player, attendance, ratings, yoyo) {
 }
 
 export default function PlayerGreetingHeader({ user, player, attendance = [], ratings = [], yoyo = [] }) {
+  const navigate = useNavigate();
   const { data: sessions = [] } = useQuery({
     queryKey: ["trainingSessions"],
     queryFn: () => base44.entities.TrainingSession.list(),
