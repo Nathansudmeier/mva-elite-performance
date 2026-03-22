@@ -251,16 +251,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── ALERTS: Lage Aanwezigheid ── */}
-      {lowAttendancePlayers.length > 0 && (
-        <div style={{ background: "rgba(251,191,36,0.08)", border: "0.5px solid rgba(251,191,36,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start", overflow: "hidden", height: "auto" }}>
-          <i className="ti ti-alert-triangle flex-shrink-0 mt-0.5" style={{ fontSize: "14px", color: "#fbbf24" }} />
-          <div>
-            <p style={{ fontSize: "12px", fontWeight: 600, color: "#fbbf24" }}>{lowAttendancePlayers.length} spelers onder 60% aanwezigheid</p>
-            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginTop: "2px" }}>{lowAttendancePlayers.map(p => p.name).join(", ")}</p>
-          </div>
-        </div>
-      )}
+
 
       {uploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
