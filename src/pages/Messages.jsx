@@ -112,7 +112,76 @@ export default function Messages() {
       <DashboardBackground />
 
       <div className="max-w-2xl mx-auto px-4">
-        <h1 className="t-page-title mb-6">Berichten</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="t-page-title">Berichten</h1>
+          <button
+            onClick={() => setShowUserPicker(true)}
+            className="p-2 rounded-lg transition-opacity hover:opacity-80"
+            style={{ background: "rgba(255,107,0,0.20)", border: "0.5px solid rgba(255,107,0,0.35)" }}
+          >
+            <Plus size={20} style={{ color: "#FF8C3A" }} />
+          </button>
+        </div>
+
+        {isTrainer && chats.length === 0 && (
+          <button
+            onClick={() => initializeChatsM.mutate()}
+            disabled={initializeChatsM.isPending}
+            className="glass w-full p-4 text-center mb-4 transition-opacity hover:opacity-80"
+          >
+            <p className="t-secondary">Maak MVA Noord groepschat aan</p>
+          </button>
+        )}
+
+        {showUserPicker && (
+          <div className="glass p-4 mb-4 space-y-3">
+            <h3 className="t-card-title">Selecteer contactpersonen</h3>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {allUsers
+                .filter(u => u.email !== user.email)
+                .map(u => (
+                  <label key={u.email} className="flex items-center gap-3 p-2 rounded cursor-pointer hover:bg-white/5">
+                    <input
+                      type="checkbox"
+                      checked={selectedUsers.includes(u.email)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedUsers([...selectedUsers, u.email]);
+                        } else {
+                          setSelectedUsers(selectedUsers.filter(e => e !== u.email));
+                        }
+                      }}
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                    <span className="t-secondary">{u.full_name}</span>
+                  </label>
+                ))}
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowUserPicker(false);
+                  setSelectedUsers([]);
+                }}
+                className="flex-1 p-2 rounded-lg transition-opacity hover:opacity-80"
+                style={{ background: "rgba(255,255,255,0.08)" }}
+              >
+                <span className="t-secondary">Annuleer</span>
+              </button>
+              <button
+                onClick={() => createDirectChatM.mutate()}
+                disabled={selectedUsers.length === 0 || createDirectChatM.isPending}
+                className="flex-1 p-2 rounded-lg transition-opacity"
+                style={{
+                  background: selectedUsers.length > 0 ? "#FF6B00" : "rgba(255,107,0,0.3)",
+                  opacity: selectedUsers.length > 0 ? 1 : 0.5,
+                }}
+              >
+                <span className="t-secondary" style={{ color: "white" }}>Start chat</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {chats.length === 0 ? (
           <div className="glass p-8 text-center">
