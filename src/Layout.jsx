@@ -142,7 +142,6 @@ export default function Layout({ children, currentPageName }) {
               <NavLink item={{ name: "Agenda", icon: "calendar", page: "Agenda" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Trainingen", icon: "list-check", page: "Trainingen" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} />
-              <NavLink item={{ name: "Staff", icon: "user-cog", page: "Staff" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }} currentPageName={currentPageName} />
               <DeveloperGroup currentPageName={currentPageName} />
             </>
