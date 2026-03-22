@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { TYPE_CONFIG, TEAM_COLORS, formatDate } from "./agendaUtils";
-import { MapPin, Clock, Pencil, Trash2, Bell } from "lucide-react";
+import { MapPin, Clock, Pencil, Trash2, Bell, Check, X } from "lucide-react";
 
 const TABS = ["Aanwezig", "Afwezig", "Nog niet gereageerd"];
 
@@ -21,6 +21,26 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
   const { data: players = [] } = useQuery({
     queryKey: ["players-agenda"],
     queryFn: () => base44.entities.Player.filter({ active: true }),
+  });
+
+  // Current user & their attendance record
+  const { data: currentUser } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => base44.auth.me(),
+    staleTime: 60000,
+  });
+  const myPlayer = currentUser ? players.find(p => p.name === currentUser.full_name) : null;
+  const myAttendance = myPlayer ? attendance.find(a => a.player_id === myPlayer.id) : null;
+
+  const rsvpMutation = useMutation({
+    mutationFn: async (status) => {
+      if (myAttendance) {
+        await base44.entities.AgendaAttendance.update(myAttendance.id, { status });
+      } else if (myPlayer) {
+        await base44.entities.AgendaAttendance.create({ agenda_item_id: item.id, player_id: myPlayer.id, status });
+      }
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["agenda-attendance", item.id] }),
   });
 
   const playerMap = {};
