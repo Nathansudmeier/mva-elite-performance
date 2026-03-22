@@ -22,11 +22,23 @@ export default function MatchCheckInOverview({ matchId, totalInSelectie }) {
   // Sort pre-check-ins by lowest mental score first
   const preCheckInsSorted = preCheckIns.sort((a, b) => (a.mental_score || 5) - (b.mental_score || 5));
 
+  // Check if both sections are empty
+  const hasAnyCheckIns = preCheckIns.length > 0 || postCheckIns.length > 0;
+
+  if (!hasAnyCheckIns) {
+    return (
+      <div style={{ textAlign: "center", paddingTop: "20px", paddingBottom: "20px" }}>
+        <Users size={20} style={{ color: "rgba(255,255,255,0.20)", margin: "0 auto 8px" }} />
+        <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "14px" }}>Nog geen reacties</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5">
       {/* Pre-game section */}
       <div className="space-y-3">
-        <p className="t-label">PRE-GAME ({preCheckIns.length} van ~{totalInSelectie})</p>
+        <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>PRE-GAME ({preCheckIns.length} van ~{totalInSelectie})</p>
         <div className="space-y-2 max-h-60 overflow-y-auto">
           {preCheckInsSorted.length === 0 ? (
             <div className="flex flex-col items-center py-5 gap-2">
