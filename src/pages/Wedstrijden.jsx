@@ -565,9 +565,10 @@ export default function Wedstrijden() {
             <div className="space-y-3">
               <label className="text-xs font-semibold uppercase tracking-wider text-[#888888]">Wedstrijdgegevens</label>
               <div className="grid grid-cols-2 gap-3">
-                <Input placeholder="Tegenstander" value={form.opponent} onChange={(e) => setForm({ ...form, opponent: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB]" />
-                <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A]" />
-              </div>
+                 <Input placeholder="Tegenstander" value={form.opponent} onChange={(e) => setForm({ ...form, opponent: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A] placeholder:text-[#BBBBBB]" />
+                 <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A]" />
+               </div>
+               <Input type="time" placeholder="Starttijd" value={form.start_time} onChange={(e) => setForm({ ...form, start_time: e.target.value })} className="bg-white border-[#E8E6E1] text-[#1A1A1A]" />
               <div className="grid grid-cols-3 gap-3">
                 <Select value={form.home_away} onValueChange={(v) => setForm({ ...form, home_away: v })}>
                   <SelectTrigger className="bg-white border-[#E8E6E1] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
