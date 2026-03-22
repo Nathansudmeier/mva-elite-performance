@@ -125,6 +125,33 @@ export default function AgendaForm({ item, onSave, onClose }) {
               placeholder="Extra informatie..." />
           </div>
 
+          {/* Herinneringen */}
+          <div className="p-4 rounded-xl space-y-3" style={{ background: "rgba(255,255,255,0.05)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
+            <p className="t-label">🔔 Automatische herinneringen</p>
+            <p className="t-tertiary" style={{ fontSize: "11px" }}>Spelers die nog niet hebben gereageerd ontvangen automatisch een e-mail herinnering.</p>
+            {[
+              { key: "reminder_1_days", label: "Eerste herinnering" },
+              { key: "reminder_2_days", label: "Tweede herinnering" },
+            ].map(({ key, label }) => (
+              <div key={key} className="flex items-center justify-between gap-3">
+                <p className="t-secondary text-sm">{label}</p>
+                <select
+                  value={form[key]}
+                  onChange={e => set(key, Number(e.target.value))}
+                  className="px-3 py-1.5 rounded-lg text-sm text-white outline-none"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}
+                >
+                  <option value={0}>Geen</option>
+                  <option value={1}>1 dag van tevoren</option>
+                  <option value={2}>2 dagen van tevoren</option>
+                  <option value={3}>3 dagen van tevoren</option>
+                  <option value={5}>5 dagen van tevoren</option>
+                  <option value={7}>7 dagen van tevoren</option>
+                </select>
+              </div>
+            ))}
+          </div>
+
           <button type="submit" disabled={saving} className="btn-primary mt-2">
             {saving ? "Opslaan..." : item ? "Wijzigingen opslaan" : "Activiteit aanmaken"}
           </button>
