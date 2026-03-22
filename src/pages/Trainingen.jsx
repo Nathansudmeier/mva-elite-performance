@@ -54,26 +54,31 @@ export default function Trainingen() {
     return { day, dateStr, session };
   });
 
+  // Helper: sync een TrainingSession naar Agenda
+  async function syncSessionToAgenda(session) {
+    const existing = await base44.entities.AgendaItem.filter({ training_session_id: session.id });
+    if (!existing || existing.length === 0) {
+      const byDate = await base44.entities.AgendaItem.filter({ date: session.date, type: "Training" });
+      if (!byDate || byDate.length === 0) {
+        await base44.entities.AgendaItem.create({
+          type: "Training",
+          title: session.notes ? `Training – ${session.notes}` : "Training",
+          date: session.date,
+          start_time: "18:30",
+          team: "Beide",
+          notes: session.notes || "",
+          training_session_id: session.id,
+        });
+      }
+    }
+  }
+
   const createSessionMutation = useMutation({
     mutationFn: async (date) => {
       const session = await base44.entities.TrainingSession.create({ date, type: "Training", notes: sessionNotes });
       const records = activePlayers.map((p) => ({ session_id: session.id, player_id: p.id, present: false }));
       await base44.entities.Attendance.bulkCreate(records);
-
-      // Sync naar Agenda: maak bijbehorende AgendaItem aan
-      const existing = await base44.entities.AgendaItem.filter({ date, type: "Training" });
-      if (!existing || existing.length === 0) {
-        await base44.entities.AgendaItem.create({
-          type: "Training",
-          title: sessionNotes ? `Training – ${sessionNotes}` : "Training",
-          date,
-          start_time: "18:30",
-          team: "Beide",
-          notes: sessionNotes || "",
-          training_session_id: session.id,
-        });
-      }
-
+      await syncSessionToAgenda(session);
       return session;
     },
     onSuccess: (session) => {
