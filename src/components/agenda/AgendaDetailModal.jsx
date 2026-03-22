@@ -1,12 +1,17 @@
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { TYPE_CONFIG, TEAM_COLORS, formatDate } from "./agendaUtils";
-import { MapPin, Clock, Users, Pencil, Trash2 } from "lucide-react";
+import { MapPin, Clock, Pencil, Trash2, Bell } from "lucide-react";
+
+const TABS = ["Aanwezig", "Afwezig", "Nog niet gereageerd"];
 
 export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, onClose }) {
   const cfg = TYPE_CONFIG[item.type] || TYPE_CONFIG.Evenement;
   const teamCfg = TEAM_COLORS[item.team] || TEAM_COLORS["Beide"];
+  const [activeTab, setActiveTab] = useState(0);
+  const [reminderSent, setReminderSent] = useState(false);
+  const qc = useQueryClient();
 
   const { data: attendance = [] } = useQuery({
     queryKey: ["agenda-attendance", item.id],
@@ -18,22 +23,37 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
     queryFn: () => base44.entities.Player.filter({ active: true }),
   });
 
-  const aanwezig = attendance.filter(a => a.status === "aanwezig").length;
-  const afwezig = attendance.filter(a => a.status === "afwezig").length;
-  const onbekend = players.length - aanwezig - afwezig;
-
   const playerMap = {};
   players.forEach(p => { playerMap[p.id] = p; });
 
-  const byStatus = (status) => attendance
-    .filter(a => a.status === status)
-    .map(a => playerMap[a.player_id])
-    .filter(Boolean);
+  const aanwezigList = attendance.filter(a => a.status === "aanwezig").map(a => ({ player: playerMap[a.player_id], record: a })).filter(x => x.player);
+  const afwezigList = attendance.filter(a => a.status === "afwezig").map(a => ({ player: playerMap[a.player_id], record: a })).filter(x => x.player);
+  const respondedIds = new Set(attendance.map(a => a.player_id));
+  const nognietList = players.filter(p => !respondedIds.has(p.id));
+
+  const counts = [aanwezigList.length, afwezigList.length, nognietList.length];
+
+  const sendReminder = useMutation({
+    mutationFn: async () => {
+      // Send email reminder to players who haven't responded
+      const dateStr = new Date(item.date + "T00:00:00").toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long" });
+      for (const player of nognietList) {
+        if (player.email) {
+          await base44.integrations.Core.SendEmail({
+            to: player.email,
+            subject: `Herinnering: bevestig je aanwezigheid voor ${item.title}`,
+            body: `Hoi ${player.name},\n\nVergeet niet je aanwezigheid door te geven voor ${item.title} op ${dateStr} om ${item.start_time}.\n\nOpen de app om te reageren.`,
+          });
+        }
+      }
+    },
+    onSuccess: () => setReminderSent(true),
+  });
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center" style={{ background: "rgba(0,0,0,0.65)", backdropFilter: "blur(8px)" }} onClick={onClose}>
       <div className="w-full md:max-w-lg glass-dark rounded-t-3xl md:rounded-3xl overflow-hidden max-h-[85vh] flex flex-col" onClick={e => e.stopPropagation()}>
-        {/* Header gekleurde balk */}
+        {/* Header */}
         <div className="px-6 pt-6 pb-4" style={{ borderBottom: `0.5px solid ${cfg.color}30` }}>
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -45,7 +65,6 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
             </div>
             <button onClick={onClose} className="t-secondary hover:text-white text-xl flex-shrink-0">✕</button>
           </div>
-
           <div className="mt-4 space-y-2">
             <div className="flex items-center gap-2 t-secondary">
               <Clock size={14} className="ic-muted" />
@@ -62,48 +81,82 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
               {item.team}
             </span>
           </div>
-
           {item.notes && (
             <p className="t-secondary mt-3 p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.05)" }}>{item.notes}</p>
           )}
         </div>
 
-        {/* Aanwezigheid samenvatting */}
-        <div className="px-6 py-4 flex gap-4" style={{ borderBottom: "0.5px solid rgba(255,255,255,0.06)" }}>
-          <div className="flex items-center gap-2">
-            <div className="dot-green" />
-            <span className="t-secondary">{aanwezig} aanwezig</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="dot-red" />
-            <span className="t-secondary">{afwezig} afwezig</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="dot-yellow" />
-            <span className="t-secondary">{onbekend} onbekend</span>
-          </div>
+        {/* Tabs */}
+        <div className="flex px-6 pt-3 gap-1" style={{ borderBottom: "0.5px solid rgba(255,255,255,0.06)" }}>
+          {TABS.map((tab, i) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(i)}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-t-lg transition-colors"
+              style={{
+                color: activeTab === i ? "#fff" : "rgba(255,255,255,0.45)",
+                borderBottom: activeTab === i ? "2px solid #FF6B00" : "2px solid transparent",
+                background: "transparent",
+              }}
+            >
+              {tab}
+              <span className="text-xs px-1.5 py-0.5 rounded-full" style={{
+                background: activeTab === i ? "rgba(255,107,0,0.20)" : "rgba(255,255,255,0.08)",
+                color: activeTab === i ? "#FF8C3A" : "rgba(255,255,255,0.40)",
+              }}>{counts[i]}</span>
+            </button>
+          ))}
         </div>
 
-        {/* Spelerslijst */}
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3">
-          {[{ label: "Aanwezig", status: "aanwezig", dot: "dot-green" }, { label: "Afwezig", status: "afwezig", dot: "dot-red" }].map(({ label, status, dot }) => {
-            const list = byStatus(status);
-            if (!list.length) return null;
-            return (
-              <div key={status}>
-                <p className="t-label mb-2">{label}</p>
-                <div className="flex flex-wrap gap-2">
-                  {list.map(p => (
-                    <div key={p.id} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
-                      style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.1)" }}>
-                      <div className={dot} style={{ width: 6, height: 6 }} />
-                      <span className="t-secondary-sm">{p.name}</span>
-                    </div>
-                  ))}
+        {/* Tab content */}
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          {activeTab === 0 && (
+            <PlayerList items={aanwezigList.map(x => ({ player: x.player }))} dotClass="dot-green" emptyMsg="Nog niemand bevestigd" />
+          )}
+          {activeTab === 1 && (
+            <div className="space-y-2">
+              {afwezigList.length === 0 && <p className="t-secondary">Niemand afgemeld</p>}
+              {afwezigList.map(({ player, record }) => (
+                <div key={player.id} className="flex items-start gap-3 p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <PlayerAvatar player={player} />
+                  <div className="flex-1 min-w-0">
+                    <p className="t-card-title">{player.name}</p>
+                    {record.notes && <p className="t-secondary mt-0.5 text-xs" style={{ color: "#f87171" }}>{record.notes}</p>}
+                  </div>
+                  <div className="dot-red mt-1.5 flex-shrink-0" />
                 </div>
-              </div>
-            );
-          })}
+              ))}
+            </div>
+          )}
+          {activeTab === 2 && (
+            <div className="space-y-2">
+              {nognietList.length === 0 && <p className="t-secondary">Iedereen heeft gereageerd 🎉</p>}
+              {nognietList.map(p => (
+                <div key={p.id} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <PlayerAvatar player={p} />
+                  <p className="t-card-title flex-1">{p.name}</p>
+                  <div className="dot-yellow flex-shrink-0" />
+                </div>
+              ))}
+              {isTrainer && nognietList.length > 0 && (
+                <button
+                  onClick={() => sendReminder.mutate()}
+                  disabled={sendReminder.isPending || reminderSent}
+                  className="w-full mt-3 flex items-center justify-center gap-2"
+                  style={{
+                    minHeight: 44,
+                    background: reminderSent ? "rgba(74,222,128,0.10)" : "rgba(255,107,0,0.15)",
+                    border: `0.5px solid ${reminderSent ? "rgba(74,222,128,0.25)" : "rgba(255,107,0,0.30)"}`,
+                    color: reminderSent ? "#4ade80" : "#FF8C3A",
+                    borderRadius: 12, fontWeight: 600, fontSize: 14, cursor: reminderSent ? "default" : "pointer",
+                  }}
+                >
+                  <Bell size={15} />
+                  {reminderSent ? "Herinneringen verstuurd!" : sendReminder.isPending ? "Versturen..." : `Stuur herinnering (${nognietList.length})`}
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Trainer acties */}
@@ -120,6 +173,33 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function PlayerAvatar({ player }) {
+  return (
+    <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden"
+      style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.25)" }}>
+      {player.photo_url
+        ? <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
+        : <span style={{ fontSize: 12, fontWeight: 700, color: "#FF8C3A" }}>{player.name.charAt(0)}</span>
+      }
+    </div>
+  );
+}
+
+function PlayerList({ items, dotClass, emptyMsg }) {
+  if (!items.length) return <p className="t-secondary">{emptyMsg}</p>;
+  return (
+    <div className="space-y-2">
+      {items.map(({ player }) => (
+        <div key={player.id} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
+          <PlayerAvatar player={player} />
+          <p className="t-card-title flex-1">{player.name}</p>
+          <div className={dotClass} style={{ flexShrink: 0 }} />
+        </div>
+      ))}
     </div>
   );
 }
