@@ -436,6 +436,14 @@ export default function Dashboard() {
 
       {isTrainer && <PhotoUpload onSaved={() => refetchPhotos()} />}
       <PhotoTimeline photos={teamPhotos} />
+
+      {agendaFormOpen && (
+        <AgendaForm
+          item={null}
+          onSave={() => { setAgendaFormOpen(false); queryClient.invalidateQueries({ queryKey: ["agenda-items"] }); queryClient.invalidateQueries({ queryKey: ["agendaItems-upcoming"] }); }}
+          onClose={() => setAgendaFormOpen(false)}
+        />
+      )}
     </div>
   );
 }
