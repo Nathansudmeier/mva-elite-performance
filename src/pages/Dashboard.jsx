@@ -477,6 +477,7 @@ export default function Dashboard() {
             <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>Zelfreflecties deze week</p>
             <button onClick={() => navigate("/SelfReflection")} style={{ fontSize: "12px", color: "#FF8C3A" }}>Alle →</button>
           </div>
+
           {thisWeekReflections.length > 0 ? (
             <div>
               {thisWeekReflections.map((r, i) => {
