@@ -253,21 +253,61 @@ export default function Trainingen() {
             </div>
           </div>
 
-          {!isTrainer && myPlayerId && myAttendanceRecord && (
-            <div className="mb-4 p-4 rounded-xl flex items-center justify-between" style={{ background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)" }}>
-              <div>
+          {!isTrainer && myPlayerId && (() => {
+            const linkedAgendaItemForRsvp = agendaItems.find(ai => ai.training_session_id === selectedSession.id || (ai.type === "Training" && ai.date === selectedSession.date));
+            const myAgendaRecord = linkedAgendaItemForRsvp ? agendaAttendance.find(aa => aa.agenda_item_id === linkedAgendaItemForRsvp.id && aa.player_id === myPlayerId) : null;
+
+            return (
+              <div className="mb-4 p-4 rounded-xl space-y-3" style={{ background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)" }}>
                 <p className="t-card-title">Mijn aanwezigheid</p>
-                <p className="t-secondary-sm">Klik om jouw status te wijzigen</p>
+                {/* Vooraf bevestigen (AgendaAttendance) */}
+                {linkedAgendaItemForRsvp && (
+                  <div className="flex items-center justify-between">
+                    <p className="t-secondary-sm">Bevestig vooraf:</p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={async () => {
+                          if (myAgendaRecord) {
+                            await base44.entities.AgendaAttendance.update(myAgendaRecord.id, { status: "aanwezig" });
+                          } else {
+                            await base44.entities.AgendaAttendance.create({ agenda_item_id: linkedAgendaItemForRsvp.id, player_id: myPlayerId, status: "aanwezig" });
+                          }
+                          queryClient.invalidateQueries({ queryKey: ["agendaAttendanceAll"] });
+                        }}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold"
+                        style={{ background: myAgendaRecord?.status === "aanwezig" ? "#4ade80" : "rgba(74,222,128,0.12)", color: myAgendaRecord?.status === "aanwezig" ? "#fff" : "#4ade80", border: "0.5px solid rgba(74,222,128,0.30)" }}
+                      >
+                        <Check size={12} /> Ik kom
+                      </button>
+                      <button
+                        onClick={async () => {
+                          if (myAgendaRecord) {
+                            await base44.entities.AgendaAttendance.update(myAgendaRecord.id, { status: "afwezig" });
+                          } else {
+                            await base44.entities.AgendaAttendance.create({ agenda_item_id: linkedAgendaItemForRsvp.id, player_id: myPlayerId, status: "afwezig" });
+                          }
+                          queryClient.invalidateQueries({ queryKey: ["agendaAttendanceAll"] });
+                        }}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold"
+                        style={{ background: myAgendaRecord?.status === "afwezig" ? "#f87171" : "rgba(248,113,113,0.12)", color: myAgendaRecord?.status === "afwezig" ? "#fff" : "#f87171", border: "0.5px solid rgba(248,113,113,0.30)" }}
+                      >
+                        <X size={12} /> Ik kom niet
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {/* Trainer-geregistreerde aanwezigheid */}
+                {myAttendanceRecord && (
+                  <div className="flex items-center justify-between">
+                    <p className="t-secondary-sm">Aanwezig geweest:</p>
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: myAttendanceRecord.present ? "#4ade80" : "rgba(255,255,255,0.15)" }}>
+                      {myAttendanceRecord.present ? <Check size={16} className="text-white" /> : <X size={16} className="text-white" />}
+                    </div>
+                  </div>
+                )}
               </div>
-              <button
-                onClick={() => toggleAttendance.mutate({ attendanceId: myAttendanceRecord.id, present: !myAttendanceRecord.present })}
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-white transition-all"
-                style={{ backgroundColor: myAttendanceRecord.present ? "#4ade80" : "rgba(255,255,255,0.15)" }}
-              >
-                {myAttendanceRecord.present ? <Check size={20} /> : <X size={20} className="text-white" />}
-              </button>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Trainer: twee-laags aanwezigheidsoverzicht */}
           {isTrainer && (
