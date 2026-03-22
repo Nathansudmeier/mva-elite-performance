@@ -205,7 +205,16 @@ export default function Trainingen() {
       </div>
 
       {/* Session detail */}
-      {selectedSession && (
+      {selectedSession && (() => {
+        // Zoek gekoppeld AgendaItem voor deze sessie
+        const linkedAgendaItem = agendaItems.find(
+          ai => ai.type === "Training" && ai.date === selectedSession.date
+        );
+        const sessionAgendaAttendance = linkedAgendaItem
+          ? agendaAttendance.filter(aa => aa.agenda_item_id === linkedAgendaItem.id)
+          : [];
+
+        return (
         <div className="glass p-5">
           <div className="flex items-center gap-3 mb-4">
             <Calendar size={16} style={{ color: "#FF8C3A" }} />
@@ -231,33 +240,84 @@ export default function Trainingen() {
             </div>
           )}
 
+          {/* Trainer: twee-laags aanwezigheidsoverzicht */}
+          {isTrainer && (
+            <div className="mb-3">
+              <div className="grid grid-cols-3 gap-2 mb-2 px-1">
+                <span className="t-label">Speler</span>
+                <span className="t-label text-center">Bevestigd vooraf</span>
+                <span className="t-label text-center">Aanwezig geweest</span>
+              </div>
+            </div>
+          )}
+
           <div className="space-y-2">
-            {sessionAttendance.map((a) => {
-              const player = players.find((p) => p.id === a.player_id);
-              const canToggle = isTrainer || a.player_id === myPlayerId;
-              return (
-                <div key={a.id} className="flex items-center justify-between rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.06)" }}>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center text-xs font-bold" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
-                      {player?.photo_url ? <img src={player.photo_url} alt="" className="w-full h-full object-cover" /> : player?.name?.charAt(0)}
+            {isTrainer ? (
+              sessionAttendance.map((a) => {
+                const player = players.find((p) => p.id === a.player_id);
+                const agendaRecord = sessionAgendaAttendance.find(aa => aa.player_id === a.player_id);
+                const confirmedAanwezig = agendaRecord?.status === "aanwezig";
+                const confirmedAfwezig = agendaRecord?.status === "afwezig";
+                const hasConfirmed = !!agendaRecord;
+                // Aandachtspunt: vooraf bevestigd aanwezig maar niet geregistreerd aanwezig
+                const isAttentionPoint = confirmedAanwezig && !a.present;
+                return (
+                  <div key={a.id} className="grid grid-cols-3 gap-2 items-center rounded-xl px-3 py-2.5" style={{ background: isAttentionPoint ? "rgba(255,140,58,0.10)" : "rgba(255,255,255,0.06)", border: isAttentionPoint ? "0.5px solid rgba(255,140,58,0.30)" : "0.5px solid transparent" }}>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
+                        {player?.photo_url ? <img src={player.photo_url} alt="" className="w-full h-full object-cover" /> : player?.name?.charAt(0)}
+                      </div>
+                      <span className="text-xs font-semibold text-white truncate">{player?.name}</span>
+                      {isAttentionPoint && <span style={{ fontSize: 10, color: "#FF8C3A", flexShrink: 0 }}>⚠</span>}
                     </div>
-                    <span className="t-card-title">{player?.name}</span>
+                    {/* Bevestigd vooraf */}
+                    <div className="flex justify-center">
+                      {!hasConfirmed ? (
+                        <span className="dot-yellow" />
+                      ) : confirmedAanwezig ? (
+                        <Check size={16} style={{ color: "#4ade80" }} />
+                      ) : (
+                        <X size={16} style={{ color: "#f87171" }} />
+                      )}
+                    </div>
+                    {/* Aanwezig geweest (handmatig door trainer) */}
+                    <div className="flex justify-center">
+                      <button onClick={() => toggleAttendance.mutate({ attendanceId: a.id, present: !a.present })} className="w-9 h-9 rounded-lg flex items-center justify-center text-white transition-all" style={{ backgroundColor: a.present ? "#4ade80" : "rgba(255,255,255,0.12)" }}>
+                        {a.present ? <Check size={16} /> : <X size={16} className="text-white" />}
+                      </button>
+                    </div>
                   </div>
-                  {canToggle ? (
-                    <button onClick={() => toggleAttendance.mutate({ attendanceId: a.id, present: !a.present })} className="w-10 h-10 rounded-lg flex items-center justify-center text-white transition-all" style={{ backgroundColor: a.present ? "#4ade80" : "rgba(255,255,255,0.12)" }}>
-                      {a.present ? <Check size={18} /> : <X size={18} className="text-white" />}
-                    </button>
-                  ) : (
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: a.present ? "#4ade80" : "rgba(255,255,255,0.12)" }}>
-                      {a.present ? <Check size={18} /> : <X size={18} className="text-white" />}
+                );
+              })
+            ) : (
+              sessionAttendance.map((a) => {
+                const player = players.find((p) => p.id === a.player_id);
+                const canToggle = a.player_id === myPlayerId;
+                return (
+                  <div key={a.id} className="flex items-center justify-between rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.06)" }}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center text-xs font-bold" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
+                        {player?.photo_url ? <img src={player.photo_url} alt="" className="w-full h-full object-cover" /> : player?.name?.charAt(0)}
+                      </div>
+                      <span className="t-card-title">{player?.name}</span>
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                    {canToggle ? (
+                      <button onClick={() => toggleAttendance.mutate({ attendanceId: a.id, present: !a.present })} className="w-10 h-10 rounded-lg flex items-center justify-center text-white transition-all" style={{ backgroundColor: a.present ? "#4ade80" : "rgba(255,255,255,0.12)" }}>
+                        {a.present ? <Check size={18} /> : <X size={18} className="text-white" />}
+                      </button>
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: a.present ? "#4ade80" : "rgba(255,255,255,0.12)" }}>
+                        {a.present ? <Check size={18} /> : <X size={18} className="text-white" />}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
-      )}
+        );
+      })()}
 
       {/* Attendance overview */}
       {!selectedSession && (
