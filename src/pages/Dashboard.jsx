@@ -156,7 +156,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── HERO STAT (alle viewports) ── */}
-      <div style={{ padding: "0 1.25rem 0.75rem" }}>
+      <div style={{ padding: "0 1.25rem 0.75rem", position: "relative", zIndex: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ fontSize: "42px", fontWeight: 700, color: "#ffffff", letterSpacing: "-1.5px", lineHeight: 1 }}>{winPct}%</span>
           <span style={{ fontSize: "15px", color: "rgba(255,255,255,0.50)", fontWeight: 400, verticalAlign: "middle" }}>winst</span>
