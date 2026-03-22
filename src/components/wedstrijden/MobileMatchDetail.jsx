@@ -301,7 +301,7 @@ export default function MobileMatchDetail({
             </div>
           )}
           </div>
-      </div>
-    </div>
-  );
-}
+          </div>
+          </div>
+          );
+          }
