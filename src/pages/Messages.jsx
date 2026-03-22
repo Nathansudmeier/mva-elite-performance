@@ -217,31 +217,70 @@ export default function Messages() {
         ) : (
           <div className="space-y-2">
             {chats.map((chat) => (
-              <button
+              <div
                 key={chat.id}
-                onClick={() => navigate(`/Chat?id=${chat.id}`)}
-                className="glass w-full p-4 flex items-center gap-3 text-left transition-opacity hover:opacity-80"
+                className="glass p-4 flex items-center gap-3 group"
               >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="t-card-title truncate">{chat.name}</h3>
-                    {chat.hasUnread && (
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#FF6B00", flexShrink: 0 }} />
+                <button
+                  onClick={() => navigate(`/Chat?id=${chat.id}`)}
+                  className="flex-1 text-left transition-opacity hover:opacity-80 flex items-center gap-3"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="t-card-title truncate">{chat.name}</h3>
+                      {chat.hasUnread && (
+                        <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#FF6B00", flexShrink: 0 }} />
+                      )}
+                    </div>
+                    {chat.lastMessage && (
+                      <p className="t-secondary-sm truncate" style={{ color: "rgba(255,255,255,0.45)" }}>
+                        {chat.lastMessage.text}
+                      </p>
                     )}
                   </div>
                   {chat.lastMessage && (
-                    <p className="t-secondary-sm truncate" style={{ color: "rgba(255,255,255,0.45)" }}>
-                      {chat.lastMessage.text}
-                    </p>
+                    <span className="t-tertiary-sm flex-shrink-0">
+                      {formatTime(chat.lastMessage.created_date)}
+                    </span>
                   )}
-                </div>
-                {chat.lastMessage && (
-                  <span className="t-tertiary-sm flex-shrink-0">
-                    {formatTime(chat.lastMessage.created_date)}
-                  </span>
+                </button>
+                {isTrainer && (
+                  <button
+                    onClick={() => setChatToDelete(chat.id)}
+                    className="p-2 rounded-lg transition-opacity hover:opacity-80 opacity-0 group-hover:opacity-100"
+                    style={{ color: "rgba(248,113,113,0.65)" }}
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 )}
-              </button>
+              </div>
             ))}
+          </div>
+        )}
+
+        {chatToDelete && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: "rgba(0,0,0,0.60)" }}>
+            <div className="glass p-6 max-w-sm rounded-2xl">
+              <h3 className="t-card-title mb-3">Groepschat verwijderen?</h3>
+              <p className="t-secondary mb-6">Dit kan niet ongedaan gemaakt worden. Alle berichten en leden worden verwijderd.</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setChatToDelete(null)}
+                  className="flex-1 p-3 rounded-lg transition-opacity hover:opacity-80"
+                  style={{ background: "rgba(255,255,255,0.08)" }}
+                >
+                  <span className="t-secondary">Annuleer</span>
+                </button>
+                <button
+                  onClick={() => deleteChatM.mutate(chatToDelete)}
+                  disabled={deleteChatM.isPending}
+                  className="flex-1 p-3 rounded-lg transition-opacity"
+                  style={{ background: "rgba(248,113,113,0.80)" }}
+                >
+                  <span style={{ color: "white" }}>Verwijder</span>
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
