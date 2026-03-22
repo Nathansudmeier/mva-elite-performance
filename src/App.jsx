@@ -59,8 +59,8 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/LiveMatch" element={<LayoutWrapper currentPageName="Wedstrijden"><LiveMatch /></LayoutWrapper>} />
       <Route path="/" element={
-        <LayoutWrapper currentPageName={mainPageKey}>
-          <MainPage />
+        <LayoutWrapper currentPageName="Dashboard">
+          <DashboardRouter />
         </LayoutWrapper>
       } />
       {Object.entries(Pages).map(([path, Page]) => (
