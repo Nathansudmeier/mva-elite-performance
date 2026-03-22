@@ -133,13 +133,6 @@ export default function Agenda() {
             ))}
           </div>
 
-          <button
-            onClick={() => exportICS(items)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-opacity hover:opacity-80"
-            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.65)" }}
-          >
-            <Download size={15} /> Export
-          </button>
           {isTrainer && (
             <button onClick={() => { setEditItem(null); setShowForm(true); }} className="btn-secondary flex items-center gap-2 !h-9 !text-sm !px-3">
               <Plus size={16} /> Nieuw
