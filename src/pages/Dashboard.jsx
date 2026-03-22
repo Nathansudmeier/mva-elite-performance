@@ -49,10 +49,10 @@ export default function Dashboard() {
    const last4WeeksAgo = subDays(new Date(), 28);
 
    // Combine both systems: TrainingSession + Attendance AND AgendaItem (Training type) + AgendaAttendance
-   const recentTrainingSessions = sessions.filter(s => isAfter(new Date(s.date), last4WeeksAgo) && s.type === "Training");
+   const recentTrainingSessions = sessions.filter(s => isAfter(new Date(s.date), last4WeeksAgo) && (!s.type || s.type === "Training"));
    const recentTrainingAttendance = attendance.filter(a => {
      const session = sessions.find(s => s.id === a.session_id);
-     return session && isAfter(new Date(session.date), last4WeeksAgo) && session.type === "Training";
+     return session && isAfter(new Date(session.date), last4WeeksAgo) && (!session.type || session.type === "Training");
    });
 
    // From Agenda: Training type items in last 4 weeks
