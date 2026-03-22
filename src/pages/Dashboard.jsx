@@ -11,6 +11,7 @@ import PhotoUpload from "../components/photos/PhotoUpload";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
 import TrainerDayBadge from "../components/dashboard/TrainerDayBadge";
 import { format, subDays, isAfter } from "date-fns";
+import NextMatchGrid from "../components/dashboard/NextMatchGrid";
 import { nl } from "date-fns/locale";
 
 export default function Dashboard() {
