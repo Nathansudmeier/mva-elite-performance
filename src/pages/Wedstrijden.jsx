@@ -388,6 +388,49 @@ export default function Wedstrijden() {
                 );
               })()}
 
+              {/* RSVP voor speler */}
+              {!isTrainer && (() => {
+                const myPlayer = currentUser ? players.find(p => p.name === currentUser.full_name) : null;
+                const linkedAgendaItem = agendaItems.find(ai => ai.match_id === detailMatch.id || (ai.type === "Wedstrijd" && ai.date === detailMatch.date && ai.title?.includes(detailMatch.opponent)));
+                const myRecord = myPlayer && linkedAgendaItem ? agendaAttendance.find(aa => aa.agenda_item_id === linkedAgendaItem.id && aa.player_id === myPlayer.id) : null;
+
+                if (!myPlayer || !linkedAgendaItem) return null;
+
+                const rsvp = async (status) => {
+                  if (myRecord) {
+                    await base44.entities.AgendaAttendance.update(myRecord.id, { status });
+                  } else {
+                    await base44.entities.AgendaAttendance.create({ agenda_item_id: linkedAgendaItem.id, player_id: myPlayer.id, status });
+                  }
+                  queryClient.invalidateQueries({ queryKey: ["agendaAttendanceAll"] });
+                };
+
+                return (
+                  <div className="glass p-4 flex items-center justify-between gap-3">
+                    <div>
+                      <p className="t-card-title">Mijn aanwezigheid</p>
+                      <p className="t-secondary-sm">Geef aan of je erbij bent</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => rsvp("aanwezig")}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold"
+                        style={{ background: myRecord?.status === "aanwezig" ? "#4ade80" : "rgba(74,222,128,0.12)", color: myRecord?.status === "aanwezig" ? "#fff" : "#4ade80", border: "0.5px solid rgba(74,222,128,0.30)" }}
+                      >
+                        <Check size={14} /> Ik kom
+                      </button>
+                      <button
+                        onClick={() => rsvp("afwezig")}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold"
+                        style={{ background: myRecord?.status === "afwezig" ? "#f87171" : "rgba(248,113,113,0.12)", color: myRecord?.status === "afwezig" ? "#fff" : "#f87171", border: "0.5px solid rgba(248,113,113,0.30)" }}
+                      >
+                        <X size={14} /> Ik kom niet
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
+
               {isTrainer && (
                 <MatchCheckInOverview
                   matchId={detailMatch.id}
