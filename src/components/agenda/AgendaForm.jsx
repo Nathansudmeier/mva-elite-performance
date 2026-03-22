@@ -14,6 +14,8 @@ export default function AgendaForm({ item, onSave, onClose }) {
     location: item?.location || "",
     team: item?.team || "Beide",
     notes: item?.notes || "",
+    reminder_1_days: item?.reminder_1_days ?? 3,
+    reminder_2_days: item?.reminder_2_days ?? 1,
   });
   const [saving, setSaving] = useState(false);
 
