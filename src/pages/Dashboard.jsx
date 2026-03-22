@@ -156,12 +156,12 @@ export default function Dashboard() {
       </div>
 
       {/* ── HERO STAT (alle viewports) ── */}
-      <div className="px-1 pt-2">
-        <div className="flex items-baseline gap-2">
-          <span style={{ fontSize: "48px", fontWeight: 700, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{winPct}%</span>
-          <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.50)" }}>winst</span>
+      <div style={{ padding: "0 1.25rem 0.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontSize: "42px", fontWeight: 700, color: "#ffffff", letterSpacing: "-1.5px", lineHeight: 1 }}>{winPct}%</span>
+          <span style={{ fontSize: "15px", color: "rgba(255,255,255,0.50)", fontWeight: 400, verticalAlign: "middle" }}>winst</span>
         </div>
-        <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.45)", marginTop: "4px" }}>
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "4px", margin: "4px 0 0 0" }}>
           {wins} overwinningen · {draws} gelijk · {losses} verlies · Seizoen 2025-26
         </p>
       </div>
@@ -213,27 +213,16 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── ALERTS ── */}
-      <div className="space-y-2">
-        {lowAttendancePlayers.length > 0 && (
-          <div style={{ background: "rgba(251,191,36,0.08)", border: "0.5px solid rgba(251,191,36,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-            <i className="ti ti-alert-triangle flex-shrink-0 mt-0.5" style={{ fontSize: "14px", color: "#fbbf24" }} />
-            <div>
-              <p style={{ fontSize: "12px", fontWeight: 600, color: "#fbbf24" }}>{lowAttendancePlayers.length} spelers onder 60% aanwezigheid</p>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginTop: "2px" }}>{lowAttendancePlayers.map(p => p.name).join(", ")}</p>
-            </div>
+      {/* ── ALERTS: Lage Aanwezigheid ── */}
+      {lowAttendancePlayers.length > 0 && (
+        <div style={{ background: "rgba(251,191,36,0.08)", border: "0.5px solid rgba(251,191,36,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+          <i className="ti ti-alert-triangle flex-shrink-0 mt-0.5" style={{ fontSize: "14px", color: "#fbbf24" }} />
+          <div>
+            <p style={{ fontSize: "12px", fontWeight: 600, color: "#fbbf24" }}>{lowAttendancePlayers.length} spelers onder 60% aanwezigheid</p>
+            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginTop: "2px" }}>{lowAttendancePlayers.map(p => p.name).join(", ")}</p>
           </div>
-        )}
-        {fatigueOrPainPlayers.length > 0 && (
-          <div style={{ background: "rgba(248,113,113,0.08)", border: "0.5px solid rgba(248,113,113,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-            <i className="ti ti-alert-triangle flex-shrink-0 mt-0.5" style={{ fontSize: "14px", color: "#f87171" }} />
-            <div>
-              <p style={{ fontSize: "12px", fontWeight: 600, color: "#f87171" }}>Vermoeidheid / pijn gemeld</p>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginTop: "2px" }}>{fatigueOrPainPlayers.join(", ")}</p>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {uploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
@@ -243,17 +232,6 @@ export default function Dashboard() {
             <button onClick={() => setUploadModalOpen(false)} className="mt-4 w-full px-4 py-3 rounded-xl text-sm font-semibold text-white bg-[#FF6B00] hover:bg-[#E55A00] transition-colors">
               Sluiten
             </button>
-          </div>
-        </div>
-      )}
-
-      {/* ── Fatigue/Pain Alert ── */}
-      {fatigueOrPainPlayers.length > 0 && (
-        <div style={{ background: "rgba(248,113,113,0.08)", border: "0.5px solid rgba(248,113,113,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-          <i className="ti ti-alert-triangle flex-shrink-0 mt-0.5" style={{ fontSize: "14px", color: "#f87171" }} />
-          <div>
-            <p style={{ fontSize: "12px", fontWeight: 600, color: "#f87171" }}>Vermoeidheid / pijn gemeld</p>
-            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginTop: "2px" }}>{fatigueOrPainPlayers.join(", ")}</p>
           </div>
         </div>
       )}
