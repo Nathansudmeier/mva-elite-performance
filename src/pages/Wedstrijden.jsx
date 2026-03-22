@@ -462,10 +462,13 @@ export default function Wedstrijden() {
               })()}
 
               {isTrainer && (
-                <MatchCheckInOverview
-                  matchId={detailMatch.id}
-                  totalInSelectie={(detailMatch.lineup?.length ?? 0) + (detailMatch.substitutes?.length ?? 0)}
-                />
+                <div className="glass p-5">
+                  <p className="t-label mb-4" style={{ color: "#FF8C3A", letterSpacing: "0.08em" }}>Check-in Status</p>
+                  <MatchCheckInOverview
+                    matchId={detailMatch.id}
+                    totalInSelectie={(detailMatch.lineup?.length ?? 0) + (detailMatch.substitutes?.length ?? 0)}
+                  />
+                </div>
               )}
             </div>
           ) : (
