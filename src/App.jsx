@@ -12,6 +12,7 @@ import AccountBeheer from './pages/AccountBeheer.jsx';
 import LiveMatch from './pages/LiveMatch.jsx';
 import Spelprincipes from './pages/Spelprincipes.jsx';
 import MijnReflecties from './pages/MijnReflecties.jsx';
+import Agenda from './pages/Agenda.jsx';
 import Staff from './pages/Staff.jsx';
 import TrainerDetail from './pages/TrainerDetail.jsx';
 import Speelminuten from './pages/Speelminuten.jsx';
@@ -81,6 +82,7 @@ const AuthenticatedApp = () => {
       <Route path="/TrainerDetail" element={<LayoutWrapper currentPageName="Staff"><TrainerDetail /></LayoutWrapper>} />
       <Route path="/Speelminuten" element={<LayoutWrapper currentPageName="Speelminuten"><Speelminuten /></LayoutWrapper>} />
       <Route path="/MijnReflecties" element={<LayoutWrapper currentPageName="MijnReflecties"><MijnReflecties /></LayoutWrapper>} />
+      <Route path="/Agenda" element={<LayoutWrapper currentPageName="Agenda"><Agenda /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
