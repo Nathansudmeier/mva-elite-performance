@@ -322,17 +322,27 @@ export default function Trainingen() {
       {/* Attendance overview */}
       {!selectedSession && (
         <div className="glass p-5">
-          <h2 className="t-section-title mb-4">Aanwezigheidsoverzicht</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="t-section-title">Aanwezigheidsoverzicht</h2>
+            {isTrainer && <span className="t-label">% aanwezig · % bevestigd</span>}
+          </div>
           <div className="space-y-2">
             {[...activePlayers].sort((a, b) => getPlayerAttendancePct(b.id) - getPlayerAttendancePct(a.id)).map((p) => {
               const pct = getPlayerAttendancePct(p.id);
+              // Bevestigingspercentage: AgendaAttendance records voor deze speler
+              const playerAgendaRecords = agendaAttendance.filter(aa => aa.player_id === p.id && aa.status !== "onbekend");
+              const playerConfirmed = agendaAttendance.filter(aa => aa.player_id === p.id && aa.status === "aanwezig").length;
+              const confirmPct = playerAgendaRecords.length > 0 ? Math.round((playerConfirmed / playerAgendaRecords.length) * 100) : null;
               return (
                 <div key={p.id} className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.06)" }}>
                   <span className="t-card-title flex-1">{p.name}</span>
-                  <div className="progress-track w-24">
+                  <div className="progress-track w-20">
                     <div className="progress-fill" style={{ width: `${pct}%`, background: pct >= 80 ? "#4ade80" : pct >= 60 ? "#fbbf24" : "#f87171" }} />
                   </div>
-                  <span className="t-secondary w-12 text-right" style={{ color: "#FF8C3A" }}>{pct}%</span>
+                  <span className="t-secondary w-10 text-right" style={{ color: "#FF8C3A" }}>{pct}%</span>
+                  {isTrainer && confirmPct !== null && (
+                    <span className="t-tertiary w-14 text-right">{confirmPct}% ✓</span>
+                  )}
                 </div>
               );
             })}
