@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useNavigate } from "react-router-dom";
 import DashboardBackground from "../components/dashboard/DashboardBackground";
-import { MessageCircle, Plus } from "lucide-react";
+import { MessageCircle, Plus, Trash2 } from "lucide-react";
 
 export default function Messages() {
   const { user, isTrainer } = useCurrentUser();
