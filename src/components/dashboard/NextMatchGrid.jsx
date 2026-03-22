@@ -6,6 +6,12 @@ import { format, parseISO, differenceInDays } from "date-fns";
 import { nl } from "date-fns/locale";
 import CheckInFlow from "@/components/checkin/CheckInFlow";
 
+// Helper to get app logo from settings
+function getAppLogo() {
+  const appSettings = window.__APP_SETTINGS;
+  return appSettings?.logo_url || null;
+}
+
 function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, playerId }) {
   const navigate = useNavigate();
   const [showCheckIn, setShowCheckIn] = useState(false);
