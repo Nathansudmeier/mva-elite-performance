@@ -114,8 +114,8 @@ function StaffContent() {
               <div className="flex-1 min-w-0">
                 <h3 className="t-card-title truncate">{trainer.name}</h3>
                 {trainer.role_title && <p className="t-secondary-sm mt-0.5" style={{ color: "#FF8C3A" }}>{trainer.role_title}</p>}
-                {trainer.phone && <p className="t-tertiary flex items-center gap-1 mt-1"><Phone size={10} /> {trainer.phone}</p>}
-                {trainer.email && <p className="t-tertiary flex items-center gap-1 mt-1"><Mail size={10} /> {trainer.email}</p>}
+                {!isTrainer && trainer.phone && <p className="t-tertiary flex items-center gap-1 mt-1"><Phone size={10} /> {trainer.phone}</p>}
+                {!isTrainer && trainer.email && <p className="t-tertiary flex items-center gap-1 mt-1"><Mail size={10} /> {trainer.email}</p>}
               </div>
               {isTrainer && (
                 <button onClick={(e) => { e.preventDefault(); openEdit(trainer); }} className="p-2 rounded-lg" style={{ background: "rgba(255,255,255,0.06)" }}>
