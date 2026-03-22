@@ -237,7 +237,7 @@ export default function Dashboard() {
       )}
 
       {/* ── 3-KOLOMS GRID (1-col op mobiel) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px" }} className="mobile-grid-1col">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px" }} className="mobile-grid-1col" hidden={!allMatches?.length}>
 
         {/* Kolom 1: Wedstrijden */}
         <div className="glass p-4">
@@ -355,7 +355,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── 2-KOLOMS GRID: Zelfreflecties (+ Activiteit inplannen verplaatst) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col" hidden={!thisWeekReflections.length}>
 
         {/* Kolom 1: Zelfreflecties */}
         <div className="glass p-4">
@@ -398,10 +398,10 @@ export default function Dashboard() {
 
       </div>
 
-      <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />
+      {winningTeamPhotos?.length > 0 && <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />}
 
       {isTrainer && <PhotoUpload onSaved={() => refetchPhotos()} />}
-      <PhotoTimeline photos={teamPhotos} />
+      {teamPhotos?.length > 0 && <PhotoTimeline photos={teamPhotos} />}
 
     </div>
   );
