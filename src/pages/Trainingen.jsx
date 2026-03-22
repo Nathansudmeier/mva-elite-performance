@@ -134,7 +134,23 @@ export default function Trainingen() {
   const dayNames = ["Ma", "Wo", "Vr"];
 
   return (
-    <div className="space-y-6 pb-20 lg:pb-6">
+    <div className="relative">
+      {/* Background image — fixed */}
+      <img
+        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png"
+        alt=""
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center",
+          zIndex: 0,
+        }}
+      />
+
+      <div className="space-y-6 pb-20 lg:pb-6 relative z-10">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -441,7 +457,8 @@ export default function Trainingen() {
         </DialogContent>
       </Dialog>
         </>
-      )}
-    </div>
-  );
-}
+        )}
+        </div>
+        </div>
+        );
+        }

@@ -94,7 +94,23 @@ export default function Agenda() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="relative">
+      {/* Background image — fixed */}
+      <img
+        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png"
+        alt=""
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center",
+          zIndex: 0,
+        }}
+      />
+      
+      <div className="space-y-5 relative z-10">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -218,6 +234,7 @@ export default function Agenda() {
           onDelete={() => handleDelete(detailItem)}
           onClose={() => setDetailItem(null)} />
       )}
+      </div>
     </div>
   );
 }
