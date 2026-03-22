@@ -57,11 +57,28 @@ export default function Trainingen() {
       const session = await base44.entities.TrainingSession.create({ date, type: "Training", notes: sessionNotes });
       const records = activePlayers.map((p) => ({ session_id: session.id, player_id: p.id, present: false }));
       await base44.entities.Attendance.bulkCreate(records);
+
+      // Sync naar Agenda: maak bijbehorende AgendaItem aan
+      const existing = await base44.entities.AgendaItem.filter({ date, type: "Training" });
+      if (!existing || existing.length === 0) {
+        await base44.entities.AgendaItem.create({
+          type: "Training",
+          title: sessionNotes ? `Training – ${sessionNotes}` : "Training",
+          date,
+          start_time: "18:30",
+          team: "Beide",
+          notes: sessionNotes || "",
+          training_session_id: session.id,
+        });
+      }
+
       return session;
     },
     onSuccess: (session) => {
       queryClient.invalidateQueries({ queryKey: ["sessions"] });
       queryClient.invalidateQueries({ queryKey: ["attendance"] });
+      queryClient.invalidateQueries({ queryKey: ["agendaItems"] });
+      queryClient.invalidateQueries({ queryKey: ["agendaItems-upcoming"] });
       setNewSessionDialog(false);
       setSessionNotes("");
       setSelectedSessionId(session.id);
