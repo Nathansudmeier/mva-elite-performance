@@ -148,7 +148,7 @@ export default function MobileMatchDetail({
              bottom: "16px",
              left: "50%",
              right: 0,
-             zIndex: 10,
+             zIndex: 2,
              transform: "translateX(-50%)",
              textAlign: "center",
            }}>
