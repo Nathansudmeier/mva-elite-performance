@@ -52,13 +52,15 @@ export default function PlayerMetricGrid({ yoyo, physical, attendance, agendaAtt
     ? +(lastSprint.sprint_30m - firstSprint.sprint_30m).toFixed(2)
     : null;
 
-  // Attendance — combine manual training attendance + agenda confirmations
+  // Aanwezigheidspercentage: puur op basis van handmatig geregistreerde aanwezigheid (Attendance)
   const trainingPresent = attendance.filter(a => a.present).length;
-  const agendaPresent = agendaAttendance.filter(a => a.status === "aanwezig").length;
-  const agendaAbsent = agendaAttendance.filter(a => a.status === "afwezig").length;
-  const totalPresent = trainingPresent + agendaPresent;
-  const totalSessions = attendance.length + agendaPresent + agendaAbsent;
-  const attendancePct = totalSessions > 0 ? Math.round((totalPresent / totalSessions) * 100) : null;
+  const totalSessions = attendance.length;
+  const attendancePct = totalSessions > 0 ? Math.round((trainingPresent / totalSessions) * 100) : null;
+
+  // Bevestigingspercentage: aparte statistiek op basis van AgendaAttendance (vooraf bevestigd)
+  const agendaConfirmed = agendaAttendance.filter(a => a.status === "aanwezig").length;
+  const agendaTotal = agendaAttendance.filter(a => a.status !== "onbekend").length;
+  const confirmationPct = agendaTotal > 0 ? Math.round((agendaConfirmed / agendaTotal) * 100) : null;
 
   // Speelminuten (total from finished matches)
   let totalMinutes = null;
