@@ -7,9 +7,12 @@ import DashboardBackground from "../components/dashboard/DashboardBackground";
 import { MessageCircle, Plus } from "lucide-react";
 
 export default function Messages() {
-  const { user } = useCurrentUser();
+  const { user, isTrainer } = useCurrentUser();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [chats, setChats] = useState([]);
+  const [showUserPicker, setShowUserPicker] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   const { data: chatMembers = [] } = useQuery({
     queryKey: ["chatMembers", user?.email],
