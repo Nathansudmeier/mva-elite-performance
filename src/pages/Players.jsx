@@ -21,6 +21,7 @@ export default function Players() {
 
 function PlayersContent() {
   const queryClient = useQueryClient();
+  const { user, playerId, isTrainer } = useCurrentUser();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: "", position: "", shirt_number: "", iop_goal_1: "", iop_goal_2: "", iop_goal_3: "" });
