@@ -105,25 +105,11 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
             ))}
           </div>
 
-          {/* Inhoud textarea */}
-          <textarea
+          {/* Inhoud rich text */}
+          <RichTextEditor
             value={form.content}
-            onChange={e => set("content", e.target.value)}
+            onChange={(val) => set("content", val)}
             placeholder="Beschrijf het spelprincipe..."
-            style={{
-              width: "100%",
-              fontSize: "15px",
-              lineHeight: 1.7,
-              minHeight: "200px",
-              background: "rgba(255,255,255,0.06)",
-              border: "0.5px solid rgba(255,255,255,0.12)",
-              borderRadius: "14px",
-              padding: "1rem",
-              color: "#ffffff",
-              outline: "none",
-              resize: "vertical",
-              fontFamily: "inherit",
-            }}
           />
 
           {/* Media sectie — uitklapbaar */}
