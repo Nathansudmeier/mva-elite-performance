@@ -10,11 +10,12 @@ export function useCurrentUser() {
   });
 
   const isAdmin = user?.role === "admin";
+  const isSpeelster = user?.role === "speelster";
   return {
     user,
     isLoading,
     isTrainer: user?.role === "trainer" || isAdmin,
-    isSpeelster: user?.role === "speelster",
+    isSpeelster,
     isOuder: user?.role === "ouder",
     isTC: user?.role === "tc",
     playerId: user?.player_id,
