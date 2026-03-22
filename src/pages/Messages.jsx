@@ -92,6 +92,12 @@ export default function Messages() {
     }
   }, [chatMembers, allChats, allMessages]);
 
+  useEffect(() => {
+    if (user?.email && isTrainer) {
+      initializeChatsM.mutate();
+    }
+  }, [user?.email]);
+
   const formatTime = (date) => {
     const d = new Date(date);
     const now = new Date();
