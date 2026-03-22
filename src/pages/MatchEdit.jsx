@@ -341,6 +341,104 @@ export default function MatchEdit() {
                     "::placeholder": { color: "rgba(255,255,255,0.30)" },
                   }}
                 />
+
+                <div style={{ marginTop: "16px" }}>
+                  <div style={LABEL_STYLE}>Logo tegenstander (optioneel)</div>
+                  {formData.opponent_logo ? (
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <div style={{
+                        position: "relative",
+                        width: "44px",
+                        height: "44px",
+                        borderRadius: "50%",
+                        background: "rgba(255,255,255,0.12)",
+                        border: "1.5px solid rgba(255,255,255,0.25)",
+                        overflow: "hidden",
+                      }}>
+                        <img src={formData.opponent_logo} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <button
+                          onClick={() => setFormData({ ...formData, opponent_logo: "" })}
+                          style={{
+                            position: "absolute",
+                            top: "-8px",
+                            right: "-8px",
+                            width: "22px",
+                            height: "22px",
+                            borderRadius: "50%",
+                            background: "#f87171",
+                            border: "none",
+                            color: "white",
+                            fontSize: "14px",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          ×
+                        </button>
+                      </div>
+                      <label style={{ flex: 1 }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleLogoUpload}
+                          disabled={uploading}
+                          style={{ display: "none" }}
+                        />
+                        <div
+                          onClick={() => document.querySelector('input[type="file"]')?.click()}
+                          style={{
+                            background: "rgba(255,255,255,0.08)",
+                            border: "0.5px solid rgba(255,255,255,0.12)",
+                            borderRadius: "14px",
+                            height: "44px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            cursor: "pointer",
+                            color: uploading ? "rgba(255,255,255,0.30)" : "rgba(255,255,255,0.55)",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <i className="ti ti-upload" style={{ fontSize: "16px" }} />
+                          {uploading ? "Uploading..." : "Verwijderen"}
+                        </div>
+                      </label>
+                    </div>
+                  ) : (
+                    <label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleLogoUpload}
+                        disabled={uploading}
+                        style={{ display: "none" }}
+                      />
+                      <div
+                        onClick={() => document.querySelector('input[type="file"]')?.click()}
+                        style={{
+                          background: "rgba(255,255,255,0.08)",
+                          border: "0.5px solid rgba(255,255,255,0.12)",
+                          borderRadius: "14px",
+                          height: "52px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "8px",
+                          cursor: uploading ? "not-allowed" : "pointer",
+                          color: uploading ? "rgba(255,255,255,0.30)" : "rgba(255,255,255,0.55)",
+                          fontSize: "13px",
+                          opacity: uploading ? 0.5 : 1,
+                        }}
+                      >
+                        <i className="ti ti-upload" style={{ fontSize: "16px" }} />
+                        {uploading ? "Uploading..." : "Logo uploaden"}
+                      </div>
+                    </label>
+                  )}
+                </div>
               </div>
 
               <div>
