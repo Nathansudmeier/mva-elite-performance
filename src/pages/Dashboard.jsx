@@ -194,17 +194,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── ACTIVITEIT TOEVOEGEN (mobiel only, compact) ── */}
-      <div className="mobile-only">
-        <button
-          onClick={() => setAgendaFormOpen(true)}
-          style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.30)", borderRadius: "18px", padding: "14px", cursor: "pointer" }}
-        >
-          <i className="ti ti-calendar-plus" style={{ fontSize: "18px", color: "#FF8C3A" }} />
-          <span style={{ fontSize: "14px", fontWeight: 600, color: "#FF8C3A" }}>Activiteit toevoegen</span>
-        </button>
-      </div>
-
       {/* ── ALERTS ── */}
       <div className="space-y-2">
         {lowAttendancePlayers.length > 0 && (
@@ -335,14 +324,7 @@ export default function Dashboard() {
                 </div>
               </button>
             ))}
-            {/* Desktop: Activiteit toevoegen knop */}
-            <button
-              onClick={() => setAgendaFormOpen(true)}
-              style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%", background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)", borderRadius: "10px", padding: "8px 10px", marginTop: "4px", cursor: "pointer" }}
-            >
-              <i className="ti ti-calendar-plus" style={{ fontSize: "14px", color: "#FF8C3A" }} />
-              <p style={{ fontSize: "12px", color: "#FF8C3A", fontWeight: 600 }}>Activiteit toevoegen</p>
-            </button>
+
           </div>
           {/* Mobiel: 2x2 grid */}
           <div className="mobile-only">
@@ -413,13 +395,6 @@ export default function Dashboard() {
       {isTrainer && <PhotoUpload onSaved={() => refetchPhotos()} />}
       <PhotoTimeline photos={teamPhotos} />
 
-      {agendaFormOpen && (
-        <AgendaForm
-          item={null}
-          onSave={() => { setAgendaFormOpen(false); queryClient.invalidateQueries({ queryKey: ["agenda-items"] }); queryClient.invalidateQueries({ queryKey: ["agendaItems-upcoming"] }); }}
-          onClose={() => setAgendaFormOpen(false)}
-        />
-      )}
     </div>
   );
 }
