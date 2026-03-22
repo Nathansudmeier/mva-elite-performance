@@ -84,7 +84,7 @@ export default function MobileMatchDetail({
 
       <div className="relative p-4 space-y-4 pb-24" style={{ zIndex: 1 }}>
         {/* Match hero card */}
-        <div className="match-hero-card p-5 flex flex-col justify-between">
+        <div className="match-hero-card p-5">
           <div className="absolute inset-0">
             <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
               <rect x="1" y="1" width="398" height="158" fill="none" stroke="white" strokeWidth="2"/>
