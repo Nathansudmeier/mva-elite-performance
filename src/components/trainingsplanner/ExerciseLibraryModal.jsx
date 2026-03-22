@@ -80,7 +80,7 @@ export default function ExerciseLibraryModal({ onSelect, onClose, currentExercis
         </div>
 
         {/* Content */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px 24px" }}>
+        <div className="modal-scroll-content" style={{ flex: 1, overflowY: "auto", padding: "12px 16px 24px" }}>
           {tab === "save" ? (
             <div>
               <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginBottom: "10px" }}>Sla de huidige oefenvorm op in de bibliotheek.</p>

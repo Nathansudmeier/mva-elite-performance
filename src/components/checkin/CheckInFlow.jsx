@@ -69,7 +69,7 @@ export default function CheckInFlow({ matchId, type, onClose, onCompleted }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-end lg:items-center justify-center p-4">
-      <div className="bg-white rounded-2xl w-full max-w-md shadow-lg overflow-y-auto" style={{ maxHeight: "95vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}>
+      <div className="bg-white rounded-2xl w-full max-w-md shadow-lg overflow-y-auto modal-scroll-content" style={{ maxHeight: "95vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}>
         {/* Header with close button */}
         <div className="flex items-center justify-between p-4 border-b border-[#E8E6E1]">
           <p className="text-sm font-500 text-[#888888]">

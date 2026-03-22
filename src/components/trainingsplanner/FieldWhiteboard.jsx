@@ -142,7 +142,7 @@ export default function FieldWhiteboard({ value, onChange, mobile = false }) {
 
   if (fullscreen) {
     return (
-      <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(20,10,2,0.98)", padding: "16px", display: "flex", flexDirection: "column" }}>
+      <div className="modal-scroll-content" style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(20,10,2,0.98)", padding: "16px", display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
           <p style={{ color: "#fff", fontWeight: 700, fontSize: "16px" }}>Velddiagram</p>
           <button onClick={() => setFullscreen(false)} style={{ background: "rgba(255,255,255,0.10)", border: "none", borderRadius: "50%", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
