@@ -540,10 +540,11 @@ export default function Wedstrijden() {
                     totalInSelectie={(detailMatch.lineup?.length ?? 0) + (detailMatch.substitutes?.length ?? 0)}
                   />
                 </div>
-              )}
-            </div>
-          ) : (
-            <div className="glass p-16 text-center">
+                )}
+                </div>
+                <div style={{ paddingTop: 0 }} />
+                ) : (
+                <div className="glass p-16 text-center">
               <Shield size={36} className="mx-auto mb-3" style={{ color: "rgba(255,255,255,0.15)" }} />
               <p className="t-tertiary">Selecteer een wedstrijd</p>
             </div>
