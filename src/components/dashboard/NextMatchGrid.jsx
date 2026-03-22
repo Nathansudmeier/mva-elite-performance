@@ -6,11 +6,8 @@ import { format, parseISO, differenceInDays } from "date-fns";
 import { nl } from "date-fns/locale";
 import CheckInFlow from "@/components/checkin/CheckInFlow";
 
-// Helper to get app logo from settings
-function getAppLogo() {
-  const appSettings = window.__APP_SETTINGS;
-  return appSettings?.logo_url || null;
-}
+// MVA Noord logo URL
+const MVA_LOGO_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/c0045a171_MVAlogo.png";
 
 function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, playerId }) {
   const navigate = useNavigate();
