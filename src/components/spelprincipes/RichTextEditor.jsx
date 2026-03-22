@@ -1,13 +1,16 @@
-import React, { useRef } from "react";
-
-const TOOLS = [
-  { cmd: "bold", icon: "B", style: { fontWeight: 700 }, title: "Vet" },
-  { cmd: "italic", icon: "I", style: { fontStyle: "italic" }, title: "Cursief" },
-  { cmd: "insertUnorderedList", icon: "≡", style: {}, title: "Lijst" },
-];
-
+import React, { useRef, useEffect } from "react";
+...
 export default function RichTextEditor({ value, onChange, placeholder }) {
   const editorRef = useRef(null);
+  const isInitialized = useRef(false);
+
+  // Set initial HTML only once — never on subsequent renders to avoid cursor jumping
+  useEffect(() => {
+    if (editorRef.current && !isInitialized.current) {
+      editorRef.current.innerHTML = value || "";
+      isInitialized.current = true;
+    }
+  }, []);
 
   const exec = (cmd) => {
     document.execCommand(cmd, false, null);
