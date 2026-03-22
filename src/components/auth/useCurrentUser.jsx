@@ -15,6 +15,8 @@ export function useCurrentUser() {
     isLoading,
     isTrainer: user?.role === "trainer" || isAdmin,
     isSpeelster: user?.role === "speelster",
+    isOuder: user?.role === "ouder",
+    isTC: user?.role === "tc",
     playerId: user?.player_id,
   };
 }
