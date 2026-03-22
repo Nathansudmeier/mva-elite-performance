@@ -148,6 +148,9 @@ export default function PlayerDashboard() {
       {/* Upcoming Activities Compact */}
       <UpcomingActivitiesCompact playerId={playerId} />
 
+      {/* Next Matches */}
+      <NextMatchGrid matches={matches} />
+
       {/* Metric Grid */}
       <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
 
