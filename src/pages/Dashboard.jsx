@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,6 @@ export default function Dashboard() {
   const queryClient = useQueryClient();
   const { isSpeelster, isTrainer, isLoading: authLoading } = useCurrentUser();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
-
 
   useEffect(() => {
     if (!authLoading && isSpeelster) {
