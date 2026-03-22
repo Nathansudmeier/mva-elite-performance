@@ -173,10 +173,11 @@ export default function Layout({ children, currentPageName }) {
             <nav className="space-y-1">
               {isSpeelsterUser ? (
                 <>
-                  <NavLink item={mainNavItems[0]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <NavLink item={mainNavItems[1]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <NavLink item={mainNavItems[4]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <NavLink item={mainNavItems[3]} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Agenda", icon: "calendar", page: "Agenda" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Trainingen", icon: "list-check", page: "Trainingen" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Staff", icon: "user-cog", page: "Staff" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={{ name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <DeveloperGroup currentPageName={currentPageName} onItemClick={() => setMobileOpen(false)} />
                 </>
