@@ -275,11 +275,11 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                <div style={{ fontSize: "28px", fontWeight: 800, color: "white", letterSpacing: "-1px", lineHeight: 1 }}>
                  VS
                </div>
-               <div style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.60)", textAlign: "center" }}>
+               <div style={{ fontSize: "14px", fontWeight: 700, color: "rgba(255,255,255,0.75)", textAlign: "center", letterSpacing: "-0.2px" }}>
                  {format(matchDate, "d MMM", { locale: nl })}
                </div>
                {nextMatch.start_time && (
-                 <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)" }}>
+                 <div style={{ fontSize: "13px", fontWeight: 600, color: "rgba(255,255,255,0.55)" }}>
                    {nextMatch.start_time}
                  </div>
                )}
