@@ -1,5 +1,11 @@
 import React, { useRef, useEffect } from "react";
 
+const TOOLS = [
+  { cmd: "bold", icon: "B", style: { fontWeight: 700 }, title: "Vet" },
+  { cmd: "italic", icon: "I", style: { fontStyle: "italic" }, title: "Cursief" },
+  { cmd: "insertUnorderedList", icon: "≡", style: {}, title: "Lijst" },
+];
+
 export default function RichTextEditor({ value, onChange, placeholder }) {
   const editorRef = useRef(null);
   const isInitialized = useRef(false);
