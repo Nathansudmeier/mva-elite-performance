@@ -194,11 +194,24 @@ export default function Wedstrijden() {
           <h1 className="t-page-title">Wedstrijden</h1>
           <p className="t-secondary">Opstellingen, uitslagen & tactiek</p>
         </div>
-        {isTrainer && (
-          <button onClick={openNew} className="btn-primary" style={{ width: "auto" }}>
-            <i className="ti ti-plus" style={{ fontSize: "16px" }} /> Nieuwe Wedstrijd
-          </button>
-        )}
+        <div className="flex gap-2">
+          {isTrainer && (
+            <button
+              onClick={() => syncAllMutation.mutate()}
+              disabled={syncAllMutation.isPending}
+              className="btn-secondary"
+              style={{ fontSize: "12px" }}
+              title="Synchroniseer wedstrijden naar Agenda"
+            >
+              {syncAllMutation.isPending ? "Syncing..." : "↻ Sync Agenda"}
+            </button>
+          )}
+          {isTrainer && (
+            <button onClick={openNew} className="btn-primary" style={{ width: "auto" }}>
+              <i className="ti ti-plus" style={{ fontSize: "16px" }} /> Nieuwe Wedstrijd
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Team switch */}
