@@ -30,6 +30,43 @@ export default function Messages() {
     queryFn: () => base44.entities.ChatMessage.filter({ is_deleted: false }),
   });
 
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["allUsers"],
+    queryFn: () => base44.entities.User.list(),
+  });
+
+  const initializeChatsM = useMutation({
+    mutationFn: () => base44.functions.invoke('initializeChats', {}),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["chatMembers", user?.email]);
+      queryClient.invalidateQueries(["allChats"]);
+    },
+  });
+
+  const createDirectChatM = useMutation({
+    mutationFn: async () => {
+      const chat = await base44.entities.Chat.create({
+        name: selectedUsers.map(e => allUsers.find(u => u.email === e)?.full_name).join(", "),
+        is_group: false,
+      });
+      const members = [user.email, ...selectedUsers];
+      for (const email of members) {
+        await base44.entities.ChatMember.create({
+          chat_id: chat.id,
+          user_email: email,
+        });
+      }
+      return chat;
+    },
+    onSuccess: (chat) => {
+      queryClient.invalidateQueries(["chatMembers", user?.email]);
+      queryClient.invalidateQueries(["allChats"]);
+      setShowUserPicker(false);
+      setSelectedUsers([]);
+      navigate(`/Chat?id=${chat.id}`);
+    },
+  });
+
   useEffect(() => {
     if (chatMembers.length > 0 && allChats.length > 0) {
       const chatIds = new Set(chatMembers.map(m => m.chat_id));
