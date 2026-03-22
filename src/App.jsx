@@ -84,6 +84,7 @@ const AuthenticatedApp = () => {
       <Route path="/Speelminuten" element={<LayoutWrapper currentPageName="Speelminuten"><Speelminuten /></LayoutWrapper>} />
       <Route path="/MijnReflecties" element={<LayoutWrapper currentPageName="MijnReflecties"><MijnReflecties /></LayoutWrapper>} />
       <Route path="/Agenda" element={<LayoutWrapper currentPageName="Agenda"><Agenda /></LayoutWrapper>} />
+      <Route path="/MatchEdit" element={<MatchEdit />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
