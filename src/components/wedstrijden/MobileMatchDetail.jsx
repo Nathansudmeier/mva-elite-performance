@@ -202,105 +202,106 @@ export default function MobileMatchDetail({
           )}
 
           {/* Opstelling */}
-        {match.lineup && match.lineup.length > 0 && (
-          <div className="glass p-4">
-            {canSeeLineup ? (
-              <>
-                <p className="t-card-title mb-3">Opstelling — {match.formation}</p>
-                <FieldLineup
-                  players={activePlayers}
-                  lineupMap={lineupArrayToMap(match.lineup)}
-                  formation={match.formation || "4-3-3"}
-                  readOnly
-                />
-                {match.substitutes && match.substitutes.length > 0 && (
-                  <div className="mt-4 pt-3" style={{ borderTop: "0.5px solid rgba(255,255,255,0.10)" }}>
-                    <p className="t-label mb-2">Wissels</p>
-                    <div className="flex flex-wrap gap-2">
-                      {match.substitutes.map((pid) => {
-                        const p = activePlayers.find((pl) => pl.id === pid);
-                        return p ? (
-                          <span key={pid} className="badge" style={{ background: "rgba(255,107,0,0.12)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.2)" }}>
-                            ⇄ {p.name}
-                          </span>
-                        ) : null;
-                      })}
+          {match.lineup && match.lineup.length > 0 && (
+            <div className="glass p-4">
+              {canSeeLineup ? (
+                <>
+                  <p className="t-card-title mb-3">Opstelling — {match.formation}</p>
+                  <FieldLineup
+                    players={activePlayers}
+                    lineupMap={lineupArrayToMap(match.lineup)}
+                    formation={match.formation || "4-3-3"}
+                    readOnly
+                  />
+                  {match.substitutes && match.substitutes.length > 0 && (
+                    <div className="mt-4 pt-3" style={{ borderTop: "0.5px solid rgba(255,255,255,0.10)" }}>
+                      <p className="t-label mb-2">Wissels</p>
+                      <div className="flex flex-wrap gap-2">
+                        {match.substitutes.map((pid) => {
+                          const p = activePlayers.find((pl) => pl.id === pid);
+                          return p ? (
+                            <span key={pid} className="badge" style={{ background: "rgba(255,107,0,0.12)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.2)" }}>
+                              ⇄ {p.name}
+                            </span>
+                          ) : null;
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="text-center py-4">
-                <Shield size={28} className="mx-auto mb-2" style={{ color: "rgba(255,107,0,0.40)" }} />
-                <p className="t-card-title mb-1">Opstelling nog niet beschikbaar</p>
-                <p className="t-secondary">De opstelling wordt zichtbaar op de wedstrijddag.</p>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-4">
+                  <Shield size={28} className="mx-auto mb-2" style={{ color: "rgba(255,107,0,0.40)" }} />
+                  <p className="t-card-title mb-1">Opstelling nog niet beschikbaar</p>
+                  <p className="t-secondary">De opstelling wordt zichtbaar op de wedstrijddag.</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Tactische notities */}
+          {(match.ball_possession || match.pressing || match.transition || match.set_pieces) && (
+            <div className="space-y-3">
+              {match.ball_possession && <TactSection icon={Shield} title="Balbezit (BB)" content={match.ball_possession} />}
+              {match.pressing && <TactSection icon={Shield} title="Pressing (VB)" content={match.pressing} />}
+              {match.transition && <TactSection icon={ArrowLeftRight} title="Omschakeling" content={match.transition} />}
+              {match.set_pieces && <TactSection icon={Flag} title="Dode Spelmomenten" content={match.set_pieces} />}
+            </div>
+          )}
+
+          {match.notes && (
+            <div className="glass p-4">
+              <p className="t-card-title mb-1">Extra Notities</p>
+              <p className="t-secondary whitespace-pre-wrap">{match.notes}</p>
+            </div>
+          )}
+
+          {/* Aanwezigheid (speler) */}
+          {!isTrainer && myPlayer && linkedAgendaItem && (
+            <div className="glass p-4 flex items-center justify-between gap-3">
+              <div>
+                <p className="t-card-title">Mijn aanwezigheid</p>
+                <p className="t-secondary-sm">Geef aan of je erbij bent</p>
               </div>
-            )}
-          </div>
-        )}
-
-        {/* Tactische notities */}
-        {(match.ball_possession || match.pressing || match.transition || match.set_pieces) && (
-          <div className="space-y-3">
-            {match.ball_possession && <TactSection icon={Shield} title="Balbezit (BB)" content={match.ball_possession} />}
-            {match.pressing && <TactSection icon={Shield} title="Pressing (VB)" content={match.pressing} />}
-            {match.transition && <TactSection icon={ArrowLeftRight} title="Omschakeling" content={match.transition} />}
-            {match.set_pieces && <TactSection icon={Flag} title="Dode Spelmomenten" content={match.set_pieces} />}
-          </div>
-        )}
-
-        {match.notes && (
-          <div className="glass p-4">
-            <p className="t-card-title mb-1">Extra Notities</p>
-            <p className="t-secondary whitespace-pre-wrap">{match.notes}</p>
-          </div>
-        )}
-
-        {/* Aanwezigheid (speler) */}
-        {!isTrainer && myPlayer && linkedAgendaItem && (
-          <div className="glass p-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="t-card-title">Mijn aanwezigheid</p>
-              <p className="t-secondary-sm">Geef aan of je erbij bent</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => rsvp("aanwezig")}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold"
+                  style={{ background: myRecord?.status === "aanwezig" ? "#4ade80" : "rgba(74,222,128,0.12)", color: myRecord?.status === "aanwezig" ? "#fff" : "#4ade80", border: "0.5px solid rgba(74,222,128,0.30)" }}
+                >
+                  <Check size={14} /> Ik kom
+                </button>
+                <button
+                  onClick={() => rsvp("afwezig")}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold"
+                  style={{ background: myRecord?.status === "afwezig" ? "#f87171" : "rgba(248,113,113,0.12)", color: myRecord?.status === "afwezig" ? "#fff" : "#f87171", border: "0.5px solid rgba(248,113,113,0.30)" }}
+                >
+                  <X size={14} /> Ik kom niet
+                </button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => rsvp("aanwezig")}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold"
-                style={{ background: myRecord?.status === "aanwezig" ? "#4ade80" : "rgba(74,222,128,0.12)", color: myRecord?.status === "aanwezig" ? "#fff" : "#4ade80", border: "0.5px solid rgba(74,222,128,0.30)" }}
-              >
-                <Check size={14} /> Ik kom
-              </button>
-              <button
-                onClick={() => rsvp("afwezig")}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold"
-                style={{ background: myRecord?.status === "afwezig" ? "#f87171" : "rgba(248,113,113,0.12)", color: myRecord?.status === "afwezig" ? "#fff" : "#f87171", border: "0.5px solid rgba(248,113,113,0.30)" }}
-              >
-                <X size={14} /> Ik kom niet
-              </button>
-            </div>
-          </div>
-        )}
+          )}
 
-        {/* Check-in status (trainer) — Liquid Glass stijl */}
-        {isTrainer && (
-          <div style={{
-            background: "rgba(255,255,255,0.09)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            border: "0.5px solid rgba(255,255,255,0.18)",
-            borderRadius: "22px",
-            overflow: "hidden",
-            position: "relative",
-          }}>
-            {/* glass shimmer */}
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", borderRadius: "22px 22px 0 0", pointerEvents: "none" }} />
-            <div className="p-5">
-              <p style={{ fontSize: "14px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Aanwezigheid</p>
-              <CheckInContent matchId={match.id} totalInSelectie={(match.lineup?.length ?? 0) + (match.substitutes?.length ?? 0)} />
+          {/* Check-in status (trainer) — Liquid Glass stijl */}
+          {isTrainer && (
+            <div style={{
+              background: "rgba(255,255,255,0.09)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
+              border: "0.5px solid rgba(255,255,255,0.18)",
+              borderRadius: "22px",
+              overflow: "hidden",
+              position: "relative",
+            }}>
+              {/* glass shimmer */}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", borderRadius: "22px 22px 0 0", pointerEvents: "none" }} />
+              <div className="p-5">
+                <p style={{ fontSize: "14px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Aanwezigheid</p>
+                <CheckInContent matchId={match.id} totalInSelectie={(match.lineup?.length ?? 0) + (match.substitutes?.length ?? 0)} />
+              </div>
             </div>
+          )}
           </div>
-        )}
       </div>
     </div>
   );
