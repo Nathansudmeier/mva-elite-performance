@@ -238,7 +238,7 @@ export default function Wedstrijden() {
         }}
       />
       
-      <div className="space-y-6 pb-20 lg:pb-6 relative z-10" style={{ padding: "0 1rem" }}>
+      <div className="space-y-6 pb-20 lg:pb-6 relative z-10" style={{ width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box", padding: "0 1rem" }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -319,24 +319,26 @@ export default function Wedstrijden() {
                  style={{
                    display: "flex",
                    alignItems: "center",
-                   gap: "12px",
+                   gap: "10px",
                    width: "100%",
+                   maxWidth: "100%",
+                   boxSizing: "border-box",
                    overflow: "hidden",
                    background: isActive ? "rgba(255,107,0,0.15)" : "rgba(255,255,255,0.07)",
                    border: isActive ? "0.5px solid rgba(255,107,0,0.35)" : "0.5px solid rgba(255,255,255,0.10)",
                    borderRadius: "18px",
-                   padding: "1rem 1.25rem",
+                   padding: "0.9rem 1rem",
                  }}>
                  {/* Date block */}
                  <div className="flex-shrink-0 rounded-xl overflow-hidden text-center"
-                   style={{ width: "56px", padding: "6px 8px", borderRadius: "10px", background: isActive ? "rgba(255,107,0,0.30)" : "rgba(255,255,255,0.10)" }}>
+                   style={{ width: "52px", padding: "6px 8px", borderRadius: "10px", background: isActive ? "rgba(255,107,0,0.30)" : "rgba(255,255,255,0.10)" }}>
                    <div className="t-label" style={{ fontSize: "9px", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", letterSpacing: "0.06em", lineHeight: "1.2" }}>{format(matchDate, "MMM", { locale: nl })}</div>
                    <div style={{ fontSize: "22px", fontWeight: 700, color: "white", lineHeight: 1, marginTop: "2px" }}>{format(matchDate, "d")}</div>
                  </div>
 
                  {/* Match info — flex 1 */}
                  <div className="flex-1 min-w-0" style={{ minWidth: 0 }}>
-                   <p style={{ fontSize: "15px", fontWeight: 600, color: "white", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.opponent}</p>
+                   <p style={{ fontSize: "15px", fontWeight: 600, color: "white", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "100%" }}>{m.opponent}</p>
                    <div className="flex items-center gap-1.5 mt-1">
                      <span className={isThuis ? "dot-green" : "dot-yellow"} />
                      <span className="t-secondary-sm">{isThuis ? "Thuis" : "Uit"}</span>
@@ -344,24 +346,20 @@ export default function Wedstrijden() {
                  </div>
 
                  {/* Right section — flex-shrink-0 */}
-                 <div className="flex-shrink-0 flex items-center gap-2" style={{ marginLeft: "auto" }}>
+                 <div className="flex-shrink-0 flex items-center gap-1" style={{ marginLeft: "auto" }}>
                    {/* Score + result */}
-                   <div className="text-right flex items-center gap-2">
-                     <div>
-                       {hasScore ? (
-                         <div className="flex flex-col items-end gap-1">
-                           <p className="text-base font-bold text-white">{scoreLabel(m)}</p>
-                           {result && <span className={badgeClass}>{resultLabel}</span>}
-                         </div>
-                       ) : (
-                         <p className="t-tertiary">–</p>
-                       )}
+                   {hasScore ? (
+                     <div className="text-right">
+                       <p className="text-base font-bold text-white">{scoreLabel(m)}</p>
+                       {result && <span className={badgeClass} style={{ fontSize: "9px" }}>{resultLabel}</span>}
                      </div>
-                   </div>
+                   ) : (
+                     <p className="t-tertiary">–</p>
+                   )}
 
                    {/* Attendance indicator — spelers only */}
                    {isSpeelsterUser && (
-                     <div style={{ width: "16px", height: "16px", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "8px" }}>
+                     <div style={{ width: "16px", height: "16px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                        {attendanceStatus === "aanwezig" && (
                          <i className="ti ti-circle-check" style={{ fontSize: "16px", color: "#4ade80" }} />
                        )}
@@ -374,24 +372,8 @@ export default function Wedstrijden() {
                      </div>
                    )}
 
-                   {/* Confirm attendance pill — future matches, not yet confirmed */}
-                   {isSpeelsterUser && isFutureMatch && !attendanceStatus && (
-                     <span className="badge" style={{
-                       background: "rgba(255,107,0,0.15)",
-                       border: "0.5px solid rgba(255,107,0,0.30)",
-                       color: "#FF8C3A",
-                       fontSize: "10px",
-                       fontWeight: 600,
-                       borderRadius: "20px",
-                       padding: "3px 10px",
-                       marginLeft: "8px",
-                     }}>
-                       Bevestig
-                     </span>
-                   )}
-
                    {/* Chevron */}
-                   <ChevronRight size={16} className="lg:hidden flex-shrink-0" style={{ color: "rgba(255,255,255,0.30)", marginLeft: "4px" }} />
+                   <ChevronRight size={16} className="lg:hidden flex-shrink-0" style={{ color: "rgba(255,255,255,0.30)" }} />
                  </div>
                </button>
              );
