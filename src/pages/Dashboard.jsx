@@ -169,39 +169,8 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* ── VOLGENDE WEDSTRIJD ── */}
-      <div className="match-hero-card cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate("/Wedstrijden")} style={{ height: undefined }} >
-        <div className="absolute inset-0">
-          <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 300 160" preserveAspectRatio="xMidYMid slice">
-            <rect x="1" y="1" width="298" height="158" fill="none" stroke="white" strokeWidth="2"/>
-            <line x1="150" y1="1" x2="150" y2="159" stroke="white" strokeWidth="1.5"/>
-            <circle cx="150" cy="80" r="28" fill="none" stroke="white" strokeWidth="1.5"/>
-            <circle cx="150" cy="80" r="2" fill="white"/>
-            <rect x="1" y="45" width="42" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
-            <rect x="257" y="45" width="42" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
-          </svg>
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
-          <div style={{ position: "absolute", top: "-60px", right: "-40px", width: "180px", height: "180px", borderRadius: "50%", background: "radial-gradient(circle, rgba(255,107,0,0.50) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
-        </div>
-        <div className="relative z-10 p-5">
-          <p className="t-label mb-3">Volgende Wedstrijd</p>
-          {nextMatch ? (
-            <div className="flex items-end justify-between">
-              <div>
-                <p className="t-secondary-sm mb-1">{nextMatch.home_away === "Uit" ? "Uitwedstrijd" : "Thuiswedstrijd"}</p>
-                <p className="text-xl font-bold text-white leading-tight" style={{ letterSpacing: "-0.3px" }}>vs. {nextMatch.opponent}</p>
-              </div>
-              <div className="flex flex-col items-center bg-white/20 backdrop-blur-sm rounded-xl p-2.5 min-w-[52px]">
-                <span className="t-label uppercase">{format(new Date(nextMatch.date), "MMM", { locale: nl })}</span>
-                <span className="t-metric text-white leading-tight">{format(new Date(nextMatch.date), "d")}</span>
-                <span className="t-tertiary">{format(new Date(nextMatch.date), "EEE", { locale: nl })}</span>
-              </div>
-            </div>
-          ) : (
-            <p className="t-secondary mt-2">Geen geplande wedstrijden</p>
-          )}
-        </div>
-      </div>
+      {/* ── VOLGENDE WEDSTRIJDEN ── */}
+      <NextMatchGrid matches={matches} playerId={null} />
 
       {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }} className="mobile-grid-2col">
