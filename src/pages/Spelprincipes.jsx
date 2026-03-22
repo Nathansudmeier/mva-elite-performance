@@ -60,10 +60,9 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
           WebkitOverflowScrolling: "touch",
         }}
       >
-        {/* Header — sticky */}
+        {/* Header */}
         <div
           className="flex items-center justify-between mb-6"
-          style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(20,10,4,0.92)", backdropFilter: "blur(12px)", marginLeft: "-2rem", marginRight: "-2rem", padding: "1rem 2rem", borderBottom: "0.5px solid rgba(255,255,255,0.08)" }}
         >
           <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff" }}>
             {initial?.id ? "Spelprincipe bewerken" : "Spelprincipe toevoegen"}
