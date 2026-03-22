@@ -108,17 +108,18 @@ export default function MobileMatchDetail({
               <span className="t-metric-orange" style={{ fontSize: "26px" }}>{scoreLabel(match)}</span>
             </div>
             {isTrainer && (
-              <div className="flex gap-2 mt-4 flex-wrap">
-                <button onClick={onEdit} className="btn-secondary" style={{ height: "36px", fontSize: "12px", padding: "0 14px" }}>
+              <div className="flex gap-2 mt-4 flex-col sm:flex-row">
+                <button onClick={onEdit} className="btn-secondary text-xs px-3 py-2 h-auto flex-1 sm:flex-none">
                   <Edit2 size={12} /> Bewerken
                 </button>
-                <Link to={`/LiveMatch?matchId=${match.id}`}>
-                  <button className="btn-primary" style={{ height: "36px", fontSize: "12px", padding: "0 14px", width: "auto" }}>
+                <Link to={`/LiveMatch?matchId=${match.id}`} className="flex-1 sm:flex-none">
+                  <button className="btn-primary w-full text-xs px-3 py-2 h-auto">
                     <Radio size={12} /> Live
                   </button>
                 </Link>
-                <button onClick={onDelete} className="badge badge-loss" style={{ cursor: "pointer", height: "36px", padding: "0 12px" }}>
-                  <Trash2 size={11} className="mr-1" /> Verwijderen
+                <button onClick={onDelete} className="flex items-center justify-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold flex-1 sm:flex-none"
+                  style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", border: "0.5px solid rgba(248,113,113,0.25)", cursor: "pointer" }}>
+                  <Trash2 size={11} /> Verwijderen
                 </button>
               </div>
             )}
