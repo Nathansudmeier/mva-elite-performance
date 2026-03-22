@@ -197,6 +197,6 @@ function PlayersContent() {
       </Dialog>
       )}
       </div>
-      </div>
-      );
-      }
+    </div>
+    );
+  }
