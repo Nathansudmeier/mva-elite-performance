@@ -212,6 +212,7 @@ export default function Layout({ children, currentPageName }) {
           { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
           { name: "Agenda", icon: "calendar", page: "Agenda" },
           { name: "Trainingen", icon: "clipboard-list", page: "Trainingen" },
+          { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
           { name: "Spelers", icon: "users", page: "Players" },
           { name: "Staff", icon: "user-cog", page: "Staff" },
           { name: "Berichten", icon: "message-circle", page: "Messages" },
