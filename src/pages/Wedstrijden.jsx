@@ -290,15 +290,19 @@ export default function Wedstrijden() {
                   </div>
 
                   {/* Score + result */}
-                  <div className="flex-shrink-0 text-right">
-                    {hasScore ? (
-                      <div className="flex flex-col items-end gap-1">
-                        <p className="text-base font-bold text-white">{scoreLabel(m)}</p>
-                        {result && <span className={badgeClass}>{resultLabel}</span>}
-                      </div>
-                    ) : (
-                      <p className="t-tertiary">–</p>
-                    )}
+                  <div className="flex-shrink-0 text-right flex items-center gap-2">
+                    <div>
+                      {hasScore ? (
+                        <div className="flex flex-col items-end gap-1">
+                          <p className="text-base font-bold text-white">{scoreLabel(m)}</p>
+                          {result && <span className={badgeClass}>{resultLabel}</span>}
+                        </div>
+                      ) : (
+                        <p className="t-tertiary">–</p>
+                      )}
+                    </div>
+                    {/* Chevron alleen op mobiel */}
+                    <ChevronRight size={16} className="lg:hidden flex-shrink-0" style={{ color: "rgba(255,255,255,0.30)" }} />
                   </div>
                 </div>
               </button>
