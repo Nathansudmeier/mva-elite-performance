@@ -401,6 +401,7 @@ export default function Wedstrijden() {
                     <rect x="354" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
                   </svg>
                   <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
+                  <div className="absolute bottom-0 left-0 right-0" style={{ height: "120px", background: "linear-gradient(180deg, transparent 0%, rgba(28,14,4,0.70) 50%, rgba(28,14,4,1.0) 100%)", zIndex: 1 }} />
                 </div>
                 <div className="relative z-10 flex items-start justify-between h-full">
                   <div>
