@@ -173,10 +173,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
           {/* Right: team toggle + seizoen + avatar */}
           <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-1 p-1 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
-              <span style={{ fontSize: "11px", fontWeight: 600, color: "#ffffff", background: "#FF6B00", borderRadius: "20px", padding: "3px 10px" }}>MO17</span>
-              <span style={{ fontSize: "11px", fontWeight: 500, color: "rgba(255,255,255,0.50)", padding: "3px 10px" }}>Dames 1</span>
-            </div>
+
             <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.50)", background: "rgba(255,255,255,0.07)", borderRadius: "20px", padding: "4px 10px" }}>2025-26</div>
             {profileLink ? (
               <Link to={profileLink} className="flex-shrink-0">
