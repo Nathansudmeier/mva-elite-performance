@@ -224,6 +224,7 @@ export default function Layout({ children, currentPageName }) {
           { name: "Agenda", icon: "calendar", page: "Agenda" },
           { name: "Trainingen", icon: "clipboard-list", page: "Trainingen" },
           { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
+          { name: "Berichten", icon: "message-circle", page: "Messages" },
           { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
         ];
         
