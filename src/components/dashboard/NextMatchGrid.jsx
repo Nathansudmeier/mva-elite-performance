@@ -50,7 +50,7 @@ function MatchCard({ team, teamLabel, teamPill, nextMatch, showCheckIn: showChec
 
   return (
     <>
-      <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg, #1a4a2e, #0d2b1a)", border: "0.5px solid rgba(255,107,0,0.28)", borderRadius: "22px", minHeight: "140px" }}>
+      <button onClick={() => navigate("/LiveMatch", { state: { matchId: nextMatch.id } })} className="relative overflow-hidden" style={{ background: "linear-gradient(135deg, #1a4a2e, #0d2b1a)", border: "0.5px solid rgba(255,107,0,0.28)", borderRadius: "22px", minHeight: "140px", padding: 0, cursor: "pointer", transition: "opacity 0.2s" }} onMouseEnter={e => e.currentTarget.style.opacity = "0.8"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
         <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.08 }} viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice">
           <rect x="1" y="1" width="398" height="148" fill="none" stroke="white" strokeWidth="2"/>
           <line x1="200" y1="1" x2="200" y2="149" stroke="white" strokeWidth="1.5"/>
@@ -68,7 +68,7 @@ function MatchCard({ team, teamLabel, teamPill, nextMatch, showCheckIn: showChec
               {dayLabel}
             </span>
           </div>
-          <div>
+          <div style={{ textAlign: "left" }}>
             <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", letterSpacing: "-0.3px", lineHeight: 1.2 }}>vs. {nextMatch.opponent}</h3>
             <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "3px" }}>
               {format(matchDate, "EEE d MMM", { locale: nl })} · {nextMatch.home_away || "Thuis"}
@@ -80,13 +80,13 @@ function MatchCard({ team, teamLabel, teamPill, nextMatch, showCheckIn: showChec
                 ✓ Check-in ingevuld
               </div>
             ) : (
-              <button onClick={() => setShowCheckIn(true)} style={{ width: "100%", background: "rgba(255,107,0,0.25)", border: "0.5px solid rgba(255,107,0,0.45)", color: "#ffffff", borderRadius: "12px", height: "38px", fontSize: "12px", fontWeight: 600, cursor: "pointer" }}>
+              <button onClick={(e) => { e.stopPropagation(); setShowCheckIn(true); }} style={{ width: "100%", background: "rgba(255,107,0,0.25)", border: "0.5px solid rgba(255,107,0,0.45)", color: "#ffffff", borderRadius: "12px", height: "38px", fontSize: "12px", fontWeight: 600, cursor: "pointer" }}>
                 Check-in →
               </button>
             )
           )}
         </div>
-      </div>
+      </button>
 
       {showCheckIn && (
         <CheckInFlow
