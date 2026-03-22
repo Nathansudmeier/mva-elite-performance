@@ -48,21 +48,22 @@ export default function MatchEdit() {
   // Form state
   const [activeTab, setActiveTab] = useState("info");
   const [formData, setFormData] = useState({
-    opponent: "",
-    opponent_logo: "",
-    date: "",
-    home_away: "Thuis",
-    score_home: "",
-    score_away: "",
-    formation: "4-3-3",
-    lineup: {},
-    substitutes: [],
-    ball_possession: "",
-    pressing: "",
-    transition: "",
-    set_pieces: "",
-    notes: "",
-  });
+     opponent: "",
+     opponent_logo: "",
+     date: "",
+     start_time: "",
+     home_away: "Thuis",
+     score_home: "",
+     score_away: "",
+     formation: "4-3-3",
+     lineup: {},
+     substitutes: [],
+     ball_possession: "",
+     pressing: "",
+     transition: "",
+     set_pieces: "",
+     notes: "",
+   });
 
   const [lineupMap, setLineupMap] = useState({});
   const [expandedTactic, setExpandedTactic] = useState(null);
@@ -112,27 +113,28 @@ export default function MatchEdit() {
   };
 
   // Load match data
-  useEffect(() => {
-    if (match) {
-      setFormData({
-        opponent: match.opponent || "",
-        opponent_logo: match.opponent_logo || "",
-        date: match.date || "",
-        home_away: match.home_away || "Thuis",
-        score_home: match.score_home ?? "",
-        score_away: match.score_away ?? "",
-        formation: match.formation || "4-3-3",
-        lineup: match.lineup || [],
-        substitutes: match.substitutes || [],
-        ball_possession: match.ball_possession || "",
-        pressing: match.pressing || "",
-        transition: match.transition || "",
-        set_pieces: match.set_pieces || "",
-        notes: match.notes || "",
-      });
-      setLineupMap(lineupArrayToMap(match.lineup));
-    }
-  }, [match]);
+   useEffect(() => {
+     if (match) {
+       setFormData({
+         opponent: match.opponent || "",
+         opponent_logo: match.opponent_logo || "",
+         date: match.date || "",
+         start_time: match.start_time || "",
+         home_away: match.home_away || "Thuis",
+         score_home: match.score_home ?? "",
+         score_away: match.score_away ?? "",
+         formation: match.formation || "4-3-3",
+         lineup: match.lineup || [],
+         substitutes: match.substitutes || [],
+         ball_possession: match.ball_possession || "",
+         pressing: match.pressing || "",
+         transition: match.transition || "",
+         set_pieces: match.set_pieces || "",
+         notes: match.notes || "",
+       });
+       setLineupMap(lineupArrayToMap(match.lineup));
+     }
+   }, [match]);
 
   const saveMutation = useMutation({
     mutationFn: (data) => base44.entities.Match.update(matchId, data),
@@ -449,6 +451,19 @@ export default function MatchEdit() {
                   type="date"
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  style={{
+                    ...INPUT_STYLE,
+                    color: "white",
+                  }}
+                />
+              </div>
+
+              <div>
+                <div style={LABEL_STYLE}>Starttijd</div>
+                <input
+                  type="time"
+                  value={formData.start_time}
+                  onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
                   style={{
                     ...INPUT_STYLE,
                     color: "white",
