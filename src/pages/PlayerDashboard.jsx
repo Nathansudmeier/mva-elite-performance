@@ -139,8 +139,8 @@ export default function PlayerDashboard() {
       {/* Today Training Card */}
       <TodayTrainingCard playerId={playerId} />
 
-      {/* Next Match Card */}
-      <NextMatchCard matches={matches} playerId={playerId} />
+      {/* Next Match Grid */}
+      <NextMatchGrid matches={matches} playerId={playerId} />
 
       {/* Attendance Dots */}
       <AttendanceDots attendance={attendance} />
