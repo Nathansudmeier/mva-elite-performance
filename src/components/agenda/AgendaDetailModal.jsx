@@ -32,15 +32,34 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
   const myPlayer = currentUser ? players.find(p => p.name === currentUser.full_name) : null;
   const myAttendance = myPlayer ? attendance.find(a => a.player_id === myPlayer.id) : null;
 
+  const [absentReason, setAbsentReason] = useState("");
+  const [showReasonInput, setShowReasonInput] = useState(false);
+
   const rsvpMutation = useMutation({
-    mutationFn: async (status) => {
+    mutationFn: async ({ status, reason }) => {
       if (myAttendance) {
-        await base44.entities.AgendaAttendance.update(myAttendance.id, { status });
+        await base44.entities.AgendaAttendance.update(myAttendance.id, { status, notes: reason || myAttendance.notes });
       } else if (myPlayer) {
-        await base44.entities.AgendaAttendance.create({ agenda_item_id: item.id, player_id: myPlayer.id, status });
+        await base44.entities.AgendaAttendance.create({ agenda_item_id: item.id, player_id: myPlayer.id, status, notes: reason || "" });
+      }
+      // Notify trainers when player marks absent
+      if (status === "afwezig" && myPlayer) {
+        await base44.functions.invoke("agendaNotifications", {
+          action: "send_absentee_notification",
+          player_name: myPlayer.name,
+          item_type: item.type,
+          item_title: item.title,
+          item_date: item.date,
+          reason: reason || "",
+          sender_email: currentUser?.email,
+        });
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["agenda-attendance", item.id] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["agenda-attendance", item.id] });
+      setShowReasonInput(false);
+      setAbsentReason("");
+    },
   });
 
   const playerMap = {};
