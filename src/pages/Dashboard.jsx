@@ -71,13 +71,39 @@ export default function Dashboard() {
    ]);
    const totalRecentTrainings = uniqueTrainingDates.size;
 
-   // Present count: Attendance.present=true + AgendaAttendance.status="aanwezig"
-   const totalPresentCount = 
-     recentTrainingAttendance.filter(a => a.present).length + 
-     recentAgendaTrainingAttendance.filter(aa => aa.status === "aanwezig").length;
+   // Calculate attendance: per player, per training date
+   const playerAttendanceByDate = {};
+   activePlayers.forEach(p => {
+     playerAttendanceByDate[p.id] = {};
+     // From TrainingSession + Attendance
+     recentTrainingSessions.forEach(s => {
+       const att = recentTrainingAttendance.find(a => a.player_id === p.id && a.session_id === s.id);
+       playerAttendanceByDate[p.id][s.date] = att?.present ? "present" : playerAttendanceByDate[p.id][s.date];
+     });
+     // From AgendaItem + AgendaAttendance
+     recentAgendaTrainings.forEach(ai => {
+       const att = recentAgendaTrainingAttendance.find(aa => aa.player_id === p.id && aa.agenda_item_id === ai.id);
+       if (att?.status === "aanwezig") {
+         playerAttendanceByDate[p.id][ai.date] = "present";
+       }
+     });
+   });
 
-   const avgAttendancePercent = totalRecentTrainings > 0 && activePlayers.length > 0
-     ? Math.round((totalPresentCount / (activePlayers.length * totalRecentTrainings)) * 100)
+   // Count total presence across all players and dates
+   let totalPlayerDateSessions = 0;
+   let totalPresentPlayerDateSessions = 0;
+   Object.keys(playerAttendanceByDate).forEach(playerId => {
+     const dates = playerAttendanceByDate[playerId];
+     uniqueTrainingDates.forEach(date => {
+       totalPlayerDateSessions++;
+       if (dates[date] === "present") {
+         totalPresentPlayerDateSessions++;
+       }
+     });
+   });
+
+   const avgAttendancePercent = totalPlayerDateSessions > 0
+     ? Math.round((totalPresentPlayerDateSessions / totalPlayerDateSessions) * 100)
      : 0;
 
   const allMatches = matches.sort((a, b) => new Date(a.date) - new Date(b.date));
