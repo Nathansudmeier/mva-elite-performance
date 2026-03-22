@@ -51,7 +51,7 @@ export default function Chat() {
         chat_id: chatId,
         sender_email: user.email,
         sender_name: user.full_name.split(" ")[0],
-        sender_photo_url: "",
+        sender_photo_url: user?.photo_url || "",
         text: messageText,
         image_url: imageUrl,
       });
