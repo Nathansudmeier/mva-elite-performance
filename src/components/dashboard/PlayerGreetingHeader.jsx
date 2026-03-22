@@ -121,9 +121,9 @@ export default function PlayerGreetingHeader({ user, player, attendance = [], ra
   const waveColor = (dayType === "training" || dayType === "match") ? "#FF8C3A" : "rgba(255,255,255,0.45)";
 
   return (
-    <div className="space-y-4" style={{ position: "relative", zIndex: 10, marginTop: "60px" }}>
+    <div className="space-y-4" style={{ position: "relative", zIndex: 10 }}>
       {/* Greeting */}
-      <div className="flex items-center gap-4" style={{ padding: "1rem 1.25rem 0.5rem", display: "flex", alignItems: "center", gap: "12px" }}>
+      <div className="flex items-center gap-4" style={{ padding: "0.75rem 1.25rem 0.5rem", display: "flex", alignItems: "center", gap: "12px" }}>
         <div className="flex-shrink-0 rounded-full overflow-hidden flex items-center justify-center"
            style={{ width: "44px", height: "44px", borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(255,107,0,0.40)", background: "rgba(255,107,0,0.20)" }}>
           {player?.photo_url ? (

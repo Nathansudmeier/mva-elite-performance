@@ -136,8 +136,8 @@ export default function Dashboard() {
     <div className="space-y-5 pb-20 lg:pb-6 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
       {/* Trainer greeting */}
-      <div style={{ position: "relative", zIndex: 10, marginTop: "60px", paddingX: "1rem" }}>
-        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", marginBottom: "8px" }}>
+      <div style={{ position: "relative", zIndex: 10, paddingX: "1rem" }}>
+        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", marginBottom: "8px", padding: "0.75rem 0 0 0" }}>
           {(() => {
             const hour = new Date().getHours();
             let greeting = "Goedemorgen";

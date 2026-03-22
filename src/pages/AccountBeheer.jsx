@@ -181,7 +181,7 @@ function AccountBeheerContent() {
     <div className="space-y-6 pb-20 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
       {/* Trainer greeting */}
-      <div style={{ position: "relative", zIndex: 10, marginTop: "60px" }}>
+      <div style={{ position: "relative", zIndex: 10, padding: "0.75rem 0 0 0" }}>
         <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", marginBottom: "8px" }}>
           {(() => {
             const hour = new Date().getHours();
