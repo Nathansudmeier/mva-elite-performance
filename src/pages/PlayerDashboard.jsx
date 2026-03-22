@@ -145,20 +145,17 @@ export default function PlayerDashboard() {
         yoyo={yoyo}
       />
 
-      {/* Komende activiteiten (agenda) */}
-      <KomendeActiviteiten playerId={playerId} />
+      {/* Upcoming Activities Compact */}
+      <UpcomingActivitiesCompact playerId={playerId} />
 
-      {/* Aanwezigheidsbevestiging voor items zonder reactie */}
-      <UpcomingConfirmations playerId={playerId} />
-
-      {/* Today Training Card */}
-      <TodayTrainingCard playerId={playerId} />
+      {/* Metric Grid */}
+      <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
 
       {/* Attendance Dots */}
       <AttendanceDots attendance={attendance} />
 
-      {/* Metric Grid */}
-      <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
+      {/* Today Training Card */}
+      <TodayTrainingCard playerId={playerId} />
 
       {/* IOP Goals */}
       <PlayerIOPGoals player={player} />
