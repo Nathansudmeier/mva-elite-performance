@@ -137,6 +137,9 @@ export default function PlayerDashboard() {
         yoyo={yoyo}
       />
 
+      {/* Aanwezigheidsbevestiging agenda */}
+      <UpcomingConfirmations playerId={playerId} />
+
       {/* Today Training Card */}
       <TodayTrainingCard playerId={playerId} />
 
