@@ -64,7 +64,7 @@ export default function MobileMatchDetail({
   const canSeeLineup = isTrainer || isMatchDay;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto" style={{ backgroundColor: "#1c0e04" }}>
+    <div className="fixed inset-0 z-50 overflow-y-auto" style={{ backgroundColor: "#1c0e04", paddingTop: "calc(52px + 8px)" }}>
       {/* Background orbs */}
       <div className="pointer-events-none fixed inset-0" style={{ zIndex: 0 }}>
         <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "rgba(255,107,0,0.40)", top: -80, left: -60, filter: "blur(70px)" }} />
@@ -72,18 +72,14 @@ export default function MobileMatchDetail({
       </div>
 
       <div className="relative p-4 space-y-4 pb-24" style={{ zIndex: 1 }}>
-        {/* Topbar */}
-        <div className="flex items-center justify-between -mx-4 px-4 py-3 mb-2"
-          style={{ backgroundColor: "rgba(28,14,4,0.95)", borderBottom: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}>
-          <button onClick={onBack} className="flex items-center justify-center w-9 h-9 rounded-xl flex-shrink-0"
-            style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
-            <i className="ti ti-arrow-left" style={{ fontSize: "18px", color: "#fff" }} />
-          </button>
-          <h1 className="t-page-title truncate flex-1 text-center">vs. {match.opponent}</h1>
-          <div className="w-9" />
-        </div>
+        {/* Back button */}
+        <button onClick={onBack} className="flex items-center gap-1.5" style={{ position: "relative", display: "flex", alignItems: "center", gap: "6px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, padding: "0.75rem 1.25rem 0", cursor: "pointer", background: "none", border: "none" }}>
+          <ArrowLeft size={16} />
+          Wedstrijden
+        </button>
+
         {/* Match hero card */}
-        <div className="match-hero-card p-5">
+        <div style={{ position: "relative", borderRadius: "24px", height: "120px", overflow: "hidden", border: "0.5px solid rgba(255,107,0,0.3)", background: "linear-gradient(135deg, #1a4a2e, #0d2b1a)" }}>
           <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
             <rect x="1" y="1" width="398" height="158" fill="none" stroke="white" strokeWidth="2"/>
             <line x1="200" y1="1" x2="200" y2="159" stroke="white" strokeWidth="1.5"/>
@@ -92,36 +88,37 @@ export default function MobileMatchDetail({
             <rect x="354" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
           </svg>
           <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
-        </div>
-        <div className="relative z-10 space-y-4">
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="badge" style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "0.5px solid rgba(255,255,255,0.2)" }}>{match.team}</span>
-                <span className={match.home_away === "Thuis" ? "badge badge-win" : "badge badge-draw"}>{match.home_away}</span>
-              </div>
-              <h2 className="text-xl font-bold text-white" style={{ letterSpacing: "-0.3px" }}>vs. {match.opponent}</h2>
-              <p className="t-secondary mt-1">{format(new Date(match.date), "d MMMM yyyy", { locale: nl })}</p>
-            </div>
-            <span className="t-metric-orange" style={{ fontSize: "26px" }}>{scoreLabel(match)}</span>
+          {/* Pills overlay */}
+          <div className="absolute top-0 left-0 z-10 flex items-center gap-2" style={{ padding: "0.75rem" }}>
+            <span className="badge" style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "0.5px solid rgba(255,255,255,0.2)" }}>{match.team}</span>
+            <span className={match.home_away === "Thuis" ? "badge badge-win" : "badge badge-draw"}>{match.home_away}</span>
           </div>
-          {isTrainer && (
-            <div className="flex gap-2 flex-col">
-              <button onClick={onEdit} className="btn-secondary text-xs px-3 py-2 h-auto">
-                <Edit2 size={12} /> Bewerken
+        </div>
+
+        {/* Match info below field */}
+        <div>
+          <h2 style={{ fontSize: "22px", fontWeight: 700, color: "white", letterSpacing: "-0.3px" }}>vs. {match.opponent}</h2>
+          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)", marginTop: "4px" }}>{format(new Date(match.date), "d MMMM yyyy", { locale: nl })}</p>
+        </div>
+
+        {/* Action buttons */}
+        {isTrainer && (
+          <div className="flex flex-col gap-3">
+            <Link to={`/LiveMatch?matchId=${match.id}`} className="w-full">
+              <button style={{ background: "#FF6B00", color: "white", borderRadius: "14px", height: "48px", fontSize: "15px", fontWeight: 600, border: "none", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", cursor: "pointer" }}>
+                <Radio size={16} /> Live
               </button>
-              <Link to={`/LiveMatch?matchId=${match.id}`}>
-                <button className="btn-primary w-full text-xs px-3 py-2 h-auto">
-                  <Radio size={12} /> Live
-                </button>
-              </Link>
-              <button onClick={onDelete} className="flex items-center justify-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold w-full"
-                style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", border: "0.5px solid rgba(248,113,113,0.25)", cursor: "pointer" }}>
-                <Trash2 size={11} /> Verwijderen
+            </Link>
+            <div className="flex gap-2">
+              <button onClick={onEdit} style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.70)", borderRadius: "12px", height: "40px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>
+                <Edit2 size={14} /> Bewerken
+              </button>
+              <button onClick={onDelete} style={{ background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.20)", color: "#f87171", borderRadius: "12px", height: "40px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>
+                <Trash2 size={14} /> Verwijderen
               </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Opstelling */}
         {match.lineup && match.lineup.length > 0 && (
