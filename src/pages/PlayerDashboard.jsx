@@ -135,7 +135,8 @@ export default function PlayerDashboard() {
   }
 
   return (
-    <div className="space-y-6 pb-24">
+    <div className="space-y-6 pb-24 relative" style={{ zIndex: 2 }}>
+      <DashboardBackground />
       {/* Header */}
       <PlayerGreetingHeader
         user={user}
