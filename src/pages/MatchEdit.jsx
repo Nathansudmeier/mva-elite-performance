@@ -215,7 +215,7 @@ export default function MatchEdit() {
     }}>
       {/* Background image with overlays */}
       <img
-        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e47690dd6_wedstrijd.jpg"
+        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/ef626366b_wedstrijd-fade.png"
         alt="Wedstrijd veld"
         style={{
           position: "fixed",
