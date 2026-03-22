@@ -82,7 +82,7 @@ export default function MobileMatchDetail({
         <div style={{ position: "absolute", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,150,0,0.20)", top: 300, right: -40, filter: "blur(60px)" }} />
       </div>
 
-      <div className="relative p-4 space-y-4 pb-24" style={{ zIndex: 1 }}>
+      <div className="relative p-4 space-y-4 pb-24 pt-16" style={{ zIndex: 1 }}>
         {/* Match hero card */}
         <div className="match-hero-card p-5">
           <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
