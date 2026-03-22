@@ -194,6 +194,50 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
 
         {/* Tab content */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
+          {/* Voor spelers: toon "Wie komt er?" alleen als ze al gereageerd hebben */}
+          {!isTrainer && (
+            <div className="mb-4">
+              {myAttendance ? (
+                <div>
+                  {/* Samenvatting */}
+                  <p className="t-secondary text-xs mb-3">
+                    <span style={{ color: "#4ade80" }}>{aanwezigList.length} aanwezig</span>
+                    {" · "}
+                    <span style={{ color: "#f87171" }}>{afwezigList.length} afwezig</span>
+                    {" · "}
+                    <span style={{ color: "rgba(255,255,255,0.40)" }}>{nognietList.length} nog onbekend</span>
+                  </p>
+                  {/* Twee kolommen: aanwezig / afwezig */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="t-label mb-2" style={{ color: "#4ade80" }}>✓ Aanwezig ({aanwezigList.length})</p>
+                      <div className="space-y-1.5">
+                        {aanwezigList.map(({ player }) => (
+                          <PlayerAvatarName key={player.id} player={player} />
+                        ))}
+                        {aanwezigList.length === 0 && <p className="t-tertiary text-xs">Niemand</p>}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="t-label mb-2" style={{ color: "#f87171" }}>✗ Afwezig ({afwezigList.length})</p>
+                      <div className="space-y-1.5">
+                        {afwezigList.map(({ player }) => (
+                          <PlayerAvatarName key={player.id} player={player} />
+                        ))}
+                        {afwezigList.length === 0 && <p className="t-tertiary text-xs">Niemand</p>}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-4 rounded-xl text-center" style={{ background: "rgba(255,255,255,0.04)", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                  <p className="t-secondary text-sm">Geef eerst je aanwezigheid door om te zien wie er komt.</p>
+                </div>
+              )}
+              <div className="mt-4" style={{ borderTop: "0.5px solid rgba(255,255,255,0.06)" }} />
+            </div>
+          )}
+
           {activeTab === 0 && (
             <PlayerList items={aanwezigList.map(x => ({ player: x.player }))} dotClass="dot-green" emptyMsg="Nog niemand bevestigd" />
           )}
@@ -205,7 +249,7 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
                   <PlayerAvatar player={player} />
                   <div className="flex-1 min-w-0">
                     <p className="t-card-title">{player.name}</p>
-                    {record.notes && <p className="t-secondary mt-0.5 text-xs" style={{ color: "#f87171" }}>{record.notes}</p>}
+                    {isTrainer && record.notes && <p className="t-secondary mt-0.5 text-xs" style={{ color: "#f87171" }}>{record.notes}</p>}
                   </div>
                   <div className="dot-red mt-1.5 flex-shrink-0" />
                 </div>
