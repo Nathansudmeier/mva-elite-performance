@@ -66,6 +66,7 @@ function PlayersContent() {
   };
 
   const activePlayers = players.filter((p) => p.active !== false);
+  const displayPlayers = isTrainer ? activePlayers : activePlayers.filter(p => p.id === playerId);
 
   const handleQuickPhoto = async (e, player) => {
     e.preventDefault();
@@ -98,15 +99,23 @@ function PlayersContent() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="t-page-title">Speelsters</h1>
-          <p className="t-secondary">{activePlayers.length} speelsters in selectie</p>
+          <p className="t-secondary">{isTrainer ? activePlayers.length : displayPlayers.length} speelsters</p>
         </div>
-        <button onClick={openNew} className="btn-secondary">
-          <Plus size={14} /> Toevoegen
-        </button>
+        {isTrainer && (
+          <button onClick={openNew} className="btn-secondary">
+            <Plus size={14} /> Toevoegen
+          </button>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {activePlayers.map((player) => (
+      {!isTrainer && displayPlayers.length === 0 ? (
+        <div className="glass p-8 text-center">
+          <User size={32} className="mx-auto mb-2 ic-muted" style={{ color: "rgba(255,255,255,0.2)" }} />
+          <p className="t-tertiary">Je profielpagina is nog niet beschikbaar.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {displayPlayers.map((player) => (
           <Link key={player.id} to={createPageUrl(`PlayerDetail?id=${player.id}`)} className="glass block transition-opacity hover:opacity-80">
             <div className="flex items-start gap-4 p-4">
               <label
