@@ -2,7 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { Link } from "react-router-dom";
-import { Edit2, Radio, Trash2, Shield, ArrowLeftRight, Flag, Check, X } from "lucide-react";
+import { Edit2, Radio, Trash2, Shield, ArrowLeftRight, Flag, Check, X, Users, ArrowLeft } from "lucide-react";
 import FieldLineup from "./FieldLineup";
 import MatchCheckInOverview from "../checkin/MatchCheckInOverview";
 import { useQueryClient } from "@tanstack/react-query";
