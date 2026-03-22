@@ -14,6 +14,7 @@ const desenvolvidoItems = [
   { name: "Reflectie", icon: "message", page: "SelfReflection" },
   { name: "Rapporten", icon: "trending-up", page: "Reports" },
   { name: "Speelminuten", icon: "activity", page: "Speelminuten" },
+  { name: "Mijn reflecties", icon: "notebook", page: "MijnReflecties" },
 ];
 
 const mainNavItems = [
