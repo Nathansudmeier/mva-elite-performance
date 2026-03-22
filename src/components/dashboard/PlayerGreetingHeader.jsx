@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { format, addDays, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 function getDayType(sessions, matches) {
   const today = new Date().toISOString().split("T")[0];
