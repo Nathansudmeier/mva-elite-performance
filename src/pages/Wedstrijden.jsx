@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
-import { Plus, Edit2, Trophy, Shield, Swords, ArrowLeftRight, Flag, Radio, Trash2, Home, Plane, Check, X, ChevronRight } from "lucide-react";
+import { Plus, Edit2, Trophy, Shield, Swords, ArrowLeftRight, Flag, Radio, Trash2, Home, Plane, Check, X, ChevronRight, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import FieldLineup from "../components/wedstrijden/FieldLineup";
 import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
@@ -29,9 +29,9 @@ function lineupMapToArray(map) {
 }
 
 export default function Wedstrijden() {
-  const queryClient = useQueryClient();
-  const { isTrainer } = useCurrentUser();
-  const [activeTeam, setActiveTeam] = useState("MO17");
+   const queryClient = useQueryClient();
+   const { isTrainer, isSpeelster, playerData } = useCurrentUser();
+   const [activeTeam, setActiveTeam] = useState("MO17");
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingMatch, setEditingMatch] = useState(null);
@@ -48,6 +48,15 @@ export default function Wedstrijden() {
   const { data: currentUser } = useQuery({ queryKey: ["currentUser"], queryFn: () => base44.auth.me(), staleTime: 60000 });
   const { data: agendaItems = [] } = useQuery({ queryKey: ["agendaItems"], queryFn: () => base44.entities.AgendaItem.list() });
   const { data: agendaAttendance = [] } = useQuery({ queryKey: ["agendaAttendanceAll"], queryFn: () => base44.entities.AgendaAttendance.list() });
+
+  // Speler-specifieke setup
+  const isSpeelsterUser = !isTrainer && isSpeelster;
+  const speelsterTeam = isSpeelsterUser && playerData?.team ? playerData.team : null;
+  React.useEffect(() => {
+    if (isSpeelsterUser && speelsterTeam) {
+      setActiveTeam(speelsterTeam);
+    }
+  }, [isSpeelsterUser, speelsterTeam]);
 
   const activePlayers = players.filter((p) => p.active !== false);
   const teamMatches = matches.filter((m) => m.team === activeTeam);
@@ -213,7 +222,23 @@ export default function Wedstrijden() {
   }
 
   return (
-    <div className="space-y-6 pb-20 lg:pb-6">
+    <div className="relative">
+      {/* Background image — fixed */}
+      <img
+        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e47690dd6_wedstrijd.jpg"
+        alt=""
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center",
+          zIndex: 0,
+        }}
+      />
+      
+      <div className="space-y-6 pb-20 lg:pb-6 relative z-10" style={{ padding: "0 1rem" }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -240,20 +265,38 @@ export default function Wedstrijden() {
         </div>
       </div>
 
-      {/* Team switch */}
-      <div className="flex rounded-xl p-1 gap-1" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", width: "fit-content" }}>
-         {TEAMS.map((t) => (
-           <button key={t} onClick={() => { setActiveTeam(t); setSelectedMatch(null); }}
-             className="py-2 rounded-lg text-sm font-bold transition-all"
-             style={{ minWidth: "80px", textAlign: "center", ...(activeTeam === t ? { background: "#FF6B00", color: "#fff", borderRadius: "10px" } : { color: "rgba(255,255,255,0.50)" }) }}>
-             {t}
-           </button>
-         ))}
-       </div>
+      {/* Team switch — hidden for spelers */}
+      {!isSpeelsterUser && (
+        <div className="flex rounded-xl p-1 gap-1" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", width: "fit-content" }}>
+           {TEAMS.map((t) => (
+             <button key={t} onClick={() => { setActiveTeam(t); setSelectedMatch(null); }}
+               className="py-2 rounded-lg text-sm font-bold transition-all"
+               style={{ minWidth: "80px", textAlign: "center", ...(activeTeam === t ? { background: "#FF6B00", color: "#fff", borderRadius: "10px" } : { color: "rgba(255,255,255,0.50)" }) }}>
+               {t}
+             </button>
+           ))}
+         </div>
+      )}
+
+      {/* Speler team pill */}
+      {isSpeelsterUser && speelsterTeam && (
+        <div className="flex justify-center">
+          <span className="badge" style={{
+            background: speelsterTeam === "MO17" ? "rgba(255,107,0,0.20)" : "rgba(100,150,255,0.20)",
+            border: speelsterTeam === "MO17" ? "0.5px solid rgba(255,107,0,0.40)" : "0.5px solid rgba(100,150,255,0.40)",
+            color: speelsterTeam === "MO17" ? "#FF8C3A" : "#6496ff",
+            fontSize: "12px",
+            fontWeight: 600,
+            padding: "4px 12px",
+          }}>
+            {speelsterTeam}
+          </span>
+        </div>
+      )}
 
        <div className="grid lg:grid-cols-5 gap-6">
          {/* Match list */}
-         <div className="lg:col-span-2 space-y-2 px-4 lg:px-0">
+         <div className="lg:col-span-2 space-y-2 px-0 lg:px-0">
           <p className="t-label mb-3">{activeTeam} — {teamMatches.length} wedstrijd{teamMatches.length !== 1 ? "en" : ""}</p>
           {teamMatches.map((m) => {
             const isActive = selectedMatch === m.id;
@@ -264,33 +307,46 @@ export default function Wedstrijden() {
             const resultLabel = result === "win" ? "W" : result === "loss" ? "V" : "G";
             const badgeClass = result === "win" ? "badge badge-win" : result === "loss" ? "badge badge-loss" : result === "draw" ? "badge badge-draw" : "";
 
+            // Attendance status for player
+            const linkedAgendaItem = agendaItems.find(ai => ai.match_id === m.id || (ai.type === "Wedstrijd" && ai.date === m.date && ai.title?.includes(m.opponent)));
+            const myAttendanceRecord = isSpeelsterUser && currentUser && linkedAgendaItem ? agendaAttendance.find(aa => aa.agenda_item_id === linkedAgendaItem.id && aa.player_id === currentUser.id) : null;
+            const attendanceStatus = myAttendanceRecord?.status;
+            const isFutureMatch = m.date > new Date().toISOString().split("T")[0];
+
             return (
                <button key={m.id} onClick={() => setSelectedMatch(m.id)}
                  className="w-full text-left transition-all"
                  style={{
+                   display: "flex",
+                   alignItems: "center",
+                   gap: "12px",
+                   width: "100%",
+                   overflow: "hidden",
                    background: isActive ? "rgba(255,107,0,0.15)" : "rgba(255,255,255,0.07)",
                    border: isActive ? "0.5px solid rgba(255,107,0,0.35)" : "0.5px solid rgba(255,255,255,0.10)",
                    borderRadius: "18px",
+                   padding: "1rem 1.25rem",
                  }}>
-                 <div className="flex items-center gap-3.5" style={{ padding: "1rem 1.25rem" }}>
-                   {/* Date block */}
-                   <div className="flex-shrink-0 rounded-xl overflow-hidden text-center"
-                     style={{ minWidth: "52px", padding: "6px 8px", borderRadius: "10px", background: isActive ? "rgba(255,107,0,0.30)" : "rgba(255,255,255,0.10)" }}>
-                     <div className="t-label" style={{ fontSize: "9px", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", letterSpacing: "0.06em", lineHeight: "1.2" }}>{format(matchDate, "MMM", { locale: nl })}</div>
-                     <div style={{ fontSize: "22px", fontWeight: 700, color: "white", lineHeight: 1, marginTop: "2px" }}>{format(matchDate, "d")}</div>
-                   </div>
+                 {/* Date block */}
+                 <div className="flex-shrink-0 rounded-xl overflow-hidden text-center"
+                   style={{ width: "56px", padding: "6px 8px", borderRadius: "10px", background: isActive ? "rgba(255,107,0,0.30)" : "rgba(255,255,255,0.10)" }}>
+                   <div className="t-label" style={{ fontSize: "9px", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", letterSpacing: "0.06em", lineHeight: "1.2" }}>{format(matchDate, "MMM", { locale: nl })}</div>
+                   <div style={{ fontSize: "22px", fontWeight: 700, color: "white", lineHeight: 1, marginTop: "2px" }}>{format(matchDate, "d")}</div>
+                 </div>
 
-                   {/* Match info */}
-                   <div className="flex-1 min-w-0" style={{ minWidth: 0 }}>
-                     <p style={{ fontSize: "15px", fontWeight: 600, color: "white", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.opponent}</p>
-                     <div className="flex items-center gap-1.5 mt-1">
-                       <span className={isThuis ? "dot-green" : "dot-yellow"} />
-                       <span className="t-secondary-sm">{isThuis ? "Thuis" : "Uit"}</span>
-                     </div>
+                 {/* Match info — flex 1 */}
+                 <div className="flex-1 min-w-0" style={{ minWidth: 0 }}>
+                   <p style={{ fontSize: "15px", fontWeight: 600, color: "white", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{m.opponent}</p>
+                   <div className="flex items-center gap-1.5 mt-1">
+                     <span className={isThuis ? "dot-green" : "dot-yellow"} />
+                     <span className="t-secondary-sm">{isThuis ? "Thuis" : "Uit"}</span>
                    </div>
+                 </div>
 
+                 {/* Right section — flex-shrink-0 */}
+                 <div className="flex-shrink-0 flex items-center gap-2" style={{ marginLeft: "auto" }}>
                    {/* Score + result */}
-                   <div className="flex-shrink-0 text-right flex items-center gap-2">
+                   <div className="text-right flex items-center gap-2">
                      <div>
                        {hasScore ? (
                          <div className="flex flex-col items-end gap-1">
@@ -301,9 +357,41 @@ export default function Wedstrijden() {
                          <p className="t-tertiary">–</p>
                        )}
                      </div>
-                     {/* Chevron alleen op mobiel */}
-                     <ChevronRight size={16} className="lg:hidden flex-shrink-0" style={{ color: "rgba(255,255,255,0.30)", marginRight: "4px" }} />
                    </div>
+
+                   {/* Attendance indicator — spelers only */}
+                   {isSpeelsterUser && (
+                     <div style={{ width: "16px", height: "16px", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "8px" }}>
+                       {attendanceStatus === "aanwezig" && (
+                         <i className="ti ti-circle-check" style={{ fontSize: "16px", color: "#4ade80" }} />
+                       )}
+                       {attendanceStatus === "afwezig" && (
+                         <i className="ti ti-circle-x" style={{ fontSize: "16px", color: "#f87171" }} />
+                       )}
+                       {!attendanceStatus && (
+                         <i className="ti ti-clock" style={{ fontSize: "16px", color: "rgba(255,255,255,0.30)" }} />
+                       )}
+                     </div>
+                   )}
+
+                   {/* Confirm attendance pill — future matches, not yet confirmed */}
+                   {isSpeelsterUser && isFutureMatch && !attendanceStatus && (
+                     <span className="badge" style={{
+                       background: "rgba(255,107,0,0.15)",
+                       border: "0.5px solid rgba(255,107,0,0.30)",
+                       color: "#FF8C3A",
+                       fontSize: "10px",
+                       fontWeight: 600,
+                       borderRadius: "20px",
+                       padding: "3px 10px",
+                       marginLeft: "8px",
+                     }}>
+                       Bevestig
+                     </span>
+                   )}
+
+                   {/* Chevron */}
+                   <ChevronRight size={16} className="lg:hidden flex-shrink-0" style={{ color: "rgba(255,255,255,0.30)", marginLeft: "4px" }} />
                  </div>
                </button>
              );
@@ -552,6 +640,7 @@ export default function Wedstrijden() {
           </div>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }
