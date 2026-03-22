@@ -395,63 +395,14 @@ export default function Dashboard() {
                 </div>
               </button>
             ))}
-            {/* Desktop: uitklapbare Activiteit inplannen */}
+            {/* Desktop: Activiteit toevoegen knop */}
             <button
-              onClick={() => setPlanExpanded(!planExpanded)}
-              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)", borderRadius: "10px", padding: "8px 10px", marginTop: "4px", cursor: "pointer" }}
+              onClick={() => setAgendaFormOpen(true)}
+              style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%", background: "rgba(255,107,0,0.10)", border: "0.5px solid rgba(255,107,0,0.25)", borderRadius: "10px", padding: "8px 10px", marginTop: "4px", cursor: "pointer" }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <i className="ti ti-calendar-plus" style={{ fontSize: "14px", color: "#FF8C3A" }} />
-                <p style={{ fontSize: "12px", color: "#FF8C3A", fontWeight: 600 }}>Activiteit inplannen</p>
-              </div>
-              <i className={`ti ti-chevron-down`} style={{ fontSize: "14px", color: "#FF8C3A", transform: planExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }} />
+              <i className="ti ti-calendar-plus" style={{ fontSize: "14px", color: "#FF8C3A" }} />
+              <p style={{ fontSize: "12px", color: "#FF8C3A", fontWeight: 600 }}>Activiteit toevoegen</p>
             </button>
-            {planExpanded && (
-              <div style={{ marginTop: "8px", padding: "10px", background: "rgba(255,255,255,0.04)", borderRadius: "10px", border: "0.5px solid rgba(255,255,255,0.08)" }}>
-                <div style={{ display: "flex", gap: "5px", marginBottom: "8px" }}>
-                  {["Training", "Wedstrijd", "Fysieke Test"].map(t => (
-                    <button
-                      key={t}
-                      onClick={() => setPlanType(t)}
-                      style={{
-                        flex: 1, padding: "6px 4px", borderRadius: "10px", fontSize: "9px", fontWeight: 600, cursor: "pointer",
-                        background: planType === t ? "#FF6B00" : "rgba(255,255,255,0.08)",
-                        border: planType === t ? "none" : "0.5px solid rgba(255,255,255,0.12)",
-                        color: planType === t ? "#ffffff" : "rgba(255,255,255,0.55)",
-                      }}
-                    >{t}</button>
-                  ))}
-                </div>
-                <input
-                  type="date"
-                  value={planDate}
-                  onChange={e => setPlanDate(e.target.value)}
-                  style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "7px 10px", fontSize: "12px", color: "#ffffff", outline: "none", colorScheme: "dark", marginBottom: "6px" }}
-                />
-                {planDateHasPlan && planType === "Training" && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "5px" }}>
-                    <i className="ti ti-circle-check-filled" style={{ fontSize: "12px", color: "#4ade80" }} />
-                    <span style={{ fontSize: "11px", color: "#4ade80", fontWeight: 600 }}>Plan aanwezig</span>
-                  </div>
-                )}
-                {planType === "Wedstrijd" && (
-                  <input
-                    type="text"
-                    placeholder="Tegenstander"
-                    value={planOpponent}
-                    onChange={e => setPlanOpponent(e.target.value)}
-                    style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "7px 10px", fontSize: "12px", color: "#ffffff", outline: "none", marginBottom: "6px" }}
-                  />
-                )}
-                <button
-                  onClick={handlePlanSave}
-                  disabled={!planDate || planSaving}
-                  style={{ width: "100%", padding: "8px", borderRadius: "12px", fontSize: "13px", fontWeight: 600, cursor: planDate ? "pointer" : "not-allowed", background: "rgba(255,107,0,0.20)", border: "0.5px solid rgba(255,107,0,0.35)", color: "#FF8C3A", height: "40px", display: "flex", alignItems: "center", justifyContent: "center" }}
-                >
-                  {planSaving ? "Opslaan..." : "+ Toevoegen"}
-                </button>
-              </div>
-            )}
           </div>
           {/* Mobiel: 2x2 grid */}
           <div className="mobile-only">
