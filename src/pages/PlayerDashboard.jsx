@@ -156,7 +156,7 @@ export default function PlayerDashboard() {
       <AttendanceDots attendance={attendance} />
 
       {/* Metric Grid */}
-      <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} matches={matches} playerId={playerId} />
+      <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
 
       {/* IOP Goals */}
       <PlayerIOPGoals player={player} />
