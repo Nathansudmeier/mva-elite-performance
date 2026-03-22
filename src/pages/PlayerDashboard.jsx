@@ -55,6 +55,12 @@ export default function PlayerDashboard() {
     enabled: !!playerId,
   });
 
+  const { data: agendaAttendance = [] } = useQuery({
+    queryKey: ["agenda-attendance-player", playerId],
+    queryFn: () => base44.entities.AgendaAttendance.filter({ player_id: playerId }),
+    enabled: !!playerId,
+  });
+
   const { data: yoyo = [] } = useQuery({
     queryKey: ["myYoyo", playerId],
     queryFn: () => base44.entities.YoYoTest.filter({ player_id: playerId }),
