@@ -44,15 +44,39 @@ export default function Dashboard() {
   const activePlayers = players.filter((p) => p.active !== false);
 
   // === BLOK 1: QUICK STATS ===
-  const last4WeeksAgo = subDays(new Date(), 28);
-  const recentSessions = sessions.filter(s => isAfter(new Date(s.date), last4WeeksAgo));
-  const recentAttendance = attendance.filter(a => {
-    const session = sessions.find(s => s.id === a.session_id);
-    return session && isAfter(new Date(session.date), last4WeeksAgo);
-  });
-  const avgAttendancePercent = recentSessions.length > 0 && activePlayers.length > 0
-    ? Math.round((recentAttendance.filter(a => a.present).length / (activePlayers.length * recentSessions.length)) * 100)
-    : 0;
+   const last4WeeksAgo = subDays(new Date(), 28);
+
+   // Combine both systems: TrainingSession + Attendance AND AgendaItem (Training type) + AgendaAttendance
+   const recentTrainingSessions = sessions.filter(s => isAfter(new Date(s.date), last4WeeksAgo) && s.type === "Training");
+   const recentTrainingAttendance = attendance.filter(a => {
+     const session = sessions.find(s => s.id === a.session_id);
+     return session && isAfter(new Date(session.date), last4WeeksAgo) && session.type === "Training";
+   });
+
+   // From Agenda: Training type items in last 4 weeks
+   const recentAgendaTrainings = agendaItems.filter(ai => 
+     ai.type === "Training" && isAfter(new Date(ai.date), last4WeeksAgo)
+   );
+   const recentAgendaTrainingAttendance = agendaAttendance.filter(aa => {
+     const item = recentAgendaTrainings.find(ai => ai.id === aa.agenda_item_id);
+     return item && (aa.status === "aanwezig" || aa.status === "afwezig");
+   });
+
+   // Total training count (avoid double-count)
+   const uniqueTrainingDates = new Set([
+     ...recentTrainingSessions.map(s => s.date),
+     ...recentAgendaTrainings.map(ai => ai.date)
+   ]);
+   const totalRecentTrainings = uniqueTrainingDates.size;
+
+   // Present count: Attendance.present=true + AgendaAttendance.status="aanwezig"
+   const totalPresentCount = 
+     recentTrainingAttendance.filter(a => a.present).length + 
+     recentAgendaTrainingAttendance.filter(aa => aa.status === "aanwezig").length;
+
+   const avgAttendancePercent = totalRecentTrainings > 0 && activePlayers.length > 0
+     ? Math.round((totalPresentCount / (activePlayers.length * totalRecentTrainings)) * 100)
+     : 0;
 
   const allMatches = matches.sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -78,9 +102,20 @@ export default function Dashboard() {
     recentPlayerAttendance[p.id] = total > 0 ? (attended / total) * 100 : 100;
   });
 
-  const lowAttendancePlayers = activePlayers
-    .filter(p => recentPlayerAttendance[p.id] < 60)
-    .map(p => ({ name: p.name, percentage: Math.round(recentPlayerAttendance[p.id]) }));
+  // Recalc with combined data
+   const recentPlayerAttendanceCombined = {};
+   activePlayers.forEach(p => {
+     // Count from Attendance (TrainingSession)
+     const trainingPresent = recentTrainingAttendance.filter(a => a.player_id === p.id && a.present).length;
+     // Count from AgendaAttendance (AgendaItem Training type)
+     const agendaPresent = recentAgendaTrainingAttendance.filter(aa => aa.player_id === p.id && aa.status === "aanwezig").length;
+     const total = totalRecentTrainings;
+     recentPlayerAttendanceCombined[p.id] = total > 0 ? ((trainingPresent + agendaPresent) / total) * 100 : 100;
+   });
+
+   const lowAttendancePlayers = activePlayers
+     .filter(p => recentPlayerAttendanceCombined[p.id] < 60)
+     .map(p => ({ name: p.name, percentage: Math.round(recentPlayerAttendanceCombined[p.id]) }));
 
   const last7Days = subDays(new Date(), 7);
   const recentWellnessLogs = wellnessLogs.filter(w => isAfter(new Date(w.date), last7Days));
