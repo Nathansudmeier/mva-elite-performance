@@ -19,7 +19,7 @@ import { nl } from "date-fns/locale";
 export default function Dashboard() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { isSpeelster, isTrainer, isLoading: authLoading } = useCurrentUser();
+  const { user: currentUser, isSpeelster, isTrainer, isLoading: authLoading } = useCurrentUser();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
   useEffect(() => {

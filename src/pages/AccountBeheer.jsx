@@ -180,6 +180,18 @@ function AccountBeheerContent() {
   return (
     <div className="space-y-6 pb-20 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
+      {/* Trainer greeting */}
+      <div style={{ position: "relative", zIndex: 10, marginTop: "60px" }}>
+        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", marginBottom: "8px" }}>
+          {(() => {
+            const hour = new Date().getHours();
+            let greeting = "Goedemorgen";
+            if (hour >= 12 && hour < 18) greeting = "Goedemiddag";
+            if (hour >= 18) greeting = "Goedenavond";
+            return greeting;
+          })()}
+        </p>
+      </div>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="t-page-title">Accountbeheer</h1>
