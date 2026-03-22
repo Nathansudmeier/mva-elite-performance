@@ -317,6 +317,22 @@ function PlayerAvatar({ player }) {
   );
 }
 
+function PlayerAvatarName({ player }) {
+  const firstName = player.name?.split(" ")[0] || player.name;
+  return (
+    <div className="flex items-center gap-2">
+      <div className="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden"
+        style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.25)" }}>
+        {player.photo_url
+          ? <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
+          : <span style={{ fontSize: 10, fontWeight: 700, color: "#FF8C3A" }}>{player.name.charAt(0)}</span>
+        }
+      </div>
+      <span className="t-secondary-sm truncate">{firstName}</span>
+    </div>
+  );
+}
+
 function PlayerList({ items, dotClass, emptyMsg }) {
   if (!items.length) return <p className="t-secondary">{emptyMsg}</p>;
   return (
