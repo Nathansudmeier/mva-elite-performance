@@ -75,35 +75,113 @@ export default function MobileMatchDetail({
         <div style={{ position: "absolute", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,150,0,0.20)", top: 300, right: -40, filter: "blur(60px)" }} />
       </div>
 
-      <div className="relative p-4 space-y-4 pb-24" style={{ zIndex: 1 }}>
-        {/* Back button */}
-        <button onClick={onBack} className="flex items-center gap-1.5" style={{ position: "relative", display: "flex", alignItems: "center", gap: "6px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, padding: "0.75rem 1.25rem 0", cursor: "pointer", background: "none", border: "none" }}>
-          <ArrowLeft size={16} />
-          Wedstrijden
-        </button>
+      <div className="relative space-y-4 pb-24" style={{ zIndex: 1 }}>
+         {/* Hero section with field background */}
+         <div style={{
+           position: "relative",
+           height: "220px",
+           backgroundImage: "url('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/3b2601fe6_wedstrijd.jpg')",
+           backgroundSize: "cover",
+           backgroundPosition: "center top",
+           backgroundRepeat: "no-repeat",
+           overflow: "hidden",
+         }}>
+           {/* Overlay 1: Dark overlay for readability */}
+           <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)" }} />
 
-        {/* Match hero card */}
-        <div style={{ position: "relative", borderRadius: "24px", height: "120px", overflow: "hidden", border: "0.5px solid rgba(255,107,0,0.3)", background: "linear-gradient(135deg, #1a4a2e, #0d2b1a)" }}>
-          <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
-            <rect x="1" y="1" width="398" height="158" fill="none" stroke="white" strokeWidth="2"/>
-            <line x1="200" y1="1" x2="200" y2="159" stroke="white" strokeWidth="1.5"/>
-            <circle cx="200" cy="80" r="30" fill="none" stroke="white" strokeWidth="1.5"/>
-            <rect x="1" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
-            <rect x="354" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
-          </svg>
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
-          {/* Pills overlay */}
-          <div className="absolute top-0 left-0 z-10 flex items-center gap-2" style={{ padding: "0.75rem" }}>
-            <span className="badge" style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "0.5px solid rgba(255,255,255,0.2)" }}>{match.team}</span>
-            <span className={match.home_away === "Thuis" ? "badge badge-win" : "badge badge-draw"}>{match.home_away}</span>
-          </div>
-        </div>
+           {/* Overlay 2: Gradient fade to bottom */}
+           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(28,14,4,0.95) 100%)" }} />
 
-        {/* Match info below field */}
-        <div>
-          <h2 style={{ fontSize: "22px", fontWeight: 700, color: "white", letterSpacing: "-0.3px" }}>vs. {match.opponent}</h2>
-          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)", marginTop: "4px" }}>{format(new Date(match.date), "d MMMM yyyy", { locale: nl })}</p>
-        </div>
+           {/* Back button */}
+           <button onClick={onBack} style={{
+             position: "absolute",
+             top: 0,
+             left: 0,
+             zIndex: 10,
+             padding: "0.75rem 1.25rem",
+             background: "none",
+             border: "none",
+             display: "flex",
+             alignItems: "center",
+             gap: "6px",
+             color: "rgba(255,255,255,0.85)",
+             fontSize: "13px",
+             fontWeight: 500,
+             cursor: "pointer",
+           }}>
+             <i className="ti ti-arrow-left" style={{ fontSize: "16px" }} />
+             Wedstrijden
+           </button>
+
+           {/* Team logos left and right */}
+           <div style={{ position: "absolute", bottom: "16px", left: "16px", zIndex: 10 }}>
+             <div style={{
+               width: "48px",
+               height: "48px",
+               borderRadius: "50%",
+               background: "rgba(255,255,255,0.12)",
+               border: "1px solid rgba(255,255,255,0.25)",
+               display: "flex",
+               alignItems: "center",
+               justifyContent: "center",
+               color: "white",
+               fontSize: "12px",
+               fontWeight: 700,
+             }}>
+               MVA
+             </div>
+           </div>
+
+           {/* Match info center bottom */}
+           <div style={{
+             position: "absolute",
+             bottom: "16px",
+             left: "50%",
+             right: 0,
+             zIndex: 10,
+             transform: "translateX(-50%)",
+             textAlign: "center",
+           }}>
+             <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.70)", marginBottom: "4px" }}>
+               vs. <span style={{ fontWeight: 700, color: "white" }}>{match.opponent}</span>
+             </p>
+             <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.50)", marginBottom: "8px" }}>
+               {format(new Date(match.date), "d MMMM", { locale: nl })}
+             </p>
+             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+               <span className="badge" style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "0.5px solid rgba(255,255,255,0.2)", fontSize: "10px" }}>
+                 {match.team}
+               </span>
+               <span className={match.home_away === "Thuis" ? "badge badge-win" : "badge badge-draw"} style={{ fontSize: "10px" }}>
+                 {match.home_away}
+               </span>
+             </div>
+           </div>
+
+           {/* Team logo right */}
+           <div style={{ position: "absolute", bottom: "16px", right: "16px", zIndex: 10 }}>
+             <div style={{
+               width: "48px",
+               height: "48px",
+               borderRadius: "50%",
+               background: "rgba(255,255,255,0.12)",
+               border: "1px solid rgba(255,255,255,0.25)",
+               display: "flex",
+               alignItems: "center",
+               justifyContent: "center",
+               color: "white",
+               fontSize: "10px",
+               fontWeight: 700,
+               textAlign: "center",
+               padding: "4px",
+             }}>
+               {match.opponent.split(" ").slice(0, 2).map(w => w[0]).join("")}
+             </div>
+           </div>
+         </div>
+
+         {/* Spacing after hero */}
+         <div style={{ padding: "0 1rem" }}>
 
         {/* Action buttons */}
         {isTrainer && (
