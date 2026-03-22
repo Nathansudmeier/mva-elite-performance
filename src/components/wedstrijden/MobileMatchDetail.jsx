@@ -213,7 +213,7 @@ export default function MobileMatchDetail({
 
           {/* Opstelling */}
           {match.lineup && match.lineup.length > 0 && (
-            <div className="glass p-4">
+            <div className="glass p-4" style={{ marginTop: "12px" }}>
               {canSeeLineup ? (
                 <>
                   <p className="t-card-title mb-3">Opstelling — {match.formation}</p>
