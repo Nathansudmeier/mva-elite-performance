@@ -138,10 +138,11 @@ export default function Layout({ children, currentPageName }) {
         <nav className="flex-1 py-4 px-3 space-y-1">
           {isSpeelsterUser ? (
             <>
-              <NavLink item={mainNavItems[0]} currentPageName={currentPageName} />
-              <NavLink item={mainNavItems[1]} currentPageName={currentPageName} />
-              <NavLink item={mainNavItems[4]} currentPageName={currentPageName} />
-              <NavLink item={mainNavItems[3]} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Agenda", icon: "calendar", page: "Agenda" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Trainingen", icon: "list-check", page: "Trainingen" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Staff", icon: "user-cog", page: "Staff" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }} currentPageName={currentPageName} />
               <DeveloperGroup currentPageName={currentPageName} />
             </>
