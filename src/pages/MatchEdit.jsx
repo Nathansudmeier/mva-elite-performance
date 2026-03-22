@@ -49,6 +49,7 @@ export default function MatchEdit() {
   const [activeTab, setActiveTab] = useState("info");
   const [formData, setFormData] = useState({
     opponent: "",
+    opponent_logo: "",
     date: "",
     home_away: "Thuis",
     score_home: "",
@@ -67,6 +68,7 @@ export default function MatchEdit() {
   const [expandedTactic, setExpandedTactic] = useState(null);
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [showPlayerPicker, setShowPlayerPicker] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   // Load match data
   useEffect(() => {
