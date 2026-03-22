@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
+import DashboardBackground from "@/components/dashboard/DashboardBackground";
 import { Trophy, Medal } from "lucide-react";
 
 export default function Leaderboard() {
@@ -39,7 +40,14 @@ export default function Leaderboard() {
   const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean);
 
   return (
-    <div className="space-y-6 pb-20">
+    <div className="space-y-6 pb-20 relative" style={{ zIndex: 2 }}>
+      <DashboardBackground />
+      {/* Light orbs */}
+      <div className="pointer-events-none fixed inset-0" style={{ zIndex: 3 }}>
+        <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: "rgba(255,107,0,0.55)", top: -160, left: -100, filter: "blur(80px)" }} />
+        <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", background: "rgba(255,150,0,0.30)", top: 380, right: -80, filter: "blur(70px)" }} />
+        <div style={{ position: "absolute", width: 250, height: 250, borderRadius: "50%", background: "rgba(255,107,0,0.20)", bottom: 100, left: -40, filter: "blur(60px)" }} />
+      </div>
       <h1 className="t-page-title text-center text-2xl">Leaderboard</h1>
 
       {/* PODIUM */}
