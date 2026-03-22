@@ -9,6 +9,37 @@ import AgendaForm from "@/components/agenda/AgendaForm";
 import AgendaDetailModal from "@/components/agenda/AgendaDetailModal";
 import { formatDate } from "@/components/agenda/agendaUtils";
 
+function exportICS(items) {
+  const today = new Date().toISOString().split("T")[0];
+  const upcoming = items.filter(i => i.date >= today);
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//VoetbalApp//NL",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+  ];
+  upcoming.forEach(item => {
+    const [y, m, d] = item.date.split("-");
+    const [h, min] = (item.start_time || "00:00").split(":");
+    const dtStart = `${y}${m}${d}T${h}${min}00`;
+    const desc = [item.type, item.location ? `Locatie: ${item.location}` : "", item.team ? `Team: ${item.team}` : ""].filter(Boolean).join("\\n");
+    lines.push("BEGIN:VEVENT");
+    lines.push(`DTSTART:${dtStart}`);
+    lines.push(`SUMMARY:${item.title}`);
+    lines.push(`DESCRIPTION:${desc}`);
+    if (item.location) lines.push(`LOCATION:${item.location}`);
+    lines.push(`UID:${item.id}@voetbalapp`);
+    lines.push("END:VEVENT");
+  });
+  lines.push("END:VCALENDAR");
+  const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "agenda.ics"; a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function Agenda() {
   const { isTrainer } = useCurrentUser();
   const qc = useQueryClient();
