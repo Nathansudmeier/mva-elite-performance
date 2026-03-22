@@ -133,7 +133,7 @@ export default function Dashboard() {
     .slice(0, 3);
 
   return (
-    <div className="space-y-5 pb-20 lg:pb-6 relative" style={{ zIndex: 2 }}>
+    <div className="space-y-4 pb-20 lg:pb-6 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
       {/* Trainer greeting */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1.25rem 0.5rem", position: "relative", zIndex: 10 }}>
