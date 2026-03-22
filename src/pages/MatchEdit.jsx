@@ -48,6 +48,7 @@ export default function MatchEdit() {
   // Form state
   const [activeTab, setActiveTab] = useState("info");
   const [formData, setFormData] = useState({
+     team: "",
      opponent: "",
      opponent_logo: "",
      date: "",
@@ -116,6 +117,7 @@ export default function MatchEdit() {
    useEffect(() => {
      if (match) {
        setFormData({
+         team: match.team || "",
          opponent: match.opponent || "",
          opponent_logo: match.opponent_logo || "",
          date: match.date || "",
@@ -332,6 +334,31 @@ export default function MatchEdit() {
           {/* INFO TAB */}
           {activeTab === "info" && (
             <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              <div>
+                <div style={LABEL_STYLE}>Team</div>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  {["MO17", "Dames 1"].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setFormData({ ...formData, team: option })}
+                      style={{
+                        flex: 1,
+                        padding: "10px 16px",
+                        background: formData.team === option ? "#FF6B00" : "rgba(255,255,255,0.08)",
+                        color: formData.team === option ? "white" : "rgba(255,255,255,0.60)",
+                        border: formData.team === option ? "none" : "0.5px solid rgba(255,255,255,0.12)",
+                        borderRadius: "12px",
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                      }}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div>
                 <div style={LABEL_STYLE}>Tegenstander</div>
                 <input
