@@ -507,6 +507,8 @@ export default function Dashboard() {
           )}
         </div>
 
+        {/* Kolom 2: Trainer weekreflectie */}
+        <TrainerWeekReflectieCard />
 
       </div>
 
