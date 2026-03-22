@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import DashboardBackground from "@/components/dashboard/DashboardBackground";
+import TrainerGreetingPill from "@/components/dashboard/TrainerGreetingPill";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { Plus, UserCheck, Link as LinkIcon, Upload } from "lucide-react";
 
 export default function AccountBeheer() {
@@ -19,6 +21,7 @@ export default function AccountBeheer() {
 
 function AccountBeheerContent() {
   const queryClient = useQueryClient();
+  const { user: currentUser } = useCurrentUser();
 
   // Invite state
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -181,16 +184,23 @@ function AccountBeheerContent() {
     <div className="space-y-6 pb-20 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
       {/* Trainer greeting */}
-      <div style={{ position: "relative", zIndex: 10, padding: "0.75rem 0 0 0" }}>
-        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", marginBottom: "8px" }}>
-          {(() => {
-            const hour = new Date().getHours();
-            let greeting = "Goedemorgen";
-            if (hour >= 12 && hour < 18) greeting = "Goedemiddag";
-            if (hour >= 18) greeting = "Goedenavond";
-            return greeting;
-          })()}
-        </p>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1.25rem 0.5rem", position: "relative", zIndex: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff", letterSpacing: "-0.3px", margin: 0 }}>
+              {(() => {
+                const hour = new Date().getHours();
+                let greeting = "Goedemorgen";
+                if (hour >= 12 && hour < 18) greeting = "Goedemiddag";
+                if (hour >= 18) greeting = "Goedenavond";
+                return greeting;
+              })()}, {currentUser?.full_name?.split(" ")[0] || "Admin"}
+            </h2>
+          </div>
+          <div>
+            <TrainerGreetingPill />
+          </div>
+        </div>
       </div>
       <div className="flex items-center justify-between">
         <div>
