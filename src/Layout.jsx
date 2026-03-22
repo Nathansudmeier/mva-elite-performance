@@ -123,36 +123,7 @@ export default function Layout({ children, currentPageName }) {
   const { user, isTrainer, isSpeelster } = useCurrentUser();
   const isSpeelsterUser = !isTrainer && isSpeelster;
 
-  // Fetch linked profile photo
-  const { data: trainerRecord } = useQuery({
-    queryKey: ["trainer", user?.trainer_id],
-    queryFn: () => b44.entities.Trainer.filter({ id: user.trainer_id }),
-    enabled: !!user?.trainer_id,
-    select: (data) => data[0],
-  });
-  const { data: playerRecord } = useQuery({
-    queryKey: ["player-layout", user?.player_id],
-    queryFn: async () => {
-      const results = await b44.entities.Player.list();
-      return results.find(p => p.id === user.player_id) || null;
-    },
-    enabled: !!user?.player_id,
-  });
-  const profilePhoto = trainerRecord?.photo_url || playerRecord?.photo_url || null;
 
-
-  const profileLink = isSpeelsterUser
-    ? `/PlayerDashboard`
-    : isTrainer && user?.trainer_id
-    ? `/TrainerDetail?id=${user.trainer_id}`
-    : null;
-
-  const greeting = (() => {
-    const h = new Date().getHours();
-    if (h < 12) return "Goedemorgen";
-    if (h < 18) return "Goedemiddag";
-    return "Goedenavond";
-  })();
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#1c0e04" }}>
