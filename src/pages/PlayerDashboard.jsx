@@ -16,8 +16,7 @@ import NextMatchGrid from "../components/dashboard/NextMatchGrid";
 import PlayerTrophySection from "../components/dashboard/PlayerTrophySection";
 import PhotoTimeline from "../components/photos/PhotoTimeline";
 import TodayTrainingCard from "../components/trainingsplanner/TodayTrainingCard";
-import UpcomingConfirmations from "../components/agenda/UpcomingConfirmations";
-import KomendeActiviteiten from "../components/agenda/KomendeActiviteiten";
+import UpcomingActivitiesCompact from "../components/agenda/UpcomingActivitiesCompact";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
 const TACTICAL = ["speelveld_groot", "omschakeling_balverlies", "speelveld_klein", "omschakeling_balbezit", "kijkgedrag"];
