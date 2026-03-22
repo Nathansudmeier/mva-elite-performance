@@ -19,12 +19,12 @@ const EMPTY = {
   published: true,
 };
 
+const MODAL_CATEGORIES = ["Algemeen", "Balbezit", "Balverlies", "Omschakeling", "Dode spelmomenten"];
+
 function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
   const [form, setForm] = useState(initial || EMPTY);
-  const [videoMode, setVideoMode] = useState(
-    initial?.video_url ? (isYouTubeUrl(initial.video_url) ? "youtube" : "upload") : "youtube"
-  );
   const [uploading, setUploading] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
@@ -48,116 +48,118 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto">
-      <div className="glass-dark p-6 w-full max-w-2xl my-8">
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl font-bold text-white">
+      <div className="glass-dark w-full my-8" style={{ maxWidth: "720px", borderRadius: "24px", padding: "2rem" }}>
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff" }}>
             {initial?.id ? "Spelprincipe bewerken" : "Spelprincipe toevoegen"}
           </h2>
-          <button onClick={onClose} className="p-2 rounded-lg" style={{ background: "rgba(255,255,255,0.08)" }}>
+          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.08)", border: "none", borderRadius: "10px", padding: "8px", cursor: "pointer", display: "flex", alignItems: "center" }}>
             <i className="ti ti-x" style={{ fontSize: "20px", color: "rgba(255,255,255,0.7)" }} />
           </button>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="text-xs font-bold text-white/50 uppercase tracking-wide mb-1 block">Titel</label>
-            <Input value={form.title} onChange={e => set("title", e.target.value)} placeholder="Naam van het spelprincipe" className="bg-white/10 border-white/20 text-white placeholder:text-white/30" />
+        <div className="space-y-5">
+          {/* Titel */}
+          <input
+            value={form.title}
+            onChange={e => set("title", e.target.value)}
+            placeholder="Naam van het spelprincipe"
+            style={{ width: "100%", fontSize: "18px", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "14px", padding: "12px 16px", color: "#ffffff", outline: "none" }}
+          />
+
+          {/* Categorie pills */}
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            {MODAL_CATEGORIES.map(cat => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => set("category", cat)}
+                style={{
+                  borderRadius: "20px",
+                  padding: "6px 16px",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  border: "none",
+                  background: form.category === cat ? "#FF6B00" : "rgba(255,255,255,0.08)",
+                  color: form.category === cat ? "#ffffff" : "rgba(255,255,255,0.55)",
+                  transition: "all 0.15s",
+                }}
+              >{cat}</button>
+            ))}
           </div>
 
+          {/* Inhoud textarea */}
+          <textarea
+            value={form.content}
+            onChange={e => set("content", e.target.value)}
+            placeholder="Beschrijf het spelprincipe..."
+            style={{
+              width: "100%",
+              fontSize: "15px",
+              lineHeight: 1.7,
+              minHeight: "200px",
+              background: "rgba(255,255,255,0.06)",
+              border: "0.5px solid rgba(255,255,255,0.12)",
+              borderRadius: "14px",
+              padding: "1rem",
+              color: "#ffffff",
+              outline: "none",
+              resize: "vertical",
+              fontFamily: "inherit",
+            }}
+          />
+
+          {/* Media sectie — uitklapbaar */}
           <div>
-            <label className="text-xs font-bold text-white/50 uppercase tracking-wide mb-1 block">Categorie</label>
-            <select
-              value={form.category}
-              onChange={e => set("category", e.target.value)}
-              className="w-full rounded-md px-3 py-2 text-sm text-white"
-              style={{ background: "rgba(255,255,255,0.10)", border: "0.5px solid rgba(255,255,255,0.18)" }}
+            <button
+              type="button"
+              onClick={() => setMediaOpen(o => !o)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "12px", padding: "10px 14px", cursor: "pointer" }}
             >
-              {CATEGORIES.filter(c => c !== "Alles").map(c => (
-                <option key={c} value={c} style={{ background: "#1c0e04" }}>{c}</option>
-              ))}
-            </select>
-          </div>
+              <span style={{ fontSize: "13px", fontWeight: 600, color: "rgba(255,255,255,0.65)" }}>Media toevoegen (optioneel)</span>
+              <i className="ti ti-chevron-down" style={{ fontSize: "16px", color: "rgba(255,255,255,0.45)", transform: mediaOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }} />
+            </button>
 
-          <div>
-            <label className="text-xs font-bold text-white/50 uppercase tracking-wide mb-1 block">Inhoud</label>
-            <div className="rounded-xl overflow-hidden" style={{ border: "0.5px solid rgba(255,255,255,0.18)" }}>
-              <ReactQuill value={form.content} onChange={val => set("content", val)} theme="snow" />
-            </div>
-          </div>
+            {mediaOpen && (
+              <div className="space-y-3 mt-3">
+                {/* YouTube URL */}
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: "6px" }}>YouTube URL</label>
+                  <input
+                    value={form.video_url}
+                    onChange={e => set("video_url", e.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    style={{ width: "100%", fontSize: "13px", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "10px", padding: "9px 12px", color: "#ffffff", outline: "none" }}
+                  />
+                  {form.video_url && isYouTubeUrl(form.video_url) && (
+                    <div className="mt-2"><YouTubeEmbed url={form.video_url} /></div>
+                  )}
+                </div>
 
-          <div>
-            <label className="text-xs font-bold text-white/50 uppercase tracking-wide mb-2 block">Video (optioneel)</label>
-            <div className="flex gap-2 mb-3">
-              <button
-                type="button"
-                onClick={() => { setVideoMode("youtube"); set("video_url", ""); }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors"
-                style={{
-                  background: videoMode === "youtube" ? "#FF6B00" : "rgba(255,107,0,0.12)",
-                  color: videoMode === "youtube" ? "#fff" : "#FF6B00",
-                  borderColor: "rgba(255,107,0,0.4)",
-                }}
-              >
-                <i className="ti ti-link" style={{ fontSize: "12px" }} /> YouTube URL
-              </button>
-              <button
-                type="button"
-                onClick={() => { setVideoMode("upload"); set("video_url", ""); }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors"
-                style={{
-                  background: videoMode === "upload" ? "#FF6B00" : "rgba(255,107,0,0.12)",
-                  color: videoMode === "upload" ? "#fff" : "#FF6B00",
-                  borderColor: "rgba(255,107,0,0.4)",
-                }}
-              >
-                <i className="ti ti-upload" style={{ fontSize: "12px" }} /> Bestand uploaden
-              </button>
-            </div>
-
-            {videoMode === "youtube" ? (
-              <div className="space-y-2">
-                <Input
-                  value={form.video_url}
-                  onChange={e => set("video_url", e.target.value)}
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/30"
-                />
-                {form.video_url && isYouTubeUrl(form.video_url) && (
-                  <YouTubeEmbed url={form.video_url} />
-                )}
-              </div>
-            ) : (
-              <div>
-                <input type="file" accept="video/*" className="hidden" id="video-upload" onChange={handleVideoUpload} />
-                <label
-                  htmlFor="video-upload"
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl cursor-pointer text-sm transition-colors"
-                  style={{ border: "1.5px dashed rgba(255,107,0,0.4)", color: "rgba(255,255,255,0.5)" }}
-                >
-                  <i className="ti ti-upload" style={{ fontSize: "16px" }} />
-                  {uploading ? "Uploaden..." : form.video_url ? "Video geüpload ✓" : "Klik om video te kiezen"}
-                </label>
+                {/* Afbeelding upload */}
+                <div>
+                  <label style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: "6px" }}>Afbeelding</label>
+                  <input type="file" accept="image/*" className="hidden" id="image-upload" onChange={handleImageUpload} />
+                  <label
+                    htmlFor="image-upload"
+                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", width: "100%", padding: "10px", borderRadius: "10px", cursor: "pointer", fontSize: "13px", border: "1.5px dashed rgba(255,107,0,0.4)", color: "rgba(255,255,255,0.5)" }}
+                  >
+                    <i className="ti ti-upload" style={{ fontSize: "16px" }} />
+                    {uploading ? "Uploaden..." : form.image_url ? "Afbeelding geüpload ✓" : "Klik om afbeelding te kiezen"}
+                  </label>
+                  {form.image_url && (
+                    <img src={form.image_url} alt="" className="mt-2 rounded-xl max-h-40 object-cover w-full" />
+                  )}
+                </div>
               </div>
             )}
           </div>
 
-          <div>
-            <label className="text-xs font-bold text-white/50 uppercase tracking-wide mb-2 block">Afbeelding (optioneel)</label>
-            <input type="file" accept="image/*" className="hidden" id="image-upload" onChange={handleImageUpload} />
-            <label
-              htmlFor="image-upload"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl cursor-pointer text-sm transition-colors"
-              style={{ border: "1.5px dashed rgba(255,107,0,0.4)", color: "rgba(255,255,255,0.5)" }}
-            >
-              <i className="ti ti-upload" style={{ fontSize: "16px" }} />
-              {uploading ? "Uploaden..." : form.image_url ? "Afbeelding geüpload ✓" : "Klik om afbeelding te kiezen"}
-            </label>
-            {form.image_url && (
-              <img src={form.image_url} alt="" className="mt-2 rounded-xl max-h-40 object-cover w-full" />
-            )}
-          </div>
-
-          <div className="flex items-center gap-3">
+          {/* Zichtbaar voor spelers */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <input
               type="checkbox"
               id="published"
@@ -165,18 +167,20 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
               onChange={e => set("published", e.target.checked)}
               className="w-4 h-4 accent-[#FF6B00]"
             />
-            <label htmlFor="published" className="text-sm text-white/70">Zichtbaar voor spelers</label>
+            <label htmlFor="published" style={{ fontSize: "13px", color: "rgba(255,255,255,0.65)", cursor: "pointer" }}>Zichtbaar voor spelers</label>
           </div>
 
-          <div className="flex gap-3 pt-2">
-            <Button variant="outline" onClick={onClose} className="flex-1 border-white/20 text-white/70 bg-transparent hover:bg-white/10">Annuleren</Button>
-            <Button
+          {/* Actieknoppen */}
+          <div style={{ display: "flex", gap: "12px" }}>
+            <button
+              onClick={onClose}
+              style={{ flex: 1, height: "48px", borderRadius: "14px", fontSize: "14px", fontWeight: 600, cursor: "pointer", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.65)" }}
+            >Annuleren</button>
+            <button
               onClick={() => onSave(form)}
               disabled={isSaving || !form.title || uploading}
-              className="flex-1 bg-[#FF6B00] hover:bg-[#E55A00] text-white"
-            >
-              {isSaving ? "Opslaan..." : "Opslaan"}
-            </Button>
+              style={{ flex: 1, height: "48px", borderRadius: "14px", fontSize: "14px", fontWeight: 600, cursor: (isSaving || !form.title || uploading) ? "not-allowed" : "pointer", background: "#FF6B00", border: "none", color: "#ffffff", opacity: (isSaving || !form.title || uploading) ? 0.5 : 1 }}
+            >{isSaving ? "Opslaan..." : "Opslaan"}</button>
           </div>
         </div>
       </div>
