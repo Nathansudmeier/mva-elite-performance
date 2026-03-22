@@ -73,6 +73,28 @@ export default function Trainingen() {
     }
   }
 
+  // Helper: sync attendance records to agenda
+  async function syncAttendanceToAgenda(session) {
+    const linkedAgendaItem = await base44.entities.AgendaItem.filter({ training_session_id: session.id });
+    const agendaItem = linkedAgendaItem && linkedAgendaItem.length > 0 ? linkedAgendaItem[0] : null;
+
+    if (agendaItem) {
+      const sessionAttendanceRecs = attendance.filter(a => a.session_id === session.id);
+      const existingAgendaRecords = agendaAttendance.filter(aa => aa.agenda_item_id === agendaItem.id);
+
+      for (const att of sessionAttendanceRecs) {
+        const existing = existingAgendaRecords.find(aa => aa.player_id === att.player_id);
+        if (!existing && att.present) {
+          await base44.entities.AgendaAttendance.create({
+            agenda_item_id: agendaItem.id,
+            player_id: att.player_id,
+            status: "aanwezig"
+          });
+        }
+      }
+    }
+  }
+
   const createSessionMutation = useMutation({
     mutationFn: async (date) => {
       const session = await base44.entities.TrainingSession.create({ date, type: "Training", notes: sessionNotes });
@@ -106,11 +128,13 @@ export default function Trainingen() {
       const trainingSessions = sessions.filter(s => s.type === "Training");
       for (const s of trainingSessions) {
         await syncSessionToAgenda(s);
+        await syncAttendanceToAgenda(s);
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["agendaItems"] });
       queryClient.invalidateQueries({ queryKey: ["agendaItems-upcoming"] });
+      queryClient.invalidateQueries({ queryKey: ["agendaAttendanceAll"] });
     },
   });
 
