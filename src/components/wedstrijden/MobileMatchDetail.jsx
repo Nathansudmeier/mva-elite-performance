@@ -73,7 +73,7 @@ export default function MobileMatchDetail({
     <div className="fixed inset-0 z-50 overflow-y-auto" style={{ paddingTop: "calc(52px + 8px)" }}>
       {/* Background image — fixed */}
       <img
-        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e47690dd6_wedstrijd.jpg"
+        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png"
         alt=""
         style={{
           position: "fixed",
