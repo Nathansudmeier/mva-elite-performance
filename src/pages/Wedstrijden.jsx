@@ -131,6 +131,35 @@ export default function Wedstrijden() {
     },
   });
 
+  // Sync alle wedstrijden zonder AgendaItem naar de agenda
+  const syncAllMutation = useMutation({
+    mutationFn: async () => {
+      for (const m of matches) {
+        const byMatchId = agendaItems.find(ai => ai.match_id === m.id);
+        if (byMatchId) continue;
+        const byDate = agendaItems.find(ai => ai.type === "Wedstrijd" && ai.date === m.date && ai.title?.includes(m.opponent));
+        if (byDate) {
+          await base44.entities.AgendaItem.update(byDate.id, { match_id: m.id });
+          continue;
+        }
+        await base44.entities.AgendaItem.create({
+          type: "Wedstrijd",
+          title: `Wedstrijd vs. ${m.opponent}`,
+          date: m.date,
+          start_time: "14:00",
+          team: m.team,
+          notes: m.notes || "",
+          match_id: m.id,
+        });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["agendaItems"] });
+      queryClient.invalidateQueries({ queryKey: ["agendaItems-upcoming"] });
+      queryClient.invalidateQueries({ queryKey: ["agendaAttendanceAll"] });
+    },
+  });
+
   const handleSave = () => {
     saveMutation.mutate({
       ...form,
