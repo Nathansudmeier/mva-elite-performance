@@ -11,11 +11,12 @@ import { Plus, Edit2, Upload, Target, User, Camera } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { resizeImage } from "@/components/utils/imageResize";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 const POSITIONS = ["Keeper", "Centrale Verdediger", "Linksback", "Rechtsback", "Controleur", "Middenvelder", "Aanvallende Middenvelder", "Linksbuiten", "Rechtsbuiten", "Spits"];
 
 export default function Players() {
-  return <RoleGuard allowedRoles={["trainer"]}><PlayersContent /></RoleGuard>;
+  return <RoleGuard allowedRoles={["trainer", "speelster"]}><PlayersContent /></RoleGuard>;
 }
 
 function PlayersContent() {
