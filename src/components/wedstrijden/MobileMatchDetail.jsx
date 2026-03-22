@@ -66,13 +66,14 @@ export default function MobileMatchDetail({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto" style={{ backgroundColor: "#1c0e04" }}>
       {/* Topbar */}
-      <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3"
+      <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3"
         style={{ backgroundColor: "rgba(28,14,4,0.95)", borderBottom: "0.5px solid rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}>
-        <button onClick={onBack} className="flex items-center justify-center w-9 h-9 rounded-xl"
+        <button onClick={onBack} className="flex items-center justify-center w-9 h-9 rounded-xl flex-shrink-0"
           style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
           <i className="ti ti-arrow-left" style={{ fontSize: "18px", color: "#fff" }} />
         </button>
-        <h1 className="t-page-title truncate flex-1">vs. {match.opponent}</h1>
+        <h1 className="t-page-title truncate flex-1 text-center">vs. {match.opponent}</h1>
+        <div className="w-9" />
       </div>
 
       {/* Background orbs */}
