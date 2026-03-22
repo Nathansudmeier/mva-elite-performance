@@ -58,7 +58,6 @@ export default function Dashboard() {
     : 0;
 
   const allMatches = matches.sort((a, b) => new Date(a.date) - new Date(b.date));
-  const nextMatch = allMatches.find(m => isAfter(new Date(m.date), new Date())) || null;
 
   const teamPlayers = activePlayers;
   const meting1Count = playerRatings.filter(r => r.meting === "Meting 1").length;
