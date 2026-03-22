@@ -187,6 +187,31 @@ export default function Wedstrijden() {
     return mva > opp ? "win" : mva < opp ? "loss" : "draw";
   };
 
+  const [isMobile, setIsMobile] = React.useState(() => window.innerWidth < 768);
+  React.useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+
+  // Mobiel: toon volledig scherm detail
+  if (isMobile && selectedMatch && detailMatch) {
+    return (
+      <MobileMatchDetail
+        match={detailMatch}
+        activePlayers={activePlayers}
+        isTrainer={isTrainer}
+        currentUser={currentUser}
+        players={players}
+        agendaItems={agendaItems}
+        agendaAttendance={agendaAttendance}
+        onBack={() => setSelectedMatch(null)}
+        onEdit={() => openEdit(detailMatch)}
+        onDelete={() => { if (confirm("Verwijderen?")) { deleteMutation.mutate(detailMatch.id); setSelectedMatch(null); } }}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
       {/* Header */}
