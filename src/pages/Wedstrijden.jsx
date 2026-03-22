@@ -295,9 +295,9 @@ export default function Wedstrijden() {
       )}
 
        <div className="grid lg:grid-cols-5 gap-6">
-         {/* Match list */}
-         <div className="lg:col-span-2 space-y-2 px-0 lg:px-0">
-          <p className="t-label mb-3">{activeTeam} — {teamMatches.length} wedstrijd{teamMatches.length !== 1 ? "en" : ""}</p>
+          {/* Match list */}
+          <div className="lg:col-span-2 space-y-2 px-0 lg:px-0 overflow-x-hidden">
+           <p className="t-label mb-3">{activeTeam} — {teamMatches.length} wedstrijd{teamMatches.length !== 1 ? "en" : ""}</p>
           {teamMatches.map((m) => {
             const isActive = selectedMatch === m.id;
             const matchDate = new Date(m.date);
@@ -346,11 +346,11 @@ export default function Wedstrijden() {
                  </div>
 
                  {/* Right section — flex-shrink-0 */}
-                 <div className="flex-shrink-0 flex items-center gap-1" style={{ marginLeft: "auto" }}>
+                 <div className="flex-shrink-0 flex items-center gap-2" style={{ marginLeft: "auto", minWidth: "fit-content" }}>
                    {/* Score + result */}
                    {hasScore ? (
-                     <div className="text-right">
-                       <p className="text-base font-bold text-white">{scoreLabel(m)}</p>
+                     <div className="text-right" style={{ whiteSpace: "nowrap" }}>
+                       <p className="text-sm font-bold text-white">{scoreLabel(m)}</p>
                        {result && <span className={badgeClass} style={{ fontSize: "9px" }}>{resultLabel}</span>}
                      </div>
                    ) : (
