@@ -294,20 +294,25 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                 height: "44px",
                 borderRadius: "50%",
                 background: "rgba(255,255,255,0.12)",
-                border: "1px solid rgba(255,255,255,0.25)",
+                border: "1.5px solid rgba(255,255,255,0.25)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 color: "rgba(255,255,255,0.70)",
-                fontSize: "11px",
+                fontSize: "12px",
                 fontWeight: 700,
+                overflow: "hidden",
               }}>
-                {nextMatch.opponent
-                  .split(" ")
-                  .slice(0, 2)
-                  .map((w) => w[0])
-                  .join("")
-                  .toUpperCase()}
+                {nextMatch.opponent_logo ? (
+                  <img src={nextMatch.opponent_logo} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  nextMatch.opponent
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((w) => w[0])
+                    .join("")
+                    .toUpperCase()
+                )}
               </div>
               <div style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.85)", textAlign: "center", maxWidth: "50px" }}>
                 {nextMatch.opponent.split(" ")[0]}
