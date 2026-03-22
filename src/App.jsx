@@ -87,6 +87,8 @@ const AuthenticatedApp = () => {
       <Route path="/MijnReflecties" element={<LayoutWrapper currentPageName="MijnReflecties"><MijnReflecties /></LayoutWrapper>} />
       <Route path="/Agenda" element={<LayoutWrapper currentPageName="Agenda"><Agenda /></LayoutWrapper>} />
       <Route path="/MatchEdit" element={<MatchEdit />} />
+      <Route path="/Messages" element={<LayoutWrapper currentPageName="Messages"><Messages /></LayoutWrapper>} />
+      <Route path="/Chat" element={<LayoutWrapper currentPageName="Messages"><Chat /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
