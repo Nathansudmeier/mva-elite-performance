@@ -87,7 +87,7 @@ export default function PlayerMetricGrid({ yoyo, physical, attendance, agendaAtt
   const metrics = [
     { icon: TrendingUp, label: "Yo-Yo niveau", value: yoyoVal, unit: "", delta: yoyoDelta, deltaUnit: "", lowerIsBetter: false },
     { icon: Activity, label: "30m sprint", value: sprintVal, unit: "s", delta: sprintDelta, deltaUnit: "s", lowerIsBetter: true, isSprint: true },
-    { icon: Calendar, label: "Aanwezigheid", value: attendancePct, unit: "%", delta: null },
+    { icon: Calendar, label: "Aanwezigheid", value: attendancePct, unit: "%", delta: null, confirmationPct },
     { icon: Timer, label: "Speelminuten", value: totalMinutes, unit: "min", delta: null },
   ];
 
