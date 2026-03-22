@@ -195,6 +195,7 @@ function PlayersContent() {
           </div>
         </DialogContent>
       </Dialog>
+      )}
       </div>
       </div>
       );
