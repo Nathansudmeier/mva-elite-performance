@@ -110,8 +110,14 @@ export default function MobileMatchDetail({
             {/* Overlay 1: Dark overlay for readability */}
             <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)" }} />
 
-            {/* Overlay 2: Gradient fade to bottom */}
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 40%, rgba(28,14,4,1.0) 100%)" }} />
+            {/* Overlay 2: Gradient fade to bottom - extends beyond hero height */}
+            <div style={{ 
+              position: "absolute", 
+              inset: 0, 
+              background: "linear-gradient(180deg, transparent 0%, rgba(28,14,4,0.50) 50%, rgba(28,14,4,1.0) 100%)",
+              height: "400px",
+              top: "-80px"
+            }} />
 
            {/* Back button */}
            <button onClick={onBack} style={{
