@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 export default function CheckInFlow({ matchId, type, onClose, onCompleted }) {
   const { playerId } = useCurrentUser();
