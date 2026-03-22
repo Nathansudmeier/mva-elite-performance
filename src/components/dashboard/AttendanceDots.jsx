@@ -17,7 +17,18 @@ export default function AttendanceDots({ attendance }) {
 
   return (
     <div className="glass p-4">
-      <p className="t-label mb-3">Laatste {last10.length} trainingen</p>
+      <div className="flex items-center gap-3 mb-3">
+        <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="trainGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#FF8C3A"/></linearGradient></defs>
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="url(#trainGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <line x1="16" y1="2" x2="16" y2="6" stroke="url(#trainGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <line x1="8" y1="2" x2="8" y2="6" stroke="url(#trainGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <line x1="3" y1="10" x2="21" y2="10" stroke="url(#trainGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <p className="t-label">Laatste {last10.length} trainingen</p>
+      </div>
       <div className="flex gap-[6px] mb-3">
         {last10.map((a, i) => (
           <div key={i} style={{ width: 10, height: 10, borderRadius: "50%", background: a.present ? "#4ade80" : "#f87171", flexShrink: 0 }} />

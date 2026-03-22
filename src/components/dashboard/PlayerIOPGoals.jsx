@@ -13,7 +13,17 @@ export default function PlayerIOPGoals({ player }) {
 
   return (
     <div className="glass p-4">
-      <p className="t-label mb-3">Mijn Leerdoelen</p>
+      <div className="flex items-center gap-3 mb-3">
+        <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="goalGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#FF8C3A"/></linearGradient></defs>
+            <circle cx="12" cy="12" r="10" stroke="url(#goalGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="12" cy="12" r="6" stroke="url(#goalGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="12" cy="12" r="2" stroke="url(#goalGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <p className="t-label">Mijn Leerdoelen</p>
+      </div>
       <div className="space-y-3">
         {goals.map((goal, i) => {
           const status = STATUS_OPTIONS[i % STATUS_OPTIONS.length];

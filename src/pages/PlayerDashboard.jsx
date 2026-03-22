@@ -160,7 +160,15 @@ export default function PlayerDashboard() {
       {/* Radar Chart */}
       {chartData.length > 0 && radarData.length > 0 && (
         <div className="glass p-4">
-          <p className="t-label mb-3">Mijn Beoordelingen</p>
+          <div className="flex items-center gap-3 mb-3">
+            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="ratingGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#FF8C3A"/></linearGradient></defs>
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="url(#ratingGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <p className="t-label">Mijn Beoordelingen</p>
+          </div>
           <ResponsiveContainer width="100%" height={220}>
             <RadarChart data={chartData}>
               <PolarGrid stroke="rgba(255,255,255,0.12)" />
@@ -184,7 +192,15 @@ export default function PlayerDashboard() {
 
       {/* Wellness Log */}
       <div className="glass p-4">
-        <p className="t-label mb-3">Belastbaarheid Invullen</p>
+        <div className="flex items-center gap-3 mb-3">
+          <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="wellnessGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#FF8C3A"/></linearGradient></defs>
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="url(#wellnessGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <p className="t-label">Belastbaarheid Invullen</p>
+        </div>
         <div className="space-y-3">
           <Input type="date" value={wellnessForm.date} onChange={e => setWellnessForm(f => ({ ...f, date: e.target.value }))}
             style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
