@@ -122,16 +122,18 @@ export default function Dashboard() {
   const winPct = playedMatches.length > 0 ? Math.round((wins / playedMatches.length) * 100) : 0;
 
   // === BLOK 2: ALERTS ===
-   // Recalc with combined data
-   const recentPlayerAttendanceCombined = {};
-   activePlayers.forEach(p => {
-     // Count from Attendance (TrainingSession)
-     const trainingPresent = recentTrainingAttendance.filter(a => a.player_id === p.id && a.present).length;
-     // Count from AgendaAttendance (AgendaItem Training type)
-     const agendaPresent = recentAgendaTrainingAttendance.filter(aa => aa.player_id === p.id && aa.status === "aanwezig").length;
-     const total = totalRecentTrainings;
-     recentPlayerAttendanceCombined[p.id] = total > 0 ? ((trainingPresent + agendaPresent) / total) * 100 : 100;
-   });
+  // Recalc with combined data (use playerAttendanceByDate from dashboard)
+  const recentPlayerAttendanceCombined = {};
+  activePlayers.forEach(p => {
+    const dates = playerAttendanceByDate[p.id] || {};
+    let present = 0;
+    uniqueTrainingDates.forEach(date => {
+      if (dates[date] === "present") {
+        present++;
+      }
+    });
+    recentPlayerAttendanceCombined[p.id] = totalRecentTrainings > 0 ? (present / totalRecentTrainings) * 100 : 100;
+  });
 
    const lowAttendancePlayers = activePlayers
      .filter(p => recentPlayerAttendanceCombined[p.id] < 60)
