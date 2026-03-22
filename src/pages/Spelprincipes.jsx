@@ -262,17 +262,10 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
             style={{ overflowY: "auto", maxHeight: "90vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
             onClick={e => e.stopPropagation()}
           >
-            {/* Sticky header */}
+            {/* Header */}
             <div
               className="flex items-center justify-between p-5"
-              style={{
-                position: "sticky",
-                top: 0,
-                zIndex: 10,
-                background: "rgba(20,10,4,0.92)",
-                backdropFilter: "blur(12px)",
-                borderBottom: "0.5px solid rgba(255,255,255,0.10)",
-              }}
+              style={{ borderBottom: "0.5px solid rgba(255,255,255,0.10)" }}
             >
               <div>
                 <h2 className="text-xl font-bold text-white">{item.title}</h2>
