@@ -133,7 +133,7 @@ export default function Dashboard() {
     .slice(0, 3);
 
   return (
-    <div className="space-y-4 pb-20 lg:pb-6 relative" style={{ zIndex: 2 }}>
+    <div className="pb-20 lg:pb-6 relative" style={{ zIndex: 2, display: "flex", flexDirection: "column", gap: "12px" }}>
       <DashboardBackground />
       {/* Trainer greeting */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1.25rem 0.5rem", position: "relative", zIndex: 10 }}>
@@ -170,7 +170,7 @@ export default function Dashboard() {
       <NextMatchGrid matches={matches} playerId={null} />
 
       {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }} className="mobile-grid-2col">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", overflow: "hidden", height: "auto" }} className="mobile-grid-2col">
 
         {/* Card 1: Aanwezigheid */}
         <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
@@ -215,7 +215,7 @@ export default function Dashboard() {
 
       {/* ── ALERTS: Lage Aanwezigheid ── */}
       {lowAttendancePlayers.length > 0 && (
-        <div style={{ background: "rgba(251,191,36,0.08)", border: "0.5px solid rgba(251,191,36,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+        <div style={{ background: "rgba(251,191,36,0.08)", border: "0.5px solid rgba(251,191,36,0.20)", borderRadius: "16px", padding: "0.75rem 1rem", display: "flex", gap: "10px", alignItems: "flex-start", overflow: "hidden", height: "auto" }}>
           <i className="ti ti-alert-triangle flex-shrink-0 mt-0.5" style={{ fontSize: "14px", color: "#fbbf24" }} />
           <div>
             <p style={{ fontSize: "12px", fontWeight: 600, color: "#fbbf24" }}>{lowAttendancePlayers.length} spelers onder 60% aanwezigheid</p>
@@ -237,7 +237,7 @@ export default function Dashboard() {
       )}
 
       {/* ── 3-KOLOMS GRID (1-col op mobiel) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px" }} className="mobile-grid-1col" hidden={!allMatches?.length}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px", overflow: "hidden", height: "auto" }} className="mobile-grid-1col">
 
         {/* Kolom 1: Wedstrijden */}
         <div className="glass p-4">
@@ -355,7 +355,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── 2-KOLOMS GRID: Zelfreflecties (+ Activiteit inplannen verplaatst) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col" hidden={!thisWeekReflections.length}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", overflow: "hidden", height: "auto" }} className="mobile-grid-1col">
 
         {/* Kolom 1: Zelfreflecties */}
         <div className="glass p-4">
