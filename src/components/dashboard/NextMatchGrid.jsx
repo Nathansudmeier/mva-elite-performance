@@ -264,8 +264,19 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                 color: isMO17 ? "#FF8C3A" : "#60a5fa",
                 fontSize: "12px",
                 fontWeight: 700,
+                overflow: "hidden",
               }}>
-                {isMO17 ? "MVA" : "VR1"}
+                {(() => {
+                  if (isMO17) {
+                    const appLogo = getAppLogo();
+                    return appLogo ? (
+                      <img src={appLogo} alt="MVA" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      "MVA"
+                    );
+                  }
+                  return "VR1";
+                })()}
               </div>
               <div style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.85)", textAlign: "center", maxWidth: "50px" }}>
                 {teamLabel}
