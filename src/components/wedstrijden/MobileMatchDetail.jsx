@@ -107,7 +107,7 @@ export default function MobileMatchDetail({
              position: "absolute",
              top: 0,
              left: 0,
-             zIndex: 10,
+             zIndex: 2,
              padding: "0.75rem 1.25rem",
              background: "none",
              border: "none",
