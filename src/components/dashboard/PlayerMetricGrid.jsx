@@ -33,7 +33,7 @@ function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowe
   );
 }
 
-export default function PlayerMetricGrid({ yoyo, physical, attendance, matches, playerId }) {
+export default function PlayerMetricGrid({ yoyo, physical, attendance, agendaAttendance = [], matches, playerId }) {
   // Yo-Yo
   const sortedYoyo = [...yoyo].sort((a, b) => a.date > b.date ? 1 : -1);
   const firstYoyo = sortedYoyo[0];
@@ -52,9 +52,13 @@ export default function PlayerMetricGrid({ yoyo, physical, attendance, matches, 
     ? +(lastSprint.sprint_30m - firstSprint.sprint_30m).toFixed(2)
     : null;
 
-  // Attendance
-  const presentCount = attendance.filter(a => a.present).length;
-  const attendancePct = attendance.length > 0 ? Math.round((presentCount / attendance.length) * 100) : null;
+  // Attendance — combine manual training attendance + agenda confirmations
+  const trainingPresent = attendance.filter(a => a.present).length;
+  const agendaPresent = agendaAttendance.filter(a => a.status === "aanwezig").length;
+  const agendaAbsent = agendaAttendance.filter(a => a.status === "afwezig").length;
+  const totalPresent = trainingPresent + agendaPresent;
+  const totalSessions = attendance.length + agendaPresent + agendaAbsent;
+  const attendancePct = totalSessions > 0 ? Math.round((totalPresent / totalSessions) * 100) : null;
 
   // Speelminuten (total from finished matches)
   let totalMinutes = null;
