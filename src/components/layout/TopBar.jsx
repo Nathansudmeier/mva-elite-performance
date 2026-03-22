@@ -231,22 +231,8 @@ export default function TopBar() {
           <DayBadge sessions={sessions} matches={matches} />
         </div>
 
-        {/* Rechts: seizoenspill + bell + avatar */}
+        {/* Rechts: bell + avatar */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          {/* Seizoenspill */}
-          <div
-            style={{
-              background: "rgba(255,255,255,0.07)",
-              border: "0.5px solid rgba(255,255,255,0.10)",
-              borderRadius: "20px",
-              padding: "5px 14px",
-              fontSize: "11px",
-              color: "rgba(255,255,255,0.55)",
-            }}
-          >
-            2025-26
-          </div>
-
           {/* Notificatie bell */}
           <div
             style={{
