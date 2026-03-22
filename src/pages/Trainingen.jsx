@@ -33,6 +33,8 @@ export default function Trainingen() {
   const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
   const { data: sessions = [] } = useQuery({ queryKey: ["sessions"], queryFn: () => base44.entities.TrainingSession.list("-date") });
   const { data: attendance = [] } = useQuery({ queryKey: ["attendance"], queryFn: () => base44.entities.Attendance.list() });
+  const { data: agendaItems = [] } = useQuery({ queryKey: ["agendaItems"], queryFn: () => base44.entities.AgendaItem.list() });
+  const { data: agendaAttendance = [] } = useQuery({ queryKey: ["agendaAttendanceAll"], queryFn: () => base44.entities.AgendaAttendance.list() });
 
   const activePlayers = players.filter((p) => p.active !== false);
 
