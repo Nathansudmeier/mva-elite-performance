@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useNavigate } from "react-router-dom";
 import DashboardBackground from "../components/dashboard/DashboardBackground";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Plus } from "lucide-react";
 
 export default function Messages() {
   const { user } = useCurrentUser();
