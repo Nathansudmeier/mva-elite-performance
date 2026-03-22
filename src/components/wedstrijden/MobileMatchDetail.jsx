@@ -201,9 +201,11 @@ export default function MobileMatchDetail({
               </button>
             </Link>
             <div className="flex gap-2" style={{ marginTop: "12px" }}>
-              <button onClick={onEdit} style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.70)", borderRadius: "12px", height: "40px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>
-                <Edit2 size={14} /> Bewerken
-              </button>
+              <Link to={`/MatchEdit?matchId=${match.id}`} className="flex-1">
+                <button style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.70)", borderRadius: "12px", height: "40px", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>
+                  <Edit2 size={14} /> Bewerken
+                </button>
+              </Link>
               <button onClick={onDelete} style={{ background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.20)", color: "#f87171", borderRadius: "12px", height: "40px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>
                 <Trash2 size={14} /> Verwijderen
               </button>
