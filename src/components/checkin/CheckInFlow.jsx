@@ -9,6 +9,7 @@ export default function CheckInFlow({ matchId, type, onClose, onCompleted }) {
   const { playerId } = useCurrentUser();
   const queryClient = useQueryClient();
   const [currentStep, setCurrentStep] = useState(0);
+  useScrollLock(true);
 
   const [formData, setFormData] = useState({
     match_id: matchId,
