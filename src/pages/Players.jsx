@@ -148,13 +148,16 @@ function PlayersContent() {
                   </div>
                 )}
               </div>
-              <button onClick={(e) => { e.preventDefault(); openEdit(player); }} className="p-2 rounded-lg transition-colors" style={{ background: "rgba(255,255,255,0.06)" }}>
-                <Edit2 size={14} style={{ color: "rgba(255,255,255,0.5)" }} />
-              </button>
+              {isTrainer && (
+                <button onClick={(e) => { e.preventDefault(); openEdit(player); }} className="p-2 rounded-lg transition-colors" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <Edit2 size={14} style={{ color: "rgba(255,255,255,0.5)" }} />
+                </button>
+              )}
             </div>
           </Link>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-md" style={{ background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
