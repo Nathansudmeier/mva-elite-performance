@@ -542,7 +542,6 @@ export default function Wedstrijden() {
                 </div>
                 )}
                 </div>
-                <div style={{ paddingTop: 0 }} />
                 ) : (
                 <div className="glass p-16 text-center">
               <Shield size={36} className="mx-auto mb-3" style={{ color: "rgba(255,255,255,0.15)" }} />
