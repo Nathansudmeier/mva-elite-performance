@@ -135,8 +135,19 @@ export default function Dashboard() {
   return (
     <div className="space-y-5 pb-20 lg:pb-6 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
-      <MatchDayBanner />
-      <TrainerDayBadge />
+      {/* Trainer greeting */}
+      <div style={{ position: "relative", zIndex: 10, marginTop: "60px", paddingX: "1rem" }}>
+        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", marginBottom: "8px" }}>
+          {(() => {
+            const hour = new Date().getHours();
+            let greeting = "Goedemorgen";
+            if (hour >= 12 && hour < 18) greeting = "Goedemiddag";
+            if (hour >= 18) greeting = "Goedenavond";
+            return greeting;
+          })()}, {currentUser?.full_name?.split(" ")[0] || "Trainer"}
+        </p>
+        <TrainerDayBadge />
+      </div>
 
       {/* ── HERO STAT (alle viewports) ── */}
       <div className="px-1 pt-2">
