@@ -215,11 +215,8 @@ export default function MobileMatchDetail({
             {/* glass shimmer */}
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", borderRadius: "22px 22px 0 0", pointerEvents: "none" }} />
             <div className="p-5">
-              <p className="t-label mb-4" style={{ color: "#FF8C3A", letterSpacing: "0.08em" }}>Check-in Status</p>
-              <MatchCheckInOverview
-                matchId={match.id}
-                totalInSelectie={(match.lineup?.length ?? 0) + (match.substitutes?.length ?? 0)}
-              />
+              <p style={{ fontSize: "14px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Aanwezigheid</p>
+              <CheckInContent matchId={match.id} totalInSelectie={(match.lineup?.length ?? 0) + (match.substitutes?.length ?? 0)} />
             </div>
           </div>
         )}
