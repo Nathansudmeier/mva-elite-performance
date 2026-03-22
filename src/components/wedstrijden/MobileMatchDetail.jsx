@@ -182,10 +182,9 @@ export default function MobileMatchDetail({
 
          {/* Spacing after hero */}
          <div style={{ padding: "0 1rem" }}>
-
-        {/* Action buttons */}
-        {isTrainer && (
-          <div className="flex flex-col gap-3">
+           {/* Action buttons */}
+           {isTrainer && (
+             <div className="flex flex-col gap-3">
             <Link to={`/LiveMatch?matchId=${match.id}`} className="w-full">
               <button style={{ background: "#FF6B00", color: "white", borderRadius: "14px", height: "48px", fontSize: "15px", fontWeight: 600, border: "none", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", cursor: "pointer" }}>
                 <Radio size={16} /> Live
