@@ -85,45 +85,43 @@ export default function MobileMatchDetail({
       <div className="relative p-4 space-y-4 pb-24" style={{ zIndex: 1 }}>
         {/* Match hero card */}
         <div className="match-hero-card p-5">
-          <div className="absolute inset-0">
-            <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
-              <rect x="1" y="1" width="398" height="158" fill="none" stroke="white" strokeWidth="2"/>
-              <line x1="200" y1="1" x2="200" y2="159" stroke="white" strokeWidth="1.5"/>
-              <circle cx="200" cy="80" r="30" fill="none" stroke="white" strokeWidth="1.5"/>
-              <rect x="1" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
-              <rect x="354" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
-            </svg>
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
-          </div>
-          <div className="relative z-10">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="badge" style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "0.5px solid rgba(255,255,255,0.2)" }}>{match.team}</span>
-                  <span className={match.home_away === "Thuis" ? "badge badge-win" : "badge badge-draw"}>{match.home_away}</span>
-                </div>
-                <h2 className="text-xl font-bold text-white" style={{ letterSpacing: "-0.3px" }}>vs. {match.opponent}</h2>
-                <p className="t-secondary mt-1">{format(new Date(match.date), "d MMMM yyyy", { locale: nl })}</p>
+          <svg className="absolute inset-0 w-full h-full opacity-[0.12]" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+            <rect x="1" y="1" width="398" height="158" fill="none" stroke="white" strokeWidth="2"/>
+            <line x1="200" y1="1" x2="200" y2="159" stroke="white" strokeWidth="1.5"/>
+            <circle cx="200" cy="80" r="30" fill="none" stroke="white" strokeWidth="1.5"/>
+            <rect x="1" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
+            <rect x="354" y="45" width="45" height="70" fill="none" stroke="white" strokeWidth="1.5"/>
+          </svg>
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,107,0,0.15) 0%, rgba(0,0,0,0.10) 100%)" }} />
+        </div>
+        <div className="relative z-10 space-y-4">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="badge" style={{ background: "rgba(255,255,255,0.12)", color: "white", border: "0.5px solid rgba(255,255,255,0.2)" }}>{match.team}</span>
+                <span className={match.home_away === "Thuis" ? "badge badge-win" : "badge badge-draw"}>{match.home_away}</span>
               </div>
-              <span className="t-metric-orange" style={{ fontSize: "26px" }}>{scoreLabel(match)}</span>
+              <h2 className="text-xl font-bold text-white" style={{ letterSpacing: "-0.3px" }}>vs. {match.opponent}</h2>
+              <p className="t-secondary mt-1">{format(new Date(match.date), "d MMMM yyyy", { locale: nl })}</p>
             </div>
-            {isTrainer && (
-              <div className="flex gap-2 mt-4 flex-col sm:flex-row">
-                <button onClick={onEdit} className="btn-secondary text-xs px-3 py-2 h-auto flex-1 sm:flex-none">
-                  <Edit2 size={12} /> Bewerken
-                </button>
-                <Link to={`/LiveMatch?matchId=${match.id}`} className="flex-1 sm:flex-none">
-                  <button className="btn-primary w-full text-xs px-3 py-2 h-auto">
-                    <Radio size={12} /> Live
-                  </button>
-                </Link>
-                <button onClick={onDelete} className="flex items-center justify-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold flex-1 sm:flex-none"
-                  style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", border: "0.5px solid rgba(248,113,113,0.25)", cursor: "pointer" }}>
-                  <Trash2 size={11} /> Verwijderen
-                </button>
-              </div>
-            )}
+            <span className="t-metric-orange" style={{ fontSize: "26px" }}>{scoreLabel(match)}</span>
           </div>
+          {isTrainer && (
+            <div className="flex gap-2 flex-col">
+              <button onClick={onEdit} className="btn-secondary text-xs px-3 py-2 h-auto">
+                <Edit2 size={12} /> Bewerken
+              </button>
+              <Link to={`/LiveMatch?matchId=${match.id}`}>
+                <button className="btn-primary w-full text-xs px-3 py-2 h-auto">
+                  <Radio size={12} /> Live
+                </button>
+              </Link>
+              <button onClick={onDelete} className="flex items-center justify-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold w-full"
+                style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", border: "0.5px solid rgba(248,113,113,0.25)", cursor: "pointer" }}>
+                <Trash2 size={11} /> Verwijderen
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Opstelling */}
