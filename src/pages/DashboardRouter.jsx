@@ -4,7 +4,7 @@ import Dashboard from "./Dashboard";
 import PlayerDashboard from "./PlayerDashboard";
 
 export default function DashboardRouter() {
-  const { isTrainer } = useCurrentUser();
+  const { isSpeelster } = useCurrentUser();
 
-  return isTrainer ? <Dashboard /> : <PlayerDashboard />;
+  return isSpeelster ? <PlayerDashboard /> : <Dashboard />;
 }
