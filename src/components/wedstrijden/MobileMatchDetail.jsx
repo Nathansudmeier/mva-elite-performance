@@ -75,22 +75,32 @@ export default function MobileMatchDetail({
         <div style={{ position: "absolute", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,150,0,0.20)", top: 300, right: -40, filter: "blur(60px)" }} />
       </div>
 
-      <div className="relative space-y-4 pb-24" style={{ zIndex: 1 }}>
+      <div className="relative" style={{ zIndex: 1 }}>
          {/* Hero section with field background */}
-         <div className="match-hero-bg" style={{
+         <div style={{
            position: "relative",
            height: "220px",
-           backgroundImage: "url('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/3b2601fe6_wedstrijd.jpg'), linear-gradient(180deg, #1a5c2a 0%, #0d3d1a 100%)",
-           backgroundSize: "cover",
-           backgroundPosition: "center top",
-           backgroundRepeat: "no-repeat",
            overflow: "hidden",
          }}>
-           {/* Overlay 1: Dark overlay for readability */}
-           <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)" }} />
+            {/* Background image */}
+            <img 
+              src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e47690dd6_wedstrijd.jpg" 
+              alt="Wedstrijd veld"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center top",
+              }}
+            />
 
-           {/* Overlay 2: Gradient fade to bottom */}
-           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(28,14,4,0.95) 100%)" }} />
+            {/* Overlay 1: Dark overlay for readability */}
+            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)" }} />
+
+            {/* Overlay 2: Gradient fade to bottom */}
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 40%, rgba(28,14,4,1.0) 100%)" }} />
 
            {/* Back button */}
            <button onClick={onBack} style={{
