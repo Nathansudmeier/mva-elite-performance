@@ -4,11 +4,11 @@ import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import YouTubeEmbed, { isYouTubeUrl } from "@/components/common/YouTubeEmbed";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 const CATEGORIES = ["Alles", "Balbezit", "Verdediging", "Omschakeling", "Standaardsituaties", "Algemeen"];
+const MODAL_CATEGORIES = ["Algemeen", "Balbezit", "Balverlies", "Omschakeling", "Dode spelmomenten"];
 
 const EMPTY = {
   title: "",
@@ -19,12 +19,11 @@ const EMPTY = {
   published: true,
 };
 
-const MODAL_CATEGORIES = ["Algemeen", "Balbezit", "Balverlies", "Omschakeling", "Dode spelmomenten"];
-
 function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
   const [form, setForm] = useState(initial || EMPTY);
   const [uploading, setUploading] = useState(false);
   const [mediaOpen, setMediaOpen] = useState(false);
+  useScrollLock(true);
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
@@ -47,11 +46,24 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto">
-      <div className="glass-dark w-full my-8" style={{ maxWidth: "720px", borderRadius: "24px", padding: "2rem" }}>
-
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-hidden">
+      <div
+        className="glass-dark w-full my-8"
+        style={{
+          maxWidth: "720px",
+          borderRadius: "24px",
+          padding: "2rem",
+          overflowY: "auto",
+          maxHeight: "90vh",
+          overscrollBehavior: "contain",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
+        {/* Header — sticky */}
+        <div
+          className="flex items-center justify-between mb-6"
+          style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(20,10,4,0.92)", backdropFilter: "blur(12px)", marginLeft: "-2rem", marginRight: "-2rem", padding: "1rem 2rem", borderBottom: "0.5px solid rgba(255,255,255,0.08)" }}
+        >
           <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff" }}>
             {initial?.id ? "Spelprincipe bewerken" : "Spelprincipe toevoegen"}
           </h2>
@@ -125,7 +137,6 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
 
             {mediaOpen && (
               <div className="space-y-3 mt-3">
-                {/* YouTube URL */}
                 <div>
                   <label style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: "6px" }}>YouTube URL</label>
                   <input
@@ -139,7 +150,6 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
                   )}
                 </div>
 
-                {/* Afbeelding upload */}
                 <div>
                   <label style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: "6px" }}>Afbeelding</label>
                   <input type="file" accept="image/*" className="hidden" id="image-upload" onChange={handleImageUpload} />
@@ -190,6 +200,7 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
 
 function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
   const [open, setOpen] = useState(false);
+  useScrollLock(open);
 
   const categoryColors = {
     Balbezit: "#3B6D11",
@@ -256,9 +267,27 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto" onClick={() => setOpen(false)}>
-          <div className="glass-dark w-full max-w-2xl my-8" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-5" style={{ borderBottom: "0.5px solid rgba(255,255,255,0.10)" }}>
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-hidden"
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className="glass-dark w-full max-w-2xl my-8"
+            style={{ overflowY: "auto", maxHeight: "90vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Sticky header */}
+            <div
+              className="flex items-center justify-between p-5"
+              style={{
+                position: "sticky",
+                top: 0,
+                zIndex: 10,
+                background: "rgba(20,10,4,0.92)",
+                backdropFilter: "blur(12px)",
+                borderBottom: "0.5px solid rgba(255,255,255,0.10)",
+              }}
+            >
               <div>
                 <h2 className="text-xl font-bold text-white">{item.title}</h2>
                 <span
