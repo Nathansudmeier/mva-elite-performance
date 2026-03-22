@@ -82,7 +82,7 @@ export default function MatchCheckInOverview({ matchId, totalInSelectie }) {
 
       {/* Post-game section */}
       <div className="space-y-3 pt-4" style={{ borderTop: "0.5px solid rgba(255,255,255,0.10)" }}>
-        <p className="t-label">POST-GAME ({postCheckIns.length})</p>
+        <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>POST-GAME ({postCheckIns.length})</p>
         {postCheckIns.length === 0 ? (
           <div className="flex flex-col items-center py-5 gap-2">
             <CheckCircle2 size={22} style={{ color: "rgba(255,255,255,0.25)" }} />
