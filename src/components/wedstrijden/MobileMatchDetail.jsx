@@ -119,18 +119,6 @@ export default function MobileMatchDetail({
               top: "-80px"
             }} />
 
-            {/* Smooth fade-out gradient at bottom of hero */}
-            <div style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: "150px",
-              zIndex: 5,
-              pointerEvents: "none",
-              background: "linear-gradient(to bottom, transparent 0%, #1c0e04 100%)"
-            }} />
-
            {/* Back button */}
            <button onClick={onBack} style={{
              position: "absolute",
@@ -226,7 +214,7 @@ export default function MobileMatchDetail({
          </div>
 
          {/* Spacing after hero */}
-         <div style={{ padding: "0 1.25rem", paddingBottom: "24px", marginTop: "-75px", background: "transparent", position: "relative", zIndex: 3 }}>
+         <div style={{ padding: "0 1.25rem", paddingBottom: "24px", marginTop: "16px" }}>
            {/* Action buttons */}
            {isTrainer && (
              <div className="flex flex-col" style={{ gap: "10px" }}>
