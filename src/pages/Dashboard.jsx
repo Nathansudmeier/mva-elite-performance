@@ -3,7 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Upload } from "lucide-react";
-import AgendaForm from "@/components/agenda/AgendaForm";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import MatchDayBanner from "@/components/checkin/MatchDayBanner";
 import TrainerChampionsTrophy from "../components/dashboard/TrainerChampionsTrophy";
@@ -21,12 +20,7 @@ export default function Dashboard() {
   const queryClient = useQueryClient();
   const { isSpeelster, isTrainer, isLoading: authLoading } = useCurrentUser();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
-  const [planType, setPlanType] = useState("Training");
-  const [planDate, setPlanDate] = useState("");
-  const [planOpponent, setPlanOpponent] = useState("");
-  const [planSaving, setPlanSaving] = useState(false);
-  const [planExpanded, setPlanExpanded] = useState(false);
-  const [agendaFormOpen, setAgendaFormOpen] = useState(false);
+
 
   useEffect(() => {
     if (!authLoading && isSpeelster) {
