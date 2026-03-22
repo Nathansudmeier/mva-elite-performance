@@ -97,6 +97,7 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
+        <SplashScreen />
         <Router>
           <AuthenticatedApp />
         </Router>
