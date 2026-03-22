@@ -96,15 +96,7 @@ export default function Dashboard() {
   const winPct = playedMatches.length > 0 ? Math.round((wins / playedMatches.length) * 100) : 0;
 
   // === BLOK 2: ALERTS ===
-  const recentPlayerAttendance = {};
-  activePlayers.forEach(p => {
-    const playerAttendance = recentAttendance.filter(a => a.player_id === p.id);
-    const attended = playerAttendance.filter(a => a.present).length;
-    const total = recentSessions.length;
-    recentPlayerAttendance[p.id] = total > 0 ? (attended / total) * 100 : 100;
-  });
-
-  // Recalc with combined data
+   // Recalc with combined data
    const recentPlayerAttendanceCombined = {};
    activePlayers.forEach(p => {
      // Count from Attendance (TrainingSession)
