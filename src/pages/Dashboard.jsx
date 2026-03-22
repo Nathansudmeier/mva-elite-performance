@@ -10,6 +10,7 @@ import PhotoTimeline from "../components/photos/PhotoTimeline";
 import PhotoUpload from "../components/photos/PhotoUpload";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
 import TrainerDayBadge from "../components/dashboard/TrainerDayBadge";
+import DashboardBackground from "../components/dashboard/DashboardBackground";
 import { format, subDays, isAfter } from "date-fns";
 import NextMatchGrid from "../components/dashboard/NextMatchGrid";
 import TrainerWeekReflectieCard from "../components/dashboard/TrainerWeekReflectieCard";
