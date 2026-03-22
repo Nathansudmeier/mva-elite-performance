@@ -69,7 +69,7 @@ export default function MatchEdit() {
   const [showPlayerPicker, setShowPlayerPicker] = useState(false);
 
   // Load match data
-  React.useEffect(() => {
+  useEffect(() => {
     if (match) {
       setFormData({
         opponent: match.opponent || "",
