@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-...
+
 export default function RichTextEditor({ value, onChange, placeholder }) {
   const editorRef = useRef(null);
   const isInitialized = useRef(false);
