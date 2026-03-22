@@ -70,11 +70,51 @@ export default function MatchEdit() {
   const [showPlayerPicker, setShowPlayerPicker] = useState(false);
   const [uploading, setUploading] = useState(false);
 
+  // Compress image to max 200x200px
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let w = img.width;
+          let h = img.height;
+          if (w > 200 || h > 200) {
+            const scale = Math.min(200 / w, 200 / h);
+            w = w * scale;
+            h = h * scale;
+          }
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL("image/jpeg", 0.8));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const compressed = await compressImage(file);
+      const response = await base44.integrations.Core.UploadFile({ file: compressed });
+      setFormData({ ...formData, opponent_logo: response.file_url });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   // Load match data
   useEffect(() => {
     if (match) {
       setFormData({
         opponent: match.opponent || "",
+        opponent_logo: match.opponent_logo || "",
         date: match.date || "",
         home_away: match.home_away || "Thuis",
         score_home: match.score_home ?? "",
