@@ -20,6 +20,7 @@ import Leaderboard from './pages/Leaderboard.jsx';
 import MatchEdit from './pages/MatchEdit.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import SplashScreen from '@/components/SplashScreen';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
