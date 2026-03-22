@@ -126,14 +126,16 @@ export default function PlayerGreetingHeader({ user, player, attendance = [], ra
     <div className="space-y-4" style={{ position: "relative", zIndex: 10 }}>
       {/* Greeting */}
       <div className="flex items-center gap-4" style={{ padding: "0.75rem 1.25rem 0.5rem", display: "flex", alignItems: "center", gap: "12px" }}>
-        <div className="flex-shrink-0 rounded-full overflow-hidden flex items-center justify-center"
-           style={{ width: "44px", height: "44px", borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(255,107,0,0.40)", background: "rgba(255,107,0,0.20)" }}>
-          {player?.photo_url ? (
-            <img src={player.photo_url} alt={firstName} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-white text-lg font-bold">{initials}</span>
-          )}
-        </div>
+         <button
+           onClick={() => navigate(`/PlayerDetail?id=${player?.id}`)}
+           className="flex-shrink-0 rounded-full overflow-hidden flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+            style={{ width: "44px", height: "44px", borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(255,107,0,0.40)", background: "rgba(255,107,0,0.20)" }}>
+           {player?.photo_url ? (
+             <img src={player.photo_url} alt={firstName} className="w-full h-full object-cover" />
+           ) : (
+             <span className="text-white text-lg font-bold">{initials}</span>
+           )}
+         </button>
         <div>
           <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2, display: "flex", alignItems: "center", gap: "6px" }}>
             Hey {firstName} <HandWaveIcon color={waveColor} />
