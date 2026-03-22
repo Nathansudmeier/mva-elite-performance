@@ -17,6 +17,7 @@ import Staff from './pages/Staff.jsx';
 import TrainerDetail from './pages/TrainerDetail.jsx';
 import Speelminuten from './pages/Speelminuten.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
+import MatchEdit from './pages/MatchEdit.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
