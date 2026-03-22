@@ -30,6 +30,7 @@ export default function DashboardBackground() {
         inset: 0,
         backgroundColor: 'rgba(10,4,0,0.55)',
         zIndex: 1,
+        pointerEvents: 'none',
       }} />
     </>
   );
