@@ -68,6 +68,25 @@ export default function Messages() {
     },
   });
 
+  const deleteChatM = useMutation({
+    mutationFn: async (chatId) => {
+      const members = await base44.entities.ChatMember.filter({ chat_id: chatId });
+      for (const member of members) {
+        await base44.entities.ChatMember.delete(member.id);
+      }
+      const messages = await base44.entities.ChatMessage.filter({ chat_id: chatId });
+      for (const msg of messages) {
+        await base44.entities.ChatMessage.delete(msg.id);
+      }
+      await base44.entities.Chat.delete(chatId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["chatMembers", user?.email]);
+      queryClient.invalidateQueries(["allChats"]);
+      setChatToDelete(null);
+    },
+  });
+
   useEffect(() => {
     if (chatMembers.length > 0 && allChats.length > 0) {
       const chatIds = new Set(chatMembers.map(m => m.chat_id));
