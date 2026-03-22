@@ -162,7 +162,7 @@ export default function Layout({ children, currentPageName }) {
       <TopBar />
 
       {/* Sidebar desktop */}
-      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-56 flex-col z-40 overflow-y-auto" style={{ backgroundColor: "rgba(0,0,0,0.38)", borderRight: "0.5px solid rgba(255,255,255,0.07)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)" }}>
+      <aside className="hidden lg:flex fixed left-0 top-[60px] bottom-0 w-56 flex-col z-40 overflow-y-auto" style={{ backgroundColor: "rgba(0,0,0,0.38)", borderRight: "0.5px solid rgba(255,255,255,0.07)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)" }}>
         <nav className="flex-1 py-4 px-3 space-y-1">
           {isSpeelsterUser ? (
             <>
