@@ -302,6 +302,7 @@ export default function MobileMatchDetail({
               borderRadius: "22px",
               overflow: "hidden",
               position: "relative",
+              marginTop: "32px",
             }}>
               {/* glass shimmer */}
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", borderRadius: "22px 22px 0 0", pointerEvents: "none" }} />
