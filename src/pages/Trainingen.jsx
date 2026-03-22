@@ -101,6 +101,19 @@ export default function Trainingen() {
     },
   });
 
+  const syncAllMutation = useMutation({
+    mutationFn: async () => {
+      const trainingSessions = sessions.filter(s => s.type === "Training");
+      for (const s of trainingSessions) {
+        await syncSessionToAgenda(s);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["agendaItems"] });
+      queryClient.invalidateQueries({ queryKey: ["agendaItems-upcoming"] });
+    },
+  });
+
   const selectedSession = sessions.find((s) => s.id === selectedSessionId) || null;
   const sessionAttendance = selectedSession
     ? attendance.filter((a) => a.session_id === selectedSession.id)
