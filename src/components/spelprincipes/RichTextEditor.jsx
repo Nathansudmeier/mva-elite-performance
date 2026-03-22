@@ -108,7 +108,6 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
         contentEditable
         suppressContentEditableWarning
         onInput={emitChange}
-        dangerouslySetInnerHTML={{ __html: value || "" }}
         data-placeholder={placeholder}
         style={{
           minHeight: "180px",
