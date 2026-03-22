@@ -220,7 +220,7 @@ export default function Layout({ children, currentPageName }) {
       )}
 
       {/* Main content */}
-      <main className="pt-16 lg:pl-56 pb-20 lg:pb-0 relative min-h-screen overflow-hidden">
+      <main className="lg:pl-56 pb-20 lg:pb-0 relative min-h-screen overflow-hidden">
         {/* Light orbs background layer */}
         <div className="pointer-events-none" style={{ position: "fixed", top: "64px", left: 0, right: 0, bottom: 0, zIndex: 1, overflow: "hidden" }}>
           <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: "rgba(255,107,0,0.55)", top: -160, left: -100, filter: "blur(80px)" }} />
