@@ -84,16 +84,6 @@ export default function MobileMatchDetail({
            backgroundSize: "cover",
            backgroundPosition: "center top",
            backgroundRepeat: "no-repeat",
-           backgroundAttachment: "scroll",
-           overflow: "hidden",
-           zIndex: 1,
-         }} style={{
-           position: "relative",
-           height: "220px",
-           backgroundImage: "url('https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/3b2601fe6_wedstrijd.jpg') !important, linear-gradient(180deg, #1a5c2a 0%, #0d3d1a 100%) !important",
-           backgroundSize: "cover !important",
-           backgroundPosition: "center top !important",
-           backgroundRepeat: "no-repeat !important",
            overflow: "hidden",
          }}>
            {/* Overlay 1: Dark overlay for readability */}
