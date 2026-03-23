@@ -14,14 +14,14 @@ const GROUP_COLOR_MAP = {
 export default function TodayTrainingCard({ playerId }) {
   const today = new Date().toISOString().split("T")[0];
 
-  const { data: agendaItems = [] } = useQuery({
-    queryKey: ["agendaItems"],
-    queryFn: () => base44.entities.AgendaItem.filter({ type: "Training", date: today }),
+  const { data: plans = [] } = useQuery({
+    queryKey: ["trainingPlans"],
+    queryFn: () => base44.entities.TrainingPlan.list(),
   });
 
-  const todayTraining = agendaItems[0];
+  const todayPlan = plans.find(p => p.date === today);
 
-  if (!todayTraining) {
+  if (!todayPlan || !(todayPlan.exercises?.length > 0)) {
     return (
       <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "14px 16px", background: "rgba(255,255,255,0.05)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "18px" }}>
         <i className="ti ti-moon" style={{ fontSize: "20px", color: "rgba(255,255,255,0.30)" }} />
