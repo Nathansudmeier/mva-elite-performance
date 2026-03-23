@@ -80,6 +80,28 @@ export default function Planning() {
     }
   }
 
+  if (errorItems) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+        <p className="t-secondary text-center">Kon de planning niet laden.<br />Controleer je verbinding en probeer opnieuw.</p>
+        <button onClick={() => qc.invalidateQueries({ queryKey: ["agenda-items"] })} className="btn-secondary flex items-center gap-2">
+          <RefreshCw size={16} /> Opnieuw proberen
+        </button>
+      </div>
+    );
+  }
+
+  if (isLoading && loadTimeout) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+        <p className="t-secondary text-center">Kon de planning niet laden. Probeer opnieuw.</p>
+        <button onClick={() => { setLoadTimeout(false); qc.invalidateQueries(); }} className="btn-secondary flex items-center gap-2">
+          <RefreshCw size={16} /> Opnieuw laden
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
       <img
