@@ -108,13 +108,13 @@ export default function PlayerDetail() {
 
       {/* IOP Goals */}
       {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
-        <div className="glass p-4">
+        <div className="glass-dark rounded-2xl p-4">
           <p className="t-label mb-3">IOP Doelen</p>
           <div className="space-y-2">
             {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).map((goal, i) => (
               <div key={i} className="flex items-start gap-2">
                 <span className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{ background: "#FF6B00" }}>{i + 1}</span>
-                <p className="t-secondary">{goal}</p>
+                <p className="t-secondary text-sm">{goal}</p>
               </div>
             ))}
           </div>
