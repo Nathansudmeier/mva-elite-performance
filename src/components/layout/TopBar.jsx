@@ -94,6 +94,7 @@ export default function TopBar() {
   const { user, isTrainer, isSpeelster } = useCurrentUser();
   const greeting = useGreeting();
   const [showNotifications, setShowNotifications] = useState(false);
+  const bellRef = useRef(null);
 
   const { data: unreadNotifications = [] } = useQuery({
     queryKey: ["notifications", user?.email],
