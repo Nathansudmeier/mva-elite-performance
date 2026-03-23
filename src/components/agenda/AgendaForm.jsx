@@ -32,6 +32,11 @@ async function compressImage(file) {
 }
 
 export default function AgendaForm({ item, onSave, onClose }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
   const [form, setForm] = useState({
     type: item?.type || "Training",
     title: item?.title || "",
