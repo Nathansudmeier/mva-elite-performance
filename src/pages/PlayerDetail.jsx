@@ -190,11 +190,11 @@ export default function PlayerDetail() {
 
       {/* Attendance */}
       {attendance.length > 0 && (
-        <div className="glass p-4">
+        <div className="glass-dark rounded-2xl p-4">
           <p className="t-label mb-3 flex items-center gap-2"><Calendar size={12} /> Aanwezigheid</p>
-          <div className="flex items-center gap-4">
-            <p className="t-metric-orange">{attendancePct}%</p>
-            <p className="t-secondary">{presentCount} van {attendance.length} sessies aanwezig</p>
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4">
+            <p className="t-metric-orange text-3xl">{attendancePct}%</p>
+            <p className="t-secondary text-sm">{presentCount} van {attendance.length} sessies aanwezig</p>
           </div>
         </div>
       )}
