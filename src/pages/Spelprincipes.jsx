@@ -165,15 +165,17 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
           </div>
 
           {/* Actieknoppen */}
-          <div style={{ display: "flex", gap: "12px" }}>
+          <div className="flex gap-3 flex-col-reverse sm:flex-row sticky bottom-0 pt-4">
             <button
               onClick={onClose}
-              style={{ flex: 1, height: "48px", borderRadius: "14px", fontSize: "14px", fontWeight: 600, cursor: "pointer", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.65)" }}
+              className="flex-1 h-12 rounded-lg text-sm font-semibold transition-colors"
+              style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.65)" }}
             >Annuleren</button>
             <button
               onClick={() => onSave(form)}
               disabled={isSaving || !form.title || uploading}
-              style={{ flex: 1, height: "48px", borderRadius: "14px", fontSize: "14px", fontWeight: 600, cursor: (isSaving || !form.title || uploading) ? "not-allowed" : "pointer", background: "#FF6B00", border: "none", color: "#ffffff", opacity: (isSaving || !form.title || uploading) ? 0.5 : 1 }}
+              className="flex-1 h-12 rounded-lg text-sm font-semibold transition-opacity"
+              style={{ background: "#FF6B00", border: "none", color: "#ffffff", opacity: (isSaving || !form.title || uploading) ? 0.5 : 1, cursor: (isSaving || !form.title || uploading) ? "not-allowed" : "pointer" }}
             >{isSaving ? "Opslaan..." : "Opslaan"}</button>
           </div>
         </div>
