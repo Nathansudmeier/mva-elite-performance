@@ -394,18 +394,23 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
 
 /**
  * NextMatchGrid — shows next match for MO17 and Dames 1 side by side.
- * @param {Array} matches - all matches (Match or AgendaItem records)
- * @param {Array} agendaItems - AgendaItem records (preferred source)
- * @param {string|null} playerId - if provided, shows check-in button
+ * Fetches AgendaItems internally; falls back to passed matches prop.
  */
-export default function NextMatchGrid({ matches = [], agendaItems = [], playerId = null }) {
+export default function NextMatchGrid({ matches = [], agendaItems: agendaItemsProp = [], playerId = null }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Prefer AgendaItems of type Wedstrijd; fall back to Match records
-  const source = agendaItems.length > 0
-    ? agendaItems.filter(ai => ai.type === "Wedstrijd")
-    : matches;
+  const { data: fetchedAgendaItems = [] } = useQuery({
+    queryKey: ["agenda-wedstrijden"],
+    queryFn: () => base44.entities.AgendaItem.filter({ type: "Wedstrijd" }),
+  });
+
+  // Prefer fetched/passed AgendaItems; fall back to Match records
+  const agendaWedstrijden = fetchedAgendaItems.length > 0
+    ? fetchedAgendaItems
+    : agendaItemsProp.filter(ai => ai.type === "Wedstrijd");
+
+  const source = agendaWedstrijden.length > 0 ? agendaWedstrijden : matches;
 
   const futureMatches = source.filter((m) => parseISO(m.date) >= today);
 
