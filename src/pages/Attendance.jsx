@@ -203,9 +203,9 @@ export default function Attendance() {
               style={{ backgroundColor: '#FFFFFF' }}
             />
             <div>
-              <p className="text-xs font-semibold text-[#2F3650] uppercase tracking-wider mb-2">Aanwezig ({presentPlayerIds.length}/{activePlayers.length})</p>
+              <p className="text-xs font-semibold text-[#2F3650] uppercase tracking-wider mb-2">Aanwezig ({presentPlayerIds.length}/{players.length})</p>
               <div className="max-h-48 overflow-y-auto space-y-1 pr-1">
-                {activePlayers.map((p) => {
+                {players.map((p) => {
                   const isPresent = presentPlayerIds.includes(p.id);
                   return (
                     <button
