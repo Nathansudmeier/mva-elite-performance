@@ -104,6 +104,16 @@ export default function PlanningTrainingDetail() {
     navigate("/Planning");
   }
 
+  async function handleAttendanceToggle(playerId, newStatus) {
+    const existingRecord = attendance.find(a => a.player_id === playerId);
+    if (existingRecord) {
+      await base44.entities.AgendaAttendance.update(existingRecord.id, { status: newStatus });
+    } else {
+      await base44.entities.AgendaAttendance.create({ agenda_item_id: itemId, player_id: playerId, status: newStatus });
+    }
+    await qc.invalidateQueries({ queryKey: ["agenda-attendance-detail", itemId] });
+  }
+
   if (isLoading || !item) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
