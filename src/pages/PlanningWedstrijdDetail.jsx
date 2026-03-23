@@ -227,14 +227,19 @@ export default function PlanningWedstrijdDetail() {
 
   async function saveScore() {
     if (!match) return;
-    setSaving(true);
-    await base44.entities.Match.update(match.id, {
-      score_home: parseInt(scoreHome) || 0,
-      score_away: parseInt(scoreAway) || 0,
-    });
-    await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
-    setSaving(false);
-    setEditingScore(false);
+    try {
+      setSaving(true);
+      await base44.entities.Match.update(match.id, {
+        score_home: parseInt(scoreHome) || 0,
+        score_away: parseInt(scoreAway) || 0,
+      });
+      await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
+      setSaving(false);
+      setEditingScore(false);
+    } catch (error) {
+      setSaving(false);
+      console.error("Error saving score:", error);
+    }
   }
 
   function getScoreResult() {
