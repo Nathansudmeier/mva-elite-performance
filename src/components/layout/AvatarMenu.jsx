@@ -108,7 +108,8 @@ export default function AvatarMenu({ user, profilePhoto, initials, isTrainer, is
     <div ref={containerRef} style={{ position: "relative", flexShrink: 0 }}>
       {/* Avatar knop */}
       <button
-        onClick={() => setOpen(v => !v)}
+        ref={avatarRef}
+        onClick={handleOpen}
         style={{ width: 32, height: 32, borderRadius: "50%", background: "#FF6B00", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", border: open ? "2px solid rgba(255,107,0,0.70)" : "2px solid transparent", cursor: "pointer", padding: 0 }}
       >
         {profilePhoto
@@ -116,29 +117,31 @@ export default function AvatarMenu({ user, profilePhoto, initials, isTrainer, is
           : <span style={{ fontSize: "12px", fontWeight: 700, color: "#fff" }}>{initials}</span>}
       </button>
 
-      {/* Dropdown – desktop */}
-      {open && (
+      {/* Render via portal zodat overflow:hidden van header geen probleem is */}
+      {open && createPortal(
         <>
           {/* Desktop dropdown */}
-          <div className="hidden xl:block" style={{ position: "absolute", top: "calc(100% + 10px)", right: 0, zIndex: 200, background: "rgba(20,10,2,0.95)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 16, minWidth: 200, boxShadow: "0 8px 32px rgba(0,0,0,0.40)", overflow: "hidden" }}>
-            {menuContent}
-          </div>
-
-          {/* Mobile bottom sheet */}
-          <div className="xl:hidden" style={{ position: "fixed", inset: 0, zIndex: 200 }}>
-            {/* Backdrop */}
-            <div
-              onClick={() => setOpen(false)}
-              style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)" }}
-            />
-            {/* Sheet */}
-            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(20,10,2,0.95)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", borderTop: "0.5px solid rgba(255,255,255,0.08)", borderRadius: "20px 20px 0 0", padding: "1rem 1.25rem 2rem", zIndex: 201 }}>
-              {/* Handle */}
-              <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)", margin: "0 auto 12px" }} />
+          {!isMobile && (
+            <div style={{ position: "fixed", top: dropdownPos.top, right: dropdownPos.right, zIndex: 9999, background: "rgba(20,10,2,0.95)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 16, minWidth: 200, boxShadow: "0 8px 32px rgba(0,0,0,0.40)", overflow: "hidden" }}>
               {menuContent}
             </div>
-          </div>
-        </>
+          )}
+
+          {/* Mobile bottom sheet */}
+          {isMobile && (
+            <div style={{ position: "fixed", inset: 0, zIndex: 9999 }}>
+              <div
+                onClick={() => setOpen(false)}
+                style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)" }}
+              />
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(20,10,2,0.95)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", borderTop: "0.5px solid rgba(255,255,255,0.08)", borderRadius: "20px 20px 0 0", padding: "1rem 1.25rem 2rem", zIndex: 10000 }}>
+                <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.15)", margin: "0 auto 12px" }} />
+                {menuContent}
+              </div>
+            </div>
+          )}
+        </>,
+        document.body
       )}
     </div>
   );
