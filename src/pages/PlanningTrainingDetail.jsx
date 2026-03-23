@@ -282,9 +282,25 @@ export default function PlanningTrainingDetail() {
   );
 }
 
-function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, sendReminder, reminderSent }) {
+function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, sendReminder, reminderSent, editingAttendance, onToggleEdit, players, onToggleStatus }) {
   return (
     <div className="glass-dark rounded-2xl p-4 space-y-5">
+      {isTrainer && (
+        <div className="flex gap-2">
+          <button
+            onClick={onToggleEdit}
+            className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition"
+            style={{
+              background: editingAttendance ? "rgba(74,222,128,0.20)" : "rgba(255,255,255,0.08)",
+              color: editingAttendance ? "#4ade80" : "rgba(255,255,255,0.65)",
+              border: `0.5px solid ${editingAttendance ? "rgba(74,222,128,0.30)" : "rgba(255,255,255,0.12)"}`,
+            }}
+          >
+            {editingAttendance ? "Gereed" : "Aanwezigheid bewerken"}
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-4">
         {/* Aanwezig */}
         <div>
@@ -295,7 +311,17 @@ function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, send
                 <div key={player.id} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ background: "rgba(74,222,128,0.06)" }}>
                   <PlayerAvatar player={player} />
                   <p className="t-secondary flex-1">{player.name}</p>
-                  <div className="dot-green" />
+                  {editingAttendance ? (
+                    <button
+                      onClick={() => onToggleStatus(player.id, null)}
+                      className="text-xs font-semibold px-2 py-1 rounded transition"
+                      style={{ background: "rgba(248,113,113,0.20)", color: "#f87171" }}
+                    >
+                      ✕
+                    </button>
+                  ) : (
+                    <div className="dot-green" />
+                  )}
                 </div>
               ))}
             </div>
@@ -314,7 +340,17 @@ function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, send
                     <p className="t-secondary">{player.name}</p>
                     {isTrainer && record.notes && <p className="t-tertiary truncate">{record.notes}</p>}
                   </div>
-                  <div className="dot-red" />
+                  {editingAttendance ? (
+                    <button
+                      onClick={() => onToggleStatus(player.id, "aanwezig")}
+                      className="text-xs font-semibold px-2 py-1 rounded transition"
+                      style={{ background: "rgba(74,222,128,0.20)", color: "#4ade80" }}
+                    >
+                      ✓
+                    </button>
+                  ) : (
+                    <div className="dot-red" />
+                  )}
                 </div>
               ))}
             </div>
@@ -330,10 +366,29 @@ function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, send
                 <div key={player.id} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
                   <PlayerAvatar player={player} />
                   <p className="t-secondary flex-1">{player.name}</p>
-                  <div className="dot-yellow" />
+                  {editingAttendance ? (
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => onToggleStatus(player.id, "aanwezig")}
+                        className="text-xs font-semibold px-2 py-1 rounded transition"
+                        style={{ background: "rgba(74,222,128,0.20)", color: "#4ade80" }}
+                      >
+                        ✓
+                      </button>
+                      <button
+                        onClick={() => onToggleStatus(player.id, "afwezig")}
+                        className="text-xs font-semibold px-2 py-1 rounded transition"
+                        style={{ background: "rgba(248,113,113,0.20)", color: "#f87171" }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="dot-yellow" />
+                  )}
                 </div>
               ))}
-              {isTrainer && (
+              {!editingAttendance && isTrainer && (
                 <button onClick={() => sendReminder.mutate()} disabled={sendReminder.isPending || reminderSent}
                   className="w-full mt-2 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm"
                   style={{
