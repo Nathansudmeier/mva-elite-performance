@@ -85,35 +85,35 @@ export default function PhotoUpload({ onSaved }) {
         </div>
         <h2 className="t-section-title">Foto Uploaden</h2>
       </div>
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
          <div>
            <label className="t-label mb-1 block text-xs">Datum</label>
            <Input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
              style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", fontSize: "12px", padding: "6px 10px" }} />
          </div>
-        <div>
-          <label className="t-label mb-1 block text-xs">Team</label>
-          <select value={form.team} onChange={e => setForm(f => ({ ...f, team: e.target.value }))} style={{ ...selectStyle, fontSize: "12px", padding: "6px 10px" }}>
-            <option value="MO17" style={{ background: "#1c0e04" }}>MO17</option>
-            <option value="Dames 1" style={{ background: "#1c0e04" }}>Dames 1</option>
-          </select>
-        </div>
-        <div>
-          <label className="t-label mb-1 block text-xs">Type</label>
-          <select value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} style={{ ...selectStyle, fontSize: "12px", padding: "6px 10px" }}>
-            <option value="Training" style={{ background: "#1c0e04" }}>Training</option>
-            <option value="Wedstrijd" style={{ background: "#1c0e04" }}>Wedstrijd</option>
-          </select>
-        </div>
-        <div className="col-span-2">
-          <label className="t-label mb-1 block text-xs">Label (optioneel)</label>
-          <Input
-            placeholder={form.type === "Wedstrijd" ? "bijv. AFC" : ""}
-            value={form.label}
-            onChange={e => setForm(f => ({ ...f, label: e.target.value }))}
-            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", fontSize: "12px", padding: "6px 10px" }}
-          />
-        </div>
+         <div>
+           <label className="t-label mb-1 block text-xs">Team</label>
+           <select value={form.team} onChange={e => setForm(f => ({ ...f, team: e.target.value }))} style={{ ...selectStyle, fontSize: "12px", padding: "6px 10px" }}>
+             <option value="MO17" style={{ background: "#1c0e04" }}>MO17</option>
+             <option value="Dames 1" style={{ background: "#1c0e04" }}>Dames 1</option>
+           </select>
+         </div>
+         <div className="col-span-2 xl:col-span-1">
+           <label className="t-label mb-1 block text-xs">Type</label>
+           <select value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} style={{ ...selectStyle, fontSize: "12px", padding: "6px 10px" }}>
+             <option value="Training" style={{ background: "#1c0e04" }}>Training</option>
+             <option value="Wedstrijd" style={{ background: "#1c0e04" }}>Wedstrijd</option>
+           </select>
+         </div>
+         <div className="col-span-2">
+           <label className="t-label mb-1 block text-xs">Label (optioneel)</label>
+           <Input
+             placeholder={form.type === "Wedstrijd" ? "bijv. AFC" : ""}
+             value={form.label}
+             onChange={e => setForm(f => ({ ...f, label: e.target.value }))}
+             style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", fontSize: "12px", padding: "6px 10px" }}
+           />
+         </div>
       </div>
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
       <button onClick={() => fileRef.current.click()} disabled={uploading} className="btn-primary">
