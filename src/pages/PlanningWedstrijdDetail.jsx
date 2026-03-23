@@ -324,21 +324,21 @@ export default function PlanningWedstrijdDetail() {
           <div className="flex items-center justify-center gap-4 py-4 border-t border-b" style={{ borderColor: "rgba(255,255,255,0.10)" }}>
             <div className="text-center flex-1">
               <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>MVA Noord</p>
-              <p style={{ fontSize: match?.score_home !== undefined ? "32px" : "24px", fontWeight: match?.score_home !== undefined ? 800 : 300, color: match?.score_home !== undefined ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
-                {match?.score_home !== undefined ? match.score_home : "vs."}
+              <p style={{ fontSize: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? "32px" : "24px", fontWeight: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? 800 : 300, color: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
+                {match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined) ? match.score_home : "vs."}
               </p>
             </div>
             <div style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.40)" }}>-</div>
             <div className="text-center flex-1">
               <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>Tegenstander</p>
-              <p style={{ fontSize: match?.score_away !== undefined ? "32px" : "24px", fontWeight: match?.score_away !== undefined ? 800 : 300, color: match?.score_away !== undefined ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
-                {match?.score_away !== undefined ? match.score_away : "vs."}
+              <p style={{ fontSize: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? "32px" : "24px", fontWeight: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? 800 : 300, color: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
+                {match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined) ? match.score_away : "vs."}
               </p>
             </div>
           </div>
 
           {/* Result badge */}
-          {getScoreResult() && (
+          {(match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined && match?.score_away !== undefined)) && getScoreResult() && (
             <div className="flex justify-center mt-3">
               <span style={{
                 fontSize: "12px",
