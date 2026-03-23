@@ -613,12 +613,18 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Tab: Opstelling */}
          {activeTab === 1 && !editingLineup && (
-          <LineupOverview
-            match={match}
-            players={players}
-            isTrainer={isTrainer}
-            onEditClick={() => setEditingLineup(true)}
-          />
+          !isTrainer && isFuture ? (
+            <div className="glass-dark rounded-2xl p-6 text-center">
+              <p className="t-secondary">De opstelling wordt bekend gemaakt op de dag van de wedstrijd.</p>
+            </div>
+          ) : (
+            <LineupOverview
+              match={match}
+              players={players}
+              isTrainer={isTrainer}
+              onEditClick={() => setEditingLineup(true)}
+            />
+          )
         )}
 
         {/* Lineup Selector Modal */}
