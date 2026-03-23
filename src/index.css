@@ -445,6 +445,13 @@
     grid-template-columns: 1fr !important;
   }
 
+  /* Tablets (600px+) krijgen 2 kolommen voor wedstrijd cards */
+  @media (min-width: 600px) {
+    .mobile-grid-1col {
+      grid-template-columns: 1fr 1fr !important;
+    }
+  }
+
   .match-hero-card {
     height: 140px !important;
   }
