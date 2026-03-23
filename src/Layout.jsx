@@ -209,8 +209,8 @@ export default function Layout({ children, currentPageName }) {
           { name: "Planning", icon: "calendar", page: "Planning" },
           { name: "Spelers", icon: "users", page: "Players" },
           { name: "Trainingsvormen", icon: "ball-football", page: "Trainingsvormen" },
+          { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
           { name: "Berichten", icon: "message-circle", page: "Messages" },
-          { name: "Beheer", icon: "settings", page: "AccountBeheer" },
         ];
         
         const speelsterTabItems = [
