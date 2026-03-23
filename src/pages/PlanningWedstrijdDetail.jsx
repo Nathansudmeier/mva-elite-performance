@@ -392,7 +392,7 @@ export default function PlanningWedstrijdDetail() {
             </div>
             <div style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.40)" }}>-</div>
             <div className="text-center flex-1">
-              <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>Tegenstander</p>
+              <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>{item.title}</p>
               <p style={{ fontSize: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? "32px" : "24px", fontWeight: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? 800 : 300, color: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
                 {match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined) ? match.score_away : "vs."}
               </p>
