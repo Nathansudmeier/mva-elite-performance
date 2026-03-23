@@ -291,7 +291,7 @@ export default function PlanningWedstrijdDetail() {
         {/* Hero card */}
         <div className="rounded-2xl p-5 relative overflow-hidden"
           style={{ background: "linear-gradient(135deg, rgba(255,107,0,0.20), rgba(28,14,4,0.60))", border: "0.5px solid rgba(255,107,0,0.30)" }}>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
                 <Trophy size={14} style={{ color: cfg.color }} />
@@ -319,6 +319,40 @@ export default function PlanningWedstrijdDetail() {
               </div>
             </div>
           </div>
+
+          {/* Score section */}
+          <div className="flex items-center justify-center gap-4 py-4 border-t border-b" style={{ borderColor: "rgba(255,255,255,0.10)" }}>
+            <div className="text-center flex-1">
+              <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>MVA Noord</p>
+              <p style={{ fontSize: match?.score_home !== undefined ? "32px" : "24px", fontWeight: match?.score_home !== undefined ? 800 : 300, color: match?.score_home !== undefined ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
+                {match?.score_home !== undefined ? match.score_home : "vs."}
+              </p>
+            </div>
+            <div style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.40)" }}>-</div>
+            <div className="text-center flex-1">
+              <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>Tegenstander</p>
+              <p style={{ fontSize: match?.score_away !== undefined ? "32px" : "24px", fontWeight: match?.score_away !== undefined ? 800 : 300, color: match?.score_away !== undefined ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
+                {match?.score_away !== undefined ? match.score_away : "vs."}
+              </p>
+            </div>
+          </div>
+
+          {/* Result badge */}
+          {getScoreResult() && (
+            <div className="flex justify-center mt-3">
+              <span style={{
+                fontSize: "12px",
+                fontWeight: 700,
+                padding: "4px 14px",
+                borderRadius: "20px",
+                background: getScoreBadgeStyles().bg,
+                border: `0.5px solid ${getScoreBadgeStyles().border}`,
+                color: getScoreBadgeStyles().color,
+              }}>
+                {getScoreResult()}
+              </span>
+            </div>
+          )}
 
           {/* Live wedstrijd knop - prominent voor trainers */}
           {isTrainer && match && (
