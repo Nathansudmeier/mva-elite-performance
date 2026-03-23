@@ -190,7 +190,7 @@ export default function PlayerDashboard() {
       <PlayerAttendanceCard 
         percentage={attendancePercentage} 
         present={playerSeasonAttendance.length} 
-        total={allSeasonTrainings.length} 
+        total={totalSeasonTrainings} 
       />
 
       {/* Attendance Dots */}
