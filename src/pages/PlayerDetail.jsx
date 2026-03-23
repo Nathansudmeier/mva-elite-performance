@@ -204,13 +204,13 @@ export default function PlayerDetail() {
 
       {/* Wellness */}
       {wellness.length > 0 && (
-        <div className="glass p-4">
+        <div className="glass-dark rounded-2xl p-4">
           <p className="t-label mb-3 flex items-center gap-2"><Heart size={12} /> Belastbaarheid (laatste 5)</p>
           <div className="space-y-2">
             {wellness.slice(-5).reverse().map(w => (
-              <div key={w.id} className="flex justify-between">
-                <span className="t-secondary">{w.date}</span>
-                <span className="t-card-title">Slaap {w.sleep}/5 · Vermoeidheid {w.fatigue}/5</span>
+              <div key={w.id} className="flex flex-col md:flex-row md:justify-between md:items-center gap-1 md:gap-2">
+                <span className="t-secondary text-sm">{w.date}</span>
+                <span className="t-card-title text-sm">Slaap {w.sleep}/5 · Vermoeidheid {w.fatigue}/5</span>
               </div>
             ))}
           </div>
