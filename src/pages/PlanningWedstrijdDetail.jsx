@@ -186,15 +186,33 @@ export default function PlanningWedstrijdDetail() {
   }
 
   async function handleSaveLineupEdit(data) {
-    if (!match) return;
     try {
       setSaving(true);
+      setSaveError("");
+      
+      let currentMatch = match;
+      
+      // Stap 1: Match aanmaken als die niet bestaat
+      if (!match) {
+        const newMatch = await base44.entities.Match.create({
+          opponent: item.title,
+          date: item.date,
+          home_away: item.home_away,
+          team: item.team,
+        });
+        await base44.entities.AgendaItem.update(itemId, { match_id: newMatch.id });
+        await qc.invalidateQueries({ queryKey: ["agenda-item", itemId] });
+        await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
+        currentMatch = newMatch;
+      }
+      
       const lineupArr = Object.entries(data.lineup).map(([slot, player_id]) => ({ slot, player_id }));
-      await base44.entities.Match.update(match.id, {
+      await base44.entities.Match.update(currentMatch.id, {
         lineup: lineupArr,
         substitutes: data.substitutes,
         formation: data.formation,
       });
+      
       // Notify players
       if (lineupArr.length > 0) {
         const allUsers = await base44.entities.User.list();
@@ -213,11 +231,19 @@ export default function PlanningWedstrijdDetail() {
           })
         )).catch(() => {});
       }
-      await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
+      await qc.invalidateQueries({ queryKey: ["match", currentMatch.id] });
       setSaving(false);
       setEditingLineup(false);
+      
+      // Stap 3: Succes feedback
+      toast({
+        description: "Opstelling opgeslagen",
+        style: { background: "#4ade80", color: "white", border: "none" },
+      });
     } catch (error) {
       setSaving(false);
+      // Stap 2: Foutmelding
+      setSaveError("Kon de opstelling niet opslaan. Probeer opnieuw.");
       console.error("Error saving lineup:", error);
     }
   }
