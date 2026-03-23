@@ -569,221 +569,108 @@ export default function MatchEdit() {
           {/* OPSTELLING TAB */}
           {activeTab === "opstelling" && (
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-              <div>
-                <div style={LABEL_STYLE}>Formatie</div>
-                <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "8px" }}>
-                  {FORMATIONS.map((f) => (
-                    <button
-                      key={f}
-                      onClick={() => {
-                        setFormData({ ...formData, formation: f });
-                        setLineupMap({});
-                      }}
-                      style={{
-                        whiteSpace: "nowrap",
-                        padding: "8px 14px",
-                        background: formData.formation === f ? "#FF6B00" : "rgba(255,255,255,0.08)",
-                        color: formData.formation === f ? "white" : "rgba(255,255,255,0.60)",
-                        border: formData.formation === f ? "none" : "0.5px solid rgba(255,255,255,0.12)",
-                        borderRadius: "10px",
-                        fontSize: "12px",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      {f}
-                    </button>
-                  ))}
+              {/* Desktop toggle */}
+              <div className="hidden xl:flex" style={{ gap: 8 }}>
+                <button
+                  onClick={() => setShowField(false)}
+                  style={{ padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", background: !showField ? "#FF6B00" : "rgba(255,255,255,0.08)", color: !showField ? "#fff" : "rgba(255,255,255,0.60)" }}
+                >Spelerslijst</button>
+                <button
+                  onClick={() => setShowField(true)}
+                  style={{ padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", background: showField ? "#FF6B00" : "rgba(255,255,255,0.08)", color: showField ? "#fff" : "rgba(255,255,255,0.60)" }}
+                >Toon veld</button>
+              </div>
+
+              {/* Mobile/tablet: always player list */}
+              <div className="xl:hidden">
+                <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 16, overflow: "hidden", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                  <LineupPlayerList
+                    players={activePlayers}
+                    lineupMap={lineupMap}
+                    substitutes={formData.substitutes}
+                    formation={formData.formation}
+                    onLineupChange={setLineupMap}
+                    onSubstitutesChange={(subs) => setFormData({ ...formData, substitutes: subs })}
+                    onFormationChange={(f) => setFormData({ ...formData, formation: f })}
+                    onSave={handleSave}
+                    saving={saveMutation.isPending}
+                  />
                 </div>
               </div>
 
-              {/* Field visualization */}
-              <div style={{
-                background: "rgba(20, 80, 40, 0.3)",
-                border: "1px solid rgba(76,175,80,0.3)",
-                borderRadius: "12px",
-                padding: "16px",
-                minHeight: "240px",
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: "12px",
-                alignContent: "center",
-              }}>
-                {FIELD_POSITIONS[formData.formation]?.map((pos) => {
-                  const playerId = lineupMap[pos];
-                  const playerName = activePlayers.find(p => p.id === playerId)?.name;
-                  return (
-                    <button
-                      key={pos}
-                      onClick={() => {
-                        setSelectedPosition(pos);
-                        setShowPlayerPicker(true);
-                      }}
-                      style={{
-                        width: "56px",
-                        height: "56px",
-                        borderRadius: "50%",
-                        background: playerName ? "#FF6B00" : "rgba(255,255,255,0.10)",
-                        border: playerName ? "2px solid #FF8C3A" : "1px solid rgba(255,255,255,0.20)",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        margin: "0 auto",
-                      }}>
-                      {playerName ? (
-                        <span style={{ fontSize: "11px", fontWeight: 700, color: "white", textAlign: "center" }}>
-                          {playerName.split(" ")[0]}
-                        </span>
-                      ) : (
-                        <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)" }}>{pos}</span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Player picker bottom sheet */}
-              {showPlayerPicker && (
-                <div style={{
-                  position: "fixed",
-                  inset: 0,
-                  background: "rgba(0,0,0,0.5)",
-                  zIndex: 10,
-                  display: "flex",
-                  alignItems: "flex-end",
-                }}>
-                  <div style={{
-                    width: "100%",
-                    background: "rgba(28,14,4,0.98)",
-                    borderRadius: "20px 20px 0 0",
-                    padding: "20px 16px 32px",
-                    maxHeight: "60vh",
-                    overflow: "auto",
-                  }}>
-                    <div style={{ height: "4px", width: "36px", background: "rgba(255,255,255,0.20)", borderRadius: "2px", margin: "0 auto 16px" }} />
-                    <p style={LABEL_STYLE}>Speler selecteren</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                      {activePlayers.map((player) => (
-                        <button
-                          key={player.id}
-                          onClick={() => handleSelectPlayer(player.id)}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "12px",
-                            padding: "12px",
-                            background: "rgba(255,255,255,0.06)",
-                            border: "0.5px solid rgba(255,255,255,0.10)",
-                            borderRadius: "10px",
-                            cursor: "pointer",
-                            color: "white",
-                            fontSize: "14px",
-                          }}
-                        >
-                          <div style={{
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "50%",
-                            background: "rgba(255,107,0,0.20)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "12px",
-                            fontWeight: 700,
-                            color: "#FF8C3A",
-                          }}>
-                            {player.shirt_number || "—"}
-                          </div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ fontWeight: 600, fontSize: "14px" }}>{player.name}</div>
-                            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)" }}>{player.position}</div>
-                          </div>
-                        </button>
+              {/* Desktop: conditional */}
+              <div className="hidden xl:block">
+                {showField ? (
+                  <>
+                    {/* Formation pills */}
+                    <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "8px" }}>
+                      {FORMATIONS.map((f) => (
+                        <button key={f} onClick={() => { setFormData({ ...formData, formation: f }); setLineupMap({}); }}
+                          style={{ whiteSpace: "nowrap", padding: "8px 14px", background: formData.formation === f ? "#FF6B00" : "rgba(255,255,255,0.08)", color: formData.formation === f ? "white" : "rgba(255,255,255,0.60)", border: formData.formation === f ? "none" : "0.5px solid rgba(255,255,255,0.12)", borderRadius: "10px", fontSize: "12px", fontWeight: 600, cursor: "pointer" }}
+                        >{f}</button>
                       ))}
                     </div>
-                    <button
-                      onClick={() => setShowPlayerPicker(false)}
-                      style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        background: "rgba(255,255,255,0.08)",
-                        color: "white",
-                        border: "0.5px solid rgba(255,255,255,0.12)",
-                        borderRadius: "10px",
-                        marginTop: "16px",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Sluiten
-                    </button>
+                    {/* Field grid */}
+                    <div style={{ background: "rgba(20,80,40,0.3)", border: "1px solid rgba(76,175,80,0.3)", borderRadius: "12px", padding: "16px", minHeight: "240px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", alignContent: "center" }}>
+                      {FIELD_POSITIONS[formData.formation]?.map((pos) => {
+                        const playerId = lineupMap[pos];
+                        const playerName = activePlayers.find(p => p.id === playerId)?.name;
+                        return (
+                          <button key={pos} onClick={() => { setSelectedPosition(pos); setShowPlayerPicker(true); }}
+                            style={{ width: "56px", height: "56px", borderRadius: "50%", background: playerName ? "#FF6B00" : "rgba(255,255,255,0.10)", border: playerName ? "2px solid #FF8C3A" : "1px solid rgba(255,255,255,0.20)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto" }}>
+                            {playerName ? <span style={{ fontSize: "11px", fontWeight: 700, color: "white", textAlign: "center" }}>{playerName.split(" ")[0]}</span> : <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)" }}>{pos}</span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {showPlayerPicker && (
+                      <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 10, display: "flex", alignItems: "flex-end" }}>
+                        <div style={{ width: "100%", background: "rgba(28,14,4,0.98)", borderRadius: "20px 20px 0 0", padding: "20px 16px 32px", maxHeight: "60vh", overflow: "auto" }}>
+                          <div style={{ height: "4px", width: "36px", background: "rgba(255,255,255,0.20)", borderRadius: "2px", margin: "0 auto 16px" }} />
+                          <p style={LABEL_STYLE}>Speler selecteren voor {selectedPosition}</p>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                            {activePlayers.map((player) => (
+                              <button key={player.id} onClick={() => handleSelectPlayer(player.id)}
+                                style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", cursor: "pointer", color: "white", fontSize: "14px" }}>
+                                <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(255,107,0,0.20)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "#FF8C3A" }}>{player.shirt_number || "—"}</div>
+                                <div style={{ flex: 1 }}>
+                                  <div style={{ fontWeight: 600, fontSize: "14px" }}>{player.name}</div>
+                                  <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)" }}>{player.position}</div>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                          <button onClick={() => setShowPlayerPicker(false)} style={{ width: "100%", padding: "12px 16px", background: "rgba(255,255,255,0.08)", color: "white", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "10px", marginTop: "16px", cursor: "pointer", fontSize: "14px", fontWeight: 600 }}>Sluiten</button>
+                        </div>
+                      </div>
+                    )}
+                    <div style={LABEL_STYLE}>Wissels</div>
+                    <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "8px" }}>
+                      {availableSubstitutes.map((player) => (
+                        <button key={player.id} onClick={() => toggleSubstitute(player.id)} style={{ whiteSpace: "nowrap", padding: "6px 12px", background: "rgba(255,107,0,0.12)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.30)", borderRadius: "10px", fontSize: "12px", fontWeight: 600, cursor: "pointer" }}>+ {player.name}</button>
+                      ))}
+                      {currentSubstitutes.map((player) => (
+                        <button key={player.id} onClick={() => toggleSubstitute(player.id)} style={{ whiteSpace: "nowrap", padding: "6px 12px", background: "rgba(255,107,0,0.25)", color: "#FF8C3A", border: "0.5px solid rgba(255,107,0,0.50)", borderRadius: "10px", fontSize: "12px", fontWeight: 600, cursor: "pointer" }}>✓ {player.name}</button>
+                      ))}
+                    </div>
+                    <button onClick={handleSave} style={{ background: "#FF6B00", color: "white", border: "none", borderRadius: "14px", height: "52px", fontSize: "16px", fontWeight: 600, width: "100%", cursor: "pointer" }}>Opslaan</button>
+                  </>
+                ) : (
+                  <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 16, overflow: "hidden", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                    <LineupPlayerList
+                      players={activePlayers}
+                      lineupMap={lineupMap}
+                      substitutes={formData.substitutes}
+                      formation={formData.formation}
+                      onLineupChange={setLineupMap}
+                      onSubstitutesChange={(subs) => setFormData({ ...formData, substitutes: subs })}
+                      onFormationChange={(f) => setFormData({ ...formData, formation: f })}
+                      onSave={handleSave}
+                      saving={saveMutation.isPending}
+                    />
                   </div>
-                </div>
-              )}
-
-              {/* Substitutes */}
-              <div>
-                <div style={LABEL_STYLE}>Wissels</div>
-                <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "8px" }}>
-                  {availableSubstitutes.map((player) => (
-                    <button
-                      key={player.id}
-                      onClick={() => toggleSubstitute(player.id)}
-                      style={{
-                        whiteSpace: "nowrap",
-                        padding: "6px 12px",
-                        background: "rgba(255,107,0,0.12)",
-                        color: "#FF8C3A",
-                        border: "0.5px solid rgba(255,107,0,0.30)",
-                        borderRadius: "10px",
-                        fontSize: "12px",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      + {player.name}
-                    </button>
-                  ))}
-                  {currentSubstitutes.map((player) => (
-                    <button
-                      key={player.id}
-                      onClick={() => toggleSubstitute(player.id)}
-                      style={{
-                        whiteSpace: "nowrap",
-                        padding: "6px 12px",
-                        background: "rgba(255,107,0,0.25)",
-                        color: "#FF8C3A",
-                        border: "0.5px solid rgba(255,107,0,0.50)",
-                        borderRadius: "10px",
-                        fontSize: "12px",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      ✓ {player.name}
-                    </button>
-                  ))}
-                </div>
+                )}
               </div>
-
-              <button
-                onClick={handleSave}
-                style={{
-                  background: "#FF6B00",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "14px",
-                  height: "52px",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  width: "100%",
-                  cursor: "pointer",
-                }}
-              >
-                Opslaan
-              </button>
             </div>
           )}
 
