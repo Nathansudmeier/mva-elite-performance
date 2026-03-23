@@ -100,6 +100,7 @@ const AuthenticatedApp = () => {
       <Route path="/MatchEdit" element={<MatchEdit />} />
       <Route path="/Messages" element={<LayoutWrapper currentPageName="Messages"><Messages /></LayoutWrapper>} />
       <Route path="/Chat" element={<LayoutWrapper currentPageName="Messages"><Chat /></LayoutWrapper>} />
+      <Route path="/ImportTrainingAttendance" element={<LayoutWrapper currentPageName="ImportTrainingAttendance"><ImportTrainingAttendance /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
