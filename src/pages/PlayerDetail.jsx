@@ -166,19 +166,19 @@ export default function PlayerDetail() {
 
       {/* Physical Tests */}
       {(yoyoTests.length > 0 || physicalTests.length > 0) && (
-        <div className="glass p-4">
+        <div className="glass-dark rounded-2xl p-4">
           <p className="t-label mb-3 flex items-center gap-2"><Activity size={12} /> Fysieke Data</p>
           <div className="space-y-2">
             {yoyoTests.slice(-3).map(t => (
-              <div key={t.id} className="flex justify-between">
-                <span className="t-secondary">Yo-Yo {t.date}</span>
-                <span className="t-card-title">Level {t.level} · {t.distance}m</span>
+              <div key={t.id} className="flex justify-between items-center gap-2">
+                <span className="t-secondary text-sm">Yo-Yo {t.date}</span>
+                <span className="t-card-title text-sm">Level {t.level} · {t.distance}m</span>
               </div>
             ))}
             {physicalTests.slice(-3).map(t => (
-              <div key={t.id} className="flex justify-between">
-                <span className="t-secondary">Sprint 30m {t.date}</span>
-                <span className="t-card-title">{t.sprint_30m}s</span>
+              <div key={t.id} className="flex justify-between items-center gap-2">
+                <span className="t-secondary text-sm">Sprint 30m {t.date}</span>
+                <span className="t-card-title text-sm">{t.sprint_30m}s</span>
               </div>
             ))}
           </div>
