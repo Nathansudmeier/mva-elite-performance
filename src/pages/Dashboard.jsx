@@ -51,10 +51,11 @@ export default function Dashboard() {
 
   // === BLOK 1: QUICK STATS ===
    const last4WeeksAgo = subDays(new Date(), 28);
+   const today = new Date().toISOString().split("T")[0];
 
-   // Agenda only: Training type items in last 4 weeks
+   // Agenda only: Training type items in last 4 weeks (from past to now)
    const recentAgendaTrainings = agendaItems.filter(ai => 
-     ai.type === "Training" && isAfter(new Date(ai.date), last4WeeksAgo)
+     ai.type === "Training" && isAfter(new Date(ai.date), last4WeeksAgo) && ai.date <= today
    );
    const recentAgendaTrainingAttendance = agendaAttendance.filter(aa => {
      const item = recentAgendaTrainings.find(ai => ai.id === aa.agenda_item_id);
