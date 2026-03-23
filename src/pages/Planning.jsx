@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { Plus, Calendar, List, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Calendar, List, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
 import AgendaCalendar from "@/components/agenda/AgendaCalendar";
 import AgendaItemCard from "@/components/agenda/AgendaItemCard";
 import AgendaForm from "@/components/agenda/AgendaForm";
@@ -13,26 +13,46 @@ export default function Planning() {
   const { isTrainer } = useCurrentUser();
   const qc = useQueryClient();
   const navigate = useNavigate();
-  const [view, setView] = useState("maand");
+  const [searchParams] = useSearchParams();
+  const [view, setView] = useState("lijst");
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
   const [showPast, setShowPast] = useState(false);
+  const [loadTimeout, setLoadTimeout] = useState(false);
 
-  const { data: items = [] } = useQuery({
+  const { data: items = [], isLoading: loadingItems, isError: errorItems } = useQuery({
     queryKey: ["agenda-items"],
     queryFn: () => base44.entities.AgendaItem.list("-date"),
   });
 
-  const { data: attendance = [] } = useQuery({
+  const { data: attendance = [], isLoading: loadingAttendance } = useQuery({
     queryKey: ["agenda-attendance-all"],
     queryFn: () => base44.entities.AgendaAttendance.list(),
   });
 
-  const { data: players = [] } = useQuery({
+  const { data: players = [], isLoading: loadingPlayers } = useQuery({
     queryKey: ["players-agenda"],
     queryFn: () => base44.entities.Player.filter({ active: true }),
   });
+
+  const isLoading = loadingItems || loadingAttendance || loadingPlayers;
+
+  // 5-second timeout fallback
+  useEffect(() => {
+    if (!isLoading) return;
+    const timer = setTimeout(() => setLoadTimeout(true), 5000);
+    return () => clearTimeout(timer);
+  }, [isLoading]);
+
+  // Auto-open item if ?id= param is provided
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id && items.length > 0) {
+      const item = items.find(i => i.id === id);
+      if (item) openDetail(item);
+    }
+  }, [searchParams, items]);
 
   const today = new Date().toISOString().split("T")[0];
   const sorted = [...items].sort((a, b) => a.date.localeCompare(b.date));
