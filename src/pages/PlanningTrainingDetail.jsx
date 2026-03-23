@@ -246,8 +246,8 @@ export default function PlanningTrainingDetail() {
         )}
 
         {/* Tab: Trainingsplan */}
-        {activeTab === 1 && (
-          <TrainingPlanEditor players={players} />
+         {activeTab === 1 && (
+          <TrainingPlanEditor players={players} trainingDate={item?.date} />
         )}
 
         {/* Tab: Aanwezigheid */}
