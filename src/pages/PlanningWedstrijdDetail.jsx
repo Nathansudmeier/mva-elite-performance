@@ -369,7 +369,7 @@ export default function PlanningWedstrijdDetail() {
         )}
 
         {/* Tab: Opstelling */}
-        {activeTab === 1 && (
+        {activeTab === 1 && !editingLineup && (
           <div className="space-y-4">
             {!match ? (
               <div className="glass-dark rounded-2xl p-6 text-center">
@@ -377,43 +377,27 @@ export default function PlanningWedstrijdDetail() {
                 <p className="t-tertiary mt-1 text-xs">Koppel een wedstrijd via Wedstrijden om de opstelling te beheren.</p>
               </div>
             ) : (
-              <>
-                {/* Formatie selector */}
-                {isTrainer && (
-                  <div>
-                    <p className="t-label mb-2">Formatie</p>
-                    <div className="flex flex-wrap gap-2">
-                      {FORMATIONS.map(f => (
-                        <button key={f} onClick={() => setFormation(f)}
-                          className="px-3 py-1.5 rounded-full text-sm font-semibold transition-all"
-                          style={{
-                            background: formation === f ? "rgba(255,140,58,0.20)" : "rgba(255,255,255,0.07)",
-                            color: formation === f ? "#FF8C3A" : "rgba(255,255,255,0.5)",
-                            border: `0.5px solid ${formation === f ? "rgba(255,140,58,0.35)" : "rgba(255,255,255,0.10)"}`,
-                          }}>
-                          {f}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <FieldLineup
+              <div className="glass-dark rounded-2xl p-4">
+                <DisplayLineup
+                  match={match}
                   players={players}
-                  lineupMap={lineupMap}
-                  formation={formation}
-                  onLineupChange={isTrainer ? setLineupMap : () => {}}
-                  readOnly={!isTrainer}
+                  isTrainerOrAdmin={isTrainer}
+                  onEditClick={() => setEditingLineup(true)}
                 />
-
-                {isTrainer && (
-                  <button onClick={saveLineup} disabled={saving} className="btn-primary">
-                    {saving ? "Opslaan..." : "Opstelling opslaan"}
-                  </button>
-                )}
-              </>
+              </div>
             )}
           </div>
+        )}
+
+        {/* Edit Lineup Modal */}
+        {editingLineup && (
+          <EditLineup
+            match={match}
+            players={players}
+            onSave={handleSaveLineupEdit}
+            onCancel={() => setEditingLineup(false)}
+            saving={saving}
+          />
         )}
 
         {/* Tab: Tactiek */}
