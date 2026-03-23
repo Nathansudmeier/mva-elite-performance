@@ -37,43 +37,18 @@ export default function TodayTrainingCard({ playerId }) {
 
       <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "8px" }}>Vandaag op de training</p>
 
-      {todayPlan.objective && (
-        <p style={{ fontSize: "16px", fontWeight: 600, color: "#ffffff", marginBottom: "12px", lineHeight: 1.3 }}>{todayPlan.objective}</p>
-      )}
+      <p style={{ fontSize: "16px", fontWeight: 600, color: "#ffffff", marginBottom: "12px", lineHeight: 1.3 }}>{todayTraining.title}</p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-        {(todayPlan.exercises || []).map((ex, i) => {
-          const playerGroup = (ex.groups || []).find(g => g.player_ids?.includes(playerId));
-          const groupColor = playerGroup ? (GROUP_COLOR_MAP[playerGroup.color] || "#FF8C3A") : null;
-
-          return (
-            <div key={ex.id || i} style={{ background: "rgba(0,0,0,0.18)", borderRadius: "12px", overflow: "hidden" }}>
-              {/* Foto bovenaan als aanwezig */}
-              {ex.field_photo && (
-                <img src={ex.field_photo} alt="" style={{ width: "100%", maxHeight: "160px", objectFit: "cover", display: "block" }} />
-              )}
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px" }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                    <span style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>{ex.name || "Oefenvorm"}</span>
-                    {playerGroup ? (
-                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "20px", background: groupColor + "30", border: `0.5px solid ${groupColor}`, color: groupColor, whiteSpace: "nowrap" }}>
-                        {playerGroup.name}
-                      </span>
-                    ) : (
-                      <span style={{ fontSize: "10px", fontWeight: 600, padding: "2px 8px", borderRadius: "20px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.45)", whiteSpace: "nowrap" }}>
-                        Niet ingedeeld
-                      </span>
-                    )}
-                  </div>
-                </div>
-                {ex.duration_minutes > 0 && (
-                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", flexShrink: 0 }}>{ex.duration_minutes} min</span>
-                )}
-              </div>
-            </div>
-          );
-        })}
+      <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "rgba(255,255,255,0.65)" }}>
+        <i className="ti ti-clock" style={{ fontSize: "16px" }} />
+        {todayTraining.start_time}
+        {todayTraining.location && (
+          <>
+            <span>•</span>
+            <i className="ti ti-map-pin" style={{ fontSize: "16px" }} />
+            {todayTraining.location}
+          </>
+        )}
       </div>
     </div>
   );
