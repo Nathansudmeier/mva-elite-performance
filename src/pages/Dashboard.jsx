@@ -117,11 +117,14 @@ export default function Dashboard() {
         present++;
       }
     });
-    recentPlayerAttendanceCombined[p.id] = totalRecentTrainings > 0 ? (present / totalRecentTrainings) * 100 : 100;
+    recentPlayerAttendanceCombined[p.id] = totalRecentTrainings > 0 ? (present / totalRecentTrainings) * 100 : 0;
   });
 
    const lowAttendancePlayers = activePlayers
-     .filter(p => recentPlayerAttendanceCombined[p.id] < 60)
+     .filter(p => {
+       const attendance = recentPlayerAttendanceCombined[p.id];
+       return attendance > 0 && attendance < 60;
+     })
      .map(p => ({ name: p.name, percentage: Math.round(recentPlayerAttendanceCombined[p.id]) }));
 
   const last7Days = subDays(new Date(), 7);
