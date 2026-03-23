@@ -240,6 +240,7 @@ export default function TopBar() {
           {/* Notificatie bell */}
           <div style={{ position: "relative" }}>
             <button
+              ref={bellRef}
               onClick={() => setShowNotifications(v => !v)}
               style={{
                 position: "relative",
