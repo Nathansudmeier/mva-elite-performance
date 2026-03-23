@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { base44 } from "@/api/base44Client";
+import NotificationPanel from "@/components/notifications/NotificationPanel";
 
 function useGreeting() {
   const h = new Date().getHours();
@@ -91,6 +92,14 @@ function DayBadge({ sessions, matches }) {
 export default function TopBar() {
   const { user, isTrainer, isSpeelster } = useCurrentUser();
   const greeting = useGreeting();
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const { data: unreadNotifications = [] } = useQuery({
+    queryKey: ["notifications", user?.email],
+    queryFn: () => base44.entities.Notification.filter({ user_email: user.email, is_read: false }),
+    enabled: !!user?.email,
+    refetchInterval: 60000,
+  });
 
   const { data: trainerRecord } = useQuery({
     queryKey: ["trainer-topbar", user?.trainer_id],
