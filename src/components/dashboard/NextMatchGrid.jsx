@@ -394,14 +394,20 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
 
 /**
  * NextMatchGrid — shows next match for MO17 and Dames 1 side by side.
- * @param {Array} matches - all matches
+ * @param {Array} matches - all matches (Match or AgendaItem records)
+ * @param {Array} agendaItems - AgendaItem records (preferred source)
  * @param {string|null} playerId - if provided, shows check-in button
  */
-export default function NextMatchGrid({ matches, playerId = null }) {
+export default function NextMatchGrid({ matches = [], agendaItems = [], playerId = null }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const futureMatches = matches.filter((m) => parseISO(m.date) >= today);
+  // Prefer AgendaItems of type Wedstrijd; fall back to Match records
+  const source = agendaItems.length > 0
+    ? agendaItems.filter(ai => ai.type === "Wedstrijd")
+    : matches;
+
+  const futureMatches = source.filter((m) => parseISO(m.date) >= today);
 
   const nextMO17 = futureMatches
     .filter((m) => m.team === "MO17")
