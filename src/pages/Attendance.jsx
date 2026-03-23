@@ -23,37 +23,46 @@ export default function Attendance() {
   const { data: agendaItems = [] } = useQuery({ queryKey: ["agenda-items"], queryFn: () => base44.entities.AgendaItem.filter({ type: "Training" }) });
   const { data: agendaAttendance = [] } = useQuery({ queryKey: ["agenda-attendance"], queryFn: () => base44.entities.AgendaAttendance.list() });
 
-  const activePlayers = players.filter((p) => p.active !== false);
-
   const createSessionMutation = useMutation({
     mutationFn: async () => {
-      const session = await base44.entities.TrainingSession.create({ date: sessionDate, type: sessionType, notes: sessionNotes });
-      const records = activePlayers.map((p) => ({ session_id: session.id, player_id: p.id, present: presentPlayerIds.includes(p.id) }));
-      await base44.entities.Attendance.bulkCreate(records);
-      return session;
+      const item = await base44.entities.AgendaItem.create({
+        type: "Training",
+        title: sessionNotes || "Training",
+        date: sessionDate,
+        start_time: "19:00",
+        team: "Beide",
+        reminder_1_days: 3,
+        reminder_2_days: 1,
+      });
+      const records = players.map((p) => ({
+        agenda_item_id: item.id,
+        player_id: p.id,
+        status: presentPlayerIds.includes(p.id) ? "aanwezig" : "afwezig",
+      }));
+      await base44.entities.AgendaAttendance.bulkCreate(records);
+      return item;
     },
-    onSuccess: (session) => {
-      queryClient.invalidateQueries({ queryKey: ["sessions"] });
-      queryClient.invalidateQueries({ queryKey: ["attendance"] });
+    onSuccess: (item) => {
+      queryClient.invalidateQueries({ queryKey: ["agenda-items"] });
+      queryClient.invalidateQueries({ queryKey: ["agenda-attendance"] });
       setNewSessionDialog(false);
       setSessionNotes("");
       setPresentPlayerIds([]);
-      setSelectedSessionId(session.id);
+      setSelectedSessionId(item.id);
     },
   });
 
   const toggleAttendance = useMutation({
-    mutationFn: async ({ attendanceId, present }) => {
-      await base44.entities.Attendance.update(attendanceId, { present });
+    mutationFn: async ({ attendanceId, status }) => {
+      await base44.entities.AgendaAttendance.update(attendanceId, { status });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["attendance"] });
-      // Do NOT invalidate sessions here — would cause re-sort and session jump
+      queryClient.invalidateQueries({ queryKey: ["agenda-attendance"] });
     },
   });
 
-  const selectedSession = sessions.find((s) => s.id === selectedSessionId) ?? null;
-  const sessionAttendance = selectedSession ? attendance.filter((a) => a.session_id === selectedSession.id) : [];
+  const selectedSession = agendaItems.find((s) => s.id === selectedSessionId) ?? null;
+  const sessionAttendance = selectedSession ? agendaAttendance.filter((a) => a.agenda_item_id === selectedSession.id) : [];
 
   const getPlayerAttendancePct = (playerId) => {
     if (sessions.length === 0) return 0;
