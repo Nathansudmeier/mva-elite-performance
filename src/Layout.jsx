@@ -20,7 +20,7 @@ const desenvolvidoItems = [
 
 const mainNavItems = [
   { name: "Dashboard", icon: "layout-grid", page: "Dashboard" },
-  { name: "Planning", icon: "calendar", page: "Planning" },
+  { name: "Planning", icon: "ti-calendar", page: "Planning" },
   { name: "Spelers", icon: "users", page: "Players" },
   { name: "Staff", icon: "user-cog", page: "Staff" },
   { name: "Berichten", icon: "message-circle", page: "Messages" },
