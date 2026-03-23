@@ -243,21 +243,37 @@ export default function TopBar() {
         {/* Rechts: bell + avatar */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           {/* Notificatie bell */}
-          <div
-            style={{
-              position: "relative",
-              width: "32px",
-              height: "32px",
-              borderRadius: "50%",
-              background: "rgba(255,255,255,0.07)",
-              border: "0.5px solid rgba(255,255,255,0.10)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-          >
-            <i className="ti ti-bell" style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)" }} />
+          <div style={{ position: "relative" }}>
+            <button
+              onClick={() => setShowNotifications(v => !v)}
+              style={{
+                position: "relative",
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: showNotifications ? "rgba(255,107,0,0.15)" : "rgba(255,255,255,0.07)",
+                border: showNotifications ? "0.5px solid rgba(255,107,0,0.30)" : "0.5px solid rgba(255,255,255,0.10)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+            >
+              <i className="ti ti-bell" style={{ fontSize: "14px", color: showNotifications ? "#FF8C3A" : "rgba(255,255,255,0.55)" }} />
+              {unreadNotifications.length > 0 && (
+                <div style={{
+                  position: "absolute", top: 0, right: 0,
+                  width: 8, height: 8, borderRadius: "50%",
+                  background: "#FF6B00", border: "1.5px solid #1c0e04",
+                }} />
+              )}
+            </button>
+            {showNotifications && user?.email && (
+              <NotificationPanel
+                userEmail={user.email}
+                onClose={() => setShowNotifications(false)}
+              />
+            )}
           </div>
 
           {/* Avatar */}
