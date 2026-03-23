@@ -64,6 +64,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/LiveMatch" element={<LayoutWrapper currentPageName="Wedstrijden"><LiveMatch /></LayoutWrapper>} />
+      <Route path="/live" element={<LiveTracker />} />
       <Route path="/" element={
         <LayoutWrapper currentPageName="Dashboard">
           <DashboardRouter />
