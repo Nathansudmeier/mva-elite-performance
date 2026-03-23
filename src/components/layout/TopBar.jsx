@@ -131,13 +131,6 @@ export default function TopBar() {
   });
 
   const profilePhoto = trainerRecord?.photo_url || playerRecord?.photo_url || null;
-  const isSpeelsterUser = !isTrainer && isSpeelster;
-
-  const profileLink = isSpeelsterUser
-    ? `/PlayerDashboard`
-    : isTrainer && user?.trainer_id
-    ? `/TrainerDetail?id=${user.trainer_id}`
-    : null;
 
   const firstName = user?.full_name?.split(" ")[0] || "trainer";
   const initials = user?.full_name
