@@ -206,11 +206,14 @@ export default function PlanningWedstrijdDetail() {
         currentMatch = newMatch;
       }
       
-      const lineupArr = Object.entries(data.lineup).map(([slot, player_id]) => ({ slot, player_id }));
+      const lineupArr = typeof data.lineup === 'object' && !Array.isArray(data.lineup)
+       ? Object.entries(data.lineup).map(([slot, player_id]) => ({ slot, player_id }))
+       : data.lineup || [];
+
       await base44.entities.Match.update(currentMatch.id, {
-        lineup: lineupArr,
-        substitutes: Array.isArray(data.substitutes) ? data.substitutes : [],
-        formation: data.formation,
+       lineup: lineupArr,
+       substitutes: Array.isArray(data.substitutes) ? data.substitutes : [],
+       formation: data.formation,
       });
       
       // Notify players
