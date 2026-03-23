@@ -28,7 +28,7 @@ const glassStyle = {
   overflow: "hidden",
 };
 
-export default function TrainingPlanEditor({ players }) {
+export default function TrainingPlanEditor({ players, trainingDate }) {
   const queryClient = useQueryClient();
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [editingPlan, setEditingPlan] = useState(null); // local draft
@@ -38,10 +38,12 @@ export default function TrainingPlanEditor({ players }) {
   const [newDate, setNewDate] = useState("");
   const [newObjective, setNewObjective] = useState("");
 
-  const { data: plans = [], isLoading } = useQuery({
+  const { data: allPlans = [], isLoading } = useQuery({
     queryKey: ["training-plans"],
     queryFn: () => base44.entities.TrainingPlan.list("-date"),
   });
+
+  const plans = trainingDate ? allPlans.filter(p => p.date === trainingDate) : allPlans;
 
   const createPlan = useMutation({
     mutationFn: (data) => base44.entities.TrainingPlan.create(data),
