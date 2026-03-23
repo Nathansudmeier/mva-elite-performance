@@ -149,6 +149,24 @@ export default function PlanningWedstrijdDetail() {
       formation,
       ...tactics,
     });
+    // Send opstelling notification to team players
+    if (lineupArr.length > 0) {
+      const allUsers = await base44.entities.User.list();
+      const allPlayers = await base44.entities.Player.filter({ active: true });
+      const playerEmails = allUsers
+        .filter(u => allPlayers.some(p => p.id === u.player_id || p.name === u.full_name))
+        .map(u => u.email).filter(Boolean);
+      await Promise.all([...new Set(playerEmails)].map(email =>
+        base44.entities.Notification.create({
+          user_email: email,
+          type: "opstelling",
+          title: "Opstelling bekend",
+          body: `De opstelling voor ${item?.title} is gepubliceerd`,
+          is_read: false,
+          link: `/Planning?id=${itemId}`,
+        })
+      )).catch(() => {});
+    }
     await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
     setSaving(false);
   }
