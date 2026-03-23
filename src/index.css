@@ -438,7 +438,7 @@
 .mobile-only { display: none; }
 .desktop-only { display: block; }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .mobile-only { display: block; }
   .desktop-only { display: none; }
 
@@ -459,9 +459,31 @@
   }
 }
 
-@media (min-width: 769px) {
+/* Tablet formaat: 600px–1024px */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .mobile-grid-2col {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .glass, .glass-orange, .glass-dark {
+    padding: 1.25rem !important;
+  }
+
+  .t-metric, .t-metric-orange {
+    font-size: 32px !important;
+  }
+}
+
+@media (min-width: 1024px) {
   .match-hero-bg {
     height: 260px !important;
+  }
+}
+
+/* Modal padding boven tab bar: tablet en kleiner */
+@media (max-width: 1023px) {
+  .modal-scroll-content {
+    padding-bottom: 80px !important;
   }
 }
 
