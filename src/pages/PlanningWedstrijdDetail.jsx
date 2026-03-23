@@ -25,6 +25,7 @@ export default function PlanningWedstrijdDetail() {
   const [absentReason, setAbsentReason] = useState("");
   const [showReasonInput, setShowReasonInput] = useState(false);
   const [reminderSent, setReminderSent] = useState(false);
+  const [editingLineup, setEditingLineup] = useState(false);
 
   // Local match state (for linked match)
   const [lineupMap, setLineupMap] = useState({});
