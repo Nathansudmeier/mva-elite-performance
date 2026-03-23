@@ -20,11 +20,9 @@ const desenvolvidoItems = [
 
 const mainNavItems = [
   { name: "Dashboard", icon: "layout-grid", page: "Dashboard" },
-  { name: "Agenda", icon: "calendar", page: "Agenda" },
-  { name: "Trainingen", icon: "list-check", page: "Trainingen" },
+  { name: "Planning", icon: "calendar", page: "Planning" },
   { name: "Spelers", icon: "users", page: "Players" },
   { name: "Staff", icon: "user-cog", page: "Staff" },
-  { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
   { name: "Berichten", icon: "message-circle", page: "Messages" },
 ];
 
