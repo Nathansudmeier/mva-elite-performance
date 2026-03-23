@@ -57,8 +57,14 @@ export default function Planning() {
 
   const today = new Date().toISOString().split("T")[0];
   const sorted = [...items].sort((a, b) => a.date.localeCompare(b.date));
-  const upcoming = sorted.filter(i => i.date >= today);
-  const past = sorted.filter(i => i.date < today).reverse();
+  
+  // Filter by type
+  const filtered = typeFilter === "alles" 
+    ? sorted 
+    : sorted.filter(i => i.type === (typeFilter === "trainingen" ? "Training" : "Wedstrijd"));
+  
+  const upcoming = filtered.filter(i => i.date >= today);
+  const past = filtered.filter(i => i.date < today).reverse();
 
   function getAttendanceFor(itemId) {
     return attendance.filter(a => a.agenda_item_id === itemId);
