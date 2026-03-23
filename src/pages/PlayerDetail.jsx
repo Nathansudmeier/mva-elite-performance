@@ -219,12 +219,13 @@ export default function PlayerDetail() {
 
       {/* Wedstrijdbeleving */}
       {(isTrainer || isOwnProfile) && (
-        <div className="glass p-4">
+        <div className="glass-dark rounded-2xl p-4">
           <p className="t-label mb-1 flex items-center gap-2"><Star size={12} /> Wedstrijdbeleving</p>
-          <p className="t-tertiary mb-4">Pre-game mentaal vs. post-game tevredenheid per wedstrijd</p>
+          <p className="t-tertiary mb-4 text-xs">Pre-game mentaal vs. post-game tevredenheid per wedstrijd</p>
           <WedstrijdbelevingChart playerId={playerId} />
         </div>
       )}
+      </div>
     </div>
   );
 }
