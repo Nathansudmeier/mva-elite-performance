@@ -164,7 +164,7 @@ export default function PlanningWedstrijdDetail() {
   const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
 
   return (
-    <div className="relative">
+    <div className="relative" style={{ width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box" }}>
       <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png" alt=""
         style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
 
