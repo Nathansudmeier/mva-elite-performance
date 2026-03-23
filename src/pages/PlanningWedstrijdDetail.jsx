@@ -56,7 +56,10 @@ export default function PlanningWedstrijdDetail() {
   // Load linked match data if present
   const { data: match } = useQuery({
     queryKey: ["match", item?.match_id],
-    queryFn: () => base44.entities.Match.filter({ id: item.match_id }).then(r => {
+    queryFn: async () => {
+      // Try by match_id first, then fall back to searching by opponent+date
+      let r = await base44.entities.Match.filter({ id: item.match_id });
+      if (!r.length) r = await base44.entities.Match.filter({ opponent: item.title, date: item.date });
       const m = r[0];
       if (m) {
         const lm = {};
@@ -71,8 +74,8 @@ export default function PlanningWedstrijdDetail() {
         });
       }
       return m;
-    }),
-    enabled: !!item?.match_id,
+    },
+    enabled: !!item,
   });
 
   const myPlayer = currentUser ? players.find(p => p.name === currentUser.full_name) : null;
