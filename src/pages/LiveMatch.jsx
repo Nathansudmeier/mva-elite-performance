@@ -5,13 +5,38 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft } from "lucide-react";
 import LiveMatchClock from "../components/live/LiveMatchClock";
 import LiveScore from "../components/live/LiveScore";
 import EventModal from "../components/live/EventModal";
 import MatchReport from "../components/live/MatchReport";
 import FieldLineup from "../components/wedstrijden/FieldLineup";
 import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
+import { format, parseISO } from "date-fns";
+import { nl } from "date-fns/locale";
+
+const BG_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png";
+
+function formatNL(dateStr) {
+  if (!dateStr) return "";
+  try { return format(parseISO(dateStr), "EEEE d MMMM yyyy", { locale: nl }); } catch { return dateStr; }
+}
+
+const glassCard = {
+  background: "rgba(255,255,255,0.09)",
+  backdropFilter: "blur(24px)",
+  WebkitBackdropFilter: "blur(24px)",
+  border: "0.5px solid rgba(255,255,255,0.18)",
+  borderRadius: "22px",
+};
+
+function BackBtn({ onClick }) {
+  return (
+    <button onClick={onClick}
+      style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+      <i className="ti ti-arrow-left" style={{ fontSize: 18, color: "#FF8C3A" }} />
+    </button>
+  );
+}
 
 const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
 
