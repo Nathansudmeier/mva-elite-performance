@@ -102,6 +102,7 @@ export default function EditLineup({ match, players, onSave, onCancel, saving })
         gap: "8px",
       }}>
         <button
+          type="button"
           onClick={onCancel}
           disabled={saving}
           style={{
@@ -120,6 +121,7 @@ export default function EditLineup({ match, players, onSave, onCancel, saving })
           Annuleren
         </button>
         <button
+          type="button"
           onClick={handleSave}
           disabled={saving}
           style={{
