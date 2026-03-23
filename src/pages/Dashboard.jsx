@@ -324,10 +324,12 @@ export default function Dashboard() {
         <div className="glass p-4" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <div>
             <p style={{ fontSize: "14px", fontWeight: 600, color: "#ffffff", marginBottom: "10px" }}>Seizoensresultaten</p>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "8px" }}>
-              <span style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{winPct}%</span>
-              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.40)" }}>winst</span>
-            </div>
+            <button onClick={() => navigate("/MatchResults")} style={{ textAlign: "left", background: "none", border: "none", cursor: "pointer", width: "100%" }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "8px" }}>
+                <span style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{winPct}%</span>
+                <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.40)" }}>winst</span>
+              </div>
+            </button>
             <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginBottom: "14px" }}>
               <div style={{ height: "100%", width: `${winPct}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
             </div>
