@@ -293,18 +293,9 @@ export default function LiveMatch() {
 
           {match && (
             <div style={{ ...glassCard, padding: "20px" }} className="space-y-5">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff" }}>vs. {match.opponent}</h2>
-                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)", marginTop: 2 }}>{match.home_away} · {formatNL(match.date)}</p>
-                </div>
-                <select
-                  value={formation}
-                  onChange={e => setFormation(e.target.value)}
-                  style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 14, color: "#fff", padding: "8px 12px", fontSize: 13, fontWeight: 600, outline: "none" }}
-                >
-                  {FORMATIONS.map(f => <option key={f} value={f} style={{ background: "#1c0e04" }}>{f}</option>)}
-                </select>
+              <div>
+                <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff" }}>vs. {match.opponent}</h2>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)", marginTop: 2 }}>{match.home_away} · {formatNL(match.date)}</p>
               </div>
 
               <div>
