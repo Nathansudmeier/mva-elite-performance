@@ -242,6 +242,13 @@ export default function PlanningTrainingDetail() {
                 <p className="t-secondary">{item.notes}</p>
               </div>
             )}
+
+            {/* Foto */}
+            {item.photo_url && (
+              <div className="glass-dark rounded-2xl overflow-hidden">
+                <img src={item.photo_url} alt={item.title} className="w-full h-auto object-cover" />
+              </div>
+            )}
           </div>
         )}
 
