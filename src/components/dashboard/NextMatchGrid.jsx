@@ -317,9 +317,14 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                     .toUpperCase()
                 )}
                 </div>
-                <div style={{ fontSize: "13px", fontWeight: 700, color: "white", textAlign: "center", letterSpacing: "-0.2px", maxWidth: "50px" }}>
-                {(nextMatch.opponent || nextMatch.title || "").split(" ")[0]}
-              </div>
+                {(() => {
+                  const name = nextMatch.title || nextMatch.opponent || "";
+                  return (
+                    <div style={{ fontSize: name.length > 12 ? "11px" : "12px", fontWeight: 600, color: "white", textAlign: "center", maxWidth: "80px", wordBreak: "break-word" }}>
+                      {name}
+                    </div>
+                  );
+                })()}
             </div>
           </div>
 
