@@ -117,6 +117,7 @@ export default function PlayerDashboard() {
   const attendancePercentage = allSeasonTrainings.length > 0
     ? (playerSeasonAttendance.length / allSeasonTrainings.length) * 100
     : 0;
+  const totalSeasonTrainings = allSeasonTrainings.length;
 
   const saveWellness = useMutation({
     mutationFn: () => base44.entities.WellnessLog.create({ ...wellnessForm, player_id: playerId, sleep: Number(wellnessForm.sleep), fatigue: Number(wellnessForm.fatigue), muscle_pain: Number(wellnessForm.muscle_pain) }),
