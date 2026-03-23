@@ -24,6 +24,7 @@ import Planning from './pages/Planning.jsx';
 import PlanningTrainingDetail from './pages/PlanningTrainingDetail.jsx';
 import PlanningWedstrijdDetail from './pages/PlanningWedstrijdDetail.jsx';
 import DashboardRouter from './pages/DashboardRouter.jsx';
+import LiveTracker from './pages/LiveTracker.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import SplashScreen from '@/components/SplashScreen';
