@@ -81,12 +81,46 @@ export default function AgendaForm({ item, onSave, onClose }) {
     }
   }
 
+  async function sendActivityNotifications(agendaItemId, formData) {
+    // Get all users and players to notify relevant team members
+    const [allUsers, allPlayers] = await Promise.all([
+      base44.entities.User.list(),
+      base44.entities.Player.filter({ active: true }),
+    ]);
+    const relevantPlayers = formData.team === "Beide"
+      ? allPlayers
+      : allPlayers.filter(p => {
+          const u = allUsers.find(u2 => u2.player_id === p.id || u2.full_name === p.name);
+          return !!u;
+        });
+    const emails = allUsers
+      .filter(u => {
+        const player = allPlayers.find(p => p.id === u.player_id || p.name === u.full_name);
+        if (!player) return false;
+        if (formData.team === "Beide") return true;
+        return true; // simplified: notify all players
+      })
+      .map(u => u.email)
+      .filter(Boolean);
+    // Deduplicate
+    const uniqueEmails = [...new Set(emails)];
+    await Promise.all(uniqueEmails.map(email =>
+      base44.entities.Notification.create({
+        user_email: email,
+        type: "activiteit",
+        title: `${formData.type}: ${formData.title}`,
+        body: `op ${formData.date} om ${formData.start_time}`,
+        is_read: false,
+        link: `/Planning?id=${agendaItemId}`,
+      })
+    ));
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
     if (item?.id) {
       await base44.entities.AgendaItem.update(item.id, form);
-      // If it's a wedstrijd/toernooi and has no match_id yet, create one
       if (isWedstrijd(form.type) && !item.match_id) {
         await ensureMatchRecord(item.id, form);
       }
@@ -95,6 +129,8 @@ export default function AgendaForm({ item, onSave, onClose }) {
       if (isWedstrijd(form.type)) {
         await ensureMatchRecord(created.id, form);
       }
+      // Send notifications to players for new activity
+      await sendActivityNotifications(created.id, form).catch(() => {});
     }
     await onSave();
     setSaving(false);
