@@ -215,6 +215,32 @@ export default function PlanningWedstrijdDetail() {
     navigate("/Planning");
   }
 
+  async function saveScore() {
+    if (!match) return;
+    setSaving(true);
+    await base44.entities.Match.update(match.id, {
+      score_home: parseInt(scoreHome) || 0,
+      score_away: parseInt(scoreAway) || 0,
+    });
+    await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
+    setSaving(false);
+    setEditingScore(false);
+  }
+
+  function getScoreResult() {
+    if (match?.score_home === undefined || match?.score_away === undefined) return null;
+    if (match.score_home > match.score_away) return "Winst";
+    if (match.score_home < match.score_away) return "Verlies";
+    return "Gelijk";
+  }
+
+  function getScoreBadgeStyles() {
+    const result = getScoreResult();
+    if (result === "Winst") return { bg: "rgba(74,222,128,0.15)", border: "rgba(74,222,128,0.25)", color: "#4ade80" };
+    if (result === "Gelijk") return { bg: "rgba(251,191,36,0.15)", border: "rgba(251,191,36,0.25)", color: "#fbbf24" };
+    return { bg: "rgba(248,113,113,0.15)", border: "rgba(248,113,113,0.25)", color: "#f87171" };
+  }
+
   if (isLoading || !item) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
