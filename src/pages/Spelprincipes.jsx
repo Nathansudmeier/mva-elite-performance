@@ -254,7 +254,7 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
 
       {open && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end xl:items-center justify-center p-4 overflow-hidden"
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-end xl:items-center justify-center p-4 overflow-hidden"
           onClick={() => setOpen(false)}
         >
           <div
@@ -263,7 +263,7 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-start justify-between gap-3 p-4 sm:p-5" style={{ borderBottom: "0.5px solid rgba(255,255,255,0.10)" }}>
+            <div className="sticky top-0 flex items-start justify-between gap-3 p-4 sm:p-5 z-10" style={{ background: "rgba(0,0,0,0.35)", borderBottom: "0.5px solid rgba(255,255,255,0.10)", backdropFilter: "blur(30px)" }}>
               <div className="flex-1">
                 <h2 className="t-card-title">{item.title}</h2>
                 <span
