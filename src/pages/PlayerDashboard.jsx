@@ -105,11 +105,6 @@ export default function PlayerDashboard() {
     queryFn: () => base44.entities.AgendaItem.list(),
   });
 
-  const { data: agendaAttendance = [] } = useQuery({
-    queryKey: ["agendaAttendance-all"],
-    queryFn: () => base44.entities.AgendaAttendance.list(),
-  });
-
   // Calculate attendance based on AgendaItem trainings
   const seasonStart = subDays(new Date(), 180); // Approximate season start (6 months)
   const allSeasonTrainings = agendaItems.filter(ai => 
