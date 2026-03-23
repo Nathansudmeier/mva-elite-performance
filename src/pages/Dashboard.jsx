@@ -294,8 +294,9 @@ export default function Dashboard() {
                   badgeBg = isWin ? "rgba(74,222,128,0.12)" : isDraw ? "rgba(251,191,36,0.12)" : "rgba(248,113,113,0.12)";
                   badgeColor = isWin ? "#4ade80" : isDraw ? "#fbbf24" : "#f87171";
                 }
+                const agendaMatch = agendaItems.find(ai => ai.match_id === m.id);
                 return (
-                  <button key={m.id} onClick={() => navigate("/LiveMatch", { state: { matchId: m.id } })} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < displayMatches.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none", background: "none", border: "none", width: "100%", cursor: "pointer", transition: "opacity 0.2s" }} onMouseEnter={e => e.currentTarget.style.opacity = "0.8"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+                 <button key={m.id} onClick={() => agendaMatch ? navigate(`/PlanningWedstrijdDetail?id=${agendaMatch.id}`) : navigate(`/Planning`)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < displayMatches.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none", background: "none", border: "none", width: "100%", cursor: "pointer", transition: "opacity 0.2s" }} onMouseEnter={e => e.currentTarget.style.opacity = "0.8"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
                       <div style={{ textAlign: "left" }}>
