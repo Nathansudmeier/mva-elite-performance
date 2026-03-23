@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { Plus, Calendar, List, ChevronDown, ChevronUp } from "lucide-react";
 import AgendaCalendar from "@/components/agenda/AgendaCalendar";
 import AgendaItemCard from "@/components/agenda/AgendaItemCard";
 import AgendaForm from "@/components/agenda/AgendaForm";
-import AgendaDetailModal from "@/components/agenda/AgendaDetailModal";
 import { formatDate } from "@/components/agenda/agendaUtils";
 
 export default function Planning() {
