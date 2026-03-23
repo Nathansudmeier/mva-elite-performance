@@ -205,7 +205,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── VOLGENDE WEDSTRIJDEN ── */}
-      <NextMatchGrid matches={matches} playerId={null} />
+      <NextMatchGrid matches={matches} agendaItems={agendaItems} playerId={null} />
 
       {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", overflow: "hidden", height: "auto" }} className="mobile-grid-2col">
