@@ -184,18 +184,8 @@ export default function Attendance() {
             <DialogTitle style={{ color: '#1A1F2E' }}>Nieuwe Sessie</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <Input type="date" value={sessionDate} onChange={(e) => setSessionDate(e.target.value)} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
-            <Select value={sessionType} onValueChange={setSessionType}>
-              <SelectTrigger className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Training">Training</SelectItem>
-                <SelectItem value="Wedstrijd">Wedstrijd</SelectItem>
-                <SelectItem value="Fysieke Test">Fysieke Test</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
+           <Input type="date" value={sessionDate} onChange={(e) => setSessionDate(e.target.value)} className="border-[#FDE8DC] text-[#1A1F2E]" style={{ backgroundColor: '#FFFFFF' }} />
+           <Input
               placeholder="Onderwerp (bijv. Positiespel, Afwerking...)"
               value={sessionNotes}
               onChange={(e) => setSessionNotes(e.target.value)}
