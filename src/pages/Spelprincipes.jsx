@@ -76,7 +76,7 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
             value={form.title}
             onChange={e => set("title", e.target.value)}
             placeholder="Naam van het spelprincipe"
-            style={{ width: "100%", fontSize: "18px", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "14px", padding: "12px 16px", color: "#ffffff", outline: "none" }}
+            style={{ width: "100%", fontSize: "15px", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "12px", padding: "10px 14px", color: "#ffffff", outline: "none" }}
           />
 
           {/* Categorie pills */}
