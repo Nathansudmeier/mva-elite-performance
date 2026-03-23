@@ -428,11 +428,6 @@
   overflow: hidden;
 }
 /* ── Modal mobile padding (boven tab bar) ── */
-@media (max-width: 767px) {
-  .modal-scroll-content {
-    padding-bottom: 80px !important;
-  }
-}
 
 /* ── Responsive utility classes ── */
 .mobile-only { display: none; }
