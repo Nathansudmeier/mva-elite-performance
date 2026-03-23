@@ -356,11 +356,38 @@ export default function PlanningWedstrijdDetail() {
 
           {/* Live wedstrijd knop - prominent voor trainers */}
           {isTrainer && match && (
-            <Link to={`/LiveMatch?matchId=${match.id}`}
-              className="mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
-              style={{ background: "#FF6B00", color: "#fff" }}>
-              <Play size={16} /> Live wedstrijdmodus
-            </Link>
+            <div className="mt-4 flex gap-2">
+              <Link to={`/LiveMatch?matchId=${match.id}`}
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
+                style={{ background: "#FF6B00", color: "#fff" }}>
+                <Play size={16} /> Live wedstrijdmodus
+              </Link>
+              <button onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: "MVA Noord Live",
+                    text: "Volg MVA Noord live",
+                    url: `${window.location.origin}/live?match_id=${match.id}`,
+                  });
+                }
+              }} style={{
+                background: "rgba(255,255,255,0.08)",
+                border: "0.5px solid rgba(255,255,255,0.12)",
+                color: "rgba(255,255,255,0.70)",
+                borderRadius: "14px",
+                height: "44px",
+                padding: "0 16px",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: 600,
+                transition: "opacity 0.15s",
+              }} onMouseEnter={(e) => e.target.style.opacity = "0.8"} onMouseLeave={(e) => e.target.style.opacity = "1"}>
+                <i className="ti ti-share" style={{ fontSize: "16px" }}></i>
+              </button>
+            </div>
           )}
         </div>
 
