@@ -15,14 +15,13 @@ export default function Attendance() {
   const { isTrainer } = useCurrentUser();
   const [newSessionDialog, setNewSessionDialog] = useState(false);
   const [sessionDate, setSessionDate] = useState(new Date().toISOString().split("T")[0]);
-  const [sessionType, setSessionType] = useState("Training");
   const [sessionNotes, setSessionNotes] = useState("");
   const [presentPlayerIds, setPresentPlayerIds] = useState([]);
   const [selectedSessionId, setSelectedSessionId] = useState(null);
 
-  const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
-  const { data: sessions = [] } = useQuery({ queryKey: ["sessions"], queryFn: () => base44.entities.TrainingSession.list("-date") });
-  const { data: attendance = [] } = useQuery({ queryKey: ["attendance"], queryFn: () => base44.entities.Attendance.list() });
+  const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.filter({ active: true }) });
+  const { data: agendaItems = [] } = useQuery({ queryKey: ["agenda-items"], queryFn: () => base44.entities.AgendaItem.filter({ type: "Training" }) });
+  const { data: agendaAttendance = [] } = useQuery({ queryKey: ["agenda-attendance"], queryFn: () => base44.entities.AgendaAttendance.list() });
 
   const activePlayers = players.filter((p) => p.active !== false);
 
