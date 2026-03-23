@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +20,7 @@ function timeAgo(dateStr) {
   } catch { return ""; }
 }
 
-export default function NotificationPanel({ userEmail, onClose }) {
+export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const panelRef = useRef();
@@ -47,7 +48,9 @@ export default function NotificationPanel({ userEmail, onClose }) {
   // Close on outside click
   useEffect(() => {
     const handler = (e) => {
-      if (panelRef.current && !panelRef.current.contains(e.target)) onClose();
+      const inPanel = panelRef.current?.contains(e.target);
+      const inAnchor = anchorRef?.current?.contains(e.target);
+      if (!inPanel && !inAnchor) onClose();
     };
     document.addEventListener("mousedown", handler);
     document.addEventListener("touchstart", handler);
@@ -55,7 +58,7 @@ export default function NotificationPanel({ userEmail, onClose }) {
       document.removeEventListener("mousedown", handler);
       document.removeEventListener("touchstart", handler);
     };
-  }, [onClose]);
+  }, [onClose, anchorRef]);
 
   const handleNotificationClick = (n) => {
     if (!n.is_read) markReadMutation.mutate(n.id);
@@ -64,47 +67,60 @@ export default function NotificationPanel({ userEmail, onClose }) {
   };
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
+  const isMobile = window.innerWidth < 768;
 
-  return (
+  // Bereken dropdown positie op basis van anchor
+  let dropdownStyle = {};
+  if (!isMobile && anchorRef?.current) {
+    const rect = anchorRef.current.getBoundingClientRect();
+    dropdownStyle = {
+      position: "fixed",
+      top: rect.bottom + 8,
+      right: window.innerWidth - rect.right,
+      width: 360,
+      borderRadius: 16,
+    };
+  } else {
+    dropdownStyle = {
+      position: "fixed",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      borderRadius: "24px 24px 0 0",
+    };
+  }
+
+  const panel = (
     <>
       {/* Mobile backdrop */}
-      <div
-        className="fixed inset-0 z-40 md:hidden"
-        style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
-        onClick={onClose}
-      />
+      {isMobile && (
+        <div
+          style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+          onClick={onClose}
+        />
+      )}
 
-      {/* Panel */}
       <div
         ref={panelRef}
-        className="fixed z-50 md:absolute"
         style={{
-          // Mobile: bottom sheet
-          bottom: 0,
-          left: 0,
-          right: 0,
-          // Desktop: dropdown
-          ...(window.innerWidth >= 768 ? {
-            bottom: "auto",
-            left: "auto",
-            right: 0,
-            top: "calc(100% + 8px)",
-            width: 360,
-          } : {}),
+          ...dropdownStyle,
+          zIndex: 9999,
           background: "rgba(20,10,3,0.96)",
           backdropFilter: "blur(30px)",
           WebkitBackdropFilter: "blur(30px)",
           border: "0.5px solid rgba(255,255,255,0.12)",
-          borderRadius: window.innerWidth >= 768 ? "16px" : "24px 24px 0 0",
           maxHeight: "80vh",
           display: "flex",
           flexDirection: "column",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.40)",
         }}
       >
         {/* Handle (mobile) */}
-        <div className="md:hidden flex justify-center pt-3 pb-1">
-          <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.20)" }} />
-        </div>
+        {isMobile && (
+          <div style={{ display: "flex", justifyContent: "center", paddingTop: 12, paddingBottom: 4 }}>
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.20)" }} />
+          </div>
+        )}
 
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 10px" }}>
@@ -157,7 +173,6 @@ export default function NotificationPanel({ userEmail, onClose }) {
                     transition: "background 0.15s",
                   }}
                 >
-                  {/* Icon */}
                   <div style={{
                     width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
                     background: `${cfg.color}18`,
@@ -166,8 +181,6 @@ export default function NotificationPanel({ userEmail, onClose }) {
                   }}>
                     <i className={`ti ${cfg.icon}`} style={{ fontSize: 16, color: cfg.color }} />
                   </div>
-
-                  {/* Text */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
                       <p style={{ fontSize: 13, fontWeight: 600, color: "#fff", lineHeight: 1.3 }}>{n.title}</p>
@@ -187,8 +200,10 @@ export default function NotificationPanel({ userEmail, onClose }) {
         </div>
 
         {/* Mobile bottom padding */}
-        <div className="md:hidden" style={{ height: 20 }} />
+        {isMobile && <div style={{ height: 20 }} />}
       </div>
     </>
   );
+
+  return createPortal(panel, document.body);
 }
