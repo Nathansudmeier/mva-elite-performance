@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { base44 } from "@/api/base44Client";
 import NotificationPanel from "@/components/notifications/NotificationPanel";
+import AvatarMenu from "@/components/layout/AvatarMenu";
 
 function useGreeting() {
   const h = new Date().getHours();
