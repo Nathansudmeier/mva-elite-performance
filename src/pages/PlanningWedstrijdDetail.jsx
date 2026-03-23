@@ -629,6 +629,7 @@ export default function PlanningWedstrijdDetail() {
             onSave={handleSaveLineupEdit}
             onCancel={() => setEditingLineup(false)}
             saving={saving}
+            error={saveError}
           />
         )}
 
