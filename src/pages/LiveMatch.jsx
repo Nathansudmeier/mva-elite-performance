@@ -116,6 +116,7 @@ export default function LiveMatch() {
   const [lineupMap, setLineupMap] = useState({});
   const [substitutes, setSubstitutes] = useState([]);
   const [formation, setFormation] = useState("4-3-3");
+  const [showField, setShowField] = useState(false); // desktop toggle
 
   // Live state
   const [phase, setPhase] = useState("pre");
