@@ -75,7 +75,7 @@ export default function Attendance() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-500 text-[#FF6B00]">Aanwezigheid</h1>
-          <p className="text-sm text-[#888888]">{sessions.length} sessies geregistreerd</p>
+          <p className="text-sm text-[#888888]">{agendaItems.length} sessies geregistreerd</p>
         </div>
         {isTrainer && (
           <Button onClick={() => setNewSessionDialog(true)} className="text-white" style={{ background: 'linear-gradient(135deg,#D45A30,#E8724A)' }}>
