@@ -288,13 +288,13 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
                       ref={dp.innerRef}
                       {...dp.draggableProps}
                       {...dp.dragHandleProps}
-                      className="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-grab"
+                      className="flex items-center gap-2 px-2 py-1.5 cursor-grab"
                       style={{
                         ...dp.draggableProps.style,
                         marginBottom: 4,
-                        backgroundColor: ds.isDragging ? "#D45A30" : "#FFFFFF",
-                        border: "1px solid #E8E6E1",
-                        borderRadius: 8,
+                        backgroundColor: ds.isDragging ? "rgba(212,90,48,0.40)" : "rgba(255,255,255,0.08)",
+                        border: `0.5px solid ${ds.isDragging ? "rgba(212,90,48,0.60)" : "rgba(255,255,255,0.12)"}`,
+                        borderRadius: 20,
                       }}
                     >
                       <div
@@ -305,7 +305,7 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
                           ? <img src={player.photo_url} className="w-full h-full object-cover" alt="" />
                           : player.name?.charAt(0)}
                       </div>
-                      <span className="text-[11px] font-semibold truncate leading-tight text-[#1A1A1A]">
+                      <span className="text-[11px] font-semibold truncate leading-tight" style={{ color: "#fff" }}>
                         {player.shirt_number ? `#${player.shirt_number} ` : ""}{player.name?.split(" ")[0]}
                       </span>
                     </div>
