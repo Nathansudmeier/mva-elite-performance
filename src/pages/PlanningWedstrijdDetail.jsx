@@ -382,6 +382,100 @@ export default function PlanningWedstrijdDetail() {
         {/* Tab: Overzicht */}
         {activeTab === 0 && (
           <div className="space-y-4">
+            {/* Score sectie */}
+            {match && (
+              <div className="glass-dark rounded-2xl p-4">
+                {!editingScore ? (
+                  <div className="text-center space-y-3">
+                    <div className="flex items-center justify-center gap-4">
+                      <div className="flex-1">
+                        {match.opponent_logo_url && (
+                          <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", margin: "0 auto 8px" }}>
+                            <img src={match.opponent_logo_url} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          </div>
+                        )}
+                        <p className="t-secondary-sm">MVA Noord</p>
+                      </div>
+                      <button type="button" onClick={() => { setEditingScore(true); setScoreHome(match.score_home ?? ""); setScoreAway(match.score_away ?? ""); }} style={{ minWidth: 0, background: "none", border: "none", cursor: isTrainer ? "pointer" : "default" }}>
+                        <p style={{ fontSize: "40px", fontWeight: 800, color: "white", letterSpacing: "-1px" }}>
+                          {match.score_home !== undefined && match.score_away !== undefined ? `${match.score_home} - ${match.score_away}` : "Nog niet gespeeld"}
+                        </p>
+                      </button>
+                      <div className="flex-1">
+                        {match.opponent_logo_url && (
+                          <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", margin: "0 auto 8px" }}>
+                            <img src={match.opponent_logo_url} alt="Opponent" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          </div>
+                        )}
+                        <p className="t-secondary-sm">{item.title}</p>
+                      </div>
+                    </div>
+                    {match.score_home !== undefined && match.score_away !== undefined && getScoreResult() && (
+                      <div>
+                        <span style={{
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          padding: "4px 14px",
+                          borderRadius: "20px",
+                          background: getScoreBadgeStyles().bg,
+                          border: `0.5px solid ${getScoreBadgeStyles().border}`,
+                          color: getScoreBadgeStyles().color,
+                        }}>
+                          {getScoreResult()}
+                        </span>
+                      </div>
+                    )}
+                    {isTrainer && match.score_home === undefined && (
+                      <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", marginTop: "8px" }}>Tik op de score om in te voeren</p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <p className="t-card-title text-center">Voer eindstand in</p>
+                    <div className="flex items-center justify-center gap-2">
+                      <input
+                        type="number"
+                        min="0"
+                        value={scoreHome}
+                        onChange={(e) => setScoreHome(e.target.value)}
+                        style={{
+                          width: "60px",
+                          height: "44px",
+                          fontSize: "20px",
+                          fontWeight: 600,
+                          textAlign: "center",
+                          background: "rgba(255,255,255,0.06)",
+                          border: "0.5px solid rgba(255,255,255,0.12)",
+                          borderRadius: "10px",
+                          color: "white",
+                        }}
+                      />
+                      <span style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.40)" }}>-</span>
+                      <input
+                        type="number"
+                        min="0"
+                        value={scoreAway}
+                        onChange={(e) => setScoreAway(e.target.value)}
+                        style={{
+                          width: "60px",
+                          height: "44px",
+                          fontSize: "20px",
+                          fontWeight: 600,
+                          textAlign: "center",
+                          background: "rgba(255,255,255,0.06)",
+                          border: "0.5px solid rgba(255,255,255,0.12)",
+                          borderRadius: "10px",
+                          color: "white",
+                        }}
+                      />
+                      <button type="button" onClick={saveScore} disabled={saving} style={{ width: "44px", height: "44px", background: "#4ade80", border: "none", borderRadius: "10px", color: "#1c0e04", cursor: "pointer", fontSize: "18px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</button>
+                      <button type="button" onClick={() => setEditingScore(false)} disabled={saving} style={{ width: "44px", height: "44px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "10px", color: "white", cursor: "pointer", fontSize: "18px", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* RSVP alleen voor toekomstige wedstrijden */}
             {!isTrainer && myPlayer && isFuture && (
               <div className="glass-dark rounded-2xl p-4 space-y-3">
