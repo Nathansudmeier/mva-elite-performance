@@ -123,11 +123,7 @@ function PlayersContent() {
                 className="relative w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center shrink-0 cursor-pointer group"
                 style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.3)" }}
               >
-                {player.photo_url ? (
-                  <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
-                ) : (
-                  <User size={22} style={{ color: "#FF8C3A" }} />
-                )}
+                <img src={player.photo_url || "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/4ecb27045_placeholder.png"} alt={player.name} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
                   <Camera size={14} className="text-white" />
                 </div>
