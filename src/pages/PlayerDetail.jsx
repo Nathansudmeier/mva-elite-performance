@@ -73,33 +73,38 @@ export default function PlayerDetail() {
   const physicalRatingKeys = ["startsnelheid", "snelheid_lang", "postuur", "blessuregevoeligheid", "duelkracht", "motorische_vaardigheden"];
 
   return (
-    <div className="space-y-6 pb-20">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link to="/Players" className="p-2 rounded-xl" style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
-          <ArrowLeft size={18} className="text-white" />
-        </Link>
-        <div className="flex items-center gap-4 flex-1">
-          {player.photo_url ? (
-            <img src={player.photo_url} alt={player.name} className="w-16 h-16 rounded-full object-cover" style={{ border: "2px solid rgba(255,107,0,0.4)" }} />
-          ) : (
-            <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A", border: "2px solid rgba(255,107,0,0.3)" }}>
-              {player.name?.[0]}
+    <div className="relative">
+      <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png" alt=""
+        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+      
+      <div className="relative z-10 space-y-4 md:space-y-6 pb-20">
+        {/* Header */}
+        <div className="flex items-center gap-2 md:gap-4">
+          <Link to="/Players" className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
+            <ArrowLeft size={18} color="#fff" />
+          </Link>
+          <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
+            {player.photo_url ? (
+              <img src={player.photo_url} alt={player.name} className="w-12 md:w-16 h-12 md:h-16 rounded-full object-cover flex-shrink-0" style={{ border: "2px solid rgba(255,107,0,0.4)" }} />
+            ) : (
+              <div className="w-12 md:w-16 h-12 md:h-16 rounded-full flex items-center justify-center text-lg md:text-xl font-bold flex-shrink-0" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A", border: "2px solid rgba(255,107,0,0.3)" }}>
+                {player.name?.[0]}
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <h1 className="t-page-title truncate">{player.name}</h1>
+              <p className="t-secondary text-xs md:text-sm">{player.position} · #{player.shirt_number}</p>
             </div>
-          )}
-          <div className="flex-1">
-            <h1 className="t-page-title text-2xl">{player.name}</h1>
-            <p className="t-secondary">{player.position} · #{player.shirt_number}</p>
           </div>
           {isTrainer && (
-            <Link to={`/PlayerRatingForm?player_id=${playerId}`}>
-              <button className="btn-secondary">
-                <ClipboardList size={14} /> Beoordelen
+            <Link to={`/PlayerRatingForm?player_id=${playerId}`} className="flex-shrink-0">
+              <button className="btn-secondary px-3 md:px-4 py-2 text-xs md:text-sm h-auto">
+                <ClipboardList size={14} />
               </button>
             </Link>
           )}
         </div>
-      </div>
 
       {/* IOP Goals */}
       {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
