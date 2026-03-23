@@ -47,27 +47,25 @@ function SpelprincipeModal({ initial, onSave, onClose, isSaving }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end xl:items-center justify-center p-4 overflow-hidden">
       <div
-        className="glass-dark modal-scroll-content w-full my-8"
+        className="glass-dark modal-scroll-content w-full xl:my-8"
         style={{
           maxWidth: "720px",
-          borderRadius: "24px",
-          padding: "2rem",
+          borderRadius: "24px 24px 0 0",
+          padding: "1.5rem",
           overflowY: "auto",
-          maxHeight: "90vh",
+          maxHeight: "95vh",
           overscrollBehavior: "contain",
           WebkitOverflowScrolling: "touch",
         }}
       >
         {/* Header */}
-        <div
-          className="flex items-center justify-between mb-6"
-        >
-          <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff" }}>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="t-section-title">
             {initial?.id ? "Spelprincipe bewerken" : "Spelprincipe toevoegen"}
           </h2>
-          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.08)", border: "none", borderRadius: "10px", padding: "8px", cursor: "pointer", display: "flex", alignItems: "center" }}>
+          <button onClick={onClose} className="p-2 rounded-lg" style={{ background: "rgba(255,255,255,0.08)", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }}>
             <i className="ti ti-x" style={{ fontSize: "20px", color: "rgba(255,255,255,0.7)" }} />
           </button>
         </div>
