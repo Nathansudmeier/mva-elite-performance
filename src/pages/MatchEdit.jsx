@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { ArrowLeft, ChevronDown } from "lucide-react";
+import LineupPlayerList from "@/components/wedstrijden/LineupPlayerList";
 
 const FORMATIONS = ["4-3-3", "4-2-3-1", "3-5-2", "4-4-2"];
 
