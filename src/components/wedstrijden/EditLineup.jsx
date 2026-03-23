@@ -29,6 +29,7 @@ export default function EditLineup({ match, players, onSave, onCancel, saving })
         borderBottom: "0.5px solid rgba(255,255,255,0.08)",
       }}>
         <button
+          type="button"
           onClick={onCancel}
           style={{
             width: "36px",
@@ -41,7 +42,10 @@ export default function EditLineup({ match, players, onSave, onCancel, saving })
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            transition: "background 0.15s",
           }}
+          onMouseOver={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.12)"}
+          onMouseOut={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
         >
           <i className="ti ti-arrow-left" style={{ fontSize: "18px" }} />
         </button>
