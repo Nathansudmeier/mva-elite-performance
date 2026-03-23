@@ -194,25 +194,31 @@ export default function PlanningWedstrijdDetail() {
         <div className="rounded-2xl p-5 relative overflow-hidden"
           style={{ background: "linear-gradient(135deg, rgba(255,107,0,0.20), rgba(28,14,4,0.60))", border: "0.5px solid rgba(255,107,0,0.30)" }}>
           <div className="flex items-center justify-between">
-            <div>
+            <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
                 <Trophy size={14} style={{ color: cfg.color }} />
                 <span className="t-label" style={{ color: cfg.color }}>{item.team}</span>
+                {item.home_away && (
+                  <span style={{ fontSize: "10px", fontWeight: 600, padding: "2px 8px", borderRadius: 20, background: item.home_away === "Thuis" ? "rgba(74,222,128,0.12)" : "rgba(251,191,36,0.12)", color: item.home_away === "Thuis" ? "#4ade80" : "#fbbf24", border: `0.5px solid ${item.home_away === "Thuis" ? "rgba(74,222,128,0.25)" : "rgba(251,191,36,0.25)"}` }}>
+                    {item.home_away}
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-2 t-secondary mb-1">
                 <Clock size={13} className="ic-muted" />
                 <span>{formatDate(item.date)} · {item.start_time}</span>
               </div>
-              {item.location && (
-                <div className="flex items-center gap-2 t-secondary">
-                  <MapPin size={13} className="ic-muted" />
-                  <span>{item.location}</span>
+            </div>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              {item.opponent_logo_url && (
+                <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", flexShrink: 0 }}>
+                  <img src={item.opponent_logo_url} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
               )}
-            </div>
-            <div className="flex gap-3 items-center">
-              <span className="t-secondary-sm" style={{ color: "#4ade80" }}>{aanwezigList.length} ✓</span>
-              <span className="t-secondary-sm" style={{ color: "#f87171" }}>{afwezigList.length} ✗</span>
+              <div className="flex flex-col items-end gap-1">
+                <span className="t-secondary-sm" style={{ color: "#4ade80" }}>{aanwezigList.length} ✓</span>
+                <span className="t-secondary-sm" style={{ color: "#f87171" }}>{afwezigList.length} ✗</span>
+              </div>
             </div>
           </div>
 

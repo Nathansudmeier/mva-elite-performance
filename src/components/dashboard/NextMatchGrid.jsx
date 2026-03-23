@@ -306,8 +306,8 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                 fontWeight: 700,
                 overflow: "hidden",
               }}>
-                {nextMatch.opponent_logo ? (
-                  <img src={nextMatch.opponent_logo} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                {(nextMatch.opponent_logo_url || nextMatch.opponent_logo) ? (
+                  <img src={nextMatch.opponent_logo_url || nextMatch.opponent_logo} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
                   (nextMatch.opponent || nextMatch.title || "?")
                     .split(" ")
