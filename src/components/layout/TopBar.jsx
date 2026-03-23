@@ -277,49 +277,14 @@ export default function TopBar() {
             )}
           </div>
 
-          {/* Avatar */}
-          {profileLink ? (
-            <Link to={profileLink} style={{ flexShrink: 0 }}>
-              <div
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                  background: "#FF6B00",
-                  overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {profilePhoto ? (
-                  <img src={profilePhoto} alt={user?.full_name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                ) : (
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#fff" }}>{initials}</span>
-                )}
-              </div>
-            </Link>
-          ) : (
-            <div
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                background: "#FF6B00",
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              {profilePhoto ? (
-                <img src={profilePhoto} alt={user?.full_name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              ) : (
-                <span style={{ fontSize: "12px", fontWeight: 700, color: "#fff" }}>{initials}</span>
-              )}
-            </div>
-          )}
+          {/* Avatar met dropdown */}
+          <AvatarMenu
+            user={user}
+            profilePhoto={profilePhoto}
+            initials={initials}
+            isTrainer={isTrainer}
+            isSpeelster={isSpeelster}
+          />
         </div>
       </div>
     </header>
