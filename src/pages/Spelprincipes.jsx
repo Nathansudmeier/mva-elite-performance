@@ -258,12 +258,12 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
           onClick={() => setOpen(false)}
         >
           <div
-            className="glass-dark modal-scroll-content w-full xl:max-w-2xl xl:my-8"
-            style={{ borderRadius: "24px 24px 0 0", overflowY: "auto", maxHeight: "95vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
+            className="glass-dark modal-scroll-content w-full xl:max-w-2xl xl:my-8 flex flex-col"
+            style={{ borderRadius: "24px 24px 0 0", maxHeight: "95vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="sticky top-0 flex items-start justify-between gap-3 p-4 sm:p-5 z-10" style={{ background: "rgba(0,0,0,0.35)", borderBottom: "0.5px solid rgba(255,255,255,0.10)", backdropFilter: "blur(30px)" }}>
+            <div className="flex items-start justify-between gap-3 p-4 sm:p-5 flex-shrink-0" style={{ background: "rgba(0,0,0,0.35)", borderBottom: "0.5px solid rgba(255,255,255,0.10)", backdropFilter: "blur(30px)" }}>
               <div className="flex-1">
                 <h2 className="t-card-title">{item.title}</h2>
                 <span
@@ -277,7 +277,7 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
                 <i className="ti ti-x" style={{ fontSize: "20px", color: "rgba(255,255,255,0.7)" }} />
               </button>
             </div>
-            <div className="p-4 sm:p-5 space-y-4">
+            <div className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
               {item.video_url && isYouTubeUrl(item.video_url) ? (
                 <YouTubeEmbed url={item.video_url} />
               ) : item.video_url ? (
