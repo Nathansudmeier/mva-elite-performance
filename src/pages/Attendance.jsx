@@ -102,7 +102,7 @@ export default function Attendance() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-semibold" style={isActive ? { color: '#fff' } : { color: '#1A1F2E' }}>{format(new Date(s.date), "d MMMM yyyy", { locale: nl })}</p>
-                    <p className="text-xs" style={isActive ? { color: 'rgba(255,255,255,0.7)' } : { color: '#2F3650' }}>{s.type}</p>
+                    <p className="text-xs" style={isActive ? { color: 'rgba(255,255,255,0.7)' } : { color: '#2F3650' }}>{s.title}</p>
                   </div>
                   <span className="text-xs font-bold" style={{ color: isActive ? '#F0926E' : '#D45A30' }}>{present}/{sAtt.length}</span>
                 </div>
