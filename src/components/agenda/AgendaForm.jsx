@@ -118,11 +118,21 @@ export default function AgendaForm({ item, onSave, onClose }) {
 
           {/* Titel */}
           <div>
-            <p className="t-label mb-1">Titel</p>
+            <p className="t-label mb-1">
+              {form.type === "Training" ? "TITEL" :
+               form.type === "Wedstrijd" ? "TEGENSTANDER" :
+               form.type === "Toernooi" ? "TOERNOOINAAM" :
+               "NAAM"}
+            </p>
             <input required value={form.title} onChange={e => set("title", e.target.value)}
               className="w-full px-3 py-2 rounded-xl text-sm text-white outline-none"
               style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}
-              placeholder="Naam van de activiteit" />
+              placeholder={
+                form.type === "Training" ? "Naam van de training" :
+                form.type === "Wedstrijd" ? "Naam van de tegenstander, bijv. Go Ahead" :
+                form.type === "Toernooi" ? "Naam van het toernooi" :
+                "Naam van het evenement"
+              } />
           </div>
 
           {/* Logo tegenstander - alleen voor Wedstrijd/Toernooi */}
