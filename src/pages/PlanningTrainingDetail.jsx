@@ -71,7 +71,9 @@ export default function PlanningTrainingDetail() {
       }
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["agenda-attendance", itemId] });
+      qc.invalidateQueries({ queryKey: ["agenda-attendance-detail", itemId] });
+      qc.invalidateQueries({ queryKey: ["agendaAttendance-all"] });
+      qc.invalidateQueries({ queryKey: ["agenda-items-all"] });
       setShowReasonInput(false);
       setAbsentReason("");
     },
