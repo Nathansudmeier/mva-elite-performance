@@ -157,7 +157,7 @@ export default function Attendance() {
             <div className="elite-card p-6">
               <h2 className="font-bold mb-4 text-[#1A1F2E]">Aanwezigheidsoverzicht</h2>
               <div className="space-y-2">
-                {[...activePlayers].sort((a, b) => getPlayerAttendancePct(b.id) - getPlayerAttendancePct(a.id)).map((p) => {
+                {[...players].sort((a, b) => getPlayerAttendancePct(b.id) - getPlayerAttendancePct(a.id)).map((p) => {
                   const pct = getPlayerAttendancePct(p.id);
                   return (
                     <div key={p.id} className="flex items-center gap-3 rounded-lg px-4 py-3" style={{ backgroundColor: '#FDE8DC' }}>
