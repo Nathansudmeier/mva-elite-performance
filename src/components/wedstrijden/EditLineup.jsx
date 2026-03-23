@@ -4,8 +4,24 @@ import LineupPlayerList from "./LineupPlayerList";
 const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
 
 export default function EditLineup({ match, players, onSave, onCancel, saving, error }) {
-  const [lineupMap, setLineupMap] = useState(match.lineup || {});
-  const [substitutes, setSubstitutes] = useState(match.substitutes || []);
+  const initLineup = () => {
+    if (!match.lineup) return {};
+    if (Array.isArray(match.lineup)) {
+      const map = {};
+      match.lineup.forEach(entry => { if (entry.slot && entry.player_id) map[entry.slot] = entry.player_id; });
+      return map;
+    }
+    return match.lineup;
+  };
+
+  const initSubs = () => {
+    if (!match.substitutes) return [];
+    if (Array.isArray(match.substitutes)) return match.substitutes;
+    return [];
+  };
+
+  const [lineupMap, setLineupMap] = useState(initLineup);
+  const [substitutes, setSubstitutes] = useState(initSubs);
   const [formation, setFormation] = useState(match.formation || "4-3-3");
 
   const handleSave = () => {
