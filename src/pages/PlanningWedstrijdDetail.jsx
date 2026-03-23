@@ -533,6 +533,10 @@ export default function PlanningWedstrijdDetail() {
                 <p className="t-secondary">Geen gekoppelde wedstrijd gevonden.</p>
                 <p className="t-tertiary mt-1 text-xs">Koppel een wedstrijd via Wedstrijden om de opstelling te beheren.</p>
               </div>
+            ) : !isTrainer && isFuture ? (
+              <div className="glass-dark rounded-2xl p-6 text-center">
+                <p className="t-secondary">De opstelling wordt bekend gemaakt op de dag van de wedstrijd.</p>
+              </div>
             ) : (
               <div className="glass-dark rounded-2xl p-4">
                 <DisplayLineup
