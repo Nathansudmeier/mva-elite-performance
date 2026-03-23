@@ -153,9 +153,6 @@ export default function PlayerDashboard() {
       {/* Upcoming Activities Compact */}
       <UpcomingActivitiesCompact playerId={playerId} />
 
-      {/* Next Matches */}
-      <NextMatchGrid matches={matches} />
-
       {/* Seizoensstatistieken */}
       <PlayerSeasonStats playerId={playerId} variant="grid" />
 
