@@ -100,6 +100,29 @@ export default function PlayerDashboard() {
     queryFn: () => base44.entities.TeamPhoto.list("-date"),
   });
 
+  const { data: agendaItems = [] } = useQuery({
+    queryKey: ["agendaItems-all"],
+    queryFn: () => base44.entities.AgendaItem.list(),
+  });
+
+  const { data: agendaAttendance = [] } = useQuery({
+    queryKey: ["agendaAttendance-all"],
+    queryFn: () => base44.entities.AgendaAttendance.list(),
+  });
+
+  // Calculate attendance based on AgendaItem trainings
+  const seasonStart = subDays(new Date(), 180); // Approximate season start (6 months)
+  const allSeasonTrainings = agendaItems.filter(ai => 
+    ai.type === "Training" && isAfter(new Date(ai.date), seasonStart)
+  );
+  const playerSeasonAttendance = agendaAttendance.filter(aa =>
+    aa.player_id === playerId && aa.status === "aanwezig" && 
+    allSeasonTrainings.find(ai => ai.id === aa.agenda_item_id)
+  );
+  const attendancePercentage = allSeasonTrainings.length > 0
+    ? (playerSeasonAttendance.length / allSeasonTrainings.length) * 100
+    : 0;
+
   const saveWellness = useMutation({
     mutationFn: () => base44.entities.WellnessLog.create({ ...wellnessForm, player_id: playerId, sleep: Number(wellnessForm.sleep), fatigue: Number(wellnessForm.fatigue), muscle_pain: Number(wellnessForm.muscle_pain) }),
     onSuccess: () => {
