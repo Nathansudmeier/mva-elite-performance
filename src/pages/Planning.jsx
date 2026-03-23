@@ -176,16 +176,6 @@ export default function Planning() {
             onSave={handleSave}
             onClose={() => { setShowForm(false); setEditItem(null); }} />
         )}
-
-        {/* Detail modal */}
-        {detailItem && (
-          <AgendaDetailModal
-            item={detailItem}
-            isTrainer={isTrainer}
-            onEdit={() => { setEditItem(detailItem); setDetailItem(null); setShowForm(true); }}
-            onDelete={() => handleDelete(detailItem)}
-            onClose={() => setDetailItem(null)} />
-        )}
       </div>
     </div>
   );
