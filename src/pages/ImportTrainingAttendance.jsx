@@ -28,7 +28,7 @@ export default function ImportTrainingAttendance() {
     try {
       // Upload file to get URL
       const uploadRes = await base44.integrations.Core.UploadFile({ file });
-      const fileUrl = uploadRes.file_url;
+      const fileUrl = uploadRes.url;
 
       // Extract data from Excel with flexible schema
       const extractRes = await base44.integrations.Core.ExtractDataFromUploadedFile({
