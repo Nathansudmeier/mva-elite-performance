@@ -196,7 +196,7 @@ export default function Layout({ children, currentPageName }) {
           <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", background: "rgba(255,150,0,0.30)", top: 380, right: -80, filter: "blur(70px)" }} />
           <div style={{ position: "absolute", width: 250, height: 250, borderRadius: "50%", background: "rgba(255,107,0,0.20)", bottom: 100, left: -40, filter: "blur(60px)" }} />
         </div>
-        <div className="relative p-4 md:p-6 lg:p-8 max-w-7xl mx-auto" style={{ zIndex: 2 }}>
+        <div className="relative p-4 md:p-6 xl:p-8 max-w-7xl mx-auto" style={{ zIndex: 2 }}>
           {children}
         </div>
       </main>
