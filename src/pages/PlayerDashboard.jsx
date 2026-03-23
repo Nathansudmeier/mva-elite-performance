@@ -34,6 +34,7 @@ const avg = (obj, keys) => {
 export default function PlayerDashboard() {
   const { user, playerId } = useCurrentUser();
   const queryClient = useQueryClient();
+  const { data: liveMatches = [] } = useLiveMatches();
 
   const [wellnessForm, setWellnessForm] = useState({
     date: new Date().toISOString().split("T")[0],
