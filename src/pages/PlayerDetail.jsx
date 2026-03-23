@@ -123,22 +123,22 @@ export default function PlayerDetail() {
 
       {/* Latest Ratings */}
       {latestRating && (isTrainer || isOwnProfile) && (
-        <div className="glass overflow-hidden">
-          <div className="relative p-5" style={{ background: "linear-gradient(135deg, rgba(255,107,0,0.35) 0%, rgba(229,90,0,0.25) 100%)", borderBottom: "0.5px solid rgba(255,107,0,0.3)" }}>
-            <div className="flex items-center justify-between">
+        <div className="glass-dark rounded-2xl overflow-hidden">
+          <div className="relative p-4 md:p-5" style={{ background: "linear-gradient(135deg, rgba(255,107,0,0.20) 0%, rgba(229,90,0,0.15) 100%)", borderBottom: "0.5px solid rgba(255,107,0,0.25)" }}>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
               <div>
                 <p className="t-label">Laatste Beoordeling</p>
-                <p className="t-card-title mt-0.5">{latestRating.meting} · {latestRating.date}</p>
+                <p className="t-card-title mt-0.5 text-sm">{latestRating.meting} · {latestRating.date}</p>
               </div>
-              <div className="rounded-xl px-4 py-2 text-center" style={{ background: "rgba(255,255,255,0.15)" }}>
-                <p className="t-metric">
+              <div className="rounded-xl px-3 md:px-4 py-2 text-center" style={{ background: "rgba(255,255,255,0.10)" }}>
+                <p className="t-metric-orange text-2xl md:text-3xl">
                   {(() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })()}
                 </p>
-                <p className="t-tertiary">totaal</p>
+                <p className="t-tertiary text-xs">totaal</p>
               </div>
             </div>
           </div>
-          <div className="p-4 grid grid-cols-2 gap-3">
+          <div className="p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { label: "Technisch", keys: technicalKeys, icon: <Zap size={14} />, color: "#60a5fa" },
               { label: "Tactisch", keys: tacticalKeys, icon: <Brain size={14} />, color: "#a78bfa" },
@@ -151,9 +151,9 @@ export default function PlayerDetail() {
                 <div key={label} className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
                   <div className="flex items-center gap-1.5 mb-2" style={{ color }}>
                     {icon}
-                    <span className="text-xs font-semibold uppercase tracking-wide">{label}</span>
+                    <span className="text-xs font-semibold uppercase tracking-tight">{label}</span>
                   </div>
-                  <p className="text-2xl font-bold" style={{ color }}>{avg}</p>
+                  <p className="text-xl md:text-2xl font-bold" style={{ color }}>{avg}</p>
                   <div className="progress-track mt-2">
                     <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
                   </div>
