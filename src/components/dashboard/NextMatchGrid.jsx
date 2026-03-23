@@ -128,7 +128,7 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
   return (
     <>
       <button
-        onClick={() => navigate(`/Wedstrijden?matchId=${nextMatch.id}`)}
+        onClick={() => navigate(`/PlanningWedstrijdDetail?id=${nextMatch.match_id || nextMatch.id}`)}
         style={{
           borderRadius: "22px",
           overflow: "hidden",

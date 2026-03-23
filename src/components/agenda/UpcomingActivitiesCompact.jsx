@@ -180,7 +180,7 @@ export default function UpcomingActivitiesCompact({ playerId }) {
       {/* More link */}
       {upcoming.length > 4 && (
         <button
-          onClick={() => navigate("/Agenda")}
+          onClick={() => navigate("/Planning")}
           style={{ fontSize: 12, color: "#FF8C3A", fontWeight: 600, background: "none", border: "none", cursor: "pointer", padding: 0 }}
         >
           Meer zien →
