@@ -612,39 +612,23 @@ export default function PlanningWedstrijdDetail() {
         )}
 
         {/* Tab: Opstelling */}
-        {activeTab === 1 && !editingLineup && (
-          <div className="space-y-4">
-            {!match ? (
-              <div className="glass-dark rounded-2xl p-6 text-center">
-                <p className="t-secondary">Geen gekoppelde wedstrijd gevonden.</p>
-                <p className="t-tertiary mt-1 text-xs">Koppel een wedstrijd via Wedstrijden om de opstelling te beheren.</p>
-              </div>
-            ) : !isTrainer && isFuture ? (
-              <div className="glass-dark rounded-2xl p-6 text-center">
-                <p className="t-secondary">De opstelling wordt bekend gemaakt op de dag van de wedstrijd.</p>
-              </div>
-            ) : (
-              <div className="glass-dark rounded-2xl p-4">
-                <DisplayLineup
-                  match={match}
-                  players={players}
-                  isTrainerOrAdmin={isTrainer}
-                  onEditClick={() => setEditingLineup(true)}
-                />
-              </div>
-            )}
-          </div>
+         {activeTab === 1 && !editingLineup && (
+          <LineupOverview
+            match={match}
+            players={players}
+            isTrainer={isTrainer}
+            onEditClick={() => setEditingLineup(true)}
+          />
         )}
 
-        {/* Edit Lineup Modal */}
+        {/* Lineup Selector Modal */}
         {editingLineup && (
-          <EditLineup
+          <LineupSelector
             match={match}
             players={players}
             onSave={handleSaveLineupEdit}
             onCancel={() => setEditingLineup(false)}
             saving={saving}
-            error={saveError}
           />
         )}
 
