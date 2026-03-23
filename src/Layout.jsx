@@ -230,16 +230,17 @@ export default function Layout({ children, currentPageName }) {
               <div style={{ display: "flex", gap: "6px", minWidth: "min-content", paddingRight: "8px" }}>
                 {tabItems.map((item) => {
                   const isActive = item.page === currentPageName;
+                  const isTablet = window.innerWidth >= 600 && window.innerWidth < 1024;
                   return (
                     <Link
                       key={item.page}
                       to={createPageUrl(item.page)}
                       onClick={() => setMobileOpen(false)}
-                      style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", padding: "6px 8px", borderRadius: "12px", textDecoration: "none", background: isActive ? "rgba(255,107,0,0.15)" : "transparent", border: isActive ? "0.5px solid rgba(255,107,0,0.25)" : "none", transition: "all 0.15s ease", flexShrink: 0 }}
+                      style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", padding: isTablet ? "8px 14px" : "6px 8px", borderRadius: "12px", textDecoration: "none", background: isActive ? "rgba(255,107,0,0.15)" : "transparent", border: isActive ? "0.5px solid rgba(255,107,0,0.25)" : "none", transition: "all 0.15s ease", flexShrink: 0 }}
                     >
                       {isActive && <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#FF6B00", marginBottom: "2px" }} />}
-                      <i className={`ti ti-${item.icon}`} style={{ fontSize: "22px", stroke: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", strokeWidth: 1.5, color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)" }} />
-                      <span style={{ fontSize: "10px", color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", fontWeight: isActive ? 600 : 400, whiteSpace: "nowrap" }}>
+                      <i className={`ti ti-${item.icon}`} style={{ fontSize: isTablet ? "24px" : "22px", stroke: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", strokeWidth: 1.5, color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)" }} />
+                      <span style={{ fontSize: isTablet ? "11px" : "10px", color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", fontWeight: isActive ? 600 : 400, whiteSpace: "nowrap" }}>
                         {item.name}
                       </span>
                     </Link>
