@@ -59,7 +59,7 @@ export default function Dashboard() {
    );
    const recentAgendaTrainingAttendance = agendaAttendance.filter(aa => {
      const item = recentAgendaTrainings.find(ai => ai.id === aa.agenda_item_id);
-     return item && (aa.status === "aanwezig" || aa.status === "afwezig");
+     return item && aa.status !== undefined && aa.status !== null;
    });
 
    const totalRecentTrainings = recentAgendaTrainings.length;
