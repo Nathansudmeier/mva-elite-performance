@@ -9,13 +9,16 @@ import { base44 } from "@/api/base44Client";
 export default function AvatarMenu({ user, profilePhoto, initials, isTrainer, isSpeelster }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Sluit bij klik buiten component
+  // Sluit bij klik buiten component én buiten portal dropdown
   useEffect(() => {
     if (!open) return;
     function handleClick(e) {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
+      const inContainer = containerRef.current?.contains(e.target);
+      const inDropdown = dropdownRef.current?.contains(e.target);
+      if (!inContainer && !inDropdown) {
         setOpen(false);
       }
     }
