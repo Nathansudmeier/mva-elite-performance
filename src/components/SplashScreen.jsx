@@ -117,6 +117,21 @@ export default function SplashScreen() {
         </p>
       </div>
 
+      {/* Version number */}
+      <div style={{
+        position: 'absolute',
+        bottom: '24px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        fontSize: '11px',
+        fontWeight: 600,
+        color: 'rgba(255,255,255,0.35)',
+        letterSpacing: '0.05em',
+        zIndex: 10,
+      }}>
+        v{APP_VERSION}
+      </div>
+
       {/* Loading indicator */}
       <div style={{
         position: 'absolute',
