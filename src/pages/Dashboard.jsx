@@ -15,6 +15,8 @@ import { format, subDays, isAfter } from "date-fns";
 import NextMatchGrid from "../components/dashboard/NextMatchGrid";
 import TrainerWeekReflectieCard from "../components/dashboard/TrainerWeekReflectieCard";
 import { nl } from "date-fns/locale";
+import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
+import { useLiveMatches } from "@/hooks/useLiveMatches";
 
 export default function Dashboard() {
   const navigate = useNavigate();
