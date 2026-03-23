@@ -114,8 +114,10 @@ export default function UpcomingActivitiesCompact({ playerId }) {
 
   if (!upcoming.length) return null;
 
-  const first = upcoming[0];
-  const rest = upcoming.slice(1, 4);
+  // Find first item without response, or first item if all have responses
+  const firstWithoutResponse = upcoming.find(i => !myAttendance.find(a => a.agenda_item_id === i.id));
+  const first = firstWithoutResponse || upcoming[0];
+  const rest = upcoming.filter(i => i.id !== first.id).slice(0, 3);
 
   return (
     <div className="space-y-3">
