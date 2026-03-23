@@ -24,6 +24,7 @@ const mainNavItems = [
   { name: "Spelers", icon: "users", page: "Players" },
   { name: "Staff", icon: "user-cog", page: "Staff" },
   { name: "Berichten", icon: "message-circle", page: "Messages" },
+  { name: "Trainingsvormen", icon: "dumbbell", page: "Trainingsvormen" },
 ];
 
 const secondaryNavItems = [
