@@ -138,8 +138,7 @@ export default function Layout({ children, currentPageName }) {
           {isSpeelsterUser ? (
             <>
               <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} />
-              <NavLink item={{ name: "Agenda", icon: "calendar", page: "Agenda" }} currentPageName={currentPageName} />
-              <NavLink item={{ name: "Trainingen", icon: "list-check", page: "Trainingen" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Planning", icon: "calendar", page: "Planning" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }} currentPageName={currentPageName} />
               <DeveloperGroup currentPageName={currentPageName} />
