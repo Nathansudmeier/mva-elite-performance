@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Camera, Check, Upload, X } from "lucide-react";
+import { Camera, Check, Upload } from "lucide-react";
 import { resizeImage } from "@/components/utils/imageResize";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export default function WinningTeamUpload({ players, onSaved }) {
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [photoFile, setPhotoFile] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   const togglePlayer = (id) => {
     setSelectedPlayers((prev) =>
@@ -18,23 +17,33 @@ export default function WinningTeamUpload({ players, onSaved }) {
   };
 
   const handleSave = async () => {
-    if (selectedPlayers.length === 0) return;
-    setSaving(true);
-    let photo_url = "";
-    if (photoFile) {
-      const resized = await resizeImage(photoFile);
-      const res = await base44.integrations.Core.UploadFile({ file: resized });
-      photo_url = res.file_url;
+    if (selectedPlayers.length === 0) {
+      setError("Selecteer minimaal één speelster");
+      return;
     }
-    await base44.entities.WinningTeam.create({
-      date,
-      winning_player_ids: selectedPlayers,
-      photo_url,
-    });
-    setSelectedPlayers([]);
-    setPhotoFile(null);
-    setSaving(false);
-    onSaved?.();
+    setSaving(true);
+    setError("");
+    try {
+      let photo_url = "";
+      if (photoFile) {
+        const resized = await resizeImage(photoFile);
+        const res = await base44.integrations.Core.UploadFile({ file: resized });
+        photo_url = res.file_url;
+      }
+      await base44.entities.WinningTeam.create({
+        date,
+        winning_player_ids: selectedPlayers,
+        photo_url,
+      });
+      setSelectedPlayers([]);
+      setPhotoFile(null);
+      setError("");
+      onSaved?.();
+    } catch (err) {
+      setError("Fout bij opslaan: " + err.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
