@@ -199,9 +199,6 @@ export default function PlayerDetail() {
         </div>
       )}
 
-      {/* Playing Minutes */}
-      <PlayerMinutesBar playerId={playerId} />
-
       {/* Wellness */}
       {wellness.length > 0 && (
         <div className="glass-dark rounded-2xl p-4">
