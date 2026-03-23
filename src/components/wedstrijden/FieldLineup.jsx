@@ -171,12 +171,13 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex gap-4 items-start">
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%", maxWidth: "100vw", boxSizing: "border-box", overflowX: "hidden" }}
+        className="md:flex-row md:items-start md:gap-4">
         {/* Football field */}
         <div
-          className="relative w-full"
+          className="relative w-full md:w-auto"
           style={{
-            maxWidth: 300,
+            maxWidth: "100%",
             aspectRatio: "2/3",
             borderRadius: 12,
             overflow: "hidden",
