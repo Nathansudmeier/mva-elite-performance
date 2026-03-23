@@ -20,6 +20,8 @@ import UpcomingActivitiesCompact from "../components/agenda/UpcomingActivitiesCo
 import PlayerSeasonStats from "../components/stats/PlayerSeasonStats";
 import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
 import { useLiveMatches } from "@/hooks/useLiveMatches";
+import PlayerAttendanceCard from "@/components/dashboard/PlayerAttendanceCard";
+import { subDays, isAfter } from "date-fns";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
 const TACTICAL = ["speelveld_groot", "omschakeling_balverlies", "speelveld_klein", "omschakeling_balbezit", "kijkgedrag"];
