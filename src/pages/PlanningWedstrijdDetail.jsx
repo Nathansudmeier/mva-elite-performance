@@ -21,12 +21,14 @@ export default function PlanningWedstrijdDetail() {
   const navigate = useNavigate();
   const { isTrainer } = useCurrentUser();
   const qc = useQueryClient();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState(0);
   const [showEdit, setShowEdit] = useState(false);
   const [absentReason, setAbsentReason] = useState("");
   const [showReasonInput, setShowReasonInput] = useState(false);
   const [reminderSent, setReminderSent] = useState(false);
   const [editingLineup, setEditingLineup] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   // Local match state (for linked match)
   const [lineupMap, setLineupMap] = useState({});
