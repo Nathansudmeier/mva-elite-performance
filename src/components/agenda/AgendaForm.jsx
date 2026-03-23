@@ -22,7 +22,10 @@ async function compressImage(file) {
       canvas.height = h;
       canvas.getContext("2d").drawImage(img, 0, 0, w, h);
       URL.revokeObjectURL(url);
-      canvas.toBlob(resolve, "image/jpeg", 0.85);
+      canvas.toBlob((blob) => {
+        const compressedFile = new File([blob], file.name, { type: "image/jpeg" });
+        resolve(compressedFile);
+      }, "image/jpeg", 0.85);
     };
     img.src = url;
   });
