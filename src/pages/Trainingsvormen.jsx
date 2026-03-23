@@ -4,7 +4,6 @@ import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { Link } from "react-router-dom";
 import { Plus, Search, ChevronRight, ClipboardList } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const categoryColors = {
   Tactisch: { bg: "rgba(96,165,250,0.20)", border: "rgba(96,165,250,0.40)", color: "#60a5fa" },
@@ -37,45 +36,41 @@ export default function Trainingsvormen() {
   const categories = ["Alle", "Tactisch", "Fysiek", "Positiespel", "Afwerking", "Spelprincipes"];
 
   return (
-    <div className="min-h-screen pb-20" style={{ backgroundColor: "#1c0e04" }}>
-      {/* Blur background */}
-      <div className="pointer-events-none fixed top-0 left-0 right-0 bottom-0 z-0" style={{ overflow: "hidden" }}>
-        <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: "rgba(255,107,0,0.35)", top: -160, left: -100, filter: "blur(80px)" }} />
-        <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", background: "rgba(96,165,250,0.25)", top: 200, right: -80, filter: "blur(70px)" }} />
-      </div>
+    <div className="min-h-screen" style={{ backgroundColor: "#1c0e04" }}>
+      <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png" alt=""
+        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
 
-      <div className="relative z-10 p-4 md:p-8 max-w-6xl mx-auto">
+      <div className="relative z-10 p-4 md:p-6 max-w-4xl mx-auto space-y-4">
         {/* Header */}
-        <div className="flex items-start justify-between mb-8">
-          <div>
-            <h1 className="t-page-title mb-1">Trainingsvormen</h1>
-            <p className="t-secondary">Bibliotheek</p>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <h1 className="t-page-title">Trainingsvormen</h1>
+            <p className="t-secondary text-xs">Bibliotheek met oefeningen</p>
           </div>
           {isTrainer && (
-            <Link to="/TrainingsvormForm">
-              <Button className="btn-primary flex items-center gap-2 h-10">
-                <Plus className="w-4 h-4" />
-                Nieuwe oefening
-              </Button>
+            <Link to="/TrainingsvormForm" className="flex-shrink-0">
+              <button className="btn-primary h-10 px-4 flex items-center gap-2 text-sm whitespace-nowrap">
+                <Plus size={16} />
+                Nieuw
+              </button>
             </Link>
           )}
         </div>
 
         {/* Filter pills */}
-        <div className="flex gap-3 overflow-x-auto pb-4 mb-6 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
           {categories.map(cat => (
             <button
               key={cat}
               onClick={() => setActiveFilter(cat)}
-              className="px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0"
+              className="px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex-shrink-0"
               style={
                 activeFilter === cat
                   ? { background: "#FF6B00", color: "white" }
                   : {
-                      background: "rgba(255,255,255,0.09)",
-                      border: "0.5px solid rgba(255,255,255,0.18)",
-                      color: "rgba(255,255,255,0.70)",
-                      backdropFilter: "blur(24px)"
+                      background: "rgba(255,255,255,0.08)",
+                      border: "0.5px solid rgba(255,255,255,0.12)",
+                      color: "rgba(255,255,255,0.60)"
                     }
               }
             >
@@ -85,34 +80,33 @@ export default function Trainingsvormen() {
         </div>
 
         {/* Search */}
-        <div className="mb-8 relative" style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(24px)", border: "0.5px solid rgba(255,255,255,0.18)", borderRadius: "22px", padding: "12px 16px" }}>
-          <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: "rgba(255,255,255,0.40)" }} />
+        <div className="glass-dark rounded-2xl px-4 py-3 flex items-center gap-2">
+          <Search size={16} style={{ color: "rgba(255,255,255,0.40)" }} />
           <input
             type="text"
-            placeholder="Zoek op naam of coaching point..."
+            placeholder="Zoek oefening..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 bg-transparent text-white text-sm outline-none placeholder-shown:text-opacity-40"
-            style={{ color: "white" }}
+            className="flex-1 bg-transparent text-sm outline-none text-white placeholder:text-opacity-40"
           />
         </div>
 
         {/* Exercises */}
         {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16">
-            <ClipboardList className="w-12 h-12 mb-4" style={{ color: "rgba(255,255,255,0.30)" }} />
-            <p className="t-secondary">Nog geen trainingsvormen toegevoegd</p>
+          <div className="flex flex-col items-center justify-center py-12">
+            <ClipboardList size={32} style={{ color: "rgba(255,255,255,0.20)" }} className="mb-3" />
+            <p className="t-secondary text-sm">Geen trainingsvormen gevonden</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {filtered.map(ex => (
-              <Link key={ex.id} to={`/TrainingsvormDetail?id=${ex.id}`}>
-                <div className="glass p-4 rounded-xl hover:opacity-90 transition-opacity cursor-pointer">
-                  <div className="flex items-start justify-between gap-4">
+              <Link key={ex.id} to={`/TrainingsvormDetail?id=${ex.id}`} className="block">
+                <div className="glass-dark rounded-2xl p-3.5 transition-opacity hover:opacity-80">
+                  <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
                         <span
-                          className="text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0"
+                          className="text-xs font-semibold px-2 py-1 rounded-lg whitespace-nowrap flex-shrink-0"
                           style={{
                             background: categoryColors[ex.category].bg,
                             border: `0.5px solid ${categoryColors[ex.category].border}`,
@@ -121,23 +115,16 @@ export default function Trainingsvormen() {
                         >
                           {ex.category}
                         </span>
-                      </div>
-                      <h3 className="font-bold text-white text-base mb-1 truncate">{ex.name}</h3>
-                      <p className="t-secondary text-xs line-clamp-2">{ex.description}</p>
-                      <div className="flex gap-2 mt-3 flex-wrap">
                         {ex.duration_minutes && (
-                          <span className="text-xs px-2 py-1 rounded-full" style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.60)" }}>
+                          <span className="t-tertiary-sm px-2 py-1 rounded-lg flex-shrink-0" style={{ background: "rgba(255,255,255,0.05)" }}>
                             {ex.duration_minutes} min
                           </span>
                         )}
-                        {ex.groups && ex.groups.length > 0 && (
-                          <span className="text-xs px-2 py-1 rounded-full" style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.60)" }}>
-                            {ex.groups.length} groepen
-                          </span>
-                        )}
                       </div>
+                      <p className="t-card-title truncate">{ex.name}</p>
+                      {ex.description && <p className="t-secondary text-xs line-clamp-1 mt-1">{ex.description}</p>}
                     </div>
-                    <ChevronRight className="w-5 h-5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.40)" }} />
+                    <ChevronRight size={18} style={{ color: "rgba(255,255,255,0.30)", flexShrink: 0 }} />
                   </div>
                 </div>
               </Link>
