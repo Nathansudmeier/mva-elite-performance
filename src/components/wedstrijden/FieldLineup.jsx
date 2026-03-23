@@ -267,16 +267,18 @@ export default function FieldLineup({ players, lineupMap, formation, onLineupCha
               ref={provided.innerRef}
               {...provided.droppableProps}
               style={{
-                flex: 1,
-                minWidth: 0,
+                width: "100%",
+                float: "none",
+                position: "static",
                 minHeight: 80,
                 borderRadius: 8,
                 padding: "6px 4px",
                 backgroundColor: snapshot.isDraggingOver ? "rgba(240,146,110,0.15)" : "transparent",
                 transition: "background-color 0.2s",
+                boxSizing: "border-box",
               }}
             >
-              <p className="text-[10px] font-bold uppercase tracking-wider mb-2 text-[#888888]">
+              <p style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "rgba(255,255,255,0.55)", marginBottom: 8 }}>
                 Selectie
               </p>
               {benchPlayers.map((player, index) => (
