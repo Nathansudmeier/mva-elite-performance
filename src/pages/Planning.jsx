@@ -179,8 +179,29 @@ export default function Planning() {
           </div>
         )}
 
-        {/* Lijstweergave */}
+        {/* Type filter (only in list view) */}
         {view === "lijst" && (
+          <div className="flex rounded-full overflow-hidden p-0.5 w-fit" style={{ background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
+            {[
+              { key: "alles", label: "Alles" },
+              { key: "trainingen", label: "Trainingen" },
+              { key: "wedstrijden", label: "Wedstrijden" }
+            ].map(({ key, label }) => (
+              <button key={key} onClick={() => setTypeFilter(key)}
+                className="px-3 py-1.5 text-sm font-semibold transition-all rounded-full"
+                style={{
+                  background: typeFilter === key ? "rgba(255,140,58,0.25)" : "transparent",
+                  color: typeFilter === key ? "#FF8C3A" : "rgba(255,255,255,0.45)",
+                  border: typeFilter === key ? "0.5px solid rgba(255,140,58,0.35)" : "0.5px solid transparent",
+                }}>
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Lijstweergave */}
+         {view === "lijst" && (
           <div className="space-y-3">
             {upcoming.length === 0 && (
               <div className="glass-dark rounded-2xl p-8 text-center">
