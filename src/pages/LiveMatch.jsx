@@ -166,7 +166,7 @@ export default function LiveMatch() {
     return (
       <div className="p-8 text-center text-white">
         <p>Wedstrijd niet gevonden.</p>
-        <Button onClick={() => navigate("/Wedstrijden")} className="mt-4">Terug</Button>
+        <button onClick={() => navigate("/Wedstrijden")} className="mt-4 btn-primary">Terug</button>
       </div>
     );
   }
@@ -174,60 +174,65 @@ export default function LiveMatch() {
   // PRE-GAME
   if (phase === "pre") {
     return (
-      <div className="space-y-6 pb-20 lg:pb-6">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/Wedstrijden")} className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
-            <ArrowLeft size={20} className="text-[#1A1A1A]" />
-          </button>
-          <div>
-            <h1 className="text-2xl font-500 text-[#1A1A1A]">Live Wedstrijd</h1>
-            {match && <p className="text-sm text-[#888888]">vs. {match.opponent} · {match.date}</p>}
-          </div>
-        </div>
-
-        {match && (
-          <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm space-y-5">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-500 text-[#1A1A1A]">vs. {match.opponent}</h2>
-                <p className="text-sm text-[#888888]">{match.home_away} · {match.date}</p>
-              </div>
-              <Select value={formation} onValueChange={setFormation}>
-                <SelectTrigger className="w-28 border-[#E8E6E1] text-[#1A1A1A] bg-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {FORMATIONS.map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-
+      <div className="relative min-h-screen pb-24">
+        <img src={BG_URL} alt="" style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+        <div className="relative z-10 space-y-5 p-4">
+          {/* Header */}
+          <div className="flex items-center gap-3">
+            <BackBtn onClick={() => navigate("/Planning")} />
             <div>
-              <p className="text-xs font-500 uppercase tracking-wider mb-3 text-[#FF6B00]">Opstelling</p>
-              <FieldLineup
-                players={activePlayers}
-                lineupMap={lineupMap}
-                formation={formation}
-                onLineupChange={setLineupMap}
-              />
+              <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>Live Wedstrijd</h1>
+              {match && <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)" }}>vs. {match.opponent} · {formatNL(match.date)}</p>}
             </div>
-
-            <SubstitutesPicker
-              players={activePlayers}
-              lineupMap={lineupMap}
-              substitutes={substitutes}
-              onSubstitutesChange={setSubstitutes}
-            />
-
-            <Button
-              onClick={startMatch}
-              disabled={Object.keys(lineupMap).length === 0}
-              className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white text-lg py-6 font-500"
-            >
-              🚀 Start Wedstrijd
-            </Button>
           </div>
-        )}
+
+          {match && (
+            <div style={{ ...glassCard, padding: "20px" }} className="space-y-5">
+              {/* Match info */}
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff" }}>vs. {match.opponent}</h2>
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)", marginTop: 2 }}>{match.home_away} · {formatNL(match.date)}</p>
+                </div>
+                <select
+                  value={formation}
+                  onChange={e => setFormation(e.target.value)}
+                  style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 14, color: "#fff", padding: "8px 12px", fontSize: 13, fontWeight: 600, outline: "none" }}
+                >
+                  {FORMATIONS.map(f => <option key={f} value={f} style={{ background: "#1c0e04" }}>{f}</option>)}
+                </select>
+              </div>
+
+              {/* Field + Players stacked vertically */}
+              <div>
+                <p style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "#FF8C3A", marginBottom: 8 }}>Opstelling</p>
+                <div style={{ height: 220, borderRadius: 16, overflow: "hidden", marginBottom: 16 }}>
+                  <FieldLineup
+                    players={activePlayers}
+                    lineupMap={lineupMap}
+                    formation={formation}
+                    onLineupChange={setLineupMap}
+                  />
+                </div>
+                <SubstitutesPicker
+                  players={activePlayers}
+                  lineupMap={lineupMap}
+                  substitutes={substitutes}
+                  onSubstitutesChange={setSubstitutes}
+                />
+              </div>
+
+              <button
+                onClick={startMatch}
+                disabled={Object.keys(lineupMap).length === 0}
+                style={{ width: "100%", height: 52, background: Object.keys(lineupMap).length === 0 ? "rgba(255,107,0,0.35)" : "#FF6B00", border: "none", borderRadius: 14, color: "#fff", fontSize: 15, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: Object.keys(lineupMap).length === 0 ? "not-allowed" : "pointer" }}
+              >
+                <i className="ti ti-player-play" style={{ fontSize: 18 }} />
+                Start Wedstrijd
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -235,20 +240,21 @@ export default function LiveMatch() {
   // FINISHED — show report
   if (phase === "finished") {
     return (
-      <div className="space-y-6 pb-20 lg:pb-6">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/Wedstrijden")} className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
-            <ArrowLeft size={20} className="text-[#1A1A1A]" />
-          </button>
-          <div>
-            <h1 className="text-2xl font-500 text-[#1A1A1A]">Wedstrijdverslag</h1>
-            <p className="text-sm text-[#888888]">vs. {match?.opponent}</p>
+      <div className="relative min-h-screen pb-24">
+        <img src={BG_URL} alt="" style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+        <div className="relative z-10 space-y-5 p-4">
+          <div className="flex items-center gap-3">
+            <BackBtn onClick={() => navigate("/Planning")} />
+            <div>
+              <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>Wedstrijdverslag</h1>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)" }}>vs. {match?.opponent}</p>
+            </div>
           </div>
+          {match && <MatchReport match={{ ...match, live_events: events, halftime_notes: halftimeNotes }} players={activePlayers} />}
+          <button onClick={() => navigate("/Planning")} className="btn-primary">
+            Terug naar Planning
+          </button>
         </div>
-        {match && <MatchReport match={{ ...match, live_events: events, halftime_notes: halftimeNotes }} players={activePlayers} />}
-        <Button onClick={() => navigate("/Wedstrijden")} className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white">
-          Terug naar Wedstrijden
-        </Button>
       </div>
     );
   }
@@ -256,33 +262,36 @@ export default function LiveMatch() {
   // HALFTIME
   if (phase === "halftime") {
     return (
-      <div className="space-y-6 pb-20 lg:pb-6">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/Wedstrijden")} className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
-            <ArrowLeft size={20} className="text-[#1A1A1A]" />
-          </button>
-          <h1 className="text-2xl font-500 text-[#1A1A1A]">Rust</h1>
-        </div>
+      <div className="relative min-h-screen pb-24">
+        <img src={BG_URL} alt="" style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+        <div className="relative z-10 space-y-5 p-4">
+          <div className="flex items-center gap-3">
+            <BackBtn onClick={() => navigate("/Planning")} />
+            <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>Rust</h1>
+          </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm text-center space-y-4">
-          <p className="text-xs font-500 uppercase tracking-widest text-[#888888]">Ruststand</p>
-          <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
-        </div>
+          <div style={{ ...glassCard, padding: "24px", textAlign: "center" }} className="space-y-4">
+            <p style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.50)" }}>Ruststand</p>
+            <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
+          </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm space-y-3">
-          <h3 className="font-500 text-[#1A1A1A]">Rustbespreking</h3>
-          <Textarea
-            placeholder="Notities voor de rustbespreking..."
-            value={halftimeNotes}
-            onChange={(e) => setHalftimeNotes(e.target.value)}
-            className="border-[#E8E6E1] text-[#1A1A1A] bg-white h-32"
-          />
-          <Button
-            onClick={startSecondHalf}
-            className="w-full bg-[#FF6B00] hover:bg-[#E55A00] text-white text-base py-4 font-500"
-          >
-            ▶ Start 2e Helft
-          </Button>
+          <div style={{ ...glassCard, padding: "20px" }} className="space-y-3">
+            <h3 style={{ fontSize: 15, fontWeight: 600, color: "#fff" }}>Rustbespreking</h3>
+            <textarea
+              placeholder="Notities voor de rustbespreking..."
+              value={halftimeNotes}
+              onChange={(e) => setHalftimeNotes(e.target.value)}
+              rows={4}
+              style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 14, color: "#fff", padding: "10px 14px", fontSize: 13, outline: "none", resize: "none" }}
+            />
+            <button
+              onClick={startSecondHalf}
+              style={{ width: "100%", height: 52, background: "#FF6B00", border: "none", borderRadius: 14, color: "#fff", fontSize: 15, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer" }}
+            >
+              <i className="ti ti-player-play" style={{ fontSize: 18 }} />
+              Start 2e Helft
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -290,105 +299,92 @@ export default function LiveMatch() {
 
   // LIVE MODE
   return (
-    <div className="space-y-5 pb-20 lg:pb-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="relative min-h-screen pb-24">
+      <img src={BG_URL} alt="" style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+      <div className="relative z-10 space-y-5 p-4">
+        {/* Header */}
         <div className="flex items-center gap-3">
-          <button onClick={() => { setRunning(false); }} className="p-2 rounded-xl bg-white border border-[#E8E6E1] hover:bg-[#F7F5F2]">
-            <ArrowLeft size={20} className="text-[#1A1A1A]" />
-          </button>
+          <BackBtn onClick={() => setRunning(false)} />
           <div>
-            <h1 className="text-lg font-500 text-[#1A1A1A]">Live — vs. {match?.opponent}</h1>
-            <p className="text-xs text-[#888888]">{match?.home_away} · {match?.team}</p>
+            <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>Live — vs. {match?.opponent}</h1>
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)" }}>{match?.home_away} · {match?.team}</p>
           </div>
         </div>
-      </div>
 
-      {/* Clock */}
-      <div className="bg-white rounded-2xl p-6 border border-[#E8E6E1] shadow-sm">
-        <LiveMatchClock seconds={seconds} running={running} onToggle={handleToggleClock} onStop={handleStop} />
-        {currentMinute >= 45 && running && (
-          <p className="text-center text-xs mt-2 text-[#FF6B00]">Druk op Pauze om naar de rust te gaan</p>
+        {/* Clock */}
+        <div style={{ ...glassCard, padding: "24px" }}>
+          <LiveMatchClock seconds={seconds} running={running} onToggle={handleToggleClock} onStop={handleStop} />
+          {currentMinute >= 45 && running && (
+            <p style={{ textAlign: "center", fontSize: 12, marginTop: 8, color: "#FF8C3A" }}>Druk op Pauze om naar de rust te gaan</p>
+          )}
+        </div>
+
+        {/* Score */}
+        <div style={{ ...glassCard, padding: "16px 24px" }}>
+          <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
+        </div>
+
+        {/* Action buttons */}
+        <div className="grid grid-cols-2 gap-3">
+          <button onClick={() => setActiveModal("goal_mva")}
+            className="flex flex-col items-center justify-center gap-2 rounded-2xl py-6 text-white font-black text-lg transition-all active:scale-95"
+            style={{ backgroundColor: "#D45A30" }}>
+            <span className="text-3xl">⚽</span>GOAL MVA
+          </button>
+          <button onClick={() => setActiveModal("goal_against")}
+            className="flex flex-col items-center justify-center gap-2 rounded-2xl py-6 text-white font-black text-lg transition-all active:scale-95"
+            style={{ backgroundColor: "#C0392B" }}>
+            <span className="text-3xl">🔴</span>GOAL TEGEN
+          </button>
+          <button onClick={() => setActiveModal("substitution")}
+            className="flex flex-col items-center justify-center gap-2 rounded-2xl py-6 text-white font-black text-lg transition-all active:scale-95"
+            style={{ backgroundColor: "#2563EB" }}>
+            <span className="text-3xl">🔄</span>WISSEL
+          </button>
+          <button onClick={() => setActiveModal("note")}
+            className="flex flex-col items-center justify-center gap-2 rounded-2xl py-6 text-white font-black text-lg transition-all active:scale-95"
+            style={{ backgroundColor: "#6B7280" }}>
+            <span className="text-3xl">📝</span>NOTITIE
+          </button>
+        </div>
+
+        {/* Events log */}
+        {events.length > 0 && (
+          <div style={{ ...glassCard, padding: "16px" }}>
+            <h3 style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "rgba(255,255,255,0.50)", marginBottom: 10 }}>Events</h3>
+            <div className="space-y-1 max-h-40 overflow-y-auto">
+              {[...events].reverse().map((e, i) => {
+                const player = activePlayers.find(p => p.id === e.player_id);
+                const playerOut = activePlayers.find(p => p.id === e.player_out_id);
+                const playerIn = activePlayers.find(p => p.id === e.player_in_id);
+                return (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, padding: "6px 10px", borderRadius: 10, background: "rgba(255,107,0,0.10)" }}>
+                    <span style={{ fontWeight: 600, width: 32, color: "#FF8C3A" }}>{e.minute}'</span>
+                    <span style={{ color: "rgba(255,255,255,0.85)" }}>
+                      {e.type === "goal_mva" && `⚽ Goal — ${player?.name}`}
+                      {e.type === "goal_against" && "🔴 Goal Tegen"}
+                      {e.type === "substitution" && `🔄 ${playerOut?.name} → ${playerIn?.name}`}
+                      {e.type === "note" && `📝 ${e.note}`}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Event modals */}
+        {activeModal && (
+          <EventModal
+            type={activeModal}
+            minute={seconds}
+            players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
+            substitutePlayers={activePlayers.filter(p => substitutes.includes(p.id) && !substitutedIn.includes(p.id))}
+            onConfirm={handleEvent}
+            onClose={() => setActiveModal(null)}
+          />
         )}
       </div>
-
-      {/* Score */}
-      <div className="bg-white rounded-2xl px-6 py-4 border border-[#E8E6E1] shadow-sm">
-        <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
-      </div>
-
-      {/* Action buttons */}
-      <div className="grid grid-cols-2 gap-3">
-        <button
-          onClick={() => setActiveModal("goal_mva")}
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl py-6 text-white font-black text-lg transition-all active:scale-95"
-          style={{ backgroundColor: "#D45A30" }}
-        >
-          <span className="text-3xl">⚽</span>
-          GOAL MVA
-        </button>
-        <button
-          onClick={() => setActiveModal("goal_against")}
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl py-6 text-white font-black text-lg transition-all active:scale-95"
-          style={{ backgroundColor: "#C0392B" }}
-        >
-          <span className="text-3xl">🔴</span>
-          GOAL TEGEN
-        </button>
-        <button
-          onClick={() => setActiveModal("substitution")}
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl py-6 text-white font-black text-lg transition-all active:scale-95"
-          style={{ backgroundColor: "#2563EB" }}
-        >
-          <span className="text-3xl">🔄</span>
-          WISSEL
-        </button>
-        <button
-          onClick={() => setActiveModal("note")}
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl py-6 text-white font-black text-lg transition-all active:scale-95"
-          style={{ backgroundColor: "#6B7280" }}
-        >
-          <span className="text-3xl">📝</span>
-          NOTITIE
-        </button>
-      </div>
-
-      {/* Events log */}
-      {events.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E6E1] shadow-sm">
-          <h3 className="text-xs font-500 uppercase tracking-wider mb-3 text-[#888888]">Events</h3>
-          <div className="space-y-1 max-h-40 overflow-y-auto">
-            {[...events].reverse().map((e, i) => {
-              const player = activePlayers.find(p => p.id === e.player_id);
-              const playerOut = activePlayers.find(p => p.id === e.player_out_id);
-              const playerIn = activePlayers.find(p => p.id === e.player_in_id);
-              return (
-                <div key={i} className="flex items-center gap-2 text-xs px-2 py-1 rounded-lg bg-[#FFF3EB]">
-                  <span className="font-500 w-8 text-[#FF6B00]">{e.minute}'</span>
-                  <span className="text-[#1A1A1A]">
-                    {e.type === "goal_mva" && `⚽ Goal — ${player?.name}`}
-                    {e.type === "goal_against" && "🔴 Goal Tegen"}
-                    {e.type === "substitution" && `🔄 ${playerOut?.name} → ${playerIn?.name}`}
-                    {e.type === "note" && `📝 ${e.note}`}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Event modals */}
-      {activeModal && (
-        <EventModal
-          type={activeModal}
-          minute={seconds}
-          players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
-          substitutePlayers={activePlayers.filter(p => substitutes.includes(p.id) && !substitutedIn.includes(p.id))}
-          onConfirm={handleEvent}
-          onClose={() => setActiveModal(null)}
-        />
-      )}
     </div>
   );
 }
