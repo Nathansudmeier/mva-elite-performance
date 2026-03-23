@@ -104,6 +104,9 @@ const AuthenticatedApp = () => {
       <Route path="/Messages" element={<LayoutWrapper currentPageName="Messages"><Messages /></LayoutWrapper>} />
       <Route path="/Chat" element={<LayoutWrapper currentPageName="Messages"><Chat /></LayoutWrapper>} />
       <Route path="/ImportTrainingAttendance" element={<LayoutWrapper currentPageName="ImportTrainingAttendance"><ImportTrainingAttendance /></LayoutWrapper>} />
+      <Route path="/Trainingsvormen" element={<LayoutWrapper currentPageName="Trainingsvormen"><Trainingsvormen /></LayoutWrapper>} />
+      <Route path="/TrainingsvormDetail" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormDetail /></LayoutWrapper>} />
+      <Route path="/TrainingsvormForm" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormForm /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
