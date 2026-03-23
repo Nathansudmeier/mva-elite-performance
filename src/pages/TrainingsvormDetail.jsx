@@ -38,32 +38,32 @@ export default function TrainingsvormDetail() {
   if (!exercise) return null;
 
   return (
-    <div className="min-h-screen pb-20" style={{ backgroundColor: "#1c0e04" }}>
-      {/* Blur background */}
-      <div className="pointer-events-none fixed top-0 left-0 right-0 bottom-0 z-0" style={{ overflow: "hidden" }}>
-        <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: "rgba(255,107,0,0.35)", top: -160, left: -100, filter: "blur(80px)" }} />
-      </div>
+    <div className="min-h-screen" style={{ backgroundColor: "#1c0e04" }}>
+      <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png" alt=""
+        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
 
-      <div className="relative z-10 p-4 md:p-8 max-w-2xl mx-auto">
+      <div className="relative z-10 p-4 md:p-6 max-w-3xl mx-auto space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2 hover:opacity-70 transition">
-            <ArrowLeft className="w-5 h-5" style={{ color: "rgba(255,255,255,0.70)" }} />
+        <div className="flex items-center justify-between">
+          <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
+            <ArrowLeft size={18} color="#fff" />
           </button>
           {isTrainer && (
             <Link to={`/TrainingsvormForm?id=${exercise.id}`}>
-              <button className="p-2 -mr-2 hover:opacity-70 transition">
-                <Edit2 className="w-5 h-5" style={{ color: "#FF8C3A" }} />
+              <button className="w-9 h-9 rounded-full flex items-center justify-center"
+                style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
+                <Edit2 size={16} color="#FF8C3A" />
               </button>
             </Link>
           )}
         </div>
 
         {/* Title section */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 flex-wrap">
             <span
-              className="text-xs font-semibold px-3 py-1 rounded-full"
+              className="text-xs font-semibold px-2 py-1 rounded-lg"
               style={{
                 background: categoryColors[exercise.category].bg,
                 border: `0.5px solid ${categoryColors[exercise.category].border}`,
@@ -72,48 +72,33 @@ export default function TrainingsvormDetail() {
             >
               {exercise.category}
             </span>
+            {exercise.duration_minutes && (
+              <div className="flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
+                <Clock size={14} />
+                {exercise.duration_minutes} min
+              </div>
+            )}
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2" style={{ letterSpacing: "-0.5px" }}>
-            {exercise.name}
-          </h1>
+          <h1 className="t-hero">{exercise.name}</h1>
         </div>
-
-        {/* Duration */}
-        {exercise.duration_minutes && (
-          <div className="mb-8 flex items-center gap-2 text-sm px-3 py-2 rounded-full" style={{ background: "rgba(255,255,255,0.08)", width: "fit-content" }}>
-            <Clock className="w-4 h-4" style={{ color: "#FF8C3A" }} />
-            <span className="text-white">{exercise.duration_minutes} minuten</span>
-          </div>
-        )}
 
         {/* Description */}
         {exercise.description && (
-          <div className="mb-8">
-            <p className="text-xs font-semibold uppercase mb-3" style={{ color: "rgba(255,255,255,0.45)" }}>
-              Beschrijving
-            </p>
-            <p className="text-sm" style={{ color: "rgba(255,255,255,0.80)", lineHeight: 1.6 }}>
-              {exercise.description}
-            </p>
+          <div className="glass-dark rounded-2xl p-4">
+            <p className="t-label mb-2">Beschrijving</p>
+            <p className="t-secondary">{exercise.description}</p>
           </div>
         )}
 
         {/* Coaching points */}
         {exercise.coaching_points && exercise.coaching_points.length > 0 && (
-          <div className="mb-8">
-            <p className="text-xs font-semibold uppercase mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
-              Coaching Points
-            </p>
-            <div className="space-y-3">
+          <div className="glass-dark rounded-2xl p-4 space-y-3">
+            <p className="t-label">Coaching Points</p>
+            <div className="space-y-2">
               {exercise.coaching_points.map((point, idx) => (
                 <div key={idx} className="flex gap-3">
-                  <div
-                    className="w-2 h-2 rounded-full flex-shrink-0 mt-2"
-                    style={{ background: "#FF8C3A" }}
-                  />
-                  <p className="text-sm text-white" style={{ lineHeight: 1.5 }}>
-                    {point}
-                  </p>
+                  <div className="w-2 h-2 rounded-full flex-shrink-0 mt-1" style={{ background: "#FF8C3A" }} />
+                  <p className="t-secondary text-sm">{point}</p>
                 </div>
               ))}
             </div>
@@ -122,15 +107,13 @@ export default function TrainingsvormDetail() {
 
         {/* Groups */}
         {exercise.groups && exercise.groups.length > 0 && (
-          <div className="mb-8">
-            <p className="text-xs font-semibold uppercase mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
-              Groepen
-            </p>
-            <div className="flex gap-3 flex-wrap mb-4">
+          <div className="glass-dark rounded-2xl p-4 space-y-3">
+            <p className="t-label">Groepen</p>
+            <div className="flex gap-2 flex-wrap">
               {exercise.groups.map((group, idx) => (
                 <div
                   key={idx}
-                  className="px-3 py-2 rounded-full text-xs font-semibold text-white"
+                  className="px-2 py-1 rounded-lg text-xs font-semibold"
                   style={{
                     background: groupColors[group.color],
                     opacity: 0.15,
@@ -143,36 +126,27 @@ export default function TrainingsvormDetail() {
               ))}
             </div>
             {exercise.group_transition_description && (
-              <p className="text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
-                {exercise.group_transition_description}
-              </p>
+              <p className="t-secondary text-xs">{exercise.group_transition_description}</p>
             )}
           </div>
         )}
 
         {/* Photo */}
         {exercise.photo_url && (
-          <div className="mb-8">
-            <img
-              src={exercise.photo_url}
-              alt={exercise.name}
-              className="w-full rounded-2xl object-cover"
-              style={{ maxHeight: "400px" }}
-            />
-          </div>
+          <img src={exercise.photo_url} alt={exercise.name} className="w-full rounded-2xl object-cover" style={{ maxHeight: "300px" }} />
         )}
 
         {/* YouTube video */}
         {exercise.youtube_url && (
-          <div className="mb-8 relative group cursor-pointer rounded-2xl overflow-hidden" style={{ background: "rgba(0,0,0,0.5)" }}>
+          <div className="relative rounded-2xl overflow-hidden group cursor-pointer" style={{ background: "rgba(0,0,0,0.3)" }}>
             <img
               src={`https://img.youtube.com/vi/${exercise.youtube_url.split("v=")[1]}/0.jpg`}
               alt="Video thumbnail"
-              className="w-full h-64 object-cover"
+              className="w-full h-48 object-cover"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <a href={exercise.youtube_url} target="_blank" rel="noopener noreferrer" className="p-4 rounded-full" style={{ background: "rgba(255,107,0,0.80)" }}>
-                <Play className="w-6 h-6 text-white" fill="white" />
+              <a href={exercise.youtube_url} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full" style={{ background: "rgba(255,107,0,0.85)" }}>
+                <Play size={20} className="text-white" fill="white" />
               </a>
             </div>
           </div>
@@ -181,10 +155,10 @@ export default function TrainingsvormDetail() {
         {/* Add to plan button */}
         {isTrainer && (
           <Link to={`/PlanningTrainingDetail?exerciseId=${exercise.id}`} className="w-full">
-            <Button className="w-full btn-primary flex items-center justify-center gap-2 h-12">
-              <Plus className="w-5 h-5" />
+            <button className="w-full btn-primary h-12 flex items-center justify-center gap-2">
+              <Plus size={18} />
               Toevoegen aan trainingsplan
-            </Button>
+            </button>
           </Link>
         )}
       </div>
