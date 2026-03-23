@@ -109,7 +109,7 @@ export default function Attendance() {
               </button>
             );
           })}
-          {sessions.length === 0 && <p className="text-sm text-center py-8 text-white/60">Geen sessies</p>}
+          {agendaItems.length === 0 && <p className="text-sm text-center py-8 text-white/60">Geen sessies</p>}
         </div>
 
         {/* Attendance detail */}
