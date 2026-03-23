@@ -72,6 +72,7 @@ export default function MatchEdit() {
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [showPlayerPicker, setShowPlayerPicker] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [showField, setShowField] = useState(false);
 
   // Compress image to max 200x200px
   const compressImage = (file) => {
