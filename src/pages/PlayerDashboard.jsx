@@ -190,6 +190,13 @@ export default function PlayerDashboard() {
       {/* Metric Grid */}
       <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
 
+      {/* Attendance Card */}
+      <PlayerAttendanceCard 
+        percentage={attendancePercentage} 
+        present={playerSeasonAttendance.length} 
+        total={allSeasonTrainings.length} 
+      />
+
       {/* Attendance Dots */}
       <AttendanceDots attendance={attendance} />
 
