@@ -22,6 +22,7 @@ export default function PlanningTrainingDetail() {
   const [absentReason, setAbsentReason] = useState("");
   const [showReasonInput, setShowReasonInput] = useState(false);
   const [reminderSent, setReminderSent] = useState(false);
+  const [editingAttendance, setEditingAttendance] = useState(false);
 
   const { data: item, isLoading } = useQuery({
     queryKey: ["agenda-item", itemId],
