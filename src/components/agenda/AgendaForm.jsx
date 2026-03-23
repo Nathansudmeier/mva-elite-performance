@@ -65,13 +65,36 @@ export default function AgendaForm({ item, onSave, onClose }) {
     setUploadingLogo(false);
   }
 
+  async function ensureMatchRecord(agendaItemId, formData) {
+    if (!isWedstrijd(formData.type)) return;
+    // Create a Match record and link it
+    const teams = formData.team === "Beide" ? ["MO17", "Dames 1"] : [formData.team];
+    for (const team of teams) {
+      const match = await base44.entities.Match.create({
+        opponent: formData.title,
+        date: formData.date,
+        start_time: formData.start_time,
+        home_away: formData.home_away === "Neutraal" ? "Thuis" : formData.home_away,
+        team,
+      });
+      await base44.entities.AgendaItem.update(agendaItemId, { match_id: match.id });
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
     if (item?.id) {
       await base44.entities.AgendaItem.update(item.id, form);
+      // If it's a wedstrijd/toernooi and has no match_id yet, create one
+      if (isWedstrijd(form.type) && !item.match_id) {
+        await ensureMatchRecord(item.id, form);
+      }
     } else {
-      await base44.entities.AgendaItem.create(form);
+      const created = await base44.entities.AgendaItem.create(form);
+      if (isWedstrijd(form.type)) {
+        await ensureMatchRecord(created.id, form);
+      }
     }
     await onSave();
     setSaving(false);
