@@ -260,8 +260,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── ATTENDANCE ALERT ── */}
-      <AttendanceAlert lowAttendancePlayers={lowAttendancePlayers} />
+
 
       {uploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
