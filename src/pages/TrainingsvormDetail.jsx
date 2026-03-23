@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { ArrowLeft, Edit2, Clock, Play, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const categoryColors = {
   Tactisch: { bg: "rgba(96,165,250,0.20)", border: "rgba(96,165,250,0.40)", color: "#60a5fa" },
