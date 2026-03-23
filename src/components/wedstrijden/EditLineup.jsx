@@ -3,7 +3,7 @@ import LineupPlayerList from "./LineupPlayerList";
 
 const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
 
-export default function EditLineup({ match, players, onSave, onCancel, saving }) {
+export default function EditLineup({ match, players, onSave, onCancel, saving, error }) {
   const [lineupMap, setLineupMap] = useState(match.lineup || {});
   const [substitutes, setSubstitutes] = useState(match.substitutes || []);
   const [formation, setFormation] = useState(match.formation || "4-3-3");
