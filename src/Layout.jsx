@@ -205,21 +205,16 @@ export default function Layout({ children, currentPageName }) {
       {(() => {
         const trainerTabItems = [
           { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
-          { name: "Agenda", icon: "calendar", page: "Agenda" },
-          { name: "Trainingen", icon: "clipboard-list", page: "Trainingen" },
-          { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
+          { name: "Planning", icon: "calendar", page: "Planning" },
           { name: "Spelers", icon: "users", page: "Players" },
           { name: "Staff", icon: "user-cog", page: "Staff" },
           { name: "Berichten", icon: "message-circle", page: "Messages" },
           { name: "Beheer", icon: "settings", page: "AccountBeheer" },
-          { name: "Leaderboard", icon: "trophy", page: "Leaderboard" },
         ];
         
         const speelsterTabItems = [
           { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
-          { name: "Agenda", icon: "calendar", page: "Agenda" },
-          { name: "Trainingen", icon: "clipboard-list", page: "Trainingen" },
-          { name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" },
+          { name: "Planning", icon: "calendar", page: "Planning" },
           { name: "Berichten", icon: "message-circle", page: "Messages" },
           { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
         ];
