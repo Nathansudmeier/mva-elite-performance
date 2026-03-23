@@ -29,6 +29,7 @@ import ImportTrainingAttendance from './pages/ImportTrainingAttendance.jsx';
 import Trainingsvormen from './pages/Trainingsvormen.jsx';
 import TrainingsvormDetail from './pages/TrainingsvormDetail.jsx';
 import TrainingsvormForm from './pages/TrainingsvormForm.jsx';
+import MatchResults from './pages/MatchResults.jsx';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import SplashScreen from '@/components/SplashScreen';
@@ -107,6 +108,7 @@ const AuthenticatedApp = () => {
       <Route path="/Trainingsvormen" element={<LayoutWrapper currentPageName="Trainingsvormen"><Trainingsvormen /></LayoutWrapper>} />
       <Route path="/TrainingsvormDetail" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormDetail /></LayoutWrapper>} />
       <Route path="/TrainingsvormForm" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormForm /></LayoutWrapper>} />
+      <Route path="/MatchResults" element={<LayoutWrapper currentPageName="Dashboard"><MatchResults /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
