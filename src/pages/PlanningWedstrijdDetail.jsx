@@ -32,6 +32,9 @@ export default function PlanningWedstrijdDetail() {
   const [formation, setFormation] = useState("4-3-3");
   const [tactics, setTactics] = useState({ ball_possession: "", pressing: "", transition: "", set_pieces: "" });
   const [saving, setSaving] = useState(false);
+  const [editingScore, setEditingScore] = useState(false);
+  const [scoreHome, setScoreHome] = useState(match?.score_home ?? "");
+  const [scoreAway, setScoreAway] = useState(match?.score_away ?? "");
 
   const { data: item, isLoading } = useQuery({
     queryKey: ["agenda-item", itemId],
