@@ -265,8 +265,8 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
               }}>
                 <img src={MVA_LOGO_URL} alt="MVA Noord" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "white", textAlign: "center", letterSpacing: "-0.2px", maxWidth: "50px" }}>
-                {teamLabel}
+              <div style={{ fontSize: "12px", fontWeight: 600, color: "white", textAlign: "center", maxWidth: "60px" }}>
+                MVA Noord
               </div>
             </div>
 
