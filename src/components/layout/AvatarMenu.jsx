@@ -125,14 +125,14 @@ export default function AvatarMenu({ user, profilePhoto, initials, isTrainer, is
         <>
           {/* Desktop dropdown */}
           {!isMobile && (
-            <div style={{ position: "fixed", top: dropdownPos.top, right: dropdownPos.right, zIndex: 9999, background: "rgba(20,10,2,0.95)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 16, minWidth: 200, boxShadow: "0 8px 32px rgba(0,0,0,0.40)", overflow: "hidden" }}>
+            <div ref={dropdownRef} style={{ position: "fixed", top: dropdownPos.top, right: dropdownPos.right, zIndex: 9999, background: "rgba(20,10,2,0.95)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 16, minWidth: 200, boxShadow: "0 8px 32px rgba(0,0,0,0.40)", overflow: "hidden" }}>
               {menuContent}
             </div>
           )}
 
           {/* Mobile bottom sheet */}
           {isMobile && (
-            <div style={{ position: "fixed", inset: 0, zIndex: 9999 }}>
+            <div ref={dropdownRef} style={{ position: "fixed", inset: 0, zIndex: 9999 }}>
               <div
                 onClick={() => setOpen(false)}
                 style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)" }}
