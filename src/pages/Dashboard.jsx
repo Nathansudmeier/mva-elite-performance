@@ -180,7 +180,7 @@ export default function Dashboard() {
     <div className="pb-20 lg:pb-6 relative" style={{ zIndex: 2, display: "flex", flexDirection: "column", gap: "12px" }}>
       <DashboardBackground />
       {/* Desktop background */}
-      <div className="hidden xl:block fixed inset-0 pointer-events-none" style={{ zIndex: 0, backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/6688752d1_Background-desktop.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed" }} />
+      <div className="hidden xl:block fixed inset-0 pointer-events-none" style={{ zIndex: 0, backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/9df6bb54b_Background-desktop.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed" }} />
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
       {/* Trainer greeting */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1.25rem 0.5rem", position: "relative", zIndex: 10 }}>

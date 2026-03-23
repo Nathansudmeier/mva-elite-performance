@@ -162,7 +162,7 @@ export default function PlayerDashboard() {
     <div className="space-y-6 pb-24 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
       {/* Desktop background */}
-      <div className="hidden xl:block fixed inset-0 pointer-events-none" style={{ zIndex: 0, backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/6688752d1_Background-desktop.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed" }} />
+      <div className="hidden xl:block fixed inset-0 pointer-events-none" style={{ zIndex: 0, backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/9df6bb54b_Background-desktop.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed" }} />
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={false} />
       {/* Header */}
       <PlayerGreetingHeader
