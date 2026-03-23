@@ -82,18 +82,10 @@ export default function AgendaForm({ item, onSave, onClose }) {
       <div
         className="w-full md:max-w-lg glass-dark rounded-t-3xl md:rounded-3xl p-6"
         style={{
-          height: "95vh",
-          maxHeight: "95vh",
+          maxHeight: window.innerWidth >= 768 ? "90vh" : "95vh",
           overflowY: "auto",
           overscrollBehavior: "contain",
           WebkitOverflowScrolling: "touch",
-        }}
-        // Op desktop iets kleiner
-        onLoad={(e) => {
-          if (window.innerWidth >= 768) {
-            e.currentTarget.style.height = "auto";
-            e.currentTarget.style.maxHeight = "90vh";
-          }
         }}
       >
         <div className="flex items-center justify-between mb-5">
