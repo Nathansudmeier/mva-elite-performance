@@ -176,6 +176,7 @@ export default function Dashboard() {
   return (
     <div className="pb-20 lg:pb-6 relative" style={{ zIndex: 2, display: "flex", flexDirection: "column", gap: "12px" }}>
       <DashboardBackground />
+      <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
       {/* Trainer greeting */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1.25rem 0.5rem", position: "relative", zIndex: 10 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
