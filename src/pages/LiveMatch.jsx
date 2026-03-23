@@ -10,6 +10,7 @@ import SubstitutionBottomSheet from "../components/live/SubstitutionBottomSheet"
 import MatchReport from "../components/live/MatchReport";
 import FieldLineup from "../components/wedstrijden/FieldLineup";
 import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
+import LineupPlayerList from "../components/wedstrijden/LineupPlayerList";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
