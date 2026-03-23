@@ -2,15 +2,15 @@ import React from "react";
 
 export default function LiveScore({ scoreHome, scoreAway, opponent }) {
   return (
-    <div className="flex items-center justify-center gap-4 py-4">
-      <div className="text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "#2F3650" }}>MVA Noord</p>
-        <span className="text-6xl font-black" style={{ color: "#D45A30" }}>{scoreHome}</span>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "8px 0" }}>
+      <div style={{ textAlign: "center" }}>
+        <p style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "rgba(255,255,255,0.50)", marginBottom: 4 }}>MVA Noord</p>
+        <span style={{ fontSize: 56, fontWeight: 800, color: "#fff", letterSpacing: "-2px", lineHeight: 1 }}>{scoreHome}</span>
       </div>
-      <span className="text-4xl font-black" style={{ color: "#1A1F2E" }}>—</span>
-      <div className="text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: "#2F3650" }}>{opponent}</p>
-        <span className="text-6xl font-black" style={{ color: "#1A1F2E" }}>{scoreAway}</span>
+      <span style={{ fontSize: 32, fontWeight: 700, color: "rgba(255,255,255,0.30)", letterSpacing: "-1px" }}>—</span>
+      <div style={{ textAlign: "center" }}>
+        <p style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "rgba(255,255,255,0.50)", marginBottom: 4 }}>{opponent || "Tegenstander"}</p>
+        <span style={{ fontSize: 56, fontWeight: 800, color: "#fff", letterSpacing: "-2px", lineHeight: 1 }}>{scoreAway}</span>
       </div>
     </div>
   );
