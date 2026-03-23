@@ -1,9 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { TYPE_CONFIG } from "./agendaUtils";
 
 const TYPES = ["Training", "Wedstrijd", "Toernooi", "Evenement"];
 const TEAMS = ["MO17", "Dames 1", "Beide"];
+const HOME_AWAY = ["Thuis", "Uit", "Neutraal"];
+
+const isWedstrijd = (type) => type === "Wedstrijd" || type === "Toernooi";
+
+async function compressImage(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const MAX = 200;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; } }
+      else { if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; } }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(resolve, "image/jpeg", 0.85);
+    };
+    img.src = url;
+  });
+}
 
 export default function AgendaForm({ item, onSave, onClose }) {
   const [form, setForm] = useState({
@@ -11,15 +34,28 @@ export default function AgendaForm({ item, onSave, onClose }) {
     title: item?.title || "",
     date: item?.date || "",
     start_time: item?.start_time || "",
-    location: item?.location || "",
     team: item?.team || "Beide",
+    home_away: item?.home_away || "Thuis",
+    opponent_logo_url: item?.opponent_logo_url || "",
     notes: item?.notes || "",
     reminder_1_days: item?.reminder_1_days ?? 3,
     reminder_2_days: item?.reminder_2_days ?? 1,
   });
   const [saving, setSaving] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const logoInputRef = useRef();
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  async function handleLogoUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingLogo(true);
+    const compressed = await compressImage(file);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file: compressed });
+    set("opponent_logo_url", file_url);
+    setUploadingLogo(false);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -73,6 +109,39 @@ export default function AgendaForm({ item, onSave, onClose }) {
               placeholder="Naam van de activiteit" />
           </div>
 
+          {/* Logo tegenstander - alleen voor Wedstrijd/Toernooi */}
+          {isWedstrijd(form.type) && (
+            <div>
+              <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "8px" }}>
+                Logo tegenstander (optioneel)
+              </p>
+              {form.opponent_logo_url ? (
+                <div className="flex items-center gap-3">
+                  <div style={{ position: "relative", width: 44, height: 44, flexShrink: 0 }}>
+                    <img src={form.opponent_logo_url} alt="logo"
+                      style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", border: "0.5px solid rgba(255,255,255,0.15)" }} />
+                    <button type="button" onClick={() => set("opponent_logo_url", "")}
+                      style={{ position: "absolute", top: -4, right: -4, width: 16, height: 16, borderRadius: "50%", background: "#f87171", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#fff", fontSize: 10, fontWeight: 700, lineHeight: 1 }}>
+                      ✕
+                    </button>
+                  </div>
+                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>Logo geüpload</span>
+                </div>
+              ) : (
+                <>
+                  <input ref={logoInputRef} type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
+                  <button type="button" onClick={() => logoInputRef.current?.click()} disabled={uploadingLogo}
+                    style={{ width: "100%", height: 52, background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer", opacity: uploadingLogo ? 0.6 : 1 }}>
+                    <i className="ti ti-upload" style={{ fontSize: 16, color: "rgba(255,255,255,0.55)" }} />
+                    <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>
+                      {uploadingLogo ? "Uploaden..." : "Logo uploaden"}
+                    </span>
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+
           {/* Datum + Tijd */}
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -87,15 +156,6 @@ export default function AgendaForm({ item, onSave, onClose }) {
                 className="w-full px-3 py-2 rounded-xl text-sm text-white outline-none"
                 style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", colorScheme: "dark" }} />
             </div>
-          </div>
-
-          {/* Locatie */}
-          <div>
-            <p className="t-label mb-1">Locatie</p>
-            <input value={form.location} onChange={e => set("location", e.target.value)}
-              className="w-full px-3 py-2 rounded-xl text-sm text-white outline-none"
-              style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}
-              placeholder="Adres of veldnaam" />
           </div>
 
           {/* Team */}
@@ -115,6 +175,36 @@ export default function AgendaForm({ item, onSave, onClose }) {
               ))}
             </div>
           </div>
+
+          {/* Thuis/Uit - alleen voor Wedstrijd/Toernooi */}
+          {isWedstrijd(form.type) && (
+            <div>
+              <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "8px" }}>
+                Locatie
+              </p>
+              <div className="flex gap-2">
+                {HOME_AWAY.map(opt => {
+                  const active = form.home_away === opt;
+                  return (
+                    <button key={opt} type="button" onClick={() => set("home_away", opt)}
+                      style={{
+                        padding: "6px 14px",
+                        borderRadius: 20,
+                        fontSize: 13,
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        border: active ? "none" : "0.5px solid rgba(255,255,255,0.12)",
+                        background: active ? "#FF6B00" : "rgba(255,255,255,0.08)",
+                        color: active ? "#ffffff" : "rgba(255,255,255,0.55)",
+                        transition: "all 0.15s",
+                      }}>
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Notitie */}
           <div>
