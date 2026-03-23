@@ -309,16 +309,16 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                 {nextMatch.opponent_logo ? (
                   <img src={nextMatch.opponent_logo} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  nextMatch.opponent
+                  (nextMatch.opponent || nextMatch.title || "?")
                     .split(" ")
                     .slice(0, 2)
                     .map((w) => w[0])
                     .join("")
                     .toUpperCase()
                 )}
-              </div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: "white", textAlign: "center", letterSpacing: "-0.2px", maxWidth: "50px" }}>
-                {nextMatch.opponent.split(" ")[0]}
+                </div>
+                <div style={{ fontSize: "13px", fontWeight: 700, color: "white", textAlign: "center", letterSpacing: "-0.2px", maxWidth: "50px" }}>
+                {(nextMatch.opponent || nextMatch.title || "").split(" ")[0]}
               </div>
             </div>
           </div>
