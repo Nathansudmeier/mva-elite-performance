@@ -85,13 +85,7 @@ export default function PlayerDetail() {
             <ArrowLeft size={18} color="#fff" />
           </Link>
           <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
-            {player.photo_url ? (
-              <img src={player.photo_url} alt={player.name} className="w-12 md:w-16 h-12 md:h-16 rounded-full object-cover flex-shrink-0" style={{ border: "2px solid rgba(255,107,0,0.4)" }} />
-            ) : (
-              <div className="w-12 md:w-16 h-12 md:h-16 rounded-full flex items-center justify-center text-lg md:text-xl font-bold flex-shrink-0" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A", border: "2px solid rgba(255,107,0,0.3)" }}>
-                {player.name?.[0]}
-              </div>
-            )}
+            <img src={player.photo_url || "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/4ecb27045_placeholder.png"} alt={player.name} className="w-12 md:w-16 h-12 md:h-16 rounded-full object-cover flex-shrink-0" style={{ border: "2px solid rgba(255,107,0,0.4)" }} />
             <div className="flex-1 min-w-0">
               <h1 className="t-page-title truncate">{player.name}</h1>
               <p className="t-secondary text-xs md:text-sm">{player.position} · #{player.shirt_number}</p>
