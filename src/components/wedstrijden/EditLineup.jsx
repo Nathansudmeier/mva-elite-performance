@@ -98,6 +98,20 @@ export default function EditLineup({ match, players, onSave, onCancel, saving, e
         </div>
       </div>
 
+      {/* Error message */}
+      {error && !saving && (
+        <div style={{
+          padding: "12px 16px",
+          background: "rgba(248,113,113,0.10)",
+          border: "0.5px solid rgba(248,113,113,0.25)",
+          color: "#f87171",
+          fontSize: "13px",
+          fontWeight: 500,
+        }}>
+          {error}
+        </div>
+      )}
+
       {/* Footer */}
       <div style={{
         padding: "12px 16px",
