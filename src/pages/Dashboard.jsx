@@ -351,7 +351,11 @@ export default function Dashboard() {
               { icon: "ti-users", label: "Aanwezigheid registreren", sub: "Training van vandaag", action: () => navigate("/Planning") },
               { icon: "ti-upload", label: "Foto uploaden", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
               { icon: "ti-clipboard-list", label: "Beoordeling invullen", sub: `${totalRatingsNeeded - meting1Count} spelers wachten`, action: () => navigate("/PlayerRatingForm") },
-              { icon: "ti-player-play", label: "Wedstrijd starten", sub: "Live modus activeren", action: () => navigate("/Wedstrijden") },
+              { icon: "ti-player-play", label: "Wedstrijd starten", sub: "Live modus activeren", action: () => {
+                const nextWedstrijd = agendaItems.find(ai => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
+                if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);
+                else navigate("/Planning");
+              } },
             ].map((item, i) => (
               <button key={i} onClick={item.action} style={{ display: "flex", gap: "8px", alignItems: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "8px 10px", marginBottom: "6px", width: "100%", textAlign: "left", cursor: "pointer" }}>
                 <i className={`ti ${item.icon}`} style={{ fontSize: "14px", color: "#FF8C3A", flexShrink: 0 }} />
@@ -367,10 +371,14 @@ export default function Dashboard() {
           <div className="mobile-only">
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: "8px" }}>
               {[
-                { icon: "ti-users", label: "Aanwezigheid", sub: "Vandaag", action: () => navigate("/Trainingen") },
+                { icon: "ti-users", label: "Aanwezigheid", sub: "Vandaag", action: () => navigate("/Planning") },
                 { icon: "ti-upload", label: "Foto", sub: "Team of Week", action: () => setUploadModalOpen(true) },
                 { icon: "ti-clipboard-list", label: "Beoordeling", sub: `${totalRatingsNeeded - meting1Count} wachten`, action: () => navigate("/PlayerRatingForm") },
-                { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => navigate("/Wedstrijden") },
+                { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => {
+                  const nextWedstrijd = agendaItems.find(ai => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
+                  if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);
+                  else navigate("/Planning");
+                } },
               ].map((item, i) => (
                 <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "12px 8px", cursor: "pointer", textAlign: "center" }}>
                   <i className={`ti ${item.icon}`} style={{ fontSize: "20px", color: "#FF8C3A", marginBottom: "6px" }} />
