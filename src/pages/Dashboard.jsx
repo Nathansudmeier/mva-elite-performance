@@ -17,7 +17,7 @@ import TrainerWeekReflectieCard from "../components/dashboard/TrainerWeekReflect
 import { nl } from "date-fns/locale";
 import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
 import { useLiveMatches } from "@/hooks/useLiveMatches";
-import AttendanceAlert from "@/components/dashboard/AttendanceAlert";
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
