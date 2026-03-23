@@ -49,16 +49,15 @@ export default function Planning() {
     setEditItem(null);
   }
 
-  async function handleDelete(item) {
-    if (!confirm(`'${item.title}' verwijderen?`)) return;
-    await base44.entities.AgendaItem.delete(item.id);
-    await qc.invalidateQueries({ queryKey: ["agenda-items"] });
-    setDetailItem(null);
-  }
-
   function openDetail(item) {
-    setDetailItem(item);
     setSelectedDay(null);
+    if (item.type === "Training") {
+      navigate(`/PlanningTrainingDetail?id=${item.id}`);
+    } else if (item.type === "Wedstrijd") {
+      navigate(`/PlanningWedstrijdDetail?id=${item.id}`);
+    } else {
+      navigate(`/PlanningTrainingDetail?id=${item.id}`);
+    }
   }
 
   return (
