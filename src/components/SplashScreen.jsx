@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 const MVA_LOGO_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/c0045a171_MVAlogo.png";
-const BACKGROUND_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/4b1e6278f_Appbackground.png";
+const BACKGROUND_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/c259ecb13_Splash.png";
+const APP_VERSION = "1.0.0";
 
 export default function SplashScreen() {
   const [isVisible, setIsVisible] = useState(true);
