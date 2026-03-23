@@ -15,6 +15,7 @@ export default function Planning() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [view, setView] = useState("lijst");
+  const [typeFilter, setTypeFilter] = useState("alles");
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
