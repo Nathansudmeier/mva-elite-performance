@@ -35,12 +35,12 @@ export default function LineupSelector({ match, players, onSave, onCancel, savin
   };
 
   const handleSave = () => {
-    const lineupArray = basis.map((playerId, i) => ({
-      slot: `POS${i}`,
-      player_id: playerId,
-    }));
+    const lineupObj = {};
+    basis.forEach((playerId, i) => {
+      lineupObj[`POS${i}`] = playerId;
+    });
     onSave({
-      lineup: lineupArray,
+      lineup: lineupObj,
       substitutes: wissels,
       formation: match?.formation || "4-3-3",
     });
