@@ -35,7 +35,7 @@ export default function PlanningTrainingDetail() {
   });
 
   const { data: attendance = [] } = useQuery({
-    queryKey: ["agenda-attendance", itemId],
+    queryKey: ["agenda-attendance-detail", itemId],
     queryFn: () => base44.entities.AgendaAttendance.filter({ agenda_item_id: itemId }),
     enabled: !!itemId,
   });
