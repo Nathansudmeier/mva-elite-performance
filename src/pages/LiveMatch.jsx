@@ -309,10 +309,57 @@ export default function LiveMatch() {
 
               <div>
                 <p style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "#FF8C3A", marginBottom: 8 }}>Opstelling</p>
-                <div style={{ height: 220, borderRadius: 16, overflow: "hidden", marginBottom: 16 }}>
-                  <FieldLineup players={activePlayers} lineupMap={lineupMap} formation={formation} onLineupChange={setLineupMap} />
+
+                {/* Desktop toggle */}
+                <div className="hidden xl:flex" style={{ gap: 8, marginBottom: 12 }}>
+                  <button
+                    onClick={() => setShowField(false)}
+                    style={{ padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", background: !showField ? "#FF6B00" : "rgba(255,255,255,0.08)", color: !showField ? "#fff" : "rgba(255,255,255,0.60)" }}
+                  >Spelerslijst</button>
+                  <button
+                    onClick={() => setShowField(true)}
+                    style={{ padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", background: showField ? "#FF6B00" : "rgba(255,255,255,0.08)", color: showField ? "#fff" : "rgba(255,255,255,0.60)" }}
+                  >Toon veld</button>
                 </div>
-                <SubstitutesPicker players={activePlayers} lineupMap={lineupMap} substitutes={substitutes} onSubstitutesChange={setSubstitutes} />
+
+                {/* Mobile/tablet: always player list */}
+                <div className="xl:hidden">
+                  <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 16, overflow: "hidden", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                    <LineupPlayerList
+                      players={activePlayers}
+                      lineupMap={lineupMap}
+                      substitutes={substitutes}
+                      formation={formation}
+                      onLineupChange={setLineupMap}
+                      onSubstitutesChange={setSubstitutes}
+                      onFormationChange={setFormation}
+                    />
+                  </div>
+                </div>
+
+                {/* Desktop: conditionally show list or field */}
+                <div className="hidden xl:block">
+                  {showField ? (
+                    <>
+                      <div style={{ height: 220, borderRadius: 16, overflow: "hidden", marginBottom: 16 }}>
+                        <FieldLineup players={activePlayers} lineupMap={lineupMap} formation={formation} onLineupChange={setLineupMap} />
+                      </div>
+                      <SubstitutesPicker players={activePlayers} lineupMap={lineupMap} substitutes={substitutes} onSubstitutesChange={setSubstitutes} />
+                    </>
+                  ) : (
+                    <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 16, overflow: "hidden", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                      <LineupPlayerList
+                        players={activePlayers}
+                        lineupMap={lineupMap}
+                        substitutes={substitutes}
+                        formation={formation}
+                        onLineupChange={setLineupMap}
+                        onSubstitutesChange={setSubstitutes}
+                        onFormationChange={setFormation}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
               <button
