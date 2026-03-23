@@ -120,12 +120,13 @@ export default function Attendance() {
                 <Calendar size={18} style={{ color: '#D45A30' }} />
                 <div>
                   <h2 className="font-bold text-[#1A1F2E]">{format(new Date(selectedSession.date), "d MMMM yyyy", { locale: nl })}</h2>
-                  <p className="text-xs" style={{ color: '#2F3650' }}>{selectedSession.type}</p>
+                  <p className="text-xs" style={{ color: '#2F3650' }}>{selectedSession.title}</p>
                 </div>
               </div>
               <div className="space-y-2">
                 {sessionAttendance.map((a) => {
                   const player = players.find((p) => p.id === a.player_id);
+                  const isPresent = a.status === "aanwezig";
                   return (
                     <div key={a.id} className="flex items-center justify-between rounded-lg px-4 py-3" style={{ backgroundColor: '#FDE8DC' }}>
                       <div className="flex items-center gap-3">
@@ -136,15 +137,15 @@ export default function Attendance() {
                       </div>
                       {isTrainer ? (
                         <button
-                          onClick={() => toggleAttendance.mutate({ attendanceId: a.id, present: !a.present })}
+                          onClick={() => toggleAttendance.mutate({ attendanceId: a.id, status: isPresent ? "afwezig" : "aanwezig" })}
                           className="w-10 h-10 rounded-lg flex items-center justify-center transition-all text-white"
-                          style={{ backgroundColor: a.present ? '#4CAF82' : '#2F3650' }}
+                          style={{ backgroundColor: isPresent ? '#4CAF82' : '#2F3650' }}
                         >
-                          {a.present ? <Check size={18} /> : <X size={18} />}
+                          {isPresent ? <Check size={18} /> : <X size={18} />}
                         </button>
                       ) : (
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: a.present ? '#4CAF82' : '#E8E6E1' }}>
-                          {a.present ? <Check size={18} /> : <X size={18} className="text-[#888888]" />}
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: isPresent ? '#4CAF82' : '#E8E6E1' }}>
+                          {isPresent ? <Check size={18} /> : <X size={18} className="text-[#888888]" />}
                         </div>
                       )}
                     </div>
