@@ -23,6 +23,7 @@ export default function Dashboard() {
   const queryClient = useQueryClient();
   const { user: currentUser, isSpeelster, isTrainer, isLoading: authLoading } = useCurrentUser();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const { data: liveMatches = [] } = useLiveMatches();
 
   useEffect(() => {
     if (!authLoading && isSpeelster) {
