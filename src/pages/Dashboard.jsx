@@ -213,7 +213,7 @@ export default function Dashboard() {
       <NextMatchGrid matches={matches} agendaItems={agendaItems} playerId={null} />
 
       {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", overflow: "hidden", height: "auto" }} className="mobile-grid-2col">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", overflow: "visible", width: "100%" }} className="mobile-grid-2col">
 
         {/* Card 1: Aanwezigheid */}
         <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
