@@ -79,7 +79,23 @@ export default function AgendaForm({ item, onSave, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}>
-      <div className="w-full md:max-w-lg glass-dark rounded-t-3xl md:rounded-3xl p-6 overflow-y-auto" style={{ maxHeight: "90vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}>
+      <div
+        className="w-full md:max-w-lg glass-dark rounded-t-3xl md:rounded-3xl p-6"
+        style={{
+          height: "95vh",
+          maxHeight: "95vh",
+          overflowY: "auto",
+          overscrollBehavior: "contain",
+          WebkitOverflowScrolling: "touch",
+        }}
+        // Op desktop iets kleiner
+        onLoad={(e) => {
+          if (window.innerWidth >= 768) {
+            e.currentTarget.style.height = "auto";
+            e.currentTarget.style.maxHeight = "90vh";
+          }
+        }}
+      >
         <div className="flex items-center justify-between mb-5">
           <h2 className="t-section-title">{item ? "Activiteit bewerken" : "Nieuwe activiteit"}</h2>
           <button onClick={onClose} className="t-secondary hover:text-white transition-colors text-xl">✕</button>
