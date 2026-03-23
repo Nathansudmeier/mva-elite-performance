@@ -7,6 +7,7 @@ import PlayerMinutesBar from "@/components/minutes/PlayerMinutesBar";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { Button } from "@/components/ui/button";
 import WedstrijdbelevingChart from "@/components/checkin/WedstrijdbelevingChart";
+import PlayerSeasonStats from "@/components/stats/PlayerSeasonStats";
 
 export default function PlayerDetail() {
   const params = new URLSearchParams(window.location.search);

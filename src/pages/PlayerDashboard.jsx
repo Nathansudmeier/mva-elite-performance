@@ -17,6 +17,7 @@ import PlayerTrophySection from "../components/dashboard/PlayerTrophySection";
 import PhotoTimeline from "../components/photos/PhotoTimeline";
 import TodayTrainingCard from "../components/trainingsplanner/TodayTrainingCard";
 import UpcomingActivitiesCompact from "../components/agenda/UpcomingActivitiesCompact";
+import PlayerSeasonStats from "../components/stats/PlayerSeasonStats";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
 const TACTICAL = ["speelveld_groot", "omschakeling_balverlies", "speelveld_klein", "omschakeling_balbezit", "kijkgedrag"];
