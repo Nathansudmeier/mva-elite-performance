@@ -33,9 +33,7 @@ export default function Dashboard() {
   }, [isSpeelster, authLoading]);
 
   const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
-  const { data: attendance = [] } = useQuery({ queryKey: ["attendance"], queryFn: () => base44.entities.Attendance.list() });
-   const { data: sessions = [] } = useQuery({ queryKey: ["sessions"], queryFn: () => base44.entities.TrainingSession.list() });
-   const { data: agendaItems = [] } = useQuery({ queryKey: ["agendaItems-all"], queryFn: () => base44.entities.AgendaItem.list("-date") });
+  const { data: agendaItems = [] } = useQuery({ queryKey: ["agendaItems-all"], queryFn: () => base44.entities.AgendaItem.list("-date") });
    const { data: agendaAttendance = [] } = useQuery({ queryKey: ["agendaAttendance-all"], queryFn: () => base44.entities.AgendaAttendance.list() });
    const { data: matches = [] } = useQuery({ queryKey: ["matches"], queryFn: () => base44.entities.Match.list("-date") });
   const { data: winningTeamPhotos = [] } = useQuery({ queryKey: ["winningTeamPhotos"], queryFn: () => base44.entities.WinningTeam.list() });
