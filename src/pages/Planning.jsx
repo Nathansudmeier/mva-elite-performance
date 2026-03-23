@@ -12,10 +12,10 @@ import { formatDate } from "@/components/agenda/agendaUtils";
 export default function Planning() {
   const { isTrainer } = useCurrentUser();
   const qc = useQueryClient();
+  const navigate = useNavigate();
   const [view, setView] = useState("maand");
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
-  const [detailItem, setDetailItem] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
   const [showPast, setShowPast] = useState(false);
 
