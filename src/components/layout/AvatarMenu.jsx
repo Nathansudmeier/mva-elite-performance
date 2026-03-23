@@ -49,6 +49,18 @@ export default function AvatarMenu({ user, profilePhoto, initials, isTrainer, is
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
 
+  // Bereken positie van de avatar knop voor dropdown plaatsing
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, right: 0 });
+  const avatarRef = useRef(null);
+
+  function handleOpen() {
+    if (!open && avatarRef.current) {
+      const rect = avatarRef.current.getBoundingClientRect();
+      setDropdownPos({ top: rect.bottom + 10, right: window.innerWidth - rect.right });
+    }
+    setOpen(v => !v);
+  }
+
   const menuContent = (
     <>
       {/* Header */}
