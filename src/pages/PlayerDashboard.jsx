@@ -152,6 +152,9 @@ export default function PlayerDashboard() {
       {/* Next Matches */}
       <NextMatchGrid matches={matches} />
 
+      {/* Seizoensstatistieken */}
+      <PlayerSeasonStats playerId={playerId} variant="grid" />
+
       {/* Metric Grid */}
       <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
 

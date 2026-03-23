@@ -180,6 +180,9 @@ export default function PlayerDetail() {
         </div>
       )}
 
+      {/* Seizoensstatistieken */}
+      <PlayerSeasonStats playerId={playerId} variant="compact" />
+
       {/* Attendance */}
       {attendance.length > 0 && (
         <div className="glass p-4">
