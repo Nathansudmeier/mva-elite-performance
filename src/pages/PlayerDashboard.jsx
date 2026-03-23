@@ -140,6 +140,7 @@ export default function PlayerDashboard() {
   return (
     <div className="space-y-6 pb-24 relative" style={{ zIndex: 2 }}>
       <DashboardBackground />
+      <LiveMatchBanner liveMatches={liveMatches} isTrainer={false} />
       {/* Header */}
       <PlayerGreetingHeader
         user={user}
