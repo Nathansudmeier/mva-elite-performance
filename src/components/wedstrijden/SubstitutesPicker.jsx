@@ -13,26 +13,26 @@ export default function SubstitutesPicker({ players, lineupMap, substitutes, onS
     }
   };
 
-  const PlayerChip = ({ player, active, onClick, label }) => (
+  const PlayerChip = ({ player, active, onClick }) => (
     <button
       type="button"
       onClick={onClick}
-      className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all border"
-      style={active
-        ? { backgroundColor: "#1A1F2E", color: "#fff", borderColor: "#1A1F2E" }
-        : { backgroundColor: "#FFF5F0", color: "#1A1F2E", borderColor: "#FDE8DC" }
-      }
+      className="flex items-center gap-2 transition-all"
+      style={{
+        padding: "6px 12px 6px 6px",
+        borderRadius: 20,
+        background: active ? "rgba(255,107,0,0.25)" : "rgba(255,255,255,0.08)",
+        border: `0.5px solid ${active ? "rgba(255,107,0,0.50)" : "rgba(255,255,255,0.12)"}`,
+        cursor: onClick ? "pointer" : "default",
+      }}
     >
-      <div
-        className="w-6 h-6 rounded-full overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold text-white"
-        style={{ backgroundColor: active ? "#D45A30" : "#2F3650" }}
-      >
+      <div style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff", background: active ? "rgba(255,107,0,0.50)" : "rgba(255,255,255,0.15)" }}>
         {player.photo_url
           ? <img src={player.photo_url} className="w-full h-full object-cover" alt="" />
           : player.name?.charAt(0)}
       </div>
-      <span>{player.name?.split(" ")[0]}</span>
-      {player.shirt_number && <span className="text-xs opacity-60">#{player.shirt_number}</span>}
+      <span style={{ fontSize: 13, fontWeight: 500, color: "#fff" }}>{player.name?.split(" ")[0]}</span>
+      {player.shirt_number && <span style={{ fontSize: 11, color: "rgba(255,255,255,0.50)" }}>#{player.shirt_number}</span>}
     </button>
   );
 
@@ -40,11 +40,11 @@ export default function SubstitutesPicker({ players, lineupMap, substitutes, onS
     <div className="space-y-4">
       {/* Basis */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#D45A30" }}>
+        <p style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "#FF8C3A", marginBottom: 8 }}>
           Basis ({basisPlayers.length})
         </p>
         {basisPlayers.length === 0 ? (
-          <p className="text-xs" style={{ color: "#2F3650" }}>Sleep speelsters naar het veld om de basis te vullen.</p>
+          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>Sleep spelers naar het veld om de basis te vullen.</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {basisPlayers.map((player) => (
@@ -56,7 +56,7 @@ export default function SubstitutesPicker({ players, lineupMap, substitutes, onS
 
       {/* Wissels */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#D45A30" }}>
+        <p style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "#FF8C3A", marginBottom: 8 }}>
           Wissels ({substitutes.length} geselecteerd)
         </p>
         <div className="flex flex-wrap gap-2">
@@ -72,7 +72,7 @@ export default function SubstitutesPicker({ players, lineupMap, substitutes, onS
             );
           })}
           {availablePlayers.length === 0 && (
-            <p className="text-xs" style={{ color: "#2F3650" }}>Alle speelsters staan in de basis.</p>
+            <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>Alle spelers staan in de basis.</p>
           )}
         </div>
       </div>
