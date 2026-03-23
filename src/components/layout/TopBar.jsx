@@ -268,6 +268,7 @@ export default function TopBar() {
               <NotificationPanel
                 userEmail={user.email}
                 onClose={() => setShowNotifications(false)}
+                anchorRef={bellRef}
               />
             )}
           </div>
