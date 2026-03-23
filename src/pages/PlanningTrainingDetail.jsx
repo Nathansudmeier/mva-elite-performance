@@ -251,7 +251,7 @@ export default function PlanningTrainingDetail() {
         )}
 
         {/* Tab: Aanwezigheid */}
-        {activeTab === 2 && (
+         {activeTab === 2 && (
           <AttendanceTab
             isTrainer={isTrainer}
             aanwezigList={aanwezigList}
@@ -259,6 +259,10 @@ export default function PlanningTrainingDetail() {
             nognietList={nognietList}
             sendReminder={sendReminder}
             reminderSent={reminderSent}
+            editingAttendance={editingAttendance}
+            onToggleEdit={() => setEditingAttendance(!editingAttendance)}
+            players={players}
+            onToggleStatus={handleAttendanceToggle}
           />
         )}
       </div>
