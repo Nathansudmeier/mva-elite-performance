@@ -177,22 +177,14 @@ export default function TrainingPlanEditor({ players, trainingDate }) {
           ))}
         </div>
 
-        {/* Add exercise */}
+        {/* Add exercise from library */}
         {(editingPlan.exercises || []).length < 10 && (
-          <div style={{ display: "flex", gap: "8px" }}>
-            <button
-              onClick={addExercise}
-              style={{ flex: 1, minHeight: "44px", background: "rgba(255,107,0,0.10)", border: "0.5px dashed rgba(255,107,0,0.35)", borderRadius: "14px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}
-            >
-              <Plus size={16} /> Nieuw ({(editingPlan.exercises || []).length}/10)
-            </button>
-            <button
-              onClick={() => { setLibraryTargetIdx(null); setShowLibrary(true); }}
-              style={{ minHeight: "44px", padding: "0 16px", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.18)", borderRadius: "14px", color: "rgba(255,255,255,0.70)", fontSize: "13px", fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
-            >
-              <BookOpen size={15} /> Bibliotheek
-            </button>
-          </div>
+          <button
+            onClick={() => { setLibraryTargetIdx(null); setShowLibrary(true); }}
+            style={{ width: "100%", minHeight: "44px", background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "14px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}
+          >
+            <Plus size={16} /> Vorm toevoegen ({(editingPlan.exercises || []).length}/10)
+          </button>
         )}
 
         {showLibrary && (
