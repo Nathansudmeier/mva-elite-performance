@@ -130,7 +130,7 @@ export default function PlanningTrainingDetail() {
 
   return (
     <div className="relative">
-      <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png" alt=""
+      <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/634f1c16e_Matchbackground.jpg" alt=""
         style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
 
       <div className="relative z-10 space-y-5">
