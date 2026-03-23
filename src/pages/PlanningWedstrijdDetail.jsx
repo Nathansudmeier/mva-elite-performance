@@ -9,8 +9,8 @@ import { formatDate, TYPE_CONFIG, TEAM_COLORS } from "@/components/agenda/agenda
 import AttendanceButtons from "@/components/attendance/AttendanceButtons";
 import FieldLineup from "@/components/wedstrijden/FieldLineup";
 import AgendaForm from "@/components/agenda/AgendaForm";
-import DisplayLineup from "@/components/wedstrijden/DisplayLineup";
-import EditLineup from "@/components/wedstrijden/EditLineup";
+import LineupOverview from "@/components/wedstrijden/LineupOverview";
+import LineupSelector from "@/components/wedstrijden/LineupSelector";
 import { createPageUrl } from "@/utils";
 
 const TABS = ["Overzicht", "Opstelling", "Tactiek", "Aanwezigheid"];
