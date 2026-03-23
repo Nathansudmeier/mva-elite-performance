@@ -90,7 +90,8 @@ export default function TrainingsvormForm() {
         ctx.drawImage(img, 0, 0, width, height);
 
         canvas.toBlob(async (blob) => {
-          const uploadRes = await base44.integrations.Core.UploadFile({ file: blob });
+          const fileObj = new File([blob], "photo.jpg", { type: "image/jpeg" });
+          const uploadRes = await base44.integrations.Core.UploadFile({ file: fileObj });
           setForm(prev => ({ ...prev, photo_url: uploadRes.file_url }));
         }, "image/jpeg", 0.8);
       };
