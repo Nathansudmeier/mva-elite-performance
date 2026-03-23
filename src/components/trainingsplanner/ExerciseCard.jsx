@@ -192,27 +192,28 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
           {/* Field photo */}
           <div style={{ marginBottom: "14px" }}>
             <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>Velddiagram foto</p>
-            {exercise.field_photo ? (
-              <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden" }}>
-                <img src={exercise.field_photo} alt="Velddiagram" style={{ width: "100%", borderRadius: "12px", display: "block" }} />
-                <button
-                  onClick={() => { update({ field_photo: null }); fileInputRef.current && (fileInputRef.current.value = ""); }}
-                  style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.55)", border: "none", borderRadius: "8px", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
-                >
-                  <X size={14} color="#fff" />
-                </button>
-              </div>
-            ) : (
+            <div style={{ position: "relative" }}>
+              {exercise.field_photo && (
+                <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "8px" }}>
+                  <img src={exercise.field_photo} alt="Velddiagram" style={{ width: "100%", borderRadius: "12px", display: "block" }} />
+                  <button
+                    onClick={() => { update({ field_photo: null }); fileInputRef.current && (fileInputRef.current.value = ""); }}
+                    style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,0.55)", border: "none", borderRadius: "8px", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+                  >
+                    <X size={14} color="#fff" />
+                  </button>
+                </div>
+              )}
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
                 style={{ width: "100%", minHeight: "100px", background: "rgba(255,255,255,0.05)", border: "0.5px dashed rgba(255,255,255,0.20)", borderRadius: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", cursor: "pointer", color: "rgba(255,255,255,0.45)", fontSize: "13px" }}
               >
                 <Camera size={24} color="rgba(255,255,255,0.35)" />
-                {uploading ? "Uploaden..." : "Foto uploaden"}
+                {uploading ? "Uploaden..." : exercise.field_photo ? "Vervangen" : "Foto uploaden"}
               </button>
-            )}
-            <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoUpload} />
+              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoUpload} />
+            </div>
           </div>
 
           {/* Groups */}
