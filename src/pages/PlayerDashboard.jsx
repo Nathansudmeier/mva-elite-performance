@@ -162,6 +162,9 @@ export default function PlayerDashboard() {
       {/* Today Training Card */}
       <TodayTrainingCard playerId={playerId} />
 
+      {/* Next Matches */}
+      <NextMatchGrid matches={matches} />
+
       {/* Metric Grid */}
       <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
 
