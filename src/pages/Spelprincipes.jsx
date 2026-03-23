@@ -254,33 +254,30 @@ function SpelprincipeCard({ item, isTrainer, onEdit, onDelete }) {
 
       {open && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-4 overflow-hidden"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end xl:items-center justify-center p-4 overflow-hidden"
           onClick={() => setOpen(false)}
         >
           <div
-            className="glass-dark modal-scroll-content w-full max-w-2xl my-8"
-            style={{ overflowY: "auto", maxHeight: "90vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
+            className="glass-dark modal-scroll-content w-full xl:max-w-2xl xl:my-8"
+            style={{ borderRadius: "24px 24px 0 0", overflowY: "auto", maxHeight: "95vh", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div
-              className="flex items-center justify-between p-5"
-              style={{ borderBottom: "0.5px solid rgba(255,255,255,0.10)" }}
-            >
-              <div>
-                <h2 className="text-xl font-bold text-white">{item.title}</h2>
+            <div className="flex items-start justify-between gap-3 p-4 sm:p-5" style={{ borderBottom: "0.5px solid rgba(255,255,255,0.10)" }}>
+              <div className="flex-1">
+                <h2 className="t-card-title">{item.title}</h2>
                 <span
-                  className="inline-block text-xs font-bold px-2 py-0.5 rounded-full text-white mt-1"
+                  className="inline-block text-xs font-bold px-2 py-0.5 rounded-full text-white mt-2"
                   style={{ background: categoryColors[item.category] || "#888888" }}
                 >
                   {item.category}
                 </span>
               </div>
-              <button onClick={() => setOpen(false)} className="p-2 rounded-lg" style={{ background: "rgba(255,255,255,0.08)" }}>
+              <button onClick={() => setOpen(false)} className="p-2 rounded-lg flex-shrink-0" style={{ background: "rgba(255,255,255,0.08)" }}>
                 <i className="ti ti-x" style={{ fontSize: "20px", color: "rgba(255,255,255,0.7)" }} />
               </button>
             </div>
-            <div className="p-5 space-y-4">
+            <div className="p-4 sm:p-5 space-y-4">
               {item.video_url && isYouTubeUrl(item.video_url) ? (
                 <YouTubeEmbed url={item.video_url} />
               ) : item.video_url ? (
