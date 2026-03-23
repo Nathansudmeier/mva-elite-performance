@@ -250,8 +250,23 @@ export default function PlanningWedstrijdDetail() {
 
   async function handleDelete() {
     if (!confirm(`'${item.title}' verwijderen?`)) return;
-    await base44.entities.AgendaItem.delete(item.id);
-    navigate("/Planning");
+    try {
+      // Verwijder gekoppelde match als die bestaat
+      if (match) {
+        await base44.entities.Match.delete(match.id);
+      }
+      // Verwijder agenda item
+      await base44.entities.AgendaItem.delete(item.id);
+      // Invalidate matches query zodat dashboard stats bijgewerkt worden
+      await qc.invalidateQueries({ queryKey: ["matches"] });
+      navigate("/Planning");
+    } catch (error) {
+      console.error("Error deleting:", error);
+      toast({
+        description: "Kon activiteit niet verwijderen",
+        style: { background: "#f87171", color: "white", border: "none" },
+      });
+    }
   }
 
   async function saveScore() {
