@@ -100,6 +100,19 @@ export default function PlanningWedstrijdDetail() {
           reason: reason || "",
           sender_email: currentUser?.email,
         });
+        // Notify trainers/admins via notification entity
+        const allUsers = await base44.entities.User.list();
+        const trainerEmails = allUsers.filter(u => u.role === "admin" || u.role === "trainer").map(u => u.email).filter(Boolean);
+        await Promise.all(trainerEmails.map(email =>
+          base44.entities.Notification.create({
+            user_email: email,
+            type: "afmelding",
+            title: `${myPlayer.name} afgemeld`,
+            body: reason || `voor ${item.title}`,
+            is_read: false,
+            link: `/Planning?id=${itemId}`,
+          })
+        ));
       }
     },
     onSuccess: () => {
