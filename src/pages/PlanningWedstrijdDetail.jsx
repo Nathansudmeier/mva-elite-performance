@@ -397,9 +397,9 @@ export default function PlanningWedstrijdDetail() {
                         <p className="t-secondary-sm">MVA Noord</p>
                       </div>
                       <button type="button" onClick={() => { setEditingScore(true); setScoreHome(match.score_home ?? ""); setScoreAway(match.score_away ?? ""); }} style={{ minWidth: 0, background: "none", border: "none", cursor: isTrainer ? "pointer" : "default" }}>
-                        <p style={{ fontSize: "40px", fontWeight: 800, color: "white", letterSpacing: "-1px" }}>
-                          {match.score_home !== undefined && match.score_away !== undefined ? `${match.score_home} - ${match.score_away}` : "Nog niet gespeeld"}
-                        </p>
+                       <p style={{ fontSize: "40px", fontWeight: 800, color: "white", letterSpacing: "-1px" }}>
+                         {match.live_status === "finished" || (!isFuture && match.score_home !== undefined && match.score_away !== undefined) ? `${match.score_home} - ${match.score_away}` : "Wedstrijd nog niet gespeeld"}
+                       </p>
                       </button>
                       <div className="flex-1">
                         {match.opponent_logo_url && (
