@@ -28,24 +28,23 @@ function AttendanceButton({ item, playerId, record }) {
 
   if (record?.status === "aanwezig") {
     return (
-      <button
-        onClick={() => upsert.mutate({ status: "onbekend", notes: "" })}
-        disabled={upsert.isPending}
-        style={{ height: 56, width: 56, borderRadius: 16, background: "rgba(74,222,128,0.15)", border: "0.5px solid rgba(74,222,128,0.25)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
-      >
-        <i className="ti ti-circle-check" style={{ fontSize: 24, color: "#4ade80" }} />
-      </button>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12 }}>
+        <i className="ti ti-circle-check" style={{ fontSize: 14, color: "#4ade80" }} />
+        <span style={{ fontSize: 12, color: "#4ade80", fontWeight: 500 }}>Aangemeld</span>
+      </div>
     );
   }
   if (record?.status === "afwezig") {
     return (
-      <button
-        onClick={() => upsert.mutate({ status: "onbekend", notes: "" })}
-        disabled={upsert.isPending}
-        style={{ height: 56, width: 56, borderRadius: 16, background: "rgba(248,113,113,0.15)", border: "0.5px solid rgba(248,113,113,0.25)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
-      >
-        <i className="ti ti-circle-x" style={{ fontSize: 24, color: "#f87171" }} />
-      </button>
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <i className="ti ti-circle-x" style={{ fontSize: 14, color: "#f87171" }} />
+          <span style={{ fontSize: 12, color: "#f87171", fontWeight: 500 }}>Afgemeld</span>
+        </div>
+        {record.notes && (
+          <p style={{ fontSize: 11, color: "rgba(255,255,255,0.40)", marginLeft: 20 }}>{record.notes}</p>
+        )}
+      </div>
     );
   }
 
