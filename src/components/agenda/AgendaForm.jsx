@@ -253,6 +253,7 @@ export default function AgendaForm({ item, onSave, onClose }) {
           <button type="submit" disabled={saving} className="btn-primary mt-2">
             {saving ? "Opslaan..." : item ? "Wijzigingen opslaan" : "Activiteit aanmaken"}
           </button>
+          <div style={{ height: 80 }} />
         </form>
       </div>
     </div>
