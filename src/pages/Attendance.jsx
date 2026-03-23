@@ -88,9 +88,9 @@ export default function Attendance() {
         {/* Sessions list */}
         <div className="space-y-2">
           <h2 className="text-sm font-500 text-[#888888] uppercase tracking-wider mb-3">Sessies</h2>
-          {sessions.map((s) => {
-            const sAtt = attendance.filter((a) => a.session_id === s.id);
-            const present = sAtt.filter((a) => a.present).length;
+          {agendaItems.map((s) => {
+            const sAtt = agendaAttendance.filter((a) => a.agenda_item_id === s.id);
+            const present = sAtt.filter((a) => a.status === "aanwezig").length;
             const isActive = selectedSessionId === s.id;
             return (
               <button
