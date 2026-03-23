@@ -343,7 +343,7 @@ export default function Spelprincipes() {
   return (
     <div className="min-h-screen pb-20" style={{ backgroundColor: "#1c0e04" }}>
       <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/1c0b85909_Tacticsbackground.jpg" alt=""
-        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0, filter: "blur(8px)" }} />
       <div className="relative z-10 p-4 md:p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-white">Spelprincipes</h1>
