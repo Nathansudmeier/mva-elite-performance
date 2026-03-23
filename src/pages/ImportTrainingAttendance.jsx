@@ -30,27 +30,27 @@ export default function ImportTrainingAttendance() {
       const uploadRes = await base44.integrations.Core.UploadFile({ file });
       const fileUrl = uploadRes.file_url;
 
-      // Extract data from Excel
+      // Extract data from Excel with flexible schema
       const extractRes = await base44.integrations.Core.ExtractDataFromUploadedFile({
         file_url: fileUrl,
         json_schema: {
           type: "object",
-          properties: {
-            Naam: { type: "string" }
-          }
+          properties: {},
+          additionalProperties: true
         }
       });
 
       if (extractRes.status !== "success") {
-        setError("Fout bij het lezen van het Excel-bestand");
+        setError(`Fout bij het lezen van het Excel-bestand: ${extractRes.details}`);
         setLoading(false);
         return;
       }
 
       // Transform data: rows[0] has training headers, rows[1+] have player data
-      const rows = extractRes.output;
+      const rows = Array.isArray(extractRes.output) ? extractRes.output : [extractRes.output];
+      
       if (rows.length < 2) {
-        setError("Excel-bestand is leeg");
+        setError("Excel-bestand bevat onvoldoende gegevens");
         setLoading(false);
         return;
       }
@@ -83,8 +83,9 @@ export default function ImportTrainingAttendance() {
 
       setMessage(`✓ ${result.data.created} trainingsgegevens toegevoegd (${result.data.skipped} overgeslagen)`);
       setFile(null);
+      document.getElementById('file-input').value = '';
     } catch (err) {
-      setError(`Fout: ${err.message}`);
+      setError(`Fout: ${err.message || 'Onbekende fout'}`);
     } finally {
       setLoading(false);
     }
