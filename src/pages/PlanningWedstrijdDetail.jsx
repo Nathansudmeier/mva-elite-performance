@@ -410,7 +410,7 @@ export default function PlanningWedstrijdDetail() {
                         <p className="t-secondary-sm">{item.title}</p>
                       </div>
                     </div>
-                    {match.score_home !== undefined && match.score_away !== undefined && getScoreResult() && (
+                    {(match.live_status === "finished" || (!isFuture && match.score_home !== undefined && match.score_away !== undefined)) && getScoreResult() && (
                       <div>
                         <span style={{
                           fontSize: "12px",
