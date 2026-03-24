@@ -127,19 +127,48 @@ export default function PlayerMergedGreeting({ player, attendance = [], ratings 
   const firstName = user?.full_name?.split(" ")[0] || "Speelster";
   const initials = user?.full_name?.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) || "?";
 
+  const getCardStyle = () => {
+    const baseStyle = {
+      border: "2.5px solid #1a1a1a",
+      borderRadius: "18px",
+      boxShadow: "3px 3px 0 #1a1a1a",
+      padding: "16px 18px",
+      display: "flex",
+      alignItems: "flex-start",
+      gap: "14px",
+    };
+
+    if (dayType === "matchday") {
+      return { ...baseStyle, background: "#FF6800" };
+    }
+    if (dayType === "training") {
+      return { ...baseStyle, background: "#08D068" };
+    }
+    return { ...baseStyle, background: "#00C2FF" };
+  };
+
+  const getTextColor = () => {
+    return dayType === "matchday" || dayType === "training" ? "#ffffff" : "#1a1a1a";
+  };
+
+  const getSecondaryColor = () => {
+    if (dayType === "matchday") return "rgba(255,255,255,0.70)";
+    if (dayType === "training") return "rgba(255,255,255,0.70)";
+    return "rgba(26,26,26,0.40)";
+  };
+
+  const getQuoteColor = () => {
+    if (dayType === "matchday") return "rgba(255,255,255,0.85)";
+    if (dayType === "training") return "rgba(255,255,255,0.85)";
+    return "rgba(26,26,26,0.55)";
+  };
+
+  const textColor = getTextColor();
+  const secondaryColor = getSecondaryColor();
+  const quoteColor = getQuoteColor();
+
   return (
-    <div
-      style={{
-        background: "#ffffff",
-        border: "2.5px solid #1a1a1a",
-        borderRadius: "18px",
-        boxShadow: "3px 3px 0 #1a1a1a",
-        padding: "16px 18px",
-        display: "flex",
-        alignItems: "flex-start",
-        gap: "14px",
-      }}
-    >
+    <div style={getCardStyle()}>
       {/* Left: Profile photo */}
       <button
         onClick={() => navigate(`/PlayerDetail?id=${player?.id}`)}
