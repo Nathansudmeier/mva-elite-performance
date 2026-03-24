@@ -6,8 +6,6 @@ import { Upload } from "lucide-react";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import MatchDayBanner from "@/components/checkin/MatchDayBanner";
 import TrainerChampionsTrophy from "../components/dashboard/TrainerChampionsTrophy";
-import PhotoTimeline from "../components/photos/PhotoTimeline";
-import PhotoUpload from "../components/photos/PhotoUpload";
 import WinningTeamUpload from "../components/dashboard/WinningTeamUpload";
 import TrainerGreetingPill from "../components/dashboard/TrainerGreetingPill";
 import DashboardBackground from "../components/dashboard/DashboardBackground";
@@ -42,7 +40,7 @@ export default function Dashboard() {
   const { data: playerRatings = [] } = useQuery({ queryKey: ["playerRatings"], queryFn: () => base44.entities.PlayerRating.list("-date") });
   const { data: wellnessLogs = [] } = useQuery({ queryKey: ["wellnessLogs"], queryFn: () => base44.entities.WellnessLog.list("-date") });
   const { data: selfReflections = [] } = useQuery({ queryKey: ["selfReflections"], queryFn: () => base44.entities.SelfReflection.list("-date") });
-  const { data: teamPhotos = [], refetch: refetchPhotos } = useQuery({ queryKey: ["teamPhotos"], queryFn: () => base44.entities.TeamPhoto.list("-date") });
+  const { data: teamPhotos = [] } = useQuery({ queryKey: ["teamPhotos"], queryFn: () => base44.entities.TeamPhoto.list("-date") });
 
 
   const activePlayers = players.filter((p) => p.active !== false);
@@ -441,8 +439,7 @@ export default function Dashboard() {
 
       {winningTeamPhotos?.length > 0 && <TrainerChampionsTrophy players={activePlayers} winningTeams={winningTeamPhotos} />}
 
-      {isTrainer && <PhotoUpload onSaved={() => refetchPhotos()} />}
-      {teamPhotos?.length > 0 && <PhotoTimeline photos={teamPhotos} />}
+
 
     </div>
   );

@@ -14,7 +14,6 @@ import PlayerIOPGoals from "../components/dashboard/PlayerIOPGoals";
 import AttendanceDots from "../components/dashboard/AttendanceDots";
 import NextMatchGrid from "../components/dashboard/NextMatchGrid";
 import PlayerTrophySection from "../components/dashboard/PlayerTrophySection";
-import PhotoTimeline from "../components/photos/PhotoTimeline";
 import TodayTrainingCard from "../components/trainingsplanner/TodayTrainingCard";
 import UpcomingActivitiesCompact from "../components/agenda/UpcomingActivitiesCompact";
 import PlayerSeasonStats from "../components/stats/PlayerSeasonStats";
@@ -96,10 +95,7 @@ export default function PlayerDashboard() {
     queryFn: () => base44.entities.WinningTeam.list(),
   });
 
-  const { data: teamPhotos = [] } = useQuery({
-    queryKey: ["teamPhotos"],
-    queryFn: () => base44.entities.TeamPhoto.list("-date"),
-  });
+
 
   const { data: agendaItems = [] } = useQuery({
     queryKey: ["agendaItems-all"],
@@ -199,9 +195,6 @@ export default function PlayerDashboard() {
 
       {/* Champions Trophy */}
       <PlayerTrophySection players={allPlayers} winningTeams={winningTeams} currentPlayerId={playerId} />
-
-      {/* Foto Tijdlijn */}
-      <PhotoTimeline photos={teamPhotos} />
 
       {/* Radar Chart */}
       {chartData.length > 0 && radarData.length > 0 && (
