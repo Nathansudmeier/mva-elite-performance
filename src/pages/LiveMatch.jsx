@@ -11,6 +11,7 @@ import MatchReport from "../components/live/MatchReport";
 import FieldLineup from "../components/wedstrijden/FieldLineup";
 import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
 import LineupPlayerList from "../components/wedstrijden/LineupPlayerList";
+import { NoteModal, GoalAgainstModal, YellowCardModal, RedCardModal } from "../components/live/EventModals";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
@@ -36,130 +37,6 @@ function lineupArrayToMap(arr) {
 }
 function lineupMapToArray(map) {
   return Object.entries(map).map(([slot, player_id]) => ({ slot, player_id }));
-}
-
-// Simple note modal overlay
-function NoteModal({ minute, onConfirm, onClose }) {
-  const [note, setNote] = useState("");
-  return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)", backdropFilter: "blur(4px)" }} />
-      <div className="glass p-6 w-full max-w-sm space-y-4" style={{ position: "relative" }}>
-        <div className="flex items-center gap-2" style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a" }}>
-          <Edit2 size={16} />Notitie — {minute}'
-        </div>
-        <textarea
-          placeholder="Tactische observatie..."
-          value={note}
-          onChange={e => setNote(e.target.value)}
-          autoFocus
-          rows={4}
-          className="w-full rounded-lg border-2 border-border p-3 resize-none focus:outline-none focus:ring-2 focus:ring-orange-600"
-          style={{ fontSize: "13px", fontFamily: "inherit" }}
-        />
-        <div className="flex gap-3">
-          <button onClick={onClose} className="flex-1 btn-secondary">Annuleren</button>
-          <button onClick={() => { if (note.trim()) onConfirm({ type: "note", minute, note }); }} disabled={!note.trim()}
-            className="flex-1 btn-primary" style={{ opacity: note.trim() ? 1 : 0.5 }}>
-            Opslaan
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Goal tegen simple confirmation
-function GoalAgainstModal({ minute, onConfirm, onClose }) {
-  return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)", backdropFilter: "blur(4px)" }} />
-      <div className="glass glass-alert p-6 w-full max-w-xs text-center space-y-4" style={{ position: "relative" }}>
-        <div style={{ fontSize: "24px" }}>⚽</div>
-        <div style={{ fontSize: "15px", fontWeight: 700, color: "#FF3DA8" }}>Goal Tegen — {minute}'</div>
-        <p className="t-secondary">Goal registreren op minuut {minute}?</p>
-        <div className="flex gap-3">
-          <button onClick={onClose} className="flex-1 btn-secondary">Annuleren</button>
-          <button onClick={() => onConfirm({ type: "goal_against", minute })}
-            className="flex-1 btn-primary" style={{ background: "#FF3DA8" }}>
-            Bevestigen
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Yellow card modal
-function YellowCardModal({ minute, onConfirm, onClose, players }) {
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
-  return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 16 }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)", backdropFilter: "blur(4px)" }} />
-      <div className="glass p-6 w-full max-w-sm space-y-4 rounded-t-3xl" style={{ position: "relative" }}>
-        <div className="flex items-center gap-2" style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", marginBottom: "8px" }}>
-          <span style={{ fontSize: "24px" }}>🟨</span>Gele Kaart — {minute}'
-        </div>
-        <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
-          {players.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => { setSelectedPlayer(p); onConfirm({ type: "yellow_card", minute, player_id: p.id }); }}
-              style={{
-                padding: "12px",
-                background: selectedPlayer?.id === p.id ? "#FFD600" : "white",
-                border: "2px solid #1a1a1a",
-                borderRadius: "12px",
-                fontWeight: 700,
-                fontSize: "12px",
-                color: "#1a1a1a",
-                cursor: "pointer"
-              }}
-            >
-              {p.name}
-            </button>
-          ))}
-        </div>
-        <button onClick={onClose} className="w-full btn-secondary">Annuleren</button>
-      </div>
-    </div>
-  );
-}
-
-// Red card modal
-function RedCardModal({ minute, onConfirm, onClose, players }) {
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
-  return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 16 }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)", backdropFilter: "blur(4px)" }} />
-      <div className="glass p-6 w-full max-w-sm space-y-4 rounded-t-3xl" style={{ position: "relative" }}>
-        <div className="flex items-center gap-2" style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", marginBottom: "8px" }}>
-          <span style={{ fontSize: "24px" }}>🟥</span>Rode Kaart — {minute}'
-        </div>
-        <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
-          {players.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => { setSelectedPlayer(p); onConfirm({ type: "red_card", minute, player_id: p.id }); }}
-              style={{
-                padding: "12px",
-                background: selectedPlayer?.id === p.id ? "#FF3333" : "white",
-                border: "2px solid #1a1a1a",
-                borderRadius: "12px",
-                fontWeight: 700,
-                fontSize: "12px",
-                color: selectedPlayer?.id === p.id ? "white" : "#1a1a1a",
-                cursor: "pointer"
-              }}
-            >
-              {p.name}
-            </button>
-          ))}
-        </div>
-        <button onClick={onClose} className="w-full btn-secondary">Annuleren</button>
-      </div>
-    </div>
-  );
 }
 
 export default function LiveMatch() {
