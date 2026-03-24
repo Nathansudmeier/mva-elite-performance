@@ -94,7 +94,7 @@ function DeveloperGroup({ currentPageName, onItemClick }) {
 
 export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, isTrainer, isSpeelster, isOuder } = useCurrentUser();
+  const { user, isTrainer, isSpeelster, isOuder, playerId: childPlayerId } = useCurrentUser();
   const isSpeelsterUser = !isTrainer && isSpeelster;
   const isOuderUser = isOuder;
 
@@ -190,7 +190,7 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Tab Bar - Bento Bold */}
-      <BentoTabBar currentPageName={currentPageName} isSpeelsterUser={isSpeelsterUser} isOuderUser={isOuderUser} onNavigate={() => setMobileOpen(false)} />
+      <BentoTabBar currentPageName={currentPageName} isSpeelsterUser={isSpeelsterUser} isOuderUser={isOuderUser} childPlayerId={childPlayerId} onNavigate={() => setMobileOpen(false)} />
     </div>
   );
 }
