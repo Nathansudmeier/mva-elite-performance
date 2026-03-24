@@ -610,8 +610,8 @@ export default function PlanningWedstrijdDetail() {
         {/* Tab: Opstelling */}
          {activeTab === 1 && !editingLineup && (
           !isTrainer && isFuture ? (
-            <div className="glass-dark rounded-2xl p-6 text-center">
-              <p className="t-secondary">De opstelling wordt bekend gemaakt op de dag van de wedstrijd.</p>
+            <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "24px 16px", textAlign: "center" }}>
+              <p style={{ fontSize: 13, color: "rgba(26,26,26,0.50)" }}>De opstelling wordt bekend gemaakt op de dag van de wedstrijd.</p>
             </div>
           ) : (
             <LineupOverview
@@ -636,32 +636,31 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Tab: Tactiek */}
         {activeTab === 2 && (
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {!match ? (
-              <div className="glass-dark rounded-2xl p-6 text-center">
-                <p className="t-secondary">Geen gekoppelde wedstrijd gevonden.</p>
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "24px 16px", textAlign: "center" }}>
+                <p style={{ fontSize: 13, color: "rgba(26,26,26,0.50)" }}>Geen gekoppelde wedstrijd gevonden.</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {[
                   { key: "ball_possession", label: "Balbezit (BB)" },
                   { key: "pressing", label: "Verdediging / Pressing (VB)" },
                   { key: "transition", label: "Omschakeling" },
                   { key: "set_pieces", label: "Dode spelmomenten" },
                 ].map(({ key, label }) => (
-                  <div key={key} className="glass-dark rounded-2xl p-4">
-                    <p className="t-label mb-2">{label}</p>
+                  <div key={key} style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+                    <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>{label}</p>
                     {isTrainer ? (
                       <textarea
                         value={tactics[key]}
                         onChange={e => setTactics(t => ({ ...t, [key]: e.target.value }))}
                         rows={3}
-                        className="w-full text-sm text-white outline-none resize-none rounded-xl p-3"
-                        style={{ background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)" }}
+                        style={{ width: "100%", fontSize: 13, color: "#1a1a1a", outline: "none", resize: "none", borderRadius: 10, padding: "8px 12px", background: "rgba(26,26,26,0.04)", border: "2px solid rgba(26,26,26,0.12)", boxSizing: "border-box", fontWeight: 500 }}
                         placeholder={`Notities voor ${label.toLowerCase()}...`}
                       />
                     ) : (
-                      <p className="t-secondary">{tactics[key] || <span className="t-tertiary">Nog geen notities.</span>}</p>
+                      <p style={{ fontSize: 13, color: tactics[key] ? "rgba(26,26,26,0.65)" : "rgba(26,26,26,0.30)" }}>{tactics[key] || "Nog geen notities."}</p>
                     )}
                   </div>
                 ))}
