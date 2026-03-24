@@ -13,7 +13,7 @@ import PlayerSeasonStats from "@/components/stats/PlayerSeasonStats";
 export default function PlayerDetail() {
   const params = new URLSearchParams(window.location.search);
   const playerId = params.get("id");
-  const { isTrainer, playerId: myPlayerId } = useCurrentUser();
+  const { isTrainer, playerId: myPlayerId, isOuder } = useCurrentUser();
   const isOwnProfile = myPlayerId === playerId;
 
   const { data: player } = useQuery({
