@@ -6,7 +6,6 @@ import { format, parseISO, differenceInDays } from "date-fns";
 import { nl } from "date-fns/locale";
 import CheckInFlow from "@/components/checkin/CheckInFlow";
 
-// MVA Noord logo URL
 const MVA_LOGO_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/c0045a171_MVAlogo.png";
 
 function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, playerId }) {
@@ -24,97 +23,18 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
   today.setHours(0, 0, 0, 0);
 
   const isMO17 = team === "MO17";
-  const glowColor = isMO17 ? "rgba(255,107,0,0.45)" : "rgba(96,165,250,0.35)";
-  const borderColor = isMO17 ? "rgba(255,107,0,0.25)" : "rgba(96,165,250,0.20)";
-  const pillColor = isMO17 ? { bg: "rgba(255,107,0,0.25)", border: "rgba(255,107,0,0.50)", text: "#FF8C3A" } : { bg: "rgba(96,165,250,0.20)", border: "rgba(96,165,250,0.45)", text: "#60a5fa" };
 
   if (!nextMatch) {
     return (
       <div style={{
-        borderRadius: "22px",
-        overflow: "hidden",
-        height: "180px",
-        position: "relative",
-        border: `0.5px solid ${borderColor}`,
+        borderRadius: "18px", height: "160px",
+        border: "2.5px solid #1a1a1a", background: "#1a1a1a",
+        boxShadow: "3px 3px 0 #1a1a1a",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        flexDirection: "column", gap: "8px",
       }}>
-        {/* Background image */}
-        <img
-          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e47690dd6_wedstrijd.jpg"
-          alt="Wedstrijd veld"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Overlay 1 */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "rgba(0,0,0,0.45)",
-          zIndex: 1,
-        }} />
-
-        {/* Overlay 2 - diagonal gradient */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "linear-gradient(135deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.10) 50%, rgba(0,0,0,0.40) 100%)",
-          zIndex: 2,
-        }} />
-
-        {/* SVG field lines */}
-        <svg
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 3,
-          }}
-          viewBox="0 0 400 150"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          <line x1="200" y1="0" x2="200" y2="150" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-          <ellipse cx="200" cy="75" rx="25" ry="35" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-          <rect x="20" y="45" width="35" height="60" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-          <rect x="345" y="45" width="35" height="60" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-        </svg>
-
-        {/* Glow */}
-        <div style={{
-          position: "absolute",
-          top: "-50px",
-          right: "-30px",
-          width: "160px",
-          height: "160px",
-          borderRadius: "50%",
-          background: `radial-gradient(${glowColor} 0%, transparent 70%)`,
-          zIndex: 4,
-          pointerEvents: "none",
-        }} />
-
-        {/* Content */}
-        <div style={{
-          position: "relative",
-          zIndex: 5,
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "16px",
-        }}>
-          <i className="ti ti-calendar" style={{ fontSize: "32px", color: "rgba(255,255,255,0.35)", marginBottom: "8px" }} />
-          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.35)", textAlign: "center" }}>
-            Geen wedstrijd gepland
-          </p>
-        </div>
+        <i className="ti ti-calendar" style={{ fontSize: "28px", color: "rgba(255,255,255,0.25)" }} />
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.30)", fontWeight: 600 }}>Geen wedstrijd gepland</p>
       </div>
     );
   }
@@ -130,216 +50,79 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
       <button
         onClick={() => navigate(`/Planning?id=${nextMatch.id}`)}
         style={{
-          borderRadius: "22px",
-          overflow: "hidden",
-          height: "180px",
-          position: "relative",
-          border: `0.5px solid ${borderColor}`,
-          background: "transparent",
-          padding: 0,
-          cursor: "pointer",
+          borderRadius: "18px", height: "160px", position: "relative",
+          border: "2.5px solid #1a1a1a", background: "#1a1a1a",
+          boxShadow: "3px 3px 0 #1a1a1a",
+          padding: 0, cursor: "pointer", overflow: "hidden", display: "block", width: "100%",
         }}
       >
-        {/* Background image */}
-        <img
-          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e47690dd6_wedstrijd.jpg"
-          alt="Wedstrijd veld"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Overlay 1 */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "rgba(0,0,0,0.45)",
-          zIndex: 1,
-        }} />
-
-        {/* Overlay 2 - diagonal gradient */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "linear-gradient(135deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.10) 50%, rgba(0,0,0,0.40) 100%)",
-          zIndex: 2,
-        }} />
-
-        {/* SVG field lines */}
-        <svg
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            zIndex: 3,
-          }}
-          viewBox="0 0 400 150"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          <line x1="200" y1="0" x2="200" y2="150" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-          <ellipse cx="200" cy="75" rx="25" ry="35" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-          <rect x="20" y="45" width="35" height="60" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-          <rect x="345" y="45" width="35" height="60" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-        </svg>
-
-        {/* Glow */}
-        <div style={{
-          position: "absolute",
-          top: "-50px",
-          right: "-30px",
-          width: "160px",
-          height: "160px",
-          borderRadius: "50%",
-          background: `radial-gradient(${glowColor} 0%, transparent 70%)`,
-          zIndex: 4,
-          pointerEvents: "none",
-        }} />
-
         {/* Content */}
-        <div style={{
-          position: "relative",
-          zIndex: 5,
-          height: "100%",
-          padding: "12px 16px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}>
-          {/* Top: Team pill + Time pill */}
+        <div style={{ padding: "12px 14px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          {/* Top: pills */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{
-              background: pillColor.bg,
-              border: `0.5px solid ${pillColor.border}`,
-              color: pillColor.text,
-              borderRadius: "20px",
-              padding: "3px 10px",
-              fontSize: "10px",
-              fontWeight: 700,
+              background: isMO17 ? "#FF6800" : "#00C2FF",
+              border: "1.5px solid white",
+              color: isMO17 ? "#ffffff" : "#1a1a1a",
+              borderRadius: "20px", padding: "3px 10px",
+              fontSize: "10px", fontWeight: 800,
             }}>
               {teamLabel}
             </div>
             <div style={{
-              background: "rgba(0,0,0,0.35)",
-              backdropFilter: "blur(10px)",
-              WebkitBackdropFilter: "blur(10px)",
-              border: "0.5px solid rgba(255,255,255,0.15)",
-              color: "rgba(255,255,255,0.65)",
-              borderRadius: "20px",
-              padding: "4px 10px",
-              fontSize: "10px",
-              fontWeight: 600,
+              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
+              color: "rgba(255,255,255,0.65)", borderRadius: "20px", padding: "3px 10px",
+              fontSize: "10px", fontWeight: 700,
             }}>
               {dayLabel}
             </div>
           </div>
 
-          {/* Middle: Logo + vs + Logo */}
+          {/* Middle: logos + VS */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
-            {/* Left logo */}
-            <div style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "4px",
-            }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
               <div style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "50%",
-                background: isMO17 ? "rgba(255,107,0,0.30)" : "rgba(96,165,250,0.20)",
-                border: `1.5px solid ${isMO17 ? "rgba(255,107,0,0.50)" : "rgba(96,165,250,0.45)"}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: isMO17 ? "#FF8C3A" : "#60a5fa",
-                fontSize: "12px",
-                fontWeight: 700,
-                overflow: "hidden",
+                width: "40px", height: "40px", borderRadius: "50%",
+                background: "rgba(255,255,255,0.12)", overflow: "hidden",
+                border: "1.5px solid rgba(255,255,255,0.25)",
               }}>
                 <img src={MVA_LOGO_URL} alt="MVA Noord" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
-              <div style={{ fontSize: "12px", fontWeight: 600, color: "white", textAlign: "center", maxWidth: "60px" }}>
-                MVA Noord
-              </div>
+              <span style={{ fontSize: "11px", fontWeight: 600, color: "#ffffff", textAlign: "center" }}>MVA Noord</span>
             </div>
 
-            {/* Center VS */}
-             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", flex: "0 0 auto" }}>
-               <div style={{ fontSize: "28px", fontWeight: 800, color: "white", letterSpacing: "-1px", lineHeight: 1 }}>
-                 VS
-               </div>
-               <div style={{ fontSize: "14px", fontWeight: 700, color: "rgba(255,255,255,0.75)", textAlign: "center", letterSpacing: "-0.2px" }}>
-                 {format(matchDate, "d MMM", { locale: nl })}
-               </div>
-               {nextMatch.start_time && (
-                 <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)" }}>
-                   {nextMatch.start_time}
-                 </div>
-               )}
-             </div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+              <span style={{ fontSize: "28px", fontWeight: 900, color: "#ffffff", letterSpacing: "-1px", lineHeight: 1 }}>VS</span>
+              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)", fontWeight: 600 }}>
+                {format(matchDate, "d MMM", { locale: nl })}
+              </span>
+            </div>
 
-            {/* Right logo */}
-            <div style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "4px",
-            }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
               <div style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "50%",
-                background: "rgba(255,255,255,0.12)",
+                width: "40px", height: "40px", borderRadius: "50%",
+                background: "rgba(255,255,255,0.12)", overflow: "hidden",
                 border: "1.5px solid rgba(255,255,255,0.25)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "rgba(255,255,255,0.70)",
-                fontSize: "12px",
-                fontWeight: 700,
-                overflow: "hidden",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "rgba(255,255,255,0.70)", fontSize: "12px", fontWeight: 700,
               }}>
                 {(nextMatch.opponent_logo_url || nextMatch.opponent_logo) ? (
                   <img src={nextMatch.opponent_logo_url || nextMatch.opponent_logo} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  (nextMatch.opponent || nextMatch.title || "?")
-                    .split(" ")
-                    .slice(0, 2)
-                    .map((w) => w[0])
-                    .join("")
-                    .toUpperCase()
+                  (nextMatch.opponent || nextMatch.title || "?").split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase()
                 )}
-                </div>
-                {(() => {
-                  const name = nextMatch.title || nextMatch.opponent || "";
-                  return (
-                    <div style={{ fontSize: name.length > 12 ? "11px" : "12px", fontWeight: 600, color: "white", textAlign: "center", maxWidth: "80px", wordBreak: "break-word" }}>
-                      {name}
-                    </div>
-                  );
-                })()}
+              </div>
+              <span style={{ fontSize: "11px", fontWeight: 600, color: "#ffffff", textAlign: "center", maxWidth: "70px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {nextMatch.title || nextMatch.opponent || ""}
+              </span>
             </div>
           </div>
 
-          {/* Bottom: Location + Check-in */}
+          {/* Bottom */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <div
-                style={{
-                  width: "6px",
-                  height: "6px",
-                  borderRadius: "50%",
-                  background: isHome ? "#4ade80" : "#fbbf24",
-                }}
-              />
-              <span style={{ fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.65)" }}>
+              <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: isHome ? "#08D068" : "#FFD600" }} />
+              <span style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.60)" }}>
                 {isHome ? "Thuis" : "Uit"}
               </span>
             </div>
@@ -347,31 +130,19 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
             {showCheckInProp && (
               alreadyCheckedIn ? (
                 <div style={{
-                  background: "rgba(74,222,128,0.15)",
-                  border: "0.5px solid rgba(74,222,128,0.30)",
-                  color: "#4ade80",
-                  borderRadius: "20px",
-                  padding: "4px 10px",
-                  fontSize: "10px",
-                  fontWeight: 600,
+                  background: "rgba(8,208,104,0.20)", border: "1px solid rgba(8,208,104,0.40)",
+                  color: "#08D068", borderRadius: "20px", padding: "3px 10px",
+                  fontSize: "10px", fontWeight: 700,
                 }}>
                   ✓ Ingevuld
                 </div>
               ) : (
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowCheckIn(true);
-                  }}
+                  onClick={(e) => { e.stopPropagation(); setShowCheckIn(true); }}
                   style={{
-                    background: "rgba(255,107,0,0.25)",
-                    border: "0.5px solid rgba(255,107,0,0.45)",
-                    color: "#FF8C3A",
-                    borderRadius: "20px",
-                    padding: "4px 12px",
-                    fontSize: "10px",
-                    fontWeight: 600,
-                    cursor: "pointer",
+                    background: "#FF6800", border: "1.5px solid #ffffff",
+                    color: "#ffffff", borderRadius: "20px", padding: "3px 12px",
+                    fontSize: "10px", fontWeight: 800, cursor: "pointer",
                   }}
                 >
                   Check-in
@@ -387,20 +158,13 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
           matchId={nextMatch.id}
           type="pre"
           onClose={() => setShowCheckIn(false)}
-          onCompleted={() => {
-            setShowCheckIn(false);
-            setCheckInDone(true);
-          }}
+          onCompleted={() => { setShowCheckIn(false); setCheckInDone(true); }}
         />
       )}
     </>
   );
 }
 
-/**
- * NextMatchGrid — shows next match for MO17 and Dames 1 side by side.
- * Fetches AgendaItems internally; falls back to passed matches prop.
- */
 export default function NextMatchGrid({ matches = [], agendaItems: agendaItemsProp = [], playerId = null }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -410,36 +174,20 @@ export default function NextMatchGrid({ matches = [], agendaItems: agendaItemsPr
     queryFn: () => base44.entities.AgendaItem.filter({ type: "Wedstrijd" }),
   });
 
-  // Prefer fetched/passed AgendaItems; fall back to Match records
   const agendaWedstrijden = fetchedAgendaItems.length > 0
     ? fetchedAgendaItems
     : agendaItemsProp.filter(ai => ai.type === "Wedstrijd");
 
   const source = agendaWedstrijden.length > 0 ? agendaWedstrijden : matches;
-
   const futureMatches = source.filter((m) => parseISO(m.date) >= today);
 
-  const nextMO17 = futureMatches
-    .filter((m) => m.team === "MO17")
-    .sort((a, b) => (a.date > b.date ? 1 : -1))[0] || null;
-
-  const nextDames = futureMatches
-    .filter((m) => m.team === "Dames 1")
-    .sort((a, b) => (a.date > b.date ? 1 : -1))[0] || null;
-
-  const showCheckIn = !!playerId;
+  const nextMO17 = futureMatches.filter((m) => m.team === "MO17").sort((a, b) => a.date > b.date ? 1 : -1)[0] || null;
+  const nextDames = futureMatches.filter((m) => m.team === "Dames 1").sort((a, b) => a.date > b.date ? 1 : -1)[0] || null;
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "12px",
-      }}
-      className="mobile-grid-1col"
-    >
-      <MatchCard team="MO17" teamLabel="MO17" nextMatch={nextMO17} showCheckIn={showCheckIn} playerId={playerId} />
-      <MatchCard team="Dames 1" teamLabel="VR1" nextMatch={nextDames} showCheckIn={showCheckIn} playerId={playerId} />
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
+      <MatchCard team="MO17" teamLabel="MO17" nextMatch={nextMO17} showCheckIn={!!playerId} playerId={playerId} />
+      <MatchCard team="Dames 1" teamLabel="VR1" nextMatch={nextDames} showCheckIn={!!playerId} playerId={playerId} />
     </div>
   );
 }
