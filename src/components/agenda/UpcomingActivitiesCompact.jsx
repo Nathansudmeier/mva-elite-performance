@@ -167,7 +167,6 @@ export default function UpcomingActivitiesCompact({ playerId }) {
             </div>
 
             <AttendanceButton item={first} playerId={playerId} record={record} />
-            </div>
           </div>
         );
       })()}
