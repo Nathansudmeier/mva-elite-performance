@@ -64,11 +64,23 @@ function IconBerichten({ fill }) {
   );
 }
 
+function IconFoto({ fill }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <rect x="2" y="4" width="14" height="11" rx="2" fill={fill} />
+      <circle cx="9" cy="9.5" r="2.5" fill="white" />
+      <circle cx="9" cy="9.5" r="1.2" fill={fill} />
+      <path d="M5 7L6.5 5.5L8 7L10 5L12 7" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 const trainerTabItems = [
   { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Spelers", page: "Players", Icon: IconSpelers },
   { name: "Trainingen", page: "Trainingsvormen", Icon: IconTrainingsvormen },
+  { name: "Foto's", page: "Photowall", Icon: IconFoto },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
 ];
@@ -85,6 +97,7 @@ function IconProfiel({ fill }) {
 const speelsterTabItems = [
   { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
+  { name: "Foto's", page: "Photowall", Icon: IconFoto },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
 ];
