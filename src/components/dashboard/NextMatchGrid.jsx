@@ -23,18 +23,18 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
   today.setHours(0, 0, 0, 0);
 
   const isMO17 = team === "MO17";
+  const cardBg = isMO17 ? "#00C2FF" : "#FF3DA8";
 
   if (!nextMatch) {
     return (
       <div style={{
-        borderRadius: "18px", height: "160px",
-        border: "2.5px solid #1a1a1a", background: "#1a1a1a",
-        boxShadow: "3px 3px 0 #1a1a1a",
+        background: cardBg, border: "2.5px solid #1a1a1a", borderRadius: "22px",
+        boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem", minHeight: "180px",
         display: "flex", alignItems: "center", justifyContent: "center",
         flexDirection: "column", gap: "8px",
       }}>
-        <i className="ti ti-calendar" style={{ fontSize: "28px", color: "rgba(255,255,255,0.25)" }} />
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.30)", fontWeight: 600 }}>Geen wedstrijd gepland</p>
+        <i className="ti ti-calendar" style={{ fontSize: "28px", color: "rgba(26,26,26,0.25)" }} />
+        <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.40)", fontWeight: 700 }}>Geen wedstrijd gepland</p>
       </div>
     );
   }
@@ -50,106 +50,131 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
       <button
         onClick={() => navigate(`/Planning?id=${nextMatch.id}`)}
         style={{
-          borderRadius: "18px", height: "160px", position: "relative",
-          border: "2.5px solid #1a1a1a", background: "#1a1a1a",
-          boxShadow: "3px 3px 0 #1a1a1a",
-          padding: 0, cursor: "pointer", overflow: "hidden", display: "block", width: "100%",
+          background: cardBg, border: "2.5px solid #1a1a1a", borderRadius: "22px",
+          boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem",
+          cursor: "pointer", display: "block", width: "100%", textAlign: "left",
+          transition: "box-shadow 0.1s, transform 0.1s",
         }}
+        onMouseDown={e => { e.currentTarget.style.boxShadow = "1px 1px 0 #1a1a1a"; e.currentTarget.style.transform = "translate(2px,2px)"; }}
+        onMouseUp={e => { e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; e.currentTarget.style.transform = ""; }}
+        onMouseLeave={e => { e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; e.currentTarget.style.transform = ""; }}
       >
-        {/* Content */}
-        <div style={{ padding: "12px 14px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          {/* Top: pills */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{
-              background: isMO17 ? "#FF6800" : "#00C2FF",
-              border: "1.5px solid white",
-              color: isMO17 ? "#ffffff" : "#1a1a1a",
-              borderRadius: "20px", padding: "3px 10px",
-              fontSize: "10px", fontWeight: 800,
-            }}>
-              {teamLabel}
-            </div>
-            <div style={{
-              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
-              color: "rgba(255,255,255,0.65)", borderRadius: "20px", padding: "3px 10px",
-              fontSize: "10px", fontWeight: 700,
-            }}>
-              {dayLabel}
-            </div>
+        {/* Top pills */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+          <div style={{
+            background: "#1a1a1a", color: "#ffffff",
+            borderRadius: "20px", padding: "4px 12px",
+            fontSize: "10px", fontWeight: 800,
+          }}>
+            {teamLabel}
           </div>
+          <div style={{
+            background: "#ffffff", color: "#1a1a1a",
+            border: "1.5px solid #1a1a1a",
+            borderRadius: "20px", padding: "4px 12px",
+            fontSize: "10px", fontWeight: 700,
+          }}>
+            {dayLabel}
+          </div>
+        </div>
 
-          {/* Middle: logos + VS */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+        {/* Field area */}
+        <div style={{
+          background: "#08D068", border: "2px solid #1a1a1a", borderRadius: "16px",
+          padding: "0.75rem", position: "relative", overflow: "hidden", marginBottom: "10px",
+        }}>
+          {/* SVG field lines */}
+          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} viewBox="0 0 300 120" preserveAspectRatio="none">
+            <rect x="1" y="1" width="298" height="118" rx="12" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1.5" />
+            <line x1="150" y1="1" x2="150" y2="119" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+            <circle cx="150" cy="60" r="22" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+            <rect x="1" y="35" width="30" height="50" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+            <rect x="269" y="35" width="30" height="50" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
+          </svg>
+
+          {/* Three columns: MVA | VS | Opponent */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 1 }}>
+            {/* MVA Noord */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px", flex: "0 0 36%" }}>
               <div style={{
-                width: "40px", height: "40px", borderRadius: "50%",
-                background: "rgba(255,255,255,0.12)", overflow: "hidden",
-                border: "1.5px solid rgba(255,255,255,0.25)",
+                width: "44px", height: "44px", borderRadius: "50%",
+                background: "#ffffff", border: "2px solid #1a1a1a",
+                display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
               }}>
                 <img src={MVA_LOGO_URL} alt="MVA Noord" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
-              <span style={{ fontSize: "11px", fontWeight: 600, color: "#ffffff", textAlign: "center" }}>MVA Noord</span>
+              <span style={{ fontSize: "13px", fontWeight: 900, color: "#ffffff", textAlign: "center" }}>MVA Noord</span>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-              <span style={{ fontSize: "28px", fontWeight: 900, color: "#ffffff", letterSpacing: "-1px", lineHeight: 1 }}>VS</span>
-              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)", fontWeight: 600 }}>
+            {/* VS */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", flex: "0 0 28%" }}>
+              <span style={{ fontSize: "26px", fontWeight: 900, color: "#ffffff", letterSpacing: "-1px", lineHeight: 1 }}>VS</span>
+              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.80)", fontWeight: 700, textAlign: "center" }}>
                 {format(matchDate, "d MMM", { locale: nl })}
               </span>
+              {nextMatch.start_time && (
+                <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.80)", fontWeight: 700 }}>{nextMatch.start_time}</span>
+              )}
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+            {/* Opponent */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "5px", flex: "0 0 36%" }}>
               <div style={{
-                width: "40px", height: "40px", borderRadius: "50%",
-                background: "rgba(255,255,255,0.12)", overflow: "hidden",
-                border: "1.5px solid rgba(255,255,255,0.25)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "rgba(255,255,255,0.70)", fontSize: "12px", fontWeight: 700,
+                width: "44px", height: "44px", borderRadius: "50%",
+                background: "#FFD600", border: "2px solid #1a1a1a",
+                display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
               }}>
                 {(nextMatch.opponent_logo_url || nextMatch.opponent_logo) ? (
                   <img src={nextMatch.opponent_logo_url || nextMatch.opponent_logo} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  (nextMatch.opponent || nextMatch.title || "?").split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase()
+                  <span style={{ fontSize: "10px", fontWeight: 900, color: "#1a1a1a" }}>
+                    {(nextMatch.opponent || nextMatch.title || "?").split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase()}
+                  </span>
                 )}
               </div>
-              <span style={{ fontSize: "11px", fontWeight: 600, color: "#ffffff", textAlign: "center", maxWidth: "70px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: "13px", fontWeight: 900, color: "#ffffff", textAlign: "center", maxWidth: "80px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {nextMatch.title || nextMatch.opponent || ""}
               </span>
             </div>
           </div>
+        </div>
 
-          {/* Bottom */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: isHome ? "#08D068" : "#FFD600" }} />
-              <span style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.60)" }}>
-                {isHome ? "Thuis" : "Uit"}
-              </span>
-            </div>
-
-            {showCheckInProp && (
-              alreadyCheckedIn ? (
-                <div style={{
-                  background: "rgba(8,208,104,0.20)", border: "1px solid rgba(8,208,104,0.40)",
-                  color: "#08D068", borderRadius: "20px", padding: "3px 10px",
-                  fontSize: "10px", fontWeight: 700,
-                }}>
-                  ✓ Ingevuld
-                </div>
-              ) : (
-                <button
-                  onClick={(e) => { e.stopPropagation(); setShowCheckIn(true); }}
-                  style={{
-                    background: "#FF6800", border: "1.5px solid #ffffff",
-                    color: "#ffffff", borderRadius: "20px", padding: "3px 12px",
-                    fontSize: "10px", fontWeight: 800, cursor: "pointer",
-                  }}
-                >
-                  Check-in
-                </button>
-              )
-            )}
+        {/* Bottom: location + check-in */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <div style={{
+              width: "8px", height: "8px", borderRadius: "50%",
+              background: isHome ? "#08D068" : "#FFD600",
+              border: "1.5px solid #1a1a1a", flexShrink: 0,
+            }} />
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a" }}>
+              {isHome ? "Thuiswedstrijd" : "Uitwedstrijd"}
+            </span>
           </div>
+
+          {showCheckInProp && (
+            alreadyCheckedIn ? (
+              <div style={{
+                background: "rgba(8,208,104,0.15)", border: "1.5px solid #1a1a1a",
+                color: "#1a1a1a", borderRadius: "20px", padding: "3px 10px",
+                fontSize: "10px", fontWeight: 800,
+              }}>
+                ✓ Ingevuld
+              </div>
+            ) : (
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowCheckIn(true); }}
+                style={{
+                  background: "#1a1a1a", border: "1.5px solid #1a1a1a",
+                  color: "#ffffff", borderRadius: "20px", padding: "4px 12px",
+                  fontSize: "10px", fontWeight: 800, cursor: "pointer",
+                  boxShadow: "2px 2px 0 rgba(26,26,26,0.25)",
+                }}
+              >
+                Check-in
+              </button>
+            )
+          )}
         </div>
       </button>
 
