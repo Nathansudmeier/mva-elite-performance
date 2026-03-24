@@ -463,10 +463,10 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Tab: Overzicht */}
         {activeTab === 0 && (
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {/* Score sectie */}
             {match && (
-              <div className="glass-dark rounded-2xl p-4">
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16 }}>
                 {!editingScore ? (
                   <div className="text-center space-y-3">
                     <div className="flex items-center justify-center gap-4">
