@@ -104,7 +104,7 @@ export default function SplashScreen() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          height: '400px',
+          height: '280px',
           width: 'auto',
           objectFit: 'contain',
           pointerEvents: 'none',
