@@ -119,7 +119,11 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, onNaviga
         borderRadius: "22px",
         boxShadow: "3px 3px 0 #1a1a1a",
         display: "flex",
-        padding: "8px 6px 12px",
+        overflowX: "auto",
+        scrollSnapType: "x mandatory",
+        WebkitOverflowScrolling: "touch",
+        padding: "10px 10px 14px",
+        gap: "8px",
       }}>
         {tabItems.map((item) => {
           const isActive = item.page === currentPageName;
@@ -129,22 +133,25 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, onNaviga
               to={createPageUrl(item.page)}
               onClick={onNavigate}
               style={{
-                flex: 1,
+                flex: "0 0 auto",
                 display: "flex", flexDirection: "column", alignItems: "center",
-                gap: "3px", textDecoration: "none",
+                gap: "6px", textDecoration: "none",
+                minWidth: "72px",
+                padding: "0 4px",
+                scrollSnapAlign: "center",
               }}
             >
               <div style={{
                 background: isActive ? "#FF6800" : "transparent",
-                borderRadius: isActive ? "10px" : "0",
+                borderRadius: isActive ? "12px" : "0",
                 border: isActive ? "1.5px solid #1a1a1a" : "none",
-                padding: isActive ? "5px 7px" : "5px 7px",
+                padding: isActive ? "8px 10px" : "8px 10px",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <item.Icon fill={isActive ? "#ffffff" : "rgba(26,26,26,0.20)"} />
               </div>
               <span style={{
-                fontSize: "9px", fontWeight: 800,
+                fontSize: "10px", fontWeight: 800,
                 color: isActive ? "#FF6800" : "rgba(26,26,26,0.30)",
                 whiteSpace: "nowrap",
               }}>
