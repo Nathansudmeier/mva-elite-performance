@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Edit2 } from "lucide-react";
+import { ChevronLeft, Edit2, Play } from "lucide-react";
 import LiveMatchClock from "../components/live/LiveMatchClock";
 import LiveScore from "../components/live/LiveScore";
 import GoalBottomSheet from "../components/live/GoalBottomSheet";
@@ -274,8 +274,8 @@ export default function LiveMatch() {
     const wisselSpelers = substitutes.map(pid => activePlayers.find(p => p.id === pid)).filter(Boolean);
     
     return (
-      <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-24 xl:pb-8">
-        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
+      <div style={{ background: "#FFF3E8" }} className="min-h-screen">
+        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6" style={{ paddingBottom: "100px" }}>
           {/* Header */}
           <div className="flex items-center gap-3">
             <BackBtn onClick={() => navigate("/Planning")} />
@@ -344,27 +344,31 @@ export default function LiveMatch() {
           )}
         </div>
 
-        {/* Start Wedstrijd Button - Fixed Footer */}
-        <div className="fixed bottom-0 left-0 right-0 px-4 py-3 md:px-6 md:py-4 bg-white border-t-2 border-black xl:static xl:border-t-0 xl:px-0 xl:py-0 xl:bg-transparent">
+        {/* Start Wedstrijd Button - Sticky Footer */}
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50, background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a", padding: "1rem 1.25rem", paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}>
           <button
             onClick={startMatch}
             disabled={Object.keys(lineupMap).length === 0}
-            className="w-full flex items-center justify-center gap-2"
             style={{
               background: "#FF6800",
               border: "2.5px solid #1a1a1a",
               borderRadius: "14px",
               boxShadow: "3px 3px 0 #1a1a1a",
               height: "52px",
+              width: "100%",
               fontSize: "15px",
               fontWeight: 800,
               color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
               cursor: Object.keys(lineupMap).length === 0 ? "not-allowed" : "pointer",
               opacity: Object.keys(lineupMap).length === 0 ? 0.5 : 1,
               transition: "all 0.1s"
             }}
           >
-            <span style={{ fontSize: "18px" }}>▶</span>Start Wedstrijd
+            <Play size={18} color="white" />Start Wedstrijd
           </button>
         </div>
       </div>
