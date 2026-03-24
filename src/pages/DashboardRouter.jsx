@@ -2,9 +2,10 @@ import React from "react";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import Dashboard from "./Dashboard";
 import PlayerDashboard from "./PlayerDashboard";
+import OuderDashboard from "./OuderDashboard";
 
 export default function DashboardRouter() {
-  const { user, isSpeelster, isLoading } = useCurrentUser();
+  const { user, isSpeelster, isOuder, isLoading } = useCurrentUser();
 
   if (isLoading) {
     return (
@@ -14,5 +15,7 @@ export default function DashboardRouter() {
     );
   }
 
-  return user?.role === "speelster" ? <PlayerDashboard /> : <Dashboard />;
+  if (isOuder) return <OuderDashboard />;
+  if (isSpeelster) return <PlayerDashboard />;
+  return <Dashboard />;
 }

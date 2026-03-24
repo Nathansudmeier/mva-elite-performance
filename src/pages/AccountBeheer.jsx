@@ -78,8 +78,9 @@ function AccountBeheerContent() {
     mutationFn: () => {
       return base44.functions.invoke("updateUserLink", {
         userId: linkUser.id,
-        player_id: linkRole === "speelster" ? linkPlayerId : "",
+        player_id: (linkRole === "speelster" || linkRole === "ouder") ? linkPlayerId : "",
         trainer_id: linkRole === "trainer" ? linkTrainerId : "",
+        role: linkRole,
       });
     },
     onSuccess: () => {
@@ -150,9 +151,10 @@ function AccountBeheerContent() {
   const getPlayerId = (u) => u.data?.player_id || u.player_id || "";
   const getTrainerId = (u) => u.data?.trainer_id || u.trainer_id || "";
 
-  const speelsters = users.filter(u => getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin");
+  const speelsters = users.filter(u => getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin" && getRole(u) !== "ouder");
+  const ouders = users.filter(u => getRole(u) === "ouder");
   const trainerUsers = users.filter(u => getTrainerId(u) && getRole(u) !== "admin");
-  const ongekoppeld = users.filter(u => !getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin");
+  const ongekoppeld = users.filter(u => !getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin" && getRole(u) !== "ouder");
 
   const inputStyle = { background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" };
   const selectStyle = { background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" };
@@ -205,7 +207,7 @@ function AccountBeheerContent() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="t-page-title">Accountbeheer</h1>
-          <p className="t-secondary">{speelsters.length} speelsters · {trainerUsers.length} trainers</p>
+          <p className="t-secondary">{speelsters.length} speelsters · {trainerUsers.length} trainers · {ouders.length} ouders</p>
         </div>
         <button onClick={() => setInviteOpen(true)} className="btn-secondary">
           <Plus size={14} /> Uitnodigen
@@ -225,6 +227,13 @@ function AccountBeheerContent() {
           <div>{speelsters.map(u => { const linked = getLinkedPlayer(u); return <UserRow key={u.id} u={u} linked={linked} onLink={openLink} linkLabel={`Gekoppeld aan ${linked?.name}`} />; })}</div>
         )}
       </div>
+
+      {ouders.length > 0 && (
+        <div className="glass p-4">
+          <p className="t-label mb-3">Ouders</p>
+          <div>{ouders.map(u => { const linked = getLinkedPlayer(u); return <UserRow key={u.id} u={u} linked={linked} onLink={openLink} linkLabel={linked ? `Gekoppeld aan ${linked?.name}` : "Niet gekoppeld"} />; })}</div>
+        </div>
+      )}
 
       {ongekoppeld.length > 0 && (
         <div className="glass p-4">
@@ -249,6 +258,7 @@ function AccountBeheerContent() {
                 <SelectContent>
                   <SelectItem value="speelster">Speelster</SelectItem>
                   <SelectItem value="trainer">Trainer</SelectItem>
+                  <SelectItem value="ouder">Ouder</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -262,6 +272,17 @@ function AccountBeheerContent() {
                   </SelectContent>
                 </Select>
                 <p className="t-tertiary mt-1">Optioneel — je kunt dit later ook nog koppelen.</p>
+              </div>
+            )}
+            {inviteRole === "ouder" && (
+              <div>
+                <label className="t-label mb-1 block">Koppel aan kind</label>
+                <Select value={invitePlayerId} onValueChange={setInvitePlayerId}>
+                  <SelectTrigger style={selectStyle}><SelectValue placeholder="Selecteer kind…" /></SelectTrigger>
+                  <SelectContent>
+                    {players.filter(p => p.active !== false).map(p => <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>)}
+                  </SelectContent>
+                </Select>
               </div>
             )}
             <p className="t-tertiary">De gebruiker ontvangt een uitnodigingsmail om een wachtwoord in te stellen.</p>
@@ -283,6 +304,7 @@ function AccountBeheerContent() {
                 <SelectContent>
                   <SelectItem value="speelster">Speelster</SelectItem>
                   <SelectItem value="trainer">Trainer</SelectItem>
+                  <SelectItem value="ouder">Ouder</SelectItem>
                   <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
               </Select>
@@ -298,11 +320,11 @@ function AccountBeheerContent() {
                   <Plus size={14} /> Nieuw trainersprofiel aanmaken
                 </button>
               </div>
-            ) : linkRole === "speelster" ? (
+            ) : (linkRole === "speelster" || linkRole === "ouder") ? (
               <div>
-                <label className="t-label mb-1 block">Koppel aan spelersprofiel</label>
+                <label className="t-label mb-1 block">{linkRole === "ouder" ? "Koppel aan kind" : "Koppel aan spelersprofiel"}</label>
                 <Select value={linkPlayerId} onValueChange={setLinkPlayerId}>
-                  <SelectTrigger style={selectStyle}><SelectValue placeholder="Selecteer spelersprofiel…" /></SelectTrigger>
+                  <SelectTrigger style={selectStyle}><SelectValue placeholder={`Selecteer ${linkRole === "ouder" ? "kind" : "spelersprofiel"}…`} /></SelectTrigger>
                   <SelectContent>{players.filter(p => p.active !== false).map(p => <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
