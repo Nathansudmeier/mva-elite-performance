@@ -400,27 +400,21 @@ export default function PlanningWedstrijdDetail() {
 
           {/* Result badge */}
           {(match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined && match?.score_away !== undefined)) && getScoreResult() && (
-            <div className="flex justify-center mt-3">
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
               <span style={{
-                fontSize: "12px",
-                fontWeight: 700,
-                padding: "4px 14px",
-                borderRadius: "20px",
-                background: getScoreBadgeStyles().bg,
-                border: `0.5px solid ${getScoreBadgeStyles().border}`,
-                color: getScoreBadgeStyles().color,
+                fontSize: 12, fontWeight: 800, padding: "4px 16px", borderRadius: 20,
+                background: getScoreBadgeStyles().bg, border: `1.5px solid ${getScoreBadgeStyles().border}`, color: getScoreBadgeStyles().color,
               }}>
                 {getScoreResult()}
               </span>
             </div>
           )}
 
-          {/* Live wedstrijd knop - prominent voor trainers */}
+          {/* Live knop */}
           {isTrainer && match && (
-            <div className="mt-4 flex gap-2">
+            <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
               <Link to={`/LiveMatch?matchId=${match.id}`}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
-                style={{ background: "#FF6B00", color: "#fff" }}>
+                style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 12, background: "#1a1a1a", color: "#ffffff", textDecoration: "none", fontWeight: 800, fontSize: 13 }}>
                 <Play size={16} /> Live wedstrijdmodus
               </Link>
               <button onClick={() => {
