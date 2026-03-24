@@ -133,9 +133,16 @@ export default function PlayerGreetingHeader({ user, player, attendance = [], ra
       </div>
 
       {/* Highlight card */}
-      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
-        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.50)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoenshighlight</p>
-        <p style={{ fontSize: "14px", fontWeight: 600, color: "#1a1a1a", lineHeight: 1.5 }}>{highlight}</p>
+      <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem", display: "flex", alignItems: "flex-end", gap: "12px", overflow: "hidden", position: "relative", minHeight: "90px" }}>
+        <div style={{ flex: 1 }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Mijn doelen</p>
+          <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.5 }}>{highlight}</p>
+        </div>
+        <img
+          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/4f144d80c_Emvi-cheer.png"
+          alt="Emvi"
+          style={{ width: "80px", height: "80px", objectFit: "contain", objectPosition: "bottom", flexShrink: 0, marginBottom: "-16px", marginRight: "-4px" }}
+        />
       </div>
     </div>
   );
