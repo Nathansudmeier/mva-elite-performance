@@ -177,86 +177,66 @@ export default function Dashboard() {
     .slice(0, 3);
 
   return (
-    <div className="pb-20 lg:pb-6 relative" style={{ zIndex: 2, display: "flex", flexDirection: "column", gap: "12px" }}>
-      <DashboardBackground />
-      {/* Desktop background */}
-      <div className="hidden xl:block fixed inset-0 pointer-events-none" style={{ zIndex: 0, backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/9df6bb54b_Background-desktop.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed" }} />
+    <div className="pb-20 lg:pb-6" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
-      {/* Trainer greeting */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1.25rem 0.5rem", position: "relative", zIndex: 10 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff", letterSpacing: "-0.3px", margin: 0 }}>
-              {(() => {
-                const hour = new Date().getHours();
-                let greeting = "Goedemorgen";
-                if (hour >= 12 && hour < 18) greeting = "Goedemiddag";
-                if (hour >= 18) greeting = "Goedenavond";
-                return greeting;
-              })()}, {currentUser?.full_name?.split(" ")[0] || "Trainer"}
-            </h2>
-          </div>
-          <div>
-            <TrainerGreetingPill />
-          </div>
-        </div>
-      </div>
 
-      {/* ── HERO STAT (alle viewports) ── */}
-      <div style={{ padding: "0 1.25rem 0.75rem", position: "relative", zIndex: 10 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontSize: "42px", fontWeight: 700, color: "#ffffff", letterSpacing: "-1.5px", lineHeight: 1 }}>{winPct}%</span>
-          <span style={{ fontSize: "15px", color: "rgba(255,255,255,0.50)", fontWeight: 400, verticalAlign: "middle" }}>winst</span>
+      {/* Hero card — winratio */}
+      <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", display: "flex", alignItems: "flex-end", justifyContent: "space-between", minHeight: "120px" }}>
+        <div>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoen 2025-26</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+            <span style={{ fontSize: "42px", fontWeight: 900, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{winPct}%</span>
+            <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", fontWeight: 700 }}>winst</span>
+          </div>
+          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", marginTop: "4px" }}>
+            {wins}W · {draws}G · {losses}V
+          </p>
         </div>
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.40)", marginTop: "4px", margin: "4px 0 0 0" }}>
-          {wins} overwinningen · {draws} gelijk · {losses} verlies · Seizoen 2025-26
-        </p>
+        <div>
+          <TrainerGreetingPill />
+        </div>
       </div>
 
       {/* ── VOLGENDE WEDSTRIJDEN ── */}
       <NextMatchGrid matches={matches} agendaItems={agendaItems} playerId={null} />
 
       {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px", overflow: "visible", width: "100%" }} className="mobile-grid-2col">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }} className="mobile-grid-2col">
 
         {/* Card 1: Aanwezigheid */}
-        <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
-          <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.50)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Aanwezigheid (4w)</p>
-          <p style={{ fontSize: "28px", fontWeight: 700, color: "#FF8C3A", lineHeight: 1, marginTop: "6px" }}>{avgAttendancePercent}%</p>
-          <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginTop: "8px" }}>
-            <div style={{ height: "100%", width: `${avgAttendancePercent}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
+        <div style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>Aanwezigheid (4w)</p>
+          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "6px", letterSpacing: "-2px" }}>{avgAttendancePercent}%</p>
+          <div style={{ height: "4px", background: "rgba(26,26,26,0.15)", borderRadius: "2px", marginTop: "8px" }}>
+            <div style={{ height: "100%", width: `${avgAttendancePercent}%`, background: "rgba(26,26,26,0.50)", borderRadius: "2px" }} />
           </div>
-          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "6px" }}>{activePlayers.length} spelers</p>
+          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "6px" }}>{activePlayers.length} spelers</p>
         </div>
 
         {/* Card 2: Yo-Yo */}
-        <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
-          <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.50)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Yo-Yo niveau</p>
-          <p style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1, marginTop: "6px" }}>{avgLatestYoyo}</p>
-          <p style={{ fontSize: "11px", color: "#6ee7b7", marginTop: "8px" }}>
-            {yoyoDiff ? (parseFloat(yoyoDiff) >= 0 ? `+${yoyoDiff}` : yoyoDiff) : "stabiel"}
+        <div style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>Yo-Yo niveau</p>
+          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "6px", letterSpacing: "-2px" }}>{avgLatestYoyo}</p>
+          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "8px" }}>
+            {yoyoDiff ? (parseFloat(yoyoDiff) >= 0 ? `+${yoyoDiff} ↑` : `${yoyoDiff} ↓`) : "stabiel"}
           </p>
         </div>
 
         {/* Card 3: Sprint */}
-        <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
-          <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.50)", textTransform: "uppercase", letterSpacing: "0.07em" }}>30m sprint</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "2px", marginTop: "6px" }}>
-            <p style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{avgLatestSprint}</p>
-            <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.30)" }}>s</span>
+        <div style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>30m sprint</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "3px", marginTop: "6px" }}>
+            <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, letterSpacing: "-2px" }}>{avgLatestSprint}</p>
+            <span style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)", fontWeight: 700 }}>s</span>
           </div>
-          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "8px" }}>gemiddeld</p>
+          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "8px" }}>gemiddeld</p>
         </div>
 
         {/* Card 4: Beoordelingen */}
-        <div style={{ position: "relative", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", border: "0.5px solid rgba(255,255,255,0.13)", borderRadius: "20px", padding: "14px", overflow: "hidden" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)" }} />
-          <p style={{ fontSize: "9px", fontWeight: 600, color: "rgba(255,255,255,0.50)", textTransform: "uppercase", letterSpacing: "0.07em" }}>Beoordelingen</p>
-          <p style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1, marginTop: "6px" }}>{meting1Count}/{totalRatingsNeeded}</p>
-          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "8px" }}>meting 1 lopend</p>
+        <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>Beoordelingen</p>
+          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "6px", letterSpacing: "-2px" }}>{meting1Count}/{totalRatingsNeeded}</p>
+          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "8px" }}>meting 1 lopend</p>
         </div>
       </div>
 
@@ -275,15 +255,13 @@ export default function Dashboard() {
       )}
 
       {/* ── 3-KOLOMS GRID (1-col op mobiel) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px", overflow: "hidden", height: "auto" }} className="mobile-grid-1col">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px" }} className="mobile-grid-1col">
 
         {/* Kolom 1: Wedstrijden */}
-        <div className="glass p-4">
-          <div className="flex items-center justify-between mb-3">
-            <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>Wedstrijden</p>
-            <div className="flex items-center gap-3">
-              <button onClick={() => navigate("/Planning")} style={{ fontSize: "12px", color: "#FF8C3A" }}>Planning →</button>
-            </div>
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+            <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Wedstrijden</p>
+            <button onClick={() => navigate("/Planning")} style={{ fontSize: "12px", color: "#FF6800", fontWeight: 700, background: "none", border: "none", cursor: "pointer" }}>Planning →</button>
           </div>
           <div>
             {(() => {
@@ -305,18 +283,18 @@ export default function Dashboard() {
                 }
                 const agendaMatch = agendaItems.find(ai => ai.match_id === m.id);
                 return (
-                 <button key={m.id} onClick={() => agendaMatch ? navigate(`/Planning?id=${agendaMatch.id}`) : navigate(`/Planning`)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < displayMatches.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none", background: "none", border: "none", width: "100%", cursor: "pointer", transition: "opacity 0.2s" }} onMouseEnter={e => e.currentTarget.style.opacity = "0.8"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+                 <button key={m.id} onClick={() => agendaMatch ? navigate(`/Planning?id=${agendaMatch.id}`) : navigate(`/Planning`)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < displayMatches.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none", background: "none", border: "none", width: "100%", cursor: "pointer" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
-                      <div style={{ textAlign: "left" }}>
-                        <p style={{ fontSize: "12px", fontWeight: 600, color: "#ffffff", lineHeight: 1.2 }}>{m.opponent}</p>
-                        <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", marginTop: "2px" }}>{format(new Date(m.date), "d MMM", { locale: nl })}</p>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: "10px", fontWeight: 700, padding: "3px 8px", borderRadius: "8px", background: badgeBg, color: badgeColor }}>
-                      {isPlanned ? "gepland" : result}
-                    </span>
-                  </button>
+                       <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
+                       <div style={{ textAlign: "left" }}>
+                         <p style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{m.opponent}</p>
+                         <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.40)", marginTop: "2px" }}>{format(new Date(m.date), "d MMM", { locale: nl })}</p>
+                       </div>
+                     </div>
+                     <span style={{ fontSize: "10px", fontWeight: 800, padding: "3px 9px", borderRadius: "20px", background: badgeBg, color: badgeColor, border: `1.5px solid ${badgeColor}` }}>
+                       {isPlanned ? "gepland" : result}
+                     </span>
+                   </button>
                 );
               });
             })()}
@@ -324,39 +302,36 @@ export default function Dashboard() {
         </div>
 
         {/* Kolom 2: Seizoensresultaten */}
-        <div className="glass p-4" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <div>
-            <p style={{ fontSize: "14px", fontWeight: 600, color: "#ffffff", marginBottom: "10px" }}>Seizoensresultaten</p>
-            <button onClick={() => navigate("/MatchResults")} style={{ textAlign: "left", background: "none", border: "none", cursor: "pointer", width: "100%" }}>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "8px" }}>
-                <span style={{ fontSize: "28px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{winPct}%</span>
-                <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.40)" }}>winst</span>
-              </div>
-            </button>
-            <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginBottom: "14px" }}>
-              <div style={{ height: "100%", width: `${winPct}%`, background: "linear-gradient(90deg, #FF6B00, #FF9500)", borderRadius: "2px" }} />
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a", marginBottom: "10px" }}>Seizoensresultaten</p>
+          <button onClick={() => navigate("/MatchResults")} style={{ textAlign: "left", background: "none", border: "none", cursor: "pointer", width: "100%" }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "8px" }}>
+              <span style={{ fontSize: "34px", fontWeight: 900, color: "#FF6800", lineHeight: 1, letterSpacing: "-2px" }}>{winPct}%</span>
+              <span style={{ fontSize: "13px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>winst</span>
             </div>
+          </button>
+          <div style={{ height: "4px", background: "rgba(26,26,26,0.10)", borderRadius: "2px", marginBottom: "14px" }}>
+            <div style={{ height: "100%", width: `${winPct}%`, background: "#FF6800", borderRadius: "2px" }} />
           </div>
           <div style={{ display: "flex", gap: "6px" }}>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(74,222,128,0.10)", border: "0.5px solid rgba(74,222,128,0.18)", borderRadius: "10px", padding: "8px 6px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 700, color: "#4ade80", lineHeight: 1 }}>{wins}</p>
-              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "2px" }}>WINST</p>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(8,208,104,0.10)", border: "1.5px solid rgba(8,208,104,0.25)", borderRadius: "12px", padding: "8px 6px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 900, color: "#05a050", lineHeight: 1, letterSpacing: "-1px" }}>{wins}</p>
+              <p style={{ fontSize: "8px", color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", marginTop: "3px", fontWeight: 800 }}>WINST</p>
             </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(251,191,36,0.10)", border: "0.5px solid rgba(251,191,36,0.18)", borderRadius: "10px", padding: "8px 6px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 700, color: "#fbbf24", lineHeight: 1 }}>{draws}</p>
-              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "2px" }}>GELIJK</p>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(255,214,0,0.15)", border: "1.5px solid rgba(255,214,0,0.35)", borderRadius: "12px", padding: "8px 6px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 900, color: "#cc9900", lineHeight: 1, letterSpacing: "-1px" }}>{draws}</p>
+              <p style={{ fontSize: "8px", color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", marginTop: "3px", fontWeight: 800 }}>GELIJK</p>
             </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.18)", borderRadius: "10px", padding: "8px 6px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 700, color: "#f87171", lineHeight: 1 }}>{losses}</p>
-              <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.30)", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: "2px" }}>VERLIES</p>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(255,61,168,0.10)", border: "1.5px solid rgba(255,61,168,0.25)", borderRadius: "12px", padding: "8px 6px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 900, color: "#FF3DA8", lineHeight: 1, letterSpacing: "-1px" }}>{losses}</p>
+              <p style={{ fontSize: "8px", color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", marginTop: "3px", fontWeight: 800 }}>VERLIES</p>
             </div>
           </div>
         </div>
 
         {/* Kolom 3: Snelle acties */}
-        <div className="glass p-4">
-          <p style={{ fontSize: "12px", fontWeight: 600, textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: "10px", letterSpacing: "0.05em" }}>Snelle acties</p>
-          {/* Desktop: verticale lijst */}
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "10px", letterSpacing: "0.10em" }}>Snelle acties</p>
           <div className="desktop-only">
             {[
               { icon: "ti-users", label: "Aanwezigheid registreren", sub: "Training van vandaag", action: () => navigate("/Planning") },
@@ -368,17 +343,15 @@ export default function Dashboard() {
                 else navigate("/Planning");
               } },
             ].map((item, i) => (
-              <button key={i} onClick={item.action} style={{ display: "flex", gap: "8px", alignItems: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "8px 10px", marginBottom: "6px", width: "100%", textAlign: "left", cursor: "pointer" }}>
-                <i className={`ti ${item.icon}`} style={{ fontSize: "14px", color: "#FF8C3A", flexShrink: 0 }} />
+              <button key={i} onClick={item.action} style={{ display: "flex", gap: "10px", alignItems: "center", background: "rgba(26,26,26,0.04)", border: "1px solid rgba(26,26,26,0.10)", borderRadius: "12px", padding: "9px 12px", marginBottom: "6px", width: "100%", textAlign: "left", cursor: "pointer" }}>
+                <i className={`ti ${item.icon}`} style={{ fontSize: "16px", color: "#FF6800", flexShrink: 0 }} />
                 <div>
-                  <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", lineHeight: 1.2 }}>{item.label}</p>
-                  <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>{item.sub}</p>
+                  <p style={{ fontSize: "12px", color: "#1a1a1a", lineHeight: 1.2, fontWeight: 600 }}>{item.label}</p>
+                  <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.40)", marginTop: "2px" }}>{item.sub}</p>
                 </div>
               </button>
             ))}
-
           </div>
-          {/* Mobiel: 2x2 grid */}
           <div className="mobile-only">
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: "8px" }}>
               {[
@@ -391,10 +364,9 @@ export default function Dashboard() {
                   else navigate("/Planning");
                 } },
               ].map((item, i) => (
-                <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "10px", padding: "12px 8px", cursor: "pointer", textAlign: "center" }}>
-                  <i className={`ti ${item.icon}`} style={{ fontSize: "20px", color: "#FF8C3A", marginBottom: "6px" }} />
-                  <p style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.75)", lineHeight: 1.2 }}>{item.label}</p>
-                  <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>{item.sub}</p>
+                <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.04)", border: "1px solid rgba(26,26,26,0.10)", borderRadius: "12px", padding: "12px 8px", cursor: "pointer", textAlign: "center" }}>
+                  <i className={`ti ${item.icon}`} style={{ fontSize: "20px", color: "#FF6800", marginBottom: "6px" }} />
+                  <p style={{ fontSize: "11px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{item.label}</p>
                 </button>
               ))}
             </div>
@@ -402,14 +374,14 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── 2-KOLOMS GRID: Zelfreflecties (+ Activiteit inplannen verplaatst) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", overflow: "hidden", height: "auto" }} className="mobile-grid-1col">
+      {/* ── 2-KOLOMS GRID ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
 
         {/* Kolom 1: Zelfreflecties */}
-        <div className="glass p-4">
-          <div className="flex items-center justify-between mb-3">
-            <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>Zelfreflecties deze week</p>
-            <button onClick={() => navigate("/SelfReflection")} style={{ fontSize: "12px", color: "#FF8C3A" }}>Alle →</button>
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+            <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Zelfreflecties</p>
+            <button onClick={() => navigate("/SelfReflection")} style={{ fontSize: "12px", color: "#FF6800", fontWeight: 700, background: "none", border: "none", cursor: "pointer" }}>Alle →</button>
           </div>
 
           {thisWeekReflections.length > 0 ? (
@@ -420,23 +392,23 @@ export default function Dashboard() {
                 const avgScore = [r.goal_1_rating, r.goal_2_rating, r.goal_3_rating].filter(Boolean);
                 const scoreAvg = avgScore.length > 0 ? (avgScore.reduce((a, b) => a + b, 0) / avgScore.length).toFixed(1) : null;
                 return (
-                  <div key={r.id} style={{ display: "flex", alignItems: "flex-start", gap: "8px", padding: "8px 0", borderBottom: i < thisWeekReflections.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none" }}>
-                    <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <span style={{ fontSize: "9px", fontWeight: 700, color: "#FF8C3A" }}>{initials}</span>
+                  <div key={r.id} style={{ display: "flex", alignItems: "flex-start", gap: "8px", padding: "8px 0", borderBottom: i < thisWeekReflections.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none" }}>
+                    <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(255,104,0,0.10)", border: "1.5px solid rgba(255,104,0,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <span style={{ fontSize: "9px", fontWeight: 800, color: "#FF6800" }}>{initials}</span>
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.80)", lineHeight: 1.2 }}>{player?.name || "–"}</p>
-                      <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", lineHeight: 1.4, marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}</p>
+                      <p style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{player?.name || "–"}</p>
+                      <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", lineHeight: 1.4, marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}</p>
                     </div>
-                    {scoreAvg && <p style={{ fontSize: "13px", fontWeight: 700, color: "#FF8C3A", flexShrink: 0 }}>{scoreAvg}</p>}
+                    {scoreAvg && <p style={{ fontSize: "13px", fontWeight: 900, color: "#FF6800", flexShrink: 0 }}>{scoreAvg}</p>}
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "16px 0" }}>
-              <i className="ti ti-message-2" style={{ fontSize: "24px", color: "rgba(255,255,255,0.20)" }} />
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", marginTop: "8px" }}>Nog geen reflecties deze week</p>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px 0" }}>
+              <i className="ti ti-message-2" style={{ fontSize: "24px", color: "rgba(26,26,26,0.18)" }} />
+              <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.35)", marginTop: "8px" }}>Nog geen reflecties deze week</p>
             </div>
           )}
         </div>
