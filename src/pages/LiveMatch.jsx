@@ -345,7 +345,7 @@ export default function LiveMatch() {
         </div>
 
         {/* Start Wedstrijd Button - Sticky Footer */}
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50, background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a", padding: "1rem 1.25rem", paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}>
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100, background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a", padding: "1rem 1.25rem", paddingBottom: "calc(4rem + env(safe-area-inset-bottom))" }}>
           <button
             onClick={startMatch}
             disabled={Object.keys(lineupMap).length === 0}
