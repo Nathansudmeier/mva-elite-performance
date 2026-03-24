@@ -129,63 +129,60 @@ export default function PlanningTrainingDetail() {
   const nognietList = players.filter(p => !respondedIds.has(p.id));
 
   return (
-    <div className="relative">
-      <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/634f1c16e_Matchbackground.jpg" alt=""
-        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+    <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
 
-      <div className="relative z-10 space-y-5">
         {/* Back + header */}
-        <div className="flex items-center gap-3">
-          <Link to="/Planning" className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
-            <ChevronLeft size={18} color="#fff" />
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Link to="/Planning"
+            style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", textDecoration: "none" }}>
+            <ChevronLeft size={18} color="#1a1a1a" />
           </Link>
-          <div className="flex-1 min-w-0">
-            <p className="t-label" style={{ color: cfg.color }}>Training</p>
-            <h1 className="t-page-title truncate">{item.title}</h1>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "#08D068", marginBottom: 2 }}>Training</p>
+            <h1 className="t-page-title" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.title}</h1>
           </div>
           {isTrainer && (
-            <div className="flex gap-2">
-              <button onClick={() => setShowEdit(true)} className="w-9 h-9 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
-                <Pencil size={16} color="rgba(255,255,255,0.7)" />
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={() => setShowEdit(true)}
+                style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
+                <Pencil size={16} color="#1a1a1a" />
               </button>
-              <button onClick={handleDelete} className="w-9 h-9 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.25)" }}>
-                <Trash2 size={16} color="#f87171" />
+              <button onClick={handleDelete}
+                style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,61,168,0.10)", border: "2.5px solid #FF3DA8", cursor: "pointer" }}>
+                <Trash2 size={16} color="#FF3DA8" />
               </button>
             </div>
           )}
         </div>
 
         {/* Info card */}
-        <div className="glass-dark rounded-2xl p-4 space-y-2">
-          <div className="flex items-center gap-2 t-secondary">
-            <Clock size={14} className="ic-muted" />
-            <span>{formatDate(item.date)} · {item.start_time}</span>
+        <div style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <Clock size={13} style={{ color: "rgba(26,26,26,0.60)" }} />
+            <span style={{ fontSize: 13, color: "#1a1a1a", fontWeight: 600 }}>{formatDate(item.date)} · {item.start_time}</span>
           </div>
           {item.location && (
-            <div className="flex items-center gap-2 t-secondary">
-              <MapPin size={14} className="ic-muted" />
-              <span>{item.location}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <MapPin size={13} style={{ color: "rgba(26,26,26,0.60)" }} />
+              <span style={{ fontSize: 13, color: "#1a1a1a", fontWeight: 600 }}>{item.location}</span>
             </div>
           )}
-          <div className="flex gap-3 pt-1">
-            <span className="t-secondary-sm" style={{ color: "#4ade80" }}>{aanwezigList.length} aanwezig</span>
-            <span className="t-secondary-sm" style={{ color: "#f87171" }}>{afwezigList.length} afwezig</span>
-            <span className="t-secondary-sm" style={{ color: "#fbbf24" }}>{nognietList.length} onbekend</span>
+          <div style={{ display: "flex", gap: 14, marginTop: 2 }}>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#1a1a1a" }}>{aanwezigList.length} aanwezig</span>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "#1a1a1a", opacity: 0.7 }}>{afwezigList.length} afwezig</span>
+            <span style={{ fontSize: 12, fontWeight: 800, color: "rgba(26,26,26,0.50)" }}>{nognietList.length} onbekend</span>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 p-1 rounded-2xl" style={{ background: "rgba(255,255,255,0.05)", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ display: "flex", background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: 14, boxShadow: "2px 2px 0 #1a1a1a", overflow: "hidden" }}>
           {TABS.map((tab, i) => (
             <button key={tab} onClick={() => setActiveTab(i)}
-              className="flex-1 py-2 text-sm font-semibold rounded-xl transition-all"
               style={{
-                background: activeTab === i ? "rgba(74,222,128,0.20)" : "transparent",
-                color: activeTab === i ? "#4ade80" : "rgba(255,255,255,0.45)",
-                border: activeTab === i ? "0.5px solid rgba(74,222,128,0.30)" : "0.5px solid transparent",
+                flex: 1, padding: "10px 4px", fontSize: "13px", fontWeight: 800, cursor: "pointer",
+                background: activeTab === i ? "#08D068" : "transparent",
+                color: activeTab === i ? "#1a1a1a" : "rgba(26,26,26,0.45)",
+                border: "none",
               }}>
               {tab}
             </button>
@@ -194,11 +191,11 @@ export default function PlanningTrainingDetail() {
 
         {/* Tab: Overzicht */}
         {activeTab === 0 && (
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {/* RSVP voor spelers (alleen toekomstige activiteiten) */}
             {!isTrainer && myPlayer && isFuture && (
-              <div className="glass-dark rounded-2xl p-4 space-y-3">
-                <p className="t-card-title">Jouw aanwezigheid</p>
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a" }}>Jouw aanwezigheid</p>
                 <AttendanceButtons
                   currentStatus={myAttendance?.status}
                   loading={rsvpMutation.isPending}
@@ -214,39 +211,37 @@ export default function PlanningTrainingDetail() {
 
             {/* Na bevestiging: aanwezigheidslijst */}
             {!isTrainer && myAttendance && (
-              <div className="glass-dark rounded-2xl p-4 space-y-3">
-                <p className="t-card-title">Wie komt er?</p>
-                <div className="grid grid-cols-2 gap-3">
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a", marginBottom: 12 }}>Wie komt er?</p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div>
-                    <p className="t-label mb-2" style={{ color: "#4ade80" }}>✓ Aanwezig ({aanwezigList.length})</p>
-                    <div className="space-y-1.5">
+                    <p style={{ fontSize: 9, fontWeight: 800, color: "#05a050", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>✓ Aanwezig ({aanwezigList.length})</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                       {aanwezigList.map(player => <PlayerPill key={player.id} player={player} />)}
-                      {aanwezigList.length === 0 && <p className="t-tertiary text-xs">Niemand</p>}
+                      {aanwezigList.length === 0 && <p style={{ fontSize: 11, color: "rgba(26,26,26,0.35)" }}>Niemand</p>}
                     </div>
                   </div>
                   <div>
-                    <p className="t-label mb-2" style={{ color: "#f87171" }}>✗ Afwezig ({afwezigList.length})</p>
-                    <div className="space-y-1.5">
+                    <p style={{ fontSize: 9, fontWeight: 800, color: "#FF3DA8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>✗ Afwezig ({afwezigList.length})</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                       {afwezigList.map(({ player }) => <PlayerPill key={player.id} player={player} />)}
-                      {afwezigList.length === 0 && <p className="t-tertiary text-xs">Niemand</p>}
+                      {afwezigList.length === 0 && <p style={{ fontSize: 11, color: "rgba(26,26,26,0.35)" }}>Niemand</p>}
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Sessiedoelstelling */}
             {item.notes && (
-              <div className="glass-dark rounded-2xl p-4">
-                <p className="t-label mb-2">Sessiedoelstelling</p>
-                <p className="t-secondary">{item.notes}</p>
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Sessiedoelstelling</p>
+                <p style={{ fontSize: 13, color: "rgba(26,26,26,0.65)" }}>{item.notes}</p>
               </div>
             )}
 
-            {/* Foto */}
             {item.photo_url && (
-              <div className="glass-dark rounded-2xl overflow-hidden">
-                <img src={item.photo_url} alt={item.title} className="w-full h-auto object-cover" />
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
+                <img src={item.photo_url} alt={item.title} style={{ width: "100%", height: "auto", objectFit: "cover", display: "block" }} />
               </div>
             )}
           </div>
