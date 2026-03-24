@@ -183,16 +183,16 @@ export default function PlayerMergedGreeting({ player, attendance = [], ratings 
 
       {/* Middle: Greeting and quote */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", margin: "0 0 2px 0" }}>
+        <p style={{ fontSize: "9px", fontWeight: 800, color: secondaryColor, textTransform: "uppercase", letterSpacing: "0.08em", margin: "0 0 2px 0" }}>
           Hallo {firstName}
         </p>
-        <h2 style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a", margin: "0 0 4px 0", letterSpacing: "-0.3px" }}>
+        <h2 style={{ fontSize: "16px", fontWeight: 900, color: textColor, margin: "0 0 4px 0", letterSpacing: "-0.3px" }}>
           {greeting.title}
         </h2>
         <div style={{ marginBottom: "6px" }}>
           <DayBadge dayType={dayType} />
         </div>
-        <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)", fontWeight: 500, margin: "0", fontStyle: "italic" }}>
+        <p style={{ fontSize: "12px", color: quoteColor, fontWeight: 500, margin: "0", fontStyle: "italic" }}>
           "{quote}"
         </p>
       </div>
