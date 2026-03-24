@@ -676,16 +676,16 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Tab: Aanwezigheid */}
         {activeTab === 3 && (
-          <div className="glass-dark rounded-2xl p-4 space-y-5">
+          <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16, display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
-              <p className="t-label mb-3" style={{ color: "#4ade80" }}>Bevestigd aanwezig ({aanwezigList.length})</p>
-              {aanwezigList.length === 0 ? <p className="t-tertiary text-sm">Niemand bevestigd</p> : (
-                <div className="space-y-2">
+              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#05a050", marginBottom: 10 }}>Bevestigd aanwezig ({aanwezigList.length})</p>
+              {aanwezigList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Niemand bevestigd</p> : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   {aanwezigList.map(player => (
-                    <div key={player.id} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ background: "rgba(74,222,128,0.06)" }}>
+                    <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(8,208,104,0.08)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
                       <PlayerAvatar player={player} />
-                      <p className="t-secondary flex-1">{player.name}</p>
-                      <div className="dot-green" />
+                      <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", flex: 1 }}>{player.name}</p>
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#05a050", flexShrink: 0 }} />
                     </div>
                   ))}
                 </div>
@@ -693,17 +693,17 @@ export default function PlanningWedstrijdDetail() {
             </div>
 
             <div>
-              <p className="t-label mb-3" style={{ color: "#f87171" }}>Afgemeld ({afwezigList.length})</p>
-              {afwezigList.length === 0 ? <p className="t-tertiary text-sm">Niemand afgemeld</p> : (
-                <div className="space-y-2">
+              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#FF3DA8", marginBottom: 10 }}>Afgemeld ({afwezigList.length})</p>
+              {afwezigList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Niemand afgemeld</p> : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   {afwezigList.map(({ player, record }) => (
-                    <div key={player.id} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ background: "rgba(248,113,113,0.06)" }}>
+                    <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(255,61,168,0.06)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
                       <PlayerAvatar player={player} />
-                      <div className="flex-1 min-w-0">
-                        <p className="t-secondary">{player.name}</p>
-                        {isTrainer && record.notes && <p className="t-tertiary truncate">{record.notes}</p>}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
+                        {isTrainer && record.notes && <p style={{ fontSize: 11, color: "#FF3DA8", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{record.notes}</p>}
                       </div>
-                      <div className="dot-red" />
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#FF3DA8", flexShrink: 0 }} />
                     </div>
                   ))}
                 </div>
@@ -711,26 +711,21 @@ export default function PlanningWedstrijdDetail() {
             </div>
 
             <div>
-              <p className="t-label mb-3" style={{ color: "#fbbf24" }}>Nog niet gereageerd ({nognietList.length})</p>
-              {nognietList.length === 0 ? <p className="t-tertiary text-sm">Iedereen heeft gereageerd 🎉</p> : (
-                <div className="space-y-2">
+              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#cc9900", marginBottom: 10 }}>Nog niet gereageerd ({nognietList.length})</p>
+              {nognietList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Iedereen heeft gereageerd 🎉</p> : (
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   {nognietList.map(player => (
-                    <div key={player.id} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
+                    <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(26,26,26,0.03)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
                       <PlayerAvatar player={player} />
-                      <p className="t-secondary flex-1">{player.name}</p>
-                      <div className="dot-yellow" />
+                      <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", flex: 1 }}>{player.name}</p>
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#FFD600", border: "1.5px solid #1a1a1a", flexShrink: 0 }} />
                     </div>
                   ))}
                   {isTrainer && (
                     <button onClick={() => sendReminder.mutate()} disabled={sendReminder.isPending || reminderSent}
-                      className="w-full mt-2 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm"
-                      style={{
-                        background: reminderSent ? "rgba(74,222,128,0.10)" : "rgba(255,107,0,0.15)",
-                        border: `0.5px solid ${reminderSent ? "rgba(74,222,128,0.25)" : "rgba(255,107,0,0.30)"}`,
-                        color: reminderSent ? "#4ade80" : "#FF8C3A",
-                      }}>
-                      <Bell size={15} />
-                      {reminderSent ? "Herinneringen verstuurd!" : sendReminder.isPending ? "Versturen..." : `Stuur herinnering (${nognietList.length})`}
+                      style={{ marginTop: 8, width: "100%", height: 44, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, borderRadius: 12, border: "2px solid #1a1a1a", background: reminderSent ? "#08D068" : "#ffffff", color: "#1a1a1a", fontSize: 13, fontWeight: 800, cursor: reminderSent ? "default" : "pointer", boxShadow: "2px 2px 0 #1a1a1a" }}>
+                      <Bell size={14} />
+                      {reminderSent ? "Verstuurd!" : sendReminder.isPending ? "Versturen..." : `Stuur herinnering (${nognietList.length})`}
                     </button>
                   )}
                 </div>
