@@ -1,14 +1,21 @@
 export const TYPE_CONFIG = {
-  Training:  { color: "#4ade80", bg: "rgba(74,222,128,0.15)",  border: "rgba(74,222,128,0.3)"  },
-  Wedstrijd: { color: "#FF8C3A", bg: "rgba(255,140,58,0.15)",  border: "rgba(255,140,58,0.3)"  },
-  Toernooi:  { color: "#fbbf24", bg: "rgba(251,191,36,0.15)",  border: "rgba(251,191,36,0.3)"  },
-  Evenement: { color: "#60a5fa", bg: "rgba(96,165,250,0.15)",  border: "rgba(96,165,250,0.3)"  },
+  Training:  { color: "#08D068", bg: "#08D068",  border: "#1a1a1a"  },
+  Wedstrijd: { color: "#FF6800", bg: "#FF6800",  border: "#1a1a1a"  },
+  Toernooi:  { color: "#FFD600", bg: "#FFD600",  border: "#1a1a1a"  },
+  Evenement: { color: "#9B5CFF", bg: "#9B5CFF",  border: "#1a1a1a"  },
+};
+
+// Team-specific card backgrounds voor wedstrijden
+export const TEAM_MATCH_COLORS = {
+  "MO17":    { cardBg: "#00C2FF", labelBg: "#1a1a1a", labelColor: "#ffffff" },
+  "Dames 1": { cardBg: "#FF3DA8", labelBg: "#1a1a1a", labelColor: "#ffffff" },
+  "Beide":   { cardBg: "#FF6800", labelBg: "#1a1a1a", labelColor: "#ffffff" },
 };
 
 export const TEAM_COLORS = {
-  "MO17":    { bg: "rgba(255,140,58,0.15)", color: "#FF8C3A" },
-  "Dames 1": { bg: "rgba(96,165,250,0.15)", color: "#60a5fa" },
-  "Beide":   { bg: "rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.7)" },
+  "MO17":    { bg: "#00C2FF", color: "#1a1a1a" },
+  "Dames 1": { bg: "#FF3DA8", color: "#ffffff" },
+  "Beide":   { bg: "rgba(26,26,26,0.10)", color: "#1a1a1a" },
 };
 
 export function formatDate(dateStr) {
