@@ -109,8 +109,8 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, onNaviga
     <nav
       className="xl:hidden"
       style={{
-        position: "fixed", bottom: 0, left: 0, right: 0,
-        zIndex: 100, padding: "0 1rem 1rem",
+        position: "fixed", bottom: 0, left: "8px", right: "8px",
+        zIndex: 100, padding: "0 0 1rem",
       }}
     >
       <div style={{
