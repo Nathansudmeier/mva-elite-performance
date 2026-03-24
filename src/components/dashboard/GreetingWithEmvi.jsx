@@ -15,6 +15,30 @@ const GREETINGS = {
   rest: { title: "Rustdag 😴", subtitle: "Herstellen voor volgende week" },
 };
 
+const trainingQuotes = [
+  'Je bent er. Dat is al meer dan de helft.',
+  'Niemand wordt beter door thuis te zitten.',
+  'Zeur niet. Train!',
+  'Je benen doen het echt wel. Je hoofd liegt.',
+  'De enige slechte training is de training die je oversloeg.'
+];
+
+const rustdagQuotes = [
+  'Doe niks. Doe het goed.',
+  'Je hoeft vandaag niemand iets te bewijzen.',
+  'Slapen telt ook als trainen. Serieus.',
+  'Rustdag, ook wel eens lekker toch?',
+  'Morgen weer knallen, vandaag is gewoon #boring'
+];
+
+const matchdayQuotes = [
+  'Hou op met nadenken, gewoon winnen vandaag!',
+  'Als ik de tegenstander was, zou ik ook niet tegen jou willen spelen.',
+  'Geen excuses, alles geven vandaag.',
+  'Je weet het echt wel. Vandaag ga je het gewoon doen.',
+  'Vandaag laat je zien waarom je de hele week traint!'
+];
+
 export default function GreetingWithEmvi() {
   const { user } = useCurrentUser();
 
@@ -58,6 +82,8 @@ export default function GreetingWithEmvi() {
 
   const greeting = GREETINGS[dayType];
   const emviUrl = EMVI_IMAGES[dayType];
+  const quoteIndex = new Date().getDate() % 5;
+  const quote = dayType === "matchday" ? matchdayQuotes[quoteIndex] : dayType === "training" ? trainingQuotes[quoteIndex] : rustdagQuotes[quoteIndex];
 
   return (
     <div
@@ -85,8 +111,8 @@ export default function GreetingWithEmvi() {
         <h2 style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a", margin: "0 0 2px 0", letterSpacing: "-0.3px" }}>
           {greeting.title}
         </h2>
-        <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)", fontWeight: 500, margin: 0 }}>
-          {greeting.subtitle}
+        <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)", fontWeight: 500, margin: "4px 0 0 0" }}>
+          "{quote}"
         </p>
       </div>
     </div>
