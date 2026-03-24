@@ -560,8 +560,8 @@ export default function PlanningWedstrijdDetail() {
 
             {/* RSVP alleen voor toekomstige wedstrijden */}
             {!isTrainer && myPlayer && isFuture && (
-              <div className="glass-dark rounded-2xl p-4 space-y-3">
-                <p className="t-card-title">Jouw aanwezigheid</p>
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a", marginBottom: 10 }}>Jouw aanwezigheid</p>
                 <AttendanceButtons
                   currentStatus={myAttendance?.status}
                   loading={rsvpMutation.isPending}
@@ -577,21 +577,21 @@ export default function PlanningWedstrijdDetail() {
 
             {/* Na bevestiging: aanwezigheidslijst */}
             {!isTrainer && myAttendance && (
-              <div className="glass-dark rounded-2xl p-4 space-y-3">
-                <p className="t-card-title">Wie is er bij?</p>
-                <div className="grid grid-cols-2 gap-3">
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a", marginBottom: 12 }}>Wie is er bij?</p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div>
-                    <p className="t-label mb-2" style={{ color: "#4ade80" }}>✓ Aanwezig ({aanwezigList.length})</p>
-                    <div className="space-y-1.5">
+                    <p style={{ fontSize: 9, fontWeight: 800, color: "#05a050", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>✓ Aanwezig ({aanwezigList.length})</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                       {aanwezigList.map(player => <PlayerPill key={player.id} player={player} />)}
-                      {aanwezigList.length === 0 && <p className="t-tertiary text-xs">Niemand</p>}
+                      {aanwezigList.length === 0 && <p style={{ fontSize: 11, color: "rgba(26,26,26,0.35)" }}>Niemand</p>}
                     </div>
                   </div>
                   <div>
-                    <p className="t-label mb-2" style={{ color: "#f87171" }}>✗ Afwezig ({afwezigList.length})</p>
-                    <div className="space-y-1.5">
+                    <p style={{ fontSize: 9, fontWeight: 800, color: "#FF3DA8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>✗ Afwezig ({afwezigList.length})</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                       {afwezigList.map(({ player }) => <PlayerPill key={player.id} player={player} />)}
-                      {afwezigList.length === 0 && <p className="t-tertiary text-xs">Niemand</p>}
+                      {afwezigList.length === 0 && <p style={{ fontSize: 11, color: "rgba(26,26,26,0.35)" }}>Niemand</p>}
                     </div>
                   </div>
                 </div>
@@ -599,9 +599,9 @@ export default function PlanningWedstrijdDetail() {
             )}
 
             {item.notes && (
-              <div className="glass-dark rounded-2xl p-4">
-                <p className="t-label mb-2">Notities</p>
-                <p className="t-secondary">{item.notes}</p>
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Notities</p>
+                <p style={{ fontSize: 13, color: "rgba(26,26,26,0.65)" }}>{item.notes}</p>
               </div>
             )}
           </div>
