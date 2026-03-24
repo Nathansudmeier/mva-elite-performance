@@ -96,9 +96,9 @@ export default function EmviFeedback() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background pb-20 xl:pb-8 gap-3 md:gap-4">
+    <div className="flex flex-col h-screen pb-20 xl:pb-8 gap-0" style={{ background: "#FFF3E8" }}>
       {/* Emvi Character - Top */}
-      <div className="flex justify-center pt-2 md:pt-4">
+      <div className="flex justify-center pt-3 md:pt-6 px-4 md:px-6">
         <img 
           src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/91f794581_Emvi-top.png" 
           alt="Emvi" 
@@ -107,7 +107,7 @@ export default function EmviFeedback() {
       </div>
 
       {/* Header Card */}
-      <div className="glass mx-4 md:mx-6 bg-orange-600" style={{ background: "#FF6800" }}>
+      <div className="glass mx-4 md:mx-6 mt-2" style={{ background: "#FF6800" }}>
         <div className="p-4 md:p-5 text-center flex flex-col items-center gap-2">
           <h1 className="t-page-title text-white">
             Praat met Emvi
@@ -121,7 +121,7 @@ export default function EmviFeedback() {
       {/* Chat Area */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-4 md:px-6 flex flex-col gap-3"
+        className="flex-1 overflow-y-auto px-4 md:px-6 flex flex-col gap-3 pt-4"
       >
         {/* Initial greeting */}
         {messages.length === 0 && (
@@ -181,7 +181,7 @@ export default function EmviFeedback() {
       </div>
 
       {/* Input Form */}
-      <form onSubmit={handleSubmit} className="glass mx-4 md:mx-6 mb-4">
+      <form onSubmit={handleSubmit} className="glass mx-4 md:mx-6 mt-4 mb-4">
         <div className="p-4 md:p-5 space-y-3 md:space-y-4">
           {/* Type Selector */}
           <div className="flex gap-2 flex-wrap">
