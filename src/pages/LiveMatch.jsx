@@ -323,7 +323,6 @@ export default function LiveMatch() {
                           <div style={{ flex: 1 }}>
                             <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
                           </div>
-                          <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.40)", fontWeight: 600, marginRight: "8px" }}>#{player.shirt_number || "-"}</span>
                           <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#FF6800", border: "2.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                             <span style={{ fontSize: "18px", fontWeight: 900, color: "white", lineHeight: 1 }}>
                               {player.shirt_number || "-"}
@@ -345,7 +344,6 @@ export default function LiveMatch() {
                             <div style={{ flex: 1 }}>
                               <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
                             </div>
-                            <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.40)", fontWeight: 600, marginRight: "8px" }}>#{player.shirt_number || "-"}</span>
                             <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#FF6800", border: "2.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                               <span style={{ fontSize: "18px", fontWeight: 900, color: "white", lineHeight: 1 }}>
                                 {player.shirt_number || "-"}
