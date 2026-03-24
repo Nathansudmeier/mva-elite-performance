@@ -50,6 +50,17 @@ export default function SplashScreen() {
         MVA Noord
       </p>
 
+      {/* Emvi */}
+      <img
+        src={EMVI_HOI_URL}
+        alt="Emvi"
+        style={{
+          position: 'absolute', bottom: '80px', right: '0px',
+          height: '220px', width: 'auto', objectFit: 'contain',
+          pointerEvents: 'none',
+        }}
+      />
+
       {/* Loading indicator */}
       <div style={{
         position: 'absolute', bottom: '56px', left: '50%',
