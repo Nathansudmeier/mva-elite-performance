@@ -68,7 +68,7 @@ const trainerTabItems = [
   { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Spelers", page: "Players", Icon: IconSpelers },
-  { name: "Trainingsvormen", page: "Trainingsvormen", Icon: IconTrainingsvormen },
+  { name: "Trainingen", page: "Trainingsvormen", Icon: IconTrainingsvormen },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
 ];
