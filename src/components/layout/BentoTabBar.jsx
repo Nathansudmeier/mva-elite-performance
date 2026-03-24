@@ -87,11 +87,22 @@ function IconBeheer({ fill }) {
   );
 }
 
+function IconEmvi({ fill }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="10" r="5" fill={fill} />
+      <path d="M8 16C6 17.5 5 19.5 5 22h14c0-2.5-1-4.5-3-6" fill={fill} />
+      <circle cx="16" cy="8" r="1.5" fill="white" opacity="0.8" />
+    </svg>
+  );
+}
+
 const trainerTabItems = [
   { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Spelers", page: "Players", Icon: IconSpelers },
   { name: "Trainingen", page: "Trainingsvormen", Icon: IconTrainingsvormen },
+  { name: "Emvi", page: "EmviFeedback", Icon: IconEmvi },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
@@ -110,6 +121,7 @@ function IconProfiel({ fill }) {
 const speelsterTabItems = [
   { name: "Dashboard", page: "PlayerDashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
+  { name: "Emvi", page: "EmviFeedback", Icon: IconEmvi },
   { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
@@ -118,9 +130,10 @@ const speelsterTabItems = [
 
 const ouderTabItems = [
   { name: "Dashboard", page: "OuderDashboard", Icon: IconDashboard },
-  { name: "Planning", page: "Planning", Icon: IconPlanning },
-  { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
+  { name: "Wedstrijden", page: "Wedstrijden", Icon: IconPlanning },
+  { name: "Emvi", page: "EmviFeedback", Icon: IconEmvi },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
+  { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
 ];
 
 export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderUser, childPlayerId, onNavigate }) {
