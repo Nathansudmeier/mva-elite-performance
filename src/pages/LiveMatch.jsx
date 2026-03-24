@@ -270,79 +270,82 @@ export default function LiveMatch() {
 
   // ---- PRE-GAME ----
   if (phase === "pre") {
+    const basisSpelers = Object.values(lineupMap).map(pid => activePlayers.find(p => p.id === pid)).filter(Boolean);
+    const wisselSpelers = substitutes.map(pid => activePlayers.find(p => p.id === pid)).filter(Boolean);
+    
     return (
-      <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
+      <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-24 xl:pb-8">
         <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
           {/* Header */}
           <div className="flex items-center gap-3">
             <BackBtn onClick={() => navigate("/Planning")} />
             <div>
-              <h1 className="t-page-title">Live Wedstrijd</h1>
-              {match && <p className="t-secondary">vs. {match.opponent} · {formatNL(match.date)}</p>}
+              <h1 className="t-page-title">Live Opstelling</h1>
+              {match && <p className="t-secondary">vs. {match.opponent}</p>}
             </div>
           </div>
 
           {match && (
-            <div className="glass p-5 md:p-6 space-y-5">
-              <div>
-                <h2 className="t-card-title" style={{ fontSize: "18px" }}>vs. {match.opponent}</h2>
-                <p className="t-secondary mt-1">{match.home_away} · {formatNL(match.date)}</p>
+            <>
+              {/* Hero Card */}
+              <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px", color: "#ffffff" }}>
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <div className="flex-1">
+                    <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "4px", opacity: 0.9 }}>Tegenstander</p>
+                    <h2 style={{ fontSize: "18px", fontWeight: 900, letterSpacing: "-0.5px" }}>{match.opponent}</h2>
+                  </div>
+                  {match.opponent_logo_url && (
+                    <img src={match.opponent_logo_url} alt="" style={{ width: "48px", height: "48px", borderRadius: "50%", border: "2px solid white", objectFit: "cover" }} />
+                  )}
+                </div>
+                <div style={{ fontSize: "12px", opacity: 0.9, lineHeight: 1.6 }}>
+                  {match.home_away} · {formatNL(match.date)}
+                </div>
               </div>
 
-              <div>
-                <p className="t-label mb-3">Opstelling</p>
-
-                {/* Voetbalveld - Mobile First */}
-                <div style={{ height: "280px", borderRadius: "16px", overflow: "hidden", marginBottom: "16px" }}>
-                  <FieldLineup 
-                    players={activePlayers} 
-                    lineupMap={lineupMap} 
-                    formation={formation} 
-                    readOnly={true}
-                  />
-                </div>
-
-                {/* Wissels sectie */}
-                {substitutes.length > 0 && (
-                  <div className="mb-4">
-                    <p className="t-label mb-3">Wissels</p>
-                    <div className="flex gap-3 overflow-x-auto pb-2">
-                      {substitutes.map(playerId => {
-                        const player = activePlayers.find(p => p.id === playerId);
-                        return player ? (
-                          <div key={playerId} className="flex-shrink-0 text-center">
-                            <div 
-                              style={{
-                                width: "36px",
-                                height: "36px",
-                                borderRadius: "50%",
-                                border: "2px solid #1a1a1a",
-                                overflow: "hidden",
-                                margin: "0 auto"
-                              }}
-                            >
-                              <img 
-                                src={player.photo_url || "https://via.placeholder.com/36?text=" + player.name.charAt(0)} 
-                                alt={player.name}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            <p style={{ fontSize: "10px", fontWeight: 700, color: "#1a1a1a", marginTop: "4px" }}>
-                              {player.name.split(" ").pop()}
-                            </p>
-                          </div>
-                        ) : null;
-                      })}
-                    </div>
+              {/* Basisspelers */}
+              <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
+                <p className="t-label mb-3">Basisspelers ({basisSpelers.length})</p>
+                {basisSpelers.length === 0 ? (
+                  <p className="t-secondary-sm">Nog geen basisspelers</p>
+                ) : (
+                  <div className="space-y-2">
+                    {basisSpelers.map((player) => (
+                      <div key={player.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(8,208,104,0.12)", border: "1.5px solid rgba(8,208,104,0.25)" }}>
+                        <img src={player.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" style={{ background: "rgba(255,104,0,0.15)", border: "2px solid #1a1a1a" }} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold text-black">{player.name}</p>
+                        </div>
+                        <span className="text-xs font-bold text-black">#{player.shirt_number || "-"}</span>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
-            </div>
+
+              {/* Wissels */}
+              {wisselSpelers.length > 0 && (
+                <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
+                  <p className="t-label mb-3">Wissels ({wisselSpelers.length})</p>
+                  <div className="space-y-2">
+                    {wisselSpelers.map((player) => (
+                      <div key={player.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(255,214,0,0.15)", border: "1.5px solid rgba(255,214,0,0.30)" }}>
+                        <img src={player.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" style={{ background: "rgba(255,104,0,0.15)", border: "2px solid #1a1a1a" }} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold text-black">{player.name}</p>
+                        </div>
+                        <span className="text-xs font-bold text-black">#{player.shirt_number || "-"}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
 
         {/* Start Wedstrijd Button - Fixed Footer */}
-        <div className="fixed bottom-0 left-0 right-0 px-5 py-4 md:px-6 md:py-5 bg-white border-t-2 border-black xl:static xl:border-t-0 xl:px-0 xl:py-0 xl:bg-transparent">
+        <div className="fixed bottom-0 left-0 right-0 px-4 py-3 md:px-6 md:py-4 bg-white border-t-2 border-black xl:static xl:border-t-0 xl:px-0 xl:py-0 xl:bg-transparent">
           <button
             onClick={startMatch}
             disabled={Object.keys(lineupMap).length === 0}
