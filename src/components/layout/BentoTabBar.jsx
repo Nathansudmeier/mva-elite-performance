@@ -123,10 +123,14 @@ const ouderTabItems = [
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
 ];
 
-export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderUser, onNavigate }) {
+export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderUser, childPlayerId, onNavigate }) {
   // Parents can ONLY access their own tabbar, nothing else
   if (isOuderUser) {
-    const tabItems = ouderTabItems;
+    const tabItems = ouderTabItems.map((item) => 
+      item.name === "Mijn profiel" && childPlayerId
+        ? { ...item, page: `PlayerDetail?id=${childPlayerId}` }
+        : item
+    );
     return (
       <nav
         className="xl:hidden"
