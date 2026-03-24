@@ -5,72 +5,72 @@ import { createPageUrl } from "@/utils";
 // Filled SVG icons
 function IconDashboard({ fill }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="1" y="1" width="7" height="7" rx="1.5" fill={fill} />
-      <rect x="10" y="1" width="7" height="7" rx="1.5" fill={fill} />
-      <rect x="1" y="10" width="7" height="7" rx="1.5" fill={fill} />
-      <rect x="10" y="10" width="7" height="7" rx="1.5" fill={fill} />
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <rect x="1" y="1" width="9" height="9" rx="2" fill={fill} />
+      <rect x="14" y="1" width="9" height="9" rx="2" fill={fill} />
+      <rect x="1" y="14" width="9" height="9" rx="2" fill={fill} />
+      <rect x="14" y="14" width="9" height="9" rx="2" fill={fill} />
     </svg>
   );
 }
 
 function IconPlanning({ fill }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="1" y="3" width="16" height="14" rx="3" fill={fill} />
-      <rect x="5" y="1" width="2" height="4" rx="1" fill={fill} />
-      <rect x="11" y="1" width="2" height="4" rx="1" fill={fill} />
-      <rect x="3" y="9" width="12" height="1.5" rx="0.75" fill="white" opacity="0.6" />
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <rect x="2" y="5" width="20" height="17" rx="3.5" fill={fill} />
+      <rect x="7" y="2" width="2.5" height="5" rx="1.2" fill={fill} />
+      <rect x="14.5" y="2" width="2.5" height="5" rx="1.2" fill={fill} />
+      <rect x="4" y="11" width="16" height="2" rx="1" fill="white" opacity="0.6" />
     </svg>
   );
 }
 
 function IconSpelers({ fill }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="5.5" r="3.5" fill={fill} />
-      <path d="M2 15.5C2 12.46 5.13 10 9 10s7 2.46 7 5.5" stroke={fill} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="7" r="4.5" fill={fill} />
+      <path d="M3 19C3 15.13 7.13 12 12 12s9 3.13 9 7" stroke={fill} strokeWidth="3" strokeLinecap="round" fill="none" />
     </svg>
   );
 }
 
 function IconTrainingsvormen({ fill }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="9" r="8" fill={fill} />
-      <polygon points="9,3 10.5,7 9,6 7.5,7" fill="white" opacity="0.7" />
-      <polygon points="15,6.5 11.5,8 12,6.5 11.5,5" fill="white" opacity="0.7" />
-      <polygon points="13,13.5 10,11 11.5,11 11,9.5" fill="white" opacity="0.7" />
-      <polygon points="5,13.5 8,11 6.5,11 7,9.5" fill="white" opacity="0.7" />
-      <polygon points="3,6.5 6.5,8 6,6.5 6.5,5" fill="white" opacity="0.7" />
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" fill={fill} />
+      <polygon points="12,4 14,9 12,8 10,9" fill="white" opacity="0.7" />
+      <polygon points="19,8 14.5,10 15,8 14.5,6" fill="white" opacity="0.7" />
+      <polygon points="17,17 13,14 15,14 14.5,12" fill="white" opacity="0.7" />
+      <polygon points="7,17 11,14 9,14 9.5,12" fill="white" opacity="0.7" />
+      <polygon points="5,8 9.5,10 9,8 9.5,6" fill="white" opacity="0.7" />
     </svg>
   );
 }
 
 function IconSpelprincipes({ fill }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M9 2L3 4v9c0 3 2.5 4.5 6 5 3.5-.5 6-2 6-5V4L9 2z" fill={fill} />
-      <line x1="9" y1="4" x2="9" y2="16" stroke="white" strokeWidth="1.2" opacity="0.5" />
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M12 3L4 5.5V17c0 3.5 3.5 5.5 8 6 4.5-.5 8-2.5 8-6V5.5L12 3z" fill={fill} />
+      <line x1="12" y1="6" x2="12" y2="21" stroke="white" strokeWidth="1.5" opacity="0.5" />
     </svg>
   );
 }
 
 function IconBerichten({ fill }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M2 3C2 2.45 2.45 2 3 2H15C15.55 2 16 2.45 16 3V11C16 11.55 15.55 12 15 12H6L3 15.5V12H3C2.45 12 2 11.55 2 11V3Z" fill={fill} />
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 4C3 3.45 3.45 3 4 3H20C20.55 3 21 3.45 21 4V14C21 14.55 20.55 15 20 15H8L4 19.5V15H4C3.45 15 3 14.55 3 14V4Z" fill={fill} />
     </svg>
   );
 }
 
 function IconFoto({ fill }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="2" y="4" width="14" height="11" rx="2" fill={fill} />
-      <circle cx="9" cy="9.5" r="2.5" fill="white" />
-      <circle cx="9" cy="9.5" r="1.2" fill={fill} />
-      <path d="M5 7L6.5 5.5L8 7L10 5L12 7" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="5" width="18" height="14" rx="2.5" fill={fill} />
+      <circle cx="12" cy="12" r="3" fill="white" />
+      <circle cx="12" cy="12" r="1.5" fill={fill} />
+      <path d="M7 9L9 6.5L11 9L14 6.5L17 9" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -87,9 +87,9 @@ const trainerTabItems = [
 
 function IconProfiel({ fill }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="6" r="3.5" fill={fill} />
-      <path d="M2 16C2 12.96 5.13 10.5 9 10.5s7 2.46 7 5.5H2z" fill={fill} />
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="8" r="4.5" fill={fill} />
+      <path d="M3 20C3 16.13 7.13 13 12 13s9 3.13 9 7H3z" fill={fill} />
     </svg>
   );
 }
