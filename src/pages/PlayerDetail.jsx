@@ -219,14 +219,14 @@ export default function PlayerDetail() {
         </div>
       )}
 
-      {/* Wedstrijdbeleving */}
-      {(isTrainer || isOwnProfile) && (
+      {/* Wedstrijdbeleving - only for trainer or own profile */}
+      {(isTrainer || isOwnProfile) && !isOuder && (
         <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
           <p className="t-label" style={{ marginBottom: "4px" }}>Wedstrijdbeleving</p>
           <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", marginBottom: "12px" }}>Pre-game vs. post-game per wedstrijd</p>
           <WedstrijdbelevingChart playerId={playerId} />
         </div>
       )}
-    </div>
-  );
-}
+      </div>
+      );
+      }
