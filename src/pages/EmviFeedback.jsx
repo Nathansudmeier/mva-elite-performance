@@ -97,16 +97,22 @@ export default function EmviFeedback() {
         border: "2.5px solid #1a1a1a",
         borderRadius: "18px",
         boxShadow: "3px 3px 0 #1a1a1a",
-        padding: "16px",
-        textAlign: "center"
+        padding: "24px 16px",
+        textAlign: "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "16px"
       }}>
-        <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b89b92670_Emvi-chat.png" alt="Emvi" style={{ height: "80px", marginBottom: "12px", margin: "0 auto 12px" }} />
-        <h1 style={{ fontSize: "18px", fontWeight: 900, color: "#ffffff", marginBottom: "4px" }}>
-          Praat met Emvi
-        </h1>
-        <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.80)" }}>
-          Stel vragen, deel tips of geef feedback
-        </p>
+        <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/91f794581_Emvi-top.png" alt="Emvi" style={{ height: "140px", objectFit: "contain" }} />
+        <div>
+          <h1 style={{ fontSize: "18px", fontWeight: 900, color: "#ffffff", marginBottom: "4px" }}>
+            Praat met Emvi
+          </h1>
+          <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.80)" }}>
+            Stel vragen, deel tips of geef feedback
+          </p>
+        </div>
       </div>
 
       {/* Chat area */}
