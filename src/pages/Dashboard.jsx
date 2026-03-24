@@ -258,130 +258,114 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* ── 3-KOLOMS GRID (1-col op mobiel) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr", gap: "10px" }} className="mobile-grid-1col">
+      {/* ── SNELLE ACTIES (mobiel-vriendelijk) ── */}
+      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+        <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "12px", letterSpacing: "0.10em" }}>Snelle acties</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }} className="mobile-grid-2col">
+          {[
+            { icon: "ti-users", label: "Aanwezigheid", sub: "Training vandaag", action: () => navigate("/Planning") },
+            { icon: "ti-upload", label: "Team foto", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
+            { icon: "ti-clipboard-list", label: "Beoordeling", sub: `${totalRatingsNeeded - meting1Count} wachten`, action: () => navigate("/PlayerRatingForm") },
+            { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => {
+              const nextWedstrijd = agendaItems.find(ai => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
+              if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);
+              else navigate("/Planning");
+            } },
+          ].map((item, i) => (
+            <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.04)", border: "2px solid rgba(26,26,26,0.10)", borderRadius: "14px", padding: "14px 8px", cursor: "pointer", textAlign: "center", gap: "6px", transition: "all 0.15s" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <i className={`ti ${item.icon}`} style={{ fontSize: "18px", color: "#ffffff" }} />
+              </div>
+              <p style={{ fontSize: "12px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.2 }}>{item.label}</p>
+              <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.45)", lineHeight: 1.2 }}>{item.sub}</p>
+            </button>
+          ))}
+        </div>
+      </div>
 
-        {/* Kolom 1: Wedstrijden */}
+      {/* ── WEDSTRIJDEN + SEIZOENSRESULTATEN ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
+
+        {/* Wedstrijden */}
         <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-            <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Wedstrijden</p>
+            <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Recente wedstrijden</p>
             <button onClick={() => navigate("/Planning")} style={{ fontSize: "12px", color: "#FF6800", fontWeight: 700, background: "none", border: "none", cursor: "pointer" }}>Planning →</button>
           </div>
           <div>
             {(() => {
               const displayMatches = allMatches.slice(-4).reverse();
+              if (displayMatches.length === 0) return (
+                <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.35)", padding: "12px 0" }}>Nog geen wedstrijden</p>
+              );
               return displayMatches.map((m, i) => {
                 const hasScore = m.score_home !== null && m.score_away !== null && m.score_home !== undefined && m.score_away !== undefined;
-                const isPlanned = !hasScore;
-                let result = "–";
-                let dotColor = "#60a5fa";
+                let result = "gepland";
                 let badgeBg = "rgba(96,165,250,0.12)";
                 let badgeColor = "#60a5fa";
+                let dotColor = "#60a5fa";
                 if (hasScore) {
                   const isWin = m.home_away === "Thuis" ? m.score_home > m.score_away : m.score_away > m.score_home;
                   const isDraw = m.score_home === m.score_away;
                   result = isWin ? "W" : isDraw ? "G" : "V";
-                  dotColor = isWin ? "#4ade80" : isDraw ? "#fbbf24" : "#f87171";
-                  badgeBg = isWin ? "rgba(74,222,128,0.12)" : isDraw ? "rgba(251,191,36,0.12)" : "rgba(248,113,113,0.12)";
-                  badgeColor = isWin ? "#4ade80" : isDraw ? "#fbbf24" : "#f87171";
+                  dotColor = isWin ? "#08D068" : isDraw ? "#FFD600" : "#FF3DA8";
+                  badgeBg = isWin ? "rgba(8,208,104,0.12)" : isDraw ? "rgba(255,214,0,0.15)" : "rgba(255,61,168,0.10)";
+                  badgeColor = isWin ? "#05a050" : isDraw ? "#cc9900" : "#FF3DA8";
                 }
                 const agendaMatch = agendaItems.find(ai => ai.match_id === m.id);
                 return (
-                 <button key={m.id} onClick={() => agendaMatch ? navigate(`/Planning?id=${agendaMatch.id}`) : navigate(`/Planning`)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < displayMatches.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none", background: "none", border: "none", width: "100%", cursor: "pointer" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                       <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: dotColor, flexShrink: 0 }} />
-                       <div style={{ textAlign: "left" }}>
-                         <p style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{m.opponent}</p>
-                         <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.40)", marginTop: "2px" }}>{format(new Date(m.date), "d MMM", { locale: nl })}</p>
-                       </div>
-                     </div>
-                     <span style={{ fontSize: "10px", fontWeight: 800, padding: "3px 9px", borderRadius: "20px", background: badgeBg, color: badgeColor, border: `1.5px solid ${badgeColor}` }}>
-                       {isPlanned ? "gepland" : result}
-                     </span>
-                   </button>
+                  <button key={m.id} onClick={() => agendaMatch ? navigate(`/Planning?id=${agendaMatch.id}`) : navigate(`/Planning`)}
+                    style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: i < displayMatches.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none", background: "none", border: "none", width: "100%", cursor: "pointer", borderBottom: i < displayMatches.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: dotColor, border: "1.5px solid #1a1a1a", flexShrink: 0 }} />
+                      <div style={{ textAlign: "left" }}>
+                        <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{m.opponent}</p>
+                        <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", marginTop: "2px" }}>{format(new Date(m.date), "d MMM", { locale: nl })} · {m.home_away}</p>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: "11px", fontWeight: 800, padding: "4px 10px", borderRadius: "20px", background: badgeBg, color: badgeColor, border: `1.5px solid ${badgeColor}`, flexShrink: 0 }}>
+                      {result}
+                    </span>
+                  </button>
                 );
               });
             })()}
           </div>
         </div>
 
-        {/* Kolom 2: Seizoensresultaten */}
-        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a", marginBottom: "10px" }}>Seizoensresultaten</p>
-          <button onClick={() => navigate("/MatchResults")} style={{ textAlign: "left", background: "none", border: "none", cursor: "pointer", width: "100%" }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "8px" }}>
-              <span style={{ fontSize: "34px", fontWeight: 900, color: "#FF6800", lineHeight: 1, letterSpacing: "-2px" }}>{winPct}%</span>
-              <span style={{ fontSize: "13px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>winst</span>
+        {/* Seizoensresultaten */}
+        <div style={{ background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(255,255,255,0.45)", letterSpacing: "0.10em", marginBottom: "8px" }}>Seizoensresultaten</p>
+          <button onClick={() => navigate("/MatchResults")} style={{ textAlign: "left", background: "none", border: "none", cursor: "pointer", width: "100%", padding: 0 }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "10px" }}>
+              <span style={{ fontSize: "42px", fontWeight: 900, color: "#FF6800", lineHeight: 1, letterSpacing: "-2px" }}>{winPct}%</span>
+              <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.50)", fontWeight: 600 }}>winst</span>
             </div>
           </button>
-          <div style={{ height: "4px", background: "rgba(26,26,26,0.10)", borderRadius: "2px", marginBottom: "14px" }}>
+          <div style={{ height: "4px", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "16px" }}>
             <div style={{ height: "100%", width: `${winPct}%`, background: "#FF6800", borderRadius: "2px" }} />
           </div>
-          <div style={{ display: "flex", gap: "6px" }}>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(8,208,104,0.10)", border: "1.5px solid rgba(8,208,104,0.25)", borderRadius: "12px", padding: "8px 6px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 900, color: "#05a050", lineHeight: 1, letterSpacing: "-1px" }}>{wins}</p>
-              <p style={{ fontSize: "8px", color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", marginTop: "3px", fontWeight: 800 }}>WINST</p>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(8,208,104,0.12)", border: "1.5px solid rgba(8,208,104,0.25)", borderRadius: "12px", padding: "10px 6px" }}>
+              <p style={{ fontSize: "22px", fontWeight: 900, color: "#08D068", lineHeight: 1, letterSpacing: "-1px" }}>{wins}</p>
+              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: "4px", fontWeight: 800 }}>WINST</p>
             </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(255,214,0,0.15)", border: "1.5px solid rgba(255,214,0,0.35)", borderRadius: "12px", padding: "8px 6px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 900, color: "#cc9900", lineHeight: 1, letterSpacing: "-1px" }}>{draws}</p>
-              <p style={{ fontSize: "8px", color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", marginTop: "3px", fontWeight: 800 }}>GELIJK</p>
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(255,214,0,0.12)", border: "1.5px solid rgba(255,214,0,0.25)", borderRadius: "12px", padding: "10px 6px" }}>
+              <p style={{ fontSize: "22px", fontWeight: 900, color: "#FFD600", lineHeight: 1, letterSpacing: "-1px" }}>{draws}</p>
+              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: "4px", fontWeight: 800 }}>GELIJK</p>
             </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(255,61,168,0.10)", border: "1.5px solid rgba(255,61,168,0.25)", borderRadius: "12px", padding: "8px 6px" }}>
-              <p style={{ fontSize: "20px", fontWeight: 900, color: "#FF3DA8", lineHeight: 1, letterSpacing: "-1px" }}>{losses}</p>
-              <p style={{ fontSize: "8px", color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.07em", marginTop: "3px", fontWeight: 800 }}>VERLIES</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Kolom 3: Snelle acties */}
-        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
-          <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "10px", letterSpacing: "0.10em" }}>Snelle acties</p>
-          <div className="desktop-only">
-            {[
-              { icon: "ti-users", label: "Aanwezigheid registreren", sub: "Training van vandaag", action: () => navigate("/Planning") },
-              { icon: "ti-upload", label: "Foto uploaden", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
-              { icon: "ti-clipboard-list", label: "Beoordeling invullen", sub: `${totalRatingsNeeded - meting1Count} spelers wachten`, action: () => navigate("/PlayerRatingForm") },
-              { icon: "ti-player-play", label: "Wedstrijd starten", sub: "Live modus activeren", action: () => {
-                const nextWedstrijd = agendaItems.find(ai => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
-                if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);
-                else navigate("/Planning");
-              } },
-            ].map((item, i) => (
-              <button key={i} onClick={item.action} style={{ display: "flex", gap: "10px", alignItems: "center", background: "rgba(26,26,26,0.04)", border: "1px solid rgba(26,26,26,0.10)", borderRadius: "12px", padding: "9px 12px", marginBottom: "6px", width: "100%", textAlign: "left", cursor: "pointer" }}>
-                <i className={`ti ${item.icon}`} style={{ fontSize: "16px", color: "#FF6800", flexShrink: 0 }} />
-                <div>
-                  <p style={{ fontSize: "12px", color: "#1a1a1a", lineHeight: 1.2, fontWeight: 600 }}>{item.label}</p>
-                  <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.40)", marginTop: "2px" }}>{item.sub}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-          <div className="mobile-only">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: "8px" }}>
-              {[
-                { icon: "ti-users", label: "Aanwezigheid", sub: "Vandaag", action: () => navigate("/Planning") },
-                { icon: "ti-upload", label: "Foto", sub: "Team of Week", action: () => setUploadModalOpen(true) },
-                { icon: "ti-clipboard-list", label: "Beoordeling", sub: `${totalRatingsNeeded - meting1Count} wachten`, action: () => navigate("/PlayerRatingForm") },
-                { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => {
-                  const nextWedstrijd = agendaItems.find(ai => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
-                  if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);
-                  else navigate("/Planning");
-                } },
-              ].map((item, i) => (
-                <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.04)", border: "1px solid rgba(26,26,26,0.10)", borderRadius: "12px", padding: "12px 8px", cursor: "pointer", textAlign: "center" }}>
-                  <i className={`ti ${item.icon}`} style={{ fontSize: "20px", color: "#FF6800", marginBottom: "6px" }} />
-                  <p style={{ fontSize: "11px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{item.label}</p>
-                </button>
-              ))}
+            <div style={{ flex: 1, textAlign: "center", background: "rgba(255,61,168,0.12)", border: "1.5px solid rgba(255,61,168,0.25)", borderRadius: "12px", padding: "10px 6px" }}>
+              <p style={{ fontSize: "22px", fontWeight: 900, color: "#FF3DA8", lineHeight: 1, letterSpacing: "-1px" }}>{losses}</p>
+              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: "4px", fontWeight: 800 }}>VERLIES</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── 2-KOLOMS GRID ── */}
+      {/* ── ZELFREFLECTIES + WEEKREFLECTIE ── */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
 
-        {/* Kolom 1: Zelfreflecties */}
+        {/* Zelfreflecties */}
         <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Zelfreflecties</p>
@@ -396,28 +380,32 @@ export default function Dashboard() {
                 const avgScore = [r.goal_1_rating, r.goal_2_rating, r.goal_3_rating].filter(Boolean);
                 const scoreAvg = avgScore.length > 0 ? (avgScore.reduce((a, b) => a + b, 0) / avgScore.length).toFixed(1) : null;
                 return (
-                  <div key={r.id} style={{ display: "flex", alignItems: "flex-start", gap: "8px", padding: "8px 0", borderBottom: i < thisWeekReflections.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none" }}>
-                    <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(255,104,0,0.10)", border: "1.5px solid rgba(255,104,0,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <span style={{ fontSize: "9px", fontWeight: 800, color: "#FF6800" }}>{initials}</span>
+                  <div key={r.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 0", borderBottom: i < thisWeekReflections.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none" }}>
+                    <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <span style={{ fontSize: "10px", fontWeight: 800, color: "#ffffff" }}>{initials}</span>
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{player?.name || "–"}</p>
+                      <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{player?.name || "–"}</p>
                       <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", lineHeight: 1.4, marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}</p>
                     </div>
-                    {scoreAvg && <p style={{ fontSize: "13px", fontWeight: 900, color: "#FF6800", flexShrink: 0 }}>{scoreAvg}</p>}
+                    {scoreAvg && (
+                      <div style={{ background: "#FF6800", border: "1.5px solid #1a1a1a", borderRadius: "8px", padding: "3px 8px", flexShrink: 0 }}>
+                        <p style={{ fontSize: "13px", fontWeight: 900, color: "#ffffff" }}>{scoreAvg}</p>
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px 0" }}>
-              <i className="ti ti-message-2" style={{ fontSize: "24px", color: "rgba(26,26,26,0.18)" }} />
-              <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.35)", marginTop: "8px" }}>Nog geen reflecties deze week</p>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 0" }}>
+              <i className="ti ti-message-2" style={{ fontSize: "28px", color: "rgba(26,26,26,0.15)" }} />
+              <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.35)", marginTop: "10px", fontWeight: 600 }}>Nog geen reflecties deze week</p>
             </div>
           )}
         </div>
 
-        {/* Kolom 2: Trainer weekreflectie */}
+        {/* Trainer weekreflectie */}
         <TrainerWeekReflectieCard />
 
       </div>
