@@ -156,8 +156,11 @@ export default function LiveMatch() {
     setRunning(true);
   };
 
+  const getHalfLengthMinutes = () => match?.team === "MO17" ? 40 : 45;
+
   const handleToggleClock = () => {
-    if (running && currentMinute >= 45 && phase === "live") {
+    const halfLength = getHalfLengthMinutes();
+    if (running && currentMinute >= halfLength && phase === "live") {
       setRunning(false);
       setPhase("halftime");
       saveMutation.mutate({ live_status: "halftime", live_events: events });
@@ -183,7 +186,8 @@ export default function LiveMatch() {
   };
 
   const startSecondHalf = () => {
-    setSeconds(45 * 60);
+    const halfLength = getHalfLengthMinutes();
+    setSeconds(halfLength * 60);
     setPhase("live");
     setRunning(true);
     saveMutation.mutate({ live_status: "live", halftime_notes: halftimeNotes, live_events: events });
@@ -412,7 +416,7 @@ export default function LiveMatch() {
         {/* Clock - Orange */}
         <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px 24px" }}>
           <LiveMatchClock seconds={seconds} running={running} onToggle={handleToggleClock} onStop={handleStop} />
-          {currentMinute >= 45 && running && (
+          {currentMinute >= getHalfLengthMinutes() && running && (
             <p className="text-center t-secondary mt-3" style={{ color: "white" }}>Druk op Pauze om naar de rust te gaan</p>
           )}
         </div>
