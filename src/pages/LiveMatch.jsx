@@ -324,9 +324,11 @@ export default function LiveMatch() {
                             <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
                           </div>
                           <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.40)", fontWeight: 600, marginRight: "8px" }}>#{player.shirt_number || "-"}</span>
-                          <span style={{ background: "#FF6800", color: "white", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "2px 10px", fontSize: "11px", fontWeight: 800, whiteSpace: "nowrap" }}>
-                            {player.position}
-                          </span>
+                          <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#FF6800", border: "2.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                            <span style={{ fontSize: "18px", fontWeight: 900, color: "white", lineHeight: 1 }}>
+                              {player.shirt_number || "-"}
+                            </span>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -344,7 +346,11 @@ export default function LiveMatch() {
                               <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
                             </div>
                             <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.40)", fontWeight: 600, marginRight: "8px" }}>#{player.shirt_number || "-"}</span>
-                            <span style={{ fontSize: "16px", color: "rgba(26,26,26,0.30)" }}>⇄</span>
+                            <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#FF6800", border: "2.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                              <span style={{ fontSize: "18px", fontWeight: 900, color: "white", lineHeight: 1 }}>
+                                {player.shirt_number || "-"}
+                              </span>
+                            </div>
                           </div>
                         ))}
                       </div>
