@@ -9,8 +9,10 @@ export default function AgendaItemCard({ item, attendance = [], playerCount = 0,
 
   // Wedstrijd → teamkleur (blauw MO17 / roze Dames 1), Training → groen, rest → type kleur
   const cardBg = isWedstrijd ? teamMatch.cardBg : cfg.bg;
-  const textDark = cardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a";
-  const textMuted = cardBg === "#FF3DA8" ? "rgba(255,255,255,0.70)" : "rgba(26,26,26,0.55)";
+  const isDarkCard = cardBg === "#FF3DA8" || cardBg === "#1a1a1a";
+  const isGreenCard = cardBg === "#08D068";
+  const textDark = isDarkCard ? "#ffffff" : "#1a1a1a";
+  const textMuted = isDarkCard ? "rgba(255,255,255,0.70)" : isGreenCard ? "rgba(0,0,0,0.60)" : "rgba(26,26,26,0.55)";
 
   const aanwezig = attendance.filter(a => a.status === "aanwezig").length;
   const afwezig = attendance.filter(a => a.status === "afwezig").length;
