@@ -17,7 +17,7 @@ import TrainerWeekReflectieCard from "../components/dashboard/TrainerWeekReflect
 import { nl } from "date-fns/locale";
 import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
 import { useLiveMatches } from "@/hooks/useLiveMatches";
-
+import GreetingWithEmvi from "@/components/dashboard/GreetingWithEmvi";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -178,6 +178,7 @@ export default function Dashboard() {
 
   return (
     <div className="pb-20 lg:pb-6" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <GreetingWithEmvi />
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
 
       {/* Hero card — winratio */}

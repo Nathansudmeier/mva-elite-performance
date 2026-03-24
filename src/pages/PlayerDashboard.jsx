@@ -21,6 +21,7 @@ import PlayerSeasonStats from "../components/stats/PlayerSeasonStats";
 import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
 import { useLiveMatches } from "@/hooks/useLiveMatches";
 import PlayerAttendanceCard from "@/components/dashboard/PlayerAttendanceCard";
+import GreetingWithEmvi from "@/components/dashboard/GreetingWithEmvi";
 import { subDays, isAfter } from "date-fns";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
@@ -160,6 +161,7 @@ export default function PlayerDashboard() {
 
   return (
     <div className="space-y-6 pb-24">
+      <GreetingWithEmvi />
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={false} />
       {/* Header */}
       <PlayerGreetingHeader
