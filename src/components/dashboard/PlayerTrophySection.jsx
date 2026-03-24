@@ -107,14 +107,11 @@ export default function PlayerTrophySection({ players, winningTeams, currentPlay
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
-        <div style={{
-          width: "44px", height: "44px", borderRadius: "50%",
-          background: "#FF6800", border: "2px solid #1a1a1a",
-          boxShadow: "2px 2px 0 #1a1a1a",
-          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-        }}>
-          <i className="ti ti-trophy" style={{ fontSize: "20px", color: "#ffffff" }} />
-        </div>
+        <img
+          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/fdbc19efe_Emvi-champion.png"
+          alt="Emvi Champion"
+          style={{ width: "52px", height: "52px", objectFit: "contain", flexShrink: 0 }}
+        />
         <div style={{ flex: 1 }}>
           <p style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1.2 }}>Champions Trophy</p>
           <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", fontWeight: 600, marginTop: "2px" }}>Seizoen 2025-26</p>
