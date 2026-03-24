@@ -733,7 +733,6 @@ export default function PlanningWedstrijdDetail() {
             </div>
           </div>
         )}
-    </div>
 
       {showEdit && (
         <AgendaForm

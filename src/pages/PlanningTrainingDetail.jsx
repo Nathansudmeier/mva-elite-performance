@@ -267,7 +267,6 @@ export default function PlanningTrainingDetail() {
             onToggleStatus={handleAttendanceToggle}
           />
         )}
-    </div>
 
       {showEdit && (
         <AgendaForm
