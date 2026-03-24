@@ -153,7 +153,7 @@ export default function UpcomingActivitiesCompact({ playerId }) {
             </div>
 
             {/* Title & meta */}
-            <p style={{ fontSize: 18, fontWeight: 900, color: "#1a1a1a", lineHeight: 1.2, letterSpacing: "-0.5px", marginBottom: 6, paddingRight: 80 }}>{first.title}</p>
+            <p style={{ fontSize: 18, fontWeight: 900, color: "#1a1a1a", lineHeight: 1.2, letterSpacing: "-0.5px", marginBottom: 6, paddingRight: 110 }}>{first.title}</p>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <i className="ti ti-calendar" style={{ fontSize: 13, color: "#FF6800" }} />
