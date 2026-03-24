@@ -207,41 +207,69 @@ export default function Dashboard() {
       {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }} className="mobile-grid-2col">
 
-        {/* Card 1: Aanwezigheid */}
-        <div style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
+        {/* Card 1: Aanwezigheid → /Attendance */}
+        <button
+          onClick={() => navigate("/Attendance")}
+          style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px", textAlign: "left", cursor: "pointer", transition: "transform 0.15s ease, box-shadow 0.15s ease" }}
+          onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "3px 5px 0 #1a1a1a"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; }}
+          onMouseDown={e => { e.currentTarget.style.transform = "translate(2px, 2px)"; e.currentTarget.style.boxShadow = "1px 1px 0 #1a1a1a"; }}
+          onMouseUp={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "3px 5px 0 #1a1a1a"; }}
+        >
           <p className="t-label" style={{ color: "rgba(26,26,26,0.65)" }}>Aanwezigheid (4w)</p>
           <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "8px", letterSpacing: "-2px" }}>{avgAttendancePercent}%</p>
           <div style={{ height: "4px", background: "rgba(26,26,26,0.15)", borderRadius: "2px", marginTop: "10px" }}>
             <div style={{ height: "100%", width: `${avgAttendancePercent}%`, background: "rgba(26,26,26,0.45)", borderRadius: "2px" }} />
           </div>
           <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.65)", marginTop: "8px", fontWeight: 600 }}>{activePlayers.length} spelers</p>
-        </div>
+        </button>
 
-        {/* Card 2: Yo-Yo */}
-        <div style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
+        {/* Card 2: Yo-Yo → /PhysicalMonitor */}
+        <button
+          onClick={() => navigate("/PhysicalMonitor")}
+          style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px", textAlign: "left", cursor: "pointer", transition: "transform 0.15s ease, box-shadow 0.15s ease" }}
+          onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "3px 5px 0 #1a1a1a"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; }}
+          onMouseDown={e => { e.currentTarget.style.transform = "translate(2px, 2px)"; e.currentTarget.style.boxShadow = "1px 1px 0 #1a1a1a"; }}
+          onMouseUp={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "3px 5px 0 #1a1a1a"; }}
+        >
           <p className="t-label" style={{ color: "rgba(26,26,26,0.65)" }}>Yo-Yo niveau</p>
           <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "8px", letterSpacing: "-2px" }}>{avgLatestYoyo}</p>
           <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.65)", marginTop: "10px", fontWeight: 600 }}>
             {yoyoDiff ? (parseFloat(yoyoDiff) >= 0 ? `↑ +${yoyoDiff}` : `↓ ${yoyoDiff}`) : "stabiel"}
           </p>
-        </div>
+        </button>
 
-        {/* Card 3: Sprint */}
-        <div style={{ background: "#9B5CFF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
+        {/* Card 3: Sprint → /PhysicalMonitor */}
+        <button
+          onClick={() => navigate("/PhysicalMonitor")}
+          style={{ background: "#9B5CFF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px", textAlign: "left", cursor: "pointer", transition: "transform 0.15s ease, box-shadow 0.15s ease" }}
+          onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "3px 5px 0 #1a1a1a"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; }}
+          onMouseDown={e => { e.currentTarget.style.transform = "translate(2px, 2px)"; e.currentTarget.style.boxShadow = "1px 1px 0 #1a1a1a"; }}
+          onMouseUp={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "3px 5px 0 #1a1a1a"; }}
+        >
           <p className="t-label" style={{ color: "rgba(255,255,255,0.65)" }}>30m sprint</p>
           <div style={{ display: "flex", alignItems: "baseline", gap: "3px", marginTop: "8px" }}>
             <p style={{ fontSize: "34px", fontWeight: 900, color: "#ffffff", lineHeight: 1, letterSpacing: "-2px" }}>{avgLatestSprint}</p>
             <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.65)", fontWeight: 700 }}>s</span>
           </div>
           <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", marginTop: "10px", fontWeight: 600 }}>gemiddeld</p>
-        </div>
+        </button>
 
-        {/* Card 4: Beoordelingen */}
-        <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
+        {/* Card 4: Beoordelingen → /PlayerRatingForm */}
+        <button
+          onClick={() => navigate("/PlayerRatingForm")}
+          style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px", textAlign: "left", cursor: "pointer", transition: "transform 0.15s ease, box-shadow 0.15s ease" }}
+          onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "3px 5px 0 #1a1a1a"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; }}
+          onMouseDown={e => { e.currentTarget.style.transform = "translate(2px, 2px)"; e.currentTarget.style.boxShadow = "1px 1px 0 #1a1a1a"; }}
+          onMouseUp={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "3px 5px 0 #1a1a1a"; }}
+        >
           <p className="t-label" style={{ color: "rgba(26,26,26,0.65)" }}>Beoordelingen</p>
           <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "8px", letterSpacing: "-2px" }}>{meting1Count}<span style={{ fontSize: "18px", opacity: 0.5 }}>/{totalRatingsNeeded}</span></p>
           <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.65)", marginTop: "10px", fontWeight: 600 }}>meting 1 lopend</p>
-        </div>
+        </button>
       </div>
 
 
