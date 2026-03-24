@@ -383,16 +383,16 @@ export default function PlanningWedstrijdDetail() {
 
           {/* Score section */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "14px 0", borderTop: "2px solid rgba(26,26,26,0.15)", borderBottom: "2px solid rgba(26,26,26,0.15)" }}>
-            <div className="text-center flex-1">
-              <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>MVA Noord</p>
-              <p style={{ fontSize: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? "32px" : "24px", fontWeight: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? 800 : 300, color: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
+            <div style={{ textAlign: "center", flex: 1 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.75)" : "rgba(26,26,26,0.60)", marginBottom: 4 }}>MVA Noord</p>
+              <p style={{ fontSize: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? "32px" : "22px", fontWeight: 900, color: teamTextDark, letterSpacing: "-1px" }}>
                 {match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined) ? match.score_home : "vs."}
               </p>
             </div>
-            <div style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.40)" }}>-</div>
-            <div className="text-center flex-1">
-              <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>{item.title}</p>
-              <p style={{ fontSize: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? "32px" : "24px", fontWeight: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? 800 : 300, color: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
+            <div style={{ fontSize: 20, fontWeight: 900, color: teamTextDark }}>-</div>
+            <div style={{ textAlign: "center", flex: 1 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.75)" : "rgba(26,26,26,0.60)", marginBottom: 4 }}>{item.title}</p>
+              <p style={{ fontSize: (match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined)) ? "32px" : "22px", fontWeight: 900, color: teamTextDark, letterSpacing: "-1px" }}>
                 {match?.live_status === "finished" || (!isFuture && match?.score_away !== undefined) ? match.score_away : "vs."}
               </p>
             </div>
