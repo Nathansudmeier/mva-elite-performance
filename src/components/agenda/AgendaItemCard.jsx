@@ -39,23 +39,24 @@ export default function AgendaItemCard({ item, attendance = [], playerCount = 0,
           </span>
         </div>
 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "8px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-            <Clock size={12} style={{ color: textMuted }} />
-            <span style={{ fontSize: "12px", color: textMuted, fontWeight: 600 }}>{formatDate(item.date)} · {item.start_time}</span>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "4px", background: "rgba(26,26,26,0.10)", borderRadius: "8px", padding: "3px 8px" }}>
+            <Clock size={11} style={{ color: textDark, opacity: 0.7 }} />
+            <span style={{ fontSize: "11px", color: textDark, fontWeight: 700 }}>{formatDate(item.date)}</span>
+            {item.start_time && <span style={{ fontSize: "11px", color: textDark, fontWeight: 700, opacity: 0.7 }}>· {item.start_time}</span>}
           </div>
           {item.location && (
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-              <MapPin size={12} style={{ color: textMuted }} />
-              <span style={{ fontSize: "12px", color: textMuted, fontWeight: 600 }}>{item.location}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "4px", background: "rgba(26,26,26,0.10)", borderRadius: "8px", padding: "3px 8px" }}>
+              <MapPin size={11} style={{ color: textDark, opacity: 0.7 }} />
+              <span style={{ fontSize: "11px", color: textDark, fontWeight: 700, opacity: 0.85 }}>{item.location}</span>
             </div>
           )}
         </div>
 
         {playerCount > 0 && (
-          <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
-            <span style={{ fontSize: "11px", fontWeight: 700, color: textDark }}>{aanwezig} ✓ aanwezig</span>
-            <span style={{ fontSize: "11px", fontWeight: 700, color: textDark, opacity: 0.7 }}>{afwezig} ✗ afwezig</span>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+            <span style={{ fontSize: "11px", fontWeight: 800, color: textDark }}>✓ {aanwezig} aanwezig</span>
+            <span style={{ fontSize: "11px", fontWeight: 800, color: textDark, opacity: 0.65 }}>✗ {afwezig} afwezig</span>
             <span style={{ fontSize: "11px", fontWeight: 700, color: textMuted }}>{onbekend} onbekend</span>
           </div>
         )}
