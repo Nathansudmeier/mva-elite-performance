@@ -123,24 +123,6 @@ export default function EmviFeedback() {
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto px-4 md:px-6 flex flex-col gap-3 pt-4"
       >
-        {/* Initial greeting */}
-        {messages.length === 0 && (
-          <div className="flex gap-3 items-end">
-            <img 
-              src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b89b92670_Emvi-chat.png" 
-              alt="Emvi" 
-              className="h-10 md:h-12 flex-shrink-0"
-            />
-            <div className="flex-1 max-w-xs md:max-w-md" style={{ background: "rgba(255,104,0,0.12)", border: "1.5px solid rgba(255,104,0,0.30)" }}>
-              <div className="rounded-xl p-3 md:p-4">
-                <p style={{ fontSize: "13px", fontWeight: 600, color: "#FF6800", lineHeight: 1.4 }}>
-                  Hallo! Ik ben Emvi! 👋 Heb je een vraag, tip of opmerking? Ik ben hier om te helpen!
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Messages */}
         {messages.map((msg, idx) => (
           <div key={msg.id || idx} className="space-y-2">
