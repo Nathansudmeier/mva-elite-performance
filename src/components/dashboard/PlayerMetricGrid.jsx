@@ -1,36 +1,36 @@
 import React from "react";
 import { Activity, Calendar, Timer, TrendingUp } from "lucide-react";
 
+const CARD_COLORS = ["#00C2FF", "#FFD600", "#08D068", "#FF6800"];
+
 function Delta({ value, unit = "", lowerIsBetter = false }) {
   if (value === null || value === undefined) return null;
   const positive = lowerIsBetter ? value < 0 : value > 0;
   const sign = value > 0 ? "+" : "";
   return (
-  <span style={{ fontSize: 11, color: positive ? "#4ade80" : value === 0 ? "rgba(255,255,255,0.40)" : "#f87171" }}>
-    {sign}{value}{unit} t.o.v. M1
-  </span>
+    <span style={{ fontSize: 11, fontWeight: 700, color: positive ? "#05a050" : value === 0 ? "rgba(26,26,26,0.40)" : "#FF3DA8" }}>
+      {sign}{value}{unit} t.o.v. M1
+    </span>
   );
 }
 
-function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowerIsBetter, isSprint, confirmationPct }) {
-  const Icon = IconComp;
+function MetricCard({ icon: IconComp, label, value, unit, delta, deltaUnit, lowerIsBetter, isSprint, confirmationPct, cardColor }) {
   return (
-    <div className="relative overflow-hidden flex flex-col gap-1" style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,255,255,0.18)", borderRadius: "22px", padding: "16px" }}>
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)" }} />
-      <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>{label}</p>
+    <div style={{ background: cardColor, border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px", display: "flex", flexDirection: "column", gap: "4px" }}>
+      <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>{label}</p>
       {value !== null && value !== undefined ? (
         <>
           <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
-            <span style={{ fontSize: "32px", fontWeight: 700, color: "#ffffff", lineHeight: 1 }}>{value}</span>
-            {unit && <span style={{ fontSize: isSprint ? "16px" : "14px", color: "rgba(255,255,255,0.35)", fontWeight: 400 }}>{unit}</span>}
+            <span style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, letterSpacing: "-2px" }}>{value}</span>
+            {unit && <span style={{ fontSize: isSprint ? "15px" : "13px", color: "rgba(26,26,26,0.55)", fontWeight: 700 }}>{unit}</span>}
           </div>
           <Delta value={delta} unit={deltaUnit} lowerIsBetter={lowerIsBetter} />
           {confirmationPct !== null && confirmationPct !== undefined && (
-            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.40)" }}>{confirmationPct}% bevestigd vooraf</span>
+            <span style={{ fontSize: 10, color: "rgba(26,26,26,0.50)", fontWeight: 600 }}>{confirmationPct}% bevestigd vooraf</span>
           )}
         </>
       ) : (
-        <span style={{ fontSize: 12, color: "rgba(255,255,255,0.30)" }}>Geen data</span>
+        <span style={{ fontSize: 12, color: "rgba(26,26,26,0.35)", fontWeight: 600 }}>Geen data</span>
       )}
     </div>
   );
@@ -95,8 +95,8 @@ export default function PlayerMetricGrid({ yoyo, physical, attendance, agendaAtt
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-[10px]">
-      {metrics.map((m, i) => <MetricCard key={i} {...m} />)}
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+      {metrics.map((m, i) => <MetricCard key={i} {...m} cardColor={CARD_COLORS[i]} />)}
     </div>
   );
 }

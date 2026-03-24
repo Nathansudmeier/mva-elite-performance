@@ -39,35 +39,20 @@ function HandWaveIcon({ color }) {
 function DayBadge({ dayType }) {
   if (dayType === "training" || dayType === "matchmorgen") {
     return (
-      <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 600, background: "rgba(74,222,128,0.12)", border: "0.5px solid rgba(74,222,128,0.25)", color: "#4ade80" }}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#4ade80">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 6v6l4 2" />
-        </svg>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "4px 12px", fontSize: "10px", fontWeight: 800, background: "#08D068", border: "1.5px solid #1a1a1a", color: "#1a1a1a", boxShadow: "2px 2px 0 #1a1a1a" }}>
         Training
       </span>
     );
   }
   if (dayType === "match") {
     return (
-      <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 600, background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.30)", color: "#FF8C3A" }}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#FF8C3A">
-          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-          <path d="M4 22h16" />
-          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-        </svg>
-        Matchday
+      <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "4px 12px", fontSize: "10px", fontWeight: 800, background: "#FF6800", border: "1.5px solid #1a1a1a", color: "#ffffff", boxShadow: "2px 2px 0 #1a1a1a" }}>
+        Matchday 🏆
       </span>
     );
   }
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 600, background: "rgba(96,165,250,0.12)", border: "0.5px solid rgba(96,165,250,0.25)", color: "#60a5fa" }}>
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#60a5fa">
-        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-      </svg>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", borderRadius: "20px", padding: "4px 12px", fontSize: "10px", fontWeight: 800, background: "#00C2FF", border: "1.5px solid #1a1a1a", color: "#1a1a1a", boxShadow: "2px 2px 0 #1a1a1a" }}>
       Rustdag
     </span>
   );
@@ -123,48 +108,34 @@ export default function PlayerGreetingHeader({ user, player, attendance = [], ra
   const waveColor = (dayType === "training" || dayType === "match") ? "#FF8C3A" : "rgba(255,255,255,0.45)";
 
   return (
-    <div className="space-y-4" style={{ position: "relative", zIndex: 10 }}>
-      {/* Greeting */}
-      <div className="flex items-center gap-4" style={{ padding: "0.75rem 1.25rem 0.5rem", display: "flex", alignItems: "center", gap: "12px" }}>
-         <button
-           onClick={() => navigate(`/PlayerDetail?id=${player?.id}`)}
-           className="flex-shrink-0 rounded-full overflow-hidden flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
-            style={{ width: "44px", height: "44px", borderRadius: "50%", objectFit: "cover", border: "1.5px solid rgba(255,107,0,0.40)", background: "rgba(255,107,0,0.20)" }}>
-           {player?.photo_url ? (
-             <img src={player.photo_url} alt={firstName} className="w-full h-full object-cover" />
-           ) : (
-             <span className="text-white text-lg font-bold">{initials}</span>
-           )}
-         </button>
-        <div>
-          <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2, display: "flex", alignItems: "center", gap: "6px" }}>
-            Hey {firstName} <HandWaveIcon color={waveColor} />
+    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      {/* Hero greeting card */}
+      <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "22px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", display: "flex", alignItems: "center", gap: "14px" }}>
+        <button
+          onClick={() => navigate(`/PlayerDetail?id=${player?.id}`)}
+          style={{ width: "56px", height: "56px", borderRadius: "50%", overflow: "hidden", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", background: "#FFD600", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+        >
+          {player?.photo_url ? (
+            <img src={player.photo_url} alt={firstName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            <span style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a" }}>{initials}</span>
+          )}
+        </button>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.70)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "4px" }}>Welkom terug</p>
+          <h1 style={{ fontSize: "22px", fontWeight: 900, color: "#ffffff", lineHeight: 1.1, letterSpacing: "-0.5px" }}>
+            Hey {firstName}!
           </h1>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "5px", flexWrap: "wrap" }}>
+          <div style={{ marginTop: "8px" }}>
             <DayBadge dayType={dayType} />
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", margin: 0 }}>{subline}</p>
           </div>
         </div>
       </div>
 
-      {/* Weekly highlight card */}
-      <div className="relative" style={{ background: "rgba(255,107,0,0.18)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "22px", padding: "20px", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)" }} />
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-          <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="highlightGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#FF8C3A"/></linearGradient></defs>
-              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" stroke="url(#highlightGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" stroke="url(#highlightGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M4 22h16" stroke="url(#highlightGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" stroke="url(#highlightGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" stroke="url(#highlightGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" stroke="url(#highlightGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em" }}>SEIZOENSHIGHLIGHT</p>
-        </div>
-        <p style={{ fontSize: "14px", fontWeight: 500, color: "#ffffff", lineHeight: 1.5 }}>{highlight}</p>
+      {/* Highlight card */}
+      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.50)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoenshighlight</p>
+        <p style={{ fontSize: "14px", fontWeight: 600, color: "#1a1a1a", lineHeight: 1.5 }}>{highlight}</p>
       </div>
     </div>
   );

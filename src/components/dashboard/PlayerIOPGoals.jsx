@@ -11,32 +11,23 @@ export default function PlayerIOPGoals({ player }) {
   const goals = [player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean);
   if (goals.length === 0) return null;
 
+  const GOAL_COLORS = ["#FF6800", "#08D068", "#00C2FF"];
+
   return (
-    <div className="glass p-4">
-      <div className="flex items-center gap-3 mb-3">
-        <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs><linearGradient id="goalGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#FF8C3A"/></linearGradient></defs>
-            <circle cx="12" cy="12" r="10" stroke="url(#goalGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="12" cy="12" r="6" stroke="url(#goalGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="12" cy="12" r="2" stroke="url(#goalGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+    <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
+        <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "2px 2px 0 #1a1a1a" }}>
+          <i className="ti ti-target" style={{ fontSize: "18px", color: "#ffffff" }} />
         </div>
-        <p className="t-label">Mijn Leerdoelen</p>
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em" }}>Mijn Leerdoelen</p>
       </div>
-      <div className="space-y-3">
-        {goals.map((goal, i) => {
-          const status = STATUS_OPTIONS[i % STATUS_OPTIONS.length];
-          return (
-            <div key={i} className="flex items-start gap-3">
-              <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1" style={{ backgroundColor: status.color }} />
-              <div>
-                <p style={{ fontSize: 13, color: "#ffffff", lineHeight: 1.5 }}>{goal}</p>
-                <p style={{ fontSize: 11, color: status.color, marginTop: "2px", fontWeight: 600 }}>{status.label}</p>
-              </div>
-            </div>
-          );
-        })}
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        {goals.map((goal, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px", padding: "10px 12px", background: "rgba(26,26,26,0.04)", border: "1.5px solid rgba(26,26,26,0.10)", borderRadius: "14px" }}>
+            <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: GOAL_COLORS[i] || "#FF6800", border: "1.5px solid #1a1a1a", flexShrink: 0, marginTop: "3px" }} />
+            <p style={{ fontSize: 13, fontWeight: 600, color: "#1a1a1a", lineHeight: 1.5, flex: 1 }}>{goal}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
