@@ -103,73 +103,115 @@ export default function PlayerTrophySection({ players, winningTeams, currentPlay
   ];
 
   return (
-    <div className="relative overflow-hidden" style={{ background: "rgba(255,255,255,0.07)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,255,255,0.14)", borderRadius: "26px", padding: "20px" }}>
-      {/* Shine */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", pointerEvents: "none" }} />
-      {/* Glow orbs */}
-      <div style={{ position: "absolute", top: -60, right: -60, width: 240, height: 240, borderRadius: "50%", background: "rgba(234,179,8,0.28)", filter: "blur(60px)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: -60, left: -60, width: 200, height: 200, borderRadius: "50%", background: "rgba(255,107,0,0.20)", filter: "blur(50px)", pointerEvents: "none" }} />
+    <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "22px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem" }}>
 
       {/* Header */}
-      <div className="relative flex items-start justify-between mb-5">
-        <div className="flex items-center gap-3">
-          <TrophyIcon />
-          <div>
-            <p style={{ fontSize: "20px", fontWeight: 700, color: "#ffffff", lineHeight: 1.2, letterSpacing: "-0.3px" }}>Champions Trophy</p>
-            <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", marginTop: "2px" }}>Seizoen 2025-26 · Intern toernooi</p>
-          </div>
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+        <div style={{
+          width: "44px", height: "44px", borderRadius: "50%",
+          background: "#FF6800", border: "2px solid #1a1a1a",
+          boxShadow: "2px 2px 0 #1a1a1a",
+          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        }}>
+          <i className="ti ti-trophy" style={{ fontSize: "20px", color: "#ffffff" }} />
         </div>
-        <Link to="/Leaderboard" style={{ background: "rgba(255,107,0,0.18)", border: "0.5px solid rgba(255,107,0,0.35)", color: "#FF8C3A", borderRadius: "20px", padding: "6px 14px", fontSize: "11px", fontWeight: 600, whiteSpace: "nowrap", textDecoration: "none" }}>
-          Volledig →
+        <div style={{ flex: 1 }}>
+          <p style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1.2 }}>Champions Trophy</p>
+          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", fontWeight: 600, marginTop: "2px" }}>Seizoen 2025-26</p>
+        </div>
+        <Link to="/Leaderboard" style={{
+          fontSize: "11px", fontWeight: 800, color: "#1a1a1a",
+          background: "rgba(26,26,26,0.10)", border: "1.5px solid #1a1a1a",
+          borderRadius: "20px", padding: "4px 12px",
+          boxShadow: "2px 2px 0 #1a1a1a", textDecoration: "none", whiteSpace: "nowrap",
+        }}>
+          Ranking →
         </Link>
       </div>
 
       {/* Podium */}
-      <div className="relative flex items-end gap-2 mb-4">
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "12px", marginBottom: "4px" }}>
         {podiumOrder.map(({ meta, player }) => {
-          if (!player) return <div key={meta.rank} style={{ flex: 1 }} />;
+          if (!player) return <div key={meta.rank} style={{ flex: "0 0 28%" }} />;
+          const isCenter = meta.rank === 1;
+          const circleSize = isCenter ? 64 : 52;
+          const circleBg = isCenter ? "#FF6800" : "#ffffff";
+          const circleShadow = isCenter ? "3px 3px 0 #1a1a1a" : "2px 2px 0 #1a1a1a";
           return (
-            <div key={meta.rank} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              {/* Flame */}
-              {player.isRecentWinner && (meta.rank === 1 || meta.rank === 2) && (
-                <i className="ti ti-flame" style={{ fontSize: "16px", color: "#FF8C3A", marginBottom: "2px" }} />
+            <div key={meta.rank} style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: isCenter ? "0 0 36%" : "0 0 28%" }}>
+              {player.isRecentWinner && (
+                <i className="ti ti-flame" style={{ fontSize: "14px", color: "#FF6800", marginBottom: "3px" }} />
               )}
-              {/* Avatar */}
-              <Avatar player={player} size={meta.size} border={meta.border} />
-              {/* Name */}
-              <p style={{ fontSize: "12px", fontWeight: 600, color: "#ffffff", marginTop: "6px", textAlign: "center", width: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div style={{
+                width: circleSize, height: circleSize, borderRadius: "50%",
+                border: "2.5px solid #1a1a1a", boxShadow: circleShadow,
+                background: player.photo_url ? "transparent" : circleBg,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                overflow: "hidden",
+                fontSize: isCenter ? 20 : 16, fontWeight: 900,
+                color: isCenter ? "#ffffff" : "#1a1a1a",
+              }}>
+                {player.photo_url
+                  ? <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  : player.name?.charAt(0)}
+              </div>
+              <p style={{ fontSize: isCenter ? 12 : 11, fontWeight: 800, color: "#1a1a1a", marginTop: "8px", textAlign: "center" }}>
                 {player.name?.split(" ")[0]}
               </p>
-              {/* Wins */}
-              <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.45)", marginBottom: "6px" }}>{player.wins}W</p>
-              {/* Platform */}
-              <div style={{ width: "100%", height: meta.platformH, background: meta.platformBg, border: `0.5px solid ${meta.platformBorder}`, borderRadius: "14px 14px 0 0", display: "flex", alignItems: "center", justifyContent: "center", color: meta.platformColor, fontSize: meta.rank === 1 ? "20px" : "14px", fontWeight: 800 }}>
-                {meta.label}
+              <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(26,26,26,0.55)", marginTop: "2px" }}>
+                {player.wins} win{player.wins !== 1 ? "s" : ""}
+              </p>
+              <div style={{
+                marginTop: "6px",
+                background: isCenter ? "#FF6800" : "#ffffff",
+                color: "#1a1a1a",
+                border: "1.5px solid #1a1a1a",
+                borderRadius: "20px", padding: "3px 10px",
+                fontSize: "10px", fontWeight: 900,
+                boxShadow: isCenter ? "2px 2px 0 #1a1a1a" : "none",
+              }}>
+                #{meta.rank}
               </div>
             </div>
           );
         })}
       </div>
 
+      {/* Divider */}
+      <div style={{ borderTop: "1.5px solid rgba(26,26,26,0.15)", margin: "0.75rem 0" }} />
+
       {/* Rank 4-6 */}
       {rank4to6.length > 0 && (
-        <div style={{ borderTop: "0.5px solid rgba(255,255,255,0.08)", paddingTop: "10px", display: "flex", flexDirection: "column", gap: "0" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           {rank4to6.map((p, i) => {
             const rank = i + 4;
             const initials = p.name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?";
             return (
-              <div key={p.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 0", borderBottom: i < rank4to6.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none" }}>
-                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", width: "22px", flexShrink: 0 }}>#{rank}</span>
-                <div style={{ width: 30, height: 30, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 700, color: "#fff" }}>
+              <div key={p.id} style={{
+                display: "flex", alignItems: "center", gap: "10px",
+                padding: "6px 0",
+                borderBottom: i < rank4to6.length - 1 ? "1px solid rgba(26,26,26,0.10)" : "none",
+              }}>
+                <span style={{ fontSize: "12px", fontWeight: 900, color: "rgba(26,26,26,0.40)", width: "20px", flexShrink: 0 }}>#{rank}</span>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", overflow: "hidden",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  background: "#ffffff", border: "1.5px solid #1a1a1a",
+                  fontSize: "11px", fontWeight: 700, color: "#1a1a1a", flexShrink: 0,
+                }}>
                   {p.photo_url ? <img src={p.photo_url} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : initials}
                 </div>
-                <span style={{ flex: 1, fontSize: "13px", color: "rgba(255,255,255,0.85)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span style={{ flex: 1, fontSize: "13px", fontWeight: 700, color: "#1a1a1a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {p.name?.split(" ")[0]}
-                  {p.isRecentWinner && <i className="ti ti-flame" style={{ fontSize: "14px", color: "#FF8C3A", marginLeft: "4px" }} />}
+                  {p.isRecentWinner && <i className="ti ti-flame" style={{ fontSize: "12px", color: "#FF6800", marginLeft: "4px" }} />}
                 </span>
-                <span style={{ background: "rgba(255,107,0,0.12)", border: "0.5px solid rgba(255,107,0,0.20)", color: "#FF8C3A", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 600 }}>
-                  {p.wins}W
-                </span>
+                <div style={{
+                  background: "#ffffff", border: "1.5px solid #1a1a1a",
+                  borderRadius: "20px", padding: "2px 8px",
+                  fontSize: "10px", fontWeight: 800, color: "#1a1a1a",
+                }}>
+                  {p.wins}
+                </div>
               </div>
             );
           })}
@@ -178,18 +220,22 @@ export default function PlayerTrophySection({ players, winningTeams, currentPlay
 
       {/* Own position pill */}
       {myEntry && (
-        <div style={{ background: "rgba(255,107,0,0.12)", border: "0.5px solid rgba(255,107,0,0.25)", borderRadius: "14px", padding: "10px 12px", marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{
+          background: "rgba(26,26,26,0.08)", border: "1.5px solid #1a1a1a",
+          borderRadius: "14px", padding: "10px 12px", marginTop: "12px",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
           <div>
-            <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)" }}>Jouw positie</p>
-            <p style={{ fontSize: "14px", fontWeight: 700, color: "#FF8C3A", lineHeight: 1.2 }}>#{myRank}</p>
+            <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.50)", fontWeight: 600 }}>Jouw positie</p>
+            <p style={{ fontSize: "18px", fontWeight: 900, color: "#FF6800", lineHeight: 1.2 }}>#{myRank}</p>
           </div>
           <div style={{ textAlign: "right" }}>
-            <p style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>{myEntry.wins} wins</p>
+            <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>{myEntry.wins} wins</p>
             {nextEntry && myRank > 1 && (
-              <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)" }}>{gapToNext} {gapToNext === 1 ? "punt" : "punten"} van #{myRank - 1}</p>
+              <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.50)", fontWeight: 600 }}>{gapToNext} {gapToNext === 1 ? "punt" : "punten"} van #{myRank - 1}</p>
             )}
             {myRank === 1 && (
-              <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)" }}>Jij staat aan kop 🏆</p>
+              <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.50)", fontWeight: 600 }}>Jij staat aan kop 🏆</p>
             )}
           </div>
         </div>
