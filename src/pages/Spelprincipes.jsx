@@ -302,9 +302,16 @@ export default function Spelprincipes() {
 
       {/* Grid */}
       {visible.length === 0 ? (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "40px 0", gap: "10px" }}>
-          <span style={{ fontSize: "32px" }}>⚽</span>
-          <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.35)", fontWeight: 600 }}>Geen spelprincipes in deze categorie</p>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "32px 0 16px", gap: "8px" }}>
+          <img
+            src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/bb8883e16_Emvi-tactics.png"
+            alt="Emvi"
+            style={{ width: "140px", height: "140px", objectFit: "contain" }}
+          />
+          <p style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a1a" }}>Nog niets hier</p>
+          <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.45)", fontWeight: 500, textAlign: "center", maxWidth: "220px" }}>
+            {activeCategory === "Alles" ? "Voeg het eerste spelprincipe toe." : `Geen principes in "${activeCategory}".`}
+          </p>
         </div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "12px" }}>
