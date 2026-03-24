@@ -157,16 +157,13 @@ export default function PlayerDashboard() {
 
   return (
     <div className="space-y-6 pb-24">
-      <GreetingWithEmvi />
-      <LiveMatchBanner liveMatches={liveMatches} isTrainer={false} />
-      {/* Header */}
-      <PlayerGreetingHeader
-        user={user}
+      <PlayerMergedGreeting
         player={player}
         attendance={attendance}
         ratings={ratings}
         yoyo={yoyo}
       />
+      <LiveMatchBanner liveMatches={liveMatches} isTrainer={false} />
 
       {/* Upcoming Activities Compact */}
       <UpcomingActivitiesCompact playerId={playerId} />
