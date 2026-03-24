@@ -108,10 +108,8 @@ function IconProfiel({ fill }) {
 }
 
 const speelsterTabItems = [
-  { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
-  { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
 ];
 
