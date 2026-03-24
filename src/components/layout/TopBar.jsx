@@ -65,7 +65,7 @@ function DayBadge({ sessions, matches }) {
 }
 
 export default function TopBar() {
-  const { user, isTrainer, isSpeelster } = useCurrentUser();
+  const { user, isTrainer, isSpeelster, isOuder } = useCurrentUser();
   const greeting = useGreeting();
   const [showNotifications, setShowNotifications] = useState(false);
   const bellRef = useRef(null);
@@ -124,7 +124,7 @@ export default function TopBar() {
         maxWidth: "1280px", margin: "0 auto",
       }}>
         {/* Links: club logo */}
-        <Link to="/Dashboard" style={{ textDecoration: "none" }}>
+        <Link to={isOuder ? "/OuderDashboard" : "/Dashboard"} style={{ textDecoration: "none" }}>
           <div style={{
             width: "36px", height: "36px", borderRadius: "50%",
             background: "rgba(255,255,255,0.20)", border: "2px solid #ffffff",
