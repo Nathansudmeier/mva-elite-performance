@@ -108,8 +108,8 @@ export default function OuderDashboard() {
 
   return (
     <div className="pb-20 xl:pb-8" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-      {/* Live banner */}
-      {liveMatches.length > 0 && liveMatches[0]?.team === childTeam && (
+      {/* Live banner - only on match days */}
+      {liveMatches.length > 0 && liveMatches[0]?.team === childTeam && nextMatches.some(m => m.id === liveMatches[0].id) && (
         <div style={{
           background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px",
           padding: "16px", display: "flex", alignItems: "center", justifyContent: "space-between",
