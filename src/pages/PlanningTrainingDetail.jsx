@@ -267,7 +267,7 @@ export default function PlanningTrainingDetail() {
             onToggleStatus={handleAttendanceToggle}
           />
         )}
-      </div>
+    </div>
 
       {showEdit && (
         <AgendaForm
@@ -286,125 +286,89 @@ export default function PlanningTrainingDetail() {
 
 function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, sendReminder, reminderSent, editingAttendance, onToggleEdit, players, onToggleStatus }) {
   return (
-    <div className="glass-dark rounded-2xl p-4 space-y-5">
+    <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "16px", display: "flex", flexDirection: "column", gap: 18 }}>
       {isTrainer && (
-        <div className="flex gap-2">
-          <button
-            onClick={onToggleEdit}
-            className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition"
-            style={{
-              background: editingAttendance ? "rgba(74,222,128,0.20)" : "rgba(255,255,255,0.08)",
-              color: editingAttendance ? "#4ade80" : "rgba(255,255,255,0.65)",
-              border: `0.5px solid ${editingAttendance ? "rgba(74,222,128,0.30)" : "rgba(255,255,255,0.12)"}`,
-            }}
-          >
-            {editingAttendance ? "Gereed" : "Aanwezigheid bewerken"}
-          </button>
-        </div>
+        <button onClick={onToggleEdit}
+          style={{ width: "100%", height: 44, borderRadius: 12, fontWeight: 800, fontSize: 13, cursor: "pointer", background: editingAttendance ? "#08D068" : "#ffffff", color: "#1a1a1a", border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a" }}>
+          {editingAttendance ? "✓ Gereed" : "Aanwezigheid bewerken"}
+        </button>
       )}
 
-      <div className="grid grid-cols-1 gap-4">
-        {/* Aanwezig */}
-        <div>
-          <p className="t-label mb-3" style={{ color: "#4ade80" }}>Bevestigd aanwezig ({aanwezigList.length})</p>
-          {aanwezigList.length === 0 ? <p className="t-tertiary text-sm">Niemand bevestigd</p> : (
-            <div className="space-y-2">
-              {aanwezigList.map(player => (
-                <div key={player.id} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ background: "rgba(74,222,128,0.06)" }}>
-                  <PlayerAvatar player={player} />
-                  <p className="t-secondary flex-1">{player.name}</p>
-                  {editingAttendance ? (
-                    <button
-                      onClick={() => onToggleStatus(player.id, null)}
-                      className="text-xs font-semibold px-2 py-1 rounded transition"
-                      style={{ background: "rgba(248,113,113,0.20)", color: "#f87171" }}
-                    >
-                      ✕
-                    </button>
-                  ) : (
-                    <div className="dot-green" />
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+      {/* Aanwezig */}
+      <div>
+        <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#05a050", marginBottom: 10 }}>Bevestigd aanwezig ({aanwezigList.length})</p>
+        {aanwezigList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Niemand bevestigd</p> : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {aanwezigList.map(player => (
+              <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(8,208,104,0.08)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
+                <PlayerAvatar player={player} />
+                <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", flex: 1 }}>{player.name}</p>
+                {editingAttendance ? (
+                  <button onClick={() => onToggleStatus(player.id, null)}
+                    style={{ padding: "3px 10px", borderRadius: 8, background: "rgba(255,61,168,0.12)", color: "#FF3DA8", border: "1px solid rgba(255,61,168,0.25)", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>✕</button>
+                ) : (
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#05a050", flexShrink: 0 }} />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-        {/* Afwezig */}
-        <div>
-          <p className="t-label mb-3" style={{ color: "#f87171" }}>Afgemeld ({afwezigList.length})</p>
-          {afwezigList.length === 0 ? <p className="t-tertiary text-sm">Niemand afgemeld</p> : (
-            <div className="space-y-2">
-              {afwezigList.map(({ player, record }) => (
-                <div key={player.id} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ background: "rgba(248,113,113,0.06)" }}>
-                  <PlayerAvatar player={player} />
-                  <div className="flex-1 min-w-0">
-                    <p className="t-secondary">{player.name}</p>
-                    {isTrainer && record.notes && <p className="t-tertiary truncate">{record.notes}</p>}
+      {/* Afwezig */}
+      <div>
+        <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#FF3DA8", marginBottom: 10 }}>Afgemeld ({afwezigList.length})</p>
+        {afwezigList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Niemand afgemeld</p> : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {afwezigList.map(({ player, record }) => (
+              <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(255,61,168,0.06)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
+                <PlayerAvatar player={player} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
+                  {isTrainer && record.notes && <p style={{ fontSize: 11, color: "#FF3DA8", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{record.notes}</p>}
+                </div>
+                {editingAttendance ? (
+                  <button onClick={() => onToggleStatus(player.id, "aanwezig")}
+                    style={{ padding: "3px 10px", borderRadius: 8, background: "rgba(8,208,104,0.12)", color: "#05a050", border: "1px solid rgba(8,208,104,0.25)", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>✓</button>
+                ) : (
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#FF3DA8", flexShrink: 0 }} />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Nog niet */}
+      <div>
+        <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#cc9900", marginBottom: 10 }}>Nog niet gereageerd ({nognietList.length})</p>
+        {nognietList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Iedereen heeft gereageerd 🎉</p> : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {nognietList.map(player => (
+              <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(26,26,26,0.03)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
+                <PlayerAvatar player={player} />
+                <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", flex: 1 }}>{player.name}</p>
+                {editingAttendance ? (
+                  <div style={{ display: "flex", gap: 4 }}>
+                    <button onClick={() => onToggleStatus(player.id, "aanwezig")}
+                      style={{ padding: "3px 10px", borderRadius: 8, background: "rgba(8,208,104,0.12)", color: "#05a050", border: "1px solid rgba(8,208,104,0.25)", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>✓</button>
+                    <button onClick={() => onToggleStatus(player.id, "afwezig")}
+                      style={{ padding: "3px 10px", borderRadius: 8, background: "rgba(255,61,168,0.12)", color: "#FF3DA8", border: "1px solid rgba(255,61,168,0.25)", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>✕</button>
                   </div>
-                  {editingAttendance ? (
-                    <button
-                      onClick={() => onToggleStatus(player.id, "aanwezig")}
-                      className="text-xs font-semibold px-2 py-1 rounded transition"
-                      style={{ background: "rgba(74,222,128,0.20)", color: "#4ade80" }}
-                    >
-                      ✓
-                    </button>
-                  ) : (
-                    <div className="dot-red" />
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Nog niet gereageerd */}
-        <div>
-          <p className="t-label mb-3" style={{ color: "#fbbf24" }}>Nog niet gereageerd ({nognietList.length})</p>
-          {nognietList.length === 0 ? <p className="t-tertiary text-sm">Iedereen heeft gereageerd 🎉</p> : (
-            <div className="space-y-2">
-              {nognietList.map(player => (
-                <div key={player.id} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
-                  <PlayerAvatar player={player} />
-                  <p className="t-secondary flex-1">{player.name}</p>
-                  {editingAttendance ? (
-                    <div className="flex gap-1">
-                      <button
-                        onClick={() => onToggleStatus(player.id, "aanwezig")}
-                        className="text-xs font-semibold px-2 py-1 rounded transition"
-                        style={{ background: "rgba(74,222,128,0.20)", color: "#4ade80" }}
-                      >
-                        ✓
-                      </button>
-                      <button
-                        onClick={() => onToggleStatus(player.id, "afwezig")}
-                        className="text-xs font-semibold px-2 py-1 rounded transition"
-                        style={{ background: "rgba(248,113,113,0.20)", color: "#f87171" }}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="dot-yellow" />
-                  )}
-                </div>
-              ))}
-              {!editingAttendance && isTrainer && (
-                <button onClick={() => sendReminder.mutate()} disabled={sendReminder.isPending || reminderSent}
-                  className="w-full mt-2 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm"
-                  style={{
-                    background: reminderSent ? "rgba(74,222,128,0.10)" : "rgba(255,107,0,0.15)",
-                    border: `0.5px solid ${reminderSent ? "rgba(74,222,128,0.25)" : "rgba(255,107,0,0.30)"}`,
-                    color: reminderSent ? "#4ade80" : "#FF8C3A",
-                  }}>
-                  <Bell size={15} />
-                  {reminderSent ? "Herinneringen verstuurd!" : sendReminder.isPending ? "Versturen..." : `Stuur herinnering (${nognietList.length})`}
-                </button>
-              )}
-            </div>
-          )}
-        </div>
+                ) : (
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#FFD600", border: "1.5px solid #1a1a1a", flexShrink: 0 }} />
+                )}
+              </div>
+            ))}
+            {!editingAttendance && isTrainer && (
+              <button onClick={() => sendReminder.mutate()} disabled={sendReminder.isPending || reminderSent}
+                style={{ marginTop: 8, width: "100%", height: 44, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, borderRadius: 12, border: "2px solid #1a1a1a", background: reminderSent ? "#08D068" : "#ffffff", color: "#1a1a1a", fontSize: 13, fontWeight: 800, cursor: reminderSent ? "default" : "pointer", boxShadow: "2px 2px 0 #1a1a1a" }}>
+                <Bell size={14} />
+                {reminderSent ? "Verstuurd!" : sendReminder.isPending ? "Versturen..." : `Stuur herinnering (${nognietList.length})`}
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -412,11 +376,10 @@ function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, send
 
 function PlayerAvatar({ player }) {
   return (
-    <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden"
-      style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.25)" }}>
+    <div style={{ width: 32, height: 32, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "rgba(255,104,0,0.12)", border: "1.5px solid #1a1a1a" }}>
       {player.photo_url
-        ? <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
-        : <span style={{ fontSize: 11, fontWeight: 700, color: "#FF8C3A" }}>{player.name?.charAt(0)}</span>}
+        ? <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        : <span style={{ fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{player.name?.charAt(0)}</span>}
     </div>
   );
 }
@@ -424,9 +387,9 @@ function PlayerAvatar({ player }) {
 function PlayerPill({ player }) {
   const firstName = player.name?.split(" ")[0] || player.name;
   return (
-    <div className="flex items-center gap-2">
+    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
       <PlayerAvatar player={player} />
-      <span className="t-secondary-sm truncate">{firstName}</span>
+      <span style={{ fontSize: 12, fontWeight: 600, color: "#1a1a1a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</span>
     </div>
   );
 }
