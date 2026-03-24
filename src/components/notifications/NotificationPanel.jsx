@@ -7,10 +7,10 @@ import { formatDistanceToNow } from "date-fns";
 import { nl } from "date-fns/locale";
 
 const TYPE_ICONS = {
-  activiteit: { icon: "ti-calendar", color: "#4ade80" },
-  afmelding:  { icon: "ti-circle-x", color: "#f87171" },
-  herinnering:{ icon: "ti-clock",    color: "#fbbf24" },
-  opstelling: { icon: "ti-layout-distribute-vertical", color: "#60a5fa" },
+  activiteit: { icon: "ti-calendar", color: "#08D068" },
+  afmelding:  { icon: "ti-circle-x", color: "#FF3DA8" },
+  herinnering:{ icon: "ti-clock",    color: "#FFD600" },
+  opstelling: { icon: "ti-layout-distribute-vertical", color: "#00C2FF" },
 };
 
 function timeAgo(dateStr) {
@@ -45,7 +45,6 @@ export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["notifications", userEmail] }),
   });
 
-  // Close on outside click
   useEffect(() => {
     const handler = (e) => {
       const inPanel = panelRef.current?.contains(e.target);
@@ -69,7 +68,6 @@ export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
   const unreadCount = notifications.filter(n => !n.is_read).length;
   const isMobile = window.innerWidth < 768;
 
-  // Bereken dropdown positie op basis van anchor
   let dropdownStyle = {};
   if (!isMobile && anchorRef?.current) {
     const rect = anchorRef.current.getBoundingClientRect();
@@ -78,24 +76,21 @@ export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
       top: rect.bottom + 8,
       right: window.innerWidth - rect.right,
       width: 360,
-      borderRadius: 16,
+      borderRadius: 18,
     };
   } else {
     dropdownStyle = {
       position: "fixed",
-      bottom: 0,
-      left: 0,
-      right: 0,
-      borderRadius: "24px 24px 0 0",
+      bottom: 0, left: 0, right: 0,
+      borderRadius: "22px 22px 0 0",
     };
   }
 
   const panel = (
     <>
-      {/* Mobile backdrop */}
       {isMobile && (
         <div
-          style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+          style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(26,26,26,0.40)" }}
           onClick={onClose}
         />
       )}
@@ -105,29 +100,27 @@ export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
         style={{
           ...dropdownStyle,
           zIndex: 9999,
-          background: "rgba(20,10,3,0.96)",
-          backdropFilter: "blur(30px)",
-          WebkitBackdropFilter: "blur(30px)",
-          border: "0.5px solid rgba(255,255,255,0.12)",
+          background: "#ffffff",
+          border: "2.5px solid #1a1a1a",
+          boxShadow: "3px 3px 0 #1a1a1a",
           maxHeight: "80vh",
           display: "flex",
           flexDirection: "column",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.40)",
         }}
       >
         {/* Handle (mobile) */}
         {isMobile && (
-          <div style={{ display: "flex", justifyContent: "center", paddingTop: 12, paddingBottom: 4 }}>
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.20)" }} />
+          <div style={{ display: "flex", justifyContent: "center", paddingTop: 14, paddingBottom: 6 }}>
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: "#1a1a1a" }} />
           </div>
         )}
 
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 10px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>Notificaties</span>
+            <span style={{ fontSize: 16, fontWeight: 800, color: "#1a1a1a" }}>Notificaties</span>
             {unreadCount > 0 && (
-              <span style={{ fontSize: 10, fontWeight: 700, color: "#fff", background: "#FF6B00", borderRadius: 10, padding: "1px 6px" }}>
+              <span style={{ fontSize: 10, fontWeight: 800, color: "#ffffff", background: "#FF6800", borderRadius: 10, padding: "2px 7px", border: "1.5px solid #1a1a1a" }}>
                 {unreadCount}
               </span>
             )}
@@ -136,7 +129,7 @@ export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
             <button
               onClick={() => markAllReadMutation.mutate()}
               disabled={markAllReadMutation.isPending}
-              style={{ fontSize: 12, color: "#FF8C3A", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
+              style={{ fontSize: 12, color: "#FF6800", background: "none", border: "none", cursor: "pointer", fontWeight: 700 }}
             >
               Alles gelezen
             </button>
@@ -144,14 +137,14 @@ export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
         </div>
 
         {/* Divider */}
-        <div style={{ height: "0.5px", background: "rgba(255,255,255,0.08)", margin: "0 16px" }} />
+        <div style={{ height: "1.5px", background: "rgba(26,26,26,0.08)", margin: "0 16px" }} />
 
         {/* List */}
         <div style={{ overflowY: "auto", flex: 1, padding: "8px 0" }}>
           {notifications.length === 0 ? (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", gap: 12 }}>
-              <i className="ti ti-bell" style={{ fontSize: 32, color: "rgba(255,255,255,0.20)" }} />
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", textAlign: "center" }}>Geen notificaties</p>
+              <i className="ti ti-bell" style={{ fontSize: 32, color: "rgba(26,26,26,0.20)" }} />
+              <p style={{ fontSize: 13, color: "rgba(26,26,26,0.40)", textAlign: "center" }}>Geen notificaties</p>
             </div>
           ) : (
             notifications.map((n) => {
@@ -161,37 +154,32 @@ export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
                   key={n.id}
                   onClick={() => handleNotificationClick(n)}
                   style={{
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 12,
+                    width: "100%", display: "flex", alignItems: "flex-start", gap: 12,
                     padding: "12px 16px",
-                    background: n.is_read ? "transparent" : "rgba(255,107,0,0.08)",
-                    border: "none",
-                    cursor: "pointer",
-                    textAlign: "left",
-                    transition: "background 0.15s",
+                    background: n.is_read ? "transparent" : "rgba(255,104,0,0.04)",
+                    borderLeft: n.is_read ? "3px solid transparent" : "3px solid #FF6800",
+                    border: "none", borderBottom: "1.5px solid rgba(26,26,26,0.06)",
+                    cursor: "pointer", textAlign: "left",
                   }}
                 >
                   <div style={{
                     width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
-                    background: `${cfg.color}18`,
-                    border: `0.5px solid ${cfg.color}40`,
+                    background: `${cfg.color}18`, border: `1.5px solid ${cfg.color}`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
                     <i className={`ti ${cfg.icon}`} style={{ fontSize: 16, color: cfg.color }} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-                      <p style={{ fontSize: 13, fontWeight: 600, color: "#fff", lineHeight: 1.3 }}>{n.title}</p>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.3 }}>{n.title}</p>
                       {!n.is_read && (
-                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#FF6B00", flexShrink: 0 }} />
+                        <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#FF6800", flexShrink: 0 }} />
                       )}
                     </div>
                     {n.body && (
-                      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 2, lineHeight: 1.4 }}>{n.body}</p>
+                      <p style={{ fontSize: 12, color: "rgba(26,26,26,0.55)", marginTop: 2, lineHeight: 1.4 }}>{n.body}</p>
                     )}
-                    <p style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", marginTop: 4 }}>{timeAgo(n.created_date)}</p>
+                    <p style={{ fontSize: 10, color: "rgba(26,26,26,0.35)", marginTop: 4, fontWeight: 600 }}>{timeAgo(n.created_date)}</p>
                   </div>
                 </button>
               );
@@ -199,8 +187,7 @@ export default function NotificationPanel({ userEmail, onClose, anchorRef }) {
           )}
         </div>
 
-        {/* Mobile bottom padding */}
-        {isMobile && <div style={{ height: 20 }} />}
+        {isMobile && <div style={{ height: 24 }} />}
       </div>
     </>
   );

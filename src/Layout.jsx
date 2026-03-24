@@ -4,10 +4,8 @@ import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useQuery } from "@tanstack/react-query";
-import { base44 as b44 } from "@/api/base44Client";
 import IOSInstallBanner from "@/components/common/IOSInstallBanner";
 import TopBar from "@/components/layout/TopBar";
-// Tabler Icons zijn nu beschikbaar via CDN
 
 const desenvolvidoItems = [
   { name: "Fysiek", icon: "activity", page: "PhysicalMonitor" },
@@ -34,45 +32,22 @@ const secondaryNavItems = [
 
 function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
   const isActive = currentPageName === item.page;
-  const iconColor = isActive ? "#FF8C3A" : "rgba(255,255,255,0.40)";
-
-  if (variant === "mobile-tab") {
-    return (
-      <Link
-        key={item.page}
-        to={createPageUrl(item.page)}
-        onClick={onClick}
-        className="flex flex-col items-center justify-center py-3 px-2 transition-colors"
-      >
-        <i
-          className={`ti ti-${item.icon}`}
-          style={{ fontSize: "22px", color: iconColor }}
-        />
-        <span className={`text-[11px] mt-1 font-semibold ${isActive ? "t-nav-active" : "t-nav-inactive"}`}
-          style={{ color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.50)" }}>
-          {item.name}
-        </span>
-      </Link>
-    );
-  }
 
   return (
     <Link
       key={item.page}
       to={createPageUrl(item.page)}
       onClick={onClick}
-      className={`flex items-center gap-3 px-3 py-2.5 text-sm font-semibold transition-all duration-200`}
       style={{
-        color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.50)",
-        background: isActive ? "rgba(255,107,0,0.15)" : "transparent",
-        border: isActive ? "0.5px solid rgba(255,107,0,0.20)" : "0.5px solid transparent",
-        borderRadius: "10px",
+        display: "flex", alignItems: "center", gap: "10px",
+        padding: "9px 12px", borderRadius: "12px",
+        textDecoration: "none", fontSize: "14px", fontWeight: isActive ? 800 : 500,
+        color: isActive ? "#ffffff" : "rgba(26,26,26,0.55)",
+        background: isActive ? "#FF6800" : "transparent",
+        transition: "all 0.15s ease",
       }}
     >
-      <i
-        className={`ti ti-${item.icon}`}
-        style={{ fontSize: "20px", color: iconColor }}
-      />
+      <i className={`ti ti-${item.icon}`} style={{ fontSize: "18px", color: isActive ? "#ffffff" : "rgba(26,26,26,0.40)" }} />
       {item.name}
     </Link>
   );
@@ -81,34 +56,31 @@ function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
 function DeveloperGroup({ currentPageName, onItemClick }) {
   const isAnyActive = desenvolvidoItems.some(item => item.page === currentPageName);
   const [open, setOpen] = useState(isAnyActive);
-  const iconColor = isAnyActive ? "#FF8C3A" : "rgba(255,255,255,0.40)";
 
   return (
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-semibold transition-all duration-200"
         style={{
-          color: isAnyActive ? "#FF8C3A" : "rgba(255,255,255,0.50)",
-          background: isAnyActive ? "rgba(255,107,0,0.15)" : "transparent",
-          border: isAnyActive ? "0.5px solid rgba(255,107,0,0.20)" : "0.5px solid transparent",
-          borderRadius: "10px",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          width: "100%", padding: "9px 12px", borderRadius: "12px",
+          background: isAnyActive ? "#FF6800" : "transparent",
+          border: "none", cursor: "pointer", fontSize: "14px",
+          fontWeight: isAnyActive ? 800 : 500,
+          color: isAnyActive ? "#ffffff" : "rgba(26,26,26,0.55)",
         }}
       >
-        <div className="flex items-center gap-3">
-          <i
-            className="ti ti-trending-up"
-            style={{ fontSize: "20px", color: iconColor }}
-          />
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <i className="ti ti-trending-up" style={{ fontSize: "18px", color: isAnyActive ? "#ffffff" : "rgba(26,26,26,0.40)" }} />
           Ontwikkeling
         </div>
-        <i
-          className={`ti ti-chevron-down transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          style={{ fontSize: "16px", color: iconColor }}
-        />
+        <i className={`ti ti-chevron-down`} style={{
+          fontSize: "14px", color: isAnyActive ? "#ffffff" : "rgba(26,26,26,0.40)",
+          transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s",
+        }} />
       </button>
       {open && (
-        <div className="ml-4 mt-1 space-y-1 border-l-2 border-[#FF8C3A]/40 pl-4">
+        <div style={{ marginLeft: "16px", marginTop: "4px", paddingLeft: "12px", borderLeft: "2px solid rgba(26,26,26,0.12)" }}>
           {desenvolvidoItems.map((item) => (
             <NavLink key={item.page} item={item} currentPageName={currentPageName} onClick={onItemClick} />
           ))}
@@ -120,21 +92,17 @@ function DeveloperGroup({ currentPageName, onItemClick }) {
 
 export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [meerOpen, setMeerOpen] = useState(false);
   const { user, isTrainer, isSpeelster } = useCurrentUser();
   const isSpeelsterUser = !isTrainer && isSpeelster;
 
-
-
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#1c0e04" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#FFF3E8" }}>
       <IOSInstallBanner />
-
-      {/* Top bar */}
       <TopBar />
 
       {/* Sidebar desktop */}
-      <aside className="hidden xl:flex fixed left-0 top-[60px] bottom-0 w-56 flex-col z-40 overflow-y-auto" style={{ backgroundColor: "rgba(0,0,0,0.38)", borderRight: "0.5px solid rgba(255,255,255,0.07)", backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)" }}>
+      <aside className="hidden xl:flex fixed left-0 top-[60px] bottom-0 w-56 flex-col z-40 overflow-y-auto"
+        style={{ background: "#ffffff", borderRight: "2.5px solid #1a1a1a" }}>
         <nav className="flex-1 py-4 px-3 space-y-1">
           {isSpeelsterUser ? (
             <>
@@ -152,13 +120,18 @@ export default function Layout({ children, currentPageName }) {
             </>
           )}
         </nav>
-        <div className="px-3 pb-4" style={{ borderTop: "0.5px solid rgba(255,255,255,0.06)", paddingTop: "12px" }}>
+        <div style={{ borderTop: "2px solid rgba(26,26,26,0.10)", padding: "12px" }}>
           <button
             onClick={() => base44.auth.logout()}
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm w-full transition-colors"
-            style={{ color: "rgba(248,113,113,0.65)" }}
+            style={{
+              display: "flex", alignItems: "center", gap: "10px",
+              padding: "10px 14px", borderRadius: "12px",
+              background: "transparent", border: "2px solid #FF3DA8",
+              color: "#FF3DA8", fontSize: "13px", fontWeight: 700,
+              cursor: "pointer", width: "100%",
+            }}
           >
-            <i className="ti ti-logout" style={{ fontSize: "20px", color: "rgba(248,113,113,0.65)" }} />
+            <i className="ti ti-logout" style={{ fontSize: "16px", color: "#FF3DA8" }} />
             Uitloggen
           </button>
         </div>
@@ -166,9 +139,10 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Mobile nav overlay */}
       {mobileOpen && (
-        <div className="xl:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
-          <div className="w-64 h-full pt-[60px] px-3 overflow-y-auto" style={{ backgroundColor: "rgba(28,14,4,0.97)", borderRight: "1px solid rgba(255,107,0,0.15)" }} onClick={(e) => e.stopPropagation()}>
-            <nav className="space-y-1">
+        <div className="xl:hidden fixed inset-0 z-40 bg-black/40" onClick={() => setMobileOpen(false)}>
+          <div style={{ width: "260px", height: "100%", paddingTop: "60px", paddingLeft: "12px", paddingRight: "12px", paddingBottom: "12px", overflowY: "auto", background: "#ffffff", borderRight: "2.5px solid #1a1a1a" }}
+            onClick={(e) => e.stopPropagation()}>
+            <nav style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
               {isSpeelsterUser ? (
                 <>
                   <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
@@ -190,19 +164,13 @@ export default function Layout({ children, currentPageName }) {
       )}
 
       {/* Main content */}
-      <main className="xl:pl-56 pb-20 xl:pb-0 relative min-h-screen overflow-hidden">
-        {/* Light orbs background layer */}
-        <div className="pointer-events-none" style={{ position: "fixed", top: "64px", left: 0, right: 0, bottom: 0, zIndex: 1, overflow: "hidden" }}>
-          <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: "rgba(255,107,0,0.55)", top: -160, left: -100, filter: "blur(80px)" }} />
-          <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", background: "rgba(255,150,0,0.30)", top: 380, right: -80, filter: "blur(70px)" }} />
-          <div style={{ position: "absolute", width: 250, height: 250, borderRadius: "50%", background: "rgba(255,107,0,0.20)", bottom: 100, left: -40, filter: "blur(60px)" }} />
-        </div>
-        <div className="relative p-4 md:p-6 xl:p-8 max-w-7xl mx-auto" style={{ zIndex: 2 }}>
+      <main className="xl:pl-56 pb-28 xl:pb-8 relative min-h-screen">
+        <div className="relative p-4 md:p-6 xl:p-8 max-w-7xl mx-auto">
           {children}
         </div>
       </main>
 
-      {/* New Tab Bar */}
+      {/* Tab Bar */}
       {(() => {
         const trainerTabItems = [
           { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
@@ -212,42 +180,61 @@ export default function Layout({ children, currentPageName }) {
           { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
           { name: "Berichten", icon: "message-circle", page: "Messages" },
         ];
-        
+
         const speelsterTabItems = [
           { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
           { name: "Planning", icon: "calendar", page: "Planning" },
           { name: "Berichten", icon: "message-circle", page: "Messages" },
           { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
         ];
-        
-        const tabItems = isSpeelsterUser ? speelsterTabItems : trainerTabItems;
-        
-        return (
-          <nav className="xl:hidden fixed bottom-0 left-0 right-0 z-[100]" style={{ backgroundColor: "rgba(15,7,2,0.20)", backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)", padding: "8px 8px 20px" }}>
-            {/* Orange gradient accent line */}
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,107,0,0.60), transparent)" }} />
 
-            <div className="overflow-x-auto" style={{ scrollBehavior: "smooth" }}>
-              <div style={{ display: "flex", gap: "6px", minWidth: "min-content", paddingRight: "8px" }}>
-                {tabItems.map((item) => {
-                  const isActive = item.page === currentPageName;
-                  const isTablet = window.innerWidth >= 600 && window.innerWidth < 1024;
-                  return (
-                    <Link
-                      key={item.page}
-                      to={createPageUrl(item.page)}
-                      onClick={() => setMobileOpen(false)}
-                      style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", padding: isTablet ? "8px 14px" : "6px 8px", borderRadius: "12px", textDecoration: "none", background: isActive ? "rgba(255,107,0,0.15)" : "transparent", border: isActive ? "0.5px solid rgba(255,107,0,0.25)" : "none", transition: "all 0.15s ease", flexShrink: 0 }}
-                    >
-                      {isActive && <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#FF6B00", marginBottom: "2px" }} />}
-                      <i className={`ti ti-${item.icon}`} style={{ fontSize: isTablet ? "24px" : "22px", stroke: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", strokeWidth: 1.5, color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)" }} />
-                      <span style={{ fontSize: isTablet ? "11px" : "10px", color: isActive ? "#FF8C3A" : "rgba(255,255,255,0.35)", fontWeight: isActive ? 600 : 400, whiteSpace: "nowrap" }}>
-                        {item.name}
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
+        const tabItems = isSpeelsterUser ? speelsterTabItems : trainerTabItems;
+
+        return (
+          <nav className="xl:hidden fixed bottom-0 left-0 right-0 z-[100]"
+            style={{ padding: "0 12px 12px" }}>
+            <div style={{
+              background: "#ffffff",
+              border: "2.5px solid #1a1a1a",
+              borderRadius: "22px",
+              boxShadow: "3px 3px 0 #1a1a1a",
+              display: "flex",
+              padding: "6px 4px 8px",
+              overflowX: "auto",
+            }}>
+              {tabItems.map((item) => {
+                const isActive = item.page === currentPageName;
+                return (
+                  <Link
+                    key={item.page}
+                    to={createPageUrl(item.page)}
+                    onClick={() => setMobileOpen(false)}
+                    style={{
+                      display: "flex", flexDirection: "column", alignItems: "center",
+                      gap: "3px", padding: "4px 8px", borderRadius: "10px",
+                      textDecoration: "none", flex: "1",
+                      background: isActive ? "#FF6800" : "transparent",
+                      transition: "all 0.15s ease", flexShrink: 0,
+                      minWidth: "52px",
+                    }}
+                  >
+                    <i
+                      className={`ti ti-${item.icon}`}
+                      style={{
+                        fontSize: "21px",
+                        color: isActive ? "#ffffff" : "rgba(26,26,26,0.30)",
+                      }}
+                    />
+                    <span style={{
+                      fontSize: "9px", fontWeight: 800,
+                      color: isActive ? "#ffffff" : "rgba(26,26,26,0.30)",
+                      whiteSpace: "nowrap", letterSpacing: "0.02em",
+                    }}>
+                      {item.name}
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </nav>
         );
