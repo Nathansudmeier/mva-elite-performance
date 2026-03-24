@@ -73,11 +73,21 @@ const trainerTabItems = [
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
 ];
 
+function IconProfiel({ fill }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="6" r="3.5" fill={fill} />
+      <path d="M2 16C2 12.96 5.13 10.5 9 10.5s7 2.46 7 5.5H2z" fill={fill} />
+    </svg>
+  );
+}
+
 const speelsterTabItems = [
   { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
+  { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
 ];
 
 export default function BentoTabBar({ currentPageName, isSpeelsterUser, onNavigate }) {
