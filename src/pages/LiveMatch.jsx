@@ -292,70 +292,77 @@ export default function LiveMatch() {
               <div>
                 <p className="t-label mb-3">Opstelling</p>
 
-                {/* Desktop toggle */}
-                <div className="hidden xl:flex gap-2 mb-4">
-                  <button
-                    onClick={() => setShowField(false)}
-                    className="px-4 py-2 rounded-lg text-xs md:text-sm font-bold border-2 transition-all"
-                    style={{ borderColor: !showField ? "#FF6800" : "rgba(26,26,26,0.15)", background: !showField ? "rgba(255,104,0,0.12)" : "transparent", color: !showField ? "#FF6800" : "rgba(26,26,26,0.50)" }}
-                  >Spelerslijst</button>
-                  <button
-                    onClick={() => setShowField(true)}
-                    className="px-4 py-2 rounded-lg text-xs md:text-sm font-bold border-2 transition-all"
-                    style={{ borderColor: showField ? "#FF6800" : "rgba(26,26,26,0.15)", background: showField ? "rgba(255,104,0,0.12)" : "transparent", color: showField ? "#FF6800" : "rgba(26,26,26,0.50)" }}
-                  >Toon veld</button>
+                {/* Voetbalveld - Mobile First */}
+                <div style={{ height: "280px", borderRadius: "16px", overflow: "hidden", marginBottom: "16px" }}>
+                  <FieldLineup 
+                    players={activePlayers} 
+                    lineupMap={lineupMap} 
+                    formation={formation} 
+                    readOnly={true}
+                  />
                 </div>
 
-                {/* Mobile/tablet: always player list */}
-                <div className="xl:hidden">
-                  <div className="glass overflow-hidden">
-                    <LineupPlayerList
-                      players={activePlayers}
-                      lineupMap={lineupMap}
-                      substitutes={substitutes}
-                      formation={formation}
-                      onLineupChange={setLineupMap}
-                      onSubstitutesChange={setSubstitutes}
-                      onFormationChange={setFormation}
-                    />
-                  </div>
-                </div>
-
-                {/* Desktop: conditionally show list or field */}
-                <div className="hidden xl:block">
-                  {showField ? (
-                    <>
-                      <div style={{ height: 220, borderRadius: 16, overflow: "hidden", marginBottom: 16 }}>
-                        <FieldLineup players={activePlayers} lineupMap={lineupMap} formation={formation} onLineupChange={setLineupMap} />
-                      </div>
-                      <SubstitutesPicker players={activePlayers} lineupMap={lineupMap} substitutes={substitutes} onSubstitutesChange={setSubstitutes} />
-                    </>
-                  ) : (
-                    <div className="glass overflow-hidden">
-                      <LineupPlayerList
-                        players={activePlayers}
-                        lineupMap={lineupMap}
-                        substitutes={substitutes}
-                        formation={formation}
-                        onLineupChange={setLineupMap}
-                        onSubstitutesChange={setSubstitutes}
-                        onFormationChange={setFormation}
-                      />
+                {/* Wissels sectie */}
+                {substitutes.length > 0 && (
+                  <div className="mb-4">
+                    <p className="t-label mb-3">Wissels</p>
+                    <div className="flex gap-3 overflow-x-auto pb-2">
+                      {substitutes.map(playerId => {
+                        const player = activePlayers.find(p => p.id === playerId);
+                        return player ? (
+                          <div key={playerId} className="flex-shrink-0 text-center">
+                            <div 
+                              style={{
+                                width: "36px",
+                                height: "36px",
+                                borderRadius: "50%",
+                                border: "2px solid #1a1a1a",
+                                overflow: "hidden",
+                                margin: "0 auto"
+                              }}
+                            >
+                              <img 
+                                src={player.photo_url || "https://via.placeholder.com/36?text=" + player.name.charAt(0)} 
+                                alt={player.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <p style={{ fontSize: "10px", fontWeight: 700, color: "#1a1a1a", marginTop: "4px" }}>
+                              {player.name.split(" ").pop()}
+                            </p>
+                          </div>
+                        ) : null;
+                      })}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
-
-              <button
-                onClick={startMatch}
-                disabled={Object.keys(lineupMap).length === 0}
-                className="btn-primary w-full flex items-center justify-center gap-2"
-                style={{ opacity: Object.keys(lineupMap).length === 0 ? 0.5 : 1 }}
-              >
-                <span>▶</span>Start Wedstrijd
-              </button>
             </div>
           )}
+        </div>
+
+        {/* Start Wedstrijd Button - Fixed Footer */}
+        <div className="fixed bottom-0 left-0 right-0 px-5 py-4 md:px-6 md:py-5 bg-white border-t-2 border-black xl:static xl:border-t-0 xl:px-0 xl:py-0 xl:bg-transparent">
+          <button
+            onClick={startMatch}
+            disabled={Object.keys(lineupMap).length === 0}
+            className="w-full flex items-center justify-center gap-2"
+            style={{
+              background: "#FF6800",
+              border: "2.5px solid #1a1a1a",
+              borderRadius: "14px",
+              boxShadow: "3px 3px 0 #1a1a1a",
+              height: "52px",
+              fontSize: "15px",
+              fontWeight: 800,
+              color: "white",
+              cursor: Object.keys(lineupMap).length === 0 ? "not-allowed" : "pointer",
+              opacity: Object.keys(lineupMap).length === 0 ? 0.5 : 1,
+              transition: "all 0.1s"
+            }}
+          >
+            <span style={{ fontSize: "18px" }}>▶</span>Start Wedstrijd
+          </button>
         </div>
       </div>
     );
