@@ -117,7 +117,7 @@ const speelsterTabItems = [
 ];
 
 const ouderTabItems = [
-  { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
+  { name: "Dashboard", page: "OuderDashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
