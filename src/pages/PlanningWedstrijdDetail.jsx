@@ -320,39 +320,38 @@ export default function PlanningWedstrijdDetail() {
 
   const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
 
-  return (
-    <div className="relative" style={{ width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box" }}>
-      <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/634f1c16e_Matchbackground.jpg" alt=""
-        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+  const teamCardBg = item.team === "MO17" ? "#00C2FF" : item.team === "Dames 1" ? "#FF3DA8" : "#FF6800";
+  const teamTextDark = teamCardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a";
 
-      <div className="relative z-10 space-y-5">
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "14px", width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box" }}>
+
         {/* Back + actions */}
-        <div className="flex items-center gap-3">
-          <Link to="/Planning" className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
-            <ChevronLeft size={18} color="#fff" />
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Link to="/Planning"
+            style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", textDecoration: "none" }}>
+            <ChevronLeft size={18} color="#1a1a1a" />
           </Link>
-          <div className="flex-1 min-w-0">
-            <p className="t-label" style={{ color: cfg.color }}>Wedstrijd</p>
-            <h1 className="t-page-title truncate">{item.title}</h1>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: teamCardBg === "#FF3DA8" ? "#FF3DA8" : teamCardBg === "#00C2FF" ? "#0090cc" : "#FF6800", marginBottom: 2 }}>Wedstrijd</p>
+            <h1 className="t-page-title" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.title}</h1>
           </div>
           {isTrainer && (
-            <div className="flex gap-2">
-              <button onClick={() => setShowEdit(true)} className="w-9 h-9 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
-                <Pencil size={16} color="rgba(255,255,255,0.7)" />
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={() => setShowEdit(true)}
+                style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
+                <Pencil size={16} color="#1a1a1a" />
               </button>
-              <button onClick={handleDelete} className="w-9 h-9 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.25)" }}>
-                <Trash2 size={16} color="#f87171" />
+              <button onClick={handleDelete}
+                style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,61,168,0.10)", border: "2.5px solid #FF3DA8", cursor: "pointer" }}>
+                <Trash2 size={16} color="#FF3DA8" />
               </button>
             </div>
           )}
         </div>
 
         {/* Hero card */}
-        <div className="rounded-2xl p-5 relative overflow-hidden"
-          style={{ background: "linear-gradient(135deg, rgba(255,107,0,0.20), rgba(28,14,4,0.60))", border: "0.5px solid rgba(255,107,0,0.30)" }}>
+        <div style={{ background: teamCardBg, border: "2.5px solid #1a1a1a", borderRadius: 22, boxShadow: "3px 3px 0 #1a1a1a", padding: 20, position: "relative", overflow: "hidden" }}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
