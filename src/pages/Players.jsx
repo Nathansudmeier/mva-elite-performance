@@ -157,33 +157,33 @@ function PlayersContent() {
 
       {isTrainer && (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-md" style={{ background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
+        <DialogContent className="max-w-md" style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 20 }}>
           <DialogHeader>
-            <DialogTitle className="t-page-title">{editing ? "Speelster Bewerken" : "Nieuwe Speelster"}</DialogTitle>
+            <DialogTitle style={{ fontSize: 18, fontWeight: 900, color: "#1a1a1a" }}>{editing ? "Speelster Bewerken" : "Nieuwe Speelster"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <Input placeholder="Naam" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+            <Input placeholder="Naam" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "10px" }} />
             <div className="grid grid-cols-2 gap-3">
               <Select value={form.position} onValueChange={(v) => setForm({ ...form, position: v })}>
-                <SelectTrigger style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }}>
+                <SelectTrigger style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "10px" }}>
                   <SelectValue placeholder="Positie" />
                 </SelectTrigger>
                 <SelectContent>
                   {POSITIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
-              <Input type="number" placeholder="Rugnummer" value={form.shirt_number} onChange={(e) => setForm({ ...form, shirt_number: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+              <Input type="number" placeholder="Rugnummer" value={form.shirt_number} onChange={(e) => setForm({ ...form, shirt_number: e.target.value })} style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "10px" }} />
             </div>
-            <label className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer" style={{ border: "1px dashed rgba(255,107,0,0.5)", background: "rgba(255,107,0,0.08)" }}>
-              <Upload size={16} style={{ color: "#FF8C3A" }} />
-              <span className="t-secondary">{photoFile ? photoFile.name : "Upload foto"}</span>
+            <label className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer" style={{ border: "2px dashed rgba(26,26,26,0.25)", background: "rgba(26,26,26,0.04)" }}>
+              <Upload size={16} style={{ color: "#FF6800" }} />
+              <span style={{ fontSize: 13, color: "rgba(26,26,26,0.55)" }}>{photoFile ? photoFile.name : "Upload foto"}</span>
               <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files[0])} />
             </label>
             <div className="space-y-2">
-              <p className="t-label">IOP Doelen</p>
-              <Input placeholder="Doel 1" value={form.iop_goal_1} onChange={(e) => setForm({ ...form, iop_goal_1: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
-              <Input placeholder="Doel 2" value={form.iop_goal_2} onChange={(e) => setForm({ ...form, iop_goal_2: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
-              <Input placeholder="Doel 3" value={form.iop_goal_3} onChange={(e) => setForm({ ...form, iop_goal_3: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)" }}>IOP Doelen</p>
+              <Input placeholder="Doel 1" value={form.iop_goal_1} onChange={(e) => setForm({ ...form, iop_goal_1: e.target.value })} style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "10px" }} />
+              <Input placeholder="Doel 2" value={form.iop_goal_2} onChange={(e) => setForm({ ...form, iop_goal_2: e.target.value })} style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "10px" }} />
+              <Input placeholder="Doel 3" value={form.iop_goal_3} onChange={(e) => setForm({ ...form, iop_goal_3: e.target.value })} style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "10px" }} />
             </div>
             <button onClick={() => saveMutation.mutate(form)} disabled={saveMutation.isPending || !form.name} className="btn-primary">
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
