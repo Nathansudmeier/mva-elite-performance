@@ -11,41 +11,43 @@ export default function AgendaItemCard({ item, attendance = [], playerCount = 0,
   const onbekend = playerCount - aanwezig - afwezig;
 
   return (
-    <button onClick={onClick} className="w-full text-left flex gap-3 p-4 rounded-2xl transition-all hover:brightness-110"
-      style={{ background: "rgba(255,255,255,0.05)", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+    <button onClick={onClick}
+      style={{ width: "100%", textAlign: "left", display: "flex", gap: "12px", padding: "14px", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", cursor: "pointer", transition: "transform 0.1s, box-shadow 0.1s" }}
+      onMouseDown={e => { e.currentTarget.style.transform = "translate(2px,2px)"; e.currentTarget.style.boxShadow = "1px 1px 0 #1a1a1a"; }}
+      onMouseUp={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; }}
+    >
       {/* Color strip */}
-      <div className="w-1 rounded-full flex-shrink-0 self-stretch" style={{ background: cfg.color }} />
+      <div style={{ width: "4px", borderRadius: "3px", flexShrink: 0, alignSelf: "stretch", background: cfg.color, border: "1px solid #1a1a1a" }} />
 
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-2">
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
           <div>
-            <p className="t-label mb-0.5" style={{ color: cfg.color }}>{item.type}</p>
-            <p className="t-card-title">{item.title}</p>
+            <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: cfg.color, marginBottom: "3px" }}>{item.type}</p>
+            <p style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.3 }}>{item.title}</p>
           </div>
-          <span className="flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-semibold"
-            style={{ background: teamCfg.bg, color: teamCfg.color }}>
+          <span style={{ flexShrink: 0, padding: "3px 10px", borderRadius: "20px", fontSize: "10px", fontWeight: 800, background: "#1a1a1a", color: "#ffffff", border: "1.5px solid #1a1a1a" }}>
             {item.team}
           </span>
         </div>
 
-        <div className="flex flex-wrap gap-3 mt-2">
-          <div className="flex items-center gap-1.5 t-secondary">
-            <Clock size={12} className="ic-muted" />
-            <span>{formatDate(item.date)} · {item.start_time}</span>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <Clock size={12} style={{ color: "rgba(26,26,26,0.40)" }} />
+            <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)", fontWeight: 600 }}>{formatDate(item.date)} · {item.start_time}</span>
           </div>
           {item.location && (
-            <div className="flex items-center gap-1.5 t-secondary">
-              <MapPin size={12} className="ic-muted" />
-              <span>{item.location}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+              <MapPin size={12} style={{ color: "rgba(26,26,26,0.40)" }} />
+              <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)", fontWeight: 600 }}>{item.location}</span>
             </div>
           )}
         </div>
 
         {playerCount > 0 && (
-          <div className="flex gap-3 mt-2">
-            <span className="t-secondary-sm" style={{ color: "#4ade80" }}>{aanwezig} aanwezig</span>
-            <span className="t-secondary-sm" style={{ color: "#f87171" }}>{afwezig} afwezig</span>
-            <span className="t-secondary-sm" style={{ color: "#fbbf24" }}>{onbekend} onbekend</span>
+          <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
+            <span style={{ fontSize: "11px", fontWeight: 700, color: "#05a050" }}>{aanwezig} aanwezig</span>
+            <span style={{ fontSize: "11px", fontWeight: 700, color: "#FF3DA8" }}>{afwezig} afwezig</span>
+            <span style={{ fontSize: "11px", fontWeight: 700, color: "rgba(26,26,26,0.40)" }}>{onbekend} onbekend</span>
           </div>
         )}
       </div>

@@ -110,143 +110,133 @@ export default function Planning() {
   }
 
   return (
-    <div className="relative">
-      <img
-        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png"
-        alt=""
-        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: 0 }}
-      />
+    <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
 
-      <div className="space-y-5 relative z-10">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="t-page-title">Planning</h1>
-            <p className="t-secondary mt-0.5">{upcoming.length} komende activiteiten</p>
-          </div>
-          <div className="flex items-center gap-2">
-            {/* View toggle pills */}
-            <div className="flex rounded-full overflow-hidden p-0.5" style={{ background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
-              {[{ key: "maand", Icon: Calendar, label: "Kalender" }, { key: "lijst", Icon: List, label: "Lijst" }].map(({ key, Icon, label }) => (
-                <button key={key} onClick={() => setView(key)}
-                  className="px-3 py-1.5 text-sm font-semibold flex items-center gap-1.5 transition-all rounded-full"
-                  style={{
-                    background: view === key ? "rgba(255,140,58,0.25)" : "transparent",
-                    color: view === key ? "#FF8C3A" : "rgba(255,255,255,0.45)",
-                    border: view === key ? "0.5px solid rgba(255,140,58,0.35)" : "0.5px solid transparent",
-                  }}>
-                  <Icon size={14} />
-                  <span className="hidden sm:inline">{label}</span>
-                </button>
-              ))}
-            </div>
-
-            {isTrainer && (
-              <button onClick={() => { setEditItem(null); setShowForm(true); }}
-                className="w-9 h-9 rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
-                style={{ background: "#FF6B00" }}>
-                <Plus size={18} color="#fff" />
-              </button>
-            )}
-          </div>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
+        <div>
+          <h1 className="t-page-title">Planning</h1>
+          <p className="t-secondary" style={{ marginTop: "2px" }}>{upcoming.length} komende activiteiten</p>
         </div>
-
-        {/* Kalenderweergave */}
-        {view === "maand" && (
-          <div className="space-y-4">
-            <AgendaCalendar items={items} onDayClick={(dateStr, dayItems) => setSelectedDay({ dateStr, dayItems })} />
-
-            {selectedDay && (
-              <div className="glass-dark rounded-2xl p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="t-card-title capitalize">{formatDate(selectedDay.dateStr)}</h3>
-                  <button onClick={() => setSelectedDay(null)} style={{ fontSize: 18, color: "rgba(255,255,255,0.4)", lineHeight: 1 }}>✕</button>
-                </div>
-                {selectedDay.dayItems.length === 0 ? (
-                  <p className="t-secondary">Geen activiteiten gepland.</p>
-                ) : (
-                  <div className="space-y-2">
-                    {selectedDay.dayItems.map(item => (
-                      <AgendaItemCard key={item.id} item={item}
-                        attendance={getAttendanceFor(item.id)}
-                        playerCount={players.length}
-                        onClick={() => openDetail(item)} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Type filter (only in list view) */}
-        {view === "lijst" && (
-          <div className="flex rounded-full overflow-hidden p-0.5 w-fit" style={{ background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
-            {[
-              { key: "alles", label: "Alles" },
-              { key: "trainingen", label: "Trainingen" },
-              { key: "wedstrijden", label: "Wedstrijden" }
-            ].map(({ key, label }) => (
-              <button key={key} onClick={() => setTypeFilter(key)}
-                className="px-3 py-1.5 text-sm font-semibold transition-all rounded-full"
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          {/* View toggle */}
+          <div style={{ display: "flex", background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "14px", boxShadow: "2px 2px 0 #1a1a1a", overflow: "hidden" }}>
+            {[{ key: "maand", Icon: Calendar, label: "Kalender" }, { key: "lijst", Icon: List, label: "Lijst" }].map(({ key, Icon, label }) => (
+              <button key={key} onClick={() => setView(key)}
                 style={{
-                  background: typeFilter === key ? "rgba(255,140,58,0.25)" : "transparent",
-                  color: typeFilter === key ? "#FF8C3A" : "rgba(255,255,255,0.45)",
-                  border: typeFilter === key ? "0.5px solid rgba(255,140,58,0.35)" : "0.5px solid transparent",
+                  padding: "7px 12px", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", gap: "5px",
+                  background: view === key ? "#FF6800" : "transparent",
+                  color: view === key ? "#ffffff" : "rgba(26,26,26,0.50)",
+                  border: "none", cursor: "pointer",
                 }}>
-                {label}
+                <Icon size={13} />
+                <span className="hidden sm:inline">{label}</span>
               </button>
             ))}
           </div>
-        )}
 
-        {/* Lijstweergave */}
-         {view === "lijst" && (
-          <div className="space-y-3">
-            {upcoming.length === 0 && (
-              <div className="glass-dark rounded-2xl p-8 text-center">
-                <p className="t-secondary">Geen komende activiteiten</p>
-              </div>
-            )}
-            {upcoming.map(item => (
-              <AgendaItemCard key={item.id} item={item}
-                attendance={getAttendanceFor(item.id)}
-                playerCount={players.length}
-                onClick={() => openDetail(item)} />
-            ))}
-
-            {past.length > 0 && (
-              <div className="mt-4">
-                <button onClick={() => setShowPast(p => !p)}
-                  className="flex items-center gap-2 t-secondary hover:text-white transition-colors w-full py-2">
-                  {showPast ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                  Eerder ({past.length})
-                </button>
-                {showPast && (
-                  <div className="space-y-2 mt-2">
-                    {past.map(item => (
-                      <div key={item.id} style={{ opacity: 0.55 }}>
-                        <AgendaItemCard item={item}
-                          attendance={getAttendanceFor(item.id)}
-                          playerCount={players.length}
-                          onClick={() => openDetail(item)} />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Form modal */}
-        {(showForm || editItem) && (
-          <AgendaForm
-            item={editItem}
-            onSave={handleSave}
-            onClose={() => { setShowForm(false); setEditItem(null); }} />
-        )}
+          {isTrainer && (
+            <button onClick={() => { setEditItem(null); setShowForm(true); }}
+              style={{ width: "42px", height: "42px", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", background: "#FF6800", border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
+              <Plus size={18} color="#fff" />
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Kalenderweergave */}
+      {view === "maand" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          <AgendaCalendar items={items} onDayClick={(dateStr, dayItems) => setSelectedDay({ dateStr, dayItems })} />
+
+          {selectedDay && (
+            <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+                <h3 style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", textTransform: "capitalize" }}>{formatDate(selectedDay.dateStr)}</h3>
+                <button onClick={() => setSelectedDay(null)} style={{ fontSize: "20px", color: "rgba(26,26,26,0.35)", background: "none", border: "none", cursor: "pointer", lineHeight: 1 }}>✕</button>
+              </div>
+              {selectedDay.dayItems.length === 0 ? (
+                <p className="t-secondary">Geen activiteiten gepland.</p>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {selectedDay.dayItems.map(item => (
+                    <AgendaItemCard key={item.id} item={item}
+                      attendance={getAttendanceFor(item.id)}
+                      playerCount={players.length}
+                      onClick={() => openDetail(item)} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Type filter (lijst view) */}
+      {view === "lijst" && (
+        <div style={{ display: "flex", background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "14px", boxShadow: "2px 2px 0 #1a1a1a", overflow: "hidden", width: "fit-content" }}>
+          {[
+            { key: "alles", label: "Alles" },
+            { key: "trainingen", label: "Trainingen" },
+            { key: "wedstrijden", label: "Wedstrijden" }
+          ].map(({ key, label }) => (
+            <button key={key} onClick={() => setTypeFilter(key)}
+              style={{
+                padding: "8px 14px", fontSize: "12px", fontWeight: 800,
+                background: typeFilter === key ? "#1a1a1a" : "transparent",
+                color: typeFilter === key ? "#ffffff" : "rgba(26,26,26,0.50)",
+                border: "none", cursor: "pointer",
+              }}>
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Lijstweergave */}
+      {view === "lijst" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          {upcoming.length === 0 && (
+            <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", padding: "2rem", textAlign: "center" }}>
+              <p className="t-secondary">Geen komende activiteiten</p>
+            </div>
+          )}
+          {upcoming.map(item => (
+            <AgendaItemCard key={item.id} item={item}
+              attendance={getAttendanceFor(item.id)}
+              playerCount={players.length}
+              onClick={() => openDetail(item)} />
+          ))}
+
+          {past.length > 0 && (
+            <div style={{ marginTop: "8px" }}>
+              <button onClick={() => setShowPast(p => !p)}
+                style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, color: "rgba(26,26,26,0.45)", background: "none", border: "none", cursor: "pointer", padding: "8px 0", width: "100%" }}>
+                {showPast ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                Eerder ({past.length})
+              </button>
+              {showPast && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "6px", opacity: 0.6 }}>
+                  {past.map(item => (
+                    <AgendaItemCard key={item.id} item={item}
+                      attendance={getAttendanceFor(item.id)}
+                      playerCount={players.length}
+                      onClick={() => openDetail(item)} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Form modal */}
+      {(showForm || editItem) && (
+        <AgendaForm
+          item={editItem}
+          onSave={handleSave}
+          onClose={() => { setShowForm(false); setEditItem(null); }} />
+      )}
     </div>
   );
 }
