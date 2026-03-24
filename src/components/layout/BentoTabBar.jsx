@@ -102,8 +102,15 @@ const speelsterTabItems = [
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
 ];
 
-export default function BentoTabBar({ currentPageName, isSpeelsterUser, onNavigate }) {
-  const tabItems = isSpeelsterUser ? speelsterTabItems : trainerTabItems;
+const ouderTabItems = [
+  { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
+  { name: "Wedstrijden", page: "Wedstrijden", Icon: IconPlanning },
+  { name: "Foto's", page: "Photowall", Icon: IconFoto },
+  { name: "Berichten", page: "Messages", Icon: IconBerichten },
+];
+
+export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderUser, onNavigate }) {
+  const tabItems = isOuderUser ? ouderTabItems : isSpeelsterUser ? speelsterTabItems : trainerTabItems;
 
   return (
     <nav

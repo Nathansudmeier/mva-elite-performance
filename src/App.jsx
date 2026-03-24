@@ -111,6 +111,7 @@ const AuthenticatedApp = () => {
       <Route path="/TrainingsvormForm" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormForm /></LayoutWrapper>} />
       <Route path="/MatchResults" element={<LayoutWrapper currentPageName="Dashboard"><MatchResults /></LayoutWrapper>} />
       <Route path="/Photowall" element={<LayoutWrapper currentPageName="Photowall"><Photowall /></LayoutWrapper>} />
+      <Route path="/OuderDashboard" element={<LayoutWrapper currentPageName="Dashboard"><OuderDashboard /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
