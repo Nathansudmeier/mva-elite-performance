@@ -170,75 +170,8 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </main>
 
-      {/* Tab Bar */}
-      {(() => {
-        const trainerTabItems = [
-          { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
-          { name: "Planning", icon: "calendar", page: "Planning" },
-          { name: "Spelers", icon: "users", page: "Players" },
-          { name: "Trainingsvormen", icon: "ball-football", page: "Trainingsvormen" },
-          { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
-          { name: "Berichten", icon: "message-circle", page: "Messages" },
-        ];
-
-        const speelsterTabItems = [
-          { name: "Dashboard", icon: "layout-dashboard", page: "Dashboard" },
-          { name: "Planning", icon: "calendar", page: "Planning" },
-          { name: "Berichten", icon: "message-circle", page: "Messages" },
-          { name: "Spelprincipes", icon: "presentation", page: "Spelprincipes" },
-        ];
-
-        const tabItems = isSpeelsterUser ? speelsterTabItems : trainerTabItems;
-
-        return (
-          <nav className="xl:hidden fixed bottom-0 left-0 right-0 z-[100]"
-            style={{ padding: "0 12px 12px" }}>
-            <div style={{
-              background: "#ffffff",
-              border: "2.5px solid #1a1a1a",
-              borderRadius: "22px",
-              boxShadow: "3px 3px 0 #1a1a1a",
-              display: "flex",
-              padding: "6px 4px 8px",
-              overflowX: "auto",
-            }}>
-              {tabItems.map((item) => {
-                const isActive = item.page === currentPageName;
-                return (
-                  <Link
-                    key={item.page}
-                    to={createPageUrl(item.page)}
-                    onClick={() => setMobileOpen(false)}
-                    style={{
-                      display: "flex", flexDirection: "column", alignItems: "center",
-                      gap: "3px", padding: "4px 8px", borderRadius: "10px",
-                      textDecoration: "none", flex: "1",
-                      background: isActive ? "#FF6800" : "transparent",
-                      transition: "all 0.15s ease", flexShrink: 0,
-                      minWidth: "52px",
-                    }}
-                  >
-                    <i
-                      className={`ti ti-${item.icon}`}
-                      style={{
-                        fontSize: "21px",
-                        color: isActive ? "#ffffff" : "rgba(26,26,26,0.30)",
-                      }}
-                    />
-                    <span style={{
-                      fontSize: "9px", fontWeight: 800,
-                      color: isActive ? "#ffffff" : "rgba(26,26,26,0.30)",
-                      whiteSpace: "nowrap", letterSpacing: "0.02em",
-                    }}>
-                      {item.name}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          </nav>
-        );
-      })()}
+      {/* Tab Bar - Bento Bold */}
+      <BentoTabBar currentPageName={currentPageName} isSpeelsterUser={isSpeelsterUser} onNavigate={() => setMobileOpen(false)} />
     </div>
   );
 }
