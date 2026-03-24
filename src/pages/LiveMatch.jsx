@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Edit2, Play } from "lucide-react";
+import { ChevronLeft, Edit2, Play, Goal, ArrowRightLeft, AlertCircle, Clock } from "lucide-react";
 import LiveMatchClock from "../components/live/LiveMatchClock";
 import LiveScore from "../components/live/LiveScore";
 import GoalBottomSheet from "../components/live/GoalBottomSheet";
@@ -532,61 +532,61 @@ export default function LiveMatch() {
           </div>
         </div>
 
-        {/* Clock */}
-        <div className="glass p-5 md:p-6">
+        {/* Clock - Orange */}
+        <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px 24px" }}>
           <LiveMatchClock seconds={seconds} running={running} onToggle={handleToggleClock} onStop={handleStop} />
           {currentMinute >= 45 && running && (
-            <p className="text-center t-secondary mt-3" style={{ color: "#FF6800" }}>Druk op Pauze om naar de rust te gaan</p>
+            <p className="text-center t-secondary mt-3" style={{ color: "white" }}>Druk op Pauze om naar de rust te gaan</p>
           )}
         </div>
 
-        {/* Score */}
-        <div className="glass p-5 md:p-6">
+        {/* Score - Yellow */}
+        <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px 24px" }}>
           <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
         </div>
 
         {/* Action buttons 3x2 */}
         <div className="grid grid-cols-3 gap-3 md:gap-4">
-          {/* GOAL MVA */}
+          {/* GOAL MVA - Green */}
           <button onClick={() => setActiveModal("goal_mva")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <span style={{ fontSize: "24px" }}>⚽</span>
-            <span className="font-bold text-xs" style={{ color: "#05a050" }}>GOAL</span>
+            style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+            <Goal size={22} color="white" strokeWidth={3} />
+            <span className="font-bold text-xs" style={{ color: "white" }}>GOAL</span>
           </button>
 
-          {/* GOAL TEGEN */}
+          {/* GOAL TEGEN - Pink */}
           <button onClick={() => setActiveModal("goal_against")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <span style={{ fontSize: "24px" }}>⚽</span>
-            <span className="font-bold text-xs" style={{ color: "#FF3DA8" }}>TEGEN</span>
+            style={{ background: "#FF3DA8", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+            <Goal size={22} color="white" strokeWidth={3} />
+            <span className="font-bold text-xs" style={{ color: "white" }}>TEGEN</span>
           </button>
 
-          {/* WISSEL */}
+          {/* WISSEL - Orange */}
           <button onClick={() => setActiveModal("substitution")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <span style={{ fontSize: "24px" }}>⇄</span>
-            <span className="font-bold text-xs" style={{ color: "#FF6800" }}>WISSEL</span>
+            style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+            <ArrowRightLeft size={22} color="white" strokeWidth={3} />
+            <span className="font-bold text-xs" style={{ color: "white" }}>WISSEL</span>
           </button>
 
-          {/* GELE KAART */}
+          {/* GELE KAART - Yellow */}
           <button onClick={() => setActiveModal("yellow_card")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <span style={{ fontSize: "24px" }}>🟨</span>
-            <span className="font-bold text-xs" style={{ color: "#FFD600" }}>GEEL</span>
+            style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+            <AlertCircle size={22} color="#1a1a1a" strokeWidth={3} />
+            <span className="font-bold text-xs" style={{ color: "#1a1a1a" }}>GEEL</span>
           </button>
 
-          {/* RODE KAART */}
+          {/* RODE KAART - Red */}
           <button onClick={() => setActiveModal("red_card")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <span style={{ fontSize: "24px" }}>🟥</span>
-            <span className="font-bold text-xs" style={{ color: "#FF3333" }}>ROOD</span>
+            style={{ background: "#FF3333", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+            <AlertCircle size={22} color="white" strokeWidth={3} />
+            <span className="font-bold text-xs" style={{ color: "white" }}>ROOD</span>
           </button>
 
-          {/* NOTITIE */}
+          {/* NOTITIE - Dark */}
           <button onClick={() => setActiveModal("note")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <span style={{ fontSize: "24px" }}>📝</span>
-            <span className="font-bold text-xs" style={{ color: "#1a1a1a" }}>NOTITIE</span>
+            style={{ background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+            <Edit2 size={22} color="white" strokeWidth={3} />
+            <span className="font-bold text-xs" style={{ color: "white" }}>NOTITIE</span>
           </button>
         </div>
 
