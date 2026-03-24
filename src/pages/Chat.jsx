@@ -3,8 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useNavigate } from "react-router-dom";
-import DashboardBackground from "../components/dashboard/DashboardBackground";
-import { Send, Image, ArrowLeft } from "lucide-react";
+import { Send, Image, ArrowLeft, Trash2 } from "lucide-react";
 
 export default function Chat() {
   const { user, isTrainer } = useCurrentUser();
@@ -46,7 +45,6 @@ export default function Chat() {
         const uploadRes = await base44.integrations.Core.UploadFile({ file: photoFile });
         imageUrl = uploadRes.file_url;
       }
-
       return base44.entities.ChatMessage.create({
         chat_id: chatId,
         sender_email: user.email,
@@ -109,88 +107,93 @@ export default function Chat() {
   };
 
   const canDelete = (senderEmail) => isTrainer || senderEmail === user.email;
-
   const sortedMessages = [...messages].sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
-
-  const formatTime = (date) => {
-    return new Date(date).toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
-  };
+  const formatTime = (date) => new Date(date).toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
 
   return (
-    <div className="flex flex-col h-screen relative" style={{ zIndex: 2 }}>
-      <DashboardBackground />
-
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#FFF3E8" }}>
       {/* Header */}
-      <div className="glass p-4 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-        <div className="flex items-center gap-3 max-w-2xl mx-auto">
-          <button onClick={() => navigate("/Messages")} className="p-2 rounded-lg transition-opacity hover:opacity-80">
-            <ArrowLeft size={20} style={{ color: "#FF8C3A" }} />
+      <div style={{ background: "#ffffff", borderBottom: "2.5px solid #1a1a1a", padding: "12px 16px", position: "sticky", top: 0, zIndex: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", maxWidth: "720px", margin: "0 auto" }}>
+          <button onClick={() => navigate("/Messages")} style={{ width: "40px", height: "40px", borderRadius: "10px", background: "transparent", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <ArrowLeft size={18} color="#1a1a1a" />
           </button>
-          <h1 className="t-page-title flex-1">{chat?.name}</h1>
+          <h1 className="t-page-title" style={{ flex: 1, margin: 0 }}>{chat?.name}</h1>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 max-w-2xl mx-auto w-full space-y-4">
+      <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px", maxWidth: "720px", width: "100%", margin: "0 auto", display: "flex", flexDirection: "column", gap: "10px" }}>
         {sortedMessages.map((message) => (
           <div
             key={message.id}
             onMouseEnter={() => setHoveredMessageId(message.id)}
             onMouseLeave={() => setHoveredMessageId(null)}
-            className="flex gap-2"
-            style={{ justifyContent: message.sender_email === user.email ? "flex-end" : "flex-start" }}
+            style={{ display: "flex", gap: "8px", justifyContent: message.sender_email === user.email ? "flex-end" : "flex-start" }}
           >
             {message.sender_email !== user.email && (
-              <div className="flex flex-col items-center gap-1 flex-shrink-0">
-                <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-10px"
-                  style={{ background: "rgba(255,107,0,0.2)" }}
-                >
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", flexShrink: 0 }}>
+                <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#FF6800", border: "1.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800, color: "#ffffff" }}>
                   {message.sender_name?.[0]?.toUpperCase()}
                 </div>
-                <span className="t-tertiary-sm">{message.sender_name}</span>
+                <span style={{ fontSize: "10px", color: "rgba(26,26,26,0.40)", fontWeight: 700 }}>{message.sender_name}</span>
               </div>
             )}
 
-            <div
-              className="max-w-xs lg:max-w-md"
-              style={{ flex: message.sender_email !== user.email ? "0 0 auto" : "0 1 auto" }}
-            >
+            <div style={{ maxWidth: "280px", display: "flex", flexDirection: "column", gap: "4px", flex: message.sender_email !== user.email ? "0 0 auto" : "0 1 auto" }}>
               {message.sender_email !== user.email && (
-                <p className="t-tertiary-sm mb-1">{message.sender_name}</p>
+                <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", fontWeight: 700, marginBottom: "2px" }}>{message.sender_name}</p>
               )}
 
               <div
-                className="p-3 rounded-2xl relative group"
                 style={{
-                  background: message.sender_email === user.email ? "#FF6B00" : "rgba(255,255,255,0.10)",
-                  border: message.sender_email === user.email ? "none" : "0.5px solid rgba(255,255,255,0.12)",
-                  borderRadius: message.sender_email === user.email ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-                  color: "white",
+                  position: "relative",
+                  background: message.sender_email === user.email ? "#FF6800" : "#ffffff",
+                  border: "2px solid #1a1a1a",
+                  borderRadius: message.sender_email === user.email ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
+                  boxShadow: "2px 2px 0 #1a1a1a",
+                  padding: "10px 13px",
+                  color: message.sender_email === user.email ? "#ffffff" : "#1a1a1a",
                   wordBreak: "break-word",
+                  fontSize: "14px",
+                  lineHeight: 1.4,
                 }}
+                onMouseEnter={() => setHoveredMessageId(message.id)}
               >
                 {message.text}
                 {message.image_url && (
-                  <img src={message.image_url} alt="attachment" className="mt-2 rounded-lg max-w-xs" />
+                  <img src={message.image_url} alt="attachment" style={{ marginTop: "8px", borderRadius: "10px", maxWidth: "100%", border: "1.5px solid " + (message.sender_email === user.email ? "rgba(255,255,255,0.3)" : "#1a1a1a") }} />
                 )}
 
                 {hoveredMessageId === message.id && canDelete(message.sender_email) && (
                   <button
                     onClick={() => handleDeleteMessage(message.id, message.sender_email)}
-                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-10px opacity-0 group-hover:opacity-100 transition-opacity"
-                    style={{ background: "rgba(248,113,113,0.80)" }}
+                    style={{
+                      position: "absolute",
+                      top: "-12px",
+                      right: "-12px",
+                      width: "28px",
+                      height: "28px",
+                      borderRadius: "50%",
+                      background: "#FF3DA8",
+                      border: "1.5px solid #1a1a1a",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      boxShadow: "1px 1px 0 #1a1a1a",
+                    }}
                   >
-                    ×
+                    <Trash2 size={13} color="#ffffff" />
                   </button>
                 )}
               </div>
 
-              <p className="t-tertiary-sm mt-1 text-right">{formatTime(message.created_date)}</p>
+              <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.35)", fontWeight: 600, textAlign: message.sender_email === user.email ? "right" : "left" }}>{formatTime(message.created_date)}</p>
             </div>
 
             {message.sender_email === user.email && (
-              <div className="w-7 flex-shrink-0" />
+              <div style={{ width: "32px", flexShrink: 0 }} />
             )}
           </div>
         ))}
@@ -199,23 +202,27 @@ export default function Chat() {
 
       {/* Input Bar */}
       <div
-        className="sticky bottom-0 left-0 right-0 p-4"
         style={{
-          background: "rgba(20,10,2,0.90)",
-          backdropFilter: "blur(30px)",
-          WebkitBackdropFilter: "blur(30px)",
-          borderTop: "0.5px solid rgba(255,255,255,0.08)",
+          position: "sticky",
+          bottom: 0,
+          background: "#FFF3E8",
+          borderTop: "2.5px solid #1a1a1a",
+          padding: "12px 16px 16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
         }}
       >
-        <div className="max-w-2xl mx-auto flex items-end gap-3">
-          <label className="cursor-pointer p-2 rounded-lg transition-opacity hover:opacity-80">
-            <Image size={20} style={{ color: "rgba(255,255,255,0.55)" }} />
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => setPhotoFile(e.target.files?.[0])}
-            />
+        {photoFile && (
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "#ffffff", border: "1.5px solid rgba(26,26,26,0.15)", borderRadius: "10px", padding: "8px 12px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", flex: 1 }}>📸 {photoFile.name}</span>
+            <button onClick={() => setPhotoFile(null)} style={{ background: "transparent", border: "none", color: "#FF3DA8", cursor: "pointer", fontSize: "14px", fontWeight: 700 }}>✕</button>
+          </div>
+        )}
+        <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", maxWidth: "720px", margin: "0 auto", width: "100%" }}>
+          <label style={{ cursor: "pointer", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <Image size={18} color="rgba(26,26,26,0.40)" />
+            <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files?.[0])} />
           </label>
 
           <textarea
@@ -230,16 +237,19 @@ export default function Chat() {
             }}
             placeholder="Stuur een bericht..."
             rows={1}
-            className="flex-1 resize-none"
             style={{
-              background: "rgba(255,255,255,0.08)",
-              border: "0.5px solid rgba(255,255,255,0.12)",
-              borderRadius: "20px",
-              padding: "10px 16px",
-              color: "white",
+              flex: 1,
+              background: "#ffffff",
+              border: "2px solid #1a1a1a",
+              borderRadius: "14px",
+              padding: "9px 12px",
+              color: "#1a1a1a",
               fontSize: "14px",
+              fontWeight: 500,
               maxHeight: "100px",
               fontFamily: "inherit",
+              resize: "none",
+              outline: "none",
             }}
             onInput={(e) => {
               e.target.style.height = "auto";
@@ -250,13 +260,22 @@ export default function Chat() {
           <button
             onClick={handleSend}
             disabled={!messageText.trim() && !photoFile || sendMessageMutation.isPending}
-            className="p-3 rounded-full transition-opacity flex-shrink-0"
             style={{
-              background: messageText.trim() || photoFile ? "#FF6B00" : "rgba(255,107,0,0.3)",
-              opacity: messageText.trim() || photoFile ? 1 : 0.5,
+              width: "40px",
+              height: "40px",
+              borderRadius: "12px",
+              background: messageText.trim() || photoFile ? "#FF6800" : "#ffffff",
+              border: "2px solid #1a1a1a",
+              boxShadow: "2px 2px 0 #1a1a1a",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: (messageText.trim() || photoFile) && !sendMessageMutation.isPending ? "pointer" : "not-allowed",
+              opacity: (messageText.trim() || photoFile) && !sendMessageMutation.isPending ? 1 : 0.45,
+              flexShrink: 0,
             }}
           >
-            <Send size={16} style={{ color: "white" }} />
+            <Send size={16} color={messageText.trim() || photoFile ? "#ffffff" : "#1a1a1a"} />
           </button>
         </div>
       </div>
