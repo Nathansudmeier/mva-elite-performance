@@ -159,10 +159,7 @@ export default function PlayerDashboard() {
   }
 
   return (
-    <div className="space-y-6 pb-24 relative" style={{ zIndex: 2 }}>
-      <DashboardBackground />
-      {/* Desktop background */}
-      <div className="hidden xl:block fixed inset-0 pointer-events-none" style={{ zIndex: 0, backgroundImage: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/9df6bb54b_Background-desktop.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed" }} />
+    <div className="space-y-6 pb-24">
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={false} />
       {/* Header */}
       <PlayerGreetingHeader
@@ -209,21 +206,13 @@ export default function PlayerDashboard() {
 
       {/* Radar Chart */}
       {chartData.length > 0 && radarData.length > 0 && (
-        <div className="glass p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs><linearGradient id="ratingGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#FF8C3A"/></linearGradient></defs>
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="url(#ratingGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <p className="t-label">Mijn Beoordelingen</p>
-          </div>
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "12px" }}>Mijn Beoordelingen</p>
           <ResponsiveContainer width="100%" height={220}>
             <RadarChart data={chartData}>
-              <PolarGrid stroke="rgba(255,255,255,0.12)" />
-              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: "rgba(255,255,255,0.50)" }} />
-              <Tooltip contentStyle={{ background: "rgba(20,10,2,0.95)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "12px", color: "#fff" }} />
+              <PolarGrid stroke="rgba(26,26,26,0.10)" />
+              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: "rgba(26,26,26,0.55)", fontWeight: 700 }} />
+              <Tooltip contentStyle={{ background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "12px", color: "#1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }} />
               {radarData.map((r, i) => (
                 <Radar key={r.meting} name={r.meting} dataKey={r.meting} stroke={COLORS[i]} fill={COLORS[i]} fillOpacity={0.15} />
               ))}
@@ -231,7 +220,7 @@ export default function PlayerDashboard() {
           </ResponsiveContainer>
           <div className="flex gap-4 justify-center mt-2">
             {radarData.map((r, i) => (
-              <div key={r.meting} className="flex items-center gap-1.5" style={{ fontSize: "11px", color: "rgba(255,255,255,0.55)" }}>
+              <div key={r.meting} className="flex items-center gap-1.5" style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", fontWeight: 700 }}>
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i] }} />
                 {r.meting}
               </div>
@@ -241,34 +230,26 @@ export default function PlayerDashboard() {
       )}
 
       {/* Wellness Log */}
-      <div className="glass p-4">
-        <div className="flex items-center gap-3 mb-3">
-          <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs><linearGradient id="wellnessGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#FF8C3A"/></linearGradient></defs>
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="url(#wellnessGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <p className="t-label">Belastbaarheid Invullen</p>
-        </div>
+      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "14px" }}>Belastbaarheid Invullen</p>
         <div className="space-y-3">
           <Input type="date" value={wellnessForm.date} onChange={e => setWellnessForm(f => ({ ...f, date: e.target.value }))}
-            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+            style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "12px", padding: "10px 14px", fontSize: "14px" }} />
           <div className="grid grid-cols-3 gap-2">
             {[
               { key: "sleep", label: "Slaap (1-5)" },
-              { key: "fatigue", label: "Vermoeidheid (1-5)" },
-              { key: "muscle_pain", label: "Spierpijn (1-5)" },
+              { key: "fatigue", label: "Vermoeidheid" },
+              { key: "muscle_pain", label: "Spierpijn" },
             ].map(({ key, label }) => (
               <div key={key}>
-                <label className="t-label mb-1 block">{label}</label>
+                <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: "6px" }}>{label}</label>
                 <Input type="number" min="1" max="5" value={wellnessForm[key]} onChange={e => setWellnessForm(f => ({ ...f, [key]: e.target.value }))}
-                  style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
+                  style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "12px" }} />
               </div>
             ))}
           </div>
           <Textarea placeholder="Opmerkingen (optioneel)" value={wellnessForm.notes} onChange={e => setWellnessForm(f => ({ ...f, notes: e.target.value }))}
-            style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} rows={2} />
+            style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "12px" }} rows={2} />
           <button onClick={() => saveWellness.mutate()} disabled={saveWellness.isPending || !wellnessForm.sleep} className="btn-primary">
             <Save size={14} />
             {saveWellness.isPending ? "Opslaan..." : "Belastbaarheid Opslaan"}
