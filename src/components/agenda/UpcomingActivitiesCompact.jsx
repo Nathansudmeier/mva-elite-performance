@@ -132,15 +132,15 @@ export default function UpcomingActivitiesCompact({ playerId }) {
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       {/* First item - large card with buttons */}
       {first && (() => {
-        const cfg = TYPE_CONFIG[first.type] || TYPE_CONFIG.Evenement;
+        const dotColor = getItemColor(first);
         const record = myAttendance.find(a => a.agenda_item_id === first.id);
         return (
           <div key={first.id} style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
             <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.50)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "10px" }}>Volgende activiteit</p>
             <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-              <div style={{ width: 10, height: 10, borderRadius: "50%", background: cfg.color, border: "1.5px solid #1a1a1a", flexShrink: 0, marginTop: 4 }} />
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: dotColor, border: "1.5px solid #1a1a1a", flexShrink: 0, marginTop: 4 }} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <span style={{ fontSize: 10, fontWeight: 800, color: cfg.color, textTransform: "uppercase", letterSpacing: "0.06em" }}>{first.type}</span>
+                <span style={{ fontSize: 10, fontWeight: 800, color: dotColor === "#FFD600" ? "#cc9900" : dotColor, textTransform: "uppercase", letterSpacing: "0.06em" }}>{first.type}</span>
                 <p style={{ fontSize: 15, fontWeight: 800, color: "#1a1a1a", marginTop: 4, lineHeight: 1.3 }}>{first.title}</p>
                 <p style={{ fontSize: 12, color: "rgba(26,26,26,0.50)", marginTop: 4, fontWeight: 600 }}>
                   {formatShort(first.date)} · {first.start_time}
