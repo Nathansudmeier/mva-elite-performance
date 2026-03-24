@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { useQuery } from "@tanstack/react-query";
 import IOSInstallBanner from "@/components/common/IOSInstallBanner";
 import TopBar from "@/components/layout/TopBar";
+import BentoTabBar from "@/components/layout/BentoTabBar";
 
 const desenvolvidoItems = [
   { name: "Fysiek", icon: "activity", page: "PhysicalMonitor" },
