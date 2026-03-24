@@ -324,7 +324,7 @@ export default function PlanningWedstrijdDetail() {
   const teamTextDark = teamCardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box", background: "#FFF3E8", padding: "16px", minHeight: "100vh" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box", background: "#FFF3E8", padding: "16px", paddingBottom: "150px", minHeight: "100vh" }}>
 
         {/* Back + actions */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
