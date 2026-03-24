@@ -110,25 +110,27 @@ export default function EmviFeedback() {
       height: "100%",
       gap: "16px"
     }}>
+      {/* Emvi Character */}
+      <div style={{ textAlign: "center" }}>
+        <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/91f794581_Emvi-top.png" alt="Emvi" style={{ height: "140px", objectFit: "contain" }} />
+      </div>
+
       {/* Header */}
       <div className="glass" style={{
         background: "#FF6800",
-        padding: "20px 16px",
+        padding: "16px",
         textAlign: "center",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: "12px"
+        gap: "8px"
       }}>
-        <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/91f794581_Emvi-top.png" alt="Emvi" style={{ height: "120px", objectFit: "contain" }} />
-        <div>
-          <h1 className="t-page-title" style={{ color: "#ffffff", marginBottom: "4px" }}>
-            Praat met Emvi
-          </h1>
-          <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>
-            Stel vragen, deel tips of geef feedback
-          </p>
-        </div>
+        <h1 className="t-page-title" style={{ color: "#ffffff", marginBottom: "0px" }}>
+          Praat met Emvi
+        </h1>
+        <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>
+          Stel vragen, deel tips of geef feedback
+        </p>
       </div>
 
       {/* Chat area */}
@@ -146,7 +148,6 @@ export default function EmviFeedback() {
           <div style={{
             display: "flex",
             gap: "12px",
-            marginBottom: "12px",
             alignItems: "flex-end"
           }}>
             <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b89b92670_Emvi-chat.png" alt="Emvi" style={{ height: "45px", flexShrink: 0 }} />
