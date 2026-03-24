@@ -27,7 +27,7 @@ export default function GoalBottomSheet({ players, minute, onConfirm, onClose })
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
       {/* Backdrop */}
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.60)", zIndex: 1, pointerEvents: "auto" }} />
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "transparent", zIndex: 1, pointerEvents: "auto" }} />
 
       {/* Sheet */}
       <div style={{
