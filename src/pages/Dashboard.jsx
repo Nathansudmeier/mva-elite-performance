@@ -181,19 +181,23 @@ export default function Dashboard() {
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
 
       {/* Hero card — winratio */}
-      <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", display: "flex", alignItems: "flex-end", justifyContent: "space-between", minHeight: "120px" }}>
-        <div>
-          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoen 2025-26</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-            <span style={{ fontSize: "42px", fontWeight: 900, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{winPct}%</span>
-            <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", fontWeight: 700 }}>winst</span>
+      <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", position: "relative", overflow: "hidden", minHeight: "120px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoen 2025-26</p>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+              <span style={{ fontSize: "42px", fontWeight: 900, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{winPct}%</span>
+              <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", fontWeight: 700 }}>winst</span>
+            </div>
+            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", marginTop: "4px", fontWeight: 600 }}>
+              {wins} gewonnen · {draws} gelijk · {losses} verloren
+            </p>
           </div>
-          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", marginTop: "4px" }}>
-            {wins}W · {draws}G · {losses}V
-          </p>
-        </div>
-        <div>
           <TrainerGreetingPill />
+        </div>
+        {/* Progress bar */}
+        <div style={{ height: "4px", background: "rgba(255,255,255,0.20)", borderRadius: "2px", marginTop: "14px", overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${winPct}%`, background: "rgba(255,255,255,0.80)", borderRadius: "2px", transition: "width 0.3s ease" }} />
         </div>
       </div>
 
