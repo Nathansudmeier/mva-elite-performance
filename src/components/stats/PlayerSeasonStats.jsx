@@ -95,28 +95,28 @@ export default function PlayerSeasonStats({ playerId, variant = "grid" }) {
     { label: "Wedstrijden", value: wedstrijden, icon: "ti-trophy", color: "#fbbf24" },
   ];
 
+  const STAT_COLORS = ["#FF3DA8", "#9B5CFF", "#FF6800", "#FFD600"];
+
   if (variant === "grid") {
     return (
       <div>
-        <p style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "rgba(255,255,255,0.55)", marginBottom: 10 }}>
+        <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.50)", marginBottom: 10 }}>
           Mijn seizoensstatistieken
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          {stats.map(s => (
+          {stats.map((s, i) => (
             <div key={s.label} style={{
-              background: "rgba(255,255,255,0.09)",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
-              border: "0.5px solid rgba(255,255,255,0.18)",
-              borderRadius: 22,
-              padding: "16px",
+              background: STAT_COLORS[i],
+              border: "2.5px solid #1a1a1a",
+              borderRadius: 18,
+              boxShadow: "3px 3px 0 #1a1a1a",
+              padding: "14px",
               display: "flex",
               flexDirection: "column",
-              gap: 6,
+              gap: 4,
             }}>
-              <i className={`ti ${s.icon}`} style={{ fontSize: 20, color: s.color }} />
-              <div style={{ fontSize: 26, fontWeight: 700, color: "#fff", letterSpacing: "-0.5px", lineHeight: 1 }}>{s.value}</div>
-              <div style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", color: "rgba(255,255,255,0.50)" }}>{s.label}</div>
+              <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>{s.label}</p>
+              <div style={{ fontSize: 34, fontWeight: 900, color: i === 3 ? "#1a1a1a" : "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{s.value}</div>
             </div>
           ))}
         </div>
