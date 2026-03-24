@@ -208,39 +208,39 @@ export default function Dashboard() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }} className="mobile-grid-2col">
 
         {/* Card 1: Aanwezigheid */}
-        <div style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px" }}>
-          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>Aanwezigheid (4w)</p>
-          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "6px", letterSpacing: "-2px" }}>{avgAttendancePercent}%</p>
-          <div style={{ height: "4px", background: "rgba(26,26,26,0.15)", borderRadius: "2px", marginTop: "8px" }}>
-            <div style={{ height: "100%", width: `${avgAttendancePercent}%`, background: "rgba(26,26,26,0.50)", borderRadius: "2px" }} />
+        <div style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
+          <p className="t-label" style={{ color: "rgba(26,26,26,0.65)" }}>Aanwezigheid (4w)</p>
+          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "8px", letterSpacing: "-2px" }}>{avgAttendancePercent}%</p>
+          <div style={{ height: "4px", background: "rgba(26,26,26,0.15)", borderRadius: "2px", marginTop: "10px" }}>
+            <div style={{ height: "100%", width: `${avgAttendancePercent}%`, background: "rgba(26,26,26,0.45)", borderRadius: "2px" }} />
           </div>
-          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "6px" }}>{activePlayers.length} spelers</p>
+          <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.65)", marginTop: "8px", fontWeight: 600 }}>{activePlayers.length} spelers</p>
         </div>
 
         {/* Card 2: Yo-Yo */}
-        <div style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px" }}>
-          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>Yo-Yo niveau</p>
-          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "6px", letterSpacing: "-2px" }}>{avgLatestYoyo}</p>
-          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "8px" }}>
-            {yoyoDiff ? (parseFloat(yoyoDiff) >= 0 ? `+${yoyoDiff} ↑` : `${yoyoDiff} ↓`) : "stabiel"}
+        <div style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
+          <p className="t-label" style={{ color: "rgba(26,26,26,0.65)" }}>Yo-Yo niveau</p>
+          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "8px", letterSpacing: "-2px" }}>{avgLatestYoyo}</p>
+          <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.65)", marginTop: "10px", fontWeight: 600 }}>
+            {yoyoDiff ? (parseFloat(yoyoDiff) >= 0 ? `↑ +${yoyoDiff}` : `↓ ${yoyoDiff}`) : "stabiel"}
           </p>
         </div>
 
         {/* Card 3: Sprint */}
-        <div style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px" }}>
-          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>30m sprint</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "3px", marginTop: "6px" }}>
-            <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, letterSpacing: "-2px" }}>{avgLatestSprint}</p>
-            <span style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)", fontWeight: 700 }}>s</span>
+        <div style={{ background: "#9B5CFF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
+          <p className="t-label" style={{ color: "rgba(255,255,255,0.65)" }}>30m sprint</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "3px", marginTop: "8px" }}>
+            <p style={{ fontSize: "34px", fontWeight: 900, color: "#ffffff", lineHeight: 1, letterSpacing: "-2px" }}>{avgLatestSprint}</p>
+            <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.65)", fontWeight: 700 }}>s</span>
           </div>
-          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "8px" }}>gemiddeld</p>
+          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", marginTop: "10px", fontWeight: 600 }}>gemiddeld</p>
         </div>
 
         {/* Card 4: Beoordelingen */}
-        <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "14px" }}>
-          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em" }}>Beoordelingen</p>
-          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "6px", letterSpacing: "-2px" }}>{meting1Count}/{totalRatingsNeeded}</p>
-          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "8px" }}>meting 1 lopend</p>
+        <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
+          <p className="t-label" style={{ color: "rgba(26,26,26,0.65)" }}>Beoordelingen</p>
+          <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: "8px", letterSpacing: "-2px" }}>{meting1Count}<span style={{ fontSize: "18px", opacity: 0.5 }}>/{totalRatingsNeeded}</span></p>
+          <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.65)", marginTop: "10px", fontWeight: 600 }}>meting 1 lopend</p>
         </div>
       </div>
 
