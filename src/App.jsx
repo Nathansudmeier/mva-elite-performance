@@ -32,6 +32,7 @@ import TrainingsvormForm from './pages/TrainingsvormForm.jsx';
 import MatchResults from './pages/MatchResults.jsx';
 import Photowall from './pages/Photowall.jsx';
 import OuderDashboard from './pages/OuderDashboard';
+import PendingAccess from './pages/PendingAccess';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import SplashScreen from '@/components/SplashScreen';
