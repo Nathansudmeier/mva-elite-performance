@@ -275,17 +275,24 @@ export default function Spelprincipes() {
     <div style={{ display: "flex", flexDirection: "column", gap: "14px", paddingBottom: "80px" }}>
 
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div>
-          <h1 className="t-page-title">Spelprincipes</h1>
-          <p className="t-secondary" style={{ marginTop: "2px" }}>{items.length} principes</p>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px" }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+          <img
+            src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/bb8883e16_Emvi-tactics.png"
+            alt="Emvi"
+            style={{ width: "72px", height: "72px", objectFit: "contain", flexShrink: 0 }}
+          />
+          <div style={{ paddingTop: "4px" }}>
+            <h1 className="t-page-title">Spelprincipes</h1>
+            <p className="t-secondary" style={{ marginTop: "2px" }}>{items.length} principes</p>
+          </div>
         </div>
         {isTrainer && (
           <button
             onClick={() => { setEditItem(null); setShowModal(true); }}
-            style={{ display: "flex", alignItems: "center", gap: "6px", background: "#FF6800", color: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "0 16px", height: "44px", fontWeight: 800, fontSize: "13px", cursor: "pointer" }}
+            style={{ display: "flex", alignItems: "center", gap: "4px", background: "#FF6800", color: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "10px", boxShadow: "2px 2px 0 #1a1a1a", padding: "0 12px", height: "36px", fontWeight: 700, fontSize: "12px", cursor: "pointer", flexShrink: 0, marginTop: "4px" }}
           >
-            <Plus size={15} /> Toevoegen
+            <Plus size={13} /> Toevoegen
           </button>
         )}
       </div>
