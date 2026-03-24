@@ -31,7 +31,7 @@ export default function AgendaItemCard({ item, attendance = [], playerCount = 0,
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
           <div>
-            <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: cardBg === "#08D068" ? "rgba(255,255,255,0.85)" : "rgba(26,26,26,0.55)", marginBottom: "3px" }}>{item.type}</p>
+            <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: textMuted, marginBottom: "3px" }}>{item.type}</p>
             <p style={{ fontSize: "15px", fontWeight: 800, color: textDark, lineHeight: 1.3 }}>{item.title}</p>
           </div>
           <span style={{ flexShrink: 0, padding: "3px 10px", borderRadius: "20px", fontSize: "10px", fontWeight: 800, background: "rgba(26,26,26,0.18)", color: textDark, border: "1.5px solid rgba(26,26,26,0.25)" }}>
