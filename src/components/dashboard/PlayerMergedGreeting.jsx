@@ -170,11 +170,11 @@ export default function PlayerMergedGreeting({ player, attendance = [], ratings 
   const quoteColor = getQuoteColor();
 
   return (
-    <div style={{ ...getCardStyle(), alignItems: "flex-end" }}>
+    <div style={getCardStyle()}>
       {/* Left: Profile photo */}
       <button
         onClick={() => navigate(`/PlayerDetail?id=${player?.id}`)}
-        style={{ width: "70px", height: "70px", borderRadius: "50%", overflow: "hidden", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", background: "#FFD600", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+        style={{ width: "70px", height: "70px", borderRadius: "50%", overflow: "hidden", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", background: "#FFD600", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", alignSelf: "flex-start" }}
       >
         {player?.photo_url ? (
           <img src={player.photo_url} alt={firstName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
