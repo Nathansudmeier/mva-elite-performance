@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-export default function AttendanceButtons({ 
-  onPresent, 
-  onAbsent, 
-  currentStatus = null, 
+export default function AttendanceButtons({
+  onPresent,
+  onAbsent,
+  currentStatus = null,
   loading = false,
   showAbsentInput = false,
   absentReason = "",
@@ -36,40 +36,23 @@ export default function AttendanceButtons({
           disabled={loading}
           style={{
             flex: 1,
-            height: "56px",
-            borderRadius: "16px",
-            background: isPresentSelected ? "rgba(74,222,128,0.20)" : "rgba(74,222,128,0.12)",
-            border: `0.5px solid ${isPresentSelected ? "rgba(74,222,128,0.40)" : "rgba(74,222,128,0.25)"}`,
+            height: "52px",
+            borderRadius: "14px",
+            background: isPresentSelected ? "#08D068" : "#ffffff",
+            border: `2px solid ${isPresentSelected ? "#1a1a1a" : "rgba(26,26,26,0.20)"}`,
+            boxShadow: isPresentSelected ? "2px 2px 0 #1a1a1a" : "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "10px",
+            gap: "8px",
             cursor: loading ? "not-allowed" : "pointer",
-            opacity: isAbsentSelected ? 0.4 : 1,
-            transition: "all 0.2s ease",
-            position: "relative",
-            transform: isAnimating === "present" ? "scale(0.96)" : "scale(1)",
+            opacity: isAbsentSelected ? 0.5 : 1,
+            transition: "all 0.15s ease",
+            transform: isAnimating === "present" ? "scale(0.97)" : "scale(1)",
           }}
         >
-          <i className="ti ti-circle-check" style={{ fontSize: "24px", color: "#4ade80" }} />
-          <span style={{ fontSize: "14px", fontWeight: 600, color: "#4ade80" }}>Ik ben erbij</span>
-          {isPresentSelected && (
-            <div style={{
-              position: "absolute",
-              top: "-6px",
-              right: "-6px",
-              width: "18px",
-              height: "18px",
-              borderRadius: "50%",
-              background: "#4ade80",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 2px 8px rgba(74,222,128,0.3)"
-            }}>
-              <i className="ti ti-check" style={{ fontSize: "10px", color: "#fff", fontWeight: 700 }} />
-            </div>
-          )}
+          <i className="ti ti-circle-check" style={{ fontSize: "20px", color: isPresentSelected ? "#1a1a1a" : "#08D068" }} />
+          <span style={{ fontSize: "13px", fontWeight: 800, color: isPresentSelected ? "#1a1a1a" : "#08D068" }}>Ik ben erbij</span>
         </button>
 
         {/* Absent button */}
@@ -78,53 +61,36 @@ export default function AttendanceButtons({
           disabled={loading}
           style={{
             flex: 1,
-            height: "56px",
-            borderRadius: "16px",
-            background: isAbsentSelected ? "rgba(248,113,113,0.20)" : "rgba(248,113,113,0.12)",
-            border: `0.5px solid ${isAbsentSelected ? "rgba(248,113,113,0.40)" : "rgba(248,113,113,0.25)"}`,
+            height: "52px",
+            borderRadius: "14px",
+            background: isAbsentSelected ? "#FF3DA8" : "#ffffff",
+            border: `2px solid ${isAbsentSelected ? "#1a1a1a" : "rgba(26,26,26,0.20)"}`,
+            boxShadow: isAbsentSelected ? "2px 2px 0 #1a1a1a" : "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "10px",
+            gap: "8px",
             cursor: loading ? "not-allowed" : "pointer",
-            opacity: isPresentSelected ? 0.4 : 1,
-            transition: "all 0.2s ease",
-            position: "relative",
-            transform: isAnimating === "absent" ? "scale(0.96)" : "scale(1)",
+            opacity: isPresentSelected ? 0.5 : 1,
+            transition: "all 0.15s ease",
+            transform: isAnimating === "absent" ? "scale(0.97)" : "scale(1)",
           }}
         >
-          <i className="ti ti-circle-x" style={{ fontSize: "24px", color: "#f87171" }} />
-          <span style={{ fontSize: "14px", fontWeight: 600, color: "#f87171" }}>Ik kan niet</span>
-          {isAbsentSelected && (
-            <div style={{
-              position: "absolute",
-              top: "-6px",
-              right: "-6px",
-              width: "18px",
-              height: "18px",
-              borderRadius: "50%",
-              background: "#f87171",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 2px 8px rgba(248,113,113,0.3)"
-            }}>
-              <i className="ti ti-x" style={{ fontSize: "10px", color: "#fff", fontWeight: 700 }} />
-            </div>
-          )}
+          <i className="ti ti-circle-x" style={{ fontSize: "20px", color: isAbsentSelected ? "#ffffff" : "#FF3DA8" }} />
+          <span style={{ fontSize: "13px", fontWeight: 800, color: isAbsentSelected ? "#ffffff" : "#FF3DA8" }}>Ik kan niet</span>
         </button>
       </div>
 
-      {/* Absent reason input (when selected) */}
-      {showAbsentInput && isAbsentSelected && (
+      {/* Absent reason input */}
+      {showAbsentInput && (
         <div style={{
           marginTop: "12px",
-          padding: "12px",
-          borderRadius: "12px",
-          background: "rgba(248,113,113,0.07)",
-          border: "0.5px solid rgba(248,113,113,0.20)"
+          padding: "14px",
+          borderRadius: "14px",
+          background: "rgba(255,61,168,0.06)",
+          border: "2px solid rgba(26,26,26,0.12)"
         }}>
-          <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.55)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          <label style={{ display: "block", fontSize: 9, fontWeight: 800, color: "rgba(26,26,26,0.55)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.10em" }}>
             Reden (optioneel)
           </label>
           <input
@@ -134,15 +100,16 @@ export default function AttendanceButtons({
             placeholder="Bijv. geblesseerd, school..."
             style={{
               width: "100%",
-              padding: "8px 12px",
+              padding: "9px 12px",
               borderRadius: "10px",
               fontSize: "13px",
-              background: "rgba(255,255,255,0.08)",
-              border: "0.5px solid rgba(255,255,255,0.12)",
-              color: "#fff",
+              background: "#ffffff",
+              border: "2px solid #1a1a1a",
+              color: "#1a1a1a",
               outline: "none",
               marginBottom: "10px",
-              boxSizing: "border-box"
+              boxSizing: "border-box",
+              fontWeight: 500,
             }}
           />
           <button
@@ -150,15 +117,16 @@ export default function AttendanceButtons({
             disabled={loading}
             style={{
               width: "100%",
-              padding: "10px",
-              borderRadius: "10px",
+              height: "44px",
+              borderRadius: "12px",
               fontSize: "13px",
-              fontWeight: 600,
-              background: "#f87171",
-              color: "#fff",
-              border: "none",
+              fontWeight: 800,
+              background: "#FF3DA8",
+              color: "#ffffff",
+              border: "2px solid #1a1a1a",
+              boxShadow: "2px 2px 0 #1a1a1a",
               cursor: loading ? "not-allowed" : "pointer",
-              opacity: loading ? 0.7 : 1
+              opacity: loading ? 0.7 : 1,
             }}
           >
             {loading ? "Bevestigen..." : "Bevestig afmelding"}
