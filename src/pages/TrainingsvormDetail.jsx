@@ -5,168 +5,147 @@ import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { ArrowLeft, Edit2, Clock, Play, Plus } from "lucide-react";
 
-const categoryColors = {
-  Tactisch: { bg: "rgba(96,165,250,0.20)", border: "rgba(96,165,250,0.40)", color: "#60a5fa" },
-  Fysiek: { bg: "rgba(74,222,128,0.20)", border: "rgba(74,222,128,0.40)", color: "#4ade80" },
-  Positiespel: { bg: "rgba(167,139,250,0.20)", border: "rgba(167,139,250,0.40)", color: "#a78bfa" },
-  Afwerking: { bg: "rgba(255,107,0,0.20)", border: "rgba(255,107,0,0.40)", color: "#FF8C3A" },
-  Spelprincipes: { bg: "rgba(251,191,36,0.20)", border: "rgba(251,191,36,0.40)", color: "#fbbf24" }
+const CATEGORY_COLORS = {
+  Tactisch:      { bg: "#00C2FF", text: "#1a1a1a" },
+  Fysiek:        { bg: "#08D068", text: "#1a1a1a" },
+  Positiespel:   { bg: "#9B5CFF", text: "#ffffff" },
+  Afwerking:     { bg: "#FF6800", text: "#ffffff" },
+  Spelprincipes: { bg: "#FFD600", text: "#1a1a1a" },
 };
 
-const groupColors = {
-  oranje: "#FF8C3A",
-  blauw: "#60a5fa",
-  groen: "#4ade80",
-  rood: "#f87171",
-  paars: "#a78bfa",
-  geel: "#fbbf24"
+const GROUP_COLORS = {
+  oranje: "#FF6800", blauw: "#00C2FF", groen: "#08D068",
+  rood: "#FF3DA8", paars: "#9B5CFF", geel: "#FFD600",
 };
 
 export default function TrainingsvormDetail() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user, isTrainer } = useCurrentUser();
+  const { isTrainer } = useCurrentUser();
   const id = searchParams.get("id");
 
   const { data: exercise } = useQuery({
     queryKey: ["exercise", id],
     queryFn: () => base44.entities.ExerciseTemplate.list().then(items => items.find(e => e.id === id)),
-    enabled: !!id
+    enabled: !!id,
   });
 
   if (!exercise) return null;
 
+  const col = CATEGORY_COLORS[exercise.category] || { bg: "#1a1a1a", text: "#ffffff" };
+
+  const cardStyle = { background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" };
+
   return (
-    <div className="min-h-screen pb-20 xl:pb-6" style={{ backgroundColor: "#1c0e04" }}>
-      {/* Background */}
-      <div className="pointer-events-none" style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 1, overflow: "hidden" }}>
-        <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: "rgba(255,107,0,0.55)", top: -160, left: -100, filter: "blur(80px)" }} />
-        <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", background: "rgba(255,150,0,0.30)", top: 380, right: -80, filter: "blur(70px)" }} />
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "12px", paddingBottom: "80px" }}>
 
-      <div className="relative z-10 p-4 md:p-6 max-w-4xl mx-auto space-y-4">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-2">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 glass-dark"
-            style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <ArrowLeft size={18} color="#fff" />
-          </button>
-          {isTrainer && (
-            <Link to={`/TrainingsvormForm?id=${exercise.id}`}>
-              <button className="w-10 h-10 rounded-lg flex items-center justify-center glass-dark"
-                style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Edit2 size={18} color="#FF8C3A" />
-              </button>
-            </Link>
-          )}
-        </div>
-
-        {/* Title section */}
-        <div className="space-y-3 mb-4">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold"
-              style={{
-                background: categoryColors[exercise.category].bg,
-                border: `0.5px solid ${categoryColors[exercise.category].border}`,
-                color: categoryColors[exercise.category].color
-              }}
-            >
-              {exercise.category}
-            </span>
-            {exercise.duration_minutes && (
-              <div className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
-                <Clock size={14} />
-                {exercise.duration_minutes} min
-              </div>
-            )}
-          </div>
-          <h1 className="t-page-title text-2xl md:text-3xl">{exercise.name}</h1>
-        </div>
-
-        {/* Description */}
-        {exercise.description && (
-          <div className="glass-dark rounded-2xl p-4">
-            <p className="t-label mb-2">Beschrijving</p>
-            <p className="t-secondary">{exercise.description}</p>
-          </div>
-        )}
-
-        {/* Coaching points */}
-        {exercise.coaching_points && exercise.coaching_points.length > 0 && (
-          <div className="glass-dark rounded-2xl p-4 space-y-3">
-            <p className="t-label">Coaching Points</p>
-            <div className="space-y-2">
-              {exercise.coaching_points.map((point, idx) => (
-                <div key={idx} className="flex gap-3">
-                  <div className="w-2 h-2 rounded-full flex-shrink-0 mt-1.5" style={{ background: "#FF8C3A" }} />
-                  <p className="t-secondary">{point}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Groups */}
-        {exercise.groups && exercise.groups.length > 0 && (
-          <div className="glass-dark rounded-2xl p-4 space-y-3">
-            <p className="t-label">Groepen</p>
-            <div className="flex gap-2 flex-wrap">
-              {exercise.groups.map((group, idx) => (
-                <div
-                  key={idx}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold"
-                  style={{
-                    background: groupColors[group.color] + "22",
-                    border: `0.5px solid ${groupColors[group.color]}`,
-                    color: groupColors[group.color]
-                  }}
-                >
-                  {group.name} ({group.player_count})
-                </div>
-              ))}
-            </div>
-            {exercise.group_transition_description && (
-              <p className="t-secondary text-xs">{exercise.group_transition_description}</p>
-            )}
-          </div>
-        )}
-
-        {/* Photo */}
-        {exercise.photo_url && (
-          <div className="glass-dark rounded-2xl overflow-hidden">
-            <img src={exercise.photo_url} alt={exercise.name} className="w-full h-auto object-cover" />
-          </div>
-        )}
-
-        {/* YouTube video */}
-        {exercise.youtube_url && (
-          <div className="glass-dark rounded-2xl overflow-hidden group cursor-pointer">
-            <div className="relative">
-              <img
-                src={`https://img.youtube.com/vi/${exercise.youtube_url.split("v=")[1]}/0.jpg`}
-                alt="Video thumbnail"
-                className="w-full h-48 md:h-64 object-cover"
-              />
-              <a href={exercise.youtube_url} target="_blank" rel="noopener noreferrer" className="absolute inset-0 flex items-center justify-center group/play">
-                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center" style={{ background: "rgba(255,107,0,0.90)" }}>
-                  <Play size={24} className="text-white" fill="white" />
-                </div>
-              </a>
-            </div>
-          </div>
-        )}
-
-        {/* Add to plan button */}
+      {/* Navigatiebalk */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{ width: "40px", height: "40px", borderRadius: "12px", background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
+        >
+          <ArrowLeft size={18} color="#1a1a1a" />
+        </button>
         {isTrainer && (
-          <Link to={`/PlanningTrainingDetail?exerciseId=${exercise.id}`} className="w-full block mt-6">
-            <button className="w-full btn-primary h-14 flex items-center justify-center gap-2">
-              <Plus size={18} />
-              Toevoegen aan trainingsplan
+          <Link to={`/TrainingsvormForm?id=${exercise.id}`}>
+            <button style={{ width: "40px", height: "40px", borderRadius: "12px", background: "#FF6800", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <Edit2 size={16} color="#ffffff" />
             </button>
           </Link>
         )}
       </div>
+
+      {/* Hero */}
+      <div style={{ ...cardStyle, background: col.bg }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+          <span style={{ fontSize: "11px", fontWeight: 900, color: col.text === "#ffffff" ? "rgba(255,255,255,0.65)" : "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em" }}>{exercise.category}</span>
+          {exercise.duration_minutes && (
+            <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "11px", fontWeight: 700, color: col.text === "#ffffff" ? "rgba(255,255,255,0.65)" : "rgba(26,26,26,0.55)" }}>
+              <Clock size={12} /> {exercise.duration_minutes} min
+            </span>
+          )}
+        </div>
+        <h1 style={{ fontSize: "22px", fontWeight: 900, color: col.text, letterSpacing: "-0.5px", lineHeight: 1.2 }}>{exercise.name}</h1>
+      </div>
+
+      {/* Beschrijving */}
+      {exercise.description && (
+        <div style={cardStyle}>
+          <p className="t-label" style={{ marginBottom: "8px" }}>Beschrijving</p>
+          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.6, fontWeight: 500 }}>{exercise.description}</p>
+        </div>
+      )}
+
+      {/* Coaching points */}
+      {exercise.coaching_points?.length > 0 && (
+        <div style={cardStyle}>
+          <p className="t-label" style={{ marginBottom: "10px" }}>Coaching Points</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {exercise.coaching_points.map((point, idx) => (
+              <div key={idx} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                <div style={{ width: "22px", height: "22px", borderRadius: "8px", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <span style={{ fontSize: "10px", fontWeight: 900, color: "#ffffff" }}>{idx + 1}</span>
+                </div>
+                <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.5, fontWeight: 500, paddingTop: "2px" }}>{point}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Groepen */}
+      {exercise.groups?.length > 0 && (
+        <div style={cardStyle}>
+          <p className="t-label" style={{ marginBottom: "10px" }}>Groepen</p>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            {exercise.groups.map((group, idx) => {
+              const gc = GROUP_COLORS[group.color] || "#1a1a1a";
+              return (
+                <div key={idx} style={{ background: gc, border: "2px solid #1a1a1a", borderRadius: "10px", padding: "6px 12px" }}>
+                  <span style={{ fontSize: "12px", fontWeight: 800, color: "#ffffff" }}>{group.name} ({group.player_count})</span>
+                </div>
+              );
+            })}
+          </div>
+          {exercise.group_transition_description && (
+            <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)", marginTop: "10px", fontWeight: 500 }}>{exercise.group_transition_description}</p>
+          )}
+        </div>
+      )}
+
+      {/* Foto */}
+      {exercise.photo_url && (
+        <div style={{ border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
+          <img src={exercise.photo_url} alt={exercise.name} style={{ width: "100%", height: "auto", display: "block" }} />
+        </div>
+      )}
+
+      {/* YouTube */}
+      {exercise.youtube_url && (
+        <div style={{ border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden", position: "relative" }}>
+          <img
+            src={`https://img.youtube.com/vi/${exercise.youtube_url.split("v=")[1]}/0.jpg`}
+            alt="Video thumbnail"
+            style={{ width: "100%", height: "200px", objectFit: "cover", display: "block" }}
+          />
+          <a href={exercise.youtube_url} target="_blank" rel="noopener noreferrer"
+            style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
+            <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "#FF6800", border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Play size={22} color="#ffffff" fill="#ffffff" />
+            </div>
+          </a>
+        </div>
+      )}
+
+      {/* Toevoegen aan plan */}
+      {isTrainer && (
+        <Link to={`/PlanningTrainingDetail?exerciseId=${exercise.id}`} style={{ textDecoration: "none" }}>
+          <button className="btn-primary" style={{ marginTop: "4px" }}>
+            <Plus size={16} /> Toevoegen aan trainingsplan
+          </button>
+        </Link>
+      )}
     </div>
   );
 }
