@@ -126,56 +126,104 @@ export default function PlayerSeasonStats({ playerId, variant = "grid" }) {
 
   // variant === "compact" — for PlayerDetail
   return (
-    <div className="glass p-4 space-y-4">
-      <p className="t-label">Seizoensstatistieken</p>
-
-      {/* Compact 4-stat row */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8 }}>
-        {stats.map(s => (
-          <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, padding: "10px 4px", borderRadius: 14, background: "rgba(255,255,255,0.05)", border: "0.5px solid rgba(255,255,255,0.08)" }}>
-            <i className={`ti ${s.icon}`} style={{ fontSize: 16, color: s.color }} />
-            <span style={{ fontSize: 20, fontWeight: 700, color: "#fff", lineHeight: 1 }}>{s.value}</span>
-            <span style={{ fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "rgba(255,255,255,0.45)", textAlign: "center" }}>{s.label}</span>
-          </div>
-        ))}
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      {/* Big Stats Cards - 2x2 Grid */}
+      <div>
+        <p className="t-label" style={{ marginBottom: "12px", color: "rgba(26,26,26,0.50)" }}>Seizoensstatistieken</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+          {[
+            { label: "Goals", value: goals, bg: "#4ade80" },
+            { label: "Assists", value: assists, bg: "#60a5fa" },
+            { label: "Speelminuten", value: totalMinutes, bg: "#FF8C3A" },
+            { label: "Wedstrijden", value: wedstrijden, bg: "#fbbf24" }
+          ].map((s, i) => (
+            <div key={s.label} style={{
+              background: "#ffffff",
+              border: "2.5px solid #1a1a1a",
+              borderRadius: "16px",
+              boxShadow: "3px 3px 0 #1a1a1a",
+              padding: "14px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px"
+            }}>
+              <p style={{ fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(26,26,26,0.50)" }}>
+                {s.label}
+              </p>
+              <p style={{ fontSize: "32px", fontWeight: 900, color: s.bg, letterSpacing: "-1.5px", lineHeight: 1 }}>
+                {s.value}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Laatste 5 wedstrijden tijdlijn */}
+      {/* Laatste 5 wedstrijden */}
       {last5.length > 0 && (
-        <div>
-          <p style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(255,255,255,0.40)", marginBottom: 8 }}>Laatste wedstrijden</p>
-          <div className="space-y-2">
+        <div className="glass p-4">
+          <p className="t-label" style={{ marginBottom: "12px" }}>Recente wedstrijden</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {last5.map(m => (
-              <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 12, background: "rgba(255,255,255,0.04)", border: "0.5px solid rgba(255,255,255,0.07)" }}>
-                {/* Date */}
-                <div style={{ width: 38, flexShrink: 0 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: "#FF8C3A" }}>
-                    {m.date ? (() => { try { return format(parseISO(m.date), "d MMM", { locale: nl }); } catch { return m.date; } })() : "—"}
-                  </div>
+              <div key={m.id} style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "12px",
+                padding: "12px 14px",
+                borderRadius: "14px",
+                border: "1.5px solid rgba(26,26,26,0.12)",
+                background: "rgba(255,255,255,0.50)"
+              }}>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", marginBottom: "4px" }}>
+                    vs. {m.opponent || "—"}
+                  </p>
+                  <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(26,26,26,0.50)" }}>
+                    {m.date ? (() => { try { return format(parseISO(m.date), "d MMMM yyyy", { locale: nl }); } catch { return m.date; } })() : "—"}
+                  </p>
                 </div>
-                {/* Opponent */}
-                <div style={{ flex: 1, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.80)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  vs. {m.opponent || "—"}
-                </div>
-                {/* Stats badges */}
-                <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
+                <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
                   {m.minutes > 0 && (
-                    <span style={{ fontSize: 10, fontWeight: 600, color: "#FF8C3A", background: "rgba(255,107,0,0.12)", border: "0.5px solid rgba(255,107,0,0.25)", borderRadius: 20, padding: "2px 7px" }}>
-                      {m.minutes}'
-                    </span>
+                    <div style={{
+                      background: "#FF6800",
+                      color: "#ffffff",
+                      padding: "4px 10px",
+                      borderRadius: "12px",
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      border: "1.5px solid #1a1a1a"
+                    }}>
+                      {m.minutes}min
+                    </div>
                   )}
                   {m.goals > 0 && (
-                    <span style={{ fontSize: 10, fontWeight: 600, color: "#4ade80", background: "rgba(74,222,128,0.12)", border: "0.5px solid rgba(74,222,128,0.25)", borderRadius: 20, padding: "2px 7px" }}>
-                      {m.goals}G
-                    </span>
+                    <div style={{
+                      background: "#08D068",
+                      color: "#1a1a1a",
+                      padding: "4px 10px",
+                      borderRadius: "12px",
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      border: "1.5px solid #1a1a1a"
+                    }}>
+                      ⚽ {m.goals}
+                    </div>
                   )}
                   {m.assists > 0 && (
-                    <span style={{ fontSize: 10, fontWeight: 600, color: "#60a5fa", background: "rgba(96,165,250,0.12)", border: "0.5px solid rgba(96,165,250,0.25)", borderRadius: 20, padding: "2px 7px" }}>
-                      {m.assists}A
-                    </span>
+                    <div style={{
+                      background: "#00C2FF",
+                      color: "#1a1a1a",
+                      padding: "4px 10px",
+                      borderRadius: "12px",
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      border: "1.5px solid #1a1a1a"
+                    }}>
+                      🎯 {m.assists}
+                    </div>
                   )}
                   {m.minutes === 0 && m.goals === 0 && m.assists === 0 && (
-                    <span style={{ fontSize: 10, color: "rgba(255,255,255,0.30)" }}>—</span>
+                    <div style={{ fontSize: "10px", color: "rgba(26,26,26,0.40)" }}>—</div>
                   )}
                 </div>
               </div>
