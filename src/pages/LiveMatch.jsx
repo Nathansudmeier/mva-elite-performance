@@ -540,8 +540,8 @@ export default function LiveMatch() {
           )}
         </div>
 
-        {/* Score - Yellow */}
-        <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px 24px" }}>
+        {/* Score - Blue */}
+        <div style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px 24px" }}>
           <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
         </div>
 
