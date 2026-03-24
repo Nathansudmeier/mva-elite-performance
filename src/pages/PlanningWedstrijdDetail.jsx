@@ -324,7 +324,7 @@ export default function PlanningWedstrijdDetail() {
   const teamTextDark = teamCardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "14px", width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box", background: "#FFF3E8", padding: "16px", minHeight: "100vh" }}>
 
         {/* Back + actions */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -447,14 +447,14 @@ export default function PlanningWedstrijdDetail() {
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: 14, boxShadow: "2px 2px 0 #1a1a1a", overflow: "hidden" }}>
+        <div className="glass flex overflow-x-auto" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
           {TABS.map((tab, i) => (
             <button key={tab} onClick={() => setActiveTab(i)}
               style={{
-                flex: 1, padding: "10px 4px", fontSize: "12px", fontWeight: 800, cursor: "pointer",
+                flex: 1, minWidth: "25%", padding: "12px 8px", fontSize: "11px", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap",
                 background: activeTab === i ? teamCardBg : "transparent",
                 color: activeTab === i ? (teamCardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a") : "rgba(26,26,26,0.45)",
-                border: "none",
+                border: "none", transition: "all 0.15s"
               }}>
               {tab}
             </button>
@@ -463,10 +463,10 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Tab: Overzicht */}
         {activeTab === 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {/* Score sectie */}
             {match && (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16 }}>
+              <div className="glass p-5 md:p-6"  style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
                 {!editingScore ? (
                   <div className="text-center space-y-3">
                     <div className="flex items-center justify-center gap-4">
@@ -560,7 +560,7 @@ export default function PlanningWedstrijdDetail() {
 
             {/* RSVP alleen voor toekomstige wedstrijden */}
             {!isTrainer && myPlayer && isFuture && (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+              <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
                 <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a", marginBottom: 10 }}>Jouw aanwezigheid</p>
                 <AttendanceButtons
                   currentStatus={myAttendance?.status}
@@ -577,7 +577,7 @@ export default function PlanningWedstrijdDetail() {
 
             {/* Na bevestiging: aanwezigheidslijst */}
             {!isTrainer && myAttendance && (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+              <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
                 <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a", marginBottom: 12 }}>Wie is er bij?</p>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div>
@@ -599,7 +599,7 @@ export default function PlanningWedstrijdDetail() {
             )}
 
             {item.notes && (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+              <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
                 <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Notities</p>
                 <p style={{ fontSize: 13, color: "rgba(26,26,26,0.65)" }}>{item.notes}</p>
               </div>
@@ -610,7 +610,7 @@ export default function PlanningWedstrijdDetail() {
         {/* Tab: Opstelling */}
          {activeTab === 1 && !editingLineup && (
           !isTrainer && isFuture ? (
-            <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "24px 16px", textAlign: "center" }}>
+            <div className="glass p-6 md:p-8 text-center" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
               <p style={{ fontSize: 13, color: "rgba(26,26,26,0.50)" }}>De opstelling wordt bekend gemaakt op de dag van de wedstrijd.</p>
             </div>
           ) : (
@@ -636,20 +636,20 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Tab: Tactiek */}
         {activeTab === 2 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {!match ? (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "24px 16px", textAlign: "center" }}>
+              <div className="glass p-6 md:p-8 text-center" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
                 <p style={{ fontSize: 13, color: "rgba(26,26,26,0.50)" }}>Geen gekoppelde wedstrijd gevonden.</p>
               </div>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 {[
                   { key: "ball_possession", label: "Balbezit (BB)" },
                   { key: "pressing", label: "Verdediging / Pressing (VB)" },
                   { key: "transition", label: "Omschakeling" },
                   { key: "set_pieces", label: "Dode spelmomenten" },
                 ].map(({ key, label }) => (
-                  <div key={key} style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px" }}>
+                  <div key={key} className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
                     <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>{label}</p>
                     {isTrainer ? (
                       <textarea
@@ -676,7 +676,7 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Tab: Aanwezigheid */}
         {activeTab === 3 && (
-          <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16, display: "flex", flexDirection: "column", gap: 18 }}>
+          <div className="glass p-4 md:p-6" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
               <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#05a050", marginBottom: 10 }}>Bevestigd aanwezig ({aanwezigList.length})</p>
               {aanwezigList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Niemand bevestigd</p> : (
