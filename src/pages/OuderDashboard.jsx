@@ -150,34 +150,37 @@ export default function OuderDashboard() {
         </div>
       </div>
 
-      {/* Child profile card */}
+      {/* Child profile card - clickable */}
       {child && (
-        <div style={{
-          background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px",
-          boxShadow: "3px 3px 0 #1a1a1a", padding: "16px",
-          display: "flex", alignItems: "center", gap: "16px"
-        }}>
-          <img src={child.photo_url || "https://via.placeholder.com/56"} alt={child.name}
-            style={{
-              width: "56px", height: "56px", borderRadius: "50%",
-              border: "2.5px solid #1a1a1a", objectFit: "cover", flexShrink: 0
-            }} />
-          <div style={{ flex: 1 }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a" }}>{child.name}</h2>
-            <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.50)", fontWeight: 600, marginTop: "2px" }}>
-              {child.position}
-            </p>
-          </div>
-          {child.shirt_number && (
-            <div style={{
-              background: "#FF6800", color: "#ffffff", padding: "2px 8px",
-              borderRadius: "20px", border: "1.5px solid #1a1a1a",
-              fontSize: "11px", fontWeight: 800
-            }}>
-              #{child.shirt_number}
+        <Link to={`/PlayerDetail?id=${child.id}`} style={{ textDecoration: "none" }}>
+          <div style={{
+            background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px",
+            boxShadow: "3px 3px 0 #1a1a1a", padding: "16px",
+            display: "flex", alignItems: "center", gap: "16px", cursor: "pointer",
+            transition: "transform 0.1s", position: "relative"
+          }} onMouseDown={e => e.currentTarget.style.transform = "translate(2px, 2px)"} onMouseUp={e => e.currentTarget.style.transform = "translate(0, 0)"}>
+            <img src={child.photo_url || "https://via.placeholder.com/56"} alt={child.name}
+              style={{
+                width: "56px", height: "56px", borderRadius: "50%",
+                border: "2.5px solid #1a1a1a", objectFit: "cover", flexShrink: 0
+              }} />
+            <div style={{ flex: 1 }}>
+              <h2 style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a" }}>{child.name}</h2>
+              <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.50)", fontWeight: 600, marginTop: "2px" }}>
+                {child.position}
+              </p>
             </div>
-          )}
-        </div>
+            {child.shirt_number && (
+              <div style={{
+                background: "#FF6800", color: "#ffffff", padding: "2px 8px",
+                borderRadius: "20px", border: "1.5px solid #1a1a1a",
+                fontSize: "11px", fontWeight: 800
+              }}>
+                #{child.shirt_number}
+              </div>
+            )}
+          </div>
+        </Link>
       )}
 
       {/* Attendance card */}
