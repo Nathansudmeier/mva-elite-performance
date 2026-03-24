@@ -275,7 +275,7 @@ export default function LiveMatch() {
     
     return (
       <div style={{ background: "#FFF3E8" }} className="min-h-screen">
-        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6" style={{ paddingBottom: "100px" }}>
+        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6" style={{ paddingBottom: "80px" }}>
           {/* Header */}
           <div className="flex items-center gap-3">
             <BackBtn onClick={() => navigate("/Planning")} />
@@ -345,7 +345,7 @@ export default function LiveMatch() {
         </div>
 
         {/* Start Wedstrijd Button - Sticky Footer */}
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100, background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a", padding: "1rem 1.25rem", paddingBottom: "calc(4rem + env(safe-area-inset-bottom))" }}>
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100, background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a", padding: "1rem 1.25rem", paddingBottom: "calc(2.5rem + env(safe-area-inset-bottom))" }}>
           <button
             onClick={startMatch}
             disabled={Object.keys(lineupMap).length === 0}
