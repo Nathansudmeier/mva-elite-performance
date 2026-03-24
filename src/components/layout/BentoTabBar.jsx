@@ -118,9 +118,8 @@ const speelsterTabItems = [
 
 const ouderTabItems = [
   { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
-  { name: "Wedstrijden", page: "Wedstrijden", Icon: IconPlanning },
+  { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
-  { name: "Berichten", page: "Messages", Icon: IconBerichten },
 ];
 
 export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderUser, onNavigate }) {
