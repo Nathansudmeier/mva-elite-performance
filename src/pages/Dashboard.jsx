@@ -243,11 +243,11 @@ export default function Dashboard() {
 
 
       {uploadModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="glass-dark p-6 max-w-lg w-full">
-            <h2 className="t-page-title mb-4">Team of the Week</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(26,26,26,0.40)" }}>
+          <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "22px", boxShadow: "4px 4px 0 #1a1a1a", padding: "1.5rem", maxWidth: "500px", width: "100%" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a", marginBottom: "16px" }}>Team of the Week</h2>
             <WinningTeamUpload players={activePlayers} onSaved={() => { queryClient.invalidateQueries({ queryKey: ["winningTeamPhotos"] }); setUploadModalOpen(false); }} />
-            <button onClick={() => setUploadModalOpen(false)} className="mt-4 w-full px-4 py-3 rounded-xl text-sm font-semibold text-white bg-[#FF6B00] hover:bg-[#E55A00] transition-colors">
+            <button onClick={() => setUploadModalOpen(false)} className="btn-primary mt-4">
               Sluiten
             </button>
           </div>
