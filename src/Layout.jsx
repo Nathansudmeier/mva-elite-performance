@@ -29,6 +29,7 @@ const mainNavItems = [
 const secondaryNavItems = [
   { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" },
   { name: "Foto's", icon: "photo", page: "Photowall" },
+  { name: "Feedback", icon: "message-2", page: "FeedbackOverview" },
   { name: "Beheer", icon: "settings", page: "AccountBeheer" },
 ];
 
