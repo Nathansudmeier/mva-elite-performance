@@ -79,23 +79,8 @@ function PlayersContent() {
   };
 
   return (
-    <div className="relative">
-      {/* Background image — fixed */}
-      <img
-        src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png"
-        alt=""
-        style={{
-          position: "fixed",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-        }}
-      />
-
-      <div className="space-y-6 pb-20 lg:pb-6 relative z-10">
+    <div>
+      <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="t-page-title">Speelsters</h1>
@@ -109,50 +94,55 @@ function PlayersContent() {
       </div>
 
       {!isTrainer && displayPlayers.length === 0 ? (
-        <div className="glass p-8 text-center">
-          <User size={32} className="mx-auto mb-2 ic-muted" style={{ color: "rgba(255,255,255,0.2)" }} />
-          <p className="t-tertiary">Je profielpagina is nog niet beschikbaar.</p>
-        </div>
+      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "2rem", textAlign: "center" }}>
+        <User size={32} style={{ color: "rgba(26,26,26,0.20)", margin: "0 auto 8px" }} />
+        <p style={{ fontSize: 13, color: "rgba(26,26,26,0.40)" }}>Je profielpagina is nog niet beschikbaar.</p>
+      </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {displayPlayers.map((player) => (
-          <Link key={player.id} to={createPageUrl(`PlayerDetail?id=${player.id}`)} className="glass block transition-opacity hover:opacity-80">
-            <div className="flex items-start gap-4 p-4">
-              <label
-                onClick={(e) => e.stopPropagation()}
-                className="relative w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center shrink-0 cursor-pointer group"
-                style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.3)" }}
-              >
-                <img src={player.photo_url || "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/4ecb27045_placeholder.png"} alt={player.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
-                  <Camera size={14} className="text-white" />
-                </div>
-                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleQuickPhoto(e, player)} />
-              </label>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  {player.shirt_number && <span className="t-secondary" style={{ color: "#FF8C3A" }}>#{player.shirt_number}</span>}
-                  <h3 className="t-card-title truncate">{player.name}</h3>
-                </div>
-                <p className="t-secondary-sm mt-0.5">{player.position || "Geen positie"}</p>
-                {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
-                  <div className="flex items-center gap-1 mt-2">
-                    <Target size={10} style={{ color: "#FF8C3A" }} />
-                    <span className="t-tertiary">
-                      {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).length} IOP doelen
-                    </span>
-                  </div>
-                )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {displayPlayers.map((player) => (
+        <Link key={player.id} to={createPageUrl(`PlayerDetail?id=${player.id}`)}
+          style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", display: "block", textDecoration: "none", transition: "opacity 0.15s" }}
+          onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+          onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 14, padding: 14 }}>
+            <label
+              onClick={(e) => e.stopPropagation()}
+              style={{ position: "relative", width: 56, height: 56, borderRadius: 14, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, cursor: "pointer", background: "rgba(255,104,0,0.10)", border: "2px solid #1a1a1a" }}
+            >
+              <img src={player.photo_url || "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/4ecb27045_placeholder.png"} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, background: "rgba(0,0,0,0.40)", transition: "opacity 0.15s" }}
+                onMouseEnter={e => e.currentTarget.style.opacity = "1"}
+                onMouseLeave={e => e.currentTarget.style.opacity = "0"}>
+                <Camera size={14} color="#ffffff" />
               </div>
-              {isTrainer && (
-                <button onClick={(e) => { e.preventDefault(); openEdit(player); }} className="p-2 rounded-lg transition-colors" style={{ background: "rgba(255,255,255,0.06)" }}>
-                  <Edit2 size={14} style={{ color: "rgba(255,255,255,0.5)" }} />
-                </button>
+              <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => handleQuickPhoto(e, player)} />
+            </label>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                {player.shirt_number && <span style={{ fontSize: 11, fontWeight: 800, color: "#FF6800" }}>#{player.shirt_number}</span>}
+                <h3 style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{player.name}</h3>
+              </div>
+              <p style={{ fontSize: 12, color: "rgba(26,26,26,0.55)", marginTop: 2 }}>{player.position || "Geen positie"}</p>
+              {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
+                <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6 }}>
+                  <Target size={10} style={{ color: "#FF6800" }} />
+                  <span style={{ fontSize: 10, color: "rgba(26,26,26,0.45)", fontWeight: 700 }}>
+                    {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).length} IOP doelen
+                  </span>
+                </div>
               )}
             </div>
-          </Link>
-          ))}
-        </div>
+            {isTrainer && (
+              <button onClick={(e) => { e.preventDefault(); openEdit(player); }}
+                style={{ padding: "6px", borderRadius: 10, background: "rgba(26,26,26,0.06)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Edit2 size={14} style={{ color: "rgba(26,26,26,0.45)" }} />
+              </button>
+            )}
+          </div>
+        </Link>
+        ))}
+      </div>
       )}
 
       {isTrainer && (
