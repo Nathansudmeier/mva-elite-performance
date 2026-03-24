@@ -124,7 +124,70 @@ const ouderTabItems = [
 ];
 
 export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderUser, onNavigate }) {
-  const tabItems = isOuderUser ? ouderTabItems : isSpeelsterUser ? speelsterTabItems : trainerTabItems;
+  // Parents can ONLY access their own tabbar, nothing else
+  if (isOuderUser) {
+    const tabItems = ouderTabItems;
+    return (
+      <nav
+        className="xl:hidden"
+        style={{
+          position: "fixed", bottom: 0, left: "8px", right: "8px",
+          zIndex: 100, padding: "0 0 1rem",
+        }}
+      >
+        <div style={{
+          background: "#ffffff",
+          border: "2.5px solid #1a1a1a",
+          borderRadius: "22px",
+          boxShadow: "3px 3px 0 #1a1a1a",
+          display: "flex",
+          overflowX: "auto",
+          scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch",
+          padding: "10px 10px 14px",
+          gap: "8px",
+        }}>
+          {tabItems.map((item) => {
+            const isActive = item.page === currentPageName;
+            return (
+              <Link
+                key={item.page}
+                to={createPageUrl(item.page)}
+                onClick={onNavigate}
+                style={{
+                  flex: "0 0 auto",
+                  display: "flex", flexDirection: "column", alignItems: "center",
+                  gap: "6px", textDecoration: "none",
+                  minWidth: "72px",
+                  padding: "0 4px",
+                  scrollSnapAlign: "center",
+                }}
+              >
+                <div style={{
+                  background: isActive ? "#FF6800" : "transparent",
+                  borderRadius: isActive ? "12px" : "0",
+                  border: isActive ? "1.5px solid #1a1a1a" : "none",
+                  padding: isActive ? "8px 10px" : "8px 10px",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <item.Icon fill={isActive ? "#ffffff" : "rgba(26,26,26,0.20)"} />
+                </div>
+                <span style={{
+                  fontSize: "10px", fontWeight: 800,
+                  color: isActive ? "#FF6800" : "rgba(26,26,26,0.30)",
+                  whiteSpace: "nowrap",
+                }}>
+                  {item.name}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+    );
+  }
+
+  const tabItems = isSpeelsterUser ? speelsterTabItems : trainerTabItems;
 
   return (
     <nav
