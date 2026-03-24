@@ -135,18 +135,43 @@ export default function UpcomingActivitiesCompact({ playerId }) {
         const dotColor = getItemColor(first);
         const record = myAttendance.find(a => a.agenda_item_id === first.id);
         return (
-          <div key={first.id} style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
-            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.50)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "10px" }}>Volgende activiteit</p>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-              <div style={{ width: 10, height: 10, borderRadius: "50%", background: dotColor, border: "1.5px solid #1a1a1a", flexShrink: 0, marginTop: 4 }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <span style={{ fontSize: 10, fontWeight: 800, color: dotColor === "#FFD600" ? "#cc9900" : dotColor, textTransform: "uppercase", letterSpacing: "0.06em" }}>{first.type}</span>
-                <p style={{ fontSize: 15, fontWeight: 800, color: "#1a1a1a", marginTop: 4, lineHeight: 1.3 }}>{first.title}</p>
-                <p style={{ fontSize: 12, color: "rgba(26,26,26,0.50)", marginTop: 4, fontWeight: 600 }}>
-                  {formatShort(first.date)} · {first.start_time}
-                </p>
+          <div key={first.id} style={{ position: "relative", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem", overflow: "visible" }}>
+            {/* Emvi hanging top-right */}
+            <img
+              src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/bed2c8b31_Emvi-hangt.png"
+              alt="Emvi"
+              style={{ position: "absolute", top: -60, right: -8, width: 100, height: 100, objectFit: "contain", pointerEvents: "none", zIndex: 10 }}
+            />
+
+            {/* Header label */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <div style={{ background: dotColor, border: "2px solid #1a1a1a", borderRadius: 8, padding: "3px 10px" }}>
+                <span style={{ fontSize: 9, fontWeight: 900, color: dotColor === "#FFD600" ? "#1a1a1a" : "#ffffff", textTransform: "uppercase", letterSpacing: "0.10em" }}>{first.type}</span>
               </div>
+              <span style={{ fontSize: 9, fontWeight: 800, color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.10em" }}>Volgende activiteit</span>
             </div>
+
+            {/* Title & meta */}
+            <p style={{ fontSize: 18, fontWeight: 900, color: "#1a1a1a", lineHeight: 1.2, letterSpacing: "-0.5px", marginBottom: 6, paddingRight: 80 }}>{first.title}</p>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <i className="ti ti-calendar" style={{ fontSize: 13, color: "#FF6800" }} />
+                <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(26,26,26,0.60)" }}>{formatShort(first.date)}</span>
+              </div>
+              {first.start_time && (
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                  <i className="ti ti-clock" style={{ fontSize: 13, color: "#FF6800" }} />
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(26,26,26,0.60)" }}>{first.start_time}</span>
+                </div>
+              )}
+              {first.location && (
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                  <i className="ti ti-map-pin" style={{ fontSize: 13, color: "#FF6800" }} />
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(26,26,26,0.60)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 100 }}>{first.location}</span>
+                </div>
+              )}
+            </div>
+
             <AttendanceButton item={first} playerId={playerId} record={record} />
           </div>
         );
