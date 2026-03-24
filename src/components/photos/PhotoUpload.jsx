@@ -68,9 +68,9 @@ export default function PhotoUpload({ onSaved }) {
   };
 
   return (
-    <div className="glass p-4 space-y-3">
+    <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }} className="space-y-3">
       <div className="flex items-center gap-3 mb-1">
-        <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(234,179,8,0.15)", border: "0.5px solid rgba(234,179,8,0.30)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#FFD600", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="uploadGrad" x1="0" y1="0" x2="1" y2="0">
@@ -83,7 +83,7 @@ export default function PhotoUpload({ onSaved }) {
             <line x1="12" y1="3" x2="12" y2="15" stroke="url(#uploadGrad)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h2 className="t-section-title">Foto Uploaden</h2>
+        <h2 style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a" }}>Foto Uploaden</h2>
       </div>
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
          <div>
