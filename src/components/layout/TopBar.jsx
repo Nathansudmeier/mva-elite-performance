@@ -21,71 +21,39 @@ function DayBadge({ sessions, matches }) {
 
   if (todayMatch) {
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          background: "rgba(255,107,0,0.15)",
-          border: "0.5px solid rgba(255,107,0,0.30)",
-          borderRadius: "20px",
-          padding: "6px 14px",
-        }}
-      >
-        <i className="ti ti-trophy" style={{ fontSize: "14px", color: "#FF8C3A" }} />
-        <div>
-          <p style={{ fontSize: "12px", fontWeight: 700, color: "#FF8C3A", lineHeight: 1 }}>Matchday</p>
-          <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px", lineHeight: 1 }}>
-            vs {todayMatch.opponent}
-          </p>
-        </div>
+      <div style={{
+        display: "flex", alignItems: "center", gap: "6px",
+        background: "#FF6800", border: "1.5px solid #FF6800",
+        borderRadius: "20px", padding: "4px 12px",
+      }}>
+        <i className="ti ti-trophy" style={{ fontSize: "13px", color: "#ffffff" }} />
+        <span style={{ fontSize: "11px", fontWeight: 800, color: "#ffffff" }}>Matchday</span>
+        <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.75)" }}>vs {todayMatch.opponent}</span>
       </div>
     );
   }
 
   if (todaySession) {
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          background: "rgba(74,222,128,0.10)",
-          border: "0.5px solid rgba(74,222,128,0.20)",
-          borderRadius: "20px",
-          padding: "6px 14px",
-        }}
-      >
-        <i className="ti ti-clock" style={{ fontSize: "14px", color: "#4ade80" }} />
-        <div>
-          <p style={{ fontSize: "12px", fontWeight: 700, color: "#4ade80", lineHeight: 1 }}>Training</p>
-          <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px", lineHeight: 1 }}>
-            {todaySession.notes || "Vandaag ingepland"}
-          </p>
-        </div>
+      <div style={{
+        display: "flex", alignItems: "center", gap: "6px",
+        background: "rgba(8,208,104,0.12)", border: "1.5px solid rgba(8,208,104,0.25)",
+        borderRadius: "20px", padding: "4px 12px",
+      }}>
+        <i className="ti ti-clock" style={{ fontSize: "13px", color: "#05a050" }} />
+        <span style={{ fontSize: "11px", fontWeight: 800, color: "#05a050" }}>Training</span>
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "8px",
-        background: "rgba(96,165,250,0.10)",
-        border: "0.5px solid rgba(96,165,250,0.20)",
-        borderRadius: "20px",
-        padding: "6px 14px",
-      }}
-    >
-      <i className="ti ti-moon" style={{ fontSize: "14px", color: "#60a5fa" }} />
-      <div>
-        <p style={{ fontSize: "12px", fontWeight: 700, color: "#60a5fa", lineHeight: 1 }}>Rustdag</p>
-        <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", marginTop: "2px", lineHeight: 1 }}>
-          Geen training of wedstrijd
-        </p>
-      </div>
+    <div style={{
+      display: "flex", alignItems: "center", gap: "6px",
+      background: "rgba(26,26,26,0.08)", border: "1.5px solid rgba(26,26,26,0.15)",
+      borderRadius: "20px", padding: "4px 12px",
+    }}>
+      <i className="ti ti-moon" style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)" }} />
+      <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)" }}>Rustdag</span>
     </div>
   );
 }
@@ -132,87 +100,30 @@ export default function TopBar() {
   });
 
   const profilePhoto = trainerRecord?.photo_url || playerRecord?.photo_url || null;
-
   const firstName = user?.full_name?.split(" ")[0] || "trainer";
   const initials = user?.full_name
     ? user.full_name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
     : "?";
 
   return (
-    <header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 10,
-        background: "rgba(0,0,0,0.30)",
-        backdropFilter: "blur(30px)",
-        WebkitBackdropFilter: "blur(30px)",
-        borderBottom: "0.5px solid rgba(255,107,0,0.15)",
-        height: "60px",
-        overflow: "hidden",
-      }}
-    >
-      {/* Decoratieve lichtbollen */}
-      <div
-        style={{
-          position: "absolute",
-          pointerEvents: "none",
-          width: "200px",
-          height: "200px",
-          background: "radial-gradient(circle, rgba(255,107,0,0.25) 0%, transparent 65%)",
-          top: "-80px",
-          left: "-40px",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          pointerEvents: "none",
-          width: "150px",
-          height: "150px",
-          background: "radial-gradient(circle, rgba(255,107,0,0.15) 0%, transparent 65%)",
-          top: "-60px",
-          right: "200px",
-        }}
-      />
-      {/* Accent lijn onderaan */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: "1px",
-          background: "linear-gradient(90deg, transparent, rgba(255,107,0,0.40), rgba(255,107,0,0.20), transparent)",
-        }}
-      />
-
-      {/* Content */}
-      <div
-        style={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: "100%",
-          padding: "0 16px",
-          maxWidth: "1280px",
-          margin: "0 auto",
-        }}
-      >
+    <header style={{
+      position: "sticky", top: 0, zIndex: 100,
+      background: "#ffffff",
+      borderBottom: "2.5px solid #1a1a1a",
+      height: "60px", overflow: "hidden",
+    }}>
+      <div style={{
+        position: "relative", display: "flex", alignItems: "center",
+        justifyContent: "space-between", height: "100%",
+        padding: "0 16px", maxWidth: "1280px", margin: "0 auto",
+      }}>
         {/* Links: logo + naam */}
         <Link to="/Dashboard" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              borderRadius: "50%",
-              background: "#1a1008",
-              border: "1px solid rgba(255,107,0,0.35)",
-              overflow: "hidden",
-              flexShrink: 0,
-            }}
-          >
+          <div style={{
+            width: "36px", height: "36px", borderRadius: "50%",
+            background: "#FFF3E8", border: "2.5px solid #1a1a1a",
+            overflow: "hidden", flexShrink: 0,
+          }}>
             <img
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69ad40ab17517be2ed782cdd/f4c654af8_Artemis.png"
               alt="MVA Noord"
@@ -220,47 +131,40 @@ export default function TopBar() {
             />
           </div>
           <div className="hidden sm:block">
-            <p style={{ fontSize: "15px", fontWeight: 700, color: "#ffffff", letterSpacing: "-0.3px", lineHeight: 1.1 }}>
+            <p style={{ fontSize: "15px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px", lineHeight: 1.1 }}>
               MVA Noord
             </p>
-            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", marginTop: "2px", lineHeight: 1 }}>
+            <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", marginTop: "1px", lineHeight: 1 }}>
               {greeting}, {firstName}
             </p>
           </div>
         </Link>
 
-        {/* Midden: scheidingslijn + dag badge */}
+        {/* Midden: dag badge */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }} className="hidden sm:flex">
-          <div style={{ width: "0.5px", height: "28px", background: "rgba(255,255,255,0.10)" }} />
           <DayBadge sessions={sessions} matches={matches} />
         </div>
 
         {/* Rechts: bell + avatar */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          {/* Notificatie bell */}
           <div style={{ position: "relative" }}>
             <button
               ref={bellRef}
               onClick={() => setShowNotifications(v => !v)}
               style={{
-                position: "relative",
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                background: showNotifications ? "rgba(255,107,0,0.15)" : "rgba(255,255,255,0.07)",
-                border: showNotifications ? "0.5px solid rgba(255,107,0,0.30)" : "0.5px solid rgba(255,255,255,0.10)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                position: "relative", width: "34px", height: "34px",
+                borderRadius: "50%", background: "#ffffff",
+                border: "2px solid #1a1a1a",
+                display: "flex", alignItems: "center", justifyContent: "center",
                 cursor: "pointer",
               }}
             >
-              <i className="ti ti-bell" style={{ fontSize: "14px", color: showNotifications ? "#FF8C3A" : "rgba(255,255,255,0.55)" }} />
+              <i className="ti ti-bell" style={{ fontSize: "15px", color: "#1a1a1a" }} />
               {unreadNotifications.length > 0 && (
                 <div style={{
                   position: "absolute", top: 0, right: 0,
                   width: 8, height: 8, borderRadius: "50%",
-                  background: "#FF6B00", border: "1.5px solid #1c0e04",
+                  background: "#FF6800", border: "1.5px solid #ffffff",
                 }} />
               )}
             </button>
@@ -273,7 +177,6 @@ export default function TopBar() {
             )}
           </div>
 
-          {/* Avatar met dropdown */}
           <AvatarMenu
             user={user}
             profilePhoto={profilePhoto}

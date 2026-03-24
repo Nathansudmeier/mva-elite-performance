@@ -23,55 +23,7 @@
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -82,212 +34,214 @@
 
   body {
     @apply bg-background text-foreground;
-    background-color: #1c0e04;
+    background-color: #FFF3E8;
     font-family: -apple-system, "SF Pro Display", sans-serif;
     font-weight: 400;
+    color: #1a1a1a;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: -0.5px;
+    color: #1a1a1a;
   }
+}
 
-  h1 {
-    letter-spacing: -1px;
-  }
+/* ── Global page background ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg, #FFF3E8 0%, #FFE8D0 40%, #FFF0E0 70%, #FFF8F0 100%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* ── Typografiehiërarchie ── */
 
-/* Hero stat — grote vrijstaande cijfers, geen container */
 .t-hero {
-  font-size: clamp(32px, 6vw, 40px);
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -1px;
+  font-size: clamp(32px, 6vw, 42px);
+  font-weight: 900;
+  color: #1a1a1a;
+  letter-spacing: -2px;
   line-height: 1;
 }
 .t-hero-orange {
-  font-size: clamp(32px, 6vw, 40px);
-  font-weight: 700;
-  color: #FF8C3A;
-  letter-spacing: -1px;
+  font-size: clamp(32px, 6vw, 42px);
+  font-weight: 900;
+  color: #FF6800;
+  letter-spacing: -2px;
   line-height: 1;
 }
 
-/* Paginatitel */
 .t-page-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #ffffff;
-  letter-spacing: -0.3px;
+  font-size: 22px;
+  font-weight: 900;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
   line-height: 1.2;
 }
 
-/* Sectietitel */
 .t-section-title {
   font-size: 15px;
-  font-weight: 600;
-  color: #ffffff;
+  font-weight: 800;
+  color: #1a1a1a;
   letter-spacing: -0.2px;
   line-height: 1.3;
 }
 
-/* Kaarttitel */
 .t-card-title {
   font-size: 14px;
-  font-weight: 600;
-  color: #ffffff;
+  font-weight: 700;
+  color: #1a1a1a;
   line-height: 1.3;
 }
 
-/* Metric waarde in kaart */
 .t-metric {
-  font-size: 28px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.5px;
+  font-size: 34px;
+  font-weight: 900;
+  color: #1a1a1a;
+  letter-spacing: -2px;
   line-height: 1;
 }
 .t-metric-orange {
-  font-size: 28px;
-  font-weight: 700;
-  color: #FF8C3A;
-  letter-spacing: -0.5px;
+  font-size: 34px;
+  font-weight: 900;
+  color: #FF6800;
+  letter-spacing: -2px;
   line-height: 1;
 }
 .t-metric-lg {
-  font-size: 30px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.5px;
+  font-size: 42px;
+  font-weight: 900;
+  color: #1a1a1a;
+  letter-spacing: -2px;
   line-height: 1;
 }
 
-/* Label boven metric */
 .t-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.55);
+  font-size: 9px;
+  font-weight: 800;
+  color: rgba(26,26,26,0.65);
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.10em;
   line-height: 1.2;
 }
 
-/* Secundaire tekst — datums, subtitels, meta */
 .t-secondary {
   font-size: 12px;
-  color: rgba(255,255,255,0.65);
+  color: rgba(26,26,26,0.55);
   line-height: 1.4;
 }
 .t-secondary-sm {
   font-size: 11px;
-  color: rgba(255,255,255,0.65);
+  color: rgba(26,26,26,0.55);
   line-height: 1.4;
 }
 
-/* Tertiaire tekst — hints, inactieve states */
 .t-tertiary {
   font-size: 11px;
-  color: rgba(255,255,255,0.40);
+  color: rgba(26,26,26,0.40);
   line-height: 1.4;
 }
 .t-tertiary-sm {
   font-size: 10px;
-  color: rgba(255,255,255,0.40);
+  color: rgba(26,26,26,0.40);
   line-height: 1.4;
 }
 
-/* Navigatielabels */
 .t-nav-inactive {
-  color: rgba(255,255,255,0.50);
+  color: rgba(26,26,26,0.30);
 }
 .t-nav-active {
-  color: #FF8C3A;
+  color: #FF6800;
 }
 
-/* Icoon kleuren */
-.ic-white  { color: #ffffff; }
-.ic-orange { color: #FF8C3A; }
-.ic-muted  { color: rgba(255,255,255,0.40); }
+.ic-white  { color: #1a1a1a; }
+.ic-orange { color: #FF6800; }
+.ic-muted  { color: rgba(26,26,26,0.40); }
 
 /* ── Knoppen ── */
 
 .btn-primary {
-  background: #FF6B00;
+  background: #FF6800;
   color: #ffffff;
   border-radius: 14px;
   height: 52px;
   font-size: 15px;
-  font-weight: 600;
-  border: none;
+  font-weight: 800;
+  border: 2.5px solid #1a1a1a;
+  box-shadow: 3px 3px 0 #1a1a1a;
   padding: 0 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: box-shadow 0.1s, transform 0.1s;
   width: 100%;
 }
 @media (min-width: 640px) {
   .btn-primary { width: auto; }
 }
-.btn-primary:hover  { opacity: 0.88; }
-.btn-primary:active { opacity: 0.75; }
+.btn-primary:hover  { opacity: 0.92; }
+.btn-primary:active { box-shadow: 1px 1px 0 #1a1a1a; transform: translate(2px, 2px); }
 .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .btn-secondary {
-  background: rgba(255,107,0,0.15);
-  border: 0.5px solid rgba(255,107,0,0.35);
-  color: #FF8C3A;
+  background: #ffffff;
+  color: #1a1a1a;
   border-radius: 14px;
   height: 44px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
+  border: 2.5px solid #1a1a1a;
+  box-shadow: 3px 3px 0 #1a1a1a;
   padding: 0 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: box-shadow 0.1s, transform 0.1s;
 }
-.btn-secondary:hover  { opacity: 0.82; }
+.btn-secondary:hover  { opacity: 0.90; }
+.btn-secondary:active { box-shadow: 1px 1px 0 #1a1a1a; transform: translate(2px, 2px); }
 .btn-secondary:disabled { opacity: 0.40; cursor: not-allowed; }
 
 /* ── Status badges ── */
 
 .badge {
   border-radius: 20px;
-  padding: 3px 10px;
+  padding: 4px 12px;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
   display: inline-flex;
   align-items: center;
   letter-spacing: 0.03em;
+  border: 1.5px solid currentColor;
 }
 .badge-win {
-  background: rgba(74,222,128,0.12);
-  color: #4ade80;
-  border: 0.5px solid rgba(74,222,128,0.2);
+  background: rgba(8,208,104,0.12);
+  color: #05a050;
+  border-color: rgba(8,208,104,0.25);
 }
 .badge-draw {
-  background: rgba(251,191,36,0.12);
-  color: #fbbf24;
-  border: 0.5px solid rgba(251,191,36,0.2);
+  background: rgba(255,214,0,0.15);
+  color: #cc9900;
+  border-color: rgba(255,214,0,0.30);
 }
 .badge-loss {
-  background: rgba(248,113,113,0.12);
-  color: #f87171;
-  border: 0.5px solid rgba(248,113,113,0.2);
+  background: rgba(255,61,168,0.10);
+  color: #FF3DA8;
+  border-color: rgba(255,61,168,0.25);
 }
 
 /* ── Progress bars ── */
 
 .progress-track {
-  height: 3px;
-  background: rgba(255,255,255,0.08);
+  height: 4px;
+  background: rgba(26,26,26,0.10);
   border-radius: 2px;
   overflow: hidden;
   width: 100%;
@@ -295,139 +249,80 @@
 .progress-fill {
   height: 100%;
   border-radius: 2px;
-  background: linear-gradient(90deg, #FF6B00, #FF9500);
+  background: #FF6800;
   transition: width 0.5s ease;
 }
 
 /* ── Status dots ── */
 
-.dot-green  { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
-.dot-yellow { width: 8px; height: 8px; border-radius: 50%; background: #fbbf24; flex-shrink: 0; }
-.dot-red    { width: 8px; height: 8px; border-radius: 50%; background: #f87171; flex-shrink: 0; }
+.dot-green  { width: 8px; height: 8px; border-radius: 50%; background: #08D068; flex-shrink: 0; }
+.dot-yellow { width: 8px; height: 8px; border-radius: 50%; background: #FFD600; flex-shrink: 0; }
+.dot-red    { width: 8px; height: 8px; border-radius: 50%; background: #FF3DA8; flex-shrink: 0; }
+
+/* ── Bento kaarten ── */
+
+.glass {
+  position: relative;
+  background: #ffffff;
+  border: 2.5px solid #1a1a1a;
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 #1a1a1a;
+  overflow: hidden;
+}
+
+.glass-orange {
+  position: relative;
+  background: #FF6800;
+  border: 2.5px solid #1a1a1a;
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 #1a1a1a;
+  overflow: hidden;
+}
+
+.glass-dark {
+  position: relative;
+  background: #1a1a1a;
+  border: 2.5px solid #1a1a1a;
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 #1a1a1a;
+  overflow: hidden;
+}
+
+.glass-alert {
+  position: relative;
+  background: rgba(255,61,168,0.08);
+  border: 2px solid rgba(255,61,168,0.35);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+/* Card kleur varianten */
+.card-orange { background: #FF6800; border: 2.5px solid #1a1a1a; border-radius: 18px; box-shadow: 3px 3px 0 #1a1a1a; }
+.card-green  { background: #08D068; border: 2.5px solid #1a1a1a; border-radius: 18px; box-shadow: 3px 3px 0 #1a1a1a; }
+.card-pink   { background: #FF3DA8; border: 2.5px solid #1a1a1a; border-radius: 18px; box-shadow: 3px 3px 0 #1a1a1a; }
+.card-blue   { background: #00C2FF; border: 2.5px solid #1a1a1a; border-radius: 18px; box-shadow: 3px 3px 0 #1a1a1a; }
+.card-yellow { background: #FFD600; border: 2.5px solid #1a1a1a; border-radius: 18px; box-shadow: 3px 3px 0 #1a1a1a; }
+.card-purple { background: #9B5CFF; border: 2.5px solid #1a1a1a; border-radius: 18px; box-shadow: 3px 3px 0 #1a1a1a; }
+.card-black  { background: #1a1a1a; border: 2.5px solid #1a1a1a; border-radius: 18px; box-shadow: 3px 3px 0 #1a1a1a; }
+.card-white  { background: #ffffff; border: 2.5px solid #1a1a1a; border-radius: 18px; box-shadow: 3px 3px 0 #1a1a1a; }
 
 /* ── Match hero card ── */
 
 .match-hero-card {
   position: relative;
-  border-radius: 24px;
+  border-radius: 18px;
   height: 160px;
   overflow: hidden;
-  border: 0.5px solid rgba(255,107,0,0.3);
-  background: linear-gradient(135deg, #1a4a2e, #0d2b1a);
-}
-.match-hero-card::after {
-  content: "";
-  position: absolute;
-  top: -60px; right: -60px;
-  width: 220px; height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,107,0,0.50) 0%, transparent 70%);
-  pointer-events: none;
+  border: 2.5px solid #1a1a1a;
+  background: #1a1a1a;
+  box-shadow: 3px 3px 0 #1a1a1a;
 }
 
-/* ── Glow kaarten ── */
+/* Glow - niet meer nodig maar bewaard voor compatibiliteit */
+.glow-gold { position: relative; overflow: hidden; }
+.glow-orange { position: relative; overflow: hidden; }
 
-.glow-gold {
-  position: relative;
-  overflow: hidden;
-}
-.glow-gold::after {
-  content: "";
-  position: absolute;
-  top: -40px; left: -40px;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(234,179,8,0.20) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.glow-orange {
-  position: relative;
-  overflow: hidden;
-}
-.glow-orange::after {
-  content: "";
-  position: absolute;
-  top: -40px; left: -40px;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,107,0,0.15) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── Glasmorfisme varianten ── */
-.glass {
-  position: relative;
-  background: rgba(255,255,255,0.09);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 0.5px solid rgba(255,255,255,0.18);
-  border-radius: 22px;
-  overflow: hidden;
-}
-.glass::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-  border-radius: 22px 22px 0 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.glass-orange {
-  position: relative;
-  background: rgba(255,107,0,0.18);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 0.5px solid rgba(255,107,0,0.35);
-  border-radius: 22px;
-  overflow: hidden;
-}
-.glass-orange::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-  border-radius: 22px 22px 0 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.glass-dark {
-  position: relative;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 0.5px solid rgba(255,255,255,0.08);
-  border-radius: 22px;
-  overflow: hidden;
-}
-.glass-dark::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-  border-radius: 22px 22px 0 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.glass-alert {
-  position: relative;
-  background: rgba(251,191,36,0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 0.5px solid rgba(251,191,36,0.2);
-  border-radius: 18px;
-  overflow: hidden;
-}
-/* ── Modal mobile padding (boven tab bar) ── */
+/* ── Modals en bottom sheets ── */
 
 /* ── Responsive utility classes ── */
 .mobile-only { display: none; }
@@ -445,7 +340,6 @@
     grid-template-columns: 1fr !important;
   }
 
-  /* Tablets (600px+) krijgen 2 kolommen voor wedstrijd cards */
   @media (min-width: 600px) {
     .mobile-grid-1col {
       grid-template-columns: 1fr 1fr !important;
@@ -461,14 +355,9 @@
   }
 }
 
-/* Tablet formaat: 600px–1024px */
 @media (min-width: 600px) and (max-width: 1023px) {
   .mobile-grid-2col {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-
-  .glass, .glass-orange, .glass-dark {
-    padding: 1.25rem !important;
   }
 
   .t-metric, .t-metric-orange {
@@ -482,20 +371,8 @@
   }
 }
 
-/* Modal padding boven tab bar: tablet en kleiner */
 @media (max-width: 1023px) {
   .modal-scroll-content {
     padding-bottom: 80px !important;
   }
-}
-
-.glass-alert::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-  border-radius: 18px 18px 0 0;
-  pointer-events: none;
-  z-index: 1;
 }
