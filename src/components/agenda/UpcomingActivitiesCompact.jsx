@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { TYPE_CONFIG } from "./agendaUtils";
+import { TYPE_CONFIG, TEAM_MATCH_COLORS } from "./agendaUtils";
 import { useNavigate } from "react-router-dom";
+
+function getItemColor(item) {
+  const isWedstrijd = item.type === "Wedstrijd" || item.type === "Toernooi";
+  if (isWedstrijd) {
+    const tc = TEAM_MATCH_COLORS[item.team] || TEAM_MATCH_COLORS["Beide"];
+    return tc.cardBg;
+  }
+  return TYPE_CONFIG[item.type]?.bg || TYPE_CONFIG.Evenement.bg;
+}
 
 function formatShort(dateStr) {
   if (!dateStr) return "";
