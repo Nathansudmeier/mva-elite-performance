@@ -10,7 +10,7 @@ function ModalBackdrop({ onClick }) {
         position: "fixed", 
         inset: 0, 
         background: "rgba(0,0,0,0.40)", 
-        zIndex: 199,
+        zIndex: 200,
         pointerEvents: "auto"
       }} 
     />
@@ -28,6 +28,7 @@ export function NoteModal({ minute, onConfirm, onClose }) {
       <div 
         style={{ 
           position: "relative",
+          zIndex: 201,
           background: "white",
           border: "2.5px solid #1a1a1a",
           borderRadius: "20px 20px 0 0",
@@ -126,6 +127,7 @@ export function GoalAgainstModal({ minute, onConfirm, onClose }) {
       <div 
         style={{ 
           position: "relative",
+          zIndex: 201,
           background: "white",
           border: "2.5px solid #1a1a1a",
           borderRadius: "20px 20px 0 0",
@@ -205,6 +207,7 @@ export function YellowCardModal({ minute, onConfirm, onClose, players }) {
       <div 
         style={{ 
           position: "relative",
+          zIndex: 201,
           background: "white",
           border: "2.5px solid #1a1a1a",
           borderRadius: "20px 20px 0 0",
@@ -287,6 +290,7 @@ export function RedCardModal({ minute, onConfirm, onClose, players }) {
       <div 
         style={{ 
           position: "relative",
+          zIndex: 201,
           background: "white",
           border: "2.5px solid #1a1a1a",
           borderRadius: "20px 20px 0 0",
