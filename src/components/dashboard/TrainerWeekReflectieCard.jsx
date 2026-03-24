@@ -125,32 +125,33 @@ export default function TrainerWeekReflectieCard() {
 
   return (
     <>
-      <div className="glass p-4 flex flex-col" style={{ minHeight: "120px" }}>
-        <div className="flex items-center justify-between mb-3">
-          <p style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>Mijn weekreflectie</p>
+      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem", minHeight: "120px", display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+          <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Mijn weekreflectie</p>
           {thisWeekReflection && (
-            <button onClick={() => setModalOpen(true)} style={{ fontSize: "12px", color: "#FF8C3A" }}>Bewerken</button>
+            <button onClick={() => setModalOpen(true)} style={{ fontSize: "12px", color: "#FF6800", fontWeight: 700, background: "none", border: "none", cursor: "pointer" }}>Bewerken →</button>
           )}
         </div>
 
         {thisWeekReflection ? (
           <div>
-            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.45)", marginBottom: "6px" }}>{weekLabel}</p>
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.65)", lineHeight: 1.5 }}>
+            <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.45)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px" }}>{weekLabel}</p>
+            <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.70)", lineHeight: 1.5 }}>
               {thisWeekReflection.content.slice(0, 100)}{thisWeekReflection.content.length > 100 && "..."}
             </p>
             {thisWeekReflection.content.length > 100 && (
-              <button onClick={() => setModalOpen(true)} style={{ fontSize: "12px", color: "#FF8C3A", marginTop: "6px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+              <button onClick={() => setModalOpen(true)} style={{ fontSize: "12px", color: "#FF6800", fontWeight: 700, marginTop: "6px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
                 Lees meer
               </button>
             )}
           </div>
         ) : (
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-            <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)" }}>{dateRange}</p>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", padding: "8px 0" }}>
+            <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>{dateRange}</p>
             <button
               onClick={() => setModalOpen(true)}
-              style={{ background: "#FF6B00", color: "#ffffff", border: "none", borderRadius: "12px", padding: "10px 20px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}
+              className="btn-primary"
+              style={{ height: "40px", fontSize: "13px" }}
             >
               Schrijf reflectie
             </button>
