@@ -203,7 +203,7 @@ export default function PlayerMergedGreeting({ player, attendance = [], ratings 
       <img
         src={emviUrl}
         alt="Emvi"
-        style={{ width: "100px", height: "100px", objectFit: "contain", flexShrink: 0 }}
+        style={{ width: "100px", height: "100px", objectFit: "contain", flexShrink: 0, alignSelf: "flex-end" }}
       />
     </div>
   );
