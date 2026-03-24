@@ -15,45 +15,51 @@ function useGreeting() {
 
 function DayBadge({ sessions, matches }) {
   const today = new Date().toISOString().slice(0, 10);
-
   const todayMatch = matches?.find(m => m.date === today);
   const todaySession = sessions?.find(s => s.date === today);
 
+  const pillStyle = {
+    background: "#ffffff",
+    border: "2px solid #1a1a1a",
+    borderRadius: "20px",
+    padding: "6px 14px",
+    boxShadow: "2px 2px 0 #1a1a1a",
+    display: "flex", alignItems: "center", gap: "6px",
+  };
+
   if (todayMatch) {
     return (
-      <div style={{
-        display: "flex", alignItems: "center", gap: "6px",
-        background: "#FF6800", border: "1.5px solid #FF6800",
-        borderRadius: "20px", padding: "4px 12px",
-      }}>
-        <i className="ti ti-trophy" style={{ fontSize: "13px", color: "#ffffff" }} />
-        <span style={{ fontSize: "11px", fontWeight: 800, color: "#ffffff" }}>Matchday</span>
-        <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.75)" }}>vs {todayMatch.opponent}</span>
+      <div style={pillStyle}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+          <path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+        </svg>
+        <span style={{ fontSize: "12px", fontWeight: 800, color: "#1a1a1a" }}>Matchday</span>
       </div>
     );
   }
 
   if (todaySession) {
     return (
-      <div style={{
-        display: "flex", alignItems: "center", gap: "6px",
-        background: "rgba(8,208,104,0.12)", border: "1.5px solid rgba(8,208,104,0.25)",
-        borderRadius: "20px", padding: "4px 12px",
-      }}>
-        <i className="ti ti-clock" style={{ fontSize: "13px", color: "#05a050" }} />
-        <span style={{ fontSize: "11px", fontWeight: 800, color: "#05a050" }}>Training</span>
+      <div style={pillStyle}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span style={{ fontSize: "12px", fontWeight: 800, color: "#1a1a1a" }}>
+          Training vandaag · {todaySession.start_time || ""}
+        </span>
       </div>
     );
   }
 
   return (
-    <div style={{
-      display: "flex", alignItems: "center", gap: "6px",
-      background: "rgba(26,26,26,0.08)", border: "1.5px solid rgba(26,26,26,0.15)",
-      borderRadius: "20px", padding: "4px 12px",
-    }}>
-      <i className="ti ti-moon" style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)" }} />
-      <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)" }}>Rustdag</span>
+    <div style={pillStyle}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+      <span style={{ fontSize: "12px", fontWeight: 800, color: "#1a1a1a" }}>Rustdag</span>
     </div>
   );
 }
@@ -100,7 +106,7 @@ export default function TopBar() {
   });
 
   const profilePhoto = trainerRecord?.photo_url || playerRecord?.photo_url || null;
-  const firstName = user?.full_name?.split(" ")[0] || "trainer";
+  const firstName = user?.full_name?.split(" ")[0] || "";
   const initials = user?.full_name
     ? user.full_name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
     : "?";
@@ -108,20 +114,20 @@ export default function TopBar() {
   return (
     <header style={{
       position: "sticky", top: 0, zIndex: 100,
-      background: "#ffffff",
+      background: "#FF6800",
       borderBottom: "2.5px solid #1a1a1a",
-      height: "60px", overflow: "hidden",
+      padding: "0.75rem 1rem",
     }}>
       <div style={{
-        position: "relative", display: "flex", alignItems: "center",
-        justifyContent: "space-between", height: "100%",
-        padding: "0 16px", maxWidth: "1280px", margin: "0 auto",
+        display: "flex", alignItems: "center",
+        justifyContent: "space-between",
+        maxWidth: "1280px", margin: "0 auto",
       }}>
-        {/* Links: logo + naam */}
-        <Link to="/Dashboard" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
+        {/* Links: club logo */}
+        <Link to="/Dashboard" style={{ textDecoration: "none" }}>
           <div style={{
             width: "36px", height: "36px", borderRadius: "50%",
-            background: "#FFF3E8", border: "2.5px solid #1a1a1a",
+            background: "rgba(255,255,255,0.20)", border: "2px solid #ffffff",
             overflow: "hidden", flexShrink: 0,
           }}>
             <img
@@ -130,41 +136,35 @@ export default function TopBar() {
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           </div>
-          <div className="hidden sm:block">
-            <p style={{ fontSize: "15px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px", lineHeight: 1.1 }}>
-              MVA Noord
-            </p>
-            <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", marginTop: "1px", lineHeight: 1 }}>
-              {greeting}, {firstName}
-            </p>
-          </div>
         </Link>
 
         {/* Midden: dag badge */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }} className="hidden sm:flex">
-          <DayBadge sessions={sessions} matches={matches} />
-        </div>
+        <DayBadge sessions={sessions} matches={matches} />
 
         {/* Rechts: bell + avatar */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          {/* Bell */}
           <div style={{ position: "relative" }}>
             <button
               ref={bellRef}
               onClick={() => setShowNotifications(v => !v)}
               style={{
                 position: "relative", width: "34px", height: "34px",
-                borderRadius: "50%", background: "#ffffff",
-                border: "2px solid #1a1a1a",
+                borderRadius: "50%", background: "rgba(255,255,255,0.20)",
+                border: "2px solid #ffffff",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 cursor: "pointer",
               }}
             >
-              <i className="ti ti-bell" style={{ fontSize: "15px", color: "#1a1a1a" }} />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
               {unreadNotifications.length > 0 && (
                 <div style={{
-                  position: "absolute", top: 0, right: 0,
-                  width: 8, height: 8, borderRadius: "50%",
-                  background: "#FF6800", border: "1.5px solid #ffffff",
+                  position: "absolute", top: "-2px", right: "-2px",
+                  width: "10px", height: "10px", borderRadius: "50%",
+                  background: "#FFD600", border: "2px solid #FF6800",
                 }} />
               )}
             </button>
@@ -177,13 +177,21 @@ export default function TopBar() {
             )}
           </div>
 
-          <AvatarMenu
-            user={user}
-            profilePhoto={profilePhoto}
-            initials={initials}
-            isTrainer={isTrainer}
-            isSpeelster={isSpeelster}
-          />
+          {/* Avatar */}
+          <div style={{
+            width: "34px", height: "34px", borderRadius: "50%",
+            border: "2.5px solid #ffffff",
+            boxShadow: "2px 2px 0 rgba(0,0,0,0.20)",
+            overflow: "hidden", flexShrink: 0,
+            background: profilePhoto ? "transparent" : "#FFD600",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            {profilePhoto ? (
+              <img src={profilePhoto} alt={firstName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ) : (
+              <span style={{ fontSize: "12px", fontWeight: 900, color: "#1a1a1a" }}>{initials}</span>
+            )}
+          </div>
         </div>
       </div>
     </header>
