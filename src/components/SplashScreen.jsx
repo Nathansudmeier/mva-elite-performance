@@ -21,76 +21,94 @@ export default function SplashScreen() {
       position: 'fixed', inset: 0, zIndex: 9999,
       opacity: isVisible ? 1 : 0,
       transition: 'opacity 0.6s ease-in-out',
-      background: 'linear-gradient(160deg, #FFF3E8 0%, #FFD600 100%)',
+      background: 'linear-gradient(160deg, #FF6800 0%, #FF8C00 50%, #FFA500 100%)',
       display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
+      alignItems: 'center', justifyContent: 'space-between',
+      padding: '60px 20px 40px',
+      boxSizing: 'border-box',
     }}>
-      {/* Club logo */}
+      {/* Top section - Logo and title */}
       <div style={{
-        width: '88px', height: '88px', borderRadius: '50%',
-        border: '2.5px solid #1a1a1a',
-        boxShadow: '4px 4px 0 #1a1a1a',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        overflow: 'hidden', backgroundColor: '#ffffff',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        marginTop: '20px',
       }}>
-        <img src={MVA_LOGO_URL} alt="MVA Noord" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        {/* Club logo */}
+        <div style={{
+          width: '88px', height: '88px', borderRadius: '50%',
+          border: '2.5px solid #1a1a1a',
+          boxShadow: '4px 4px 0 #1a1a1a',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          overflow: 'hidden', backgroundColor: '#ffffff',
+        }}>
+          <img src={MVA_LOGO_URL} alt="MVA Noord" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+
+        <h1 style={{
+          fontSize: '24px', fontWeight: 900, color: '#ffffff',
+          letterSpacing: '-0.5px', marginTop: '20px', marginBottom: 0,
+          textShadow: '2px 2px 0 rgba(0,0,0,0.15)',
+        }}>
+          FC MV Artemis Noord
+        </h1>
+
+        <p style={{
+          fontSize: '12px', color: 'rgba(255,255,255,0.85)',
+          letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '6px', fontWeight: 700,
+        }}>
+          MVA Noord
+        </p>
       </div>
 
-      <h1 style={{
-        fontSize: '24px', fontWeight: 900, color: '#1a1a1a',
-        letterSpacing: '-0.5px', marginTop: '20px', marginBottom: 0,
+      {/* Bottom section - Loading and version */}
+      <div style={{
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        gap: '12px',
+        marginBottom: '20px',
       }}>
-        FC MV Artemis Noord
-      </h1>
+        {/* Loading indicator */}
+        <div style={{
+          width: '60px', height: '4px', borderRadius: '2px',
+          background: 'rgba(255,255,255,0.3)', overflow: 'hidden',
+        }}>
+          <style>{`
+            @keyframes loadingFill {
+              from { width: 0; }
+              to { width: 100%; }
+            }
+            .splash-loading-bar {
+              height: 100%;
+              background: #ffffff;
+              border-radius: 2px;
+              animation: loadingFill 2s ease-in-out forwards;
+            }
+          `}</style>
+          <div className="splash-loading-bar" />
+        </div>
 
-      <p style={{
-        fontSize: '12px', color: 'rgba(26,26,26,0.55)',
-        letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '6px', fontWeight: 700,
-      }}>
-        MVA Noord
-      </p>
+        <div style={{
+          fontSize: '11px', fontWeight: 700,
+          color: 'rgba(255,255,255,0.7)', letterSpacing: '0.05em',
+        }}>
+          v{APP_VERSION}
+        </div>
+      </div>
 
-      {/* Emvi */}
+      {/* Emvi - positioned on the side */}
       <img
         src={EMVI_HOI_URL}
         alt="Emvi"
         style={{
-          position: 'absolute', bottom: '80px', right: '0px',
-          height: '220px', width: 'auto', objectFit: 'contain',
+          position: 'absolute',
+          bottom: '0',
+          right: '0',
+          height: '280px',
+          width: 'auto',
+          objectFit: 'contain',
           pointerEvents: 'none',
         }}
       />
-
-      {/* Loading indicator */}
-      <div style={{
-        position: 'absolute', bottom: '56px', left: '50%',
-        transform: 'translateX(-50%)',
-        width: '60px', height: '4px', borderRadius: '2px',
-        background: 'rgba(26,26,26,0.15)', overflow: 'hidden',
-      }}>
-        <style>{`
-          @keyframes loadingFill {
-            from { width: 0; }
-            to { width: 100%; }
-          }
-          .splash-loading-bar {
-            height: 100%;
-            background: #FF6800;
-            border-radius: 2px;
-            animation: loadingFill 2s ease-in-out forwards;
-          }
-        `}</style>
-        <div className="splash-loading-bar" />
-      </div>
-
-      <div style={{
-        position: 'absolute', bottom: '28px', left: '50%',
-        transform: 'translateX(-50%)',
-        fontSize: '11px', fontWeight: 700,
-        color: 'rgba(26,26,26,0.35)', letterSpacing: '0.05em',
-      }}>
-        v{APP_VERSION}
-      </div>
     </div>
   );
 }
