@@ -23,10 +23,11 @@ export default function SubstitutionBottomSheet({ fieldPlayers, benchPlayers, mi
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.60)", backdropFilter: "blur(4px)" }} />
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.60)", zIndex: 1, pointerEvents: "auto" }} />
 
       <div style={{
         position: "relative",
+        zIndex: 2,
         background: "#ffffff",
         border: "2.5px solid #1a1a1a",
         borderRadius: "24px 24px 0 0",
