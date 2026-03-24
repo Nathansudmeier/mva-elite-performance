@@ -170,7 +170,7 @@ export default function PlayerMergedGreeting({ player, attendance = [], ratings 
   const quoteColor = getQuoteColor();
 
   return (
-    <div style={getCardStyle()}>
+    <div style={{ ...getCardStyle(), alignItems: "flex-end" }}>
       {/* Left: Profile photo */}
       <button
         onClick={() => navigate(`/PlayerDetail?id=${player?.id}`)}
@@ -203,7 +203,7 @@ export default function PlayerMergedGreeting({ player, attendance = [], ratings 
       <img
         src={emviUrl}
         alt="Emvi"
-        style={{ width: "70px", height: "70px", objectFit: "contain", flexShrink: 0 }}
+        style={{ width: "100px", height: "100px", objectFit: "contain", flexShrink: 0 }}
       />
     </div>
   );
