@@ -95,15 +95,16 @@ export default function SplashScreen() {
         </div>
       </div>
 
-      {/* Emvi - positioned on the side */}
+      {/* Emvi - centered in the middle */}
       <img
         src={EMVI_HOI_URL}
         alt="Emvi"
         style={{
           position: 'absolute',
-          bottom: '0',
-          right: '0',
-          height: '280px',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          height: '400px',
           width: 'auto',
           objectFit: 'contain',
           pointerEvents: 'none',
