@@ -156,9 +156,9 @@ function AccountBeheerContent() {
   const trainerUsers = users.filter(u => getTrainerId(u) && getRole(u) !== "admin");
   const ongekoppeld = users.filter(u => !getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin" && getRole(u) !== "ouder");
 
-  const inputStyle = { background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" };
-  const selectStyle = { background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" };
-  const dialogStyle = { background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)" };
+  const inputStyle = { background: "#ffffff", border: "2.5px solid #1a1a1a", color: "#1a1a1a", borderRadius: "14px" };
+  const selectStyle = { background: "#ffffff", border: "2.5px solid #1a1a1a", color: "#1a1a1a", borderRadius: "14px" };
+  const dialogContentStyle = { background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a" };
 
   const UserRow = ({ u, linked, onLink, linkLabel }) => (
     <div className="flex items-center gap-3 py-3" style={{ borderBottom: "0.5px solid rgba(255,255,255,0.08)" }}>
@@ -244,15 +244,15 @@ function AccountBeheerContent() {
 
       {/* Invite Dialog */}
       <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
-        <DialogContent className="max-w-sm" style={dialogStyle}>
-          <DialogHeader><DialogTitle className="t-page-title">Gebruiker Uitnodigen</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-sm" style={dialogContentStyle}>
+          <DialogHeader><DialogTitle style={{ color: "#1a1a1a", fontSize: "18px", fontWeight: 800 }}>Gebruiker Uitnodigen</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="t-label mb-1 block">E-mailadres *</label>
+              <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>E-mailadres *</label>
               <Input placeholder="naam@email.nl" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} style={inputStyle} />
             </div>
             <div>
-              <label className="t-label mb-1 block">Rol</label>
+              <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>Rol</label>
               <Select value={inviteRole} onValueChange={v => { setInviteRole(v); setInvitePlayerId(""); }}>
                 <SelectTrigger style={selectStyle}><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -264,19 +264,19 @@ function AccountBeheerContent() {
             </div>
             {inviteRole === "speelster" && (
               <div>
-                <label className="t-label mb-1 block">Koppel aan speelster</label>
+                <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>Koppel aan speelster</label>
                 <Select value={invitePlayerId} onValueChange={setInvitePlayerId}>
                   <SelectTrigger style={selectStyle}><SelectValue placeholder="Selecteer spelersprofiel…" /></SelectTrigger>
                   <SelectContent>
                     {players.filter(p => p.active !== false).map(p => <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>)}
                   </SelectContent>
                 </Select>
-                <p className="t-tertiary mt-1">Optioneel — je kunt dit later ook nog koppelen.</p>
+                <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)", marginTop: "4px" }}>Optioneel — je kunt dit later ook nog koppelen.</p>
               </div>
             )}
             {inviteRole === "ouder" && (
               <div>
-                <label className="t-label mb-1 block">Koppel aan kind</label>
+                <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>Koppel aan kind</label>
                 <Select value={invitePlayerId} onValueChange={setInvitePlayerId}>
                   <SelectTrigger style={selectStyle}><SelectValue placeholder="Selecteer kind…" /></SelectTrigger>
                   <SelectContent>
@@ -285,7 +285,7 @@ function AccountBeheerContent() {
                 </Select>
               </div>
             )}
-            <p className="t-tertiary">De gebruiker ontvangt een uitnodigingsmail om een wachtwoord in te stellen.</p>
+            <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)" }}>De gebruiker ontvangt een uitnodigingsmail om een wachtwoord in te stellen.</p>
             <button onClick={handleInvite} disabled={inviting || !inviteEmail} className="btn-primary">{inviting ? "Uitnodigen..." : "Uitnodiging Versturen"}</button>
           </div>
         </DialogContent>
@@ -293,12 +293,12 @@ function AccountBeheerContent() {
 
       {/* Link Dialog */}
       <Dialog open={linkOpen} onOpenChange={setLinkOpen}>
-        <DialogContent className="max-w-sm" style={dialogStyle}>
-          <DialogHeader><DialogTitle className="t-page-title">Gebruiker Bewerken</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-sm" style={dialogContentStyle}>
+          <DialogHeader><DialogTitle style={{ color: "#1a1a1a", fontSize: "18px", fontWeight: 800 }}>Gebruiker Bewerken</DialogTitle></DialogHeader>
           <div className="space-y-4">
-            <p className="t-secondary">Account: <strong className="text-white">{linkUser?.full_name || linkUser?.email}</strong></p>
+            <p style={{ color: "#1a1a1a", fontSize: "14px" }}>Account: <strong style={{ color: "#1a1a1a" }}>{linkUser?.full_name || linkUser?.email}</strong></p>
             <div>
-              <label className="t-label mb-1 block">Rol</label>
+              <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>Rol</label>
               <Select value={linkRole} onValueChange={(v) => { setLinkRole(v); setLinkPlayerId(""); setLinkTrainerId(""); }}>
                 <SelectTrigger style={selectStyle}><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -311,7 +311,7 @@ function AccountBeheerContent() {
             </div>
             {linkRole === "trainer" ? (
               <div>
-                <label className="t-label mb-1 block">Koppel aan trainersprofiel</label>
+                <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>Koppel aan trainersprofiel</label>
                 <Select value={linkTrainerId} onValueChange={setLinkTrainerId}>
                   <SelectTrigger style={selectStyle}><SelectValue placeholder="Selecteer trainersprofiel…" /></SelectTrigger>
                   <SelectContent>{trainers.map(t => <SelectItem key={t.id} value={t.id}>{t.name}{t.role_title ? ` · ${t.role_title}` : ""}</SelectItem>)}</SelectContent>
@@ -322,7 +322,7 @@ function AccountBeheerContent() {
               </div>
             ) : (linkRole === "speelster" || linkRole === "ouder") ? (
               <div>
-                <label className="t-label mb-1 block">{linkRole === "ouder" ? "Koppel aan kind" : "Koppel aan spelersprofiel"}</label>
+                <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>{linkRole === "ouder" ? "Koppel aan kind" : "Koppel aan spelersprofiel"}</label>
                 <Select value={linkPlayerId} onValueChange={setLinkPlayerId}>
                   <SelectTrigger style={selectStyle}><SelectValue placeholder={`Selecteer ${linkRole === "ouder" ? "kind" : "spelersprofiel"}…`} /></SelectTrigger>
                   <SelectContent>{players.filter(p => p.active !== false).map(p => <SelectItem key={p.id} value={p.id}>{p.name}{p.shirt_number ? ` (#${p.shirt_number})` : ""}</SelectItem>)}</SelectContent>
@@ -336,11 +336,11 @@ function AccountBeheerContent() {
 
       {/* New Trainer Profile Dialog */}
       <Dialog open={newTrainerOpen} onOpenChange={setNewTrainerOpen}>
-        <DialogContent className="max-w-sm" style={dialogStyle}>
-          <DialogHeader><DialogTitle className="t-page-title">Nieuw Trainersprofiel</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-sm" style={dialogContentStyle}>
+          <DialogHeader><DialogTitle style={{ color: "#1a1a1a", fontSize: "18px", fontWeight: 800 }}>Nieuw Trainersprofiel</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center font-bold text-xl shrink-0" style={{ background: "rgba(255,255,255,0.10)", color: "rgba(255,255,255,0.5)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
+              <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center font-bold text-xl shrink-0" style={{ background: "rgba(26,26,26,0.08)", color: "rgba(26,26,26,0.40)", border: "2.5px solid #1a1a1a" }}>
                 {newTrainerPhoto ? <img src={newTrainerPhoto} alt="" className="w-full h-full object-cover" /> : (newTrainerName?.[0] || "?")}
               </div>
               <label className="cursor-pointer btn-secondary" style={{ height: "36px", fontSize: "13px" }}>
@@ -349,9 +349,9 @@ function AccountBeheerContent() {
                 <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} disabled={uploadingPhoto} />
               </label>
             </div>
-            <div><label className="t-label mb-1 block">Naam *</label><Input placeholder="Volledige naam" value={newTrainerName} onChange={e => setNewTrainerName(e.target.value)} style={inputStyle} /></div>
-            <div><label className="t-label mb-1 block">Functietitel</label><Input placeholder="bijv. Hoofdtrainer, Assistent" value={newTrainerTitle} onChange={e => setNewTrainerTitle(e.target.value)} style={inputStyle} /></div>
-            <div><label className="t-label mb-1 block">Telefoonnummer</label><Input placeholder="+31 6 ..." value={newTrainerPhone} onChange={e => setNewTrainerPhone(e.target.value)} style={inputStyle} /></div>
+            <div><label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>Naam *</label><Input placeholder="Volledige naam" value={newTrainerName} onChange={e => setNewTrainerName(e.target.value)} style={inputStyle} /></div>
+            <div><label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>Functietitel</label><Input placeholder="bijv. Hoofdtrainer, Assistent" value={newTrainerTitle} onChange={e => setNewTrainerTitle(e.target.value)} style={inputStyle} /></div>
+            <div><label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", display: "block", marginBottom: "4px" }}>Telefoonnummer</label><Input placeholder="+31 6 ..." value={newTrainerPhone} onChange={e => setNewTrainerPhone(e.target.value)} style={inputStyle} /></div>
             <button onClick={handleCreateTrainer} disabled={savingTrainer || !newTrainerName} className="btn-primary">{savingTrainer ? "Opslaan..." : "Profiel Aanmaken"}</button>
           </div>
         </DialogContent>
