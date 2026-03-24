@@ -192,9 +192,6 @@ export default function PlayerDashboard() {
         total={totalSeasonTrainings} 
       />
 
-      {/* Attendance Dots */}
-      <AttendanceDots attendance={attendance} />
-
       {/* IOP Goals */}
       <PlayerIOPGoals player={player} />
 
