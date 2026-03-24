@@ -90,6 +90,78 @@ function GoalAgainstModal({ minute, onConfirm, onClose }) {
   );
 }
 
+// Yellow card modal
+function YellowCardModal({ minute, onConfirm, onClose, players }) {
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 16 }}>
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)", backdropFilter: "blur(4px)" }} />
+      <div className="glass p-6 w-full max-w-sm space-y-4 rounded-t-3xl" style={{ position: "relative" }}>
+        <div className="flex items-center gap-2" style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", marginBottom: "8px" }}>
+          <span style={{ fontSize: "24px" }}>🟨</span>Gele Kaart — {minute}'
+        </div>
+        <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+          {players.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => { setSelectedPlayer(p); onConfirm({ type: "yellow_card", minute, player_id: p.id }); }}
+              style={{
+                padding: "12px",
+                background: selectedPlayer?.id === p.id ? "#FFD600" : "white",
+                border: "2px solid #1a1a1a",
+                borderRadius: "12px",
+                fontWeight: 700,
+                fontSize: "12px",
+                color: "#1a1a1a",
+                cursor: "pointer"
+              }}
+            >
+              {p.name}
+            </button>
+          ))}
+        </div>
+        <button onClick={onClose} className="w-full btn-secondary">Annuleren</button>
+      </div>
+    </div>
+  );
+}
+
+// Red card modal
+function RedCardModal({ minute, onConfirm, onClose, players }) {
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center", padding: 16 }}>
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)", backdropFilter: "blur(4px)" }} />
+      <div className="glass p-6 w-full max-w-sm space-y-4 rounded-t-3xl" style={{ position: "relative" }}>
+        <div className="flex items-center gap-2" style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", marginBottom: "8px" }}>
+          <span style={{ fontSize: "24px" }}>🟥</span>Rode Kaart — {minute}'
+        </div>
+        <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+          {players.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => { setSelectedPlayer(p); onConfirm({ type: "red_card", minute, player_id: p.id }); }}
+              style={{
+                padding: "12px",
+                background: selectedPlayer?.id === p.id ? "#FF3333" : "white",
+                border: "2px solid #1a1a1a",
+                borderRadius: "12px",
+                fontWeight: 700,
+                fontSize: "12px",
+                color: selectedPlayer?.id === p.id ? "white" : "#1a1a1a",
+                cursor: "pointer"
+              }}
+            >
+              {p.name}
+            </button>
+          ))}
+        </div>
+        <button onClick={onClose} className="w-full btn-secondary">Annuleren</button>
+      </div>
+    </div>
+  );
+}
+
 export default function LiveMatch() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -473,34 +545,48 @@ export default function LiveMatch() {
           <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
         </div>
 
-        {/* Action buttons 2x2 */}
-        <div className="grid grid-cols-2 gap-3 md:gap-4">
+        {/* Action buttons 3x2 */}
+        <div className="grid grid-cols-3 gap-3 md:gap-4">
           {/* GOAL MVA */}
-          <button onClick={() => setActiveModal("goal_mva")} className="h-24 md:h-28 rounded-lg flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "rgba(8,208,104,0.12)", border: "2px solid rgba(8,208,104,0.30)" }}>
+          <button onClick={() => setActiveModal("goal_mva")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
             <span style={{ fontSize: "24px" }}>⚽</span>
-            <span className="font-bold text-xs md:text-sm" style={{ color: "#05a050" }}>GOAL MVA</span>
+            <span className="font-bold text-xs" style={{ color: "#05a050" }}>GOAL</span>
           </button>
 
           {/* GOAL TEGEN */}
-          <button onClick={() => setActiveModal("goal_against")} className="h-24 md:h-28 rounded-lg flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "rgba(255,61,168,0.12)", border: "2px solid rgba(255,61,168,0.30)" }}>
+          <button onClick={() => setActiveModal("goal_against")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
             <span style={{ fontSize: "24px" }}>⚽</span>
-            <span className="font-bold text-xs md:text-sm" style={{ color: "#FF3DA8" }}>GOAL TEGEN</span>
+            <span className="font-bold text-xs" style={{ color: "#FF3DA8" }}>TEGEN</span>
           </button>
 
           {/* WISSEL */}
-          <button onClick={() => setActiveModal("substitution")} className="h-24 md:h-28 rounded-lg flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "rgba(255,104,0,0.12)", border: "2px solid rgba(255,104,0,0.30)" }}>
+          <button onClick={() => setActiveModal("substitution")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
             <span style={{ fontSize: "24px" }}>⇄</span>
-            <span className="font-bold text-xs md:text-sm" style={{ color: "#FF6800" }}>WISSEL</span>
+            <span className="font-bold text-xs" style={{ color: "#FF6800" }}>WISSEL</span>
+          </button>
+
+          {/* GELE KAART */}
+          <button onClick={() => setActiveModal("yellow_card")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+            <span style={{ fontSize: "24px" }}>🟨</span>
+            <span className="font-bold text-xs" style={{ color: "#FFD600" }}>GEEL</span>
+          </button>
+
+          {/* RODE KAART */}
+          <button onClick={() => setActiveModal("red_card")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+            <span style={{ fontSize: "24px" }}>🟥</span>
+            <span className="font-bold text-xs" style={{ color: "#FF3333" }}>ROOD</span>
           </button>
 
           {/* NOTITIE */}
-          <button onClick={() => setActiveModal("note")} className="h-24 md:h-28 rounded-lg flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "rgba(26,26,26,0.08)", border: "2px solid rgba(26,26,26,0.15)" }}>
+          <button onClick={() => setActiveModal("note")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
             <span style={{ fontSize: "24px" }}>📝</span>
-            <span className="font-bold text-xs md:text-sm" style={{ color: "#1a1a1a" }}>NOTITIE</span>
+            <span className="font-bold text-xs" style={{ color: "#1a1a1a" }}>NOTITIE</span>
           </button>
         </div>
 
@@ -514,12 +600,14 @@ export default function LiveMatch() {
                 const playerOut = activePlayers.find(p => p.id === e.player_out_id);
                 const playerIn = activePlayers.find(p => p.id === e.player_in_id);
                 return (
-                  <div key={i} className="flex items-center gap-3 text-xs md:text-sm p-2 rounded-lg" style={{ background: "rgba(255,104,0,0.08)" }}>
-                    <span className="font-bold w-8" style={{ color: "#FF6800" }}>{e.minute}'</span>
-                    <span className="text-gray-700">
+                  <div key={i} className="flex items-center gap-3 text-xs md:text-sm p-3 rounded-lg" style={{ background: "white", border: "1.5px solid rgba(26,26,26,0.08)" }}>
+                    <span className="font-bold w-8" style={{ color: "#FF6800", fontSize: "12px" }}>{e.minute}'</span>
+                    <span style={{ color: "#1a1a1a", fontWeight: 600 }}>
                       {e.type === "goal_mva" && <>⚽ Goal — {player?.name}{e.assist_player_id && ` (assist: ${activePlayers.find(p => p.id === e.assist_player_id)?.name})`}</>}
                       {e.type === "goal_against" && <>⚽ Goal Tegen</>}
                       {e.type === "substitution" && <>⇄ {playerOut?.name} → {playerIn?.name}</>}
+                      {e.type === "yellow_card" && <>🟨 {player?.name} Gele kaart</>}
+                      {e.type === "red_card" && <>🟥 {player?.name} Rode kaart</>}
                       {e.type === "note" && <>📝 {e.note}</>}
                     </span>
                   </div>
@@ -558,6 +646,22 @@ export default function LiveMatch() {
       {activeModal === "note" && (
         <NoteModal
           minute={currentMinute}
+          onConfirm={handleEvent}
+          onClose={() => setActiveModal(null)}
+        />
+      )}
+      {activeModal === "yellow_card" && (
+        <YellowCardModal
+          minute={currentMinute}
+          players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
+          onConfirm={handleEvent}
+          onClose={() => setActiveModal(null)}
+        />
+      )}
+      {activeModal === "red_card" && (
+        <RedCardModal
+          minute={currentMinute}
+          players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
           onConfirm={handleEvent}
           onClose={() => setActiveModal(null)}
         />
