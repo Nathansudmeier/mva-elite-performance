@@ -33,6 +33,7 @@ import MatchResults from './pages/MatchResults.jsx';
 import Photowall from './pages/Photowall.jsx';
 import OuderDashboard from './pages/OuderDashboard';
 import PendingAccess from './pages/PendingAccess';
+import EmviFeedback from './pages/EmviFeedback';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import SplashScreen from '@/components/SplashScreen';
@@ -115,6 +116,7 @@ const AuthenticatedApp = () => {
       <Route path="/Photowall" element={<LayoutWrapper currentPageName="Photowall"><Photowall /></LayoutWrapper>} />
       <Route path="/OuderDashboard" element={<LayoutWrapper currentPageName="Dashboard"><OuderDashboard /></LayoutWrapper>} />
       <Route path="/PendingAccess" element={<LayoutWrapper currentPageName="Dashboard"><PendingAccess /></LayoutWrapper>} />
+      <Route path="/EmviFeedback" element={<LayoutWrapper currentPageName="EmviFeedback"><EmviFeedback /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
