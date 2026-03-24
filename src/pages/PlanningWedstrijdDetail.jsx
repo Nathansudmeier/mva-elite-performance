@@ -13,7 +13,7 @@ import LineupOverview from "@/components/wedstrijden/LineupOverview";
 import LineupSelector from "@/components/wedstrijden/LineupSelector";
 import { createPageUrl } from "@/utils";
 
-const TABS = ["Overzicht", "Opstelling", "Tactiek", "Aanwezigheid"];
+const TABS = ["Opstelling", "Tactiek", "Aanwezigheid"];
 
 export default function PlanningWedstrijdDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -461,154 +461,8 @@ export default function PlanningWedstrijdDetail() {
           ))}
         </div>
 
-        {/* Tab: Overzicht */}
-        {activeTab === 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {/* Score sectie */}
-            {match && (
-              <div className="glass p-5 md:p-6"  style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
-                {!editingScore ? (
-                  <div className="text-center space-y-3">
-                    <div className="flex items-center justify-center gap-4">
-                      <div className="flex-1">
-                        {match.opponent_logo_url && (
-                          <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", margin: "0 auto 8px" }}>
-                            <img src={match.opponent_logo_url} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                          </div>
-                        )}
-                        <p className="t-secondary-sm">MVA Noord</p>
-                      </div>
-                      <button type="button" onClick={() => { setEditingScore(true); setScoreHome(match.score_home ?? ""); setScoreAway(match.score_away ?? ""); }} style={{ minWidth: 0, background: "none", border: "none", cursor: isTrainer ? "pointer" : "default" }}>
-                       <p style={{ fontSize: (match.live_status === "finished" || (!isFuture && match.score_home !== undefined && match.score_away !== undefined)) ? "40px" : "14px", fontWeight: 800, color: "white", letterSpacing: "-1px" }}>
-                         {match.live_status === "finished" || (!isFuture && match.score_home !== undefined && match.score_away !== undefined) ? `${match.score_home} - ${match.score_away}` : "Wedstrijd nog niet gespeeld"}
-                       </p>
-                      </button>
-                      <div className="flex-1">
-                        {match.opponent_logo_url && (
-                          <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", margin: "0 auto 8px" }}>
-                            <img src={match.opponent_logo_url} alt="Opponent" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                          </div>
-                        )}
-                        <p className="t-secondary-sm">{item.title}</p>
-                      </div>
-                    </div>
-                    {(match.live_status === "finished" || (!isFuture && match.score_home !== undefined && match.score_away !== undefined)) && getScoreResult() && (
-                      <div>
-                        <span style={{
-                          fontSize: "12px",
-                          fontWeight: 700,
-                          padding: "4px 14px",
-                          borderRadius: "20px",
-                          background: getScoreBadgeStyles().bg,
-                          border: `0.5px solid ${getScoreBadgeStyles().border}`,
-                          color: getScoreBadgeStyles().color,
-                        }}>
-                          {getScoreResult()}
-                        </span>
-                      </div>
-                    )}
-                    {isTrainer && match.score_home === undefined && (
-                      <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", marginTop: "8px" }}>Tik op de score om in te voeren</p>
-                    )}
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <p className="t-card-title text-center">Voer eindstand in</p>
-                    <div className="flex items-center justify-center gap-2">
-                      <input
-                        type="number"
-                        min="0"
-                        value={scoreHome}
-                        onChange={(e) => setScoreHome(e.target.value)}
-                        style={{
-                          width: "60px",
-                          height: "44px",
-                          fontSize: "20px",
-                          fontWeight: 600,
-                          textAlign: "center",
-                          background: "rgba(255,255,255,0.06)",
-                          border: "0.5px solid rgba(255,255,255,0.12)",
-                          borderRadius: "10px",
-                          color: "white",
-                        }}
-                      />
-                      <span style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.40)" }}>-</span>
-                      <input
-                        type="number"
-                        min="0"
-                        value={scoreAway}
-                        onChange={(e) => setScoreAway(e.target.value)}
-                        style={{
-                          width: "60px",
-                          height: "44px",
-                          fontSize: "20px",
-                          fontWeight: 600,
-                          textAlign: "center",
-                          background: "rgba(255,255,255,0.06)",
-                          border: "0.5px solid rgba(255,255,255,0.12)",
-                          borderRadius: "10px",
-                          color: "white",
-                        }}
-                      />
-                      <button type="button" onClick={saveScore} disabled={saving} style={{ width: "44px", height: "44px", background: "#4ade80", border: "none", borderRadius: "10px", color: "#1c0e04", cursor: "pointer", fontSize: "18px", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✓</button>
-                      <button type="button" onClick={() => setEditingScore(false)} disabled={saving} style={{ width: "44px", height: "44px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "10px", color: "white", cursor: "pointer", fontSize: "18px", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* RSVP alleen voor toekomstige wedstrijden */}
-            {!isTrainer && myPlayer && isFuture && (
-              <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
-                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a", marginBottom: 10 }}>Jouw aanwezigheid</p>
-                <AttendanceButtons
-                  currentStatus={myAttendance?.status}
-                  loading={rsvpMutation.isPending}
-                  showAbsentInput={showReasonInput}
-                  absentReason={absentReason}
-                  onAbsentReasonChange={setAbsentReason}
-                  onPresent={() => rsvpMutation.mutate({ status: "aanwezig" })}
-                  onAbsent={() => setShowReasonInput(true)}
-                  onConfirmAbsent={() => rsvpMutation.mutate({ status: "afwezig", reason: absentReason })}
-                />
-              </div>
-            )}
-
-            {/* Na bevestiging: aanwezigheidslijst */}
-            {!isTrainer && myAttendance && (
-              <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
-                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a", marginBottom: 12 }}>Wie is er bij?</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  <div>
-                    <p style={{ fontSize: 9, fontWeight: 800, color: "#05a050", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>✓ Aanwezig ({aanwezigList.length})</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                      {aanwezigList.map(player => <PlayerPill key={player.id} player={player} />)}
-                      {aanwezigList.length === 0 && <p style={{ fontSize: 11, color: "rgba(26,26,26,0.35)" }}>Niemand</p>}
-                    </div>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 9, fontWeight: 800, color: "#FF3DA8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>✗ Afwezig ({afwezigList.length})</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                      {afwezigList.map(({ player }) => <PlayerPill key={player.id} player={player} />)}
-                      {afwezigList.length === 0 && <p style={{ fontSize: 11, color: "rgba(26,26,26,0.35)" }}>Niemand</p>}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {item.notes && (
-              <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
-                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Notities</p>
-                <p style={{ fontSize: 13, color: "rgba(26,26,26,0.65)" }}>{item.notes}</p>
-              </div>
-            )}
-          </div>
-        )}
-
         {/* Tab: Opstelling */}
-         {activeTab === 1 && !editingLineup && (
+          {activeTab === 0 && !editingLineup && (
           !isTrainer && isFuture ? (
             <div className="glass p-6 md:p-8 text-center" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
               <p style={{ fontSize: 13, color: "rgba(26,26,26,0.50)" }}>De opstelling wordt bekend gemaakt op de dag van de wedstrijd.</p>
@@ -635,7 +489,7 @@ export default function PlanningWedstrijdDetail() {
         )}
 
         {/* Tab: Tactiek */}
-        {activeTab === 2 && (
+         {activeTab === 1 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {!match ? (
               <div className="glass p-6 md:p-8 text-center" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
@@ -675,7 +529,7 @@ export default function PlanningWedstrijdDetail() {
         )}
 
         {/* Tab: Aanwezigheid */}
-        {activeTab === 3 && (
+        {activeTab === 2 && (
           <div className="glass p-4 md:p-6" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
               <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#05a050", marginBottom: 10 }}>Bevestigd aanwezig ({aanwezigList.length})</p>
