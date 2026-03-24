@@ -447,14 +447,14 @@ export default function PlanningWedstrijdDetail() {
         </div>
 
         {/* Tabs */}
-        <div className="glass flex overflow-x-auto" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
+        <div className="glass flex flex-wrap gap-2" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
           {TABS.map((tab, i) => (
             <button key={tab} onClick={() => setActiveTab(i)}
               style={{
-                flex: 1, minWidth: "25%", padding: "12px 8px", fontSize: "11px", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap",
+                flex: "1 1 auto", minWidth: "22%", padding: "10px 6px", fontSize: "10px", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap",
                 background: activeTab === i ? teamCardBg : "transparent",
                 color: activeTab === i ? (teamCardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a") : "rgba(26,26,26,0.45)",
-                border: "none", transition: "all 0.15s"
+                border: "none", transition: "all 0.15s", borderRadius: "8px"
               }}>
               {tab}
             </button>
