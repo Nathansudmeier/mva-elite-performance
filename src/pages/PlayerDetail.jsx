@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList, Zap, Brain, Shield, Dumbbell, TrendingUp } from "lucide-react";
 
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import RoleGuard from "@/components/auth/RoleGuard";
 import { Button } from "@/components/ui/button";
 import WedstrijdbelevingChart from "@/components/checkin/WedstrijdbelevingChart";
 import PlayerSeasonStats from "@/components/stats/PlayerSeasonStats";
