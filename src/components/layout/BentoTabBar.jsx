@@ -75,6 +75,18 @@ function IconFoto({ fill }) {
   );
 }
 
+function IconBeheer({ fill }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="2" fill={fill} />
+      <circle cx="12" cy="4" r="2" fill={fill} />
+      <circle cx="12" cy="20" r="2" fill={fill} />
+      <line x1="12" y1="6" x2="12" y2="10" stroke={fill} strokeWidth="2" strokeLinecap="round" />
+      <line x1="12" y1="14" x2="12" y2="18" stroke={fill} strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const trainerTabItems = [
   { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
@@ -83,6 +95,7 @@ const trainerTabItems = [
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
+  { name: "Beheer", page: "AccountBeheer", Icon: IconBeheer },
 ];
 
 function IconProfiel({ fill }) {
