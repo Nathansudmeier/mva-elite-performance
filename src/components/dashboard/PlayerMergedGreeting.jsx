@@ -113,8 +113,10 @@ export default function PlayerMergedGreeting({ player, attendance = [], ratings 
 
   // Determine day type
   let dayType = "rest";
-  const hasMatch = matches.length > 0 || agendaItems.some((a) => a.type === "Wedstrijd" || a.type === "Toernooi");
-  const hasTraining = trainingSessions.length > 0 || agendaItems.some((a) => a.type === "Training");
+  const today = new Date().toISOString().split("T")[0];
+  const todayMatch = matches.find((m) => m.date === today);
+  const hasMatch = todayMatch || agendaItems.some((a) => (a.type === "Wedstrijd" || a.type === "Toernooi") && a.date === today);
+  const hasTraining = trainingSessions.length > 0 || agendaItems.some((a) => a.type === "Training" && a.date === today);
 
   if (hasMatch) dayType = "matchday";
   else if (hasTraining) dayType = "training";
