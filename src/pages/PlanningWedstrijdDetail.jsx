@@ -733,7 +733,7 @@ export default function PlanningWedstrijdDetail() {
             </div>
           </div>
         )}
-      </div>
+    </div>
 
       {showEdit && (
         <AgendaForm
@@ -752,11 +752,10 @@ export default function PlanningWedstrijdDetail() {
 
 function PlayerAvatar({ player }) {
   return (
-    <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden"
-      style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.25)" }}>
+    <div style={{ width: 32, height: 32, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "rgba(255,104,0,0.12)", border: "1.5px solid #1a1a1a" }}>
       {player.photo_url
-        ? <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" />
-        : <span style={{ fontSize: 11, fontWeight: 700, color: "#FF8C3A" }}>{player.name?.charAt(0)}</span>}
+        ? <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        : <span style={{ fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{player.name?.charAt(0)}</span>}
     </div>
   );
 }
@@ -764,9 +763,9 @@ function PlayerAvatar({ player }) {
 function PlayerPill({ player }) {
   const firstName = player.name?.split(" ")[0] || player.name;
   return (
-    <div className="flex items-center gap-2">
+    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
       <PlayerAvatar player={player} />
-      <span className="t-secondary-sm truncate">{firstName}</span>
+      <span style={{ fontSize: 12, fontWeight: 600, color: "#1a1a1a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{firstName}</span>
     </div>
   );
 }
