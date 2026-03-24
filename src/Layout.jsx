@@ -94,8 +94,9 @@ function DeveloperGroup({ currentPageName, onItemClick }) {
 
 export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, isTrainer, isSpeelster } = useCurrentUser();
+  const { user, isTrainer, isSpeelster, isOuder } = useCurrentUser();
   const isSpeelsterUser = !isTrainer && isSpeelster;
+  const isOuderUser = isOuder;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFF3E8" }}>
@@ -106,7 +107,14 @@ export default function Layout({ children, currentPageName }) {
       <aside className="hidden xl:flex fixed left-0 top-[60px] bottom-0 w-56 flex-col z-40 overflow-y-auto"
         style={{ background: "#ffffff", borderRight: "2.5px solid #1a1a1a" }}>
         <nav className="flex-1 py-4 px-3 space-y-1">
-          {isSpeelsterUser ? (
+          {isOuderUser ? (
+            <>
+              <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Foto's", icon: "photo", page: "Photowall" }} currentPageName={currentPageName} />
+              <NavLink item={{ name: "Berichten", icon: "message-circle", page: "Messages" }} currentPageName={currentPageName} />
+            </>
+          ) : isSpeelsterUser ? (
             <>
               <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Planning", icon: "calendar", page: "Planning" }} currentPageName={currentPageName} />
@@ -146,7 +154,14 @@ export default function Layout({ children, currentPageName }) {
           <div style={{ width: "260px", height: "100%", paddingTop: "60px", paddingLeft: "12px", paddingRight: "12px", paddingBottom: "12px", overflowY: "auto", background: "#ffffff", borderRight: "2.5px solid #1a1a1a" }}
             onClick={(e) => e.stopPropagation()}>
             <nav style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-              {isSpeelsterUser ? (
+              {isOuderUser ? (
+                <>
+                  <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Foto's", icon: "photo", page: "Photowall" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                  <NavLink item={{ name: "Berichten", icon: "message-circle", page: "Messages" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
+                </>
+              ) : isSpeelsterUser ? (
                 <>
                   <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={{ name: "Planning", icon: "calendar", page: "Planning" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
@@ -175,7 +190,7 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Tab Bar - Bento Bold */}
-      <BentoTabBar currentPageName={currentPageName} isSpeelsterUser={isSpeelsterUser} onNavigate={() => setMobileOpen(false)} />
+      <BentoTabBar currentPageName={currentPageName} isSpeelsterUser={isSpeelsterUser} isOuderUser={isOuderUser} onNavigate={() => setMobileOpen(false)} />
     </div>
   );
 }
