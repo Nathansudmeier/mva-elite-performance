@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { Textarea } from "@/components/ui/textarea";
+import { ChevronLeft, Edit2 } from "lucide-react";
 import LiveMatchClock from "../components/live/LiveMatchClock";
 import LiveScore from "../components/live/LiveScore";
 import GoalBottomSheet from "../components/live/GoalBottomSheet";
@@ -14,26 +14,16 @@ import LineupPlayerList from "../components/wedstrijden/LineupPlayerList";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
-const BG_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png";
-
 function formatNL(dateStr) {
   if (!dateStr) return "";
   try { return format(parseISO(dateStr), "EEEE d MMMM yyyy", { locale: nl }); } catch { return dateStr; }
 }
 
-const glassCard = {
-  background: "rgba(255,255,255,0.09)",
-  backdropFilter: "blur(24px)",
-  WebkitBackdropFilter: "blur(24px)",
-  border: "0.5px solid rgba(255,255,255,0.18)",
-  borderRadius: "22px",
-};
-
 function BackBtn({ onClick }) {
   return (
-    <button onClick={onClick}
-      style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-      <i className="ti ti-arrow-left" style={{ fontSize: 18, color: "#FF8C3A" }} />
+    <button onClick={onClick} className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-orange-600/20"
+      style={{ border: "2px solid #FF6800" }}>
+      <ChevronLeft size={18} style={{ color: "#FF6800" }} />
     </button>
   );
 }
@@ -53,10 +43,10 @@ function NoteModal({ minute, onConfirm, onClose }) {
   const [note, setNote] = useState("");
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.60)", backdropFilter: "blur(4px)" }} />
-      <div style={{ position: "relative", ...glassCard, padding: 24, width: "100%", maxWidth: 360 }}>
-        <div style={{ fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 12 }}>
-          <i className="ti ti-pencil" style={{ marginRight: 8 }} />Notitie — {minute}'
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)", backdropFilter: "blur(4px)" }} />
+      <div className="glass p-6 w-full max-w-sm space-y-4" style={{ position: "relative" }}>
+        <div className="flex items-center gap-2" style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a" }}>
+          <Edit2 size={16} />Notitie — {minute}'
         </div>
         <textarea
           placeholder="Tactische observatie..."
@@ -64,12 +54,13 @@ function NoteModal({ minute, onConfirm, onClose }) {
           onChange={e => setNote(e.target.value)}
           autoFocus
           rows={4}
-          style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 14, color: "#fff", padding: "10px 14px", fontSize: 13, outline: "none", resize: "none" }}
+          className="w-full rounded-lg border-2 border-border p-3 resize-none focus:outline-none focus:ring-2 focus:ring-orange-600"
+          style={{ fontSize: "13px", fontFamily: "inherit" }}
         />
-        <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-          <button onClick={onClose} style={{ flex: 1, height: 44, background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 14, color: "rgba(255,255,255,0.70)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Annuleren</button>
+        <div className="flex gap-3">
+          <button onClick={onClose} className="flex-1 btn-secondary">Annuleren</button>
           <button onClick={() => { if (note.trim()) onConfirm({ type: "note", minute, note }); }} disabled={!note.trim()}
-            style={{ flex: 1, height: 44, background: note.trim() ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.05)", border: "0.5px solid rgba(255,255,255,0.20)", borderRadius: 14, color: note.trim() ? "#fff" : "rgba(255,255,255,0.30)", fontSize: 14, fontWeight: 600, cursor: note.trim() ? "pointer" : "not-allowed" }}>
+            className="flex-1 btn-primary" style={{ opacity: note.trim() ? 1 : 0.5 }}>
             Opslaan
           </button>
         </div>
@@ -82,15 +73,15 @@ function NoteModal({ minute, onConfirm, onClose }) {
 function GoalAgainstModal({ minute, onConfirm, onClose }) {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.60)", backdropFilter: "blur(4px)" }} />
-      <div style={{ position: "relative", ...glassCard, padding: 24, width: "100%", maxWidth: 320, textAlign: "center" }}>
-        <i className="ti ti-ball-football" style={{ fontSize: 40, color: "#f87171", marginBottom: 12, display: "block" }} />
-        <div style={{ fontSize: 17, fontWeight: 700, color: "#f87171", marginBottom: 8 }}>Goal Tegen — {minute}'</div>
-        <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)", marginBottom: 20 }}>Goal registreren op minuut {minute}?</p>
-        <div style={{ display: "flex", gap: 10 }}>
-          <button onClick={onClose} style={{ flex: 1, height: 44, background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 14, color: "rgba(255,255,255,0.70)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Annuleren</button>
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.40)", backdropFilter: "blur(4px)" }} />
+      <div className="glass glass-alert p-6 w-full max-w-xs text-center space-y-4" style={{ position: "relative" }}>
+        <div style={{ fontSize: "24px" }}>⚽</div>
+        <div style={{ fontSize: "15px", fontWeight: 700, color: "#FF3DA8" }}>Goal Tegen — {minute}'</div>
+        <p className="t-secondary">Goal registreren op minuut {minute}?</p>
+        <div className="flex gap-3">
+          <button onClick={onClose} className="flex-1 btn-secondary">Annuleren</button>
           <button onClick={() => onConfirm({ type: "goal_against", minute })}
-            style={{ flex: 1, height: 44, background: "rgba(248,113,113,0.20)", border: "0.5px solid rgba(248,113,113,0.35)", borderRadius: 14, color: "#f87171", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            className="flex-1 btn-primary" style={{ background: "#FF3DA8" }}>
             Bevestigen
           </button>
         </div>
@@ -280,42 +271,44 @@ export default function LiveMatch() {
   // ---- PRE-GAME ----
   if (phase === "pre") {
     return (
-      <div className="relative min-h-screen pb-24">
-        <img src={BG_URL} alt="" style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
-        <div className="relative z-10 space-y-5 p-4">
+      <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
+        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
+          {/* Header */}
           <div className="flex items-center gap-3">
             <BackBtn onClick={() => navigate("/Planning")} />
             <div>
-              <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>Live Wedstrijd</h1>
-              {match && <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)" }}>vs. {match.opponent} · {formatNL(match.date)}</p>}
+              <h1 className="t-page-title">Live Wedstrijd</h1>
+              {match && <p className="t-secondary">vs. {match.opponent} · {formatNL(match.date)}</p>}
             </div>
           </div>
 
           {match && (
-            <div style={{ ...glassCard, padding: "20px" }} className="space-y-5">
+            <div className="glass p-5 md:p-6 space-y-5">
               <div>
-                <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff" }}>vs. {match.opponent}</h2>
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)", marginTop: 2 }}>{match.home_away} · {formatNL(match.date)}</p>
+                <h2 className="t-card-title" style={{ fontSize: "18px" }}>vs. {match.opponent}</h2>
+                <p className="t-secondary mt-1">{match.home_away} · {formatNL(match.date)}</p>
               </div>
 
               <div>
-                <p style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "#FF8C3A", marginBottom: 8 }}>Opstelling</p>
+                <p className="t-label mb-3">Opstelling</p>
 
                 {/* Desktop toggle */}
-                <div className="hidden xl:flex" style={{ gap: 8, marginBottom: 12 }}>
+                <div className="hidden xl:flex gap-2 mb-4">
                   <button
                     onClick={() => setShowField(false)}
-                    style={{ padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", background: !showField ? "#FF6B00" : "rgba(255,255,255,0.08)", color: !showField ? "#fff" : "rgba(255,255,255,0.60)" }}
+                    className="px-4 py-2 rounded-lg text-xs md:text-sm font-bold border-2 transition-all"
+                    style={{ borderColor: !showField ? "#FF6800" : "rgba(26,26,26,0.15)", background: !showField ? "rgba(255,104,0,0.12)" : "transparent", color: !showField ? "#FF6800" : "rgba(26,26,26,0.50)" }}
                   >Spelerslijst</button>
                   <button
                     onClick={() => setShowField(true)}
-                    style={{ padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer", background: showField ? "#FF6B00" : "rgba(255,255,255,0.08)", color: showField ? "#fff" : "rgba(255,255,255,0.60)" }}
+                    className="px-4 py-2 rounded-lg text-xs md:text-sm font-bold border-2 transition-all"
+                    style={{ borderColor: showField ? "#FF6800" : "rgba(26,26,26,0.15)", background: showField ? "rgba(255,104,0,0.12)" : "transparent", color: showField ? "#FF6800" : "rgba(26,26,26,0.50)" }}
                   >Toon veld</button>
                 </div>
 
                 {/* Mobile/tablet: always player list */}
                 <div className="xl:hidden">
-                  <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 16, overflow: "hidden", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                  <div className="glass overflow-hidden">
                     <LineupPlayerList
                       players={activePlayers}
                       lineupMap={lineupMap}
@@ -338,7 +331,7 @@ export default function LiveMatch() {
                       <SubstitutesPicker players={activePlayers} lineupMap={lineupMap} substitutes={substitutes} onSubstitutesChange={setSubstitutes} />
                     </>
                   ) : (
-                    <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 16, overflow: "hidden", border: "0.5px solid rgba(255,255,255,0.08)" }}>
+                    <div className="glass overflow-hidden">
                       <LineupPlayerList
                         players={activePlayers}
                         lineupMap={lineupMap}
@@ -356,10 +349,10 @@ export default function LiveMatch() {
               <button
                 onClick={startMatch}
                 disabled={Object.keys(lineupMap).length === 0}
-                style={{ width: "100%", height: 52, background: Object.keys(lineupMap).length === 0 ? "rgba(255,107,0,0.35)" : "#FF6B00", border: "none", borderRadius: 14, color: "#fff", fontSize: 15, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: Object.keys(lineupMap).length === 0 ? "not-allowed" : "pointer" }}
+                className="btn-primary w-full flex items-center justify-center gap-2"
+                style={{ opacity: Object.keys(lineupMap).length === 0 ? 0.5 : 1 }}
               >
-                <i className="ti ti-player-play" style={{ fontSize: 18 }} />
-                Start Wedstrijd
+                <span>▶</span>Start Wedstrijd
               </button>
             </div>
           )}
@@ -371,18 +364,17 @@ export default function LiveMatch() {
   // ---- FINISHED ----
   if (phase === "finished") {
     return (
-      <div className="relative min-h-screen pb-24">
-        <img src={BG_URL} alt="" style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
-        <div className="relative z-10 space-y-5 p-4">
+      <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
+        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
           <div className="flex items-center gap-3">
             <BackBtn onClick={() => navigate("/Planning")} />
             <div>
-              <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>Wedstrijdverslag</h1>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)" }}>vs. {match?.opponent}</p>
+              <h1 className="t-page-title">Wedstrijdverslag</h1>
+              <p className="t-secondary">vs. {match?.opponent}</p>
             </div>
           </div>
           {match && <MatchReport match={{ ...match, live_events: events, halftime_notes: halftimeNotes }} players={activePlayers} />}
-          <button onClick={() => navigate("/Planning")} className="btn-primary">Terug naar Planning</button>
+          <button onClick={() => navigate("/Planning")} className="btn-primary w-full md:w-auto">Terug naar Planning</button>
         </div>
       </div>
     );
@@ -391,34 +383,33 @@ export default function LiveMatch() {
   // ---- HALFTIME ----
   if (phase === "halftime") {
     return (
-      <div className="relative min-h-screen pb-24">
-        <img src={BG_URL} alt="" style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
-        <div className="relative z-10 space-y-5 p-4">
+      <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
+        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
           <div className="flex items-center gap-3">
             <BackBtn onClick={() => navigate("/Planning")} />
-            <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>Rust</h1>
+            <h1 className="t-page-title">Rust</h1>
           </div>
 
-          <div style={{ ...glassCard, padding: "24px", textAlign: "center" }}>
-            <p style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.50)", marginBottom: 12 }}>Ruststand</p>
+          <div className="glass p-5 md:p-6 text-center">
+            <p className="t-label mb-3">Ruststand</p>
             <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
           </div>
 
-          <div style={{ ...glassCard, padding: "20px" }} className="space-y-3">
-            <h3 style={{ fontSize: 15, fontWeight: 600, color: "#fff" }}>Rustbespreking</h3>
+          <div className="glass p-5 md:p-6 space-y-4">
+            <h3 className="t-card-title">Rustbespreking</h3>
             <textarea
               placeholder="Notities voor de rustbespreking..."
               value={halftimeNotes}
               onChange={(e) => setHalftimeNotes(e.target.value)}
               rows={4}
-              style={{ width: "100%", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: 14, color: "#fff", padding: "10px 14px", fontSize: 13, outline: "none", resize: "none" }}
+              className="w-full rounded-lg border-2 border-border p-3 resize-none focus:outline-none focus:ring-2 focus:ring-orange-600"
+              style={{ fontSize: "13px", fontFamily: "inherit" }}
             />
             <button
               onClick={startSecondHalf}
-              style={{ width: "100%", height: 52, background: "#FF6B00", border: "none", borderRadius: 14, color: "#fff", fontSize: 15, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer" }}
+              className="btn-primary w-full flex items-center justify-center gap-2"
             >
-              <i className="ti ti-player-play" style={{ fontSize: 18 }} />
-              Start 2e Helft
+              <span>▶</span>Start 2e Helft
             </button>
           </div>
         </div>
@@ -428,87 +419,78 @@ export default function LiveMatch() {
 
   // ---- LIVE MODE ----
   return (
-    <div className="relative min-h-screen pb-24">
-      <img src={BG_URL} alt="" style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
-      <div className="relative z-10 space-y-4 p-4">
+    <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
+      <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
         {/* Header */}
         <div className="flex items-center gap-3">
           <BackBtn onClick={() => setRunning(false)} />
           <div>
-            <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>Live — vs. {match?.opponent}</h1>
-            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.50)" }}>{match?.home_away} · {match?.team}</p>
+            <h1 className="t-page-title">Live — vs. {match?.opponent}</h1>
+            <p className="t-secondary">{match?.home_away} · {match?.team}</p>
           </div>
         </div>
 
         {/* Clock */}
-        <div style={{ ...glassCard, padding: "24px" }}>
+        <div className="glass p-5 md:p-6">
           <LiveMatchClock seconds={seconds} running={running} onToggle={handleToggleClock} onStop={handleStop} />
           {currentMinute >= 45 && running && (
-            <p style={{ textAlign: "center", fontSize: 12, marginTop: 10, color: "#FF8C3A" }}>Druk op Pauze om naar de rust te gaan</p>
+            <p className="text-center t-secondary mt-3" style={{ color: "#FF6800" }}>Druk op Pauze om naar de rust te gaan</p>
           )}
         </div>
 
         {/* Score */}
-        <div style={{ ...glassCard, padding: "16px 24px" }}>
+        <div className="glass p-5 md:p-6">
           <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
         </div>
 
         {/* Action buttons 2x2 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           {/* GOAL MVA */}
-          <button onClick={() => setActiveModal("goal_mva")} style={{
-            height: 100, borderRadius: 18, background: "rgba(74,222,128,0.15)", border: "0.5px solid rgba(74,222,128,0.30)",
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer",
-          }}>
-            <i className="ti ti-ball-football" style={{ fontSize: 28, color: "#4ade80" }} />
-            <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", color: "#4ade80" }}>GOAL MVA</span>
+          <button onClick={() => setActiveModal("goal_mva")} className="h-24 md:h-28 rounded-lg flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "rgba(8,208,104,0.12)", border: "2px solid rgba(8,208,104,0.30)" }}>
+            <span style={{ fontSize: "24px" }}>⚽</span>
+            <span className="font-bold text-xs md:text-sm" style={{ color: "#05a050" }}>GOAL MVA</span>
           </button>
 
           {/* GOAL TEGEN */}
-          <button onClick={() => setActiveModal("goal_against")} style={{
-            height: 100, borderRadius: 18, background: "rgba(248,113,113,0.15)", border: "0.5px solid rgba(248,113,113,0.30)",
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer",
-          }}>
-            <i className="ti ti-ball-football" style={{ fontSize: 28, color: "#f87171" }} />
-            <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", color: "#f87171" }}>GOAL TEGEN</span>
+          <button onClick={() => setActiveModal("goal_against")} className="h-24 md:h-28 rounded-lg flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "rgba(255,61,168,0.12)", border: "2px solid rgba(255,61,168,0.30)" }}>
+            <span style={{ fontSize: "24px" }}>⚽</span>
+            <span className="font-bold text-xs md:text-sm" style={{ color: "#FF3DA8" }}>GOAL TEGEN</span>
           </button>
 
           {/* WISSEL */}
-          <button onClick={() => setActiveModal("substitution")} style={{
-            height: 100, borderRadius: 18, background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.30)",
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer",
-          }}>
-            <i className="ti ti-arrows-exchange" style={{ fontSize: 28, color: "#FF8C3A" }} />
-            <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", color: "#FF8C3A" }}>WISSEL</span>
+          <button onClick={() => setActiveModal("substitution")} className="h-24 md:h-28 rounded-lg flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "rgba(255,104,0,0.12)", border: "2px solid rgba(255,104,0,0.30)" }}>
+            <span style={{ fontSize: "24px" }}>⇄</span>
+            <span className="font-bold text-xs md:text-sm" style={{ color: "#FF6800" }}>WISSEL</span>
           </button>
 
           {/* NOTITIE */}
-          <button onClick={() => setActiveModal("note")} style={{
-            height: 100, borderRadius: 18, background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)",
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer",
-          }}>
-            <i className="ti ti-pencil" style={{ fontSize: 28, color: "rgba(255,255,255,0.70)" }} />
-            <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.05em", color: "rgba(255,255,255,0.70)" }}>NOTITIE</span>
+          <button onClick={() => setActiveModal("note")} className="h-24 md:h-28 rounded-lg flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
+            style={{ background: "rgba(26,26,26,0.08)", border: "2px solid rgba(26,26,26,0.15)" }}>
+            <span style={{ fontSize: "24px" }}>📝</span>
+            <span className="font-bold text-xs md:text-sm" style={{ color: "#1a1a1a" }}>NOTITIE</span>
           </button>
         </div>
 
         {/* Events log */}
         {events.length > 0 && (
-          <div style={{ ...glassCard, padding: "16px" }}>
-            <h3 style={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em", color: "rgba(255,255,255,0.50)", marginBottom: 10 }}>Events</h3>
-            <div className="space-y-1 max-h-40 overflow-y-auto">
+          <div className="glass p-5 md:p-6">
+            <h3 className="t-label mb-3">Events</h3>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
               {[...events].reverse().map((e, i) => {
                 const player = activePlayers.find(p => p.id === e.player_id);
                 const playerOut = activePlayers.find(p => p.id === e.player_out_id);
                 const playerIn = activePlayers.find(p => p.id === e.player_in_id);
                 return (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, padding: "6px 10px", borderRadius: 10, background: "rgba(255,107,0,0.10)" }}>
-                    <span style={{ fontWeight: 600, width: 32, color: "#FF8C3A" }}>{e.minute}'</span>
-                    <span style={{ color: "rgba(255,255,255,0.85)" }}>
-                      {e.type === "goal_mva" && <><i className="ti ti-ball-football" style={{ marginRight: 4 }} />Goal — {player?.name}{e.assist_player_id && ` (assist: ${activePlayers.find(p => p.id === e.assist_player_id)?.name})`}</>}
-                      {e.type === "goal_against" && <><i className="ti ti-ball-football" style={{ marginRight: 4, color: "#f87171" }} />Goal Tegen</>}
-                      {e.type === "substitution" && <><i className="ti ti-arrows-exchange" style={{ marginRight: 4, color: "#FF8C3A" }} />{playerOut?.name} → {playerIn?.name}</>}
-                      {e.type === "note" && <><i className="ti ti-pencil" style={{ marginRight: 4 }} />{e.note}</>}
+                  <div key={i} className="flex items-center gap-3 text-xs md:text-sm p-2 rounded-lg" style={{ background: "rgba(255,104,0,0.08)" }}>
+                    <span className="font-bold w-8" style={{ color: "#FF6800" }}>{e.minute}'</span>
+                    <span className="text-gray-700">
+                      {e.type === "goal_mva" && <>⚽ Goal — {player?.name}{e.assist_player_id && ` (assist: ${activePlayers.find(p => p.id === e.assist_player_id)?.name})`}</>}
+                      {e.type === "goal_against" && <>⚽ Goal Tegen</>}
+                      {e.type === "substitution" && <>⇄ {playerOut?.name} → {playerIn?.name}</>}
+                      {e.type === "note" && <>📝 {e.note}</>}
                     </span>
                   </div>
                 );
