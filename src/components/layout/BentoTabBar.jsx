@@ -83,11 +83,10 @@ function IconProfiel({ fill }) {
 }
 
 const speelsterTabItems = [
-  { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
-  { name: "Berichten", page: "Messages", Icon: IconBerichten },
-  { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
   { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
+  { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
+  { name: "Berichten", page: "Messages", Icon: IconBerichten },
 ];
 
 export default function BentoTabBar({ currentPageName, isSpeelsterUser, onNavigate }) {
