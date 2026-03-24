@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -107,7 +107,7 @@ export default function LiveMatch() {
   const [lineupMap, setLineupMap] = useState({});
   const [substitutes, setSubstitutes] = useState([]);
   const [formation, setFormation] = useState("4-3-3");
-  const [showField, setShowField] = useState(false); // desktop toggle
+  const [showField, setShowField] = useState(false);
 
   // Live state
   const [phase, setPhase] = useState("pre");
@@ -117,7 +117,7 @@ export default function LiveMatch() {
   const [halftimeNotes, setHalftimeNotes] = useState("");
   const [activeModal, setActiveModal] = useState(null);
 
-  // PlayerMatchTime records tracked locally (array of {id, player_id, start_minute, end_minute})
+  // PlayerMatchTime records tracked locally
   const [matchTimeRecords, setMatchTimeRecords] = useState([]);
 
   const intervalRef = useRef(null);
@@ -155,11 +155,9 @@ export default function LiveMatch() {
   const substitutedIn = events.filter(e => e.type === "substitution").map(e => e.player_in_id);
   const substitutedOut = events.filter(e => e.type === "substitution").map(e => e.player_out_id);
 
-  // Current field players = starters still on field + players who came in
   const currentFieldPlayers = activePlayers.filter(p =>
     (lineupPlayerIds.includes(p.id) && !substitutedOut.includes(p.id)) || substitutedIn.includes(p.id)
   );
-  // Bench players = substitutes not yet in
   const currentBenchPlayers = activePlayers.filter(p =>
     substitutes.includes(p.id) && !substitutedIn.includes(p.id)
   );
@@ -201,7 +199,6 @@ export default function LiveMatch() {
     const lineup = lineupMapToArray(lineupMap);
     saveMutation.mutate({ lineup, substitutes, formation, live_status: "live", live_events: [] });
 
-    // Create time records for all starters
     const starterIds = Object.values(lineupMap);
     const records = await createMatchTimeRecords(starterIds, 0);
     setMatchTimeRecords(records);
@@ -226,7 +223,6 @@ export default function LiveMatch() {
     const finalScoreHome = events.filter(e => e.type === "goal_mva").length;
     const finalScoreAway = events.filter(e => e.type === "goal_against").length;
 
-    // Close all open time records
     await closeAllOpenRecords(currentMinute, matchTimeRecords);
 
     saveMutation.mutate({
@@ -250,7 +246,6 @@ export default function LiveMatch() {
     setActiveModal(null);
     saveMutation.mutate({ live_events: newEvents });
 
-    // Handle substitution time records
     if (eventData.type === "substitution") {
       let records = matchTimeRecords;
       records = await closeMatchTimeRecord(eventData.player_out_id, eventData.minute, records);
@@ -270,14 +265,20 @@ export default function LiveMatch() {
 
   // ---- PRE-GAME ----
   if (phase === "pre") {
-    const basisSpelers = Object.values(lineupMap).map(pid => activePlayers.find(p => p.id === pid)).filter(Boolean);
+    const POSITION_ORDER = { "Keeper": 0, "Centrale Verdediger": 1, "Linksback": 2, "Rechtsback": 3, "Controleur": 4, "Middenvelder": 5, "Aanvallende Middenvelder": 6, "Linksbuiten": 7, "Rechtsbuiten": 8, "Spits": 9 };
+    const basisSpelers = Object.values(lineupMap)
+      .map(pid => activePlayers.find(p => p.id === pid))
+      .filter(Boolean)
+      .sort((a, b) => (POSITION_ORDER[a.position] ?? 10) - (POSITION_ORDER[b.position] ?? 10));
     const wisselSpelers = substitutes.map(pid => activePlayers.find(p => p.id === pid)).filter(Boolean);
-    
+    const hasLineup = Object.keys(lineupMap).length > 0;
+
     return (
-      <div style={{ background: "#FFF3E8" }} className="min-h-screen">
-        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6" style={{ paddingBottom: "80px" }}>
+      <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden", background: "#FFF3E8" }}>
+        {/* Scrollable content */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "1rem" }}>
           {/* Header */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mb-6">
             <BackBtn onClick={() => navigate("/Planning")} />
             <div>
               <h1 className="t-page-title">Live Opstelling</h1>
@@ -287,68 +288,79 @@ export default function LiveMatch() {
 
           {match && (
             <>
-              {/* Hero Card */}
-              <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px", color: "#ffffff" }}>
-                <div className="flex items-center justify-between gap-4 mb-4">
-                  <div className="flex-1">
-                    <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "4px", opacity: 0.9 }}>Tegenstander</p>
-                    <h2 style={{ fontSize: "18px", fontWeight: 900, letterSpacing: "-0.5px" }}>{match.opponent}</h2>
+              {/* Wedstrijdinfo Card */}
+              <div style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem", marginBottom: "12px" }}>
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div>
+                    <p style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a", marginBottom: "4px" }}>{match.opponent}</p>
+                    <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.50)", fontWeight: 600 }}>{match.home_away} · {formatNL(match.date)}</p>
                   </div>
                   {match.opponent_logo_url && (
-                    <img src={match.opponent_logo_url} alt="" style={{ width: "48px", height: "48px", borderRadius: "50%", border: "2px solid white", objectFit: "cover" }} />
+                    <img src={match.opponent_logo_url} alt="" style={{ width: "48px", height: "48px", borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover", flexShrink: 0 }} />
                   )}
                 </div>
-                <div style={{ fontSize: "12px", opacity: 0.9, lineHeight: 1.6 }}>
-                  {match.home_away} · {formatNL(match.date)}
-                </div>
+                <span style={{ background: "#FF6800", color: "white", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 800, display: "inline-block", marginTop: "8px" }}>
+                  {formation}
+                </span>
               </div>
 
-              {/* Basisspelers */}
-              <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
-                <p className="t-label mb-3">Basisspelers ({basisSpelers.length})</p>
-                {basisSpelers.length === 0 ? (
-                  <p className="t-secondary-sm">Nog geen basisspelers</p>
-                ) : (
-                  <div className="space-y-2">
-                    {basisSpelers.map((player) => (
-                      <div key={player.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(8,208,104,0.12)", border: "1.5px solid rgba(8,208,104,0.25)" }}>
-                        <img src={player.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" style={{ background: "rgba(255,104,0,0.15)", border: "2px solid #1a1a1a" }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-black">{player.name}</p>
-                        </div>
-                        <span className="text-xs font-bold text-black">#{player.shirt_number || "-"}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Wissels */}
-              {wisselSpelers.length > 0 && (
-                <div className="glass p-4 md:p-5" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
-                  <p className="t-label mb-3">Wissels ({wisselSpelers.length})</p>
-                  <div className="space-y-2">
-                    {wisselSpelers.map((player) => (
-                      <div key={player.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(255,214,0,0.15)", border: "1.5px solid rgba(255,214,0,0.30)" }}>
-                        <img src={player.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" style={{ background: "rgba(255,104,0,0.15)", border: "2px solid #1a1a1a" }} />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-black">{player.name}</p>
-                        </div>
-                        <span className="text-xs font-bold text-black">#{player.shirt_number || "-"}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Empty state or Basisspelers */}
+              {!hasLineup ? (
+                <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.5rem", textAlign: "center" }}>
+                  <div style={{ fontSize: "32px", color: "#1a1a1a", marginBottom: "8px" }}>⚠️</div>
+                  <p style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a1a", marginBottom: "4px" }}>Geen opstelling ingesteld</p>
+                  <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)" }}>Stel eerst een opstelling in via de wedstrijd detail pagina</p>
                 </div>
+              ) : (
+                <>
+                  {/* Basisspelers Section */}
+                  <div style={{ marginBottom: "12px" }}>
+                    <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", letterSpacing: "0.07em", marginBottom: "8px" }}>BASIS ({basisSpelers.length})</p>
+                    <div style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
+                      {basisSpelers.map((player, idx) => (
+                        <div key={player.id} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 16px", borderBottom: idx < basisSpelers.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
+                          <img src={player.photo_url} alt="" style={{ width: "36px", height: "36px", borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover", flexShrink: 0 }} />
+                          <div style={{ flex: 1 }}>
+                            <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
+                          </div>
+                          <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.40)", fontWeight: 600, marginRight: "8px" }}>#{player.shirt_number || "-"}</span>
+                          <span style={{ background: "#FF6800", color: "white", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "2px 10px", fontSize: "11px", fontWeight: 800, whiteSpace: "nowrap" }}>
+                            {player.position}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Wissels Section */}
+                  {wisselSpelers.length > 0 && (
+                    <div>
+                      <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", letterSpacing: "0.07em", marginBottom: "8px" }}>WISSELS ({wisselSpelers.length})</p>
+                      <div style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
+                        {wisselSpelers.map((player, idx) => (
+                          <div key={player.id} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 16px", borderBottom: idx < wisselSpelers.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
+                            <img src={player.photo_url} alt="" style={{ width: "36px", height: "36px", borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover", flexShrink: 0 }} />
+                            <div style={{ flex: 1 }}>
+                              <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
+                            </div>
+                            <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.40)", fontWeight: 600, marginRight: "8px" }}>#{player.shirt_number || "-"}</span>
+                            <span style={{ fontSize: "16px", color: "rgba(26,26,26,0.30)" }}>⇄</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}
         </div>
 
-        {/* Start Wedstrijd Button - Sticky Footer */}
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100, background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a", padding: "1rem 1.25rem", paddingBottom: "calc(2.5rem + env(safe-area-inset-bottom))" }}>
+        {/* Sticky button footer */}
+        <div style={{ flexShrink: 0, padding: "1rem 1.25rem", paddingBottom: "calc(1rem + 80px + env(safe-area-inset-bottom))", background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a" }}>
           <button
             onClick={startMatch}
-            disabled={Object.keys(lineupMap).length === 0}
+            disabled={!hasLineup}
             style={{
               background: "#FF6800",
               border: "2.5px solid #1a1a1a",
@@ -363,8 +375,8 @@ export default function LiveMatch() {
               alignItems: "center",
               justifyContent: "center",
               gap: "10px",
-              cursor: Object.keys(lineupMap).length === 0 ? "not-allowed" : "pointer",
-              opacity: Object.keys(lineupMap).length === 0 ? 0.5 : 1,
+              cursor: hasLineup ? "pointer" : "not-allowed",
+              opacity: hasLineup ? 1 : 0.5,
               transition: "all 0.1s"
             }}
           >
