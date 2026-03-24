@@ -156,7 +156,7 @@ export default function UpcomingActivitiesCompact({ playerId }) {
       {rest.length > 0 && (
         <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "0.75rem 1rem" }}>
           {rest.map((item, idx) => {
-            const cfg = TYPE_CONFIG[item.type] || TYPE_CONFIG.Evenement;
+            const dotColor = getItemColor(item);
             const record = myAttendance.find(a => a.agenda_item_id === item.id);
             let indicator = null;
             if (record?.status === "aanwezig") {
@@ -169,7 +169,7 @@ export default function UpcomingActivitiesCompact({ playerId }) {
 
             return (
               <div key={item.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 0", borderBottom: idx < rest.length - 1 ? "1.5px solid rgba(26,26,26,0.08)" : "none" }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: cfg.color, border: "1.5px solid #1a1a1a", flexShrink: 0 }} />
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: dotColor, border: "1.5px solid #1a1a1a", flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", lineHeight: 1.3, marginBottom: 2 }}>{item.title}</p>
                   <p style={{ fontSize: 11, color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>{formatShort(item.date)}</p>
