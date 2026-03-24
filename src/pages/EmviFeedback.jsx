@@ -100,7 +100,7 @@ export default function EmviFeedback() {
         padding: "16px",
         textAlign: "center"
       }}>
-        <div style={{ fontSize: "48px", marginBottom: "12px" }}>🎯</div>
+        <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b89b92670_Emvi-chat.png" alt="Emvi" style={{ height: "80px", marginBottom: "12px", margin: "0 auto 12px" }} />
         <h1 style={{ fontSize: "18px", fontWeight: 900, color: "#ffffff", marginBottom: "4px" }}>
           Praat met Emvi
         </h1>
@@ -131,7 +131,7 @@ export default function EmviFeedback() {
             marginBottom: "12px",
             alignItems: "flex-end"
           }}>
-            <div style={{ fontSize: "32px", flexShrink: 0 }}>🎯</div>
+            <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b89b92670_Emvi-chat.png" alt="Emvi" style={{ height: "50px", flexShrink: 0 }} />
             <div style={{
               background: "rgba(255,104,0,0.10)",
               border: "1.5px solid #FF6800",
@@ -180,7 +180,7 @@ export default function EmviFeedback() {
               marginBottom: "12px",
               alignItems: "flex-end"
             }}>
-              <div style={{ fontSize: "28px", flexShrink: 0 }}>🎯</div>
+              <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b89b92670_Emvi-chat.png" alt="Emvi" style={{ height: "45px", flexShrink: 0 }} />
               <div style={{
                 background: "rgba(255,104,0,0.10)",
                 border: "1.5px solid #FF6800",
