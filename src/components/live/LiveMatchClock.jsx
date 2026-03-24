@@ -36,9 +36,9 @@ export default function LiveMatchClock({ seconds, running, onToggle, onStop }) {
           style={{
             flex: 1,
             height: 44,
-            background: "rgba(248,113,113,0.20)",
-            border: "0.5px solid rgba(248,113,113,0.35)",
-            color: "#f87171",
+            background: "#FF3333",
+            border: "0.5px solid #FF3333",
+            color: "white",
             borderRadius: 14,
             fontSize: 14,
             fontWeight: 600,
