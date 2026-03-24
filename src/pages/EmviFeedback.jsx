@@ -132,13 +132,13 @@ export default function EmviFeedback() {
       </div>
 
       {/* Chat area */}
-      <div className="glass" style={{
-        padding: "16px",
+      <div style={{
+        padding: "0px",
         display: "flex",
         flexDirection: "column",
         gap: "12px",
-        minHeight: "280px",
-        maxHeight: "450px",
+        minHeight: "200px",
+        maxHeight: "380px",
         overflowY: "auto"
       }}>
         {/* Initial Emvi greeting */}
