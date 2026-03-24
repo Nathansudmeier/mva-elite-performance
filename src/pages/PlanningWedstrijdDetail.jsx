@@ -298,9 +298,9 @@ export default function PlanningWedstrijdDetail() {
 
   function getScoreBadgeStyles() {
     const result = getScoreResult();
-    if (result === "Winst") return { bg: "rgba(74,222,128,0.15)", border: "rgba(74,222,128,0.25)", color: "#4ade80" };
-    if (result === "Gelijk") return { bg: "rgba(251,191,36,0.15)", border: "rgba(251,191,36,0.25)", color: "#fbbf24" };
-    return { bg: "rgba(248,113,113,0.15)", border: "rgba(248,113,113,0.25)", color: "#f87171" };
+    if (result === "Winst") return { bg: "#08D068", border: "#1a1a1a", color: "#1a1a1a" };
+    if (result === "Gelijk") return { bg: "#FFD600", border: "#1a1a1a", color: "#1a1a1a" };
+    return { bg: "#FF3DA8", border: "#1a1a1a", color: "#ffffff" };
   }
 
   if (isLoading || !item) {
