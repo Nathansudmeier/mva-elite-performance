@@ -135,14 +135,7 @@ export default function UpcomingActivitiesCompact({ playerId }) {
         const dotColor = getItemColor(first);
         const record = myAttendance.find(a => a.agenda_item_id === first.id);
         return (
-          <div key={first.id} style={{ position: "relative", marginTop: 70 }}>
-            {/* Emvi hanging top-right, overlapping the card */}
-            <img
-              src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/bed2c8b31_Emvi-hangt.png"
-              alt="Emvi"
-              style={{ position: "absolute", top: -70, right: 0, width: 110, height: 110, objectFit: "contain", pointerEvents: "none", zIndex: 10 }}
-            />
-            <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+          <div key={first.id} style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
 
             {/* Header label */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
