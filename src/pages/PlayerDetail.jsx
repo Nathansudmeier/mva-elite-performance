@@ -73,42 +73,48 @@ export default function PlayerDetail() {
   const physicalRatingKeys = ["startsnelheid", "snelheid_lang", "postuur", "blessuregevoeligheid", "duelkracht", "motorische_vaardigheden"];
 
   return (
-    <div className="relative">
-      <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/767b215a5_Appbackground-blur.png" alt=""
-        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
-      
-      <div className="relative z-10 space-y-4 md:space-y-6 pb-20">
-        {/* Header */}
-        <div className="flex items-center gap-2 md:gap-4">
-          <Link to="/Players" className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}>
-            <ArrowLeft size={18} color="#fff" />
-          </Link>
-          <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
-            <img src={player.photo_url || "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/4ecb27045_placeholder.png"} alt={player.name} className="w-12 md:w-16 h-12 md:h-16 rounded-full object-cover flex-shrink-0" style={{ border: "2px solid rgba(255,107,0,0.4)" }} />
-            <div className="flex-1 min-w-0">
-              <h1 className="t-page-title truncate">{player.name}</h1>
-              <p className="t-secondary text-xs md:text-sm">{player.position} · #{player.shirt_number}</p>
-            </div>
-          </div>
-          {isTrainer && (
-            <Link to={`/PlayerRatingForm?player_id=${playerId}`} className="flex-shrink-0">
-              <button className="btn-secondary px-3 md:px-4 py-2 text-xs md:text-sm h-auto">
-                <ClipboardList size={14} />
-              </button>
-            </Link>
-          )}
+    <div className="pb-20 xl:pb-8" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      {/* Header with back button */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px"
+      }}>
+        <Link to="/Players" style={{
+          width: "44px", height: "44px", borderRadius: "12px", display: "flex",
+          alignItems: "center", justifyContent: "center", background: "#ffffff",
+          border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a"
+        }}>
+          <ArrowLeft size={20} color="#1a1a1a" />
+        </Link>
+        <div style={{ flex: 1 }}>
+          <h1 style={{ fontSize: "22px", fontWeight: 900, color: "#1a1a1a" }}>{player.name}</h1>
+          <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)", marginTop: "2px" }}>{player.position} · #{player.shirt_number}</p>
         </div>
+        {isTrainer && (
+          <Link to={`/PlayerRatingForm?player_id=${playerId}`}>
+            <button style={{
+              background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "12px",
+              padding: "10px", display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", transition: "transform 0.1s", boxShadow: "2px 2px 0 #1a1a1a"
+            }} onMouseDown={e => e.currentTarget.style.transform = "translate(1px, 1px)"}>
+              <ClipboardList size={18} color="#ffffff" />
+            </button>
+          </Link>
+        )}
+      </div>
 
       {/* IOP Goals */}
       {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
-        <div className="glass-dark rounded-2xl p-4">
-          <p className="t-label mb-3">IOP Doelen</p>
-          <div className="space-y-2">
+        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
+          <p className="t-label" style={{ marginBottom: "12px" }}>IOP Doelen</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).map((goal, i) => (
-              <div key={i} className="flex items-start gap-2">
-                <span className="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0" style={{ background: "#FF6B00" }}>{i + 1}</span>
-                <p className="t-secondary text-sm">{goal}</p>
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                <span style={{
+                  width: "28px", height: "28px", borderRadius: "50%", background: "#FF6800",
+                  border: "2px solid #1a1a1a", display: "flex", alignItems: "center",
+                  justifyContent: "center", color: "#ffffff", fontWeight: 800, fontSize: "12px", flexShrink: 0
+                }}>{i + 1}</span>
+                <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.70)", lineHeight: 1.4, paddingTop: "2px" }}>{goal}</p>
               </div>
             ))}
           </div>
@@ -117,39 +123,40 @@ export default function PlayerDetail() {
 
       {/* Latest Ratings */}
       {latestRating && (isTrainer || isOwnProfile) && (
-        <div className="glass-dark rounded-2xl overflow-hidden">
-          <div className="relative p-4 md:p-5" style={{ background: "linear-gradient(135deg, rgba(255,107,0,0.20) 0%, rgba(229,90,0,0.15) 100%)", borderBottom: "0.5px solid rgba(255,107,0,0.25)" }}>
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4">
-              <div>
-                <p className="t-label">Laatste Beoordeling</p>
-                <p className="t-card-title mt-0.5 text-sm">{latestRating.meting} · {latestRating.date}</p>
-              </div>
-              <div className="rounded-xl px-3 md:px-4 py-2 text-center" style={{ background: "rgba(255,255,255,0.10)" }}>
-                <p className="t-metric-orange text-2xl md:text-3xl">
-                  {(() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })()}
-                </p>
-                <p className="t-tertiary text-xs">totaal</p>
-              </div>
+        <div className="glass" style={{ borderRadius: "18px", overflow: "hidden" }}>
+          <div style={{
+            background: "linear-gradient(135deg, #FF6800 0%, #FF8C00 100%)",
+            padding: "16px", display: "flex", flexDirection: "column", gap: "12px"
+          }}>
+            <div>
+              <p className="t-label" style={{ color: "rgba(255,255,255,0.75)" }}>Laatste Beoordeling</p>
+              <p style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff", marginTop: "4px" }}>{latestRating.meting} · {latestRating.date}</p>
+            </div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+              <span style={{ fontSize: "34px", fontWeight: 900, color: "#ffffff", lineHeight: 1 }}>
+                {(() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })()}
+              </span>
+              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)" }}>totaal</span>
             </div>
           </div>
-          <div className="p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div style={{ padding: "16px", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }} className="mobile-grid-2col">
             {[
-              { label: "Technisch", keys: technicalKeys, icon: <Zap size={14} />, color: "#60a5fa" },
-              { label: "Tactisch", keys: tacticalKeys, icon: <Brain size={14} />, color: "#a78bfa" },
-              { label: "Persoonlijkheid", keys: personalityKeys, icon: <Shield size={14} />, color: "#4ade80" },
-              { label: "Fysiek", keys: physicalRatingKeys, icon: <Dumbbell size={14} />, color: "#fbbf24" },
-            ].map(({ label, keys, icon, color }) => {
+              { label: "Technisch", keys: technicalKeys, icon: "⚡", color: "#60a5fa" },
+              { label: "Tactisch", keys: tacticalKeys, icon: "🧠", color: "#a78bfa" },
+              { label: "Persoonlijkheid", keys: personalityKeys, icon: "🛡️", color: "#4ade80" },
+              { label: "Fysiek", keys: physicalRatingKeys, icon: "💪", color: "#fbbf24" },
+            ].map(({ label, keys, color }) => {
               const avg = calcAvg(latestRating, keys);
               const pct = avg !== "-" ? (parseFloat(avg) / 5) * 100 : 0;
               return (
-                <div key={label} className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.10)" }}>
-                  <div className="flex items-center gap-1.5 mb-2" style={{ color }}>
-                    {icon}
-                    <span className="text-xs font-semibold uppercase tracking-tight">{label}</span>
-                  </div>
-                  <p className="text-xl md:text-2xl font-bold" style={{ color }}>{avg}</p>
-                  <div className="progress-track mt-2">
-                    <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
+                <div key={label} style={{
+                  background: "rgba(26,26,26,0.04)", border: "2px solid rgba(26,26,26,0.08)",
+                  borderRadius: "14px", padding: "12px"
+                }}>
+                  <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", letterSpacing: "0.05em", marginBottom: "6px" }}>{label}</p>
+                  <p style={{ fontSize: "22px", fontWeight: 900, color }}>{avg}</p>
+                  <div style={{ height: "4px", background: "rgba(26,26,26,0.10)", borderRadius: "2px", marginTop: "8px", overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${pct}%`, background: color, borderRadius: "2px", transition: "width 0.3s ease" }} />
                   </div>
                 </div>
               );
@@ -160,19 +167,19 @@ export default function PlayerDetail() {
 
       {/* Physical Tests */}
       {(yoyoTests.length > 0 || physicalTests.length > 0) && (
-        <div className="glass-dark rounded-2xl p-4">
-          <p className="t-label mb-3 flex items-center gap-2"><Activity size={12} /> Fysieke Data</p>
-          <div className="space-y-2">
+        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
+          <p className="t-label" style={{ marginBottom: "12px" }}>Fysieke Data</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             {yoyoTests.slice(-3).map(t => (
-              <div key={t.id} className="flex justify-between items-center gap-2">
-                <span className="t-secondary text-sm">Yo-Yo {t.date}</span>
-                <span className="t-card-title text-sm">Level {t.level} · {t.distance}m</span>
+              <div key={t.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingBottom: "8px", borderBottom: "1.5px solid rgba(26,26,26,0.07)" }}>
+                <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)" }}>Yo-Yo {t.date}</span>
+                <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>Level {t.level} · {t.distance}m</span>
               </div>
             ))}
             {physicalTests.slice(-3).map(t => (
-              <div key={t.id} className="flex justify-between items-center gap-2">
-                <span className="t-secondary text-sm">Sprint 30m {t.date}</span>
-                <span className="t-card-title text-sm">{t.sprint_30m}s</span>
+              <div key={t.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingBottom: "8px", borderBottom: "1.5px solid rgba(26,26,26,0.07)" }}>
+                <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)" }}>Sprint 30m {t.date}</span>
+                <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>{t.sprint_30m}s</span>
               </div>
             ))}
           </div>
@@ -184,24 +191,27 @@ export default function PlayerDetail() {
 
       {/* Attendance */}
       {attendance.length > 0 && (
-        <div className="glass-dark rounded-2xl p-4">
-          <p className="t-label mb-3 flex items-center gap-2"><Calendar size={12} /> Aanwezigheid</p>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4">
-            <p className="t-metric-orange text-3xl">{attendancePct}%</p>
-            <p className="t-secondary text-sm">{presentCount} van {attendance.length} sessies aanwezig</p>
+        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
+          <p className="t-label" style={{ marginBottom: "12px" }}>Aanwezigheid</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "12px" }}>
+            <span style={{ fontSize: "34px", fontWeight: 900, color: "#FF6800", lineHeight: 1 }}>{attendancePct}%</span>
+            <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)" }}>{presentCount} van {attendance.length} sessies</p>
           </div>
         </div>
       )}
 
       {/* Wellness */}
       {wellness.length > 0 && (
-        <div className="glass-dark rounded-2xl p-4">
-          <p className="t-label mb-3 flex items-center gap-2"><Heart size={12} /> Belastbaarheid (laatste 5)</p>
-          <div className="space-y-2">
-            {wellness.slice(-5).reverse().map(w => (
-              <div key={w.id} className="flex flex-col md:flex-row md:justify-between md:items-center gap-1 md:gap-2">
-                <span className="t-secondary text-sm">{w.date}</span>
-                <span className="t-card-title text-sm">Slaap {w.sleep}/5 · Vermoeidheid {w.fatigue}/5</span>
+        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
+          <p className="t-label" style={{ marginBottom: "12px" }}>Belastbaarheid (laatste 5)</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {wellness.slice(-5).reverse().map((w, i) => (
+              <div key={w.id} style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                paddingBottom: "8px", borderBottom: i < 4 ? "1.5px solid rgba(26,26,26,0.07)" : "none"
+              }}>
+                <span style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)" }}>{w.date}</span>
+                <span style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a" }}>Slaap {w.sleep}/5</span>
               </div>
             ))}
           </div>
@@ -210,13 +220,12 @@ export default function PlayerDetail() {
 
       {/* Wedstrijdbeleving */}
       {(isTrainer || isOwnProfile) && (
-        <div className="glass-dark rounded-2xl p-4">
-          <p className="t-label mb-1 flex items-center gap-2"><Star size={12} /> Wedstrijdbeleving</p>
-          <p className="t-tertiary mb-4 text-xs">Pre-game mentaal vs. post-game tevredenheid per wedstrijd</p>
+        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
+          <p className="t-label" style={{ marginBottom: "4px" }}>Wedstrijdbeleving</p>
+          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", marginBottom: "12px" }}>Pre-game vs. post-game per wedstrijd</p>
           <WedstrijdbelevingChart playerId={playerId} />
         </div>
       )}
-      </div>
     </div>
   );
 }
