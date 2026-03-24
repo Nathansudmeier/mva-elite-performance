@@ -58,12 +58,12 @@ export default function PhotoUpload({ onSaved }) {
 
   const selectStyle = {
     width: "100%",
-    background: "rgba(255,255,255,0.07)",
-    border: "0.5px solid rgba(255,255,255,0.15)",
-    borderRadius: "10px",
+    background: "#ffffff",
+    border: "2px solid #1a1a1a",
+    borderRadius: "12px",
     padding: "8px 12px",
     fontSize: "13px",
-    color: "#ffffff",
+    color: "#1a1a1a",
     outline: "none",
   };
 
@@ -89,7 +89,7 @@ export default function PhotoUpload({ onSaved }) {
          <div>
            <label className="t-label mb-1 block text-xs">Datum</label>
            <Input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-             style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", fontSize: "12px", padding: "6px 10px" }} />
+             style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "12px", fontSize: "12px", padding: "6px 10px" }} />
          </div>
          <div>
            <label className="t-label mb-1 block text-xs">Team</label>
@@ -111,7 +111,7 @@ export default function PhotoUpload({ onSaved }) {
              placeholder={form.type === "Wedstrijd" ? "bijv. AFC" : ""}
              value={form.label}
              onChange={e => setForm(f => ({ ...f, label: e.target.value }))}
-             style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px", fontSize: "12px", padding: "6px 10px" }}
+             style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "12px", fontSize: "12px", padding: "6px 10px" }}
            />
          </div>
       </div>
