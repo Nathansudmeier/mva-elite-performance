@@ -411,12 +411,24 @@ export default function PlanningWedstrijdDetail() {
           )}
 
           {/* Live knop */}
-          {isTrainer && match && (
-            <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
-              <Link to={`/LiveMatch?matchId=${match.id}`}
-                style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 12, background: "#1a1a1a", color: "#ffffff", textDecoration: "none", fontWeight: 800, fontSize: 13 }}>
-                <Play size={16} /> Live wedstrijdmodus
-              </Link>
+           {isTrainer && match && (
+             <div style={{ marginTop: 14, display: "flex", gap: 8 }}>
+               <button onClick={async () => {
+                 if (match) {
+                   try {
+                     await base44.entities.Match.update(match.id, { live_status: "live" });
+                     await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
+                   } catch (err) {
+                     console.error("Error starting match:", err);
+                   }
+                 }
+               }} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 12, background: "#FF6800", border: "2.5px solid #1a1a1a", color: "#ffffff", fontWeight: 800, fontSize: 13, cursor: "pointer", boxShadow: "3px 3px 0 #1a1a1a", transition: "all 0.1s" }}>
+                 <Play size={16} /> Wedstrijd starten
+               </button>
+               <Link to={`/LiveMatch?matchId=${match.id}`}
+                 style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 12, background: "#1a1a1a", color: "#ffffff", textDecoration: "none", fontWeight: 800, fontSize: 13 }}>
+                 <Play size={16} /> Live modus
+               </Link>
               <button onClick={() => {
                 if (navigator.share) {
                   navigator.share({
