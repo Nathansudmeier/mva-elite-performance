@@ -15,6 +15,7 @@ export default function DashboardRouter() {
     );
   }
 
+  // Parents always see parent dashboard, regardless of other roles
   if (isOuder) return <OuderDashboard />;
   if (isSpeelster) return <PlayerDashboard />;
   return <Dashboard />;
