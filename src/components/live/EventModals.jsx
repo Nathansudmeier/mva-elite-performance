@@ -9,9 +9,9 @@ function ModalBackdrop({ onClick }) {
       style={{ 
         position: "fixed", 
         inset: 0, 
-        background: "rgba(0,0,0,0.50)", 
-        backdropFilter: "blur(6px)",
-        zIndex: 199 
+        background: "rgba(0,0,0,0.40)", 
+        zIndex: 199,
+        pointerEvents: "auto"
       }} 
     />
   );
