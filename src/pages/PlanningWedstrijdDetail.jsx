@@ -352,37 +352,37 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Hero card */}
         <div style={{ background: teamCardBg, border: "2.5px solid #1a1a1a", borderRadius: 22, boxShadow: "3px 3px 0 #1a1a1a", padding: 20, position: "relative", overflow: "hidden" }}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-2">
-                <Trophy size={14} style={{ color: cfg.color }} />
-                <span className="t-label" style={{ color: cfg.color }}>{item.team}</span>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <Trophy size={14} style={{ color: teamTextDark }} />
+                <span style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: teamTextDark }}>{item.team}</span>
                 {item.home_away && (
-                  <span style={{ fontSize: "10px", fontWeight: 600, padding: "2px 8px", borderRadius: 20, background: item.home_away === "Thuis" ? "rgba(74,222,128,0.12)" : "rgba(251,191,36,0.12)", color: item.home_away === "Thuis" ? "#4ade80" : "#fbbf24", border: `0.5px solid ${item.home_away === "Thuis" ? "rgba(74,222,128,0.25)" : "rgba(251,191,36,0.25)"}` }}>
+                  <span style={{ fontSize: 10, fontWeight: 800, padding: "2px 10px", borderRadius: 20, background: "rgba(26,26,26,0.18)", color: teamTextDark, border: "1px solid rgba(26,26,26,0.20)" }}>
                     {item.home_away}
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2 t-secondary mb-1">
-                <Clock size={13} className="ic-muted" />
-                <span>{formatDate(item.date)} · {item.start_time}</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                <Clock size={12} style={{ color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.70)" : "rgba(26,26,26,0.55)" }} />
+                <span style={{ fontSize: 12, fontWeight: 600, color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.80)" : "rgba(26,26,26,0.65)" }}>{formatDate(item.date)} · {item.start_time}</span>
               </div>
             </div>
-            <div className="flex items-center gap-3 flex-shrink-0">
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
               {item.opponent_logo_url && (
-                <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", flexShrink: 0 }}>
+                <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(26,26,26,0.25)", flexShrink: 0 }}>
                   <img src={item.opponent_logo_url} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
               )}
-              <div className="flex flex-col items-end gap-1">
-                <span className="t-secondary-sm" style={{ color: "#4ade80" }}>{aanwezigList.length} ✓</span>
-                <span className="t-secondary-sm" style={{ color: "#f87171" }}>{afwezigList.length} ✗</span>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2 }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: teamTextDark }}>{aanwezigList.length} ✓</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.70)" : "rgba(26,26,26,0.55)" }}>{afwezigList.length} ✗</span>
               </div>
             </div>
           </div>
 
           {/* Score section */}
-          <div className="flex items-center justify-center gap-4 py-4 border-t border-b" style={{ borderColor: "rgba(255,255,255,0.10)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "14px 0", borderTop: "2px solid rgba(26,26,26,0.15)", borderBottom: "2px solid rgba(26,26,26,0.15)" }}>
             <div className="text-center flex-1">
               <p style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.65)", marginBottom: "4px" }}>MVA Noord</p>
               <p style={{ fontSize: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? "32px" : "24px", fontWeight: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? 800 : 300, color: (match?.live_status === "finished" || (!isFuture && match?.score_home !== undefined)) ? "white" : "rgba(255,255,255,0.40)", letterSpacing: "-1px" }}>
