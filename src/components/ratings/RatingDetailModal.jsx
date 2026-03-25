@@ -104,7 +104,7 @@ export default function RatingDetailModal({ rating, onClose, player }) {
           width: "100%",
           maxHeight: "90vh",
           overflow: "auto",
-          padding: "20px",
+          padding: "20px 20px 80px 20px",
           boxShadow: "0 -4px 20px rgba(0,0,0,0.15)",
         }}
         onClick={e => e.stopPropagation()}
