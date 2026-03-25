@@ -35,6 +35,7 @@ import LiveMatchViewer from './pages/LiveMatchViewer.jsx';
 import PendingAccess from './pages/PendingAccess';
 import EmviFeedback from './pages/EmviFeedback';
 import FeedbackOverview from './pages/FeedbackOverview';
+import YoYoTestLive from './pages/YoYoTestLive';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import SplashScreen from '@/components/SplashScreen';
@@ -119,6 +120,7 @@ const AuthenticatedApp = () => {
       <Route path="/PendingAccess" element={<LayoutWrapper currentPageName="Dashboard"><PendingAccess /></LayoutWrapper>} />
       <Route path="/EmviFeedback" element={<LayoutWrapper currentPageName="EmviFeedback"><EmviFeedback /></LayoutWrapper>} />
       <Route path="/FeedbackOverview" element={<LayoutWrapper currentPageName="FeedbackOverview"><FeedbackOverview /></LayoutWrapper>} />
+      <Route path="/YoYoTestLive" element={<LayoutWrapper currentPageName="YoYoTestLive"><YoYoTestLive /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
