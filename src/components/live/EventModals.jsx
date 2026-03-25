@@ -22,13 +22,13 @@ export function NoteModal({ minute, onConfirm, onClose }) {
   const [note, setNote] = useState("");
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center", pointerEvents: "none" }}>
       <ModalBackdrop onClick={onClose} />
       
       <div 
         style={{ 
           position: "relative",
-          zIndex: 201,
+          zIndex: 301,
           background: "white",
           border: "2.5px solid #1a1a1a",
           borderRadius: "20px 20px 0 0",
@@ -38,7 +38,8 @@ export function NoteModal({ minute, onConfirm, onClose }) {
           padding: "24px",
           paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))",
           maxHeight: "90vh",
-          overflowY: "auto"
+          overflowY: "auto",
+          pointerEvents: "auto"
         }}
       >
         {/* Header */}
@@ -121,13 +122,13 @@ export function NoteModal({ minute, onConfirm, onClose }) {
 // GoalAgainstModal
 export function GoalAgainstModal({ minute, onConfirm, onClose }) {
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center", pointerEvents: "none" }}>
       <ModalBackdrop onClick={onClose} />
       
       <div 
         style={{ 
           position: "relative",
-          zIndex: 201,
+          zIndex: 301,
           background: "white",
           border: "2.5px solid #1a1a1a",
           borderRadius: "20px 20px 0 0",
@@ -136,7 +137,8 @@ export function GoalAgainstModal({ minute, onConfirm, onClose }) {
           maxWidth: "500px",
           padding: "24px",
           paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))",
-          textAlign: "center"
+          textAlign: "center",
+          pointerEvents: "auto"
         }}
       >
         {/* Emoji */}
@@ -201,13 +203,13 @@ export function YellowCardModal({ minute, onConfirm, onClose, players }) {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center", pointerEvents: "none" }}>
       <ModalBackdrop onClick={onClose} />
       
       <div 
         style={{ 
           position: "relative",
-          zIndex: 201,
+          zIndex: 301,
           background: "white",
           border: "2.5px solid #1a1a1a",
           borderRadius: "20px 20px 0 0",
@@ -217,7 +219,8 @@ export function YellowCardModal({ minute, onConfirm, onClose, players }) {
           padding: "24px",
           paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))",
           maxHeight: "90vh",
-          overflowY: "auto"
+          overflowY: "auto",
+          pointerEvents: "auto"
         }}
       >
         {/* Header */}
@@ -245,10 +248,11 @@ export function YellowCardModal({ minute, onConfirm, onClose, players }) {
                 borderRadius: "12px",
                 fontWeight: 700,
                 fontSize: "12px",
-                color: selectedPlayer === p.id ? "#1a1a1a" : "#1a1a1a",
+                color: "#1a1a1a",
                 cursor: "pointer",
                 transition: "all 0.1s",
-                boxShadow: selectedPlayer === p.id ? "3px 3px 0 #1a1a1a" : "none"
+                boxShadow: selectedPlayer === p.id ? "3px 3px 0 #1a1a1a" : "none",
+                pointerEvents: "auto"
               }}
             >
               {p.name}
@@ -284,13 +288,13 @@ export function RedCardModal({ minute, onConfirm, onClose, players }) {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center", pointerEvents: "none" }}>
       <ModalBackdrop onClick={onClose} />
       
       <div 
         style={{ 
           position: "relative",
-          zIndex: 201,
+          zIndex: 301,
           background: "white",
           border: "2.5px solid #1a1a1a",
           borderRadius: "20px 20px 0 0",
@@ -300,7 +304,8 @@ export function RedCardModal({ minute, onConfirm, onClose, players }) {
           padding: "24px",
           paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))",
           maxHeight: "90vh",
-          overflowY: "auto"
+          overflowY: "auto",
+          pointerEvents: "auto"
         }}
       >
         {/* Header */}
@@ -323,7 +328,7 @@ export function RedCardModal({ minute, onConfirm, onClose, players }) {
               }}
               style={{
                 padding: "12px",
-                background: selectedPlayer === p.id ? "#FF3333" : "white",
+                background: selectedPlayer === p.id ? "#FF3B30" : "white",
                 border: "2.5px solid #1a1a1a",
                 borderRadius: "12px",
                 fontWeight: 700,
@@ -331,7 +336,8 @@ export function RedCardModal({ minute, onConfirm, onClose, players }) {
                 color: selectedPlayer === p.id ? "white" : "#1a1a1a",
                 cursor: "pointer",
                 transition: "all 0.1s",
-                boxShadow: selectedPlayer === p.id ? "3px 3px 0 #1a1a1a" : "none"
+                boxShadow: selectedPlayer === p.id ? "3px 3px 0 #1a1a1a" : "none",
+                pointerEvents: "auto"
               }}
             >
               {p.name}
