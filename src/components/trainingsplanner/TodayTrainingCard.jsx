@@ -34,9 +34,9 @@ export default function TodayTrainingCard({ playerId }) {
     <div style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden", padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
 
       <div>
-        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "4px" }}>Vandaag op de training</p>
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "4px" }}>Vandaag op de training</p>
         {todayPlan.objective && (
-          <p style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.3 }}>{todayPlan.objective}</p>
+          <p style={{ fontSize: "15px", fontWeight: 800, color: "#ffffff", lineHeight: 1.3 }}>{todayPlan.objective}</p>
         )}
       </div>
 
@@ -52,20 +52,20 @@ export default function TodayTrainingCard({ playerId }) {
               )}
               <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px" }}>
                 <div style={{ width: 24, height: 24, borderRadius: "50%", background: "rgba(26,26,26,0.15)", border: "1.5px solid rgba(26,26,26,0.20)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <span style={{ fontSize: "10px", fontWeight: 900, color: "#1a1a1a" }}>{i + 1}</span>
+                  <span style={{ fontSize: "10px", fontWeight: 900, color: "#ffffff" }}>{i + 1}</span>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>{ex.name || "Oefenvorm"}</span>
+                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff" }}>{ex.name || "Oefenvorm"}</span>
                     {playerGroup ? (
-                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "20px", background: "rgba(26,26,26,0.15)", border: "1px solid rgba(26,26,26,0.25)", color: "#1a1a1a", whiteSpace: "nowrap" }}>
+                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "20px", background: "rgba(255,255,255,0.20)", border: "1px solid rgba(255,255,255,0.35)", color: "#ffffff", whiteSpace: "nowrap" }}>
                         {playerGroup.name}
                       </span>
                     ) : null}
                   </div>
                 </div>
                 {ex.duration_minutes > 0 && (
-                  <span style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", fontWeight: 600, flexShrink: 0 }}>{ex.duration_minutes} min</span>
+                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.65)", fontWeight: 600, flexShrink: 0 }}>{ex.duration_minutes} min</span>
                 )}
               </div>
             </div>
