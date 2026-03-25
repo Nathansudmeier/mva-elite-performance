@@ -23,23 +23,22 @@ export default function TodayTrainingCard({ playerId }) {
 
   if (!todayPlan || !(todayPlan.exercises?.length > 0)) {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "14px 16px", background: "rgba(255,255,255,0.05)", border: "0.5px solid rgba(255,255,255,0.10)", borderRadius: "18px" }}>
-        <i className="ti ti-moon" style={{ fontSize: "20px", color: "rgba(255,255,255,0.30)" }} />
-        <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.40)" }}>Geen training vandaag</span>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "14px 16px", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a" }}>
+        <i className="ti ti-moon" style={{ fontSize: "20px", color: "rgba(26,26,26,0.30)" }} />
+        <span style={{ fontSize: "13px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>Geen training vandaag</span>
       </div>
     );
   }
 
   return (
-    <div style={{ position: "relative", background: "rgba(255,107,0,0.18)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "22px", overflow: "hidden", padding: "16px" }}>
-      {/* Shine line */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", pointerEvents: "none" }} />
+    <div style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden", padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
 
-      <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "8px" }}>Vandaag op de training</p>
-
-      {todayPlan.objective && (
-        <p style={{ fontSize: "16px", fontWeight: 600, color: "#ffffff", marginBottom: "12px", lineHeight: 1.3 }}>{todayPlan.objective}</p>
-      )}
+      <div>
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "4px" }}>Vandaag op de training</p>
+        {todayPlan.objective && (
+          <p style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.3 }}>{todayPlan.objective}</p>
+        )}
+      </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         {(todayPlan.exercises || []).map((ex, i) => {
@@ -47,28 +46,26 @@ export default function TodayTrainingCard({ playerId }) {
           const groupColor = playerGroup ? (GROUP_COLOR_MAP[playerGroup.color] || "#FF8C3A") : null;
 
           return (
-            <div key={ex.id || i} style={{ background: "rgba(0,0,0,0.18)", borderRadius: "12px", overflow: "hidden" }}>
-              {/* Foto bovenaan als aanwezig */}
+            <div key={ex.id || i} style={{ background: "rgba(0,0,0,0.10)", border: "1.5px solid rgba(26,26,26,0.15)", borderRadius: "12px", overflow: "hidden" }}>
               {ex.field_photo && (
                 <img src={ex.field_photo} alt="" style={{ width: "100%", maxHeight: "160px", objectFit: "cover", display: "block" }} />
               )}
               <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px" }}>
+                <div style={{ width: 24, height: 24, borderRadius: "50%", background: "rgba(26,26,26,0.15)", border: "1.5px solid rgba(26,26,26,0.20)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <span style={{ fontSize: "10px", fontWeight: 900, color: "#1a1a1a" }}>{i + 1}</span>
+                </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                    <span style={{ fontSize: "13px", fontWeight: 600, color: "#ffffff" }}>{ex.name || "Oefenvorm"}</span>
+                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>{ex.name || "Oefenvorm"}</span>
                     {playerGroup ? (
-                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "20px", background: groupColor + "30", border: `0.5px solid ${groupColor}`, color: groupColor, whiteSpace: "nowrap" }}>
+                      <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "20px", background: "rgba(26,26,26,0.15)", border: "1px solid rgba(26,26,26,0.25)", color: "#1a1a1a", whiteSpace: "nowrap" }}>
                         {playerGroup.name}
                       </span>
-                    ) : (
-                      <span style={{ fontSize: "10px", fontWeight: 600, padding: "2px 8px", borderRadius: "20px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.45)", whiteSpace: "nowrap" }}>
-                        Niet ingedeeld
-                      </span>
-                    )}
+                    ) : null}
                   </div>
                 </div>
                 {ex.duration_minutes > 0 && (
-                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", flexShrink: 0 }}>{ex.duration_minutes} min</span>
+                  <span style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", fontWeight: 600, flexShrink: 0 }}>{ex.duration_minutes} min</span>
                 )}
               </div>
             </div>
