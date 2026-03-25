@@ -280,17 +280,41 @@ export default function YoYoTestLive() {
           </>
         ) : (
           <>
-            <button
-              onClick={() => setTestStarted(false)}
-              style={{
-                marginBottom: "16px", padding: "10px 14px", borderRadius: "10px", border: "2px solid #1a1a1a",
-                background: "#ffffff", fontSize: "12px", fontWeight: 700, cursor: "pointer",
-                boxShadow: "2px 2px 0 #1a1a1a",
-              }}
-            >
-              ← Terug naar selectie
-            </button>
-        </>
+            {/* Header with cancel button for test started state */}
+            <div style={{
+              position: "sticky", top: 0, zIndex: 40,
+              background: "#FF6800", 
+              border: "2.5px solid #1a1a1a",
+              borderRadius: "18px",
+              margin: "12px",
+              padding: "16px",
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: "space-between",
+              color: "#ffffff",
+              boxShadow: "3px 3px 0 #1a1a1a",
+            }}>
+              <button 
+                onClick={() => setTestStarted(false)}
+                style={{
+                  width: "40px", height: "40px", borderRadius: "12px", border: "2.5px solid #ffffff",
+                  display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", 
+                  background: "rgba(255,255,255,0.15)",
+                  color: "#ffffff", transition: "all 0.15s",
+                }}
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <div style={{ textAlign: "center", flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "4px" }}>
+                  <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0bf7cd806_Emvi-tactics.png" alt="Emvi" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
+                  <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Resultaten</h1>
+                </div>
+                <p style={{ fontSize: "12px", fontWeight: 500, margin: 0, opacity: 0.9 }}>{savedCount} / {selectedPlayers.length} opgeslagen</p>
+              </div>
+              <div style={{ width: "40px" }} />
+            </div>
+          </>
         )}
         
 
