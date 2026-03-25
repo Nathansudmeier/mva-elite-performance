@@ -141,7 +141,10 @@ export default function YoYoTestLive() {
           <ChevronLeft size={18} />
         </button>
         <div style={{ textAlign: "center", flex: 1 }}>
-          <h1 style={{ fontSize: "20px", fontWeight: 900, margin: "0 0 4px 0", letterSpacing: "-0.5px" }}>Yo-Yo Test</h1>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "4px" }}>
+            <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/emvi_tactic.png" alt="Emvi" style={{ width: "24px", height: "24px" }} />
+            <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Yo-Yo Test</h1>
+          </div>
           <p style={{ fontSize: "12px", fontWeight: 500, margin: 0, opacity: 0.9 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
         </div>
         <div style={{ width: "40px" }} />
