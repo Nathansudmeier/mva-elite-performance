@@ -142,7 +142,7 @@ export default function YoYoTestLive() {
         </button>
         <div style={{ textAlign: "center", flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "4px" }}>
-            <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/emvi_tactic.png" alt="Emvi" style={{ width: "24px", height: "24px" }} />
+            <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0bf7cd806_Emvi-tactics.png" alt="Emvi" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
             <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Yo-Yo Test</h1>
           </div>
           <p style={{ fontSize: "12px", fontWeight: 500, margin: 0, opacity: 0.9 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
