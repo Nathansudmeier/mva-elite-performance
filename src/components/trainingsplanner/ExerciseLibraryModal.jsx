@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { X, Plus, BookOpen, Save } from "lucide-react";
+import { X, Plus, BookOpen, Save, Clock } from "lucide-react";
+
+const CATEGORY_COLORS = {
+  Tactisch:      "#00C2FF",
+  Fysiek:        "#08D068",
+  Positiespel:   "#9B5CFF",
+  Afwerking:     "#FF6800",
+  Spelprincipes: "#FFD600",
+};
 
 export default function ExerciseLibraryModal({ onSelect, onClose, currentExercise }) {
   const queryClient = useQueryClient();
-  const [tab, setTab] = useState("library"); // "library" | "save"
+  const [tab, setTab] = useState("library");
   const [saveName, setSaveName] = useState(currentExercise?.name || "");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data: templates = [], isLoading } = useQuery({
     queryKey: ["exercise-templates"],
@@ -49,30 +58,46 @@ export default function ExerciseLibraryModal({ onSelect, onClose, currentExercis
     onClose();
   }
 
+  const filtered = searchQuery
+    ? templates.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    : templates;
+
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "rgba(0,0,0,0.65)", backdropFilter: "blur(6px)", display: "flex", alignItems: "flex-end", justifyContent: "center" }} onClick={onClose}>
+    <div
+      style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(26,26,26,0.60)", backdropFilter: "blur(4px)", display: "flex", alignItems: "flex-end", justifyContent: "center" }}
+      onClick={onClose}
+    >
       <div
-        style={{ width: "100%", maxWidth: "540px", maxHeight: "80vh", background: "rgba(20,10,2,0.97)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "24px 24px 0 0", display: "flex", flexDirection: "column", overflow: "hidden" }}
+        style={{ width: "100%", maxWidth: "560px", maxHeight: "85vh", background: "#FFF3E8", border: "2.5px solid #1a1a1a", borderRadius: "24px 24px 0 0", boxShadow: "0 -4px 0 #1a1a1a", display: "flex", flexDirection: "column", overflow: "hidden" }}
         onClick={e => e.stopPropagation()}
       >
         {/* Handle */}
-        <div style={{ width: "36px", height: "4px", borderRadius: "2px", background: "rgba(255,255,255,0.20)", margin: "12px auto 0" }} />
+        <div style={{ width: "36px", height: "4px", borderRadius: "2px", background: "rgba(26,26,26,0.20)", margin: "12px auto 0", flexShrink: 0 }} />
 
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 0" }}>
-          <p style={{ fontSize: "15px", fontWeight: 700, color: "#fff" }}>Oefeningen bibliotheek</p>
-          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.08)", border: "none", borderRadius: "8px", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-            <X size={14} color="rgba(255,255,255,0.6)" />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 0", flexShrink: 0 }}>
+          <p style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px" }}>Bibliotheek</p>
+          <button
+            onClick={onClose}
+            style={{ background: "#ffffff", border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", borderRadius: "10px", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+          >
+            <X size={16} color="#1a1a1a" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: "6px", padding: "12px 16px 0" }}>
-          {[["library", "Bibliotheek"], ["save", "Huidige opslaan"]].map(([key, label]) => (
+        <div style={{ display: "flex", gap: "8px", padding: "12px 16px 0", flexShrink: 0 }}>
+          {[["library", "Bibliotheek"], ["save", "Opslaan"]].map(([key, label]) => (
             <button
               key={key}
               onClick={() => setTab(key)}
-              style={{ padding: "6px 14px", borderRadius: "10px", fontSize: "12px", fontWeight: 600, cursor: "pointer", background: tab === key ? "#FF6B00" : "rgba(255,255,255,0.07)", border: "0.5px solid " + (tab === key ? "#FF6B00" : "rgba(255,255,255,0.15)"), color: tab === key ? "#fff" : "rgba(255,255,255,0.55)", minHeight: "36px" }}
+              style={{
+                padding: "8px 16px", borderRadius: "20px", fontSize: "13px", fontWeight: 800, cursor: "pointer",
+                background: tab === key ? "#1a1a1a" : "#ffffff",
+                border: "2px solid #1a1a1a",
+                color: tab === key ? "#ffffff" : "#1a1a1a",
+                minHeight: "38px",
+              }}
             >
               {label}
             </button>
@@ -80,59 +105,92 @@ export default function ExerciseLibraryModal({ onSelect, onClose, currentExercis
         </div>
 
         {/* Content */}
-        <div className="modal-scroll-content" style={{ flex: 1, overflowY: "auto", padding: "12px 16px 24px" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px 32px" }}>
           {tab === "save" ? (
-            <div>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginBottom: "10px" }}>Sla de huidige oefenvorm op in de bibliotheek.</p>
-              <input
-                value={saveName}
-                onChange={e => setSaveName(e.target.value)}
-                placeholder="Naam van de oefenvorm..."
-                style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "10px 12px", fontSize: "13px", color: "#fff", outline: "none", marginBottom: "10px", minHeight: "44px" }}
-              />
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)", fontWeight: 500 }}>Sla de huidige oefenvorm op in de bibliotheek.</p>
+              <div>
+                <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.45)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px", display: "block" }}>Naam</label>
+                <input
+                  value={saveName}
+                  onChange={e => setSaveName(e.target.value)}
+                  placeholder="Naam van de oefenvorm..."
+                  style={{ width: "100%", background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "12px", padding: "12px 14px", fontSize: "14px", fontWeight: 600, color: "#1a1a1a", outline: "none", minHeight: "48px", boxSizing: "border-box" }}
+                />
+              </div>
               <button
                 onClick={handleSave}
                 disabled={!saveName.trim() || saveTemplate.isPending}
-                style={{ width: "100%", minHeight: "48px", background: "#FF6B00", border: "none", borderRadius: "12px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}
+                style={{ width: "100%", minHeight: "52px", background: "#FF6800", border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", opacity: !saveName.trim() ? 0.5 : 1 }}
               >
-                <Save size={15} /> {saveTemplate.isPending ? "Opslaan..." : "Opslaan in bibliotheek"}
+                <Save size={16} /> {saveTemplate.isPending ? "Opslaan..." : "Opslaan in bibliotheek"}
               </button>
             </div>
           ) : isLoading ? (
-            <p style={{ color: "rgba(255,255,255,0.40)", fontSize: "13px", paddingTop: "16px", textAlign: "center" }}>Laden...</p>
-          ) : templates.length === 0 ? (
-            <div style={{ textAlign: "center", paddingTop: "24px" }}>
-              <BookOpen size={32} color="rgba(255,255,255,0.20)" style={{ margin: "0 auto 10px" }} />
-              <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "13px" }}>Nog geen oefeningen opgeslagen.</p>
-              <p style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px", marginTop: "4px" }}>Ga naar 'Huidige opslaan' om een oefening toe te voegen.</p>
-            </div>
+            <p style={{ color: "rgba(26,26,26,0.40)", fontSize: "13px", paddingTop: "16px", textAlign: "center" }}>Laden...</p>
           ) : (
-            templates.map(tpl => (
-              <div key={tpl.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", background: "rgba(255,255,255,0.06)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "14px", marginBottom: "8px" }}>
-                {tpl.field_photo && (
-                  <img src={tpl.field_photo} alt="" style={{ width: "52px", height: "52px", borderRadius: "8px", objectFit: "cover", flexShrink: 0 }} />
-                )}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: "13px", fontWeight: 700, color: "#fff" }}>{tpl.name}</p>
-                  {tpl.description && <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{tpl.description}</p>}
-                  <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.30)", marginTop: "2px" }}>{tpl.duration_minutes || 10} min • {(tpl.coaching_points || []).length} coaching points</p>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px", flexShrink: 0 }}>
-                  <button
-                    onClick={() => handleSelect(tpl)}
-                    style={{ background: "#FF6B00", border: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", fontWeight: 700, color: "#fff", cursor: "pointer", minHeight: "34px" }}
-                  >
-                    Selecteren
-                  </button>
-                  <button
-                    onClick={() => deleteTemplate.mutate(tpl.id)}
-                    style={{ background: "rgba(248,113,113,0.10)", border: "0.5px solid rgba(248,113,113,0.20)", borderRadius: "8px", padding: "4px 8px", fontSize: "11px", color: "#f87171", cursor: "pointer", minHeight: "28px" }}
-                  >
-                    Verwijder
-                  </button>
-                </div>
+            <>
+              {/* Search */}
+              <div style={{ background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "12px", display: "flex", alignItems: "center", gap: "8px", padding: "0 12px", height: "44px", marginBottom: "10px" }}>
+                <span style={{ color: "rgba(26,26,26,0.35)", fontSize: "14px" }}>🔍</span>
+                <input
+                  type="text"
+                  placeholder="Zoek oefening..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  style={{ flex: 1, background: "transparent", border: "none", outline: "none", fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}
+                />
               </div>
-            ))
+
+              {filtered.length === 0 ? (
+                <div style={{ textAlign: "center", paddingTop: "32px" }}>
+                  <BookOpen size={36} color="rgba(26,26,26,0.15)" style={{ margin: "0 auto 10px" }} />
+                  <p style={{ color: "rgba(26,26,26,0.35)", fontSize: "14px", fontWeight: 700 }}>Geen oefeningen gevonden</p>
+                  <p style={{ color: "rgba(26,26,26,0.25)", fontSize: "12px", marginTop: "4px" }}>Ga naar 'Opslaan' om een oefening toe te voegen.</p>
+                </div>
+              ) : (
+                filtered.map(tpl => {
+                  const catColor = CATEGORY_COLORS[tpl.category] || "#1a1a1a";
+                  return (
+                    <div
+                      key={tpl.id}
+                      style={{ display: "flex", alignItems: "center", gap: "10px", padding: "12px", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "2px 2px 0 #1a1a1a", marginBottom: "8px" }}
+                    >
+                      {tpl.photo_url ? (
+                        <img src={tpl.photo_url} alt="" style={{ width: "52px", height: "52px", borderRadius: "10px", objectFit: "cover", flexShrink: 0, border: "2px solid #1a1a1a" }} />
+                      ) : (
+                        <div style={{ width: "48px", height: "48px", borderRadius: "10px", background: catColor, border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                          <span style={{ fontSize: "10px", fontWeight: 900, color: catColor === "#FFD600" || catColor === "#08D068" || catColor === "#00C2FF" ? "#1a1a1a" : "#ffffff" }}>{tpl.category?.slice(0, 3).toUpperCase()}</span>
+                        </div>
+                      )}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>{tpl.name}</p>
+                        {tpl.description && <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 500 }}>{tpl.description}</p>}
+                        {tpl.duration_minutes && (
+                          <p style={{ fontSize: "10px", fontWeight: 700, color: "rgba(26,26,26,0.35)", marginTop: "2px", display: "flex", alignItems: "center", gap: "3px" }}>
+                            <Clock size={10} /> {tpl.duration_minutes} min
+                          </p>
+                        )}
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "6px", flexShrink: 0 }}>
+                        <button
+                          onClick={() => handleSelect(tpl)}
+                          style={{ background: "#FF6800", border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", fontWeight: 800, color: "#fff", cursor: "pointer", minHeight: "34px", whiteSpace: "nowrap" }}
+                        >
+                          Selecteren
+                        </button>
+                        <button
+                          onClick={() => deleteTemplate.mutate(tpl.id)}
+                          style={{ background: "rgba(255,61,168,0.10)", border: "2px solid rgba(255,61,168,0.30)", borderRadius: "8px", padding: "4px 8px", fontSize: "11px", fontWeight: 700, color: "#FF3DA8", cursor: "pointer", minHeight: "28px" }}
+                        >
+                          Verwijder
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </>
           )}
         </div>
       </div>
