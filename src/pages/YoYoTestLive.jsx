@@ -325,14 +325,41 @@ export default function YoYoTestLive() {
         {/* Players grid - only show if test started */}
         {testStarted && (
         <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "14px" }}>
+
+          {/* Quick player index */}
+          <div style={{
+            background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "14px",
+            padding: "12px", boxShadow: "3px 3px 0 #1a1a1a", overflowX: "auto", whiteSpace: "nowrap"
+          }}>
+            <div style={{ display: "flex", gap: "8px", fontSize: "11px", fontWeight: 700 }}>
+              {presentPlayers.filter(p => selectedPlayers.includes(p.id)).map(player => (
+                <button
+                  key={player.id}
+                  onClick={() => {
+                    const element = document.getElementById(`player-${player.id}`);
+                    element?.scrollIntoView({ behavior: "smooth", block: "center" });
+                  }}
+                  style={{
+                    padding: "6px 12px", borderRadius: "8px", border: "1.5px solid #1a1a1a",
+                    background: "#FF6800", color: "#ffffff", cursor: "pointer",
+                    transition: "all 0.15s", flexShrink: 0
+                  }}
+                  onMouseEnter={e => e.target.style.opacity = "0.85"}
+                  onMouseLeave={e => e.target.style.opacity = "1"}
+                >
+                  {player.name.split(" ")[0]}
+                </button>
+              ))}
+            </div>
+          </div>
           {/* Level 18.x group - always visible */}
           <div>
             <p style={{ fontSize: "12px", fontWeight: 800, color: "#FF6800", margin: "0 0 10px 0" }}>Niveau 18.x</p>
             {presentPlayers.filter(p => selectedPlayers.includes(p.id) && p.lastLevel.startsWith("18")).map(player => (
-            <div key={player.id} style={{
-              background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "16px",
-              boxShadow: "2px 2px 0 #1a1a1a", padding: "14px",
-            }}>
+              <div id={`player-${player.id}`} key={player.id} style={{
+                background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "16px",
+                boxShadow: "2px 2px 0 #1a1a1a", padding: "14px",
+              }}>
               {/* Player header */}
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                 <img src={player.photoUrl} alt={player.name}
@@ -431,7 +458,7 @@ export default function YoYoTestLive() {
             {expandedLower && (
               <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "10px" }}>
                 {presentPlayers.filter(p => selectedPlayers.includes(p.id) && !p.lastLevel.startsWith("18") && !p.lastLevel.startsWith("19") && !p.lastLevel.startsWith("2")).map(player => (
-                  <div key={player.id} style={{
+                  <div id={`player-${player.id}`} key={player.id} style={{
                     background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "16px",
                     boxShadow: "2px 2px 0 #1a1a1a", padding: "14px",
                   }}>
@@ -532,7 +559,7 @@ export default function YoYoTestLive() {
             {expandedHigher && (
               <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "10px" }}>
                 {presentPlayers.filter(p => selectedPlayers.includes(p.id) && (p.lastLevel.startsWith("19") || p.lastLevel.startsWith("2"))).map(player => (
-                  <div key={player.id} style={{
+                  <div id={`player-${player.id}`} key={player.id} style={{
                     background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "16px",
                     boxShadow: "2px 2px 0 #1a1a1a", padding: "14px",
                   }}>
