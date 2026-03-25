@@ -23,42 +23,21 @@ function toDateStr(year, month, day) {
   return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
-// Mini SVG icons for activity types
-function TrainingIcon() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="12" cy="8" r="4" fill="#60a5fa" opacity="0.9"/>
-      <path d="M5 20c0-4 3-6 7-6s7 2 7 6" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" opacity="0.9"/>
-    </svg>
-  );
-}
+// Activity type color mapping
+const typeColors = {
+  "Training": { bg: "#08D068", text: "#1a1a1a" },
+  "Wedstrijd": { bg: "#FF3DA8", text: "#ffffff" },
+  "Toernooi": { bg: "#00C2FF", text: "#1a1a1a" },
+};
 
-function WedstrijdIcon() {
+function ActivityDot({ type }) {
+  const colors = typeColors[type] || { bg: "#FFD600", text: "#1a1a1a" };
   return (
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="12" cy="12" r="9" stroke="#4ade80" strokeWidth="2" opacity="0.9"/>
-      <path d="M12 3 L14 8 L12 10 L10 8 Z" fill="#4ade80" opacity="0.9"/>
-      <path d="M3 12 L8 10 L10 12 L8 14 Z" fill="#4ade80" opacity="0.9"/>
-      <path d="M21 12 L16 14 L14 12 L16 10 Z" fill="#4ade80" opacity="0.9"/>
-      <path d="M12 21 L10 16 L12 14 L14 16 Z" fill="#4ade80" opacity="0.9"/>
-    </svg>
+    <div style={{
+      width: "6px", height: "6px", borderRadius: "50%",
+      background: colors.bg, border: "1px solid #1a1a1a",
+    }} />
   );
-}
-
-function EventIcon() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="3" y="4" width="18" height="18" rx="3" stroke="#fbbf24" strokeWidth="2" opacity="0.9"/>
-      <path d="M3 9h18" stroke="#fbbf24" strokeWidth="2" opacity="0.9"/>
-      <path d="M8 2v4M16 2v4" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" opacity="0.9"/>
-    </svg>
-  );
-}
-
-function ActivityIcon({ type }) {
-  if (type === "Training") return <TrainingIcon />;
-  if (type === "Wedstrijd") return <WedstrijdIcon />;
-  return <EventIcon />;
 }
 
 export default function AgendaCalendar({ items, onDayClick }) {
@@ -88,27 +67,49 @@ export default function AgendaCalendar({ items, onDayClick }) {
   const monthName = new Date(year, month, 1).toLocaleDateString("nl-NL", { month: "long", year: "numeric" });
 
   return (
-    <div className="glass-dark rounded-2xl p-4">
+    <div style={{
+      background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px",
+      boxShadow: "3px 3px 0 #1a1a1a", padding: "16px",
+    }}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <button onClick={prevMonth} className="p-2 rounded-xl hover:bg-white/10 transition-colors">
-          <ChevronLeft size={18} style={{ color: "rgba(255,255,255,0.7)" }} />
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+        <button onClick={prevMonth}
+          style={{
+            width: "40px", height: "40px", borderRadius: "12px", display: "flex",
+            alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.04)",
+            border: "2px solid rgba(26,26,26,0.10)", cursor: "pointer", transition: "all 0.15s",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = "rgba(26,26,26,0.08)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "rgba(26,26,26,0.04)"; }}>
+          <ChevronLeft size={16} color="#1a1a1a" />
         </button>
-        <span className="t-card-title capitalize">{monthName}</span>
-        <button onClick={nextMonth} className="p-2 rounded-xl hover:bg-white/10 transition-colors">
-          <ChevronRight size={18} style={{ color: "rgba(255,255,255,0.7)" }} />
+        <h3 style={{ fontSize: "15px", fontWeight: 800, color: "#1a1a1a", textTransform: "capitalize" }}>{monthName}</h3>
+        <button onClick={nextMonth}
+          style={{
+            width: "40px", height: "40px", borderRadius: "12px", display: "flex",
+            alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.04)",
+            border: "2px solid rgba(26,26,26,0.10)", cursor: "pointer", transition: "all 0.15s",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = "rgba(26,26,26,0.08)"; }}
+          onMouseLeave={e => { e.currentTarget.style.background = "rgba(26,26,26,0.04)"; }}>
+          <ChevronRight size={16} color="#1a1a1a" />
         </button>
       </div>
 
       {/* Dag headers */}
-      <div className="grid grid-cols-7 mb-2">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "6px", marginBottom: "8px" }}>
         {DAYS.map(d => (
-          <div key={d} className="text-center t-label py-1">{d}</div>
+          <div key={d} style={{
+            textAlign: "center", fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)",
+            textTransform: "uppercase", letterSpacing: "0.08em", padding: "6px 0",
+          }}>
+            {d}
+          </div>
         ))}
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-7 gap-1">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "6px" }}>
         {grid.map((day, idx) => {
           if (!day) return <div key={idx} />;
           const dateStr = toDateStr(year, month, day);
@@ -118,20 +119,38 @@ export default function AgendaCalendar({ items, onDayClick }) {
 
           return (
             <button key={idx} onClick={() => onDayClick(dateStr, dayItems)}
-              className="relative flex flex-col items-center py-2 rounded-xl transition-all hover:bg-white/5"
               style={{
-                background: isToday ? "rgba(255,140,58,0.15)" : hasItems ? "rgba(255,255,255,0.04)" : "transparent",
-                border: isToday ? "1.5px solid #FF8C3A" : "1px solid transparent",
-                cursor: "pointer",
+                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                padding: "10px 6px", borderRadius: "12px", minHeight: "60px",
+                background: isToday ? "#FF6800" : hasItems ? "rgba(255,104,0,0.08)" : "rgba(26,26,26,0.02)",
+                border: `2px solid ${isToday ? "#1a1a1a" : hasItems ? "rgba(255,104,0,0.20)" : "rgba(26,26,26,0.06)"}`,
+                cursor: "pointer", transition: "all 0.15s", boxShadow: isToday ? "2px 2px 0 #1a1a1a" : "none",
+              }}
+              onMouseEnter={e => {
+                if (!isToday && !hasItems) {
+                  e.currentTarget.style.background = "rgba(26,26,26,0.04)";
+                  e.currentTarget.style.borderColor = "rgba(26,26,26,0.10)";
+                }
+              }}
+              onMouseLeave={e => {
+                if (!isToday && !hasItems) {
+                  e.currentTarget.style.background = "rgba(26,26,26,0.02)";
+                  e.currentTarget.style.borderColor = "rgba(26,26,26,0.06)";
+                }
               }}>
-              <span className="text-sm font-semibold" style={{ color: isToday ? "#FF8C3A" : "rgba(255,255,255,0.85)" }}>
+              <span style={{
+                fontSize: "13px", fontWeight: 700, color: isToday ? "#ffffff" : "#1a1a1a",
+              }}>
                 {day}
               </span>
               {dayItems.length > 0 && (
-                <div className="flex gap-0.5 mt-1 flex-wrap justify-center">
+                <div style={{ display: "flex", gap: "3px", marginTop: "4px", flexWrap: "wrap", justifyContent: "center" }}>
                   {dayItems.slice(0, 3).map((it, i) => (
-                    <ActivityIcon key={i} type={it.type} />
+                    <ActivityDot key={i} type={it.type} />
                   ))}
+                  {dayItems.length > 3 && (
+                    <div style={{ fontSize: "8px", color: "rgba(26,26,26,0.35)", fontWeight: 800, lineHeight: 1 }}>+</div>
+                  )}
                 </div>
               )}
             </button>
