@@ -3,6 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
+const MVA_LOGO = "https://upload.wikimedia.org/wikipedia/nl/thumb/7/7d/MVA_Noord.svg/1200px-MVA_Noord.svg.png";
+
 export default function LiveTracker() {
   const [searchParams] = useSearchParams();
   const matchId = searchParams.get("match_id");
@@ -21,7 +23,6 @@ export default function LiveTracker() {
     refetchInterval: 5000,
   });
 
-  // Extract minute from live_events or display text
   useEffect(() => {
     if (match?.live_events && match.live_events.length > 0) {
       const lastEvent = match.live_events[match.live_events.length - 1];
@@ -29,275 +30,387 @@ export default function LiveTracker() {
     }
   }, [match?.live_events]);
 
-  const isLive = match?.live_status === "live" || match?.live_status === "halftime";
+  const isLive = match?.live_status === "live";
+  const isHalftime = match?.live_status === "halftime";
   const isFinished = match?.live_status === "finished";
-  const isFuture = !match ? true : new Date(match.date) > new Date();
 
-  // Get match date/time
   const getMatchDateTime = () => {
     if (!match) return "";
     const d = new Date(match.date);
-    const time = match.start_time;
-    return `${d.toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short" })} ${time}`;
+    return `${d.toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long" })}${match.start_time ? ` · ${match.start_time}` : ""}`;
   };
 
-  // Get player by ID
   const getPlayer = (playerId) => players?.find(p => p.id === playerId);
-
-  // Get lineup players
   const getLineupPlayers = () => {
     if (!match?.lineup) return [];
-    return match.lineup
-      .map(item => ({
-        ...item,
-        player: getPlayer(item.player_id),
-      }))
-      .filter(item => item.player);
+    return match.lineup.map(item => ({ ...item, player: getPlayer(item.player_id) })).filter(i => i.player);
   };
-
-  // Get substitutes
   const getSubstitutes = () => {
     if (!match?.substitutes) return [];
-    return match.substitutes
-      .map(playerId => getPlayer(playerId))
-      .filter(p => p);
+    return match.substitutes.map(id => getPlayer(id)).filter(Boolean);
   };
 
-  // Render timeline event
-  const renderTimelineEvent = (event) => {
+  // Calculate scores from events
+  const scoreHome = (() => {
+    if (match?.score_home != null) return match.score_home;
+    return match?.live_events?.filter(e => e.type === "goal").length ?? 0;
+  })();
+  const scoreAway = (() => {
+    if (match?.score_away != null) return match.score_away;
+    return match?.live_events?.filter(e => e.type === "goal-opp").length ?? 0;
+  })();
+
+  const timelineEvents = match?.live_events ? [...match.live_events].reverse() : [];
+  const lineupPlayers = getLineupPlayers();
+  const substitutePlayers = getSubstitutes();
+
+  const renderEvent = (event, idx) => {
     const player = getPlayer(event.player_id);
     const assistPlayer = event.assist_player_id ? getPlayer(event.assist_player_id) : null;
     const playerOut = event.player_out_id ? getPlayer(event.player_out_id) : null;
     const playerIn = event.player_in_id ? getPlayer(event.player_in_id) : null;
 
-    let icon = "ti-help";
-    let iconBg = "rgba(255,255,255,0.08)";
-    let iconBorder = "rgba(255,255,255,0.15)";
-    let iconColor = "rgba(255,255,255,0.40)";
+    let emoji = "❓";
     let title = event.type;
-    let description = "";
+    let subtitle = "";
+    let accentColor = "#1a1a1a";
+    let bgColor = "#ffffff";
 
     if (event.type === "goal") {
-      icon = "ti-ball-football";
-      iconBg = "rgba(74,222,128,0.15)";
-      iconBorder = "rgba(74,222,128,0.25)";
-      iconColor = "#4ade80";
-      title = "Goal MVA Noord";
-      description = `${player?.name || "Onbekend"}${assistPlayer ? ` (assist: ${assistPlayer.name})` : ""}`;
+      emoji = "⚽";
+      title = "Goal MVA Noord!";
+      subtitle = `${player?.name || "Onbekend"}${assistPlayer ? ` · assist: ${assistPlayer.name}` : ""}`;
+      accentColor = "#08D068";
+      bgColor = "rgba(8,208,104,0.08)";
     } else if (event.type === "goal-opp") {
-      icon = "ti-ball-football";
-      iconBg = "rgba(248,113,113,0.15)";
-      iconBorder = "rgba(248,113,113,0.25)";
-      iconColor = "#f87171";
-      title = "Goal Tegenstander";
-      description = player?.name || "Onbekend";
+      emoji = "⚽";
+      title = "Goal tegenstander";
+      subtitle = match?.opponent || "Tegenstander";
+      accentColor = "#FF3DA8";
+      bgColor = "rgba(255,61,168,0.08)";
     } else if (event.type === "substitution") {
-      icon = "ti-arrows-exchange";
-      iconColor = "#FF8C3A";
-      iconBg = "rgba(255,107,0,0.15)";
-      iconBorder = "rgba(255,107,0,0.25)";
+      emoji = "🔄";
       title = "Wissel";
-      description = `${playerOut?.name || "Onbekend"} → ${playerIn?.name || "Onbekend"}`;
+      subtitle = `${playerOut?.name || "?"} → ${playerIn?.name || "?"}`;
+      accentColor = "#FF6800";
+      bgColor = "rgba(255,104,0,0.08)";
+    } else if (event.type === "yellow_card") {
+      emoji = "🟨";
+      title = "Gele kaart";
+      subtitle = player?.name || "Onbekend";
+      accentColor = "#FFD600";
+      bgColor = "rgba(255,214,0,0.10)";
+    } else if (event.type === "red_card") {
+      emoji = "🟥";
+      title = "Rode kaart";
+      subtitle = player?.name || "Onbekend";
+      accentColor = "#FF3DA8";
+      bgColor = "rgba(255,61,168,0.08)";
     } else if (event.type === "kickoff") {
-      icon = "ti-clock";
+      emoji = "🏁";
       title = "Aftrap";
     } else if (event.type === "halftime") {
-      icon = "ti-clock";
+      emoji = "⏸";
       title = "Rust";
+    } else if (event.type === "note") {
+      emoji = "📝";
+      title = "Notitie";
+      subtitle = event.note || "";
     }
 
     return (
-      <div key={`${event.minute}-${event.type}-${event.player_id}`} className="flex gap-3 pb-4 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-        <div style={{ minWidth: "32px", fontSize: "12px", color: "rgba(255,255,255,0.45)", paddingTop: "4px" }}>{event.minute}'</div>
-        <div
-          style={{
-            width: "32px",
-            height: "32px",
-            borderRadius: "50%",
-            background: iconBg,
-            border: `0.5px solid ${iconBorder}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            marginTop: "2px",
-          }}
-        >
-          <i className={`ti ${icon}`} style={{ fontSize: "16px", color: iconColor }} />
+      <div
+        key={idx}
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: "12px",
+          padding: "12px 0",
+          borderBottom: "1.5px solid rgba(26,26,26,0.07)",
+        }}
+      >
+        {/* Minute */}
+        <div style={{
+          minWidth: "36px",
+          height: "28px",
+          background: "#1a1a1a",
+          borderRadius: "8px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "11px",
+          fontWeight: 800,
+          color: "#ffffff",
+          flexShrink: 0,
+        }}>
+          {event.minute}'
         </div>
-        <div className="flex-1 pt-1">
-          <p style={{ fontSize: "13px", fontWeight: 600, color: "white" }}>{title}</p>
-          {description && <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", marginTop: "2px" }}>{description}</p>}
+
+        {/* Icon */}
+        <div style={{
+          width: "36px",
+          height: "36px",
+          borderRadius: "10px",
+          background: bgColor,
+          border: `2px solid ${accentColor}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "16px",
+          flexShrink: 0,
+        }}>
+          {emoji}
+        </div>
+
+        {/* Text */}
+        <div style={{ flex: 1, paddingTop: "2px" }}>
+          <p style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.2 }}>{title}</p>
+          {subtitle && <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)", marginTop: "2px" }}>{subtitle}</p>}
         </div>
       </div>
     );
   };
 
-  const lineupPlayers = getLineupPlayers();
-  const substitutePlayers = getSubstitutes();
-  const timelineEvents = match?.live_events ? [...match.live_events].reverse() : [];
-
   if (matchLoading || playersLoading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center" style={{ backgroundColor: "#1c0e04" }}>
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      <div style={{ minHeight: "100vh", background: "#FFF3E8", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div className="w-8 h-8 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!match) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center" style={{ backgroundColor: "#1c0e04" }}>
-        <p className="t-secondary">Wedstrijd niet gevonden</p>
+      <div style={{ minHeight: "100vh", background: "#FFF3E8", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "12px", padding: "24px" }}>
+        <div style={{ fontSize: "48px" }}>⚽</div>
+        <p className="t-section-title">Wedstrijd niet gevonden</p>
+        <p className="t-secondary" style={{ textAlign: "center" }}>Er is geen live wedstrijd beschikbaar op dit moment.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#1c0e04" }}>
-      {/* Background */}
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <div style={{ position: "absolute", width: "100%", height: "100%", backgroundImage: "url('https://images.unsplash.com/photo-1521116573892-7e212e47c319?auto=format&fit=crop&w=1200&h=800&q=80')", backgroundSize: "cover", backgroundPosition: "center" }} />
-        <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: "rgba(255,107,0,0.55)", top: -160, left: -100, filter: "blur(80px)" }} />
-        <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", background: "rgba(255,150,0,0.30)", top: 380, right: -80, filter: "blur(70px)" }} />
-      </div>
+    <div style={{ minHeight: "100vh", background: "#FFF3E8", paddingBottom: "40px" }}>
+      {/* Header */}
+      <div style={{
+        background: "#1a1a1a",
+        borderBottom: "2.5px solid #1a1a1a",
+        padding: "16px 16px 0",
+        position: "sticky",
+        top: 0,
+        zIndex: 10,
+      }}>
+        <div style={{ maxWidth: "480px", margin: "0 auto" }}>
+          {/* Team + MVA label */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+            <img
+              src={MVA_LOGO}
+              alt="MVA Noord"
+              style={{ width: "28px", height: "28px", objectFit: "contain" }}
+              onError={e => { e.target.style.display = "none"; }}
+            />
+            <span style={{ fontSize: "13px", fontWeight: 800, color: "rgba(255,255,255,0.75)", letterSpacing: "0.05em" }}>
+              MVA NOORD {match.team ? `— ${match.team}` : ""}
+            </span>
+            {isLive && (
+              <div style={{
+                display: "flex", alignItems: "center", gap: "5px",
+                marginLeft: "auto",
+                background: "rgba(255,61,168,0.18)",
+                border: "1.5px solid rgba(255,61,168,0.5)",
+                borderRadius: "20px",
+                padding: "3px 10px",
+                fontSize: "10px", fontWeight: 800, color: "#FF3DA8",
+              }}>
+                <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#FF3DA8", animation: "liveBlip 1.4s ease-in-out infinite" }} />
+                LIVE
+              </div>
+            )}
+            {isHalftime && (
+              <div style={{
+                marginLeft: "auto",
+                background: "rgba(255,214,0,0.18)",
+                border: "1.5px solid rgba(255,214,0,0.5)",
+                borderRadius: "20px",
+                padding: "3px 10px",
+                fontSize: "10px", fontWeight: 800, color: "#FFD600",
+              }}>
+                RUST
+              </div>
+            )}
+            {isFinished && (
+              <div style={{
+                marginLeft: "auto",
+                background: "rgba(255,255,255,0.10)",
+                border: "1.5px solid rgba(255,255,255,0.25)",
+                borderRadius: "20px",
+                padding: "3px 10px",
+                fontSize: "10px", fontWeight: 800, color: "rgba(255,255,255,0.55)",
+              }}>
+                AFGELOPEN
+              </div>
+            )}
+          </div>
 
-      {/* Content */}
-      <div className="relative z-10 p-4 md:p-6 max-w-2xl mx-auto pb-12">
-        {/* Hero Card */}
-        <div className="glass-dark rounded-2xl p-6 mb-6" style={{ borderColor: "rgba(255,107,0,0.3)" }}>
-          {/* LIVE Badge */}
-          {(isLive || isFinished) && (
-            <div className="flex justify-center mb-4">
-              {isLive ? (
-                <div style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  padding: "3px 10px",
-                  borderRadius: "20px",
-                  background: "rgba(248,113,113,0.20)",
-                  border: "0.5px solid rgba(248,113,113,0.40)",
-                  color: "#f87171",
-                }}>
-                  <div style={{
-                    width: "6px",
-                    height: "6px",
-                    borderRadius: "50%",
-                    background: "#f87171",
-                    animation: "pulse 1.5s ease-in-out infinite",
-                  }} />
-                  LIVE
-                </div>
+          {/* Score hero */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", paddingBottom: "20px" }}>
+            {/* Home */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+              <img
+                src={MVA_LOGO}
+                alt="MVA Noord"
+                style={{ width: "52px", height: "52px", objectFit: "contain" }}
+                onError={e => { e.target.style.display = "none"; }}
+              />
+              <p style={{ fontSize: "11px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textAlign: "center", lineHeight: 1.2 }}>MVA Noord</p>
+            </div>
+
+            {/* Score */}
+            <div style={{ textAlign: "center", minWidth: "100px" }}>
+              <p style={{ fontSize: "52px", fontWeight: 900, color: "#ffffff", letterSpacing: "-3px", lineHeight: 1 }}>
+                {(isLive || isHalftime || isFinished) ? `${scoreHome} – ${scoreAway}` : "–"}
+              </p>
+              <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", marginTop: "6px" }}>
+                {isLive ? `${currentMinute}'` : isHalftime ? "Rust" : isFinished ? "Eindstand" : getMatchDateTime()}
+              </p>
+            </div>
+
+            {/* Away */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+              {match.opponent_logo ? (
+                <img
+                  src={match.opponent_logo}
+                  alt={match.opponent}
+                  style={{ width: "52px", height: "52px", objectFit: "contain", borderRadius: "50%", background: "rgba(255,255,255,0.1)" }}
+                />
               ) : (
-                <div style={{
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  padding: "3px 10px",
-                  borderRadius: "20px",
-                  background: "rgba(100,100,100,0.20)",
-                  border: "0.5px solid rgba(100,100,100,0.40)",
-                  color: "rgba(255,255,255,0.45)",
-                }}>
-                  AFGELOPEN
+                <div style={{ width: "52px", height: "52px", borderRadius: "50%", background: "rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>
+                  ⚽
                 </div>
               )}
-            </div>
-          )}
-
-          {/* Score Section */}
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="text-center flex-1">
-              <img src={match.opponent_logo || "https://via.placeholder.com/40"} alt={match.opponent} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: "0 auto 8px" }} />
-              <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.65)" }}>MVA Noord</p>
-            </div>
-            <div className="text-center">
-              <p style={{ fontSize: "44px", fontWeight: 800, color: "white", letterSpacing: "-2px", lineHeight: 1 }}>
-                {match.score_home ?? "-"}
-              </p>
-              <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "4px" }}>
-                {!isLive && !isFinished ? getMatchDateTime() : `${currentMinute}'`}
-              </p>
-              <p style={{ fontSize: "13px", fontWeight: 600, color: "#FF8C3A", marginTop: "2px" }}>
-                {isLive || isFinished ? `- ${match.score_away ?? "-"}` : ""}
-              </p>
-            </div>
-            <div className="text-center flex-1">
-              <img src={match.opponent_logo || "https://via.placeholder.com/40"} alt={match.opponent} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: "0 auto 8px" }} />
-              <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.65)" }}>{match.opponent}</p>
+              <p style={{ fontSize: "11px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textAlign: "center", lineHeight: 1.2 }}>{match.opponent || "Tegenstander"}</p>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: "480px", margin: "0 auto", padding: "16px" }}>
+
+        {/* Match info */}
+        {(!isLive && !isHalftime && !isFinished) && (
+          <div className="glass" style={{ padding: "16px", marginBottom: "16px" }}>
+            <p className="t-label" style={{ marginBottom: "8px" }}>Wedstrijd info</p>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <i className="ti ti-calendar" style={{ fontSize: "16px", color: "#FF6800" }} />
+              <p style={{ fontSize: "14px", fontWeight: 600, color: "#1a1a1a" }}>{getMatchDateTime()}</p>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
+              <i className="ti ti-map-pin" style={{ fontSize: "16px", color: "#FF6800" }} />
+              <p style={{ fontSize: "14px", color: "rgba(26,26,26,0.65)" }}>{match.home_away === "Thuis" ? "Thuiswedstrijd" : "Uitwedstrijd"}</p>
+            </div>
+          </div>
+        )}
 
         {/* Timeline */}
-        {timelineEvents.length > 0 && (
-          <div className="glass-dark rounded-2xl p-4 mb-6">
-            <p style={{ fontSize: "10px", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", marginBottom: "16px", letterSpacing: "0.07em" }}>Tijdlijn</p>
-            <div className="space-y-0">
-              {timelineEvents.map((event, idx) => (
-                <div key={idx}>{renderTimelineEvent(event)}</div>
-              ))}
+        <div className="glass" style={{ padding: "16px", marginBottom: "16px" }}>
+          <p className="t-label" style={{ marginBottom: "4px" }}>Tijdlijn</p>
+          {timelineEvents.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "24px 0" }}>
+              <p style={{ fontSize: "32px", marginBottom: "8px" }}>⏳</p>
+              <p className="t-secondary">Nog geen gebeurtenissen</p>
             </div>
-          </div>
-        )}
+          ) : (
+            <div>
+              {timelineEvents.map((event, idx) => renderEvent(event, idx))}
+            </div>
+          )}
+        </div>
 
-        {timelineEvents.length === 0 && (
-          <div className="glass-dark rounded-2xl p-4 mb-6 text-center">
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.35)" }}>Nog geen gebeurtenissen</p>
-          </div>
-        )}
-
-        {/* Lineup */}
+        {/* Basisopstelling */}
         {lineupPlayers.length > 0 && (
-          <div className="glass-dark rounded-2xl p-4 mb-6">
-            <p style={{ fontSize: "10px", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", marginBottom: "12px", letterSpacing: "0.07em" }}>Basisopstelling</p>
-            <div className="space-y-0">
-              {lineupPlayers.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 py-2.5" style={{ borderBottom: idx < lineupPlayers.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none" }}>
-                  <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", width: "32px", textAlign: "right" }}>{item.slot}</p>
-                  <img src={item.player?.photo_url || "https://via.placeholder.com/28"} alt={item.player?.name} style={{ width: "28px", height: "28px", borderRadius: "50%", objectFit: "cover" }} />
-                  <p style={{ fontSize: "13px", color: "white", flex: 1 }}>{item.player?.name}</p>
-                  <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", width: "24px", textAlign: "right" }}>{item.player?.shirt_number}</p>
+          <div className="glass" style={{ padding: "16px", marginBottom: "16px" }}>
+            <p className="t-label" style={{ marginBottom: "12px" }}>Basisopstelling</p>
+            {lineupPlayers.map((item, idx) => (
+              <div key={idx} style={{
+                display: "flex", alignItems: "center", gap: "12px",
+                padding: "8px 0",
+                borderBottom: idx < lineupPlayers.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none",
+              }}>
+                <div style={{
+                  width: "32px", height: "32px", borderRadius: "50%",
+                  overflow: "hidden", border: "2px solid #1a1a1a", flexShrink: 0,
+                  background: "rgba(26,26,26,0.08)",
+                }}>
+                  {item.player?.photo_url ? (
+                    <img src={item.player.photo_url} alt={item.player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>👤</div>
+                  )}
                 </div>
-              ))}
-            </div>
+                <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a", flex: 1 }}>{item.player?.name}</p>
+                {item.player?.shirt_number && (
+                  <div style={{
+                    width: "28px", height: "28px", borderRadius: "8px",
+                    background: "#FF6800", border: "2px solid #1a1a1a",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "11px", fontWeight: 900, color: "#ffffff",
+                  }}>
+                    {item.player.shirt_number}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
 
-        {/* Substitutes */}
+        {/* Wissels */}
         {substitutePlayers.length > 0 && (
-          <div className="glass-dark rounded-2xl p-4 mb-6">
-            <p style={{ fontSize: "10px", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", marginBottom: "12px", letterSpacing: "0.07em" }}>Wissels</p>
-            <div className="space-y-0">
-              {substitutePlayers.map((player, idx) => (
-                <div key={idx} className="flex items-center gap-3 py-2.5" style={{ borderBottom: idx < substitutePlayers.length - 1 ? "0.5px solid rgba(255,255,255,0.06)" : "none" }}>
-                  <img src={player.photo_url || "https://via.placeholder.com/28"} alt={player.name} style={{ width: "28px", height: "28px", borderRadius: "50%", objectFit: "cover" }} />
-                  <p style={{ fontSize: "13px", color: "white", flex: 1 }}>{player.name}</p>
-                  <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", width: "24px", textAlign: "right" }}>{player.shirt_number}</p>
+          <div className="glass" style={{ padding: "16px", marginBottom: "16px" }}>
+            <p className="t-label" style={{ marginBottom: "12px" }}>Reservebank</p>
+            {substitutePlayers.map((player, idx) => (
+              <div key={idx} style={{
+                display: "flex", alignItems: "center", gap: "12px",
+                padding: "8px 0",
+                borderBottom: idx < substitutePlayers.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none",
+              }}>
+                <div style={{
+                  width: "32px", height: "32px", borderRadius: "50%",
+                  overflow: "hidden", border: "2px solid rgba(26,26,26,0.25)", flexShrink: 0,
+                  background: "rgba(26,26,26,0.05)",
+                }}>
+                  {player.photo_url ? (
+                    <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>👤</div>
+                  )}
                 </div>
-              ))}
-            </div>
+                <p style={{ fontSize: "14px", fontWeight: 600, color: "#1a1a1a", flex: 1 }}>{player.name}</p>
+                {player.shirt_number && (
+                  <div style={{
+                    width: "28px", height: "28px", borderRadius: "8px",
+                    background: "rgba(26,26,26,0.08)", border: "2px solid rgba(26,26,26,0.15)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "11px", fontWeight: 900, color: "rgba(26,26,26,0.55)",
+                  }}>
+                    {player.shirt_number}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
 
-        {substitutePlayers.length === 0 && (
-          <div className="glass-dark rounded-2xl p-4 mb-6 text-center">
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.35)" }}>Nog niet bekend</p>
-          </div>
-        )}
-
-        {/* Refresh indicator */}
-        <div className="text-center mt-8">
-          <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.25)" }}>Vernieuwd elke 5 seconden</p>
+        {/* Footer */}
+        <div style={{ textAlign: "center", marginTop: "8px" }}>
+          <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.30)", fontWeight: 600 }}>Vernieuwd elke 5 seconden</p>
         </div>
       </div>
 
       <style>{`
-        @keyframes pulse {
+        @keyframes liveBlip {
           0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
+          50% { opacity: 0.2; }
         }
       `}</style>
     </div>
