@@ -275,11 +275,14 @@ export default function Dashboard() {
 
 
       {uploadModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(26,26,26,0.40)" }}>
-          <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "22px", boxShadow: "4px 4px 0 #1a1a1a", padding: "1.5rem", maxWidth: "500px", width: "100%" }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a", marginBottom: "16px" }}>Team of the Week</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(26,26,26,0.40)", overflowY: "auto" }}>
+          <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "22px", boxShadow: "4px 4px 0 #1a1a1a", padding: "1.5rem", maxWidth: "500px", width: "100%", maxHeight: "90vh", overflowY: "auto", margin: "auto" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+              <h2 style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a", margin: 0 }}>Team of the Week</h2>
+              <button onClick={() => setUploadModalOpen(false)} style={{ background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#1a1a1a", padding: 0, width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}>×</button>
+            </div>
             <WinningTeamUpload players={activePlayers} onSaved={() => { queryClient.invalidateQueries({ queryKey: ["winningTeamPhotos"] }); setUploadModalOpen(false); }} />
-            <button onClick={() => setUploadModalOpen(false)} className="btn-primary mt-4">
+            <button onClick={() => setUploadModalOpen(false)} className="btn-primary" style={{ marginTop: "16px", width: "100%" }}>
               Sluiten
             </button>
           </div>
