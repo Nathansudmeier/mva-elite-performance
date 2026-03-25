@@ -322,8 +322,11 @@ export default function YoYoTestLive() {
 
         {/* Players grid - only show if test started */}
         {testStarted && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-          {presentPlayers.filter(p => selectedPlayers.includes(p.id)).map(player => (
+        <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "14px" }}>
+          {/* Level 18.x group - always visible */}
+          <div>
+            <p style={{ fontSize: "12px", fontWeight: 800, color: "#FF6800", margin: "0 0 10px 0" }}>Niveau 18.x</p>
+            {presentPlayers.filter(p => selectedPlayers.includes(p.id) && p.lastLevel.startsWith("18")).map(player => (
             <div key={player.id} style={{
               background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "16px",
               boxShadow: "2px 2px 0 #1a1a1a", padding: "14px",
