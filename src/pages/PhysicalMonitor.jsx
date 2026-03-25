@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
-import { Plus } from "lucide-react";
+import { Plus, Zap } from "lucide-react";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -88,34 +88,116 @@ export default function PhysicalMonitor() {
 
   const inputStyle = { background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "12px", color: "#1a1a1a", fontWeight: 600, height: "44px" };
 
+  const tabLabels = { yoyo: "Yo-Yo Test", physical: "Sprint", wellness: "Belastbaarheid" };
+  const currentTabLabel = tabLabels[tab];
+
+  const getTopPlayers = () => {
+    if (tab === "yoyo") return yoyoByPlayer.slice(0, 3);
+    if (tab === "physical") {
+      const byPlayer = {};
+      physicalTests.forEach(t => {
+        if (!byPlayer[t.player_id]) byPlayer[t.player_id] = [];
+        byPlayer[t.player_id].push(t);
+      });
+      const latest = Object.entries(byPlayer).map(([id, tests]) => ({
+        id,
+        name: players.find(p => p.id === id)?.name?.split(" ")[0] || "–",
+        score: tests.sort((a, b) => new Date(b.date) - new Date(a.date))[0]?.sprint_30m || 0
+      })).sort((a, b) => a.score - b.score).slice(0, 3);
+      return latest;
+    }
+    if (tab === "wellness") {
+      const byPlayer = {};
+      wellness.forEach(w => {
+        if (!byPlayer[w.player_id]) byPlayer[w.player_id] = [];
+        byPlayer[w.player_id].push(w);
+      });
+      const avgScore = Object.entries(byPlayer).map(([id, logs]) => {
+        const latest = logs.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+        const avg = latest ? (latest.sleep + latest.fatigue + latest.muscle_pain) / 3 : 0;
+        return { id, name: players.find(p => p.id === id)?.name?.split(" ")[0] || "–", score: avg };
+      }).sort((a, b) => b.score - a.score).slice(0, 3);
+      return avgScore;
+    }
+  };
+
+  const topPlayers = getTopPlayers();
+  const maxScore = Math.max(...(tab === "yoyo" ? yoyoByPlayer : tab === "physical" ? (Object.values(physicalTests.reduce((acc, t) => {
+    if (!acc[t.player_id]) acc[t.player_id] = [];
+    acc[t.player_id].push(t.sprint_30m);
+    return acc;
+  }, {})).flat()) : (Object.values(wellness.reduce((acc, w) => {
+    if (!acc[w.player_id]) acc[w.player_id] = [];
+    acc[w.player_id].push((w.sleep + w.fatigue + w.muscle_pain) / 3);
+    return acc;
+  }, {})).flat())).map(p => typeof p === 'object' ? p.level || p.score : p), 0) || 1;
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingBottom: "80px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingBottom: "80px", padding: "1rem" }}>
 
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div>
-          <h1 className="t-page-title">Fysieke Monitor</h1>
-          <p className="t-secondary" style={{ marginTop: "2px" }}>Yo-Yo, Sprint & Belastbaarheid</p>
+      <div style={{
+        background: "#FF6800", 
+        border: "2.5px solid #1a1a1a",
+        borderRadius: "18px",
+        boxShadow: "3px 3px 0 #1a1a1a",
+        padding: "1rem 0 1rem 1.25rem",
+        margin: 0,
+        position: "relative",
+        overflow: "hidden",
+        minHeight: "90px",
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+      }}>
+        {/* Decorative circles */}
+        <div style={{
+          position: "absolute",
+          width: "130px",
+          height: "130px",
+          borderRadius: "50%",
+          border: "2px solid rgba(255,255,255,0.15)",
+          top: "-40px",
+          right: "90px",
+          pointerEvents: "none",
+        }} />
+        <div style={{
+          position: "absolute",
+          width: "60px",
+          height: "60px",
+          borderRadius: "50%",
+          border: "2px solid rgba(255,255,255,0.15)",
+          bottom: "-15px",
+          right: "180px",
+          pointerEvents: "none",
+        }} />
+        
+        {/* Left section */}
+        <div style={{ zIndex: 2 }}>
+          <h1 style={{ fontSize: "22px", fontWeight: 900, color: "white", letterSpacing: "-0.5px", margin: 0 }}>Fysieke Monitor</h1>
+          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", fontWeight: 600, margin: "3px 0 0 0" }}>Yo-Yo, Sprint & Belastbaarheid</p>
         </div>
-        {isTrainer && (
-          <div style={{ display: "flex", gap: "8px" }}>
-            <Link to={createPageUrl("YoYoTestLive")} style={{ textDecoration: "none" }}>
-              <button style={{ display: "flex", alignItems: "center", gap: "6px", background: "#08D068", color: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "0 16px", height: "44px", fontWeight: 800, fontSize: "13px", cursor: "pointer" }}>
-                <Plus size={15} /> Live Invoeren
-              </button>
-            </Link>
-            <button
-              onClick={() => openDialog(tab)}
-              style={{ display: "flex", alignItems: "center", gap: "6px", background: "#FF6800", color: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "0 16px", height: "44px", fontWeight: 800, fontSize: "13px", cursor: "pointer" }}
-            >
-              <Plus size={15} /> Invoeren
-            </button>
-          </div>
-        )}
+        
+        {/* Emvi illustration */}
+        <img 
+          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b7c2ea7dc_Emvi-sweat.png" 
+          alt="Emvi" 
+          style={{ 
+            position: "absolute",
+            right: 0,
+            bottom: 0,
+            height: "110px",
+            width: "auto",
+            objectFit: "contain",
+            objectPosition: "bottom",
+            zIndex: 3,
+            pointerEvents: "none",
+          }} 
+        />
       </div>
 
-      {/* Tab bar */}
-      <div style={{ display: "flex", gap: "6px" }}>
+      {/* Tab pills */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
         {TABS.map(t => (
           <button
             key={t.key}
@@ -123,14 +205,14 @@ export default function PhysicalMonitor() {
             style={{
               padding: "8px 16px",
               borderRadius: "20px",
-              border: "2px solid #1a1a1a",
+              border: "2.5px solid #1a1a1a",
               background: tab === t.key ? "#1a1a1a" : "#ffffff",
-              color: tab === t.key ? "#ffffff" : "#1a1a1a",
-              fontSize: "12px",
+              color: tab === t.key ? "#ffffff" : "rgba(26,26,26,0.50)",
+              fontSize: "13px",
               fontWeight: 800,
               cursor: "pointer",
               transition: "all 0.1s",
-              boxShadow: tab === t.key ? "2px 2px 0 rgba(26,26,26,0.2)" : "none",
+              boxShadow: tab === t.key ? "3px 3px 0 #FF6800" : "2px 2px 0 #1a1a1a",
             }}
           >
             {t.label}
@@ -138,24 +220,79 @@ export default function PhysicalMonitor() {
         ))}
       </div>
 
+      {/* Action buttons */}
+      {isTrainer && (
+        <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+          <Link to={createPageUrl("YoYoTestLive")} style={{ textDecoration: "none", flex: 1 }}>
+            <button style={{ 
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", 
+              background: "#08D068", color: "#1a1a1a", border: "2.5px solid #1a1a1a", 
+              borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", 
+              height: "44px", fontWeight: 800, fontSize: "13px", cursor: "pointer", width: "100%"
+            }}>
+              <Zap size={14} /> Live Invoeren
+            </button>
+          </Link>
+          <button
+            onClick={() => openDialog(tab)}
+            style={{ 
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", 
+              background: "#FF6800", color: "#ffffff", border: "2.5px solid #1a1a1a", 
+              borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", 
+              height: "44px", fontWeight: 800, fontSize: "13px", cursor: "pointer", flex: 1
+            }}
+          >
+            <Plus size={14} /> Invoeren
+          </button>
+        </div>
+      )}
+
+      {/* Top 3 bento cards */}
+      {topPlayers.length > 0 && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+          {topPlayers.map((p, i) => (
+            <div
+              key={p.id}
+              style={{
+                background: i === 0 ? "#FF6800" : "#ffffff",
+                border: "2.5px solid #1a1a1a",
+                borderRadius: "14px",
+                boxShadow: i === 0 ? "3px 3px 0 #1a1a1a" : "2px 2px 0 #1a1a1a",
+                padding: "0.75rem",
+                textAlign: "center",
+              }}
+            >
+              <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: i === 0 ? "rgba(255,255,255,0.60)" : "rgba(26,26,26,0.40)", margin: 0 }}>#{i + 1}</p>
+              <p style={{ fontSize: "13px", fontWeight: 900, color: i === 0 ? "#ffffff" : "#1a1a1a", margin: "4px 0 0 0" }}>{p.name}</p>
+              <p style={{ fontSize: "22px", fontWeight: 900, color: i === 0 ? "#ffffff" : "#FF6800", letterSpacing: "-1px", margin: "4px 0 0 0" }}>{typeof p.level !== 'undefined' ? p.level : p.score}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* ── YO-YO ── */}
       {tab === "yoyo" && (
         <>
           {/* Ranking */}
-          <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
-            <p className="t-section-title" style={{ marginBottom: "14px" }}>Huidig Yo-Yo Niveau</p>
+          <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
+            <div style={{ padding: "0.75rem 1rem", borderBottom: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <p style={{ fontSize: "14px", fontWeight: 900, color: "#1a1a1a", margin: 0 }}>Huidig {currentTabLabel} Niveau</p>
+              <div style={{ background: "#00C2FF", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "3px 10px", fontSize: "10px", fontWeight: 800, color: "#1a1a1a" }}>
+                {yoyoByPlayer.length}
+              </div>
+            </div>
             {yoyoByPlayer.length === 0 ? (
-              <p className="t-secondary" style={{ textAlign: "center", padding: "24px 0" }}>Nog geen Yo-Yo resultaten</p>
+              <p className="t-secondary" style={{ textAlign: "center", padding: "24px 1rem" }}>Nog geen Yo-Yo resultaten</p>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {yoyoByPlayer.map((p, i) => (
-                  <div key={p.id} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.25)", width: "18px", textAlign: "right", flexShrink: 0 }}>{i + 1}</span>
-                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a", width: "80px", flexShrink: 0 }}>{p.name}</span>
-                    <div style={{ flex: 1, height: "8px", background: "rgba(26,26,26,0.08)", borderRadius: "4px", overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${Math.min((p.level / 23) * 100, 100)}%`, background: p.level >= 18 ? "#08D068" : p.level >= 15 ? "#FFD600" : "#FF6800", borderRadius: "4px", transition: "width 0.4s ease" }} />
+              <div>
+                {yoyoByPlayer.map((p, i, arr) => (
+                  <div key={p.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 1rem", borderBottom: i < arr.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 800, color: i < 3 ? "#FF6800" : "rgba(26,26,26,0.35)", width: "20px", textAlign: "center", flexShrink: 0 }}>{i + 1}</span>
+                    <span style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a", width: "80px", flexShrink: 0 }}>{p.name}</span>
+                    <div style={{ flex: 1, height: "10px", background: "rgba(26,26,26,0.08)", borderRadius: "20px", border: "1.5px solid #1a1a1a", overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${(p.level / maxScore) * 100}%`, background: p.level >= 18 ? "#08D068" : p.level >= 15 ? "#FFD600" : "#FF3DA8", borderRadius: "20px" }} />
                     </div>
-                    <span style={{ fontSize: "13px", fontWeight: 900, color: "#FF6800", width: "36px", textAlign: "right", flexShrink: 0 }}>{p.level || "–"}</span>
+                    <span style={{ fontSize: "14px", fontWeight: 900, color: "#FF6800", width: "36px", textAlign: "right", flexShrink: 0 }}>{p.level || "–"}</span>
                   </div>
                 ))}
               </div>
@@ -184,30 +321,30 @@ export default function PhysicalMonitor() {
 
       {/* ── SPRINT ── */}
       {tab === "physical" && (
-        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
-          <p className="t-section-title" style={{ marginBottom: "14px" }}>Sprint Resultaten</p>
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
+          <div style={{ padding: "0.75rem 1rem", borderBottom: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <p style={{ fontSize: "14px", fontWeight: 900, color: "#1a1a1a", margin: 0 }}>Huidig {currentTabLabel} Niveau</p>
+            <div style={{ background: "#00C2FF", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "3px 10px", fontSize: "10px", fontWeight: 800, color: "#1a1a1a" }}>
+              {physicalTests.length}
+            </div>
+          </div>
           {physicalTests.length === 0 ? (
-            <p className="t-secondary" style={{ textAlign: "center", padding: "24px 0" }}>Nog geen testresultaten</p>
+            <p className="t-secondary" style={{ textAlign: "center", padding: "24px 1rem" }}>Nog geen testresultaten</p>
           ) : (
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr style={{ borderBottom: "2px solid rgba(26,26,26,0.08)" }}>
-                    {["Speelster", "Datum", "Sprint 30m"].map((h, i) => (
-                      <th key={h} style={{ padding: "8px 6px", fontSize: "10px", fontWeight: 800, color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", textAlign: i >= 2 ? "right" : "left" }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...physicalTests].sort((a, b) => new Date(b.date) - new Date(a.date)).map((t, i, arr) => (
-                    <tr key={t.id} style={{ borderBottom: i < arr.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
-                      <td style={{ padding: "10px 6px", fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>{players.find((p) => p.id === t.player_id)?.name || "–"}</td>
-                      <td style={{ padding: "10px 6px", fontSize: "12px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>{format(new Date(t.date), "d MMM", { locale: nl })}</td>
-                      <td style={{ padding: "10px 6px", textAlign: "right", fontSize: "13px", fontWeight: 900, color: "#9B5CFF" }}>{t.sprint_30m ? `${t.sprint_30m}s` : "–"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div>
+              {[...physicalTests].sort((a, b) => new Date(b.date) - new Date(a.date)).map((t, i, arr) => {
+                const playerName = players.find((p) => p.id === t.player_id)?.name?.split(" ")[0] || "–";
+                return (
+                  <div key={t.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 1rem", borderBottom: i < arr.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 800, color: "rgba(26,26,26,0.35)", width: "20px", textAlign: "center", flexShrink: 0 }}>–</span>
+                    <span style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a", width: "80px", flexShrink: 0 }}>{playerName}</span>
+                    <div style={{ flex: 1, height: "10px", background: "rgba(26,26,26,0.08)", borderRadius: "20px", border: "1.5px solid #1a1a1a", overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${(t.sprint_30m / maxScore) * 100}%`, background: t.sprint_30m <= 4.5 ? "#08D068" : t.sprint_30m <= 5 ? "#FFD600" : "#FF3DA8", borderRadius: "20px" }} />
+                    </div>
+                    <span style={{ fontSize: "14px", fontWeight: 900, color: "#FF6800", width: "36px", textAlign: "right", flexShrink: 0 }}>{t.sprint_30m || "–"}</span>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
@@ -215,32 +352,31 @@ export default function PhysicalMonitor() {
 
       {/* ── BELASTBAARHEID ── */}
       {tab === "wellness" && (
-        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
-          <p className="t-section-title" style={{ marginBottom: "14px" }}>Belastbaarheidslogboek</p>
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
+          <div style={{ padding: "0.75rem 1rem", borderBottom: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <p style={{ fontSize: "14px", fontWeight: 900, color: "#1a1a1a", margin: 0 }}>Huidig {currentTabLabel} Niveau</p>
+            <div style={{ background: "#00C2FF", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "3px 10px", fontSize: "10px", fontWeight: 800, color: "#1a1a1a" }}>
+              {wellness.length}
+            </div>
+          </div>
           {wellness.length === 0 ? (
-            <p className="t-secondary" style={{ textAlign: "center", padding: "24px 0" }}>Nog geen logs</p>
+            <p className="t-secondary" style={{ textAlign: "center", padding: "24px 1rem" }}>Nog geen logs</p>
           ) : (
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr style={{ borderBottom: "2px solid rgba(26,26,26,0.08)" }}>
-                    {["Speelster", "Datum", "Slaap", "Vermoeidheid", "Spierpijn"].map((h, i) => (
-                      <th key={h} style={{ padding: "8px 6px", fontSize: "10px", fontWeight: 800, color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", textAlign: i >= 2 ? "center" : "left" }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...wellness].sort((a, b) => new Date(b.date) - new Date(a.date)).map((w, i, arr) => (
-                    <tr key={w.id} style={{ borderBottom: i < arr.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
-                      <td style={{ padding: "10px 6px", fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>{players.find((p) => p.id === w.player_id)?.name || "–"}</td>
-                      <td style={{ padding: "10px 6px", fontSize: "12px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>{format(new Date(w.date), "d MMM", { locale: nl })}</td>
-                      <td style={{ padding: "10px 6px", textAlign: "center" }}>{renderScore(w.sleep)}</td>
-                      <td style={{ padding: "10px 6px", textAlign: "center" }}>{renderScore(w.fatigue)}</td>
-                      <td style={{ padding: "10px 6px", textAlign: "center" }}>{renderScore(w.muscle_pain)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div>
+              {[...wellness].sort((a, b) => new Date(b.date) - new Date(a.date)).map((w, i, arr) => {
+                const playerName = players.find((p) => p.id === w.player_id)?.name?.split(" ")[0] || "–";
+                const avg = (w.sleep + w.fatigue + w.muscle_pain) / 3;
+                return (
+                  <div key={w.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 1rem", borderBottom: i < arr.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 800, color: "rgba(26,26,26,0.35)", width: "20px", textAlign: "center", flexShrink: 0 }}>–</span>
+                    <span style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a", width: "80px", flexShrink: 0 }}>{playerName}</span>
+                    <div style={{ flex: 1, height: "10px", background: "rgba(26,26,26,0.08)", borderRadius: "20px", border: "1.5px solid #1a1a1a", overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${(avg / maxScore) * 100}%`, background: avg >= 4 ? "#08D068" : avg >= 3 ? "#FFD600" : "#FF3DA8", borderRadius: "20px" }} />
+                    </div>
+                    <span style={{ fontSize: "14px", fontWeight: 900, color: "#FF6800", width: "36px", textAlign: "right", flexShrink: 0 }}>{avg.toFixed(1)}</span>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
