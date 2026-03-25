@@ -1,8 +1,8 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import DashboardBackground from "@/components/dashboard/DashboardBackground";
-import { Trophy, Medal } from "lucide-react";
+import { format } from "date-fns";
+import { nl } from "date-fns/locale";
 
 export default function Leaderboard() {
   const { data: winningTeams } = useQuery({
@@ -25,6 +25,15 @@ export default function Leaderboard() {
     });
   });
 
+  // Get recent winners (last 3 winning teams)
+  const recentWinnerIds = new Set(
+    winningTeams
+      .slice()
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 3)
+      .flatMap((w) => w.winning_player_ids || [])
+  );
+
   // Maak leaderboard met speler info
   const leaderboard = players
     .map((p) => ({
@@ -35,38 +44,143 @@ export default function Leaderboard() {
     .filter((p) => p.wins > 0);
 
   const top3 = leaderboard.slice(0, 3);
-  const rest = leaderboard.slice(3);
+  const ranked = leaderboard;
 
   const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean);
 
   return (
-    <div className="space-y-6 pb-20 relative" style={{ zIndex: 2 }}>
-      <DashboardBackground />
-      <h1 className="t-page-title text-center text-2xl">Leaderboard</h1>
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingBottom: "100px" }}>
+      <h1 className="t-page-title" style={{ textAlign: "center", fontSize: "24px", marginTop: "8px" }}>Champions Trophy</h1>
 
-      {/* PODIUM */}
+      {/* PODIUM CARD */}
       {top3.length > 0 && (
-        <div className="glass p-6">
-          <div className="flex items-end justify-center gap-6 mb-4">
+        <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "22px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem" }}>
+          {/* Header */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+            <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <i className="ti ti-trophy" style={{ fontSize: "20px", color: "#ffffff" }} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1.2 }}>Podium Top 3</p>
+              <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", fontWeight: 600, marginTop: "2px" }}>Seizoen 2025-26</p>
+            </div>
+          </div>
+
+          {/* Podium */}
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "12px" }}>
             {podiumOrder.map((player, idx) => {
-              const medalColors = ["#C0A060", "#FFD700", "#CD7F32"];
-              const positions = ["2", "1", "3"];
+              const originalRank = top3.indexOf(player);
               const isCenter = idx === 1;
+              const isHot = recentWinnerIds.has(player.id);
+
+              const circleSize = isCenter ? 64 : 52;
+              const circleBg = isCenter ? "#FF6800" : "#ffffff";
+              const circleShadow = isCenter ? "3px 3px 0 #1a1a1a" : "2px 2px 0 #1a1a1a";
 
               return (
-                <div key={player.id} className="flex flex-col items-center" style={{ flex: isCenter ? "0 0 34%" : "0 0 26%" }}>
-                  <Medal size={isCenter ? 28 : 22} style={{ color: medalColors[idx] }} className="mb-1" />
-                  <p className="t-metric-orange mb-2" style={{ fontSize: isCenter ? "24px" : "18px" }}>#{positions[idx]}</p>
-                  {player.photo_url ? (
-                    <img src={player.photo_url} alt={player.name} className="rounded-full object-cover mb-2" style={{ width: isCenter ? 72 : 52, height: isCenter ? 72 : 52, border: `3px solid ${medalColors[idx]}` }} />
-                  ) : (
-                    <div className="rounded-full flex items-center justify-center text-white font-black mb-2" style={{ width: isCenter ? 72 : 52, height: isCenter ? 72 : 52, background: `linear-gradient(135deg, ${medalColors[idx]}, rgba(0,0,0,0.3))`, border: `2px solid ${medalColors[idx]}`, fontSize: isCenter ? 22 : 16 }}>
-                      {player.name?.[0]}
-                    </div>
-                  )}
-                  <div className="w-full rounded-t-xl flex flex-col items-center justify-end pt-2 pb-3" style={{ background: `linear-gradient(135deg, ${medalColors[idx]}33, ${medalColors[idx]}11)`, border: `0.5px solid ${medalColors[idx]}55`, minHeight: isCenter ? 56 : 36 }}>
-                    <p className="t-card-title text-center truncate w-full px-1" style={{ fontSize: isCenter ? 12 : 10 }}>{player.name?.split(" ")[0]}</p>
-                    <p className="text-xs font-bold mt-0.5" style={{ color: medalColors[idx] }}>{player.wins} wins</p>
+                <div key={player.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: isCenter ? "0 0 36%" : "0 0 28%" }}>
+                  {isHot && <i className="ti ti-flame" style={{ fontSize: "14px", color: "#FF6800", marginBottom: "3px" }} />}
+
+                  {/* Avatar circle */}
+                  <div style={{
+                    width: circleSize,
+                    height: circleSize,
+                    borderRadius: "50%",
+                    border: "2.5px solid #1a1a1a",
+                    boxShadow: circleShadow,
+                    background: player.photo_url ? "transparent" : circleBg,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    overflow: "hidden",
+                    fontSize: isCenter ? 20 : 16,
+                    fontWeight: 900,
+                    color: isCenter ? "#ffffff" : "#1a1a1a",
+                  }}>
+                    {player.photo_url
+                      ? <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      : player.name?.charAt(0)}
+                  </div>
+
+                  {/* Name */}
+                  <p style={{ fontSize: isCenter ? 12 : 11, fontWeight: 800, color: "#1a1a1a", marginTop: "8px", textAlign: "center" }}>
+                    {player.name?.split(" ")[0]}
+                  </p>
+
+                  {/* Wins */}
+                  <p style={{ fontSize: "10px", fontWeight: 600, color: "rgba(26,26,26,0.55)", marginTop: "2px" }}>
+                    {player.wins} win{player.wins !== 1 ? "s" : ""}
+                  </p>
+
+                  {/* Position badge */}
+                  <div style={{
+                    marginTop: "6px",
+                    background: circleBg,
+                    color: "#1a1a1a",
+                    border: "1.5px solid #1a1a1a",
+                    borderRadius: "20px",
+                    padding: "3px 10px",
+                    fontSize: "10px",
+                    fontWeight: 900,
+                    boxShadow: isCenter ? "2px 2px 0 #1a1a1a" : "none",
+                  }}>
+                    #{originalRank + 1}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Divider */}
+          <div style={{ borderTop: "1.5px solid rgba(26,26,26,0.15)", margin: "0.75rem 0" }} />
+
+          {/* Rank 4+ list */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {ranked.slice(3, 8).map((player, i) => {
+              const isHot = recentWinnerIds.has(player.id);
+              return (
+                <div key={player.id} style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "6px 0",
+                  borderBottom: i < ranked.slice(3, 8).length - 1 ? "1px solid rgba(26,26,26,0.10)" : "none",
+                }}>
+                  <span style={{ fontSize: "12px", fontWeight: 900, color: "rgba(26,26,26,0.40)", width: "20px", flexShrink: 0 }}>
+                    #{i + 4}
+                  </span>
+                  <div style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "#ffffff",
+                    border: "1.5px solid #1a1a1a",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    color: "#1a1a1a",
+                    flexShrink: 0,
+                  }}>
+                    {player.photo_url
+                      ? <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      : player.name?.charAt(0)}
+                  </div>
+                  <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a", flex: 1 }}>
+                    {player.name?.split(" ")[0]} {isHot && <i className="ti ti-flame" style={{ fontSize: "12px", color: "#FF6800", marginLeft: "4px" }} />}
+                  </span>
+                  <div style={{
+                    background: "#ffffff",
+                    border: "1.5px solid #1a1a1a",
+                    borderRadius: "20px",
+                    padding: "2px 8px",
+                    fontSize: "10px",
+                    fontWeight: 800,
+                    color: "#1a1a1a",
+                  }}>
+                    {player.wins}
                   </div>
                 </div>
               );
@@ -75,43 +189,28 @@ export default function Leaderboard() {
         </div>
       )}
 
-      {/* VOLLEDIGE LEADERBOARD */}
-      <div className="glass p-6">
-        <p className="t-section-title mb-4">Volledige Leaderboard</p>
-        <div className="space-y-2">
-          {leaderboard.map((p, i) => (
-            <div key={p.id} className="flex items-center justify-between p-4 rounded-xl" style={{ background: "rgba(255,255,255,0.06)" }}>
-              <div className="flex items-center gap-4">
-                <span className="t-metric-orange w-8 text-center" style={{ fontSize: "18px" }}>{i + 1}</span>
-                {p.photo_url ? (
-                  <img src={p.photo_url} alt={p.name} className="w-10 h-10 rounded-full object-cover" style={{ border: "1.5px solid rgba(255,107,0,0.3)" }} />
-                ) : (
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>{p.name?.[0]}</div>
-                )}
-                <span className="t-card-title">{p.name}</span>
-              </div>
-              <p className="t-metric-orange" style={{ fontSize: "16px" }}>{p.wins} wins</p>
-            </div>
-          ))}
-        </div>
-        {leaderboard.length === 0 && <p className="t-tertiary text-center py-8">Geen winnaars geregistreerd</p>}
-      </div>
-
       {/* RECENTE WINNENDE TEAMS */}
       {winningTeams.length > 0 && (
-        <div className="glass p-6">
-          <p className="t-section-title mb-4">Recente Winnende Teams</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {winningTeams.slice(0, 9).map((team) => (
-              <div key={team.id} className="rounded-xl overflow-hidden" style={{ border: "0.5px solid rgba(255,255,255,0.12)" }}>
-                {team.photo_url && <img src={team.photo_url} alt="Winning team" className="w-full h-48 object-cover" />}
-                <div className="p-4" style={{ background: "rgba(255,255,255,0.06)" }}>
-                  <p className="t-tertiary mb-1">{new Date(team.date).toLocaleDateString("nl-NL")}</p>
-                  <p className="t-secondary">{team.winning_player_ids.length} spelers</p>
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+          <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a", marginBottom: "12px" }}>Recente Winnende Teams</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }} className="mobile-grid-1col">
+            {winningTeams.slice(0, 6).map((team) => (
+              <div key={team.id} style={{ borderRadius: "14px", overflow: "hidden", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", background: "#ffffff" }}>
+                {team.photo_url && <img src={team.photo_url} alt="Winning team" style={{ width: "100%", height: "120px", objectFit: "cover" }} />}
+                <div style={{ padding: "10px 12px", background: "#ffffff" }}>
+                  <p style={{ fontSize: "11px", fontWeight: 700, color: "#1a1a1a" }}>{format(new Date(team.date), "d MMM yyyy", { locale: nl })}</p>
+                  <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.55)", marginTop: "3px", fontWeight: 600 }}>{team.winning_player_ids.length} spelers</p>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {leaderboard.length === 0 && (
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "2rem", textAlign: "center" }}>
+          <i className="ti ti-trophy" style={{ fontSize: "36px", color: "rgba(26,26,26,0.15)", marginBottom: "12px", display: "block" }} />
+          <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>Nog geen winnaars geregistreerd</p>
         </div>
       )}
     </div>
