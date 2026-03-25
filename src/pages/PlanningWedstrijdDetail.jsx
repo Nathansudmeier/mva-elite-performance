@@ -279,8 +279,8 @@ export default function PlanningWedstrijdDetail() {
     setResetting(true);
     await base44.entities.Match.update(match.id, {
       live_events: [],
-      score_home: 0,
-      score_away: 0,
+      score_home: null,
+      score_away: null,
       halftime_notes: "",
       live_status: "pre",
     });
