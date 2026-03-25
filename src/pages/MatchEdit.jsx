@@ -73,6 +73,8 @@ export default function MatchEdit() {
   const [showPlayerPicker, setShowPlayerPicker] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [showField, setShowField] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   // Compress image to max 200x200px
   const compressImage = (file) => {
@@ -147,6 +149,31 @@ export default function MatchEdit() {
       navigate(-1);
     },
   });
+
+
+  const handleReset = async () => {
+    setResetting(true);
+    try {
+      // Reset match live data
+      await base44.entities.Match.update(matchId, {
+        live_status: "pre",
+        live_events: [],
+        score_home: null,
+        score_away: null,
+        halftime_notes: "",
+      });
+      // Delete all PlayerMatchTime records for this match
+      const matchTimes = await base44.entities.PlayerMatchTime.filter({ match_id: matchId });
+      for (const rec of matchTimes) {
+        await base44.entities.PlayerMatchTime.delete(rec.id);
+      }
+      queryClient.invalidateQueries({ queryKey: ["matches"] });
+      setShowResetConfirm(false);
+      setFormData(prev => ({ ...prev, score_home: "", score_away: "" }));
+    } finally {
+      setResetting(false);
+    }
+  };
 
   const handleSave = () => {
     const saveData = {
@@ -563,6 +590,65 @@ export default function MatchEdit() {
               >
                 Opslaan
               </button>
+
+              {/* Reset knop */}
+              <button
+                onClick={() => setShowResetConfirm(true)}
+                style={{
+                  background: "transparent",
+                  color: "rgba(255,100,100,0.85)",
+                  border: "0.5px solid rgba(255,100,100,0.35)",
+                  borderRadius: "14px",
+                  height: "48px",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  width: "100%",
+                  cursor: "pointer",
+                  marginTop: "-8px",
+                }}
+              >
+                🔄 Wedstrijd resetten
+              </button>
+
+              {/* Reset bevestiging modal */}
+              {showResetConfirm && (
+                <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center", pointerEvents: "none" }}>
+                  <div onClick={() => setShowResetConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 200, pointerEvents: "auto" }} />
+                  <div style={{
+                    position: "relative",
+                    zIndex: 301,
+                    background: "#1c0e04",
+                    border: "0.5px solid rgba(255,255,255,0.12)",
+                    borderRadius: "20px 20px 0 0",
+                    padding: "24px",
+                    paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))",
+                    width: "100%",
+                    maxWidth: "500px",
+                    pointerEvents: "auto",
+                  }}>
+                    <div style={{ fontSize: "32px", textAlign: "center", marginBottom: "12px" }}>⚠️</div>
+                    <div style={{ fontSize: "16px", fontWeight: 800, color: "white", textAlign: "center", marginBottom: "8px" }}>Wedstrijd resetten?</div>
+                    <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", textAlign: "center", marginBottom: "24px" }}>
+                      Dit verwijdert alle live events, de score, rust-notities en speeltijdrecords van deze wedstrijd. Dit kan niet ongedaan worden gemaakt.
+                    </p>
+                    <div style={{ display: "flex", gap: "12px" }}>
+                      <button
+                        onClick={() => setShowResetConfirm(false)}
+                        style={{ flex: 1, height: "48px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: "pointer" }}
+                      >
+                        Annuleren
+                      </button>
+                      <button
+                        onClick={handleReset}
+                        disabled={resetting}
+                        style={{ flex: 1, height: "48px", background: resetting ? "#666" : "#cc3333", border: "none", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: resetting ? "not-allowed" : "pointer" }}
+                      >
+                        {resetting ? "Bezig..." : "Ja, reset"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
