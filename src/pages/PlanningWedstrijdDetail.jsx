@@ -286,7 +286,11 @@ export default function PlanningWedstrijdDetail() {
     });
     const playerMatchTimes = await base44.entities.PlayerMatchTime.filter({ match_id: match.id });
     await Promise.all(playerMatchTimes.map(r => base44.entities.PlayerMatchTime.delete(r.id)));
-    await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: ["match", item?.match_id] }),
+      qc.invalidateQueries({ queryKey: ["matches"] }),
+      qc.invalidateQueries({ queryKey: ["matches-all"] }),
+    ]);
     setResetting(false);
     setShowResetConfirm(false);
     toast({ description: "Wedstrijd gereset", style: { background: "#4ade80", color: "white", border: "none" } });
