@@ -78,7 +78,25 @@ export default function LiveMatch() {
       setFormation(match.formation || "4-3-3");
       if (match.live_events) setEvents(match.live_events);
       if (match.halftime_notes) setHalftimeNotes(match.halftime_notes);
-      if (match.live_status && match.live_status !== "pre") setPhase(match.live_status);
+
+      const status = match.live_status;
+      if (status && status !== "pre") setPhase(status);
+
+      // Restore timer from server timestamps
+      const halfLength = match.team === "MO17" ? 40 : 45;
+      if (status === "live") {
+        if (match.second_half_started_at) {
+          const elapsed = Math.floor((Date.now() - new Date(match.second_half_started_at).getTime()) / 1000);
+          setSeconds(halfLength * 60 + elapsed);
+        } else if (match.first_half_started_at) {
+          const elapsed = Math.floor((Date.now() - new Date(match.first_half_started_at).getTime()) / 1000);
+          setSeconds(elapsed);
+        }
+        setRunning(true);
+      } else if (status === "halftime") {
+        setSeconds(halfLength * 60);
+        setRunning(false);
+      }
     }
   }, [match?.id]);
 
