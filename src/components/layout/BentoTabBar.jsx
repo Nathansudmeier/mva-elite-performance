@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import TestenMenu from "./TestenMenu";
 
 // Filled SVG icons
 function IconDashboard({ fill }) {
@@ -97,11 +98,24 @@ function IconEmvi({ fill }) {
   );
 }
 
+function IconTesten({ fill }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="6" width="18" height="12" rx="2" fill={fill} />
+      <circle cx="8" cy="12" r="1.5" fill="white" opacity="0.7" />
+      <circle cx="12" cy="12" r="1.5" fill="white" opacity="0.7" />
+      <circle cx="16" cy="12" r="1.5" fill="white" opacity="0.7" />
+      <path d="M6 3v3M12 3v3M18 3v3" stroke={fill} strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const trainerTabItems = [
   { name: "Dashboard", page: "Dashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
   { name: "Spelers", page: "Players", Icon: IconSpelers },
   { name: "Trainingen", page: "Trainingsvormen", Icon: IconTrainingsvormen },
+  { name: "Testen", page: "Testen", Icon: IconTesten, isAction: true },
   { name: "Emvi", page: "EmviFeedback", Icon: IconEmvi },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
@@ -137,6 +151,8 @@ const ouderTabItems = [
 ];
 
 export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderUser, childPlayerId, onNavigate }) {
+  const [testenMenuOpen, setTestenMenuOpen] = useState(false);
+
   // Parents can ONLY access their own tabbar, nothing else
   if (isOuderUser) {
     const tabItems = ouderTabItems.map((item) => 
@@ -228,6 +244,37 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderU
       }}>
         {tabItems.map((item) => {
           const isActive = item.page === currentPageName;
+          
+          if (item.isAction) {
+            return (
+              <button
+                key={item.page}
+                onClick={() => setTestenMenuOpen(true)}
+                style={{
+                  flex: "0 0 auto",
+                  display: "flex", flexDirection: "column", alignItems: "center",
+                  gap: "6px", textDecoration: "none", minWidth: "72px",
+                  padding: "0 4px", scrollSnapAlign: "center",
+                  background: "none", border: "none", cursor: "pointer",
+                }}
+              >
+                <div style={{
+                  background: "transparent", borderRadius: "0", border: "none",
+                  padding: "8px 10px", display: "flex", alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  <item.Icon fill="rgba(26,26,26,0.20)" />
+                </div>
+                <span style={{
+                  fontSize: "10px", fontWeight: 800,
+                  color: "rgba(26,26,26,0.30)", whiteSpace: "nowrap",
+                }}>
+                  {item.name}
+                </span>
+              </button>
+            );
+          }
+          
           return (
             <Link
               key={item.page}
@@ -262,6 +309,8 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderU
           );
         })}
       </div>
+
+      <TestenMenu isOpen={testenMenuOpen} onClose={() => setTestenMenuOpen(false)} />
     </nav>
   );
 }
