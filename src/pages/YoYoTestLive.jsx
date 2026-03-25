@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, Check } from "lucide-react";
+import { ChevronLeft, Check, Play } from "lucide-react";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 
@@ -28,6 +28,8 @@ export default function YoYoTestLive() {
   
   const [testResults, setTestResults] = useState({});
   const [testDate, setTestDate] = useState(new Date().toISOString().split("T")[0]);
+  const [testStarted, setTestStarted] = useState(false);
+  const [selectedPlayers, setSelectedPlayers] = useState([]);
 
   // Fetch agenda item + attendance
   const { data: agenda } = useQuery({
@@ -52,22 +54,35 @@ export default function YoYoTestLive() {
     queryFn: () => base44.entities.YoYoTest.list(),
   });
 
-  // Get present players for this training
-  const presentPlayers = attendance
-    .filter(a => a.attendance_status !== "afwezig")
-    .map(a => {
-      const player = players.find(p => p.id === a.player_id);
-      const lastTest = existingTests
-        .filter(t => t.player_id === a.player_id)
-        .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-      
-      return {
-        id: a.player_id,
-        name: player?.name || "Unknown",
-        lastLevel: lastTest?.level || "–",
-        photoUrl: player?.photo_url,
-      };
-    });
+  // Get present players for this training, or all active players if no agenda
+  const presentPlayers = agendaId
+    ? attendance
+        .filter(a => a.attendance_status !== "afwezig")
+        .map(a => {
+          const player = players.find(p => p.id === a.player_id);
+          const lastTest = existingTests
+            .filter(t => t.player_id === a.player_id)
+            .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+          
+          return {
+            id: a.player_id,
+            name: player?.name || "Unknown",
+            lastLevel: lastTest?.level || "–",
+            photoUrl: player?.photo_url,
+          };
+        })
+    : players.map(p => {
+        const lastTest = existingTests
+          .filter(t => t.player_id === p.id)
+          .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+        
+        return {
+          id: p.id,
+          name: p.name || "Unknown",
+          lastLevel: lastTest?.level || "–",
+          photoUrl: p.photo_url,
+        };
+      });
 
   // Save mutation
   const saveMutation = useMutation({
@@ -124,25 +139,96 @@ export default function YoYoTestLive() {
       {/* Content */}
       <div style={{ padding: "16px" }}>
         
-        {/* Date picker */}
-        <div style={{ marginBottom: "20px" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px" }}>
-            Testdatum
-          </label>
-          <input
-            type="date"
-            value={testDate}
-            onChange={(e) => setTestDate(e.target.value)}
-            style={{
-              width: "100%", padding: "12px", borderRadius: "12px", border: "2px solid #1a1a1a",
-              fontSize: "14px", fontWeight: 600, boxSizing: "border-box",
-            }}
-          />
-        </div>
+        {!testStarted ? (
+          <>
+            {/* Pre-test setup */}
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px" }}>
+                Testdatum
+              </label>
+              <input
+                type="date"
+                value={testDate}
+                onChange={(e) => setTestDate(e.target.value)}
+                style={{
+                  width: "100%", padding: "12px", borderRadius: "12px", border: "2px solid #1a1a1a",
+                  fontSize: "14px", fontWeight: 600, boxSizing: "border-box",
+                }}
+              />
+            </div>
 
-        {/* Players grid */}
+            {/* Player selection */}
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "10px" }}>
+                Selecteer deelnemers
+              </label>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {presentPlayers.map(player => (
+                  <button
+                    key={player.id}
+                    onClick={() => {
+                      setSelectedPlayers(prev =>
+                        prev.includes(player.id)
+                          ? prev.filter(id => id !== player.id)
+                          : [...prev, player.id]
+                      );
+                    }}
+                    style={{
+                      padding: "12px", borderRadius: "12px", border: "2px solid #1a1a1a",
+                      background: selectedPlayers.includes(player.id) ? "#FF6800" : "#ffffff",
+                      color: selectedPlayers.includes(player.id) ? "#ffffff" : "#1a1a1a",
+                      fontSize: "14px", fontWeight: 700, cursor: "pointer",
+                      textAlign: "left", transition: "all 0.15s",
+                      boxShadow: selectedPlayers.includes(player.id) ? "2px 2px 0 #1a1a1a" : "none",
+                    }}
+                  >
+                    {player.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Start button */}
+            <button
+              onClick={() => {
+                if (selectedPlayers.length > 0) {
+                  setTestStarted(true);
+                }
+              }}
+              disabled={selectedPlayers.length === 0}
+              style={{
+                width: "100%", padding: "14px", borderRadius: "14px", border: "2.5px solid #1a1a1a",
+                background: selectedPlayers.length > 0 ? "#08D068" : "rgba(26,26,26,0.1)",
+                color: selectedPlayers.length > 0 ? "#ffffff" : "rgba(26,26,26,0.3)",
+                fontSize: "15px", fontWeight: 800, cursor: selectedPlayers.length > 0 ? "pointer" : "not-allowed",
+                boxShadow: selectedPlayers.length > 0 ? "3px 3px 0 #1a1a1a" : "none",
+                transition: "all 0.1s",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+              }}
+            >
+              <Play size={18} /> Test starten
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => setTestStarted(false)}
+              style={{
+                marginBottom: "16px", padding: "10px 14px", borderRadius: "10px", border: "2px solid #1a1a1a",
+                background: "#ffffff", fontSize: "12px", fontWeight: 700, cursor: "pointer",
+                boxShadow: "2px 2px 0 #1a1a1a",
+              }}
+            >
+              ← Terug naar selectie
+            </button>
+        </>
+        )}
+        
+
+        {/* Players grid - only show if test started */}
+        {testStarted && (
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-          {presentPlayers.map(player => (
+          {presentPlayers.filter(p => selectedPlayers.includes(p.id)).map(player => (
             <div key={player.id} style={{
               background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "16px",
               boxShadow: "2px 2px 0 #1a1a1a", padding: "14px",
@@ -192,10 +278,11 @@ export default function YoYoTestLive() {
             </div>
           ))}
         </div>
+        )}
       </div>
 
       {/* Save button - sticky footer */}
-      {savedCount > 0 && (
+      {testStarted && savedCount > 0 && (
         <div style={{
           position: "fixed", bottom: "0", left: "0", right: "0",
           background: "#ffffff", borderTop: "2.5px solid #1a1a1a", padding: "12px 16px",
