@@ -357,7 +357,7 @@ function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, send
                 <PlayerAvatar player={player} />
                 <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", flex: 1 }}>{player.name}</p>
                 {editingAttendance ? (
-                  <button onClick={() => onToggleStatus(player.id, null)}
+                  <button onClick={() => onToggleStatus(player.id, "afwezig")}
                     style={{ padding: "3px 10px", borderRadius: 8, background: "rgba(255,61,168,0.12)", color: "#FF3DA8", border: "1px solid rgba(255,61,168,0.25)", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>✕</button>
                 ) : (
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#05a050", flexShrink: 0 }} />
