@@ -253,7 +253,9 @@ export default function PlanningTrainingDetail() {
          {activeTab === 1 && (
           isOuder
             ? <OuderTrainingsPlanView trainingDate={item?.date} />
-            : <TrainingPlanEditor players={aanwezigList.length > 0 ? aanwezigList : players} trainingDate={item?.date} readOnly={!isTrainer} />
+            : !isTrainer
+            ? <OuderTrainingsPlanView trainingDate={item?.date} />
+            : <TrainingPlanEditor players={aanwezigList.length > 0 ? aanwezigList : players} trainingDate={item?.date} readOnly={false} />
         )}
 
         {/* Tab: Aanwezigheid */}
