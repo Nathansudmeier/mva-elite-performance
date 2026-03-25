@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { ChevronLeft, Clock, Bell, Pencil, Trash2, Play, Trophy } from "lucide-react";
+import { ChevronLeft, Clock, Bell, Pencil, Trash2, Play, Trophy, RotateCcw } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { formatDate, TYPE_CONFIG, TEAM_COLORS } from "@/components/agenda/agendaUtils";
