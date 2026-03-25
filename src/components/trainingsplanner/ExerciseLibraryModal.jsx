@@ -42,7 +42,8 @@ export default function ExerciseLibraryModal({ onSelect, onClose, currentExercis
       description: currentExercise?.description || "",
       duration_minutes: currentExercise?.duration_minutes || 10,
       coaching_points: currentExercise?.coaching_points || [],
-      field_photo: currentExercise?.field_photo || null,
+      photo_url: currentExercise?.field_drawing || currentExercise?.field_photo || null,
+      youtube_url: currentExercise?.youtube_url || null,
     });
   }
 
@@ -52,7 +53,8 @@ export default function ExerciseLibraryModal({ onSelect, onClose, currentExercis
       description: tpl.description || "",
       duration_minutes: tpl.duration_minutes || 10,
       coaching_points: tpl.coaching_points || [],
-      field_photo: tpl.field_photo || null,
+      field_drawing: tpl.photo_url || null,
+      youtube_url: tpl.youtube_url || null,
       groups: [],
     });
     onClose();

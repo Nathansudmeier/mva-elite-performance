@@ -11,11 +11,11 @@ import { nl } from "date-fns/locale";
 function genId() { return Math.random().toString(36).slice(2, 10); }
 
 function newExercise(name = "") {
-  return { id: genId(), name, description: "", duration_minutes: 10, coaching_points: [], groups: [], field_photo: null };
+  return { id: genId(), name, description: "", duration_minutes: 10, coaching_points: [], groups: [], field_drawing: null, youtube_url: null };
 }
 
 function warmupExercise() {
-  return { id: genId(), name: "Warming-up", description: "", duration_minutes: 10, coaching_points: [], groups: [], field_photo: null };
+  return { id: genId(), name: "Warming-up", description: "", duration_minutes: 10, coaching_points: [], groups: [], field_drawing: null, youtube_url: null };
 }
 
 const cardStyle = {
@@ -261,7 +261,7 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
               if (!newDate) return;
               const warmupTemplate = exerciseTemplates.find(t => t.name?.toLowerCase().includes("warming"));
               const firstExercise = warmupTemplate
-                ? { id: genId(), name: warmupTemplate.name, description: warmupTemplate.description || "", duration_minutes: warmupTemplate.duration_minutes || 10, coaching_points: warmupTemplate.coaching_points || [], groups: [], field_photo: warmupTemplate.photo_url || null }
+                ? { id: genId(), name: warmupTemplate.name, description: warmupTemplate.description || "", duration_minutes: warmupTemplate.duration_minutes || 10, coaching_points: warmupTemplate.coaching_points || [], groups: [], field_drawing: warmupTemplate.photo_url || null, youtube_url: warmupTemplate.youtube_url || null }
                 : warmupExercise();
               createPlan.mutate({ date: newDate, objective: newObjective, exercises: [firstExercise], status: "draft" });
             }}

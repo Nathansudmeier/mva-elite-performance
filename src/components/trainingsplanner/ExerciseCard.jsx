@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { ChevronDown, ChevronUp, Plus, X, GripVertical, Camera } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, X, GripVertical, Camera, Youtube } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const GROUP_COLORS = [
@@ -102,7 +102,7 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
     if (!file) return;
     setUploading(true);
     const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    update({ field_photo: file_url });
+    update({ field_drawing: file_url });
     setUploading(false);
   }
 
@@ -234,11 +234,11 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
           {!readOnly && (
             <div>
               <label style={labelStyle}>Velddiagram foto</label>
-              {exercise.field_photo && (
+              {exercise.field_drawing && (
                 <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "8px", border: "2px solid #1a1a1a" }}>
-                  <img src={exercise.field_photo} alt="Velddiagram" style={{ width: "100%", borderRadius: "10px", display: "block" }} />
+                  <img src={exercise.field_drawing} alt="Velddiagram" style={{ width: "100%", borderRadius: "10px", display: "block" }} />
                   <button
-                    onClick={() => { update({ field_photo: null }); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+                    onClick={() => { update({ field_drawing: null }); if (fileInputRef.current) fileInputRef.current.value = ""; }}
                     style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(26,26,26,0.7)", border: "none", borderRadius: "8px", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
                   >
                     <X size={14} color="#fff" />
@@ -251,14 +251,40 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
                 style={{ width: "100%", minHeight: "80px", background: "#f5f5f5", border: "2px dashed rgba(26,26,26,0.20)", borderRadius: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", cursor: "pointer", color: "rgba(26,26,26,0.45)", fontSize: "13px", fontWeight: 600 }}
               >
                 <Camera size={22} color="rgba(26,26,26,0.30)" />
-                {uploading ? "Uploaden..." : exercise.field_photo ? "Vervangen" : "Foto uploaden"}
+                {uploading ? "Uploaden..." : exercise.field_drawing ? "Vervangen" : "Foto uploaden"}
               </button>
               <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handlePhotoUpload} />
             </div>
           )}
-          {readOnly && exercise.field_photo && (
+          {readOnly && exercise.field_drawing && (
             <div style={{ border: "2.5px solid #1a1a1a", borderRadius: "12px", overflow: "hidden" }}>
-              <img src={exercise.field_photo} alt="Velddiagram" style={{ width: "100%", display: "block" }} />
+              <img src={exercise.field_drawing} alt="Velddiagram" style={{ width: "100%", display: "block" }} />
+            </div>
+          )}
+
+          {/* YouTube URL */}
+          {!readOnly && (
+            <div>
+              <label style={labelStyle}>YouTube video (optioneel)</label>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "#f5f5f5", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "10px", padding: "0 12px", minHeight: "44px" }}>
+                <Youtube size={16} color="#FF0000" style={{ flexShrink: 0 }} />
+                <input
+                  value={exercise.youtube_url || ""}
+                  onChange={e => update({ youtube_url: e.target.value })}
+                  placeholder="https://youtube.com/..."
+                  style={{ flex: 1, background: "transparent", border: "none", outline: "none", fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}
+                />
+              </div>
+            </div>
+          )}
+          {readOnly && exercise.youtube_url && (
+            <div>
+              <label style={labelStyle}>Video</label>
+              <a href={exercise.youtube_url} target="_blank" rel="noopener noreferrer"
+                style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,0,0,0.08)", border: "2px solid rgba(255,0,0,0.25)", borderRadius: "10px", padding: "10px 14px", textDecoration: "none" }}>
+                <Youtube size={16} color="#FF0000" />
+                <span style={{ fontSize: "13px", fontWeight: 700, color: "#FF0000" }}>Bekijk video</span>
+              </a>
             </div>
           )}
 
