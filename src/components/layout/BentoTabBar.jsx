@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import TestenMenu from "./TestenMenu";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 // Filled SVG icons
 function IconDashboard({ fill }) {
@@ -152,6 +153,7 @@ const ouderTabItems = [
 
 export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderUser, childPlayerId, onNavigate }) {
   const [testenMenuOpen, setTestenMenuOpen] = useState(false);
+  const { playerId } = useCurrentUser();
 
   // Parents can ONLY access their own tabbar, nothing else
   if (isOuderUser) {
@@ -220,7 +222,16 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderU
     );
   }
 
-  const tabItems = isSpeelsterUser ? speelsterTabItems : trainerTabItems;
+  let tabItems = isSpeelsterUser ? speelsterTabItems : trainerTabItems;
+  
+  // For speelsters: map "Mijn profiel" to their own PlayerDetail page
+  if (isSpeelsterUser && playerId) {
+    tabItems = tabItems.map((item) => 
+      item.name === "Mijn profiel"
+        ? { ...item, page: `PlayerDetail?id=${playerId}` }
+        : item
+    );
+  }
 
   return (
     <nav
