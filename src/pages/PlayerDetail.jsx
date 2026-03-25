@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
@@ -9,12 +9,14 @@ import RoleGuard from "@/components/auth/RoleGuard";
 import { Button } from "@/components/ui/button";
 import WedstrijdbelevingChart from "@/components/checkin/WedstrijdbelevingChart";
 import PlayerSeasonStats from "@/components/stats/PlayerSeasonStats";
+import RatingDetailModal from "@/components/ratings/RatingDetailModal";
 
 export default function PlayerDetail() {
   const params = new URLSearchParams(window.location.search);
   const playerId = params.get("id");
   const { isTrainer, playerId: myPlayerId, isOuder } = useCurrentUser();
   const isOwnProfile = myPlayerId === playerId;
+  const [showRatingModal, setShowRatingModal] = useState(false);
 
   const { data: player } = useQuery({
     queryKey: ["player", playerId],
@@ -124,54 +126,88 @@ export default function PlayerDetail() {
 
       {/* Latest Ratings */}
       {latestRating && (isTrainer || isOwnProfile) && (
-        <div className="glass" style={{ borderRadius: "18px", overflow: "hidden" }}>
-          <div style={{
-            background: "linear-gradient(135deg, #FF6800 0%, #FF8C00 100%)",
-            padding: "16px", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px",
-            position: "relative", overflow: "hidden"
-          }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              <div>
-                <p className="t-label" style={{ color: "rgba(255,255,255,0.75)" }}>Laatste Beoordeling</p>
-                <p style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff", marginTop: "4px" }}>{latestRating.meting} · {latestRating.date}</p>
-              </div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-                <span style={{ fontSize: "34px", fontWeight: 900, color: "#ffffff", lineHeight: 1 }}>
-                  {(() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })()}
-                </span>
-                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)" }}>totaal</span>
-              </div>
-            </div>
-            <img
-              src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/cd3abaf70_Emvi-tactics.png"
-              alt="Emvi"
-              style={{ height: "110px", objectFit: "contain", marginBottom: "-16px", flexShrink: 0 }}
-            />
-          </div>
-          <div style={{ padding: "16px", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }} className="mobile-grid-2col">
-            {[
-              { label: "Technisch", keys: technicalKeys, icon: "⚡", color: "#60a5fa" },
-              { label: "Tactisch", keys: tacticalKeys, icon: "🧠", color: "#a78bfa" },
-              { label: "Persoonlijkheid", keys: personalityKeys, icon: "🛡️", color: "#4ade80" },
-              { label: "Fysiek", keys: physicalRatingKeys, icon: "💪", color: "#fbbf24" },
-            ].map(({ label, keys, color }) => {
-              const avg = calcAvg(latestRating, keys);
-              const pct = avg !== "-" ? (parseFloat(avg) / 5) * 100 : 0;
-              return (
-                <div key={label} style={{
-                  background: "rgba(26,26,26,0.04)", border: "2px solid rgba(26,26,26,0.08)",
-                  borderRadius: "14px", padding: "12px"
-                }}>
-                  <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", letterSpacing: "0.05em", marginBottom: "6px" }}>{label}</p>
-                  <p style={{ fontSize: "22px", fontWeight: 900, color }}>{avg}</p>
-                  <div style={{ height: "4px", background: "rgba(26,26,26,0.10)", borderRadius: "2px", marginTop: "8px", overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: `${pct}%`, background: color, borderRadius: "2px", transition: "width 0.3s ease" }} />
+        <>
+          <button
+            onClick={() => setShowRatingModal(true)}
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+              borderRadius: "18px",
+              overflow: "hidden",
+            }}
+          >
+            <div className="glass" style={{ borderRadius: "18px", overflow: "hidden", transition: "opacity 0.2s", opacity: 1 }} onMouseDown={() => { }} onMouseUp={(e) => { }}>
+              <div style={{
+                background: "linear-gradient(135deg, #FF6800 0%, #FF8C00 100%)",
+                padding: "16px", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px",
+                position: "relative", overflow: "hidden"
+              }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <div style={{ textAlign: "left" }}>
+                    <p className="t-label" style={{ color: "rgba(255,255,255,0.75)" }}>Laatste Beoordeling</p>
+                    <p style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff", marginTop: "4px" }}>{latestRating.meting} · {latestRating.date}</p>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    {[...Array(5)].map((_, i) => {
+                      const overallScore = parseFloat((() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })());
+                      return (
+                        <Star
+                          key={i}
+                          size={16}
+                          style={{
+                            fill: i < Math.round(overallScore) ? "#ffffff" : "rgba(255,255,255,0.3)",
+                            color: i < Math.round(overallScore) ? "#ffffff" : "rgba(255,255,255,0.3)",
+                          }}
+                        />
+                      );
+                    })}
+                    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.85)", marginLeft: "4px", fontWeight: 600 }}>
+                      {(() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })()}/5
+                    </span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
+                <img
+                  src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/cd3abaf70_Emvi-tactics.png"
+                  alt="Emvi"
+                  style={{ height: "110px", objectFit: "contain", marginBottom: "-16px", flexShrink: 0 }}
+                />
+              </div>
+              <div style={{ padding: "16px", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }} className="mobile-grid-2col">
+                {[
+                  { label: "Technisch", keys: technicalKeys, icon: "⚡", color: "#60a5fa" },
+                  { label: "Tactisch", keys: tacticalKeys, icon: "🧠", color: "#a78bfa" },
+                  { label: "Persoonlijkheid", keys: personalityKeys, icon: "🛡️", color: "#4ade80" },
+                  { label: "Fysiek", keys: physicalRatingKeys, icon: "💪", color: "#fbbf24" },
+                ].map(({ label, keys, color }) => {
+                  const avg = calcAvg(latestRating, keys);
+                  const pct = avg !== "-" ? (parseFloat(avg) / 5) * 100 : 0;
+                  return (
+                    <div key={label} style={{
+                      background: "rgba(26,26,26,0.04)", border: "2px solid rgba(26,26,26,0.08)",
+                      borderRadius: "14px", padding: "12px"
+                    }}>
+                      <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", letterSpacing: "0.05em", marginBottom: "6px" }}>{label}</p>
+                      <p style={{ fontSize: "22px", fontWeight: 900, color }}>{avg}</p>
+                      <div style={{ height: "4px", background: "rgba(26,26,26,0.10)", borderRadius: "2px", marginTop: "8px", overflow: "hidden" }}>
+                        <div style={{ height: "100%", width: `${pct}%`, background: color, borderRadius: "2px", transition: "width 0.3s ease" }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </button>
+
+          {showRatingModal && (
+            <RatingDetailModal
+              rating={latestRating}
+              onClose={() => setShowRatingModal(false)}
+              player={player}
+            />
+          )}
+        </>
       )}
 
       {/* Physical Tests */}
