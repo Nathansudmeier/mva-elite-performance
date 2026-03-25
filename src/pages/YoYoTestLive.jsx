@@ -372,7 +372,137 @@ export default function YoYoTestLive() {
                 ))}
               </div>
             </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Lower levels group */}
+          <div>
+            <button
+              onClick={() => setExpandedLower(!expandedLower)}
+              style={{
+                width: "100%", padding: "12px", borderRadius: "12px", border: "2.5px solid #1a1a1a",
+                background: "#ffffff", fontSize: "12px", fontWeight: 800, cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                boxShadow: "2px 2px 0 rgba(26,26,26,0.08)",
+              }}
+            >
+              <span>Lager dan 18 ({presentPlayers.filter(p => selectedPlayers.includes(p.id) && !p.lastLevel.startsWith("18") && !p.lastLevel.startsWith("19") && !p.lastLevel.startsWith("2")).length})</span>
+              <span style={{ fontSize: "14px" }}>{expandedLower ? "−" : "+"}</span>
+            </button>
+            {expandedLower && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "10px" }}>
+                {presentPlayers.filter(p => selectedPlayers.includes(p.id) && !p.lastLevel.startsWith("18") && !p.lastLevel.startsWith("19") && !p.lastLevel.startsWith("2")).map(player => (
+                  <div key={player.id} style={{
+                    background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "16px",
+                    boxShadow: "2px 2px 0 #1a1a1a", padding: "14px",
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                      <img src={player.photoUrl} alt={player.name}
+                        style={{ width: "36px", height: "36px", borderRadius: "10px", objectFit: "cover", border: "2px solid #1a1a1a" }} />
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a1a" }}>{player.name}</p>
+                        <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "2px" }}>
+                          Vorig niveau: <span style={{ fontWeight: 800, color: "#FF6800" }}>{player.lastLevel}</span>
+                        </p>
+                      </div>
+                      {testResults[player.id] && (
+                        <div style={{
+                          background: "#08D068", color: "#ffffff", width: "32px", height: "32px",
+                          borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
+                          border: "2px solid #1a1a1a", fontWeight: 800,
+                        }}>
+                          <Check size={16} />
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
+                      {YOYO_LEVELS.map(level => (
+                        <button
+                          key={level}
+                          onClick={() => handleLevelSelect(player.id, level)}
+                          style={{
+                            padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                            border: "2px solid #1a1a1a",
+                            background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
+                            color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
+                            cursor: "pointer", transition: "all 0.15s",
+                            boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
+                          }}
+                        >
+                          {level}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Higher levels group */}
+          <div>
+            <button
+              onClick={() => setExpandedHigher(!expandedHigher)}
+              style={{
+                width: "100%", padding: "12px", borderRadius: "12px", border: "2.5px solid #1a1a1a",
+                background: "#ffffff", fontSize: "12px", fontWeight: 800, cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                boxShadow: "2px 2px 0 rgba(26,26,26,0.08)",
+              }}
+            >
+              <span>Hoger dan 18 ({presentPlayers.filter(p => selectedPlayers.includes(p.id) && (p.lastLevel.startsWith("19") || p.lastLevel.startsWith("2"))).length})</span>
+              <span style={{ fontSize: "14px" }}>{expandedHigher ? "−" : "+"}</span>
+            </button>
+            {expandedHigher && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "10px" }}>
+                {presentPlayers.filter(p => selectedPlayers.includes(p.id) && (p.lastLevel.startsWith("19") || p.lastLevel.startsWith("2"))).map(player => (
+                  <div key={player.id} style={{
+                    background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "16px",
+                    boxShadow: "2px 2px 0 #1a1a1a", padding: "14px",
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                      <img src={player.photoUrl} alt={player.name}
+                        style={{ width: "36px", height: "36px", borderRadius: "10px", objectFit: "cover", border: "2px solid #1a1a1a" }} />
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a1a" }}>{player.name}</p>
+                        <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "2px" }}>
+                          Vorig niveau: <span style={{ fontWeight: 800, color: "#FF6800" }}>{player.lastLevel}</span>
+                        </p>
+                      </div>
+                      {testResults[player.id] && (
+                        <div style={{
+                          background: "#08D068", color: "#ffffff", width: "32px", height: "32px",
+                          borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
+                          border: "2px solid #1a1a1a", fontWeight: 800,
+                        }}>
+                          <Check size={16} />
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
+                      {YOYO_LEVELS.map(level => (
+                        <button
+                          key={level}
+                          onClick={() => handleLevelSelect(player.id, level)}
+                          style={{
+                            padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                            border: "2px solid #1a1a1a",
+                            background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
+                            color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
+                            cursor: "pointer", transition: "all 0.15s",
+                            boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
+                          }}
+                        >
+                          {level}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          </div>
         </div>
         )}
       </div>
