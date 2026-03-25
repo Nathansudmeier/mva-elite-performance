@@ -163,7 +163,7 @@ export default function RatingDetailModal({ rating, onClose, player }) {
         </div>
 
         {/* Categories Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px", marginBottom: "20px" }} className="md:grid-cols-2">
           {renderCategory("Technisch", technicalKeys, "#60a5fa")}
           {renderCategory("Tactisch", tacticalKeys, "#a78bfa")}
           {renderCategory("Persoonlijkheid", personalityKeys, "#4ade80")}
