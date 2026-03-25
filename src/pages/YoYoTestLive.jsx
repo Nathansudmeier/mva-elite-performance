@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, Check, Play, Users, Calendar } from "lucide-react";
+import { ChevronLeft, Check, Play, Users, Calendar, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
@@ -122,46 +122,82 @@ export default function YoYoTestLive() {
 
   return (
     <div style={{ background: "#FFF3E8", minHeight: "100vh", paddingBottom: "120px" }}>
-      {/* Merged Header + Hero Section */}
+      {/* Header - Setup Phase */}
        {!testStarted && (
        <div style={{
-         position: "sticky", top: 0, zIndex: 40,
          background: "#FF6800", 
          border: "2.5px solid #1a1a1a",
          borderRadius: "18px",
-         margin: "12px",
-         padding: "16px",
-         display: "flex", 
-         alignItems: "center", 
-         justifyContent: "space-between",
-         color: "#ffffff",
          boxShadow: "3px 3px 0 #1a1a1a",
-         minHeight: "100px",
+         padding: "1rem 0 1rem 1.25rem",
+         margin: "1rem 1rem 0",
          position: "relative",
          overflow: "hidden",
+         height: "90px",
+         display: "flex",
+         alignItems: "center",
+         paddingRight: "120px",
        }}>
-         <button onClick={() => navigate(-1)} style={{
-           width: "40px", height: "40px", borderRadius: "12px", border: "2.5px solid #ffffff",
-           display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: "rgba(255,255,255,0.15)",
-           color: "#ffffff", transition: "all 0.15s", zIndex: 10,
+         {/* Decorative circle */}
+         <div style={{
+           position: "absolute",
+           width: "140px",
+           height: "140px",
+           borderRadius: "50%",
+           border: "2px solid rgba(255,255,255,0.15)",
+           top: "-30px",
+           right: "80px",
+           pointerEvents: "none",
+         }} />
+         
+         {/* Left section */}
+         <div style={{
+           display: "flex",
+           flexDirection: "column",
+           gap: "8px",
+           flex: 1,
+           minWidth: 0,
+           zIndex: 2,
          }}>
-           <ChevronLeft size={18} />
-         </button>
-         <div style={{ flex: 1, zIndex: 10 }}>
-           <h1 style={{ fontSize: "28px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px", color: "#ffffff" }}>Yo-Yo Test</h1>
-           <p style={{ fontSize: "12px", fontWeight: 500, margin: "4px 0 0 0", opacity: 0.9 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
+           {/* Back button */}
+           <button onClick={() => navigate(-1)} style={{
+             width: "32px",
+             height: "32px",
+             borderRadius: "10px",
+             background: "rgba(255,255,255,0.20)",
+             border: "2px solid white",
+             display: "flex",
+             alignItems: "center",
+             justifyContent: "center",
+             cursor: "pointer",
+             flexShrink: 0,
+             color: "white",
+             transition: "all 0.15s",
+           }}>
+             <ArrowLeft size={14} />
+           </button>
+           
+           {/* Title and subtitle */}
+           <div>
+             <h1 style={{ fontSize: "20px", fontWeight: 900, color: "white", letterSpacing: "-0.5px", lineHeight: 1.1, margin: 0 }}>Yo-Yo Test</h1>
+             <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", fontWeight: 600, margin: "0" }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
+           </div>
          </div>
+         
+         {/* Right section - Emvi illustration */}
          <img 
            src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0bf7cd806_Emvi-tactics.png" 
            alt="Emvi" 
            style={{ 
-             width: "90px", 
-             height: "90px", 
-             objectFit: "contain",
              position: "absolute",
-             right: "-10px",
-             bottom: "-10px",
-             opacity: 0.9,
+             right: 0,
+             bottom: 0,
+             height: "110px",
+             width: "auto",
+             objectFit: "contain",
+             objectPosition: "bottom",
+             zIndex: 3,
+             pointerEvents: "none",
            }} 
          />
        </div>
@@ -296,49 +332,84 @@ export default function YoYoTestLive() {
           </>
         ) : (
           <>
-            {/* Header with cancel button for test started state */}
+            {/* Header - Test Started Phase */}
             <div style={{
-              position: "sticky", top: 0, zIndex: 40,
               background: "#FF6800", 
               border: "2.5px solid #1a1a1a",
               borderRadius: "18px",
-              margin: "12px",
-              padding: "16px",
-              display: "flex", 
-              alignItems: "center", 
-              justifyContent: "space-between",
-              color: "#ffffff",
               boxShadow: "3px 3px 0 #1a1a1a",
-              minHeight: "100px",
+              padding: "1rem 0 1rem 1.25rem",
+              margin: "1rem 1rem 0",
               position: "relative",
               overflow: "hidden",
+              height: "90px",
+              display: "flex",
+              alignItems: "center",
+              paddingRight: "120px",
             }}>
-              <button 
-                onClick={() => setTestStarted(false)}
-                style={{
-                  width: "40px", height: "40px", borderRadius: "12px", border: "2.5px solid #ffffff",
-                  display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", 
-                  background: "rgba(255,255,255,0.15)",
-                  color: "#ffffff", transition: "all 0.15s", zIndex: 10,
-                }}
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <div style={{ flex: 1, zIndex: 10 }}>
-                <h1 style={{ fontSize: "28px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px", color: "#ffffff" }}>Resultaten</h1>
-                <p style={{ fontSize: "12px", fontWeight: 500, margin: "4px 0 0 0", opacity: 0.9 }}>{savedCount} / {selectedPlayers.length} opgeslagen</p>
+              {/* Decorative circle */}
+              <div style={{
+                position: "absolute",
+                width: "140px",
+                height: "140px",
+                borderRadius: "50%",
+                border: "2px solid rgba(255,255,255,0.15)",
+                top: "-30px",
+                right: "80px",
+                pointerEvents: "none",
+              }} />
+
+              {/* Left section */}
+              <div style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                flex: 1,
+                minWidth: 0,
+                zIndex: 2,
+              }}>
+                {/* Back button */}
+                <button 
+                  onClick={() => setTestStarted(false)}
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "10px",
+                    background: "rgba(255,255,255,0.20)",
+                    border: "2px solid white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    flexShrink: 0,
+                    color: "white",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  <ArrowLeft size={14} />
+                </button>
+
+                {/* Title and subtitle */}
+                <div>
+                  <h1 style={{ fontSize: "20px", fontWeight: 900, color: "white", letterSpacing: "-0.5px", lineHeight: 1.1, margin: 0 }}>Resultaten</h1>
+                  <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", fontWeight: 600, margin: "0" }}>{savedCount} / {selectedPlayers.length} opgeslagen</p>
+                </div>
               </div>
+
+              {/* Right section - Emvi illustration */}
               <img 
                 src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0bf7cd806_Emvi-tactics.png" 
                 alt="Emvi" 
                 style={{ 
-                  width: "90px", 
-                  height: "90px", 
-                  objectFit: "contain",
                   position: "absolute",
-                  right: "-10px",
-                  bottom: "-10px",
-                  opacity: 0.9,
+                  right: 0,
+                  bottom: 0,
+                  height: "110px",
+                  width: "auto",
+                  objectFit: "contain",
+                  objectPosition: "bottom",
+                  zIndex: 3,
+                  pointerEvents: "none",
                 }} 
               />
             </div>
