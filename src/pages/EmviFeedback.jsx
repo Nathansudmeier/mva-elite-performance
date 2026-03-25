@@ -56,7 +56,6 @@ export default function EmviFeedback() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
-
     submitFeedbackMutation.mutate({
       user_email: user.email,
       user_name: user.full_name,
@@ -95,78 +94,110 @@ export default function EmviFeedback() {
     }
   };
 
-  return (
-    <div className="flex flex-col h-screen pb-20 xl:pb-8 gap-0" style={{ background: "#FFF3E8" }}>
-      {/* Emvi Character - Top */}
-      <div className="flex justify-center pt-3 md:pt-6 px-4 md:px-6">
-        <img 
-          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/91f794581_Emvi-top.png" 
-          alt="Emvi" 
-          className="h-32 md:h-40 object-contain"
-        />
-      </div>
+  const hasMessages = messages.length > 0;
 
-      {/* Header Card */}
-      <div className="glass mx-4 md:mx-6 lg:mx-auto lg:max-w-2xl mt-2 lg:w-full" style={{ background: "#FF6800" }}>
-        <div className="p-4 md:p-5 text-center flex flex-col items-center gap-2">
-          <h1 className="t-page-title text-white">
+  return (
+    <div
+      style={{
+        background: "#FFF3E8",
+        display: "flex",
+        flexDirection: "column",
+        height: "calc(100dvh - 64px)", /* subtract bottom nav */
+        overflow: "hidden",
+        maxWidth: "680px",
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      {/* Top: Emvi character + header — compact when there are messages */}
+      <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", padding: hasMessages ? "12px 16px 0" : "20px 16px 0" }}>
+        <img
+          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/91f794581_Emvi-top.png"
+          alt="Emvi"
+          style={{ height: hasMessages ? "72px" : "120px", objectFit: "contain", transition: "height 0.3s ease" }}
+        />
+        <div
+          className="glass"
+          style={{
+            background: "#FF6800",
+            width: "100%",
+            borderRadius: "14px",
+            marginTop: "10px",
+            padding: hasMessages ? "10px 16px" : "16px",
+            textAlign: "center",
+          }}
+        >
+          <h1 style={{ fontSize: hasMessages ? "16px" : "20px", fontWeight: 900, color: "white", margin: 0 }}>
             Praat met Emvi
           </h1>
-          <p className="t-secondary text-white/85">
-            Stel vragen, deel tips of geef feedback
-          </p>
+          {!hasMessages && (
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.85)", margin: "4px 0 0" }}>
+              Stel vragen, deel tips of geef feedback
+            </p>
+          )}
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div 
+      {/* Chat Area — scrollable middle */}
+      <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-4 md:px-6 lg:px-0 flex flex-col gap-3 pt-4 lg:max-w-2xl lg:mx-auto lg:w-full"
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          padding: "12px 16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+        }}
       >
-        {/* Messages */}
+        {!hasMessages && (
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", color: "rgba(26,26,26,0.35)", textAlign: "center", padding: "20px" }}>
+            <MessageSquare size={28} style={{ opacity: 0.4 }} />
+            <p style={{ fontSize: "14px", fontWeight: 600, margin: 0 }}>Nog geen berichten</p>
+            <p style={{ fontSize: "12px", margin: 0 }}>Stuur hieronder je eerste vraag, tip of opmerking.</p>
+          </div>
+        )}
+
         {messages.map((msg, idx) => (
-          <div key={msg.id || idx} className="space-y-2">
+          <div key={msg.id || idx} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             {/* User message */}
-            <div className="flex gap-3 justify-end">
-              <div className="max-w-xs md:max-w-md lg:max-w-lg" style={{ background: "#FF6800" }}>
-                <div className="rounded-xl p-3 md:p-4 text-white">
-                  <div className="flex items-center gap-2 mb-2 text-xs font-bold">
-                    {getTypeIcon(msg.feedbackType)}
-                    {msg.feedbackType === "vraag" ? "Vraag" : msg.feedbackType === "tip" ? "Tip" : "Opmerking"}
-                  </div>
-                  <p style={{ fontSize: "12px", lineHeight: 1.4 }}>
-                    {msg.message}
-                  </p>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <div style={{ background: "#FF6800", borderRadius: "14px", padding: "10px 14px", maxWidth: "75%" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.80)" }}>
+                  {getTypeIcon(msg.feedbackType)}
+                  {msg.feedbackType === "vraag" ? "Vraag" : msg.feedbackType === "tip" ? "Tip" : "Opmerking"}
                 </div>
+                <p style={{ fontSize: "13px", lineHeight: 1.45, color: "white", margin: 0 }}>{msg.message}</p>
               </div>
             </div>
 
             {/* Emvi response */}
-            <div className="flex gap-3 items-end">
-              <img 
-                src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b89b92670_Emvi-chat.png" 
-                alt="Emvi" 
-                className="h-9 md:h-11 flex-shrink-0"
+            <div style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}>
+              <img
+                src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b89b92670_Emvi-chat.png"
+                alt="Emvi"
+                style={{ height: "36px", flexShrink: 0 }}
               />
-              <div className="flex-1 max-w-xs md:max-w-md lg:max-w-lg" style={{ background: "rgba(255,104,0,0.12)", border: "1.5px solid rgba(255,104,0,0.30)" }}>
-                <div className="rounded-xl p-3 md:p-4">
-                  <p style={{ fontSize: "13px", fontWeight: 600, color: "#FF6800", lineHeight: 1.4 }}>
-                    {getEmviResponse(msg.feedbackType)}
-                  </p>
-                </div>
+              <div style={{ background: "rgba(255,104,0,0.10)", border: "1.5px solid rgba(255,104,0,0.25)", borderRadius: "14px", padding: "10px 14px", maxWidth: "75%" }}>
+                <p style={{ fontSize: "13px", fontWeight: 600, color: "#FF6800", lineHeight: 1.45, margin: 0 }}>
+                  {getEmviResponse(msg.feedbackType)}
+                </p>
               </div>
             </div>
           </div>
         ))}
-
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Form */}
-      <form onSubmit={handleSubmit} className="glass mx-4 md:mx-6 lg:mx-auto lg:max-w-2xl mt-4 mb-4 lg:w-full">
-        <div className="p-4 md:p-5 space-y-3 md:space-y-4">
+      {/* Input Form — always at bottom, never cut off */}
+      <form
+        onSubmit={handleSubmit}
+        className="glass"
+        style={{ flexShrink: 0, margin: "0 16px 16px", borderRadius: "16px" }}
+      >
+        <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: "10px" }}>
           {/* Type Selector */}
-          <div className="flex gap-2 flex-wrap">
+          <div style={{ display: "flex", gap: "8px" }}>
             {[
               { value: "vraag", icon: HelpCircle, label: "Vraag" },
               { value: "tip", icon: Lightbulb, label: "Tip" },
@@ -179,21 +210,24 @@ export default function EmviFeedback() {
                   key={option.value}
                   type="button"
                   onClick={() => setSelectedType(option.value)}
-                  className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg font-bold text-xs md:text-sm transition-all border-2"
                   style={{
+                    display: "flex", alignItems: "center", gap: "6px",
+                    padding: "6px 12px", borderRadius: "20px", fontWeight: 700,
+                    fontSize: "12px", cursor: "pointer", transition: "all 0.15s",
+                    border: "2px solid",
                     borderColor: isSelected ? "#FF6800" : "rgba(26,26,26,0.15)",
-                    background: isSelected ? "rgba(255,104,0,0.12)" : "transparent",
-                    color: isSelected ? "#FF6800" : "rgba(26,26,26,0.50)"
+                    background: isSelected ? "rgba(255,104,0,0.10)" : "transparent",
+                    color: isSelected ? "#FF6800" : "rgba(26,26,26,0.45)"
                   }}
                 >
-                  <Icon size={14} />
+                  <Icon size={13} />
                   {option.label}
                 </button>
               );
             })}
           </div>
 
-          {/* Input Textarea */}
+          {/* Input */}
           <textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -202,21 +236,28 @@ export default function EmviFeedback() {
               selectedType === "tip" ? "Deel je tip..." :
               "Geef je opmerking..."
             }
-            className="w-full rounded-lg border-2 border-border p-3 md:p-4 resize-none focus:outline-none focus:ring-2 focus:ring-orange-600"
-            style={{ minHeight: "80px", fontSize: "13px", fontFamily: "inherit" }}
+            style={{
+              width: "100%", borderRadius: "10px", border: "2px solid rgba(26,26,26,0.12)",
+              padding: "10px 12px", resize: "none", outline: "none",
+              fontSize: "13px", fontFamily: "inherit", minHeight: "72px",
+              background: "white", boxSizing: "border-box"
+            }}
+            onFocus={e => e.target.style.borderColor = "#FF6800"}
+            onBlur={e => e.target.style.borderColor = "rgba(26,26,26,0.12)"}
           />
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={!inputValue.trim() || submitFeedbackMutation.isPending}
-            className="btn-primary flex items-center justify-center gap-2"
+            className="btn-primary"
             style={{
-              opacity: inputValue.trim() ? 1 : 0.5,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+              opacity: inputValue.trim() ? 1 : 0.45,
               cursor: inputValue.trim() ? "pointer" : "not-allowed"
             }}
           >
-            <Send size={16} />
+            <Send size={15} />
             {submitFeedbackMutation.isPending ? "Verzenden..." : "Verzend naar Emvi"}
           </button>
         </div>
