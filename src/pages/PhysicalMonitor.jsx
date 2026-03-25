@@ -180,7 +180,7 @@ export default function PhysicalMonitor() {
         
         {/* Emvi illustration */}
         <img 
-          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b7c2ea7dc_Emvi-sweat.png" 
+          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0857bc46e_Emvi-sweat.png" 
           alt="Emvi" 
           style={{ 
             position: "relative",
