@@ -32,6 +32,7 @@ import TrainingsvormForm from './pages/TrainingsvormForm.jsx';
 import MatchResults from './pages/MatchResults.jsx';
 import Photowall from './pages/Photowall.jsx';
 import OuderDashboard from './pages/OuderDashboard';
+import LiveMatchViewer from './pages/LiveMatchViewer.jsx';
 import PendingAccess from './pages/PendingAccess';
 import EmviFeedback from './pages/EmviFeedback';
 import FeedbackOverview from './pages/FeedbackOverview';
@@ -74,6 +75,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/LiveMatch" element={<LayoutWrapper currentPageName="Wedstrijden"><LiveMatch /></LayoutWrapper>} />
+      <Route path="/live/:matchId" element={<LiveMatchViewer />} />
       <Route path="/live" element={<LiveTracker />} />
       <Route path="/" element={
         <LayoutWrapper currentPageName="Dashboard">
