@@ -121,7 +121,7 @@ export default function YoYoTestLive() {
   const savedCount = Object.values(testResults).filter(Boolean).length;
 
   return (
-    <div style={{ background: "#FFF3E8", minHeight: "100vh", paddingBottom: "120px" }}>
+    <div style={{ background: "#FFF3E8", minHeight: "100vh", paddingBottom: "160px" }}>
       {/* Header - Setup Phase */}
        {!testStarted && (
        <div style={{
@@ -742,10 +742,12 @@ export default function YoYoTestLive() {
       </div>
 
       {/* Save button - sticky footer */}
-      {testStarted && savedCount > 0 && (
+      {testStarted && (
         <div style={{
           position: "fixed", bottom: "0", left: "0", right: "0",
-          background: "#ffffff", borderTop: "2.5px solid #1a1a1a", padding: "12px 16px",
+          background: "#ffffff", borderTop: "2.5px solid #1a1a1a",
+          padding: "12px 16px calc(12px + env(safe-area-inset-bottom, 0px)) 16px",
+          paddingBottom: "calc(72px + env(safe-area-inset-bottom, 0px))",
           boxShadow: "0 -3px 10px rgba(0,0,0,0.05)",
           zIndex: 50,
         }}>
