@@ -18,14 +18,11 @@ function warmupExercise() {
   return { id: genId(), name: "Warming-up", description: "", duration_minutes: 10, coaching_points: [], groups: [], field_photo: null };
 }
 
-const glassStyle = {
-  background: "rgba(255,255,255,0.09)",
-  backdropFilter: "blur(24px)",
-  WebkitBackdropFilter: "blur(24px)",
-  border: "0.5px solid rgba(255,255,255,0.18)",
-  borderRadius: "22px",
-  position: "relative",
-  overflow: "hidden",
+const cardStyle = {
+  background: "#ffffff",
+  border: "2.5px solid #1a1a1a",
+  borderRadius: "18px",
+  boxShadow: "3px 3px 0 #1a1a1a",
 };
 
 export default function TrainingPlanEditor({ players, trainingDate, readOnly = false }) {
@@ -120,10 +117,10 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
   // ── Plan detail editor ──
   if (editingPlan) {
     return (
-      <div className="space-y-4 pb-20 lg:pb-6">
+      <div style={{ display: "flex", flexDirection: "column", gap: "14px", paddingBottom: "80px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <button onClick={closePlan} style={{ background: "rgba(255,255,255,0.08)", border: "none", borderRadius: "10px", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-            <ChevronLeft size={18} color="#fff" />
+          <button onClick={closePlan} style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
+            <ChevronLeft size={18} color="#1a1a1a" />
           </button>
           <div>
             <p className="t-page-title">Trainingsplan</p>
@@ -132,25 +129,24 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
         </div>
 
         {/* Session header */}
-        <div style={{ ...glassStyle, padding: "16px" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", pointerEvents: "none" }} />
-          <div style={{ marginBottom: "10px" }}>
-            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Datum</p>
+        <div style={{ ...cardStyle, padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+          <div>
+            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Datum</p>
             <input
               type="date"
               value={editingPlan.date || ""}
               onChange={e => setEditingPlan({ ...editingPlan, date: e.target.value })}
-              style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#fff", outline: "none", colorScheme: "dark", minHeight: "44px" }}
+              style={{ width: "100%", background: "#f5f5f5", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "10px", padding: "10px 12px", fontSize: "14px", color: "#1a1a1a", outline: "none", minHeight: "44px" }}
             />
           </div>
           <div>
-            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Sessiedoelstelling</p>
+            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Sessiedoelstelling</p>
             <textarea
               value={editingPlan.objective || ""}
               onChange={e => setEditingPlan({ ...editingPlan, objective: e.target.value })}
               placeholder="Bijv. Positiespel verbeteren, pressing oefenen..."
               rows={2}
-              style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#fff", outline: "none", resize: "vertical" }}
+              style={{ width: "100%", background: "#f5f5f5", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "10px", padding: "10px 12px", fontSize: "14px", color: "#1a1a1a", outline: "none", resize: "vertical" }}
             />
           </div>
         </div>
@@ -181,9 +177,9 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
         {!readOnly && (editingPlan.exercises || []).length < 10 && (
           <button
             onClick={() => { setLibraryTargetIdx(null); setShowLibrary(true); }}
-            style={{ width: "100%", minHeight: "44px", background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "14px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}
+            style={{ width: "100%", minHeight: "52px", background: "#ffffff", border: "2.5px dashed rgba(26,26,26,0.25)", borderRadius: "14px", color: "#FF6800", fontSize: "14px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
           >
-            <Plus size={16} /> Vorm toevoegen ({(editingPlan.exercises || []).length}/10)
+            <Plus size={16} /> Oefenvorm toevoegen ({(editingPlan.exercises || []).length}/10)
           </button>
         )}
 
@@ -203,11 +199,11 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
 
         {/* Action buttons */}
         {!readOnly && (
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "10px" }}>
             <button
               onClick={savePlan}
               disabled={saving}
-              style={{ flex: 1, minHeight: "52px", background: "rgba(255,255,255,0.10)", border: "0.5px solid rgba(255,255,255,0.20)", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
+              style={{ flex: 1, minHeight: "52px", background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", borderRadius: "14px", color: "#1a1a1a", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}
             >
               {saving ? "Opslaan..." : "Opslaan"}
             </button>
@@ -218,7 +214,7 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
                 setSaving(false);
                 setLivePlan({ ...editingPlan });
               }}
-              style={{ flex: 2, minHeight: "52px", background: "#FF6B00", border: "none", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+              style={{ flex: 2, minHeight: "52px", background: "#FF6800", border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
             >
               <Play size={16} /> Start training
             </button>
@@ -236,7 +232,7 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
         {!readOnly && (
           <button
             onClick={() => setShowNewForm(s => !s)}
-            style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "12px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, padding: "8px 14px", cursor: "pointer", minHeight: "44px", display: "flex", alignItems: "center", gap: "6px" }}
+            style={{ background: "#FF6800", border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", borderRadius: "12px", color: "#fff", fontSize: "13px", fontWeight: 700, padding: "8px 14px", cursor: "pointer", minHeight: "40px", display: "flex", alignItems: "center", gap: "6px" }}
           >
             <Plus size={14} /> Nieuw plan
           </button>
@@ -245,21 +241,20 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
 
       {/* New plan form */}
       {!readOnly && showNewForm && (
-        <div style={{ ...glassStyle, padding: "16px" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", pointerEvents: "none" }} />
-          <p style={{ fontSize: "13px", fontWeight: 700, color: "#fff", marginBottom: "12px" }}>Nieuw trainingsplan</p>
-          <div style={{ marginBottom: "8px" }}>
-            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Datum</p>
-            <input type="date" value={newDate} onChange={e => setNewDate(e.target.value)} style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#fff", outline: "none", colorScheme: "dark", minHeight: "44px" }} />
+        <div style={{ ...cardStyle, padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+          <p style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a1a" }}>Nieuw trainingsplan</p>
+          <div>
+            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Datum</p>
+            <input type="date" value={newDate} onChange={e => setNewDate(e.target.value)} style={{ width: "100%", background: "#f5f5f5", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "10px", padding: "10px 12px", fontSize: "14px", color: "#1a1a1a", outline: "none", minHeight: "44px" }} />
           </div>
-          <div style={{ marginBottom: "12px" }}>
-            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "4px" }}>Sessiedoelstelling (optioneel)</p>
-            <input value={newObjective} onChange={e => setNewObjective(e.target.value)} placeholder="Bijv. Pressing en omschakeling..." style={{ width: "100%", background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", borderRadius: "8px", padding: "8px 10px", fontSize: "13px", color: "#fff", outline: "none", minHeight: "44px" }} />
+          <div>
+            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Sessiedoelstelling (optioneel)</p>
+            <input value={newObjective} onChange={e => setNewObjective(e.target.value)} placeholder="Bijv. Pressing en omschakeling..." style={{ width: "100%", background: "#f5f5f5", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "10px", padding: "10px 12px", fontSize: "14px", color: "#1a1a1a", outline: "none", minHeight: "44px" }} />
           </div>
           <button
             onClick={() => newDate && createPlan.mutate({ date: newDate, objective: newObjective, exercises: [warmupExercise()], status: "draft" })}
             disabled={!newDate || createPlan.isPending}
-            style={{ width: "100%", minHeight: "52px", background: "#FF6B00", border: "none", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}
+            style={{ width: "100%", minHeight: "52px", background: "#FF6800", border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: !newDate ? "not-allowed" : "pointer", opacity: !newDate ? 0.5 : 1 }}
           >
             {createPlan.isPending ? "Aanmaken..." : "Plan aanmaken"}
           </button>
@@ -270,38 +265,37 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
       {isLoading ? (
         <p className="t-secondary">Laden...</p>
       ) : plans.length === 0 ? (
-        <div style={{ ...glassStyle, padding: "32px", textAlign: "center" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", pointerEvents: "none" }} />
-          <p style={{ color: "rgba(255,255,255,0.40)", fontSize: "14px" }}>Nog geen trainingsplannen.</p>
-          <p style={{ color: "rgba(255,255,255,0.25)", fontSize: "12px", marginTop: "4px" }}>Maak je eerste plan aan via 'Nieuw plan'.</p>
+        <div style={{ ...cardStyle, padding: "32px", textAlign: "center" }}>
+          <p style={{ fontSize: "14px", fontWeight: 700, color: "rgba(26,26,26,0.45)" }}>Nog geen trainingsplannen.</p>
+          <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.30)", marginTop: "4px" }}>Maak je eerste plan aan via 'Nieuw plan'.</p>
         </div>
       ) : (
         plans.map(plan => {
           const total = (plan.exercises || []).reduce((s, e) => s + (e.duration_minutes || 0), 0);
-          const statusColors = { draft: "#fbbf24", active: "#FF8C3A", completed: "#4ade80" };
+          const statusColors = { draft: "#cc9900", active: "#FF6800", completed: "#05a050" };
+          const statusBg = { draft: "rgba(255,214,0,0.15)", active: "rgba(255,104,0,0.12)", completed: "rgba(8,208,104,0.12)" };
           const statusLabels = { draft: "Concept", active: "Actief", completed: "Voltooid" };
           return (
-            <div key={plan.id} style={{ ...glassStyle, padding: "16px", cursor: "pointer" }} onClick={() => openPlan(plan)}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", pointerEvents: "none" }} />
+            <div key={plan.id} style={{ ...cardStyle, padding: "16px", cursor: "pointer" }} onClick={() => openPlan(plan)}>
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "10px" }}>
-                <div style={{ flex: 1 }}>
-                  <p style={{ color: "#fff", fontWeight: 700, fontSize: "14px" }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ color: "#1a1a1a", fontWeight: 800, fontSize: "14px" }}>
                     {plan.date ? format(parseISO(plan.date), "EEEE d MMMM", { locale: nl }) : "Ongedateerd"}
                   </p>
-                  {plan.objective && <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "12px", marginTop: "2px" }}>{plan.objective}</p>}
+                  {plan.objective && <p style={{ color: "rgba(26,26,26,0.55)", fontSize: "12px", marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{plan.objective}</p>}
                   <div style={{ display: "flex", gap: "8px", marginTop: "6px", flexWrap: "wrap" }}>
-                    <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)" }}>{(plan.exercises || []).length} oefeningen</span>
-                    {total > 0 && <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)" }}>• {total} min</span>}
+                    <span style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>{(plan.exercises || []).length} oefeningen</span>
+                    {total > 0 && <span style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>· {total} min</span>}
                   </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
-                  <span style={{ background: statusColors[plan.status] + "22", border: `0.5px solid ${statusColors[plan.status]}`, borderRadius: "20px", padding: "3px 10px", fontSize: "10px", fontWeight: 700, color: statusColors[plan.status] }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px", flexShrink: 0 }}>
+                  <span style={{ background: statusBg[plan.status], border: `1.5px solid ${statusColors[plan.status]}`, borderRadius: "20px", padding: "3px 10px", fontSize: "10px", fontWeight: 800, color: statusColors[plan.status] }}>
                     {statusLabels[plan.status]}
                   </span>
                   {!readOnly && plan.status !== "completed" && (
                     <button
                       onClick={e => { e.stopPropagation(); setLivePlan(plan); }}
-                      style={{ background: "#FF6B00", border: "none", borderRadius: "10px", padding: "6px 12px", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px", minHeight: "36px" }}
+                      style={{ background: "#FF6800", border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", borderRadius: "10px", padding: "6px 12px", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px", minHeight: "36px" }}
                     >
                       <Play size={12} /> Start
                     </button>
