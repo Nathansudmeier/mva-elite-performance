@@ -274,6 +274,24 @@ export default function PlanningWedstrijdDetail() {
     }
   }
 
+  async function handleReset() {
+    if (!match) return;
+    setResetting(true);
+    await base44.entities.Match.update(match.id, {
+      live_events: [],
+      score_home: 0,
+      score_away: 0,
+      halftime_notes: "",
+      live_status: "pre",
+    });
+    const playerMatchTimes = await base44.entities.PlayerMatchTime.filter({ match_id: match.id });
+    await Promise.all(playerMatchTimes.map(r => base44.entities.PlayerMatchTime.delete(r.id)));
+    await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
+    setResetting(false);
+    setShowResetConfirm(false);
+    toast({ description: "Wedstrijd gereset", style: { background: "#4ade80", color: "white", border: "none" } });
+  }
+
   async function saveScore() {
     if (!match) return;
     try {
@@ -344,6 +362,12 @@ export default function PlanningWedstrijdDetail() {
                 style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
                 <Pencil size={16} color="#1a1a1a" />
               </button>
+              {match && (
+                <button onClick={() => setShowResetConfirm(true)}
+                  style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,214,0,0.12)", border: "2.5px solid #cc9900", cursor: "pointer" }}>
+                  <RotateCcw size={16} color="#cc9900" />
+                </button>
+              )}
               <button onClick={handleDelete}
                 style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,61,168,0.10)", border: "2.5px solid #FF3DA8", cursor: "pointer" }}>
                 <Trash2 size={16} color="#FF3DA8" />
@@ -589,6 +613,29 @@ export default function PlanningWedstrijdDetail() {
             </div>
           </div>
         )}
+
+      {showResetConfirm && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+          <div onClick={() => setShowResetConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 200 }} />
+          <div style={{ position: "relative", zIndex: 301, background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "20px 20px 0 0", padding: "24px", paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))", width: "100%", maxWidth: "500px" }}>
+            <div style={{ fontSize: "32px", textAlign: "center", marginBottom: "12px" }}>⚠️</div>
+            <div style={{ fontSize: "16px", fontWeight: 800, color: "white", textAlign: "center", marginBottom: "8px" }}>Wedstrijd resetten?</div>
+            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.55)", textAlign: "center", marginBottom: "24px" }}>
+              Dit verwijdert alle live events, de score, rust-notities en speeltijdrecords. Dit kan niet ongedaan worden gemaakt.
+            </p>
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button onClick={() => setShowResetConfirm(false)}
+                style={{ flex: 1, height: "48px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: "pointer" }}>
+                Annuleren
+              </button>
+              <button onClick={handleReset} disabled={resetting}
+                style={{ flex: 1, height: "48px", background: resetting ? "#666" : "#cc3333", border: "none", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: resetting ? "not-allowed" : "pointer" }}>
+                {resetting ? "Bezig..." : "Ja, reset"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showEdit && (
         <AgendaForm
