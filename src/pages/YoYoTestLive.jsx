@@ -14,6 +14,9 @@ const YOYO_LEVELS = [
   "17.1", "17.2", "17.3", "17.4", "17.5", "17.6", "17.7", "17.8",
   "18.1", "18.2", "18.3", "18.4", "18.5", "18.6", "18.7", "18.8",
   "19.1", "19.2", "19.3", "19.4", "19.5", "19.6", "19.7", "19.8",
+];
+
+const YOYO_LEVELS_HIGHER = [
   "20.1", "20.2", "20.3", "20.4", "20.5", "20.6", "20.7", "20.8",
   "21.1", "21.2", "21.3", "21.4", "21.5", "21.6", "21.7", "21.8",
   "22.1", "22.2", "22.3", "22.4", "22.5",
@@ -31,6 +34,7 @@ export default function YoYoTestLive() {
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [expandedLower, setExpandedLower] = useState(false);
   const [expandedHigher, setExpandedHigher] = useState(false);
+  const [expandedPlayerHigher, setExpandedPlayerHigher] = useState({});
 
   // Fetch agenda item + attendance
   const { data: agenda } = useQuery({
@@ -351,27 +355,64 @@ export default function YoYoTestLive() {
               </div>
 
               {/* Level selector grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
-                {YOYO_LEVELS.map(level => (
-                  <button
-                    key={level}
-                    onClick={() => handleLevelSelect(player.id, level)}
-                    style={{
-                      padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
-                      border: "2px solid #1a1a1a",
-                      background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
-                      color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
-                      cursor: "pointer", transition: "all 0.15s",
-                      boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
-                    }}
-                  >
-                    {level}
-                  </button>
-                ))}
+               <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginBottom: "10px" }}>
+                 {YOYO_LEVELS.map(level => (
+                   <button
+                     key={level}
+                     onClick={() => handleLevelSelect(player.id, level)}
+                     style={{
+                       padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                       border: "2px solid #1a1a1a",
+                       background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
+                       color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
+                       cursor: "pointer", transition: "all 0.15s",
+                       boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
+                     }}
+                   >
+                     {level}
+                   </button>
+                 ))}
+               </div>
+
+               {/* Hoger button */}
+               <button
+                 onClick={() => setExpandedPlayerHigher(prev => ({
+                   ...prev,
+                   [player.id]: !prev[player.id]
+                 }))}
+                 style={{
+                   width: "100%", padding: "8px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                   border: "2px solid #FF6800", background: "#ffffff", color: "#FF6800",
+                   cursor: "pointer", transition: "all 0.15s",
+                 }}
+               >
+                 {expandedPlayerHigher[player.id] ? "− Hoger verbergen" : "+ Hoger"}
+               </button>
+
+               {/* Higher levels grid - only show if expanded */}
+               {expandedPlayerHigher[player.id] && (
+                 <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginTop: "10px" }}>
+                   {YOYO_LEVELS_HIGHER.map(level => (
+                     <button
+                       key={level}
+                       onClick={() => handleLevelSelect(player.id, level)}
+                       style={{
+                         padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                         border: "2px solid #1a1a1a",
+                         background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
+                         color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
+                         cursor: "pointer", transition: "all 0.15s",
+                         boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
+                       }}
+                     >
+                       {level}
+                     </button>
+                   ))}
+                 </div>
+               )}
               </div>
-            </div>
-            ))}
-          </div>
+              ))}
+              </div>
 
           {/* Lower levels group */}
           <div>
@@ -413,31 +454,68 @@ export default function YoYoTestLive() {
                         </div>
                       )}
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
-                      {YOYO_LEVELS.map(level => (
-                        <button
-                          key={level}
-                          onClick={() => handleLevelSelect(player.id, level)}
-                          style={{
-                            padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
-                            border: "2px solid #1a1a1a",
-                            background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
-                            color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
-                            cursor: "pointer", transition: "all 0.15s",
-                            boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
-                          }}
-                        >
-                          {level}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginBottom: "10px" }}>
+                       {YOYO_LEVELS.map(level => (
+                         <button
+                           key={level}
+                           onClick={() => handleLevelSelect(player.id, level)}
+                           style={{
+                             padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                             border: "2px solid #1a1a1a",
+                             background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
+                             color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
+                             cursor: "pointer", transition: "all 0.15s",
+                             boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
+                           }}
+                         >
+                           {level}
+                         </button>
+                       ))}
+                     </div>
 
-          {/* Higher levels group */}
+                     {/* Hoger button */}
+                     <button
+                       onClick={() => setExpandedPlayerHigher(prev => ({
+                         ...prev,
+                         [player.id]: !prev[player.id]
+                       }))}
+                       style={{
+                         width: "100%", padding: "8px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                         border: "2px solid #FF6800", background: "#ffffff", color: "#FF6800",
+                         cursor: "pointer", transition: "all 0.15s",
+                       }}
+                     >
+                       {expandedPlayerHigher[player.id] ? "− Hoger verbergen" : "+ Hoger"}
+                     </button>
+
+                     {/* Higher levels grid - only show if expanded */}
+                     {expandedPlayerHigher[player.id] && (
+                       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginTop: "10px" }}>
+                         {YOYO_LEVELS_HIGHER.map(level => (
+                           <button
+                             key={level}
+                             onClick={() => handleLevelSelect(player.id, level)}
+                             style={{
+                               padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                               border: "2px solid #1a1a1a",
+                               background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
+                               color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
+                               cursor: "pointer", transition: "all 0.15s",
+                               boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
+                             }}
+                           >
+                             {level}
+                           </button>
+                         ))}
+                       </div>
+                     )}
+                    </div>
+                    ))}
+                    </div>
+                    )}
+                    </div>
+
+                    {/* Higher levels group */}
           <div>
             <button
               onClick={() => setExpandedHigher(!expandedHigher)}
@@ -477,31 +555,68 @@ export default function YoYoTestLive() {
                         </div>
                       )}
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
-                      {YOYO_LEVELS.map(level => (
-                        <button
-                          key={level}
-                          onClick={() => handleLevelSelect(player.id, level)}
-                          style={{
-                            padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
-                            border: "2px solid #1a1a1a",
-                            background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
-                            color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
-                            cursor: "pointer", transition: "all 0.15s",
-                            boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
-                          }}
-                        >
-                          {level}
-                        </button>
-                      ))}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginBottom: "10px" }}>
+                       {YOYO_LEVELS.map(level => (
+                         <button
+                           key={level}
+                           onClick={() => handleLevelSelect(player.id, level)}
+                           style={{
+                             padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                             border: "2px solid #1a1a1a",
+                             background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
+                             color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
+                             cursor: "pointer", transition: "all 0.15s",
+                             boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
+                           }}
+                         >
+                           {level}
+                         </button>
+                       ))}
+                     </div>
+
+                     {/* Hoger button */}
+                     <button
+                       onClick={() => setExpandedPlayerHigher(prev => ({
+                         ...prev,
+                         [player.id]: !prev[player.id]
+                       }))}
+                       style={{
+                         width: "100%", padding: "8px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                         border: "2px solid #FF6800", background: "#ffffff", color: "#FF6800",
+                         cursor: "pointer", transition: "all 0.15s",
+                       }}
+                     >
+                       {expandedPlayerHigher[player.id] ? "− Hoger verbergen" : "+ Hoger"}
+                     </button>
+
+                     {/* Higher levels grid - only show if expanded */}
+                     {expandedPlayerHigher[player.id] && (
+                       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginTop: "10px" }}>
+                         {YOYO_LEVELS_HIGHER.map(level => (
+                           <button
+                             key={level}
+                             onClick={() => handleLevelSelect(player.id, level)}
+                             style={{
+                               padding: "8px 6px", borderRadius: "10px", fontSize: "11px", fontWeight: 700,
+                               border: "2px solid #1a1a1a",
+                               background: testResults[player.id] === level ? "#FF6800" : "#ffffff",
+                               color: testResults[player.id] === level ? "#ffffff" : "#1a1a1a",
+                               cursor: "pointer", transition: "all 0.15s",
+                               boxShadow: testResults[player.id] === level ? "2px 2px 0 #1a1a1a" : "none",
+                             }}
+                           >
+                             {level}
+                           </button>
+                         ))}
+                       </div>
+                     )}
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-        )}
+                    ))}
+                    </div>
+                    )}
+                    </div>
+                    </div>
+                    )}
       </div>
 
       {/* Save button - sticky footer */}
