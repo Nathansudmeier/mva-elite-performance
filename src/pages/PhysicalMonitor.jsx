@@ -76,10 +76,11 @@ export default function PhysicalMonitor() {
   }).sort((a, b) => b.level - a.level);
 
   const yoyoProgression = [...yoyoTests]
+    .filter(t => t.level && !isNaN(parseFloat(t.level)))
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .map((t) => ({
       date: format(new Date(t.date), "d MMM", { locale: nl }),
-      level: parseFloat(t.level) || 0,
+      level: parseFloat(t.level),
     }));
 
   const chartTick = { fill: "rgba(26,26,26,0.35)", fontSize: 11, fontWeight: 600 };
