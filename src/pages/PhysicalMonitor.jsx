@@ -9,6 +9,8 @@ import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { Plus } from "lucide-react";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 
 const TABS = [
   { key: "yoyo", label: "Yo-Yo Test" },
@@ -96,12 +98,19 @@ export default function PhysicalMonitor() {
           <p className="t-secondary" style={{ marginTop: "2px" }}>Yo-Yo, Sprint, Sprongkracht & Belastbaarheid</p>
         </div>
         {isTrainer && (
-          <button
-            onClick={() => openDialog(tab)}
-            style={{ display: "flex", alignItems: "center", gap: "6px", background: "#FF6800", color: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "0 16px", height: "44px", fontWeight: 800, fontSize: "13px", cursor: "pointer" }}
-          >
-            <Plus size={15} /> Invoeren
-          </button>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <Link to={createPageUrl("YoYoTestLive")} style={{ textDecoration: "none" }}>
+              <button style={{ display: "flex", alignItems: "center", gap: "6px", background: "#08D068", color: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "0 16px", height: "44px", fontWeight: 800, fontSize: "13px", cursor: "pointer" }}>
+                <Plus size={15} /> Live Invoeren
+              </button>
+            </Link>
+            <button
+              onClick={() => openDialog(tab)}
+              style={{ display: "flex", alignItems: "center", gap: "6px", background: "#FF6800", color: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "0 16px", height: "44px", fontWeight: 800, fontSize: "13px", cursor: "pointer" }}
+            >
+              <Plus size={15} /> Invoeren
+            </button>
+          </div>
         )}
       </div>
 
