@@ -123,37 +123,49 @@ export default function YoYoTestLive() {
   return (
     <div style={{ background: "#FFF3E8", minHeight: "100vh", paddingBottom: "120px" }}>
       {/* Merged Header + Hero Section */}
-      {!testStarted && (
-      <div style={{
-        position: "sticky", top: 0, zIndex: 40,
-        background: "#FF6800", 
-        border: "2.5px solid #1a1a1a",
-        borderRadius: "18px",
-        margin: "12px",
-        padding: "16px",
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "space-between",
-        color: "#ffffff",
-        boxShadow: "3px 3px 0 #1a1a1a",
-      }}>
-        <button onClick={() => navigate(-1)} style={{
-          width: "40px", height: "40px", borderRadius: "12px", border: "2.5px solid #ffffff",
-          display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: "rgba(255,255,255,0.15)",
-          color: "#ffffff", transition: "all 0.15s",
-        }}>
-          <ChevronLeft size={18} />
-        </button>
-        <div style={{ textAlign: "center", flex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "4px" }}>
-            <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0bf7cd806_Emvi-tactics.png" alt="Emvi" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
-            <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Yo-Yo Test</h1>
-          </div>
-          <p style={{ fontSize: "12px", fontWeight: 500, margin: 0, opacity: 0.9 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
-        </div>
-        <div style={{ width: "40px" }} />
-      </div>
-      )}
+       {!testStarted && (
+       <div style={{
+         position: "sticky", top: 0, zIndex: 40,
+         background: "#FF6800", 
+         border: "2.5px solid #1a1a1a",
+         borderRadius: "18px",
+         margin: "12px",
+         padding: "16px",
+         display: "flex", 
+         alignItems: "center", 
+         justifyContent: "space-between",
+         color: "#ffffff",
+         boxShadow: "3px 3px 0 #1a1a1a",
+         minHeight: "100px",
+         position: "relative",
+         overflow: "hidden",
+       }}>
+         <button onClick={() => navigate(-1)} style={{
+           width: "40px", height: "40px", borderRadius: "12px", border: "2.5px solid #ffffff",
+           display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: "rgba(255,255,255,0.15)",
+           color: "#ffffff", transition: "all 0.15s", zIndex: 10,
+         }}>
+           <ChevronLeft size={18} />
+         </button>
+         <div style={{ flex: 1, zIndex: 10 }}>
+           <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Yo-Yo Test</h1>
+           <p style={{ fontSize: "12px", fontWeight: 500, margin: "4px 0 0 0", opacity: 0.9 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
+         </div>
+         <img 
+           src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0bf7cd806_Emvi-tactics.png" 
+           alt="Emvi" 
+           style={{ 
+             width: "90px", 
+             height: "90px", 
+             objectFit: "contain",
+             position: "absolute",
+             right: "-10px",
+             bottom: "-10px",
+             opacity: 0.9,
+           }} 
+         />
+       </div>
+       )}
 
       {/* Content */}
       <div>
@@ -297,6 +309,9 @@ export default function YoYoTestLive() {
               justifyContent: "space-between",
               color: "#ffffff",
               boxShadow: "3px 3px 0 #1a1a1a",
+              minHeight: "100px",
+              position: "relative",
+              overflow: "hidden",
             }}>
               <button 
                 onClick={() => setTestStarted(false)}
@@ -304,19 +319,28 @@ export default function YoYoTestLive() {
                   width: "40px", height: "40px", borderRadius: "12px", border: "2.5px solid #ffffff",
                   display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", 
                   background: "rgba(255,255,255,0.15)",
-                  color: "#ffffff", transition: "all 0.15s",
+                  color: "#ffffff", transition: "all 0.15s", zIndex: 10,
                 }}
               >
                 <ChevronLeft size={18} />
               </button>
-              <div style={{ textAlign: "center", flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "4px" }}>
-                  <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0bf7cd806_Emvi-tactics.png" alt="Emvi" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
-                  <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Resultaten</h1>
-                </div>
-                <p style={{ fontSize: "12px", fontWeight: 500, margin: 0, opacity: 0.9 }}>{savedCount} / {selectedPlayers.length} opgeslagen</p>
+              <div style={{ flex: 1, zIndex: 10 }}>
+                <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Resultaten</h1>
+                <p style={{ fontSize: "12px", fontWeight: 500, margin: "4px 0 0 0", opacity: 0.9 }}>{savedCount} / {selectedPlayers.length} opgeslagen</p>
               </div>
-              <div style={{ width: "40px" }} />
+              <img 
+                src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/0bf7cd806_Emvi-tactics.png" 
+                alt="Emvi" 
+                style={{ 
+                  width: "90px", 
+                  height: "90px", 
+                  objectFit: "contain",
+                  position: "absolute",
+                  right: "-10px",
+                  bottom: "-10px",
+                  opacity: 0.9,
+                }} 
+              />
             </div>
           </>
         )}
