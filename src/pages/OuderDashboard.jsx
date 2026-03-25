@@ -45,7 +45,7 @@ export default function OuderDashboard() {
   const { data: liveMatches = [] } = useQuery({
     queryKey: ["liveMatches"],
     queryFn: () => base44.entities.Match.list("-date"),
-    select: (data) => data.filter(m => m.live_status && m.live_status !== "finished"),
+    select: (data) => data.filter(m => m.live_status === "live" || m.live_status === "halftime"),
   });
 
   // Get child's team from matches
