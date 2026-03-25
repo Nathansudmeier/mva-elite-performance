@@ -40,6 +40,11 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
     queryFn: () => base44.entities.TrainingPlan.list("-date"),
   });
 
+  const { data: exerciseTemplates = [] } = useQuery({
+    queryKey: ["exercise-templates"],
+    queryFn: () => base44.entities.ExerciseTemplate.list(),
+  });
+
   const plans = trainingDate ? allPlans.filter(p => p.date === trainingDate) : allPlans;
 
   const createPlan = useMutation({
@@ -252,7 +257,14 @@ export default function TrainingPlanEditor({ players, trainingDate, readOnly = f
             <input value={newObjective} onChange={e => setNewObjective(e.target.value)} placeholder="Bijv. Pressing en omschakeling..." style={{ width: "100%", background: "#f5f5f5", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "10px", padding: "10px 12px", fontSize: "14px", color: "#1a1a1a", outline: "none", minHeight: "44px" }} />
           </div>
           <button
-            onClick={() => newDate && createPlan.mutate({ date: newDate, objective: newObjective, exercises: [warmupExercise()], status: "draft" })}
+            onClick={() => {
+              if (!newDate) return;
+              const warmupTemplate = exerciseTemplates.find(t => t.name?.toLowerCase().includes("warming"));
+              const firstExercise = warmupTemplate
+                ? { id: genId(), name: warmupTemplate.name, description: warmupTemplate.description || "", duration_minutes: warmupTemplate.duration_minutes || 10, coaching_points: warmupTemplate.coaching_points || [], groups: [], field_photo: warmupTemplate.photo_url || null }
+                : warmupExercise();
+              createPlan.mutate({ date: newDate, objective: newObjective, exercises: [firstExercise], status: "draft" });
+            }}
             disabled={!newDate || createPlan.isPending}
             style={{ width: "100%", minHeight: "52px", background: "#FF6800", border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: !newDate ? "not-allowed" : "pointer", opacity: !newDate ? 0.5 : 1 }}
           >
