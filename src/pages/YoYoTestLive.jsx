@@ -121,7 +121,7 @@ export default function YoYoTestLive() {
   const savedCount = Object.values(testResults).filter(Boolean).length;
 
   return (
-    <div style={{ background: "#FFF3E8", minHeight: "100vh", paddingBottom: "80px" }}>
+    <div style={{ background: "#FFF3E8", minHeight: "100vh", paddingBottom: "120px" }}>
       {/* Merged Header + Hero Section */}
       {!testStarted && (
       <div style={{
@@ -382,7 +382,7 @@ export default function YoYoTestLive() {
               </div>
 
               {/* Level selector grid */}
-               <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginBottom: "10px" }}>
+               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(70px, 1fr))", gap: "6px", marginBottom: "10px" }}>
                  {YOYO_LEVELS.map(level => (
                    <button
                      key={level}
@@ -418,7 +418,7 @@ export default function YoYoTestLive() {
 
                {/* Higher levels grid - only show if expanded */}
                {expandedPlayerHigher[player.id] && (
-                 <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginTop: "10px" }}>
+                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(70px, 1fr))", gap: "6px", marginTop: "10px" }}>
                    {YOYO_LEVELS_HIGHER.map(level => (
                      <button
                        key={level}
@@ -481,7 +481,7 @@ export default function YoYoTestLive() {
                         </div>
                       )}
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginBottom: "10px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(70px, 1fr))", gap: "6px", marginBottom: "10px" }}>
                        {YOYO_LEVELS.map(level => (
                          <button
                            key={level}
@@ -517,7 +517,7 @@ export default function YoYoTestLive() {
 
                      {/* Higher levels grid - only show if expanded */}
                      {expandedPlayerHigher[player.id] && (
-                       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginTop: "10px" }}>
+                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(70px, 1fr))", gap: "6px", marginTop: "10px" }}>
                          {YOYO_LEVELS_HIGHER.map(level => (
                            <button
                              key={level}
@@ -582,7 +582,7 @@ export default function YoYoTestLive() {
                         </div>
                       )}
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginBottom: "10px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(70px, 1fr))", gap: "6px", marginBottom: "10px" }}>
                        {YOYO_LEVELS.map(level => (
                          <button
                            key={level}
@@ -618,7 +618,7 @@ export default function YoYoTestLive() {
 
                      {/* Higher levels grid - only show if expanded */}
                      {expandedPlayerHigher[player.id] && (
-                       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginTop: "10px" }}>
+                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(70px, 1fr))", gap: "6px", marginTop: "10px" }}>
                          {YOYO_LEVELS_HIGHER.map(level => (
                            <button
                              key={level}
@@ -652,6 +652,7 @@ export default function YoYoTestLive() {
           position: "fixed", bottom: "0", left: "0", right: "0",
           background: "#ffffff", borderTop: "2.5px solid #1a1a1a", padding: "12px 16px",
           boxShadow: "0 -3px 10px rgba(0,0,0,0.05)",
+          zIndex: 50,
         }}>
           <button
             onClick={() => saveMutation.mutate(testResults)}
