@@ -14,7 +14,7 @@ import { createPageUrl } from "@/utils";
 
 const TABS = [
   { key: "yoyo", label: "Yo-Yo Test" },
-  { key: "physical", label: "Sprint & Sprong" },
+  { key: "physical", label: "Sprint" },
   { key: "wellness", label: "Belastbaarheid" },
 ];
 
@@ -57,7 +57,7 @@ export default function PhysicalMonitor() {
       if (dialogType === "yoyo") {
         await base44.entities.YoYoTest.create(data);
       } else if (dialogType === "physical") {
-        await base44.entities.PhysicalTest.create({ ...data, sprint_30m: data.sprint_30m ? Number(data.sprint_30m) : undefined, jump_height: data.jump_height ? Number(data.jump_height) : undefined });
+        await base44.entities.PhysicalTest.create({ ...data, sprint_30m: data.sprint_30m ? Number(data.sprint_30m) : undefined });
       } else {
         await base44.entities.WellnessLog.create({ ...data, sleep: Number(data.sleep), fatigue: Number(data.fatigue), muscle_pain: Number(data.muscle_pain) });
       }
@@ -95,7 +95,7 @@ export default function PhysicalMonitor() {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
           <h1 className="t-page-title">Fysieke Monitor</h1>
-          <p className="t-secondary" style={{ marginTop: "2px" }}>Yo-Yo, Sprint, Sprongkracht & Belastbaarheid</p>
+          <p className="t-secondary" style={{ marginTop: "2px" }}>Yo-Yo, Sprint & Belastbaarheid</p>
         </div>
         {isTrainer && (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -182,10 +182,10 @@ export default function PhysicalMonitor() {
         </>
       )}
 
-      {/* ── SPRINT & SPRONG ── */}
+      {/* ── SPRINT ── */}
       {tab === "physical" && (
         <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "16px" }}>
-          <p className="t-section-title" style={{ marginBottom: "14px" }}>Sprint & Sprongkracht Resultaten</p>
+          <p className="t-section-title" style={{ marginBottom: "14px" }}>Sprint Resultaten</p>
           {physicalTests.length === 0 ? (
             <p className="t-secondary" style={{ textAlign: "center", padding: "24px 0" }}>Nog geen testresultaten</p>
           ) : (
@@ -193,7 +193,7 @@ export default function PhysicalMonitor() {
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ borderBottom: "2px solid rgba(26,26,26,0.08)" }}>
-                    {["Speelster", "Datum", "Sprint 30m", "Sprongkracht"].map((h, i) => (
+                    {["Speelster", "Datum", "Sprint 30m"].map((h, i) => (
                       <th key={h} style={{ padding: "8px 6px", fontSize: "10px", fontWeight: 800, color: "rgba(26,26,26,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", textAlign: i >= 2 ? "right" : "left" }}>{h}</th>
                     ))}
                   </tr>
@@ -204,7 +204,6 @@ export default function PhysicalMonitor() {
                       <td style={{ padding: "10px 6px", fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>{players.find((p) => p.id === t.player_id)?.name || "–"}</td>
                       <td style={{ padding: "10px 6px", fontSize: "12px", color: "rgba(26,26,26,0.45)", fontWeight: 600 }}>{format(new Date(t.date), "d MMM", { locale: nl })}</td>
                       <td style={{ padding: "10px 6px", textAlign: "right", fontSize: "13px", fontWeight: 900, color: "#9B5CFF" }}>{t.sprint_30m ? `${t.sprint_30m}s` : "–"}</td>
-                      <td style={{ padding: "10px 6px", textAlign: "right", fontSize: "13px", fontWeight: 900, color: "#FF6800" }}>{t.jump_height ? `${t.jump_height}cm` : "–"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -275,7 +274,6 @@ export default function PhysicalMonitor() {
             {dialogType === "physical" && (
               <>
                 <Input type="number" step="0.01" placeholder="Sprint 30m (sec)" value={form.sprint_30m || ""} onChange={(e) => setForm({ ...form, sprint_30m: e.target.value })} style={inputStyle} />
-                <Input type="number" placeholder="Sprongkracht (cm)" value={form.jump_height || ""} onChange={(e) => setForm({ ...form, jump_height: e.target.value })} style={inputStyle} />
               </>
             )}
             {dialogType === "wellness" && (
