@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Camera, Check, Upload } from "lucide-react";
+import { Check, Upload } from "lucide-react";
 import { resizeImage } from "@/components/utils/imageResize";
 
 export default function WinningTeamUpload({ players, onSaved }) {
@@ -37,6 +37,7 @@ export default function WinningTeamUpload({ players, onSaved }) {
       });
       setSelectedPlayers([]);
       setPhotoFile(null);
+      setDate(new Date().toISOString().split("T")[0]);
       setError("");
       onSaved?.();
     } catch (err) {
@@ -47,59 +48,80 @@ export default function WinningTeamUpload({ players, onSaved }) {
   };
 
   return (
-    <div className="glass-dark rounded-2xl p-4 md:p-6">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(255,107,0,0.15)" }}>
-          <Camera size={20} style={{ color: "#FF8C3A" }} />
-        </div>
-        <div>
-          <h2 className="t-card-title">Winnend Team</h2>
-          <p className="t-tertiary text-xs">Registreer het winnende team</p>
-        </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+      {/* Date input */}
+      <div>
+        <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "8px", letterSpacing: "0.10em" }}>Datum</p>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          style={{ width: "100%", padding: "10px 12px", borderRadius: "12px", border: "2px solid #1a1a1a", fontSize: "14px", fontWeight: 600, color: "#1a1a1a", background: "#ffffff", boxSizing: "border-box" }}
+        />
       </div>
 
-      {/* Date input */}
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        className="w-full mb-4 px-3 py-2 rounded-xl text-sm"
-        style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.12)", color: "#fff" }}
-      />
-
-      {/* Player selection */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4 max-h-48 overflow-y-auto">
-        {players.map((p) => (
-          <button
-            key={p.id}
-            onClick={() => togglePlayer(p.id)}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all"
-            style={{
-              background: selectedPlayers.includes(p.id) ? "rgba(255,107,0,0.25)" : "rgba(255,255,255,0.06)",
-              border: selectedPlayers.includes(p.id) ? "0.5px solid rgba(255,107,0,0.4)" : "0.5px solid rgba(255,255,255,0.1)",
-              color: selectedPlayers.includes(p.id) ? "#FF8C3A" : "rgba(255,255,255,0.7)"
-            }}
-          >
-            {selectedPlayers.includes(p.id) && <Check size={14} />}
-            <span className="truncate">{p.name?.split(" ")[0]}</span>
-          </button>
-        ))}
+      {/* Player selection grid */}
+      <div>
+        <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "8px", letterSpacing: "0.10em" }}>Selecteer speelsters</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "6px", maxHeight: "200px", overflowY: "auto" }}>
+          {players.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => togglePlayer(p.id)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                padding: "10px 12px",
+                borderRadius: "12px",
+                border: "2.5px solid #1a1a1a",
+                background: selectedPlayers.includes(p.id) ? "#FF6800" : "#ffffff",
+                color: selectedPlayers.includes(p.id) ? "#ffffff" : "#1a1a1a",
+                fontSize: "12px",
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.15s",
+                boxShadow: selectedPlayers.includes(p.id) ? "2px 2px 0 #1a1a1a" : "none",
+              }}
+            >
+              {selectedPlayers.includes(p.id) && <Check size={14} />}
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name?.split(" ")[0]}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Photo upload */}
-      <label className="flex items-center gap-2 px-4 py-3 rounded-xl border border-dashed cursor-pointer transition-colors mb-4"
-        style={{ borderColor: "rgba(255,107,0,0.3)", background: "rgba(255,107,0,0.08)" }}>
-        <Upload size={16} style={{ color: "#FF8C3A" }} />
-        <span className="t-secondary text-xs md:text-sm truncate">
-          {photoFile ? photoFile.name : "Upload teamfoto"}
-        </span>
-        <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files?.[0] || null)} />
-      </label>
+      <div>
+        <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "8px", letterSpacing: "0.10em" }}>Teamfoto</p>
+        <label style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+          padding: "16px 12px",
+          borderRadius: "12px",
+          border: "2.5px dashed #1a1a1a",
+          background: "rgba(255,107,0,0.08)",
+          cursor: "pointer",
+          transition: "all 0.15s",
+          minHeight: "56px",
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,107,0,0.15)"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,107,0,0.08)"; }}
+        >
+          <Upload size={16} style={{ color: "#FF6800", flexShrink: 0 }} />
+          <span style={{ fontSize: "13px", fontWeight: 700, color: photoFile ? "#FF6800" : "rgba(26,26,26,0.55)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {photoFile ? photoFile.name : "Upload foto"}
+          </span>
+          <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => setPhotoFile(e.target.files?.[0] || null)} />
+        </label>
+      </div>
 
       {/* Error message */}
       {error && (
-        <div className="px-3 py-2 rounded-lg mb-4" style={{ background: "rgba(248,113,113,0.12)", color: "#f87171", fontSize: "12px" }}>
+        <div style={{ padding: "10px 12px", borderRadius: "12px", background: "rgba(255,61,168,0.10)", border: "1.5px solid rgba(255,61,168,0.25)", color: "#FF3DA8", fontSize: "12px", fontWeight: 600 }}>
           {error}
         </div>
       )}
@@ -108,11 +130,19 @@ export default function WinningTeamUpload({ players, onSaved }) {
       <button
         onClick={handleSave}
         disabled={saving || selectedPlayers.length === 0}
-        className="w-full py-3 rounded-xl font-semibold transition-opacity text-white text-sm"
         style={{
-          background: saving || selectedPlayers.length === 0 ? "rgba(255,107,0,0.4)" : "#FF6B00",
+          width: "100%",
+          padding: "12px 16px",
+          borderRadius: "14px",
+          border: "2.5px solid #1a1a1a",
+          background: saving || selectedPlayers.length === 0 ? "rgba(255,107,0,0.45)" : "#FF6800",
+          color: "#ffffff",
+          fontSize: "14px",
+          fontWeight: 800,
+          cursor: saving || selectedPlayers.length === 0 ? "not-allowed" : "pointer",
+          boxShadow: saving || selectedPlayers.length === 0 ? "none" : "3px 3px 0 #1a1a1a",
+          transition: "all 0.15s",
           opacity: saving || selectedPlayers.length === 0 ? 0.6 : 1,
-          cursor: saving || selectedPlayers.length === 0 ? "not-allowed" : "pointer"
         }}
       >
         {saving ? "Opslaan..." : `Opslaan (${selectedPlayers.length})`}
