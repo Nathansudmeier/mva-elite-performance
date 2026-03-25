@@ -148,7 +148,7 @@ export default function YoYoTestLive() {
            <ChevronLeft size={18} />
          </button>
          <div style={{ flex: 1, zIndex: 10 }}>
-           <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Yo-Yo Test</h1>
+           <h1 style={{ fontSize: "28px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px", color: "#ffffff" }}>Yo-Yo Test</h1>
            <p style={{ fontSize: "12px", fontWeight: 500, margin: "4px 0 0 0", opacity: 0.9 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
          </div>
          <img 
@@ -325,7 +325,7 @@ export default function YoYoTestLive() {
                 <ChevronLeft size={18} />
               </button>
               <div style={{ flex: 1, zIndex: 10 }}>
-                <h1 style={{ fontSize: "20px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px" }}>Resultaten</h1>
+                <h1 style={{ fontSize: "28px", fontWeight: 900, margin: 0, letterSpacing: "-0.5px", color: "#ffffff" }}>Resultaten</h1>
                 <p style={{ fontSize: "12px", fontWeight: 500, margin: "4px 0 0 0", opacity: 0.9 }}>{savedCount} / {selectedPlayers.length} opgeslagen</p>
               </div>
               <img 
