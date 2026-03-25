@@ -127,18 +127,26 @@ export default function PlayerDetail() {
         <div className="glass" style={{ borderRadius: "18px", overflow: "hidden" }}>
           <div style={{
             background: "linear-gradient(135deg, #FF6800 0%, #FF8C00 100%)",
-            padding: "16px", display: "flex", flexDirection: "column", gap: "12px"
+            padding: "16px", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px",
+            position: "relative", overflow: "hidden"
           }}>
-            <div>
-              <p className="t-label" style={{ color: "rgba(255,255,255,0.75)" }}>Laatste Beoordeling</p>
-              <p style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff", marginTop: "4px" }}>{latestRating.meting} · {latestRating.date}</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div>
+                <p className="t-label" style={{ color: "rgba(255,255,255,0.75)" }}>Laatste Beoordeling</p>
+                <p style={{ fontSize: "13px", fontWeight: 700, color: "#ffffff", marginTop: "4px" }}>{latestRating.meting} · {latestRating.date}</p>
+              </div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+                <span style={{ fontSize: "34px", fontWeight: 900, color: "#ffffff", lineHeight: 1 }}>
+                  {(() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })()}
+                </span>
+                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)" }}>totaal</span>
+              </div>
             </div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-              <span style={{ fontSize: "34px", fontWeight: 900, color: "#ffffff", lineHeight: 1 }}>
-                {(() => { const allKeys = [...technicalKeys, ...tacticalKeys, ...personalityKeys, ...physicalRatingKeys]; return calcAvg(latestRating, allKeys); })()}
-              </span>
-              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)" }}>totaal</span>
-            </div>
+            <img
+              src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/cd3abaf70_Emvi-tactics.png"
+              alt="Emvi"
+              style={{ height: "110px", objectFit: "contain", marginBottom: "-16px", flexShrink: 0 }}
+            />
           </div>
           <div style={{ padding: "16px", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px" }} className="mobile-grid-2col">
             {[
