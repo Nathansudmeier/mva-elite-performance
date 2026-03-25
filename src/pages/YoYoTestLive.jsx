@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, Check, Play } from "lucide-react";
+import { ChevronLeft, Check, Play, Users } from "lucide-react";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
+import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
 
 const YOYO_LEVELS = [
   "5.1", "9.1", "11.1", "11.2", "12.1", "12.2", "12.3",
@@ -68,7 +69,7 @@ export default function YoYoTestLive() {
             id: a.player_id,
             name: player?.name || "Unknown",
             lastLevel: lastTest?.level || "–",
-            photoUrl: player?.photo_url,
+            photoUrl: player?.photo_url || PLAYER_FALLBACK_PHOTO,
           };
         })
     : players.map(p => {
@@ -80,7 +81,7 @@ export default function YoYoTestLive() {
           id: p.id,
           name: p.name || "Unknown",
           lastLevel: lastTest?.level || "–",
-          photoUrl: p.photo_url,
+          photoUrl: p.photo_url || PLAYER_FALLBACK_PHOTO,
         };
       });
 
@@ -117,48 +118,38 @@ export default function YoYoTestLive() {
 
   return (
     <div style={{ background: "#FFF3E8", minHeight: "100vh", paddingBottom: "80px" }}>
-      {/* Header */}
+      {/* Merged Header + Hero Section */}
+      {!testStarted && (
       <div style={{
         position: "sticky", top: 0, zIndex: 40,
-        background: "#ffffff", borderBottom: "2.5px solid #1a1a1a",
-        padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        background: "linear-gradient(135deg, #FF6800 0%, #FF8C3D 100%)", 
+        borderBottom: "2.5px solid #1a1a1a",
+        padding: "16px",
+        display: "flex", 
+        alignItems: "center", 
+        justifyContent: "space-between",
+        color: "#ffffff",
       }}>
         <button onClick={() => navigate(-1)} style={{
-          width: "40px", height: "40px", borderRadius: "12px", border: "2px solid #1a1a1a",
-          display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: "rgba(26,26,26,0.04)",
+          width: "40px", height: "40px", borderRadius: "12px", border: "2px solid #ffffff",
+          display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: "rgba(255,255,255,0.2)",
+          color: "#ffffff",
         }}>
           <ChevronLeft size={18} />
         </button>
-        <div style={{ textAlign: "center" }}>
-          <h1 className="t-section-title">Yo-Yo Test</h1>
-          <p className="t-tertiary">{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
+        <div style={{ textAlign: "center", flex: 1 }}>
+          <h1 style={{ fontSize: "20px", fontWeight: 900, margin: "0 0 4px 0", letterSpacing: "-0.5px" }}>Yo-Yo Test</h1>
+          <p style={{ fontSize: "12px", fontWeight: 500, margin: 0, opacity: 0.95 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
         </div>
         <div style={{ width: "40px" }} />
       </div>
+      )}
 
       {/* Content */}
       <div>
         
         {!testStarted ? (
           <>
-            {/* Hero section */}
-            <div style={{ 
-              background: "linear-gradient(135deg, #FF6800 0%, #FF8C3D 100%)", 
-              padding: "24px 16px", 
-              borderRadius: "18px", 
-              border: "2.5px solid #1a1a1a",
-              boxShadow: "3px 3px 0 #1a1a1a",
-              marginBottom: "24px",
-              color: "#ffffff",
-            }}>
-              <h1 style={{ fontSize: "28px", fontWeight: 900, margin: "0 0 6px 0", letterSpacing: "-0.5px" }}>
-                🏃 Yo-Yo Test
-              </h1>
-              <p style={{ fontSize: "13px", fontWeight: 500, margin: 0, opacity: 0.95 }}>
-                Intermittent recovery test
-              </p>
-            </div>
-
             {/* Setup container */}
             <div style={{ padding: "16px" }}>
               {/* Testdatum */}
@@ -180,9 +171,27 @@ export default function YoYoTestLive() {
 
               {/* Player selection */}
               <div style={{ marginBottom: "24px" }}>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "12px" }}>
-                  👥 Selecteer deelnemers ({selectedPlayers.length})
-                </label>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+                  <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                    👥 Selecteer deelnemers ({selectedPlayers.length})
+                  </label>
+                  <button
+                    onClick={() => {
+                      if (selectedPlayers.length === presentPlayers.length) {
+                        setSelectedPlayers([]);
+                      } else {
+                        setSelectedPlayers(presentPlayers.map(p => p.id));
+                      }
+                    }}
+                    style={{
+                      fontSize: "11px", fontWeight: 700, padding: "6px 10px", borderRadius: "8px",
+                      border: "1.5px solid #FF6800", background: "#ffffff", color: "#FF6800",
+                      cursor: "pointer", transition: "all 0.15s",
+                    }}
+                  >
+                    {selectedPlayers.length === presentPlayers.length ? "Deselecteer alles" : "Selecteer alles"}
+                  </button>
+                </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                 {presentPlayers.map(player => (
                   <button
@@ -213,19 +222,17 @@ export default function YoYoTestLive() {
                       gap: "8px",
                     }}
                   >
-                    {player.photoUrl && (
-                      <img 
-                        src={player.photoUrl} 
-                        alt={player.name}
-                        style={{
-                          width: "40px",
-                          height: "40px",
-                          borderRadius: "10px",
-                          objectFit: "cover",
-                          border: selectedPlayers.includes(player.id) ? "2px solid #ffffff" : "2px solid #1a1a1a",
-                        }}
-                      />
-                    )}
+                    <img 
+                      src={player.photoUrl} 
+                      alt={player.name}
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "10px",
+                        objectFit: "cover",
+                        border: selectedPlayers.includes(player.id) ? "2px solid #ffffff" : "2px solid #1a1a1a",
+                      }}
+                    />
                     <span style={{ lineHeight: 1.2 }}>{player.name}</span>
                     <span style={{ fontSize: "10px", fontWeight: 600, opacity: 0.75 }}>
                       Laatste: {player.lastLevel}
@@ -291,10 +298,8 @@ export default function YoYoTestLive() {
             }}>
               {/* Player header */}
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                {player.photoUrl && (
-                  <img src={player.photoUrl} alt={player.name}
-                    style={{ width: "36px", height: "36px", borderRadius: "10px", objectFit: "cover", border: "2px solid #1a1a1a" }} />
-                )}
+                <img src={player.photoUrl} alt={player.name}
+                  style={{ width: "36px", height: "36px", borderRadius: "10px", objectFit: "cover", border: "2px solid #1a1a1a" }} />
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a1a" }}>{player.name}</p>
                   <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginTop: "2px" }}>
