@@ -137,32 +137,53 @@ export default function YoYoTestLive() {
       </div>
 
       {/* Content */}
-      <div style={{ padding: "16px" }}>
+      <div>
         
         {!testStarted ? (
           <>
-            {/* Pre-test setup */}
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px" }}>
-                Testdatum
-              </label>
-              <input
-                type="date"
-                value={testDate}
-                onChange={(e) => setTestDate(e.target.value)}
-                style={{
-                  width: "100%", padding: "12px", borderRadius: "12px", border: "2px solid #1a1a1a",
-                  fontSize: "14px", fontWeight: 600, boxSizing: "border-box",
-                }}
-              />
+            {/* Hero section */}
+            <div style={{ 
+              background: "linear-gradient(135deg, #FF6800 0%, #FF8C3D 100%)", 
+              padding: "24px 16px", 
+              borderRadius: "18px", 
+              border: "2.5px solid #1a1a1a",
+              boxShadow: "3px 3px 0 #1a1a1a",
+              marginBottom: "24px",
+              color: "#ffffff",
+            }}>
+              <h1 style={{ fontSize: "28px", fontWeight: 900, margin: "0 0 6px 0", letterSpacing: "-0.5px" }}>
+                🏃 Yo-Yo Test
+              </h1>
+              <p style={{ fontSize: "13px", fontWeight: 500, margin: 0, opacity: 0.95 }}>
+                Intermittent recovery test
+              </p>
             </div>
 
-            {/* Player selection */}
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "10px" }}>
-                Selecteer deelnemers
-              </label>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {/* Setup container */}
+            <div style={{ padding: "16px" }}>
+              {/* Testdatum */}
+              <div style={{ marginBottom: "24px" }}>
+                <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
+                  📅 Testdatum
+                </label>
+                <input
+                  type="date"
+                  value={testDate}
+                  onChange={(e) => setTestDate(e.target.value)}
+                  style={{
+                    width: "100%", padding: "12px 14px", borderRadius: "12px", border: "2.5px solid #1a1a1a",
+                    fontSize: "14px", fontWeight: 600, boxSizing: "border-box",
+                    background: "#ffffff", boxShadow: "2px 2px 0 rgba(26,26,26,0.1)",
+                  }}
+                />
+              </div>
+
+              {/* Player selection */}
+              <div style={{ marginBottom: "24px" }}>
+                <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "12px" }}>
+                  👥 Selecteer deelnemers ({selectedPlayers.length})
+                </label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                 {presentPlayers.map(player => (
                   <button
                     key={player.id}
@@ -174,40 +195,75 @@ export default function YoYoTestLive() {
                       );
                     }}
                     style={{
-                      padding: "12px", borderRadius: "12px", border: "2px solid #1a1a1a",
-                      background: selectedPlayers.includes(player.id) ? "#FF6800" : "#ffffff",
+                      position: "relative",
+                      padding: "12px", 
+                      borderRadius: "14px", 
+                      border: "2.5px solid #1a1a1a",
+                      background: selectedPlayers.includes(player.id) ? "#08D068" : "#ffffff",
                       color: selectedPlayers.includes(player.id) ? "#ffffff" : "#1a1a1a",
-                      fontSize: "14px", fontWeight: 700, cursor: "pointer",
-                      textAlign: "left", transition: "all 0.15s",
-                      boxShadow: selectedPlayers.includes(player.id) ? "2px 2px 0 #1a1a1a" : "none",
+                      fontSize: "12px", 
+                      fontWeight: 700, 
+                      cursor: "pointer",
+                      textAlign: "center", 
+                      transition: "all 0.15s",
+                      boxShadow: selectedPlayers.includes(player.id) ? "3px 3px 0 #1a1a1a" : "2px 2px 0 rgba(26,26,26,0.08)",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "8px",
                     }}
                   >
-                    {player.name}
+                    {player.photoUrl && (
+                      <img 
+                        src={player.photoUrl} 
+                        alt={player.name}
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "10px",
+                          objectFit: "cover",
+                          border: selectedPlayers.includes(player.id) ? "2px solid #ffffff" : "2px solid #1a1a1a",
+                        }}
+                      />
+                    )}
+                    <span style={{ lineHeight: 1.2 }}>{player.name}</span>
+                    <span style={{ fontSize: "10px", fontWeight: 600, opacity: 0.75 }}>
+                      Laatste: {player.lastLevel}
+                    </span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Start button */}
-            <button
-              onClick={() => {
-                if (selectedPlayers.length > 0) {
-                  setTestStarted(true);
-                }
-              }}
-              disabled={selectedPlayers.length === 0}
-              style={{
-                width: "100%", padding: "14px", borderRadius: "14px", border: "2.5px solid #1a1a1a",
-                background: selectedPlayers.length > 0 ? "#08D068" : "rgba(26,26,26,0.1)",
-                color: selectedPlayers.length > 0 ? "#ffffff" : "rgba(26,26,26,0.3)",
-                fontSize: "15px", fontWeight: 800, cursor: selectedPlayers.length > 0 ? "pointer" : "not-allowed",
-                boxShadow: selectedPlayers.length > 0 ? "3px 3px 0 #1a1a1a" : "none",
-                transition: "all 0.1s",
-                display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
-              }}
-            >
-              <Play size={18} /> Test starten
-            </button>
+              {/* Start button */}
+              <button
+                onClick={() => {
+                  if (selectedPlayers.length > 0) {
+                    setTestStarted(true);
+                  }
+                }}
+                disabled={selectedPlayers.length === 0}
+                style={{
+                  width: "100%", 
+                  padding: "16px", 
+                  borderRadius: "14px", 
+                  border: "2.5px solid #1a1a1a",
+                  background: selectedPlayers.length > 0 ? "#FF6800" : "rgba(26,26,26,0.1)",
+                  color: selectedPlayers.length > 0 ? "#ffffff" : "rgba(26,26,26,0.3)",
+                  fontSize: "15px", 
+                  fontWeight: 800, 
+                  cursor: selectedPlayers.length > 0 ? "pointer" : "not-allowed",
+                  boxShadow: selectedPlayers.length > 0 ? "3px 3px 0 #1a1a1a" : "none",
+                  transition: "all 0.1s",
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center", 
+                  gap: "8px",
+                }}
+              >
+                <Play size={18} /> Test starten ({selectedPlayers.length} speelsters)
+              </button>
+            </div>
           </>
         ) : (
           <>
