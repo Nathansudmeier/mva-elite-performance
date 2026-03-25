@@ -184,12 +184,15 @@ export default function PhysicalMonitor() {
           alt="Emvi" 
           style={{ 
             position: "relative",
-            height: "100px",
+            height: "110px",
             width: "auto",
             objectFit: "contain",
+            objectPosition: "bottom",
             marginLeft: "12px",
+            marginBottom: "-4px",
             flexShrink: 0,
             zIndex: 3,
+            alignSelf: "flex-end",
           }} 
         />
       </div>
