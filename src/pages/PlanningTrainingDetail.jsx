@@ -8,6 +8,7 @@ import { formatDate, TYPE_CONFIG } from "@/components/agenda/agendaUtils";
 import AttendanceButtons from "@/components/attendance/AttendanceButtons";
 import TrainingPlanEditor from "@/components/trainingsplanner/TrainingPlanEditor";
 import AgendaForm from "@/components/agenda/AgendaForm";
+import { format, parseISO } from "date-fns";
 
 const TABS = ["Overzicht", "Trainingsplan", "Aanwezigheid"];
 
@@ -249,7 +250,9 @@ export default function PlanningTrainingDetail() {
 
         {/* Tab: Trainingsplan */}
          {activeTab === 1 && (
-          <TrainingPlanEditor players={players} trainingDate={item?.date} readOnly={!isTrainer} />
+          isOuder
+            ? <OuderTrainingsPlanView trainingDate={item?.date} />
+            : <TrainingPlanEditor players={players} trainingDate={item?.date} readOnly={!isTrainer} />
         )}
 
         {/* Tab: Aanwezigheid */}
@@ -279,6 +282,56 @@ export default function PlanningTrainingDetail() {
           onClose={() => setShowEdit(false)}
         />
       )}
+    </div>
+  );
+}
+
+function OuderTrainingsPlanView({ trainingDate }) {
+  const { data: allPlans = [], isLoading } = useQuery({
+    queryKey: ["training-plans"],
+    queryFn: () => base44.entities.TrainingPlan.list("-date"),
+  });
+
+  const plan = trainingDate ? allPlans.find(p => p.date === trainingDate) : null;
+
+  if (isLoading) return <div style={{ textAlign: "center", padding: "32px 0" }}><div className="w-6 h-6 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin mx-auto" /></div>;
+
+  if (!plan || !(plan.exercises || []).length) {
+    return (
+      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "32px 16px", textAlign: "center" }}>
+        <p style={{ fontSize: 14, fontWeight: 700, color: "rgba(26,26,26,0.45)" }}>Nog geen oefenvormen gepland.</p>
+      </div>
+    );
+  }
+
+  const total = plan.exercises.reduce((s, e) => s + (e.duration_minutes || 0), 0);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {plan.objective && (
+        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 14, boxShadow: "2px 2px 0 #1a1a1a", padding: "12px 14px" }}>
+          <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 4 }}>Sessiedoelstelling</p>
+          <p style={{ fontSize: 13, color: "#1a1a1a", fontWeight: 600 }}>{plan.objective}</p>
+        </div>
+      )}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 2px" }}>
+        <p style={{ fontSize: 13, fontWeight: 800, color: "#1a1a1a" }}>{plan.exercises.length} oefenvormen</p>
+        {total > 0 && <p style={{ fontSize: 12, color: "rgba(26,26,26,0.55)", fontWeight: 600 }}>{total} min totaal</p>}
+      </div>
+      {plan.exercises.map((ex, i) => (
+        <div key={ex.id || i} style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 14, boxShadow: "2px 2px 0 #1a1a1a", padding: "12px 14px", display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <span style={{ fontSize: 11, fontWeight: 900, color: "#fff" }}>{i + 1}</span>
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a" }}>{ex.name || "Oefenvorm"}</p>
+            {ex.description && <p style={{ fontSize: 12, color: "rgba(26,26,26,0.55)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{ex.description}</p>}
+          </div>
+          {ex.duration_minutes > 0 && (
+            <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(26,26,26,0.55)", flexShrink: 0 }}>{ex.duration_minutes} min</span>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
