@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, ChevronDown, ChevronUp, Check } from "lucide-react";
+import { X, ChevronDown, ChevronUp, Check, Image, Users } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -14,6 +14,8 @@ export default function LiveTrainingMode({ plan, players, onClose }) {
   const [completed, setCompleted] = useState({});
   const [timers, setTimers] = useState({});
   const [showHints, setShowHints] = useState({});
+  const [showImage, setShowImage] = useState({});
+  const [showGroups, setShowGroups] = useState({});
   const [saving, setSaving] = useState(false);
   const [tick, setTick] = useState(0);
 
@@ -125,41 +127,85 @@ export default function LiveTrainingMode({ plan, players, onClose }) {
                     <p style={{ fontSize: "12px", fontWeight: 700, color: "rgba(26,26,26,0.40)", marginBottom: "4px" }}>{ex.duration_minutes} min</p>
                   )}
 
-                  {/* Group pills */}
-                  {groups.length > 0 && (
-                    <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginBottom: "8px" }}>
-                      {groups.map(g => {
-                        const gc = GROUP_COLORS[g.color] || "#FF6800";
-                        return (
-                          <span key={g.id} style={{ background: gc + "20", border: `2px solid ${gc}`, borderRadius: "20px", padding: "2px 8px", fontSize: "10px", fontWeight: 800, color: gc === "#f0f0f0" ? "#1a1a1a" : gc }}>
-                            {g.name} {g.player_ids.length > 0 ? `(${g.player_ids.length})` : ""}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Coaching points */}
-                  {(ex.coaching_points || []).length > 0 && (
-                    <div>
+                  {/* Action buttons row */}
+                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "4px" }}>
+                    {/* Coaching points */}
+                    {(ex.coaching_points || []).length > 0 && (
                       <button
                         onClick={() => setShowHints(h => ({ ...h, [ex.id]: !h[ex.id] }))}
                         style={{ fontSize: "12px", fontWeight: 700, color: "#FF6800", background: "rgba(255,104,0,0.10)", border: "2px solid rgba(255,104,0,0.25)", borderRadius: "8px", padding: "4px 10px", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
                       >
                         Coaching {showHints[ex.id] ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                       </button>
-                      {showHints[ex.id] && (
-                        <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "4px" }}>
-                          {ex.coaching_points.map((pt, j) => (
-                            <div key={j} style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
-                              <div style={{ width: "18px", height: "18px", borderRadius: "6px", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
-                                <span style={{ fontSize: "8px", fontWeight: 900, color: "#fff" }}>{j + 1}</span>
-                              </div>
-                              <span style={{ fontSize: "13px", color: "#1a1a1a", lineHeight: 1.4, fontWeight: 500 }}>{pt}</span>
-                            </div>
-                          ))}
+                    )}
+
+                    {/* Afbeelding toggle */}
+                    {ex.field_drawing && (
+                      <button
+                        onClick={() => setShowImage(s => ({ ...s, [ex.id]: !s[ex.id] }))}
+                        style={{ fontSize: "12px", fontWeight: 700, color: "#9B5CFF", background: "rgba(155,92,255,0.10)", border: "2px solid rgba(155,92,255,0.25)", borderRadius: "8px", padding: "4px 10px", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
+                      >
+                        <Image size={12} /> Veld {showImage[ex.id] ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                      </button>
+                    )}
+
+                    {/* Groepen toggle */}
+                    {groups.length > 0 && (
+                      <button
+                        onClick={() => setShowGroups(s => ({ ...s, [ex.id]: !s[ex.id] }))}
+                        style={{ fontSize: "12px", fontWeight: 700, color: "#00C2FF", background: "rgba(0,194,255,0.10)", border: "2px solid rgba(0,194,255,0.25)", borderRadius: "8px", padding: "4px 10px", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
+                      >
+                        <Users size={12} /> Groepen {showGroups[ex.id] ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Coaching points uitklap */}
+                  {showHints[ex.id] && (ex.coaching_points || []).length > 0 && (
+                    <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "4px", marginBottom: "4px" }}>
+                      {ex.coaching_points.map((pt, j) => (
+                        <div key={j} style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
+                          <div style={{ width: "18px", height: "18px", borderRadius: "6px", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
+                            <span style={{ fontSize: "8px", fontWeight: 900, color: "#fff" }}>{j + 1}</span>
+                          </div>
+                          <span style={{ fontSize: "13px", color: "#1a1a1a", lineHeight: 1.4, fontWeight: 500 }}>{pt}</span>
                         </div>
-                      )}
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Afbeelding uitklap */}
+                  {showImage[ex.id] && ex.field_drawing && (
+                    <div style={{ marginTop: "8px", marginBottom: "4px" }}>
+                      <img
+                        src={ex.field_drawing}
+                        alt="Velddiagram"
+                        style={{ width: "100%", borderRadius: "12px", border: "2.5px solid #1a1a1a", display: "block" }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Groepen uitklap */}
+                  {showGroups[ex.id] && groups.length > 0 && (
+                    <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "8px", marginBottom: "4px" }}>
+                      {groups.map(g => {
+                        const gc = GROUP_COLORS[g.color] || "#FF6800";
+                        const groupPlayers = (g.player_ids || []).map(pid => players.find(p => p.id === pid)).filter(Boolean);
+                        return (
+                          <div key={g.id} style={{ borderRadius: "12px", border: `2px solid ${gc}`, background: gc + "12", padding: "8px 12px" }}>
+                            <p style={{ fontSize: "11px", fontWeight: 800, color: gc === "#f0f0f0" ? "#1a1a1a" : gc, marginBottom: groupPlayers.length > 0 ? "6px" : 0, textTransform: "uppercase", letterSpacing: "0.05em" }}>{g.name}</p>
+                            {groupPlayers.length > 0 && (
+                              <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+                                {groupPlayers.map(p => (
+                                  <span key={p.id} style={{ fontSize: "11px", fontWeight: 700, color: "#1a1a1a", background: "#ffffff", border: "1.5px solid rgba(26,26,26,0.20)", borderRadius: "20px", padding: "2px 8px" }}>
+                                    {p.name}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
