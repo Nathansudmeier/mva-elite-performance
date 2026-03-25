@@ -122,24 +122,27 @@ export default function YoYoTestLive() {
       {!testStarted && (
       <div style={{
         position: "sticky", top: 0, zIndex: 40,
-        background: "linear-gradient(135deg, #FF6800 0%, #FF8C3D 100%)", 
-        borderBottom: "2.5px solid #1a1a1a",
+        background: "#FF6800", 
+        border: "2.5px solid #1a1a1a",
+        borderRadius: "18px",
+        margin: "12px",
         padding: "16px",
         display: "flex", 
         alignItems: "center", 
         justifyContent: "space-between",
         color: "#ffffff",
+        boxShadow: "3px 3px 0 #1a1a1a",
       }}>
         <button onClick={() => navigate(-1)} style={{
-          width: "40px", height: "40px", borderRadius: "12px", border: "2px solid #ffffff",
-          display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: "rgba(255,255,255,0.2)",
-          color: "#ffffff",
+          width: "40px", height: "40px", borderRadius: "12px", border: "2.5px solid #ffffff",
+          display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", background: "rgba(255,255,255,0.15)",
+          color: "#ffffff", transition: "all 0.15s",
         }}>
           <ChevronLeft size={18} />
         </button>
         <div style={{ textAlign: "center", flex: 1 }}>
           <h1 style={{ fontSize: "20px", fontWeight: 900, margin: "0 0 4px 0", letterSpacing: "-0.5px" }}>Yo-Yo Test</h1>
-          <p style={{ fontSize: "12px", fontWeight: 500, margin: 0, opacity: 0.95 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
+          <p style={{ fontSize: "12px", fontWeight: 500, margin: 0, opacity: 0.9 }}>{format(new Date(testDate), "d MMMM yyyy", { locale: nl })}</p>
         </div>
         <div style={{ width: "40px" }} />
       </div>
