@@ -502,7 +502,6 @@ export default function YoYoTestLive() {
               </div>
             )}
           </div>
-          </div>
         </div>
         )}
       </div>
