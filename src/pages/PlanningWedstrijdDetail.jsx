@@ -19,7 +19,7 @@ export default function PlanningWedstrijdDetail() {
   const params = new URLSearchParams(window.location.search);
   const itemId = params.get("id");
   const navigate = useNavigate();
-  const { isTrainer } = useCurrentUser();
+  const { isTrainer, isOuder } = useCurrentUser();
   const qc = useQueryClient();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState(0);
@@ -560,7 +560,25 @@ export default function PlanningWedstrijdDetail() {
 
         {/* Tab: Aanwezigheid */}
         {activeTab === 2 && (
-          <div className="glass p-4 md:p-6" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", display: "flex", flexDirection: "column", gap: 18 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {/* RSVP voor spelers (alleen toekomstige activiteiten) */}
+            {!isTrainer && myPlayer && isFuture && !isOuder && (
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a" }}>Jouw aanwezigheid</p>
+                <AttendanceButtons
+                  currentStatus={myAttendance?.status}
+                  loading={rsvpMutation.isPending}
+                  showAbsentInput={showReasonInput}
+                  absentReason={absentReason}
+                  onAbsentReasonChange={setAbsentReason}
+                  onPresent={() => rsvpMutation.mutate({ status: "aanwezig" })}
+                  onAbsent={() => setShowReasonInput(true)}
+                  onConfirmAbsent={() => rsvpMutation.mutate({ status: "afwezig", reason: absentReason })}
+                />
+              </div>
+            )}
+
+            <div className="glass p-4 md:p-6" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", display: "flex", flexDirection: "column", gap: 18 }}>
             <div>
               <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#05a050", marginBottom: 10 }}>Bevestigd aanwezig ({aanwezigList.length})</p>
               {aanwezigList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Niemand bevestigd</p> : (
@@ -616,9 +634,10 @@ export default function PlanningWedstrijdDetail() {
               )}
             </div>
           </div>
-        )}
+            </div>
+          )}
 
-      {showResetConfirm && (
+          {showResetConfirm && (
         <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
           <div onClick={() => setShowResetConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 200 }} />
           <div style={{ position: "relative", zIndex: 301, background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "20px 20px 0 0", padding: "24px", paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))", width: "100%", maxWidth: "500px" }}>

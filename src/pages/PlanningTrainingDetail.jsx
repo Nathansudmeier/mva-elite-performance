@@ -194,8 +194,8 @@ export default function PlanningTrainingDetail() {
         {/* Tab: Overzicht */}
         {activeTab === 0 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {/* RSVP voor spelers (alleen toekomstige activiteiten) */}
-            {!isTrainer && myPlayer && isFuture && (
+            {/* RSVP voor spelers (alleen toekomstige activiteiten) - GEEN ouders */}
+            {!isTrainer && myPlayer && isFuture && !isOuder && (
               <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
                 <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a" }}>Jouw aanwezigheid</p>
                 <AttendanceButtons
