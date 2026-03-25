@@ -66,7 +66,6 @@ import Tactics from './pages/Tactics';
 import TrainerDetail from './pages/TrainerDetail';
 import VideoHub from './pages/VideoHub';
 import Trainingen from './pages/Trainingen';
-import Wedstrijden from './pages/Wedstrijden';
 import __Layout from './Layout.jsx';
 
 
@@ -90,7 +89,6 @@ export const PAGES = {
     "Trainingen": Trainingen,
     "TrainerDetail": TrainerDetail,
     "VideoHub": VideoHub,
-    "Wedstrijden": Wedstrijden,
 }
 
 export const pagesConfig = {

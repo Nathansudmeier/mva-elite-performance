@@ -4,7 +4,6 @@ import { queryClientInstance } from '@/lib/query-client'
 import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
-import Wedstrijden from './pages/Wedstrijden';
 import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
 import PlayerDashboard from './pages/PlayerDashboard.jsx';
@@ -93,7 +92,6 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
-      <Route path="/Wedstrijden" element={<LayoutWrapper currentPageName="Wedstrijden"><Wedstrijden /></LayoutWrapper>} />
       <Route path="/PlayerRatingForm" element={<LayoutWrapper currentPageName="PlayerRatingForm"><PlayerRatingForm /></LayoutWrapper>} />
       <Route path="/PlayerDetail" element={<LayoutWrapper currentPageName="PlayerDetail"><PlayerDetail /></LayoutWrapper>} />
       <Route path="/PlayerDashboard" element={<LayoutWrapper currentPageName="Dashboard"><PlayerDashboard /></LayoutWrapper>} />

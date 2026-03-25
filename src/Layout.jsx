@@ -111,7 +111,6 @@ export default function Layout({ children, currentPageName }) {
           {isOuderUser ? (
             <>
               <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} />
-              <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Foto's", icon: "photo", page: "Photowall" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Berichten", icon: "message-circle", page: "Messages" }} currentPageName={currentPageName} />
             </>
@@ -119,7 +118,6 @@ export default function Layout({ children, currentPageName }) {
             <>
               <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Planning", icon: "calendar", page: "Planning" }} currentPageName={currentPageName} />
-              <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Foto's", icon: "photo", page: "Photowall" }} currentPageName={currentPageName} />
               <NavLink item={{ name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }} currentPageName={currentPageName} />
               <DeveloperGroup currentPageName={currentPageName} />
@@ -158,7 +156,6 @@ export default function Layout({ children, currentPageName }) {
               {isOuderUser ? (
                 <>
                   <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={{ name: "Foto's", icon: "photo", page: "Photowall" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={{ name: "Berichten", icon: "message-circle", page: "Messages" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                 </>
@@ -166,7 +163,6 @@ export default function Layout({ children, currentPageName }) {
                 <>
                   <NavLink item={{ name: "Dashboard", icon: "layout-grid", page: "Dashboard" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={{ name: "Planning", icon: "calendar", page: "Planning" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
-                  <NavLink item={{ name: "Wedstrijden", icon: "trophy", page: "Wedstrijden" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={{ name: "Foto's", icon: "photo", page: "Photowall" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <NavLink item={{ name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" }} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                   <DeveloperGroup currentPageName={currentPageName} onItemClick={() => setMobileOpen(false)} />
