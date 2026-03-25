@@ -107,7 +107,7 @@ export default function EmviFeedback() {
       </div>
 
       {/* Header Card */}
-      <div className="glass mx-4 md:mx-6 mt-2" style={{ background: "#FF6800" }}>
+      <div className="glass mx-4 md:mx-6 lg:mx-auto lg:max-w-2xl mt-2 lg:w-full" style={{ background: "#FF6800" }}>
         <div className="p-4 md:p-5 text-center flex flex-col items-center gap-2">
           <h1 className="t-page-title text-white">
             Praat met Emvi
@@ -121,14 +121,14 @@ export default function EmviFeedback() {
       {/* Chat Area */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-4 md:px-6 flex flex-col gap-3 pt-4"
+        className="flex-1 overflow-y-auto px-4 md:px-6 lg:px-0 flex flex-col gap-3 pt-4 lg:max-w-2xl lg:mx-auto lg:w-full"
       >
         {/* Messages */}
         {messages.map((msg, idx) => (
           <div key={msg.id || idx} className="space-y-2">
             {/* User message */}
             <div className="flex gap-3 justify-end">
-              <div className="max-w-xs md:max-w-md" style={{ background: "#FF6800" }}>
+              <div className="max-w-xs md:max-w-md lg:max-w-lg" style={{ background: "#FF6800" }}>
                 <div className="rounded-xl p-3 md:p-4 text-white">
                   <div className="flex items-center gap-2 mb-2 text-xs font-bold">
                     {getTypeIcon(msg.feedbackType)}
@@ -148,7 +148,7 @@ export default function EmviFeedback() {
                 alt="Emvi" 
                 className="h-9 md:h-11 flex-shrink-0"
               />
-              <div className="flex-1 max-w-xs md:max-w-md" style={{ background: "rgba(255,104,0,0.12)", border: "1.5px solid rgba(255,104,0,0.30)" }}>
+              <div className="flex-1 max-w-xs md:max-w-md lg:max-w-lg" style={{ background: "rgba(255,104,0,0.12)", border: "1.5px solid rgba(255,104,0,0.30)" }}>
                 <div className="rounded-xl p-3 md:p-4">
                   <p style={{ fontSize: "13px", fontWeight: 600, color: "#FF6800", lineHeight: 1.4 }}>
                     {getEmviResponse(msg.feedbackType)}
@@ -163,7 +163,7 @@ export default function EmviFeedback() {
       </div>
 
       {/* Input Form */}
-      <form onSubmit={handleSubmit} className="glass mx-4 md:mx-6 mt-4 mb-4">
+      <form onSubmit={handleSubmit} className="glass mx-4 md:mx-6 lg:mx-auto lg:max-w-2xl mt-4 mb-4 lg:w-full">
         <div className="p-4 md:p-5 space-y-3 md:space-y-4">
           {/* Type Selector */}
           <div className="flex gap-2 flex-wrap">
