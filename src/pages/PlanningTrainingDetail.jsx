@@ -249,7 +249,7 @@ export default function PlanningTrainingDetail() {
 
         {/* Tab: Trainingsplan */}
          {activeTab === 1 && (
-          <TrainingPlanEditor players={players} trainingDate={item?.date} readOnly={isOuder} />
+          <TrainingPlanEditor players={players} trainingDate={item?.date} readOnly={!isTrainer} />
         )}
 
         {/* Tab: Aanwezigheid */}
