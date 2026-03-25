@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, Check, Play, Users } from "lucide-react";
+import { ChevronLeft, Check, Play, Users, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
@@ -164,8 +164,8 @@ export default function YoYoTestLive() {
             <div style={{ padding: "16px" }}>
               {/* Testdatum */}
               <div style={{ marginBottom: "24px" }}>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
-                  📅 Testdatum
+                <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
+                   <Calendar size={16} /> Testdatum
                 </label>
                 <input
                   type="date"
@@ -182,8 +182,8 @@ export default function YoYoTestLive() {
               {/* Player selection */}
               <div style={{ marginBottom: "24px" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                  <label style={{ display: "block", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                    👥 Selecteer deelnemers ({selectedPlayers.length})
+                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                    <Users size={16} /> Selecteer deelnemers ({selectedPlayers.length})
                   </label>
                   <button
                     onClick={() => {
