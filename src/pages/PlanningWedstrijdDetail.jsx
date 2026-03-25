@@ -89,8 +89,9 @@ export default function PlanningWedstrijdDetail() {
     enabled: !!item,
   });
 
-  const myPlayer = currentUser ? players.find(p => p.name === currentUser.full_name) : null;
-  const myAttendance = myPlayer ? attendance.find(a => a.player_id === myPlayer.id) : null;
+  const playerId = useCurrentUser().playerId;
+  const myPlayer = playerId ? players.find(p => p.id === playerId) : null;
+  const myAttendance = playerId ? attendance.find(a => a.player_id === playerId) : null;
   const today = new Date().toISOString().split("T")[0];
   const isFuture = item?.date >= today;
 
