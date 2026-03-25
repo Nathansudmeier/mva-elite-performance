@@ -37,6 +37,11 @@ export default function ExerciseLibraryModal({ onSelect, onClose, currentExercis
 
   function handleSave() {
     if (!saveName.trim()) return;
+    const groups = (currentExercise?.groups || []).map(g => ({
+      name: g.name || "",
+      player_count: (g.player_ids || []).length || undefined,
+      color: g.color || "oranje",
+    }));
     saveTemplate.mutate({
       name: saveName.trim(),
       description: currentExercise?.description || "",
@@ -44,10 +49,17 @@ export default function ExerciseLibraryModal({ onSelect, onClose, currentExercis
       coaching_points: currentExercise?.coaching_points || [],
       photo_url: currentExercise?.field_drawing || currentExercise?.field_photo || null,
       youtube_url: currentExercise?.youtube_url || null,
+      groups,
     });
   }
 
   function handleSelect(tpl) {
+    const groups = (tpl.groups || []).map(g => ({
+      id: Math.random().toString(36).slice(2, 10),
+      name: g.name || "",
+      color: g.color || "oranje",
+      player_ids: [],
+    }));
     onSelect({
       name: tpl.name,
       description: tpl.description || "",
@@ -55,7 +67,7 @@ export default function ExerciseLibraryModal({ onSelect, onClose, currentExercis
       coaching_points: tpl.coaching_points || [],
       field_drawing: tpl.photo_url || null,
       youtube_url: tpl.youtube_url || null,
-      groups: [],
+      groups,
     });
     onClose();
   }
