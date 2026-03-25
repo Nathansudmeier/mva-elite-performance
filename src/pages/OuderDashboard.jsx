@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 import { Star, Trophy } from "lucide-react";
+import PlayerAttendanceCard from "@/components/dashboard/PlayerAttendanceCard";
+import TrainerChampionsTrophy from "@/components/dashboard/TrainerChampionsTrophy";
 
 export default function OuderDashboard() {
   const { user: currentUser, playerId: childPlayerId } = useCurrentUser();
@@ -15,6 +17,11 @@ export default function OuderDashboard() {
     queryFn: () => base44.entities.Player.filter({ id: childPlayerId }),
     enabled: !!childPlayerId,
     select: (data) => data[0],
+  });
+
+  const { data: allPlayers = [] } = useQuery({
+    queryKey: ["players"],
+    queryFn: () => base44.entities.Player.filter({ active: true }),
   });
 
   const { data: agendaItems = [] } = useQuery({
@@ -48,8 +55,8 @@ export default function OuderDashboard() {
     select: (data) => data.filter(m => m.live_status === "live" || m.live_status === "halftime"),
   });
 
-  // Get child's team from matches
-  const childTeam = matches.length > 0 ? matches[0]?.team : null;
+  // Get child's team from the child player record
+  const childTeam = child?.team || (matches.find(m => m.lineup?.some(l => l.player_id === childPlayerId))?.team) || null;
 
   // Trainingen for child (use AgendaItem type Training)
   const childTrainings = agendaItems.filter(
@@ -60,9 +67,6 @@ export default function OuderDashboard() {
   const childAttendanceRecords = agendaAttendance.filter(aa => aa.player_id === childPlayerId);
   const presentCount = childAttendanceRecords.filter(aa => aa.status === "aanwezig").length;
   const attendancePct = childAttendanceRecords.length > 0 ? Math.round((presentCount / childAttendanceRecords.length) * 100) : 0;
-
-  // Last 10 trainings for dots
-  const last10Trainings = childTrainings.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10).reverse();
 
   // Next activity
   const today = new Date().toISOString().split("T")[0];
@@ -184,31 +188,7 @@ export default function OuderDashboard() {
       )}
 
       {/* Attendance card */}
-      <div style={{
-        background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "18px",
-        boxShadow: "3px 3px 0 #1a1a1a", padding: "16px"
-      }}>
-        <p className="t-label" style={{ color: "rgba(26,26,26,0.60)", marginBottom: "12px" }}>Aanwezigheid</p>
-        <p style={{ fontSize: "34px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-1.5px" }}>
-          {attendancePct}%
-        </p>
-        <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.60)", fontWeight: 600, marginTop: "8px" }}>
-          {presentCount} van de {childAttendanceRecords.length} trainingen
-        </p>
-        <div style={{ display: "flex", gap: "6px", marginTop: "12px", flexWrap: "wrap" }}>
-          {last10Trainings.map((training, i) => {
-            const att = childAttendanceRecords.find(aa => aa.session_id === training.id);
-            return (
-              <div key={i} style={{
-                width: "9px", height: "9px", borderRadius: "50%",
-                border: "1.5px solid #1a1a1a",
-                background: att?.status === "aanwezig" ? "#1a1a1a" : "transparent",
-                flexShrink: 0
-              }} />
-            );
-          })}
-        </div>
-      </div>
+      <PlayerAttendanceCard percentage={attendancePct} present={presentCount} total={childAttendanceRecords.length} />
 
       {/* Next activity */}
       {nextActivity && (
@@ -310,22 +290,9 @@ export default function OuderDashboard() {
       )}
 
       {/* Champions Trophy */}
-      <div style={{
-        background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px",
-        boxShadow: "3px 3px 0 #1a1a1a", padding: "16px",
-        display: "flex", alignItems: "center", justifyContent: "space-between"
-      }}>
-        <div>
-          <p className="t-label" style={{ color: "rgba(255,255,255,0.65)", marginBottom: "8px" }}>Champions Trophy</p>
-          <p style={{ fontSize: "40px", fontWeight: 900, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>
-            #{Math.max(1, childWins > 0 ? 1 : childWins + 10)}
-          </p>
-          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", fontWeight: 600, marginTop: "4px" }}>
-            {childWins} wins
-          </p>
-        </div>
-        <div style={{ fontSize: "48px" }}>🏆</div>
-      </div>
+      {allPlayers.length > 0 && winningTeams.length > 0 && (
+        <TrainerChampionsTrophy players={allPlayers} winningTeams={winningTeams} />
+      )}
 
       {/* Photo preview */}
       {photoWallPosts.length > 0 && (
