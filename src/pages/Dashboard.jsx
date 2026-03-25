@@ -11,6 +11,7 @@ import TrainerGreetingPill from "../components/dashboard/TrainerGreetingPill";
 import DashboardBackground from "../components/dashboard/DashboardBackground";
 import { format, subDays, isAfter } from "date-fns";
 import NextMatchGrid from "../components/dashboard/NextMatchGrid";
+import TodayActivityCard from "../components/dashboard/TodayActivityCard";
 import TrainerWeekReflectieCard from "../components/dashboard/TrainerWeekReflectieCard";
 import { nl } from "date-fns/locale";
 import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
@@ -360,33 +361,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Seizoensresultaten */}
-        <div style={{ background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
-          <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(255,255,255,0.45)", letterSpacing: "0.10em", marginBottom: "8px" }}>Seizoensresultaten</p>
-          <button onClick={() => navigate("/MatchResults")} style={{ textAlign: "left", background: "none", border: "none", cursor: "pointer", width: "100%", padding: 0 }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "6px", marginBottom: "10px" }}>
-              <span style={{ fontSize: "42px", fontWeight: 900, color: "#FF6800", lineHeight: 1, letterSpacing: "-2px" }}>{winPct}%</span>
-              <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.50)", fontWeight: 600 }}>winst</span>
-            </div>
-          </button>
-          <div style={{ height: "4px", background: "rgba(255,255,255,0.10)", borderRadius: "2px", marginBottom: "16px" }}>
-            <div style={{ height: "100%", width: `${winPct}%`, background: "#FF6800", borderRadius: "2px" }} />
-          </div>
-          <div style={{ display: "flex", gap: "8px" }}>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(8,208,104,0.12)", border: "1.5px solid rgba(8,208,104,0.25)", borderRadius: "12px", padding: "10px 6px" }}>
-              <p style={{ fontSize: "22px", fontWeight: 900, color: "#08D068", lineHeight: 1, letterSpacing: "-1px" }}>{wins}</p>
-              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: "4px", fontWeight: 800 }}>WINST</p>
-            </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(255,214,0,0.12)", border: "1.5px solid rgba(255,214,0,0.25)", borderRadius: "12px", padding: "10px 6px" }}>
-              <p style={{ fontSize: "22px", fontWeight: 900, color: "#FFD600", lineHeight: 1, letterSpacing: "-1px" }}>{draws}</p>
-              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: "4px", fontWeight: 800 }}>GELIJK</p>
-            </div>
-            <div style={{ flex: 1, textAlign: "center", background: "rgba(255,61,168,0.12)", border: "1.5px solid rgba(255,61,168,0.25)", borderRadius: "12px", padding: "10px 6px" }}>
-              <p style={{ fontSize: "22px", fontWeight: 900, color: "#FF3DA8", lineHeight: 1, letterSpacing: "-1px" }}>{losses}</p>
-              <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.40)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: "4px", fontWeight: 800 }}>VERLIES</p>
-            </div>
-          </div>
-        </div>
+        {/* Training of wedstrijd vandaag */}
+        <TodayActivityCard agendaItems={agendaItems} matches={matches} players={activePlayers} />
       </div>
 
       {/* ── ZELFREFLECTIES + WEEKREFLECTIE ── */}
