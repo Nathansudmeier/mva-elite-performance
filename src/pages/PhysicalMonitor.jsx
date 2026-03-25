@@ -75,12 +75,18 @@ export default function PhysicalMonitor() {
     return { id: p.id, name: p.name?.split(" ")[0], level: tests[0] ? parseFloat(tests[0].level) || 0 : 0 };
   }).sort((a, b) => b.level - a.level);
 
-  const yoyoProgression = [...yoyoTests]
-    .filter(t => t.level && !isNaN(parseFloat(t.level)))
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .map((t) => ({
-      date: format(new Date(t.date), "d MMM", { locale: nl }),
-      level: parseFloat(t.level),
+  const yoyoProgression = Object.entries(
+    [...yoyoTests]
+      .filter(t => t.level && !isNaN(parseFloat(t.level)))
+      .reduce((acc, t) => {
+        if (!acc[t.date]) acc[t.date] = [];
+        acc[t.date].push(parseFloat(t.level));
+        return acc;
+      }, {})
+  ).sort((a, b) => new Date(a[0]) - new Date(b[0]))
+   .map(([date, levels]) => ({
+      date: format(new Date(date), "d MMM", { locale: nl }),
+      level: levels.reduce((a, b) => a + b, 0) / levels.length,
     }));
 
   const chartTick = { fill: "rgba(26,26,26,0.35)", fontSize: 11, fontWeight: 600 };
