@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { resizeImage } from "@/components/utils/imageResize";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
 
 const POSITIONS = ["Keeper", "Centrale Verdediger", "Linksback", "Rechtsback", "Controleur", "Middenvelder", "Aanvallende Middenvelder", "Linksbuiten", "Rechtsbuiten", "Spits"];
 
@@ -110,7 +111,7 @@ function PlayersContent() {
               onClick={(e) => e.stopPropagation()}
               style={{ position: "relative", width: 56, height: 56, borderRadius: 14, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, cursor: "pointer", background: "rgba(255,104,0,0.10)", border: "2px solid #1a1a1a" }}
             >
-              <img src={player.photo_url || "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/4ecb27045_placeholder.png"} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img src={player.photo_url || PLAYER_FALLBACK_PHOTO} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0, background: "rgba(0,0,0,0.40)", transition: "opacity 0.15s" }}
                 onMouseEnter={e => e.currentTarget.style.opacity = "1"}
                 onMouseLeave={e => e.currentTarget.style.opacity = "0"}>

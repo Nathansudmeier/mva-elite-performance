@@ -5,6 +5,7 @@ import { calcPlayerSeasonStats } from "@/utils/calculateMinutes";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Clock, AlertTriangle, Users } from "lucide-react";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
 
 function TeamFilter({ value, onChange }) {
   const options = [
@@ -113,8 +114,8 @@ export default function Speelminuten() {
             >
               <div className="w-6 text-center t-tertiary shrink-0">{index + 1}</div>
 
-              <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: "rgba(255,107,0,0.15)", color: "#FF8C3A" }}>
-                {player.photo_url ? <img src={player.photo_url} alt={player.name} className="w-full h-full object-cover" /> : <span className="text-sm font-bold">{player.name?.[0]}</span>}
+              <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center shrink-0" style={{ background: "rgba(255,107,0,0.15)" }}>
+                <img src={player.photo_url || PLAYER_FALLBACK_PHOTO} alt={player.name} className="w-full h-full object-cover" />
               </div>
 
               <div className="w-28 shrink-0">

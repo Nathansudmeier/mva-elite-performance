@@ -1,0 +1,1 @@
+export const PLAYER_FALLBACK_PHOTO = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/afccab13b_placeholder.png";

@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { format, addDays, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
+import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
 
 function getDayType(sessions, matches) {
   const today = new Date().toISOString().split("T")[0];
@@ -115,11 +116,7 @@ export default function PlayerGreetingHeader({ user, player, attendance = [], ra
           onClick={() => navigate(`/PlayerDetail?id=${player?.id}`)}
           style={{ width: "56px", height: "56px", borderRadius: "50%", overflow: "hidden", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", background: "#FFD600", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
         >
-          {player?.photo_url ? (
-            <img src={player.photo_url} alt={firstName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          ) : (
-            <span style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a" }}>{initials}</span>
-          )}
+          <img src={player?.photo_url || PLAYER_FALLBACK_PHOTO} alt={firstName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         </button>
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.70)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "4px" }}>Welkom terug</p>

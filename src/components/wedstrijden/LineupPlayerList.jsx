@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
+import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
 
 const FORMATIONS_ALL = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
 
@@ -28,12 +29,7 @@ function Avatar({ player, size = 36 }) {
       overflow: "hidden",
       display: "flex", alignItems: "center", justifyContent: "center",
     }}>
-      {player.photo_url
-        ? <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        : <span style={{ fontSize: size * 0.38, fontWeight: 700, color: "#FF8C3A" }}>
-            {player.name?.charAt(0)?.toUpperCase()}
-          </span>
-      }
+      <img src={player.photo_url || PLAYER_FALLBACK_PHOTO} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
     </div>
   );
 }

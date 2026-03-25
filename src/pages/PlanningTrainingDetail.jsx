@@ -9,6 +9,7 @@ import AttendanceButtons from "@/components/attendance/AttendanceButtons";
 import TrainingPlanEditor from "@/components/trainingsplanner/TrainingPlanEditor";
 import AgendaForm from "@/components/agenda/AgendaForm";
 import { format, parseISO } from "date-fns";
+import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
 
 const TABS = ["Overzicht", "Trainingsplan", "Aanwezigheid"];
 
@@ -429,9 +430,7 @@ function AttendanceTab({ isTrainer, aanwezigList, afwezigList, nognietList, send
 function PlayerAvatar({ player }) {
   return (
     <div style={{ width: 32, height: 32, borderRadius: "50%", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", background: "rgba(255,104,0,0.12)", border: "1.5px solid #1a1a1a" }}>
-      {player.photo_url
-        ? <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        : <span style={{ fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{player.name?.charAt(0)}</span>}
+      <img src={player.photo_url || PLAYER_FALLBACK_PHOTO} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
     </div>
   );
 }
