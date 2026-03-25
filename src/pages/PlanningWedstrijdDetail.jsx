@@ -38,6 +38,8 @@ export default function PlanningWedstrijdDetail() {
   const [editingScore, setEditingScore] = useState(false);
   const [scoreHome, setScoreHome] = useState("");
   const [scoreAway, setScoreAway] = useState("");
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   const { data: item, isLoading } = useQuery({
     queryKey: ["agenda-item", itemId],
