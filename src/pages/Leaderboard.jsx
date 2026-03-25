@@ -189,6 +189,66 @@ export default function Leaderboard() {
         </div>
       )}
 
+      {/* VOLLEDIGE RANKING */}
+      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+        <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a", marginBottom: "12px" }}>Volledige Ranking</p>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {ranked.map((player, i) => {
+            const isHot = recentWinnerIds.has(player.id);
+            return (
+              <div key={player.id} style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "10px 0",
+                borderBottom: i < ranked.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1 }}>
+                  <span style={{ fontSize: "14px", fontWeight: 900, color: "#FF6800", width: "28px", flexShrink: 0, textAlign: "center" }}>
+                    #{i + 1}
+                  </span>
+                  <div style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "#ffffff",
+                    border: "2px solid #1a1a1a",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    color: "#1a1a1a",
+                    flexShrink: 0,
+                  }}>
+                    {player.photo_url
+                      ? <img src={player.photo_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      : player.name?.charAt(0)}
+                  </div>
+                  <span style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>
+                    {player.name} {isHot && <i className="ti ti-flame" style={{ fontSize: "12px", color: "#FF6800", marginLeft: "4px" }} />}
+                  </span>
+                </div>
+                <div style={{
+                  background: "#FF6800",
+                  border: "2px solid #1a1a1a",
+                  borderRadius: "12px",
+                  padding: "4px 10px",
+                  fontSize: "13px",
+                  fontWeight: 900,
+                  color: "#ffffff",
+                  boxShadow: "2px 2px 0 #1a1a1a",
+                  flexShrink: 0,
+                }}>
+                  {player.wins}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* RECENTE WINNENDE TEAMS */}
       {winningTeams.length > 0 && (
         <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
