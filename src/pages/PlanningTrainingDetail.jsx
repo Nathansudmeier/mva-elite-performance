@@ -15,7 +15,7 @@ export default function PlanningTrainingDetail() {
   const params = new URLSearchParams(window.location.search);
   const itemId = params.get("id");
   const navigate = useNavigate();
-  const { isTrainer } = useCurrentUser();
+  const { isTrainer, isOuder } = useCurrentUser();
   const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState(0);
   const [showEdit, setShowEdit] = useState(false);
@@ -141,7 +141,7 @@ export default function PlanningTrainingDetail() {
             <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "#08D068", marginBottom: 2 }}>Training</p>
             <h1 className="t-page-title" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.title}</h1>
           </div>
-          {isTrainer && (
+          {isTrainer && !isOuder && (
             <div style={{ display: "flex", gap: 8 }}>
               <button onClick={() => setShowEdit(true)}
                 style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
@@ -249,7 +249,7 @@ export default function PlanningTrainingDetail() {
 
         {/* Tab: Trainingsplan */}
          {activeTab === 1 && (
-          <TrainingPlanEditor players={players} trainingDate={item?.date} />
+          <TrainingPlanEditor players={players} trainingDate={item?.date} readOnly={isOuder} />
         )}
 
         {/* Tab: Aanwezigheid */}

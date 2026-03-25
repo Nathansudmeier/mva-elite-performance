@@ -28,7 +28,7 @@ const glassStyle = {
   overflow: "hidden",
 };
 
-export default function TrainingPlanEditor({ players, trainingDate }) {
+export default function TrainingPlanEditor({ players, trainingDate, readOnly = false }) {
   const queryClient = useQueryClient();
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [editingPlan, setEditingPlan] = useState(null); // local draft
@@ -178,7 +178,7 @@ export default function TrainingPlanEditor({ players, trainingDate }) {
         </div>
 
         {/* Add exercise from library */}
-        {(editingPlan.exercises || []).length < 10 && (
+        {!readOnly && (editingPlan.exercises || []).length < 10 && (
           <button
             onClick={() => { setLibraryTargetIdx(null); setShowLibrary(true); }}
             style={{ width: "100%", minHeight: "44px", background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "14px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}
@@ -187,7 +187,7 @@ export default function TrainingPlanEditor({ players, trainingDate }) {
           </button>
         )}
 
-        {showLibrary && (
+        {!readOnly && showLibrary && (
           <ExerciseLibraryModal
             currentExercise={libraryTargetIdx !== null ? editingPlan.exercises?.[libraryTargetIdx] : null}
             onSelect={(tpl) => {
@@ -202,26 +202,28 @@ export default function TrainingPlanEditor({ players, trainingDate }) {
         )}
 
         {/* Action buttons */}
-        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-          <button
-            onClick={savePlan}
-            disabled={saving}
-            style={{ flex: 1, minHeight: "52px", background: "rgba(255,255,255,0.10)", border: "0.5px solid rgba(255,255,255,0.20)", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
-          >
-            {saving ? "Opslaan..." : "Opslaan"}
-          </button>
-          <button
-            onClick={async () => {
-              setSaving(true);
-              await updatePlan.mutateAsync({ id: editingPlan.id, data: editingPlan });
-              setSaving(false);
-              setLivePlan({ ...editingPlan });
-            }}
-            style={{ flex: 2, minHeight: "52px", background: "#FF6B00", border: "none", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
-          >
-            <Play size={16} /> Start training
-          </button>
-        </div>
+        {!readOnly && (
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            <button
+              onClick={savePlan}
+              disabled={saving}
+              style={{ flex: 1, minHeight: "52px", background: "rgba(255,255,255,0.10)", border: "0.5px solid rgba(255,255,255,0.20)", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
+            >
+              {saving ? "Opslaan..." : "Opslaan"}
+            </button>
+            <button
+              onClick={async () => {
+                setSaving(true);
+                await updatePlan.mutateAsync({ id: editingPlan.id, data: editingPlan });
+                setSaving(false);
+                setLivePlan({ ...editingPlan });
+              }}
+              style={{ flex: 2, minHeight: "52px", background: "#FF6B00", border: "none", borderRadius: "14px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+            >
+              <Play size={16} /> Start training
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -231,16 +233,18 @@ export default function TrainingPlanEditor({ players, trainingDate }) {
     <div className="space-y-4 pb-20 lg:pb-6">
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <p className="t-section-title">Trainingsplannen</p>
-        <button
-          onClick={() => setShowNewForm(s => !s)}
-          style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "12px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, padding: "8px 14px", cursor: "pointer", minHeight: "44px", display: "flex", alignItems: "center", gap: "6px" }}
-        >
-          <Plus size={14} /> Nieuw plan
-        </button>
+        {!readOnly && (
+          <button
+            onClick={() => setShowNewForm(s => !s)}
+            style={{ background: "rgba(255,107,0,0.15)", border: "0.5px solid rgba(255,107,0,0.35)", borderRadius: "12px", color: "#FF8C3A", fontSize: "13px", fontWeight: 600, padding: "8px 14px", cursor: "pointer", minHeight: "44px", display: "flex", alignItems: "center", gap: "6px" }}
+          >
+            <Plus size={14} /> Nieuw plan
+          </button>
+        )}
       </div>
 
       {/* New plan form */}
-      {showNewForm && (
+      {!readOnly && showNewForm && (
         <div style={{ ...glassStyle, padding: "16px" }}>
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", pointerEvents: "none" }} />
           <p style={{ fontSize: "13px", fontWeight: 700, color: "#fff", marginBottom: "12px" }}>Nieuw trainingsplan</p>
@@ -294,7 +298,7 @@ export default function TrainingPlanEditor({ players, trainingDate }) {
                   <span style={{ background: statusColors[plan.status] + "22", border: `0.5px solid ${statusColors[plan.status]}`, borderRadius: "20px", padding: "3px 10px", fontSize: "10px", fontWeight: 700, color: statusColors[plan.status] }}>
                     {statusLabels[plan.status]}
                   </span>
-                  {plan.status !== "completed" && (
+                  {!readOnly && plan.status !== "completed" && (
                     <button
                       onClick={e => { e.stopPropagation(); setLivePlan(plan); }}
                       style={{ background: "#FF6B00", border: "none", borderRadius: "10px", padding: "6px 12px", color: "#fff", fontSize: "12px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px", minHeight: "36px" }}
