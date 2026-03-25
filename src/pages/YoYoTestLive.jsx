@@ -31,6 +31,8 @@ export default function YoYoTestLive() {
   const [testDate, setTestDate] = useState(new Date().toISOString().split("T")[0]);
   const [testStarted, setTestStarted] = useState(false);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [expandedLower, setExpandedLower] = useState(false);
+  const [expandedHigher, setExpandedHigher] = useState(false);
 
   // Fetch agenda item + attendance
   const { data: agenda } = useQuery({
