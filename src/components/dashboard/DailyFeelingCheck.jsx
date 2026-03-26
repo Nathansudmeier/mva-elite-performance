@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
+import { Star } from "lucide-react";
 
 const EMVI_IMAGE = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/17362aae0_Emvi-point.png";
 
@@ -55,15 +56,27 @@ export default function DailyFeelingCheck({ playerId }) {
       position: "relative",
       overflow: "hidden",
       display: "grid",
-      gridTemplateColumns: "1fr 120px",
+      gridTemplateColumns: "120px 1fr",
       gap: "16px",
       alignItems: "center"
     }}>
-      {/* Left content */}
+      {/* Emvi character */}
+      <img
+        src={EMVI_IMAGE}
+        alt="Emvi"
+        style={{
+          width: "100%",
+          maxWidth: "110px",
+          height: "auto",
+          objectFit: "contain"
+        }}
+      />
+
+      {/* Right content */}
       <div>
         <p className="t-section-title" style={{ color: "#ffffff", marginBottom: "8px" }}>Hoe voel je je vandaag?</p>
         <p className="t-secondary" style={{ color: "rgba(255,255,255,0.80)", marginBottom: "14px" }}>
-          Geef je dagelijks stemming aan met sterren
+          Geef je dagelijks stemming aan
         </p>
         
         {/* Star rating */}
@@ -76,38 +89,23 @@ export default function DailyFeelingCheck({ playerId }) {
               onMouseLeave={() => setHoveredRating(0)}
               disabled={isSubmitting}
               style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "8px",
-                background: rating <= (hoveredRating || 0) ? "rgba(26,26,26,0.25)" : "rgba(26,26,26,0.12)",
-                border: "2px solid rgba(255,255,255,0.40)",
+                background: "none",
+                border: "none",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 padding: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 transition: "all 0.15s ease",
-                opacity: isSubmitting ? 0.6 : 1,
-                fontSize: "18px"
+                opacity: isSubmitting ? 0.6 : 1
               }}
             >
-              ⭐
+              <Star
+                size={28}
+                fill={rating <= (hoveredRating || 0) ? "#1a1a1a" : "none"}
+                color={rating <= (hoveredRating || 0) ? "#1a1a1a" : "rgba(26,26,26,0.25)"}
+              />
             </button>
           ))}
         </div>
       </div>
-
-      {/* Emvi character */}
-      <img
-        src={EMVI_IMAGE}
-        alt="Emvi"
-        style={{
-          width: "100%",
-          maxWidth: "110px",
-          height: "auto",
-          objectFit: "contain"
-        }}
-      />
     </div>
   );
 }
