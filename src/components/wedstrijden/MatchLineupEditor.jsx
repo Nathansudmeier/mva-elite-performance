@@ -48,7 +48,15 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
         ...wissel.map(id => ({ player_id: id, slot: "wissel" })),
       ];
 
-      await base44.entities.Match.update(matchId, { lineup: lineupData });
+      // Sla ook op als basis/wissel objects voor LiveMatch
+      const basisObj = basis.reduce((acc, id, idx) => { acc[`slot_${idx}`] = id; return acc; }, {});
+      const wisselObj = wissel.reduce((acc, id, idx) => { acc[`slot_${idx}`] = id; return acc; }, {});
+
+      await base44.entities.Match.update(matchId, { 
+        lineup: lineupData,
+        basis: basisObj,
+        wissel: wisselObj
+      });
       await qc.invalidateQueries({ queryKey: matchQueryKey });
       toast.success("Opstelling opgeslagen");
       setShowEditor(false);
