@@ -53,7 +53,7 @@ export default function AgendaItemCard({ item, attendance = [], playerCount = 0,
           )}
         </div>
 
-        {playerCount > 0 && (
+        {playerCount > 0 && !isWedstrijd && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
             <span style={{ fontSize: "11px", fontWeight: 800, color: textDark }}>✓ {aanwezig} aanwezig</span>
             <span style={{ fontSize: "11px", fontWeight: 800, color: textDark, opacity: 0.65 }}>✗ {afwezig} afwezig</span>
