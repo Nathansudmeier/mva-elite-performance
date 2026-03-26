@@ -16,7 +16,12 @@ export default function LineupSelector({ match, players, onSave, onCancel, savin
   };
 
   const selectedIds = new Set([...basis, ...wissels]);
-  const availablePlayers = players.filter(p => !selectedIds.has(p.id) && p.active !== false);
+  const selectionIds = match?.selection?.length > 0 ? new Set(match.selection) : null;
+  const availablePlayers = players.filter(p =>
+    !selectedIds.has(p.id) &&
+    p.active !== false &&
+    (selectionIds === null || selectionIds.has(p.id))
+  );
 
   const handleAddBasis = (playerId) => {
     setBasis([...basis, playerId]);
