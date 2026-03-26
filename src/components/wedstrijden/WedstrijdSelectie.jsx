@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Check, Users } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 export default function WedstrijdSelectie({ match, players, item, isTrainer, matchQueryKey }) {
   const qc = useQueryClient();
-  const { toast } = useToast();
   const [selected, setSelected] = useState([]);
   const [saving, setSaving] = useState(false);
 
@@ -45,9 +44,9 @@ export default function WedstrijdSelectie({ match, players, item, isTrainer, mat
 
       await base44.entities.Match.update(matchId, { substitutes: selected });
       await qc.invalidateQueries({ queryKey: matchQueryKey });
-      toast({ description: "Selectie opgeslagen ✓", style: { background: "#4ade80", color: "white", border: "none" } });
+      toast.success("Selectie opgeslagen");
     } catch (e) {
-      toast({ description: "Opslaan mislukt", style: { background: "#f87171", color: "white", border: "none" } });
+      toast.error("Opslaan mislukt");
     }
     setSaving(false);
   }
