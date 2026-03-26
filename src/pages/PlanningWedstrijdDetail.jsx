@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { formatDate } from "@/components/agenda/agendaUtils";
 import AgendaForm from "@/components/agenda/AgendaForm";
 import WedstrijdSelectie from "@/components/wedstrijden/WedstrijdSelectie";
+import MatchLineupEditor from "@/components/wedstrijden/MatchLineupEditor";
 
 export default function PlanningWedstrijdDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -219,6 +220,15 @@ export default function PlanningWedstrijdDetail() {
 
       {/* Selectie */}
       <WedstrijdSelectie
+        match={match}
+        players={players}
+        item={item}
+        isTrainer={isTrainer}
+        matchQueryKey={["match", item?.match_id, item?.id]}
+      />
+
+      {/* Opstelling */}
+      <MatchLineupEditor
         match={match}
         players={players}
         item={item}
