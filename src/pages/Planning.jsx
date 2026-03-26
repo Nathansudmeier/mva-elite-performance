@@ -61,7 +61,7 @@ export default function Planning() {
   // Filter by type
   const filtered = typeFilter === "alles" 
     ? sorted 
-    : sorted.filter(i => i.type === (typeFilter === "trainingen" ? "Training" : "Wedstrijd"));
+    : sorted.filter(i => i.type === (typeFilter === "trainingen" ? "Training" : typeFilter === "wedstrijden" ? "Wedstrijd" : "Toernooi"));
   
   const upcoming = filtered.filter(i => i.date >= today);
   const past = filtered.filter(i => i.date < today).reverse();
@@ -178,7 +178,8 @@ export default function Planning() {
           {[
             { key: "alles", label: "Alles" },
             { key: "trainingen", label: "Trainingen" },
-            { key: "wedstrijden", label: "Wedstrijden" }
+            { key: "wedstrijden", label: "Wedstrijden" },
+            { key: "toernooien", label: "Toernooien" }
           ].map(({ key, label }) => (
             <button key={key} onClick={() => setTypeFilter(key)}
               style={{
