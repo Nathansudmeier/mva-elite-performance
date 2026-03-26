@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { formatDate } from "@/components/agenda/agendaUtils";
 import AgendaForm from "@/components/agenda/AgendaForm";
+import WedstrijdSelectie from "@/components/wedstrijden/WedstrijdSelectie";
 
 export default function PlanningWedstrijdDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -23,6 +24,11 @@ export default function PlanningWedstrijdDetail() {
     queryKey: ["agenda-item", itemId],
     queryFn: () => base44.entities.AgendaItem.filter({ id: itemId }).then(r => r[0]),
     enabled: !!itemId,
+  });
+
+  const { data: players = [] } = useQuery({
+    queryKey: ["players-active"],
+    queryFn: () => base44.entities.Player.filter({ active: true }),
   });
 
   const { data: match } = useQuery({
@@ -210,6 +216,15 @@ export default function PlanningWedstrijdDetail() {
           </div>
         )}
       </div>
+
+      {/* Selectie */}
+      <WedstrijdSelectie
+        match={match}
+        players={players}
+        item={item}
+        isTrainer={isTrainer}
+        matchQueryKey={["match", item?.match_id, item?.id]}
+      />
 
       {/* Reset confirm */}
       {showResetConfirm && (
