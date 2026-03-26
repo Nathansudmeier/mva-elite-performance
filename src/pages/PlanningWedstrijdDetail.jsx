@@ -26,9 +26,6 @@ export default function PlanningWedstrijdDetail() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState(0);
   const [showEdit, setShowEdit] = useState(false);
-  const [absentReason, setAbsentReason] = useState("");
-  const [showReasonInput, setShowReasonInput] = useState(false);
-  const [reminderSent, setReminderSent] = useState(false);
   const [editingLineup, setEditingLineup] = useState(false);
   const [saveError, setSaveError] = useState("");
 
@@ -52,18 +49,6 @@ export default function PlanningWedstrijdDetail() {
   const { data: players = [] } = useQuery({
     queryKey: ["players-agenda"],
     queryFn: () => base44.entities.Player.filter({ active: true }),
-  });
-
-  const { data: attendance = [] } = useQuery({
-    queryKey: ["agenda-attendance", itemId],
-    queryFn: () => base44.entities.AgendaAttendance.filter({ agenda_item_id: itemId }),
-    enabled: !!itemId,
-  });
-
-  const { data: currentUser } = useQuery({
-    queryKey: ["currentUser"],
-    queryFn: () => base44.auth.me(),
-    staleTime: 60000,
   });
 
   // Load linked match data if present
@@ -92,69 +77,9 @@ export default function PlanningWedstrijdDetail() {
     enabled: !!item,
   });
 
-  const playerId = useCurrentUser().playerId;
-  const myPlayer = playerId ? players.find(p => p.id === playerId) : null;
-  const myAttendance = playerId ? attendance.find(a => a.player_id === playerId) : null;
   const today = new Date().toISOString().split("T")[0];
   const isFuture = item?.date > today;       // strictly future = opstelling hidden
   const isMatchDay = item?.date === today;   // today = opstelling zichtbaar
-
-  const rsvpMutation = useMutation({
-    mutationFn: async ({ status, reason }) => {
-      if (myAttendance) {
-        await base44.entities.AgendaAttendance.update(myAttendance.id, { status, notes: reason || myAttendance.notes });
-      } else if (myPlayer) {
-        await base44.entities.AgendaAttendance.create({ agenda_item_id: itemId, player_id: myPlayer.id, status, notes: reason || "" });
-      }
-      if (status === "afwezig" && myPlayer) {
-        await base44.functions.invoke("agendaNotifications", {
-          action: "send_absentee_notification",
-          player_name: myPlayer.name,
-          item_type: item.type,
-          item_title: item.title,
-          item_date: item.date,
-          reason: reason || "",
-          sender_email: currentUser?.email,
-        });
-        // Notify trainers/admins via notification entity
-        const allUsers = await base44.entities.User.list();
-        const trainerEmails = allUsers.filter(u => u.role === "admin" || u.role === "trainer").map(u => u.email).filter(Boolean);
-        await Promise.all(trainerEmails.map(email =>
-          base44.entities.Notification.create({
-            user_email: email,
-            type: "afmelding",
-            title: `${myPlayer.name} afgemeld`,
-            body: reason || `voor ${item.title}`,
-            is_read: false,
-            link: `/Planning?id=${itemId}`,
-          })
-        ));
-      }
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["agenda-attendance", itemId] });
-      setShowReasonInput(false);
-      setAbsentReason("");
-    },
-  });
-
-  const sendReminder = useMutation({
-    mutationFn: async () => {
-      const respondedIds = new Set(attendance.map(a => a.player_id));
-      const nogniet = players.filter(p => !respondedIds.has(p.id));
-      const dateStr = new Date(item.date + "T00:00:00").toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long" });
-      for (const player of nogniet) {
-        if (player.email) {
-          await base44.integrations.Core.SendEmail({
-            to: player.email,
-            subject: `Herinnering: bevestig je aanwezigheid voor ${item.title}`,
-            body: `Hoi ${player.name},\n\nVergeet niet je aanwezigheid door te geven voor ${item.title} op ${dateStr} om ${item.start_time}.\n\nOpen de app om te reageren.`,
-          });
-        }
-      }
-    },
-    onSuccess: () => setReminderSent(true),
-  });
 
   async function saveLineup() {
     if (!match) return;
@@ -348,21 +273,14 @@ export default function PlanningWedstrijdDetail() {
     );
   }
 
-  const cfg = TYPE_CONFIG["Wedstrijd"];
-  const teamCfg = TEAM_COLORS[item.team] || TEAM_COLORS["Beide"];
-  const aanwezigList = attendance.filter(a => a.status === "aanwezig").map(a => players.find(p => p.id === a.player_id)).filter(Boolean);
-  const afwezigList = attendance.filter(a => a.status === "afwezig").map(a => ({ player: players.find(p => p.id === a.player_id), record: a })).filter(x => x.player);
-  const respondedIds = new Set(attendance.map(a => a.player_id));
-  const nognietList = players.filter(p => !respondedIds.has(p.id));
-
   const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
 
   const teamCardBg = item.team === "MO17" ? "#00C2FF" : item.team === "Dames 1" ? "#FF3DA8" : "#FF6800";
   const teamTextDark = teamCardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a";
 
-  // Tabs: trainers zien alles, spelers/ouders zien Opstelling en Selectie (geen Tactiek/Aanwezigheid)
+  // Tabs: trainers zien alles, spelers/ouders zien Opstelling en Selectie (geen Tactiek)
   const TABS = isTrainer
-    ? ["Opstelling", "Tactiek", "Selectie", "Aanwezigheid"]
+    ? ["Opstelling", "Tactiek", "Selectie"]
     : ["Opstelling", "Selectie"];
 
   return (
@@ -590,68 +508,6 @@ export default function PlanningWedstrijdDetail() {
             teamCardBg={teamCardBg}
           />
         </div>
-
-        {/* Tab: Aanwezigheid — trainer only, index 3 */}
-        {isTrainer && activeTab === 3 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {/* Aanwezig */}
-            {aanwezigList.length > 0 && (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16 }}>
-                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "#08D068", marginBottom: 10 }}>✓ Aanwezig ({aanwezigList.length})</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {aanwezigList.map(p => (
-                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 10, background: "rgba(8,208,104,0.06)", border: "1.5px solid rgba(8,208,104,0.20)" }}>
-                      <div style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,104,0,0.10)", border: "1.5px solid #1a1a1a" }}>
-                        {p.photo_url ? <img src={p.photo_url} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{p.name?.charAt(0)}</span>}
-                      </div>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{p.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {/* Afwezig */}
-            {afwezigList.length > 0 && (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16 }}>
-                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "#FF3DA8", marginBottom: 10 }}>✗ Afwezig ({afwezigList.length})</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {afwezigList.map(({ player: p, record }) => (
-                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 10, background: "rgba(255,61,168,0.05)", border: "1.5px solid rgba(255,61,168,0.20)" }}>
-                      <div style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,104,0,0.10)", border: "1.5px solid #1a1a1a" }}>
-                        {p.photo_url ? <img src={p.photo_url} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{p.name?.charAt(0)}</span>}
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{p.name}</span>
-                        {record.notes && <p style={{ fontSize: 11, color: "rgba(26,26,26,0.50)", marginTop: 1 }}>{record.notes}</p>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {/* Nog niet gereageerd */}
-            {nognietList.length > 0 && (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16 }}>
-                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.40)", marginBottom: 10 }}>? Nog niet gereageerd ({nognietList.length})</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {nognietList.map(p => (
-                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 10, background: "rgba(26,26,26,0.03)", border: "1.5px solid rgba(26,26,26,0.10)" }}>
-                      <div style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,104,0,0.10)", border: "1.5px solid #1a1a1a" }}>
-                        {p.photo_url ? <img src={p.photo_url} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{p.name?.charAt(0)}</span>}
-                      </div>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(26,26,26,0.50)" }}>{p.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {aanwezigList.length === 0 && afwezigList.length === 0 && nognietList.length === 0 && (
-              <div className="glass p-6 text-center" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
-                <p style={{ fontSize: 13, color: "rgba(26,26,26,0.40)" }}>Nog geen aanwezigheidsgegevens.</p>
-              </div>
-            )}
-          </div>
-        )}
 
           {showResetConfirm && (
         <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>

@@ -111,6 +111,7 @@ export default function KomendeActiviteiten({ playerId }) {
       {upcoming.map(item => {
         const cfg = TYPE_CONFIG[item.type] || TYPE_CONFIG.Evenement;
         const record = myAttendance.find(a => a.agenda_item_id === item.id);
+        const isWedstrijd = item.type === "Wedstrijd" || item.type === "Toernooi";
         return (
           <div key={item.id} className="glass p-3">
             <div className="flex items-start gap-3">
@@ -121,7 +122,7 @@ export default function KomendeActiviteiten({ playerId }) {
                   <div className="flex items-center gap-1.5">
                     <span style={{ fontSize: 10, fontWeight: 700, color: cfg.color, textTransform: "uppercase", letterSpacing: "0.05em" }}>{item.type}</span>
                   </div>
-                  <AttendanceButton item={item} playerId={playerId} record={record} />
+                  {!isWedstrijd && <AttendanceButton item={item} playerId={playerId} record={record} />}
                 </div>
                 <p className="t-card-title mt-0.5 truncate">{item.title}</p>
                 <div className="flex items-center gap-3 mt-1">

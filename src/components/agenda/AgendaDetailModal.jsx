@@ -130,8 +130,8 @@ export default function AgendaDetailModal({ item, isTrainer, onEdit, onDelete, o
             <p style={{ fontSize: 12, color: headerTextMuted, marginTop: 10, padding: "8px 12px", background: "rgba(26,26,26,0.10)", borderRadius: 10 }}>{item.notes}</p>
           )}
 
-          {/* RSVP voor speler */}
-          {!isTrainer && myPlayer && (
+          {/* RSVP voor speler — alleen bij trainingen */}
+          {!isTrainer && myPlayer && !isWedstrijd && (
             <div style={{ marginTop: 14 }}>
               <p style={{ fontSize: 12, fontWeight: 700, color: headerTextMuted, marginBottom: 8 }}>Jouw aanwezigheid:</p>
               <AttendanceButtons

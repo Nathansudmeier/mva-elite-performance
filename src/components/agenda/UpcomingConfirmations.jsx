@@ -22,7 +22,7 @@ export default function UpcomingConfirmations({ playerId }) {
   });
 
   const upcoming = allItems
-    .filter(i => i.date >= todayStr && i.date <= in14Str)
+    .filter(i => i.date >= todayStr && i.date <= in14Str && i.type !== "Wedstrijd" && i.type !== "Toernooi")
     .sort((a, b) => a.date.localeCompare(b.date));
 
   // Only show items where the player hasn't responded yet
