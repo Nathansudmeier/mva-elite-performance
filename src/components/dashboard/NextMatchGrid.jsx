@@ -22,7 +22,7 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
   // Fetch the linked match to check selection
   const { data: linkedMatch } = useQuery({
     queryKey: ["linked-match", nextMatch?.match_id],
-    queryFn: () => base44.entities.Match.filter({ id: nextMatch.match_id }).then(r => r[0]),
+    queryFn: () => base44.entities.Match.get(nextMatch.match_id),
     enabled: !!nextMatch?.match_id,
   });
 

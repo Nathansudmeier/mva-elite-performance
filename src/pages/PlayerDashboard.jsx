@@ -175,7 +175,7 @@ export default function PlayerDashboard() {
       <TodayTrainingCard playerId={playerId} />
 
       {/* Next Matches */}
-      <NextMatchGrid matches={matches} />
+      <NextMatchGrid matches={matches} playerId={playerId} />
 
       {/* Metric Grid */}
       <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
