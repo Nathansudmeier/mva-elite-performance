@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList, Zap, Brain, Shield, Dumbbell, TrendingUp } from "lucide-react";
+import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList, Zap, Brain, Shield, Dumbbell, TrendingUp, Target, Trophy } from "lucide-react";
 import PlayerMetricGrid from "@/components/dashboard/PlayerMetricGrid";
 
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
@@ -216,6 +216,12 @@ export default function PlayerDetail() {
         </>
       )}
 
+      {/* Section header: Testen en resultaten */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "16px", marginBottom: "4px" }}>
+        <Target size={20} color="#FF6800" />
+        <h2 style={{ fontSize: "17px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px" }}>Testen en resultaten</h2>
+      </div>
+
       {/* Physical Tests */}
       {(yoyoTests.length > 0 || physicalTests.length > 0) && (
         <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
@@ -239,6 +245,12 @@ export default function PlayerDetail() {
 
       {/* Metric Grid */}
       <PlayerMetricGrid yoyo={yoyoTests} physical={physicalTests} attendance={attendance} matches={matches} playerId={playerId} />
+
+      {/* Section header: Seizoensstatistieken */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "24px", marginBottom: "4px" }}>
+        <Trophy size={20} color="#FF6800" />
+        <h2 style={{ fontSize: "17px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px" }}>Seizoensstatistieken</h2>
+      </div>
 
       {/* Seizoensstatistieken */}
       <PlayerSeasonStats playerId={playerId} variant="compact" />
