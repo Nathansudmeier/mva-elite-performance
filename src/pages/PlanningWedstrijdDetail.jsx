@@ -275,6 +275,15 @@ export default function PlanningWedstrijdDetail() {
     }
   }
 
+  async function handleClearLineup() {
+    if (!match) return;
+    if (!confirm("Opstelling leegmaken? Dit verwijdert alle basisspelers en wissels.")) return;
+    await base44.entities.Match.update(match.id, { lineup: [], substitutes: [] });
+    setLineupMap({});
+    await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
+    toast({ description: "Opstelling leeggemaakt", style: { background: "#4ade80", color: "white", border: "none" } });
+  }
+
   async function handleReset() {
     if (!match) return;
     setResetting(true);
@@ -505,6 +514,7 @@ export default function PlanningWedstrijdDetail() {
               players={players}
               isTrainer={isTrainer}
               onEditClick={() => setEditingLineup(true)}
+              onClearClick={handleClearLineup}
             />
           )
         )}

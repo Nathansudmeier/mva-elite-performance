@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function LineupOverview({ match, players, isTrainer, onEditClick }) {
+export default function LineupOverview({ match, players, isTrainer, onEditClick, onClearClick }) {
   if (!match) {
     return (
       <div className="glass-dark rounded-2xl p-6 text-center">
@@ -87,27 +87,48 @@ export default function LineupOverview({ match, players, isTrainer, onEditClick 
         )}
       </div>
 
-      {/* Edit Button */}
+      {/* Trainer Buttons */}
       {isTrainer && (
-        <button
-          onClick={onEditClick}
-          className="w-full flex items-center justify-center gap-2"
-          style={{
-            background: "#FF6800",
-            border: "2.5px solid #1a1a1a",
-            borderRadius: "14px",
-            boxShadow: "3px 3px 0 #1a1a1a",
-            height: "52px",
-            fontSize: "15px",
-            fontWeight: 800,
-            color: "white",
-            cursor: "pointer",
-            transition: "all 0.1s"
-          }}
-        >
-          <i className="ti ti-edit" style={{ fontSize: "18px" }} />
-          Opstelling aanpassen
-        </button>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <button
+            onClick={onEditClick}
+            className="w-full flex items-center justify-center gap-2"
+            style={{
+              background: "#FF6800",
+              border: "2.5px solid #1a1a1a",
+              borderRadius: "14px",
+              boxShadow: "3px 3px 0 #1a1a1a",
+              height: "52px",
+              fontSize: "15px",
+              fontWeight: 800,
+              color: "white",
+              cursor: "pointer",
+              transition: "all 0.1s"
+            }}
+          >
+            <i className="ti ti-edit" style={{ fontSize: "18px" }} />
+            Opstelling aanpassen
+          </button>
+          <button
+            onClick={onClearClick}
+            className="w-full flex items-center justify-center gap-2"
+            style={{
+              background: "#ffffff",
+              border: "2.5px solid #FF3DA8",
+              borderRadius: "14px",
+              boxShadow: "3px 3px 0 #1a1a1a",
+              height: "44px",
+              fontSize: "13px",
+              fontWeight: 800,
+              color: "#FF3DA8",
+              cursor: "pointer",
+              transition: "all 0.1s"
+            }}
+          >
+            <i className="ti ti-trash" style={{ fontSize: "16px" }} />
+            Opstelling leegmaken
+          </button>
+        </div>
       )}
     </div>
   );
