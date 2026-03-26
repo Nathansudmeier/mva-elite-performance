@@ -76,14 +76,18 @@ export default function OuderDashboard() {
 
   // Next 3 matches (from agendaItems Wedstrijd type for correct match_id lookup)
   const nextAgendaMatches = agendaItems
-    .filter(ai => ai.type === "Wedstrijd" && ai.date >= today && (!childTeam || ai.team === "Beide" || ai.team === childTeam))
+    .filter(ai => ai.type === "Wedstrijd" && ai.date >= today)
     .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 3);
+    .slice(0, 4);
 
-  const nextMatches = matches
-    .filter(m => m.date >= today && (!childTeam || m.team === childTeam))
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 3);
+  // Build nextMatches by joining agendaItems (for selection) to Match records
+  // Show all teams — child may play MO17 one week and Dames 1 the next
+  const nextMatches = nextAgendaMatches.map(ai => {
+    const linked = matches.find(m => m.id === ai.match_id);
+    return linked
+      ? { ...linked, agendaTitle: ai.title, agendaTeam: ai.team }
+      : { id: ai.id, date: ai.date, opponent: ai.title, home_away: ai.home_away, team: ai.team, selection: [], agendaId: ai.id };
+  });
 
   // Child's championship position
   const childWins = winningTeams.filter(wt => wt.winning_player_ids?.includes(childPlayerId)).length;
@@ -118,7 +122,7 @@ export default function OuderDashboard() {
   return (
     <div className="pb-20 xl:pb-8" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
       {/* Live banner - only on match days */}
-      {liveMatches.length > 0 && liveMatches[0]?.team === childTeam && nextMatches.some(m => m.id === liveMatches[0].id) && (
+      {liveMatches.length > 0 && (
         <div style={{
           background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px",
           padding: "16px", display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -252,7 +256,14 @@ export default function OuderDashboard() {
                 }}>
                   {format(new Date(match.date), "d MMM", { locale: nl })}
                 </div>
-                <p style={{ color: "#ffffff", fontWeight: 700, flex: 1 }}>{match.opponent}</p>
+                <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0 }}>
+                  <p style={{ color: "#ffffff", fontWeight: 700 }}>{match.opponent || match.agendaTitle}</p>
+                  {(match.team || match.agendaTeam) && (
+                    <span style={{ fontSize: "9px", fontWeight: 800, color: (match.team || match.agendaTeam) === "MO17" ? "#00C2FF" : "#FF3DA8", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                      {match.team || match.agendaTeam}
+                    </span>
+                  )}
+                </div>
                 <div style={{
                   background: match.home_away === "Thuis" ? "rgba(8,208,104,0.20)" : "rgba(255,213,0,0.20)",
                   color: match.home_away === "Thuis" ? "#08D068" : "#FFD600",
