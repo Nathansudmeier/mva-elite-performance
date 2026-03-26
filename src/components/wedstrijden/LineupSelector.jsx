@@ -17,11 +17,13 @@ export default function LineupSelector({ match, players, onSave, onCancel, savin
 
   const selectedIds = new Set([...basis, ...wissels]);
   const selectionIds = match?.selection?.length > 0 ? new Set(match.selection) : null;
+  // Filter available players: if selection is set, only show selected players; otherwise show all active
   const availablePlayers = players.filter(p =>
     !selectedIds.has(p.id) &&
     p.active !== false &&
     (selectionIds === null || selectionIds.has(p.id))
   );
+  const noSelectionWarning = selectionIds === null;
 
   const handleAddBasis = (playerId) => {
     setBasis([...basis, playerId]);
@@ -137,6 +139,11 @@ export default function LineupSelector({ match, players, onSave, onCancel, savin
           {availablePlayers.length > 0 && (
             <div>
               <p className="t-label mb-3">Beschikbare spelers ({availablePlayers.length})</p>
+              {noSelectionWarning && (
+                <div style={{ background: "rgba(255,214,0,0.15)", border: "1.5px solid rgba(255,214,0,0.40)", borderRadius: "10px", padding: "8px 12px", marginBottom: "8px" }}>
+                  <p style={{ fontSize: "11px", fontWeight: 700, color: "#cc9900" }}>⚠ Nog geen selectie gemaakt — alle spelers worden getoond. Stel eerst een selectie in via het tabblad Selectie.</p>
+                </div>
+              )}
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {availablePlayers.map((player) => (
                   <div
