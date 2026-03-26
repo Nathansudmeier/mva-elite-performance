@@ -133,16 +133,12 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
               </p>
               <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 14, boxShadow: "2px 2px 0 #1a1a1a", overflow: "hidden" }}>
                 {availablePlayers.map((player, i) => (
-                  <button key={player.id} onClick={() => setBasis([...basis, player.id])}
+                  <div key={player.id}
                     style={{
                       width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "10px 14px",
                       background: "transparent",
-                      border: "none", borderBottom: i < availablePlayers.length - 1 ? "1.5px solid rgba(26,26,26,0.08)" : "none",
-                      cursor: "pointer", textAlign: "left",
-                      transition: "background 0.2s",
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = "rgba(255,104,0,0.06)"}
-                    onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                      borderBottom: i < availablePlayers.length - 1 ? "1.5px solid rgba(26,26,26,0.08)" : "none",
+                    }}>
                     <div style={{ width: 32, height: 32, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,104,0,0.10)", border: "1.5px solid #1a1a1a" }}>
                       <img src={player.photo_url || PLAYER_FALLBACK_PHOTO} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </div>
@@ -150,8 +146,17 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
                       <p style={{ fontSize: 12, fontWeight: 700, color: "#1a1a1a", margin: 0 }}>{player.name}</p>
                       {player.position && <p style={{ fontSize: 10, color: "rgba(26,26,26,0.45)", margin: 0 }}>{player.position}</p>}
                     </div>
-                    <ArrowRight size={14} color="rgba(26,26,26,0.40)" />
-                  </button>
+                    <div style={{ display: "flex", gap: 6 }}>
+                      <button onClick={() => setBasis([...basis, player.id])}
+                        style={{ padding: "4px 10px", borderRadius: 8, background: "#FF6800", color: "#fff", fontSize: 11, fontWeight: 800, border: "none", cursor: "pointer" }}>
+                        Basis
+                      </button>
+                      <button onClick={() => setWissel([...wissel, player.id])}
+                        style={{ padding: "4px 10px", borderRadius: 8, background: "#08D068", color: "#fff", fontSize: 11, fontWeight: 800, border: "none", cursor: "pointer" }}>
+                        Wissel
+                      </button>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
