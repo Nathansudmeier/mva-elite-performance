@@ -171,29 +171,6 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
                 ✓ Ingedeeld
               </div>
             )}
-            {showCheckInProp && (
-              alreadyCheckedIn ? (
-                <div style={{
-                  background: "rgba(8,208,104,0.15)", border: "1.5px solid #1a1a1a",
-                  color: "#1a1a1a", borderRadius: "20px", padding: "3px 10px",
-                  fontSize: "10px", fontWeight: 800,
-                }}>
-                  ✓ Ingevuld
-                </div>
-              ) : (
-                <button
-                  onClick={(e) => { e.stopPropagation(); setShowCheckIn(true); }}
-                  style={{
-                    background: "#1a1a1a", border: "1.5px solid #1a1a1a",
-                    color: "#ffffff", borderRadius: "20px", padding: "4px 12px",
-                    fontSize: "10px", fontWeight: 800, cursor: "pointer",
-                    boxShadow: "2px 2px 0 rgba(26,26,26,0.25)",
-                  }}
-                >
-                  Check-in
-                </button>
-              )
-            )}
           </div>
         </div>
       </button>
