@@ -134,8 +134,10 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
   const unselectedPlayers = players.filter(p => !localSelection.includes(p.id));
 
   // For non-trainers: show read-only view
+  // Always read directly from match?.selection — never from stale local state
   if (!isTrainer) {
-    if (currentSelection.length === 0) {
+    const liveSelection = match?.selection || [];
+    if (liveSelection.length === 0) {
       return (
         <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "32px 20px", textAlign: "center" }}>
           <Users size={32} style={{ color: "rgba(26,26,26,0.20)", margin: "0 auto 12px" }} />
@@ -146,9 +148,9 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
     return (
       <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "16px", display: "flex", flexDirection: "column", gap: 10 }}>
         <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.50)", marginBottom: 4 }}>
-          Selectie ({currentSelection.length} spelers)
+          Selectie ({liveSelection.length} spelers)
         </p>
-        {players.filter(p => currentSelection.includes(p.id)).map(player => (
+        {players.filter(p => liveSelection.includes(p.id)).map(player => (
           <PlayerRow key={player.id} player={player} selected={true} isTrainer={false} onToggle={null} />
         ))}
       </div>
