@@ -73,8 +73,12 @@ export default function LiveMatch() {
 
   useEffect(() => {
     if (match) {
-      setLineupMap(lineupArrayToMap(match.lineup));
-      setSubstitutes(match.substitutes || []);
+      // Use basis/wissel from match if available (from MatchLineupEditor), otherwise fallback to lineup/substitutes
+      const basis = match.basis ? Object.entries(match.basis).reduce((acc, [slot, pid]) => { if (pid) acc[slot] = pid; return acc; }, {}) : lineupArrayToMap(match.lineup);
+      const wissel = match.wissel || match.substitutes || [];
+
+      setLineupMap(basis);
+      setSubstitutes(wissel);
       setFormation(match.formation || "4-3-3");
       if (match.live_events) setEvents(match.live_events);
       if (match.halftime_notes) setHalftimeNotes(match.halftime_notes);
