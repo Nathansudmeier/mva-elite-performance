@@ -122,6 +122,7 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
     }
 
     await qc.invalidateQueries({ queryKey: ["match", matchId] });
+    await qc.invalidateQueries({ queryKey: ["match"] });
     setSavedSelection([...localSelection]);
     setSaveState("saved");
     setTimeout(() => setSaveState("idle"), 2500);

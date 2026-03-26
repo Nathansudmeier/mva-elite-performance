@@ -569,8 +569,8 @@ export default function PlanningWedstrijdDetail() {
           </div>
         )}
 
-        {/* Tab: Selectie */}
-        {activeTab === 2 && (
+        {/* Tab: Selectie — always mounted to preserve state */}
+        <div style={{ display: activeTab === 2 ? "block" : "none" }}>
           <SelectieTab
             match={match}
             players={players}
@@ -580,7 +580,7 @@ export default function PlanningWedstrijdDetail() {
             toast={toast}
             teamCardBg={teamCardBg}
           />
-        )}
+        </div>
 
           {showResetConfirm && (
         <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
