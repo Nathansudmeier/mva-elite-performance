@@ -8,6 +8,7 @@ import { formatDate, TYPE_CONFIG } from "@/components/agenda/agendaUtils";
 import AttendanceButtons from "@/components/attendance/AttendanceButtons";
 import TrainingPlanEditor from "@/components/trainingsplanner/TrainingPlanEditor";
 import AgendaForm from "@/components/agenda/AgendaForm";
+import DailyFeelingAverage from "@/components/dashboard/DailyFeelingAverage";
 import { format, parseISO } from "date-fns";
 import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
 
@@ -193,8 +194,11 @@ export default function PlanningTrainingDetail() {
         </div>
 
         {/* Tab: Overzicht */}
-        {activeTab === 0 && (
+         {activeTab === 0 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {/* Daily Feeling Average - alleen voor trainers */}
+            <DailyFeelingAverage trainingDate={item.date} isTrainer={isTrainer} />
+
             {/* RSVP voor spelers (alleen toekomstige activiteiten) - GEEN ouders */}
             {!isTrainer && myPlayer && isFuture && !isOuder && (
               <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
