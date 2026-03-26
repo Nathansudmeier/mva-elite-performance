@@ -51,7 +51,6 @@ import AccountBeheer from './pages/AccountBeheer';
 import Attendance from './pages/Attendance';
 import Dashboard from './pages/Dashboard';
 import Leaderboard from './pages/Leaderboard';
-import LiveMatch from './pages/LiveMatch';
 import PhysicalMonitor from './pages/PhysicalMonitor';
 import PlayerDashboard from './pages/PlayerDashboard';
 import PlayerDetail from './pages/PlayerDetail';
@@ -73,7 +72,6 @@ export const PAGES = {
     "Attendance": Attendance,
     "Dashboard": Dashboard,
     "Leaderboard": Leaderboard,
-    "LiveMatch": LiveMatch,
     "PhysicalMonitor": PhysicalMonitor,
     "PlayerDashboard": PlayerDashboard,
     "PlayerDetail": PlayerDetail,
