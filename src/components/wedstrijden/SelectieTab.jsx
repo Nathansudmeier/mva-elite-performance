@@ -55,14 +55,17 @@ function PlayerRow({ player, selected, onToggle, isTrainer }) {
 export default function SelectieTab({ match, players, isTrainer, item, qc, toast, teamCardBg }) {
   const currentSelection = match?.selection || [];
   const [localSelection, setLocalSelection] = useState(currentSelection);
+  const [savedSelection, setSavedSelection] = useState(currentSelection);
   const [saving, setSaving] = useState(false);
 
   // Sync when match loads/changes
   React.useEffect(() => {
-    setLocalSelection(match?.selection || []);
-  }, [match?.id, match?.selection?.length]);
+    const sel = match?.selection || [];
+    setLocalSelection(sel);
+    setSavedSelection(sel);
+  }, [match?.id, JSON.stringify(match?.selection)]);
 
-  const hasChanges = JSON.stringify([...localSelection].sort()) !== JSON.stringify([...currentSelection].sort());
+  const hasChanges = JSON.stringify([...localSelection].sort()) !== JSON.stringify([...savedSelection].sort());
 
   function togglePlayer(playerId) {
     setLocalSelection(prev =>
@@ -92,7 +95,8 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
         })
       )).catch(() => {});
     }
-    await qc.invalidateQueries({ queryKey: ["match", match.id] });
+    await qc.invalidateQueries({ queryKey: ["match"] });
+    setSavedSelection([...localSelection]);
     setSaving(false);
     toast({ description: "Selectie opgeslagen", style: { background: "#4ade80", color: "white", border: "none" } });
   }
