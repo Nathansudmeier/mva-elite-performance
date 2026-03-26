@@ -253,7 +253,7 @@ export default function LiveMatch() {
             <>
               {/* Match info card */}
               <div className="glass p-5 md:p-6">
-                <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex items-start justify-between gap-3 mb-4">
                   <div>
                     <p style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a" }}>{match.opponent}</p>
                     <p className="t-secondary">{match.home_away} • {formatNL(match.date)}</p>
@@ -262,9 +262,16 @@ export default function LiveMatch() {
                     <img src={match.opponent_logo_url} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover" }} />
                   )}
                 </div>
-                <span style={{ background: "#FF6800", color: "white", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "4px 12px", fontSize: "11px", fontWeight: 800, display: "inline-block" }}>
-                  {formation}
-                </span>
+                <div className="flex items-center justify-between gap-3">
+                  <span style={{ background: "#FF6800", color: "white", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "4px 12px", fontSize: "11px", fontWeight: 800, display: "inline-block" }}>
+                    {formation}
+                  </span>
+                  {hasLineup && (
+                    <button onClick={startMatch} className="btn-primary" style={{ flex: 1, height: "40px", fontSize: "14px" }}>
+                      <Play size={16} /> Start
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Lineup or empty state */}
@@ -335,12 +342,7 @@ export default function LiveMatch() {
           )}
         </div>
 
-        {/* Start button */}
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, padding: "1rem", paddingBottom: "calc(1rem + env(safe-area-inset-bottom))", background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a" }}>
-          <button onClick={startMatch} disabled={!hasLineup} className="btn-primary" style={{ opacity: hasLineup ? 1 : 0.5 }}>
-            <Play size={18} /> Start Wedstrijd
-          </button>
-        </div>
+
       </div>
     );
   }
