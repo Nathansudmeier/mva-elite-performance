@@ -168,9 +168,6 @@ export default function PlayerDashboard() {
       {/* Upcoming Activities Compact */}
       <UpcomingActivitiesCompact playerId={playerId} />
 
-      {/* Seizoensstatistieken */}
-      <PlayerSeasonStats playerId={playerId} variant="grid" />
-
       {/* Today Training Card */}
       <TodayTrainingCard playerId={playerId} />
 
