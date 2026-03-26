@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Star } from "lucide-react";
 import { format } from "date-fns";
+
+const EMVI_IMAGE = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/17362aae0_Emvi-point.png";
 
 export default function DailyFeelingCheck({ playerId }) {
   const [hoveredRating, setHoveredRating] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
   const today = format(new Date(), "yyyy-MM-dd");
 
@@ -28,6 +30,7 @@ export default function DailyFeelingCheck({ playerId }) {
         rating: rating,
       }),
     onSuccess: () => {
+      setIsSubmitting(false);
       queryClient.invalidateQueries({ queryKey: ["dailyFeeling"] });
     },
   });
@@ -37,32 +40,74 @@ export default function DailyFeelingCheck({ playerId }) {
     return null;
   }
 
+  const handleRatingClick = (rating) => {
+    setIsSubmitting(true);
+    submitMutation.mutate(rating);
+  };
+
   return (
-    <div className="glass" style={{ padding: "16px", marginBottom: "16px" }}>
-      <p className="t-card-title" style={{ marginBottom: "12px" }}>Hoe voel je je vandaag?</p>
-      <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
-        {[1, 2, 3, 4, 5].map((rating) => (
-          <button
-            key={rating}
-            onClick={() => submitMutation.mutate(rating)}
-            onMouseEnter={() => setHoveredRating(rating)}
-            onMouseLeave={() => setHoveredRating(0)}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          >
-            <Star
-              size={32}
-              fill={rating <= (hoveredRating || 0) ? "#FF6800" : "none"}
-              color={rating <= (hoveredRating || 0) ? "#FF6800" : "rgba(26,26,26,0.20)"}
-              style={{ transition: "all 0.15s ease" }}
-            />
-          </button>
-        ))}
+    <div style={{
+      background: "#FF6800",
+      border: "2.5px solid #1a1a1a",
+      borderRadius: "18px",
+      boxShadow: "3px 3px 0 #1a1a1a",
+      padding: "20px",
+      position: "relative",
+      overflow: "hidden",
+      display: "grid",
+      gridTemplateColumns: "1fr 120px",
+      gap: "16px",
+      alignItems: "center"
+    }}>
+      {/* Left content */}
+      <div>
+        <p className="t-section-title" style={{ color: "#ffffff", marginBottom: "8px" }}>Hoe voel je je vandaag?</p>
+        <p className="t-secondary" style={{ color: "rgba(255,255,255,0.80)", marginBottom: "14px" }}>
+          Geef je dagelijks stemming aan met sterren
+        </p>
+        
+        {/* Star rating */}
+        <div style={{ display: "flex", gap: "6px" }}>
+          {[1, 2, 3, 4, 5].map((rating) => (
+            <button
+              key={rating}
+              onClick={() => handleRatingClick(rating)}
+              onMouseEnter={() => setHoveredRating(rating)}
+              onMouseLeave={() => setHoveredRating(0)}
+              disabled={isSubmitting}
+              style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "8px",
+                background: rating <= (hoveredRating || 0) ? "rgba(26,26,26,0.25)" : "rgba(26,26,26,0.12)",
+                border: "2px solid rgba(255,255,255,0.40)",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
+                padding: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.15s ease",
+                opacity: isSubmitting ? 0.6 : 1,
+                fontSize: "18px"
+              }}
+            >
+              ⭐
+            </button>
+          ))}
+        </div>
       </div>
+
+      {/* Emvi character */}
+      <img
+        src={EMVI_IMAGE}
+        alt="Emvi"
+        style={{
+          width: "100%",
+          maxWidth: "110px",
+          height: "auto",
+          objectFit: "contain"
+        }}
+      />
     </div>
   );
 }
