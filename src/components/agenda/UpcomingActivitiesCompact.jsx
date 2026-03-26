@@ -119,7 +119,11 @@ export default function UpcomingActivitiesCompact({ playerId }) {
 
   const upcoming = [...allItems]
     .filter(i => i.date >= today)
-    .sort((a, b) => a.date.localeCompare(b.date));
+    .sort((a, b) => {
+      const dateCompare = a.date.localeCompare(b.date);
+      if (dateCompare !== 0) return dateCompare;
+      return (a.start_time || "00:00").localeCompare(b.start_time || "00:00");
+    });
 
   if (!upcoming.length) return null;
 
