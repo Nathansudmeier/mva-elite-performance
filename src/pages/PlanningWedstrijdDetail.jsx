@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { ChevronLeft, Clock, Bell, Pencil, Trash2, Play, Trophy, RotateCcw } from "lucide-react";
+import { ChevronLeft, Clock, Pencil, Trash2, Play, Trophy, RotateCcw } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { formatDate, TYPE_CONFIG, TEAM_COLORS } from "@/components/agenda/agendaUtils";
-import AttendanceButtons from "@/components/attendance/AttendanceButtons";
 import FieldLineup from "@/components/wedstrijden/FieldLineup";
+import SelectieTab from "@/components/wedstrijden/SelectieTab";
 import AgendaForm from "@/components/agenda/AgendaForm";
 import LineupOverview from "@/components/wedstrijden/LineupOverview";
 import LineupSelector from "@/components/wedstrijden/LineupSelector";
 import { createPageUrl } from "@/utils";
 
-const TABS = ["Opstelling", "Tactiek", "Aanwezigheid"];
+const TABS = ["Opstelling", "Tactiek", "Selectie"];
 
 export default function PlanningWedstrijdDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -405,10 +405,11 @@ export default function PlanningWedstrijdDetail() {
                   <img src={item.opponent_logo_url} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
               )}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2 }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: teamTextDark }}>{aanwezigList.length} ✓</span>
-                <span style={{ fontSize: 11, fontWeight: 800, color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.70)" : "rgba(26,26,26,0.55)" }}>{afwezigList.length} ✗</span>
-              </div>
+              {match?.selection?.length > 0 && (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2 }}>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: teamTextDark }}>{match.selection.length} geselecteerd</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -559,84 +560,18 @@ export default function PlanningWedstrijdDetail() {
           </div>
         )}
 
-        {/* Tab: Aanwezigheid */}
+        {/* Tab: Selectie */}
         {activeTab === 2 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {/* RSVP voor spelers (alleen toekomstige activiteiten) */}
-            {!isTrainer && myPlayer && isFuture && !isOuder && (
-              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
-                <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a" }}>Jouw aanwezigheid</p>
-                <AttendanceButtons
-                  currentStatus={myAttendance?.status}
-                  loading={rsvpMutation.isPending}
-                  showAbsentInput={showReasonInput}
-                  absentReason={absentReason}
-                  onAbsentReasonChange={setAbsentReason}
-                  onPresent={() => rsvpMutation.mutate({ status: "aanwezig" })}
-                  onAbsent={() => setShowReasonInput(true)}
-                  onConfirmAbsent={() => rsvpMutation.mutate({ status: "afwezig", reason: absentReason })}
-                />
-              </div>
-            )}
-
-            <div className="glass p-4 md:p-6" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a", display: "flex", flexDirection: "column", gap: 18 }}>
-            <div>
-              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#05a050", marginBottom: 10 }}>Bevestigd aanwezig ({aanwezigList.length})</p>
-              {aanwezigList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Niemand bevestigd</p> : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {aanwezigList.map(player => (
-                    <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(8,208,104,0.08)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
-                      <PlayerAvatar player={player} />
-                      <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", flex: 1 }}>{player.name}</p>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#05a050", flexShrink: 0 }} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div>
-              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#FF3DA8", marginBottom: 10 }}>Afgemeld ({afwezigList.length})</p>
-              {afwezigList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Niemand afgemeld</p> : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {afwezigList.map(({ player, record }) => (
-                    <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(255,61,168,0.06)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
-                      <PlayerAvatar player={player} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
-                        {isTrainer && record.notes && <p style={{ fontSize: 11, color: "#FF3DA8", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{record.notes}</p>}
-                      </div>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#FF3DA8", flexShrink: 0 }} />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div>
-              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "#cc9900", marginBottom: 10 }}>Nog niet gereageerd ({nognietList.length})</p>
-              {nognietList.length === 0 ? <p style={{ fontSize: 12, color: "rgba(26,26,26,0.40)" }}>Iedereen heeft gereageerd 🎉</p> : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {nognietList.map(player => (
-                    <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", background: "rgba(26,26,26,0.03)", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: 10 }}>
-                      <PlayerAvatar player={player} />
-                      <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", flex: 1 }}>{player.name}</p>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#FFD600", border: "1.5px solid #1a1a1a", flexShrink: 0 }} />
-                    </div>
-                  ))}
-                  {isTrainer && (
-                    <button onClick={() => sendReminder.mutate()} disabled={sendReminder.isPending || reminderSent}
-                      style={{ marginTop: 8, width: "100%", height: 44, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, borderRadius: 12, border: "2px solid #1a1a1a", background: reminderSent ? "#08D068" : "#ffffff", color: "#1a1a1a", fontSize: 13, fontWeight: 800, cursor: reminderSent ? "default" : "pointer", boxShadow: "2px 2px 0 #1a1a1a" }}>
-                      <Bell size={14} />
-                      {reminderSent ? "Verstuurd!" : sendReminder.isPending ? "Versturen..." : `Stuur herinnering (${nognietList.length})`}
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-            </div>
-          )}
+          <SelectieTab
+            match={match}
+            players={players}
+            isTrainer={isTrainer}
+            item={item}
+            qc={qc}
+            toast={toast}
+            teamCardBg={teamCardBg}
+          />
+        )}
 
           {showResetConfirm && (
         <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>

@@ -74,7 +74,12 @@ export default function OuderDashboard() {
     .filter(ai => ai.date >= today && (!childTeam || ai.team === "Beide" || ai.team === childTeam))
     .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
 
-  // Next 3 matches
+  // Next 3 matches (from agendaItems Wedstrijd type for correct match_id lookup)
+  const nextAgendaMatches = agendaItems
+    .filter(ai => ai.type === "Wedstrijd" && ai.date >= today && (!childTeam || ai.team === "Beide" || ai.team === childTeam))
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 3);
+
   const nextMatches = matches
     .filter(m => m.date >= today && (!childTeam || m.team === childTeam))
     .sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -237,13 +242,13 @@ export default function OuderDashboard() {
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {nextMatches.map((match, i) => (
               <div key={match.id} style={{
-                display: "flex", alignItems: "center", gap: "12px",
+                display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap",
                 paddingBottom: "10px", borderBottom: i < nextMatches.length - 1 ? "1px solid rgba(255,255,255,0.10)" : "none"
               }}>
                 <div style={{
                   background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.15)",
                   borderRadius: "20px", padding: "4px 10px", fontSize: "10px", fontWeight: 700, color: "#ffffff",
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap", flexShrink: 0
                 }}>
                   {format(new Date(match.date), "d MMM", { locale: nl })}
                 </div>
@@ -251,16 +256,18 @@ export default function OuderDashboard() {
                 <div style={{
                   background: match.home_away === "Thuis" ? "rgba(8,208,104,0.20)" : "rgba(255,213,0,0.20)",
                   color: match.home_away === "Thuis" ? "#08D068" : "#FFD600",
-                  padding: "2px 8px", borderRadius: "12px", fontSize: "10px", fontWeight: 700
+                  padding: "2px 8px", borderRadius: "12px", fontSize: "10px", fontWeight: 700, flexShrink: 0
                 }}>
                   {match.home_away}
                 </div>
-                {match.opponent_logo && (
-                  <img src={match.opponent_logo} alt=""
-                    style={{
-                      width: "24px", height: "24px", borderRadius: "50%",
-                      objectFit: "cover", flexShrink: 0
-                    }} />
+                {childPlayerId && match.selection?.includes(childPlayerId) && (
+                  <div style={{
+                    background: "#08D068", border: "1.5px solid rgba(255,255,255,0.30)",
+                    color: "#ffffff", borderRadius: "20px", padding: "2px 8px",
+                    fontSize: "10px", fontWeight: 800, flexShrink: 0
+                  }}>
+                    ✓ Ingedeeld
+                  </div>
                 )}
               </div>
             ))}

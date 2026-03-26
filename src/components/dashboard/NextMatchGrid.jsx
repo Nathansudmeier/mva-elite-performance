@@ -19,6 +19,15 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
     enabled: !!playerId,
   });
 
+  // Fetch the linked match to check selection
+  const { data: linkedMatch } = useQuery({
+    queryKey: ["linked-match", nextMatch?.match_id],
+    queryFn: () => base44.entities.Match.filter({ id: nextMatch.match_id }).then(r => r[0]),
+    enabled: !!nextMatch?.match_id,
+  });
+
+  const isInSelection = !!playerId && !!linkedMatch?.selection?.includes(playerId);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -139,8 +148,8 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
           </div>
         </div>
 
-        {/* Bottom: location + check-in */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        {/* Bottom: location + pills */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <div style={{
               width: "8px", height: "8px", borderRadius: "50%",
@@ -148,33 +157,44 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
               border: "1.5px solid #1a1a1a", flexShrink: 0,
             }} />
             <span style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a" }}>
-              {isHome ? "Thuiswedstrijd" : "Uitwedstrijd"}
+              {isHome ? "Thuis" : "Uit"}
             </span>
           </div>
 
-          {showCheckInProp && (
-            alreadyCheckedIn ? (
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+            {isInSelection && (
               <div style={{
-                background: "rgba(8,208,104,0.15)", border: "1.5px solid #1a1a1a",
-                color: "#1a1a1a", borderRadius: "20px", padding: "3px 10px",
-                fontSize: "10px", fontWeight: 800,
+                background: "#08D068", border: "1.5px solid #1a1a1a",
+                color: "#ffffff", borderRadius: "20px", padding: "3px 10px",
+                fontSize: "10px", fontWeight: 800, boxShadow: "1px 1px 0 #1a1a1a",
               }}>
-                ✓ Ingevuld
+                ✓ Ingedeeld
               </div>
-            ) : (
-              <button
-                onClick={(e) => { e.stopPropagation(); setShowCheckIn(true); }}
-                style={{
-                  background: "#1a1a1a", border: "1.5px solid #1a1a1a",
-                  color: "#ffffff", borderRadius: "20px", padding: "4px 12px",
-                  fontSize: "10px", fontWeight: 800, cursor: "pointer",
-                  boxShadow: "2px 2px 0 rgba(26,26,26,0.25)",
-                }}
-              >
-                Check-in
-              </button>
-            )
-          )}
+            )}
+            {showCheckInProp && (
+              alreadyCheckedIn ? (
+                <div style={{
+                  background: "rgba(8,208,104,0.15)", border: "1.5px solid #1a1a1a",
+                  color: "#1a1a1a", borderRadius: "20px", padding: "3px 10px",
+                  fontSize: "10px", fontWeight: 800,
+                }}>
+                  ✓ Ingevuld
+                </div>
+              ) : (
+                <button
+                  onClick={(e) => { e.stopPropagation(); setShowCheckIn(true); }}
+                  style={{
+                    background: "#1a1a1a", border: "1.5px solid #1a1a1a",
+                    color: "#ffffff", borderRadius: "20px", padding: "4px 12px",
+                    fontSize: "10px", fontWeight: 800, cursor: "pointer",
+                    boxShadow: "2px 2px 0 rgba(26,26,26,0.25)",
+                  }}
+                >
+                  Check-in
+                </button>
+              )
+            )}
+          </div>
         </div>
       </button>
 
