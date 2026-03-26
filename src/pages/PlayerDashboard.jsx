@@ -174,9 +174,6 @@ export default function PlayerDashboard() {
       {/* Next Matches */}
       <NextMatchGrid matches={matches} playerId={playerId} />
 
-      {/* Metric Grid */}
-      <PlayerMetricGrid yoyo={yoyo} physical={physical} attendance={attendance} agendaAttendance={agendaAttendance} matches={matches} playerId={playerId} />
-
       {/* Attendance Card */}
       <PlayerAttendanceCard 
         percentage={attendancePercentage} 

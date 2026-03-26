@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList, Zap, Brain, Shield, Dumbbell, TrendingUp } from "lucide-react";
+import PlayerMetricGrid from "@/components/dashboard/PlayerMetricGrid";
 
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import RoleGuard from "@/components/auth/RoleGuard";
@@ -53,6 +54,11 @@ export default function PlayerDetail() {
     queryKey: ["wellness", playerId],
     queryFn: () => base44.entities.WellnessLog.filter({ player_id: playerId }),
     enabled: !!playerId,
+  });
+
+  const { data: matches = [] } = useQuery({
+    queryKey: ["allMatches"],
+    queryFn: () => base44.entities.Match.list(),
   });
 
   if (!player) return (
@@ -230,6 +236,9 @@ export default function PlayerDetail() {
           </div>
         </div>
       )}
+
+      {/* Metric Grid */}
+      <PlayerMetricGrid yoyo={yoyoTests} physical={physicalTests} attendance={attendance} matches={matches} playerId={playerId} />
 
       {/* Seizoensstatistieken */}
       <PlayerSeasonStats playerId={playerId} variant="compact" />
