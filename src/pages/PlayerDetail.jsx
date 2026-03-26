@@ -252,7 +252,6 @@ export default function PlayerDetail() {
         <h2 style={{ fontSize: "17px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px" }}>Seizoensstatistieken</h2>
       </div>
 
-      {/* Seizoensstatistieken */}
       <PlayerSeasonStats playerId={playerId} variant="compact" />
 
       {/* Wellness */}
