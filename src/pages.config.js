@@ -65,7 +65,6 @@ import Staff from './pages/Staff';
 import Tactics from './pages/Tactics';
 import TrainerDetail from './pages/TrainerDetail';
 import VideoHub from './pages/VideoHub';
-import Trainingen from './pages/Trainingen';
 import __Layout from './Layout.jsx';
 
 
@@ -86,7 +85,6 @@ export const PAGES = {
     "Spelprincipes": Spelprincipes,
     "Staff": Staff,
     "Tactics": Tactics,
-    "Trainingen": Trainingen,
     "TrainerDetail": TrainerDetail,
     "VideoHub": VideoHub,
 }
