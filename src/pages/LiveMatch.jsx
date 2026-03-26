@@ -2,15 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Edit2, Play, Goal, ArrowRightLeft, AlertCircle, Clock } from "lucide-react";
+import { ChevronLeft, Goal, ArrowRightLeft, AlertCircle, Play, Pause, Square } from "lucide-react";
 import LiveMatchClock from "../components/live/LiveMatchClock";
 import LiveScore from "../components/live/LiveScore";
 import GoalBottomSheet from "../components/live/GoalBottomSheet";
 import SubstitutionBottomSheet from "../components/live/SubstitutionBottomSheet";
 import MatchReport from "../components/live/MatchReport";
-import FieldLineup from "../components/wedstrijden/FieldLineup";
-import SubstitutesPicker from "../components/wedstrijden/SubstitutesPicker";
-import LineupPlayerList from "../components/wedstrijden/LineupPlayerList";
 import { NoteModal, GoalAgainstModal, YellowCardModal, RedCardModal } from "../components/live/EventModals";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
@@ -20,21 +17,8 @@ function formatNL(dateStr) {
   try { return format(parseISO(dateStr), "EEEE d MMMM yyyy", { locale: nl }); } catch { return dateStr; }
 }
 
-function BackBtn({ onClick }) {
-  return (
-    <button onClick={onClick} className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-orange-600/20"
-      style={{ border: "2px solid #FF6800" }}>
-      <ChevronLeft size={18} style={{ color: "#FF6800" }} />
-    </button>
-  );
-}
+const POSITION_ORDER = { "Keeper": 0, "Centrale Verdediger": 1, "Linksback": 2, "Rechtsback": 3, "Controleur": 4, "Middenvelder": 5, "Aanvallende Middenvelder": 6, "Linksbuiten": 7, "Rechtsbuiten": 8, "Spits": 9 };
 
-const FORMATIONS = ["4-3-3", "4-4-2", "3-5-2", "4-2-3-1", "3-4-3"];
-
-function lineupArrayToMap(arr) {
-  if (!arr) return {};
-  return arr.reduce((acc, { slot, player_id }) => { if (slot && player_id) acc[slot] = player_id; return acc; }, {});
-}
 function lineupMapToArray(map) {
   return Object.entries(map).map(([slot, player_id]) => ({ slot, player_id }));
 }
@@ -52,31 +36,25 @@ export default function LiveMatch() {
   const activePlayers = players.filter(p => p.active !== false);
   const match = matches.find(m => m.id === matchId);
 
-  // Pre-game state
+  // State
+  const [phase, setPhase] = useState("pre");
   const [lineupMap, setLineupMap] = useState({});
   const [substitutes, setSubstitutes] = useState([]);
   const [formation, setFormation] = useState("4-3-3");
-  const [showField, setShowField] = useState(false);
-
-  // Live state
-  const [phase, setPhase] = useState("pre");
   const [seconds, setSeconds] = useState(0);
   const [running, setRunning] = useState(false);
   const [events, setEvents] = useState([]);
   const [halftimeNotes, setHalftimeNotes] = useState("");
   const [activeModal, setActiveModal] = useState(null);
-
-  // PlayerMatchTime records tracked locally
   const [matchTimeRecords, setMatchTimeRecords] = useState([]);
 
   const intervalRef = useRef(null);
 
   useEffect(() => {
     if (match) {
-      // Use basis/wissel from match if available (from MatchLineupEditor), otherwise fallback to lineup/substitutes
-      const basis = match.basis ? Object.entries(match.basis).reduce((acc, [slot, pid]) => { if (pid) acc[slot] = pid; return acc; }, {}) : lineupArrayToMap(match.lineup);
+      const basis = match.basis ? Object.entries(match.basis).reduce((acc, [slot, pid]) => { if (pid) acc[slot] = pid; return acc; }, {}) : {};
       const wissel = match.wissel || match.substitutes || [];
-
+      
       setLineupMap(basis);
       setSubstitutes(wissel);
       setFormation(match.formation || "4-3-3");
@@ -86,7 +64,6 @@ export default function LiveMatch() {
       const status = match.live_status;
       if (status && status !== "pre") setPhase(status);
 
-      // Restore timer from server timestamps
       const halfLength = match.team === "MO17" ? 40 : 45;
       if (status === "live") {
         if (match.second_half_started_at) {
@@ -133,7 +110,6 @@ export default function LiveMatch() {
     substitutes.includes(p.id) && !substitutedIn.includes(p.id)
   );
 
-  // ---- PlayerMatchTime helpers ----
   const createMatchTimeRecords = async (playerIds, startMin) => {
     const created = [];
     for (const pid of playerIds) {
@@ -165,7 +141,6 @@ export default function LiveMatch() {
     return updated;
   };
 
-  // ---- Match control ----
   const startMatch = async () => {
     const lineup = lineupMapToArray(lineupMap);
     saveMutation.mutate({ lineup, substitutes, formation, live_status: "live", live_events: [] });
@@ -231,16 +206,17 @@ export default function LiveMatch() {
 
   if (!match && matchId) {
     return (
-      <div className="p-8 text-center text-white">
-        <p>Wedstrijd niet gevonden.</p>
-        <button onClick={() => navigate("/Wedstrijden")} className="btn-primary">Terug</button>
+      <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto">
+        <div className="glass p-6 text-center">
+          <p className="t-section-title">Wedstrijd niet gevonden</p>
+          <button onClick={() => navigate("/Planning")} className="btn-primary mt-4">Terug</button>
+        </div>
       </div>
     );
   }
 
   // ---- PRE-GAME ----
   if (phase === "pre") {
-    const POSITION_ORDER = { "Keeper": 0, "Centrale Verdediger": 1, "Linksback": 2, "Rechtsback": 3, "Controleur": 4, "Middenvelder": 5, "Aanvallende Middenvelder": 6, "Linksbuiten": 7, "Rechtsbuiten": 8, "Spits": 9 };
     const basisSpelers = Object.values(lineupMap)
       .map(pid => activePlayers.find(p => p.id === pid))
       .filter(Boolean)
@@ -249,12 +225,13 @@ export default function LiveMatch() {
     const hasLineup = Object.keys(lineupMap).length > 0;
 
     return (
-      <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden", background: "#FFF3E8" }}>
-        {/* Scrollable content */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "1rem" }}>
+      <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
+        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-6">
           {/* Header */}
-          <div className="flex items-center gap-3 mb-6">
-            <BackBtn onClick={() => navigate("/Planning")} />
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate("/Planning")} className="w-9 h-9 rounded-full flex items-center justify-center border-2" style={{ borderColor: "#FF6800" }}>
+              <ChevronLeft size={18} style={{ color: "#FF6800" }} />
+            </button>
             <div>
               <h1 className="t-page-title">Live Opstelling</h1>
               {match && <p className="t-secondary">vs. {match.opponent}</p>}
@@ -263,66 +240,78 @@ export default function LiveMatch() {
 
           {match && (
             <>
-              {/* Wedstrijdinfo Card */}
-              <div style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem", marginBottom: "12px" }}>
-                <div className="flex items-start justify-between gap-3 mb-2">
+              {/* Match info card */}
+              <div className="glass p-5 md:p-6">
+                <div className="flex items-start justify-between gap-3 mb-3">
                   <div>
-                    <p style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a", marginBottom: "4px" }}>{match.opponent}</p>
-                    <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.50)", fontWeight: 600 }}>{match.home_away} · {formatNL(match.date)}</p>
+                    <p style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a" }}>{match.opponent}</p>
+                    <p className="t-secondary">{match.home_away} • {formatNL(match.date)}</p>
                   </div>
                   {match.opponent_logo_url && (
-                    <img src={match.opponent_logo_url} alt="" style={{ width: "48px", height: "48px", borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover", flexShrink: 0 }} />
+                    <img src={match.opponent_logo_url} alt="" style={{ width: "40px", height: "40px", borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover" }} />
                   )}
                 </div>
-                <span style={{ background: "#FF6800", color: "white", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "3px 10px", fontSize: "11px", fontWeight: 800, display: "inline-block", marginTop: "8px" }}>
+                <span style={{ background: "#FF6800", color: "white", border: "1.5px solid #1a1a1a", borderRadius: "20px", padding: "4px 12px", fontSize: "11px", fontWeight: 800, display: "inline-block" }}>
                   {formation}
                 </span>
               </div>
 
-              {/* Empty state or Basisspelers */}
+              {/* Lineup or empty state */}
               {!hasLineup ? (
-                <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.5rem", textAlign: "center" }}>
-                  <div style={{ fontSize: "32px", color: "#1a1a1a", marginBottom: "8px" }}>⚠️</div>
-                  <p style={{ fontSize: "14px", fontWeight: 800, color: "#1a1a1a", marginBottom: "4px" }}>Geen opstelling ingesteld</p>
-                  <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)" }}>Stel eerst een opstelling in via de wedstrijd detail pagina</p>
+                <div className="glass-alert p-5 md:p-6 text-center">
+                  <p style={{ fontSize: "32px", marginBottom: "8px" }}>⚠️</p>
+                  <p className="t-section-title">Geen opstelling ingesteld</p>
+                  <p className="t-secondary mt-2">Stel eerst een opstelling in via de wedstrijd detail pagina</p>
                 </div>
               ) : (
                 <>
-                  {/* Basisspelers Section */}
-                  <div style={{ marginBottom: "12px" }}>
-                    <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", letterSpacing: "0.07em", marginBottom: "8px" }}>BASIS ({basisSpelers.length})</p>
-                    <div style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
-                      {basisSpelers.map((player, idx) => (
-                        <div key={player.id} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 16px", borderBottom: idx < basisSpelers.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
-                          <img src={player.photo_url} alt="" style={{ width: "36px", height: "36px", borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover", flexShrink: 0 }} />
+                  {/* Basis */}
+                  <div>
+                    <p className="t-label mb-3">BASIS ({basisSpelers.length})</p>
+                    <div className="glass p-0 overflow-hidden">
+                      {basisSpelers.map((player, i) => (
+                        <div key={player.id} style={{
+                          display: "flex", alignItems: "center", gap: 12, padding: "10px 16px",
+                          borderBottom: i < basisSpelers.length - 1 ? "1.5px solid rgba(26,26,26,0.08)" : "none"
+                        }}>
+                          <img src={player.photo_url || "https://via.placeholder.com/36"} alt="" style={{
+                            width: 36, height: 36, borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover"
+                          }} />
                           <div style={{ flex: 1 }}>
-                            <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
+                            <p style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>{player.name}</p>
                           </div>
-                          <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#FF6800", border: "2.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                            <span style={{ fontSize: "18px", fontWeight: 900, color: "white", lineHeight: 1 }}>
-                              {player.shirt_number || "-"}
-                            </span>
+                          <div style={{
+                            width: 36, height: 36, borderRadius: "50%", background: "#FF6800", border: "2.5px solid #1a1a1a",
+                            display: "flex", alignItems: "center", justifyContent: "center"
+                          }}>
+                            <span style={{ fontSize: 14, fontWeight: 900, color: "white" }}>{player.shirt_number || "-"}</span>
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* Wissels Section */}
+                  {/* Wissel */}
                   {wisselSpelers.length > 0 && (
                     <div>
-                      <p style={{ fontSize: "11px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", letterSpacing: "0.07em", marginBottom: "8px" }}>WISSELS ({wisselSpelers.length})</p>
-                      <div style={{ background: "white", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden" }}>
-                        {wisselSpelers.map((player, idx) => (
-                          <div key={player.id} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 16px", borderBottom: idx < wisselSpelers.length - 1 ? "1.5px solid rgba(26,26,26,0.06)" : "none" }}>
-                            <img src={player.photo_url} alt="" style={{ width: "36px", height: "36px", borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover", flexShrink: 0 }} />
+                      <p className="t-label mb-3">WISSELS ({wisselSpelers.length})</p>
+                      <div className="glass p-0 overflow-hidden">
+                        {wisselSpelers.map((player, i) => (
+                          <div key={player.id} style={{
+                            display: "flex", alignItems: "center", gap: 12, padding: "10px 16px",
+                            borderBottom: i < wisselSpelers.length - 1 ? "1.5px solid rgba(26,26,26,0.08)" : "none"
+                          }}>
+                            <img src={player.photo_url || "https://via.placeholder.com/36"} alt="" style={{
+                              width: 36, height: 36, borderRadius: "50%", border: "2px solid #1a1a1a", objectFit: "cover"
+                            }} />
                             <div style={{ flex: 1 }}>
-                              <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.name}</p>
+                              <p style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>{player.name}</p>
                             </div>
-                            <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#FF6800", border: "2.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                              <span style={{ fontSize: "18px", fontWeight: 900, color: "white", lineHeight: 1 }}>
-                                {player.shirt_number || "-"}
-                              </span>
+                            <div style={{
+                              width: 36, height: 36, borderRadius: "50%", background: "#08D068", border: "2.5px solid #1a1a1a",
+                              display: "flex", alignItems: "center", justifyContent: "center"
+                            }}>
+                              <span style={{ fontSize: 14, fontWeight: 900, color: "white" }}>{player.shirt_number || "-"}</span>
                             </div>
                           </div>
                         ))}
@@ -335,31 +324,10 @@ export default function LiveMatch() {
           )}
         </div>
 
-        {/* Sticky button footer */}
-        <div style={{ flexShrink: 0, padding: "1rem 1.25rem", paddingBottom: "calc(1rem + 80px + env(safe-area-inset-bottom))", background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a" }}>
-          <button
-            onClick={startMatch}
-            disabled={!hasLineup}
-            style={{
-              background: "#FF6800",
-              border: "2.5px solid #1a1a1a",
-              borderRadius: "14px",
-              boxShadow: "3px 3px 0 #1a1a1a",
-              height: "52px",
-              width: "100%",
-              fontSize: "15px",
-              fontWeight: 800,
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              cursor: hasLineup ? "pointer" : "not-allowed",
-              opacity: hasLineup ? 1 : 0.5,
-              transition: "all 0.1s"
-            }}
-          >
-            <Play size={18} color="white" />Start Wedstrijd
+        {/* Start button */}
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, padding: "1rem", paddingBottom: "calc(1rem + env(safe-area-inset-bottom))", background: "#FFF3E8", borderTop: "2.5px solid #1a1a1a" }}>
+          <button onClick={startMatch} disabled={!hasLineup} className="btn-primary" style={{ opacity: hasLineup ? 1 : 0.5 }}>
+            <Play size={18} /> Start Wedstrijd
           </button>
         </div>
       </div>
@@ -370,16 +338,18 @@ export default function LiveMatch() {
   if (phase === "finished") {
     return (
       <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
-        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
+        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-6">
           <div className="flex items-center gap-3">
-            <BackBtn onClick={() => navigate("/Planning")} />
+            <button onClick={() => navigate("/Planning")} className="w-9 h-9 rounded-full flex items-center justify-center border-2" style={{ borderColor: "#FF6800" }}>
+              <ChevronLeft size={18} style={{ color: "#FF6800" }} />
+            </button>
             <div>
               <h1 className="t-page-title">Wedstrijdverslag</h1>
               <p className="t-secondary">vs. {match?.opponent}</p>
             </div>
           </div>
           {match && <MatchReport match={{ ...match, live_events: events, halftime_notes: halftimeNotes }} players={activePlayers} />}
-          <button onClick={() => navigate("/Planning")} className="btn-primary w-full md:w-auto">Terug naar Planning</button>
+          <button onClick={() => navigate("/Planning")} className="btn-primary">Terug naar Planning</button>
         </div>
       </div>
     );
@@ -389,15 +359,20 @@ export default function LiveMatch() {
   if (phase === "halftime") {
     return (
       <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
-        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
+        <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-6">
           <div className="flex items-center gap-3">
-            <BackBtn onClick={() => navigate("/Planning")} />
+            <button onClick={() => navigate("/Planning")} className="w-9 h-9 rounded-full flex items-center justify-center border-2" style={{ borderColor: "#FF6800" }}>
+              <ChevronLeft size={18} style={{ color: "#FF6800" }} />
+            </button>
             <h1 className="t-page-title">Rust</h1>
           </div>
 
-          <div className="glass p-5 md:p-6 text-center">
-            <p className="t-label mb-3">Ruststand</p>
-            <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
+          <div className="glass-orange p-5 md:p-6 text-center" style={{ color: "white" }}>
+            <p className="t-label mb-3">RUSTSTAND</p>
+            <div style={{ fontSize: "42px", fontWeight: 900, marginBottom: "12px" }}>
+              {scoreHome} — {scoreAway}
+            </div>
+            <p style={{ fontSize: "14px", fontWeight: 700 }}>{match?.opponent}</p>
           </div>
 
           <div className="glass p-5 md:p-6 space-y-4">
@@ -407,14 +382,11 @@ export default function LiveMatch() {
               value={halftimeNotes}
               onChange={(e) => setHalftimeNotes(e.target.value)}
               rows={4}
-              className="w-full rounded-lg border-2 border-border p-3 resize-none focus:outline-none focus:ring-2 focus:ring-orange-600"
-              style={{ fontSize: "13px", fontFamily: "inherit" }}
+              className="w-full rounded-lg border-2 border-border p-3 resize-none focus:outline-none focus:ring-2"
+              style={{ fontSize: "13px", borderColor: "#1a1a1a" }}
             />
-            <button
-              onClick={startSecondHalf}
-              className="btn-primary w-full flex items-center justify-center gap-2"
-            >
-              <span>▶</span>Start 2e Helft
+            <button onClick={startSecondHalf} className="btn-primary flex items-center justify-center gap-2">
+              <Play size={18} /> Start 2e Helft
             </button>
           </div>
         </div>
@@ -425,87 +397,77 @@ export default function LiveMatch() {
   // ---- LIVE MODE ----
   return (
     <div style={{ background: "#FFF3E8" }} className="min-h-screen pb-20 xl:pb-8">
-      <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-4 md:space-y-6">
+      <div className="p-4 md:p-6 xl:p-8 max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <BackBtn onClick={() => setRunning(false)} />
+          <button onClick={() => setRunning(false)} className="w-9 h-9 rounded-full flex items-center justify-center border-2" style={{ borderColor: "#FF6800" }}>
+            <ChevronLeft size={18} style={{ color: "#FF6800" }} />
+          </button>
           <div>
             <h1 className="t-page-title">Live — vs. {match?.opponent}</h1>
-            <p className="t-secondary">{match?.home_away} · {match?.team}</p>
+            <p className="t-secondary">{match?.home_away} • {match?.team}</p>
           </div>
         </div>
 
-        {/* Clock - Orange */}
-        <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px 24px" }}>
+        {/* Clock */}
+        <div className="card-orange p-5 md:p-6" style={{ color: "white" }}>
           <LiveMatchClock seconds={seconds} running={running} onToggle={handleToggleClock} onStop={handleStop} />
           {currentMinute >= getHalfLengthMinutes() && running && (
-            <p className="text-center t-secondary mt-3" style={{ color: "white" }}>Druk op Pauze om naar de rust te gaan</p>
+            <p className="text-center" style={{ fontSize: "12px", color: "white", marginTop: "12px" }}>Druk op Pauze om naar de rust te gaan</p>
           )}
         </div>
 
-        {/* Score - Blue */}
-        <div style={{ background: "#00C2FF", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "20px 24px" }}>
+        {/* Score */}
+        <div className="card-blue p-5 md:p-6" style={{ color: "white" }}>
           <LiveScore scoreHome={scoreHome} scoreAway={scoreAway} opponent={match?.opponent} />
         </div>
 
-        {/* Action buttons 3x2 */}
+        {/* Action buttons */}
         <div className="grid grid-cols-3 gap-3 md:gap-4">
-          {/* GOAL MVA - Green */}
-          <button onClick={() => setActiveModal("goal_mva")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <Goal size={22} color="white" strokeWidth={3} />
-            <span className="font-bold text-xs" style={{ color: "white" }}>GOAL</span>
+          <button onClick={() => setActiveModal("goal_mva")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 card-green" style={{ color: "white" }}>
+            <Goal size={22} strokeWidth={3} />
+            <span className="font-bold text-xs">GOAL</span>
           </button>
 
-          {/* GOAL TEGEN - Pink */}
-          <button onClick={() => setActiveModal("goal_against")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "#FF3DA8", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <Goal size={22} color="white" strokeWidth={3} />
-            <span className="font-bold text-xs" style={{ color: "white" }}>TEGEN</span>
+          <button onClick={() => setActiveModal("goal_against")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 card-pink" style={{ color: "white" }}>
+            <Goal size={22} strokeWidth={3} />
+            <span className="font-bold text-xs">TEGEN</span>
           </button>
 
-          {/* WISSEL - Orange */}
-          <button onClick={() => setActiveModal("substitution")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <ArrowRightLeft size={22} color="white" strokeWidth={3} />
-            <span className="font-bold text-xs" style={{ color: "white" }}>WISSEL</span>
+          <button onClick={() => setActiveModal("substitution")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 card-orange" style={{ color: "white" }}>
+            <ArrowRightLeft size={22} strokeWidth={3} />
+            <span className="font-bold text-xs">WISSEL</span>
           </button>
 
-          {/* GELE KAART - Yellow */}
-          <button onClick={() => setActiveModal("yellow_card")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <AlertCircle size={22} color="#1a1a1a" strokeWidth={3} />
-            <span className="font-bold text-xs" style={{ color: "#1a1a1a" }}>GEEL</span>
+          <button onClick={() => setActiveModal("yellow_card")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 card-yellow" style={{ color: "#1a1a1a" }}>
+            <AlertCircle size={22} strokeWidth={3} />
+            <span className="font-bold text-xs">GEEL</span>
           </button>
 
-          {/* RODE KAART - Red */}
-          <button onClick={() => setActiveModal("red_card")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "#FF3333", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <AlertCircle size={22} color="white" strokeWidth={3} />
-            <span className="font-bold text-xs" style={{ color: "white" }}>ROOD</span>
+          <button onClick={() => setActiveModal("red_card")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2" style={{ background: "#FF3333", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", color: "white" }}>
+            <AlertCircle size={22} strokeWidth={3} />
+            <span className="font-bold text-xs">ROOD</span>
           </button>
 
-          {/* NOTITIE - Dark */}
-          <button onClick={() => setActiveModal("note")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 transition-all hover:opacity-90"
-            style={{ background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a" }}>
-            <Edit2 size={22} color="white" strokeWidth={3} />
-            <span className="font-bold text-xs" style={{ color: "white" }}>NOTITIE</span>
+          <button onClick={() => setActiveModal("note")} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 card-black" style={{ color: "white" }}>
+            <AlertCircle size={22} strokeWidth={3} />
+            <span className="font-bold text-xs">NOTITIE</span>
           </button>
         </div>
 
         {/* Events log */}
         {events.length > 0 && (
           <div className="glass p-5 md:p-6">
-            <h3 className="t-label mb-3">Events</h3>
+            <h3 className="t-label mb-3">EVENTS</h3>
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {[...events].reverse().map((e, i) => {
                 const player = activePlayers.find(p => p.id === e.player_id);
                 const playerOut = activePlayers.find(p => p.id === e.player_out_id);
                 const playerIn = activePlayers.find(p => p.id === e.player_in_id);
                 return (
-                  <div key={i} className="flex items-center gap-3 text-xs md:text-sm p-3 rounded-lg" style={{ background: "white", border: "1.5px solid rgba(26,26,26,0.08)" }}>
-                    <span className="font-bold w-8" style={{ color: "#FF6800", fontSize: "12px" }}>{e.minute}'</span>
-                    <span style={{ color: "#1a1a1a", fontWeight: 600 }}>
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", background: "white", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: "12px", fontSize: "12px" }}>
+                    <span style={{ fontWeight: 900, color: "#FF6800", fontSize: "12px", minWidth: "24px" }}>{e.minute}'</span>
+                    <span style={{ color: "#1a1a1a", fontWeight: 600, flex: 1 }}>
                       {e.type === "goal_mva" && <>⚽ Goal — {player?.name}{e.assist_player_id && ` (assist: ${activePlayers.find(p => p.id === e.assist_player_id)?.name})`}</>}
                       {e.type === "goal_against" && <>⚽ Goal Tegen</>}
                       {e.type === "substitution" && <>⇄ {playerOut?.name} → {playerIn?.name}</>}
@@ -521,54 +483,13 @@ export default function LiveMatch() {
         )}
       </div>
 
-      {/* Modals / Bottom sheets */}
-      {activeModal === "goal_mva" && (
-        <GoalBottomSheet
-          players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
-          minute={currentMinute}
-          onConfirm={handleEvent}
-          onClose={() => setActiveModal(null)}
-        />
-      )}
-      {activeModal === "goal_against" && (
-        <GoalAgainstModal
-          minute={currentMinute}
-          onConfirm={handleEvent}
-          onClose={() => setActiveModal(null)}
-        />
-      )}
-      {activeModal === "substitution" && (
-        <SubstitutionBottomSheet
-          fieldPlayers={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
-          benchPlayers={currentBenchPlayers}
-          minute={currentMinute}
-          onConfirm={handleEvent}
-          onClose={() => setActiveModal(null)}
-        />
-      )}
-      {activeModal === "note" && (
-        <NoteModal
-          minute={currentMinute}
-          onConfirm={handleEvent}
-          onClose={() => setActiveModal(null)}
-        />
-      )}
-      {activeModal === "yellow_card" && (
-        <YellowCardModal
-          minute={currentMinute}
-          players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
-          onConfirm={handleEvent}
-          onClose={() => setActiveModal(null)}
-        />
-      )}
-      {activeModal === "red_card" && (
-        <RedCardModal
-          minute={currentMinute}
-          players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers}
-          onConfirm={handleEvent}
-          onClose={() => setActiveModal(null)}
-        />
-      )}
+      {/* Modals */}
+      {activeModal === "goal_mva" && <GoalBottomSheet players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers} minute={currentMinute} onConfirm={handleEvent} onClose={() => setActiveModal(null)} />}
+      {activeModal === "goal_against" && <GoalAgainstModal minute={currentMinute} onConfirm={handleEvent} onClose={() => setActiveModal(null)} />}
+      {activeModal === "substitution" && <SubstitutionBottomSheet fieldPlayers={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers} benchPlayers={currentBenchPlayers} minute={currentMinute} onConfirm={handleEvent} onClose={() => setActiveModal(null)} />}
+      {activeModal === "note" && <NoteModal minute={currentMinute} onConfirm={handleEvent} onClose={() => setActiveModal(null)} />}
+      {activeModal === "yellow_card" && <YellowCardModal minute={currentMinute} players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers} onConfirm={handleEvent} onClose={() => setActiveModal(null)} />}
+      {activeModal === "red_card" && <RedCardModal minute={currentMinute} players={currentFieldPlayers.length > 0 ? currentFieldPlayers : activePlayers} onConfirm={handleEvent} onClose={() => setActiveModal(null)} />}
     </div>
   );
 }
