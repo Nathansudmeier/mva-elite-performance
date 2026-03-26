@@ -13,7 +13,9 @@ import LineupOverview from "@/components/wedstrijden/LineupOverview";
 import LineupSelector from "@/components/wedstrijden/LineupSelector";
 import { createPageUrl } from "@/utils";
 
-const TABS = ["Opstelling", "Tactiek", "Selectie"];
+// Trainers zien alle tabs; spelers/ouders zien alleen Opstelling en Selectie
+// (Tactiek is trainer-only)
+// We use dynamic tabs based on role, computed inside the component
 
 export default function PlanningWedstrijdDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -356,6 +358,11 @@ export default function PlanningWedstrijdDetail() {
   const teamCardBg = item.team === "MO17" ? "#00C2FF" : item.team === "Dames 1" ? "#FF3DA8" : "#FF6800";
   const teamTextDark = teamCardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a";
 
+  // Tabs: trainers zien alles, spelers/ouders zien Opstelling + Selectie (geen Tactiek)
+  const TABS = isTrainer
+    ? ["Opstelling", "Tactiek", "Selectie"]
+    : ["Opstelling", "Selectie"];
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "100vw", overflowX: "hidden", boxSizing: "border-box", background: "#FFF3E8", padding: "16px", paddingBottom: "150px", minHeight: "100vh" }}>
 
@@ -529,8 +536,8 @@ export default function PlanningWedstrijdDetail() {
           />
         )}
 
-        {/* Tab: Tactiek */}
-         {activeTab === 1 && (
+        {/* Tab: Tactiek — trainer only */}
+         {isTrainer && activeTab === 1 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {!match ? (
               <div className="glass p-6 md:p-8 text-center" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
@@ -569,8 +576,8 @@ export default function PlanningWedstrijdDetail() {
           </div>
         )}
 
-        {/* Tab: Selectie — always mounted to preserve state */}
-        <div style={{ display: activeTab === 2 ? "block" : "none" }}>
+        {/* Tab: Selectie — always mounted to preserve state. Index 2 for trainers, 1 for spelers/ouders */}
+        <div style={{ display: (isTrainer ? activeTab === 2 : activeTab === 1) ? "block" : "none" }}>
           <SelectieTab
             match={match}
             players={players}
