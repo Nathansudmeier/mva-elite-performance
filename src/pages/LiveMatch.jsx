@@ -52,8 +52,15 @@ export default function LiveMatch() {
 
   useEffect(() => {
     if (match) {
-      const basis = match.basis ? Object.entries(match.basis).reduce((acc, [slot, pid]) => { if (pid) acc[slot] = pid; return acc; }, {}) : {};
-      const wissel = match.wissel || match.substitutes || [];
+      // lineup is stored as array [{slot, player_id}] from PlanningWedstrijdDetail
+      // Support both old format (match.basis object) and new format (match.lineup array)
+      let basis = {};
+      if (match.lineup && Array.isArray(match.lineup) && match.lineup.length > 0) {
+        match.lineup.forEach(({ slot, player_id }) => { if (slot && player_id) basis[slot] = player_id; });
+      } else if (match.basis && typeof match.basis === "object") {
+        basis = Object.entries(match.basis).reduce((acc, [slot, pid]) => { if (pid) acc[slot] = pid; return acc; }, {});
+      }
+      const wissel = match.substitutes || match.wissel || [];
       
       setLineupMap(basis);
       setSubstitutes(wissel);
