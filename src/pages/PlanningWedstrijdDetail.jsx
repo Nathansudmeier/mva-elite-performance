@@ -281,7 +281,6 @@ export default function PlanningWedstrijdDetail() {
     await base44.entities.Match.update(match.id, { lineup: [], substitutes: [] });
     setLineupMap({});
     await qc.invalidateQueries({ queryKey: ["match", item?.match_id] });
-    toast({ description: "Opstelling leeggemaakt", style: { background: "#4ade80", color: "white", border: "none" } });
   }
 
   async function handleReset() {
