@@ -56,10 +56,12 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
   const currentSelection = match?.selection || [];
   const [localSelection, setLocalSelection] = useState(currentSelection);
   const [savedSelection, setSavedSelection] = useState(currentSelection);
-  const [saving, setSaving] = useState(false);
+  // "idle" | "saving" | "saved"
+  const [saveState, setSaveState] = useState("idle");
 
-  // Sync when match loads/changes
+  // Sync when match loads/changes — but not while saving (would overwrite local state)
   React.useEffect(() => {
+    if (saveState === "saving") return;
     const sel = match?.selection || [];
     setLocalSelection(sel);
     setSavedSelection(sel);
@@ -68,15 +70,38 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
   const hasChanges = JSON.stringify([...localSelection].sort()) !== JSON.stringify([...savedSelection].sort());
 
   function togglePlayer(playerId) {
+    setSaveState("idle");
     setLocalSelection(prev =>
       prev.includes(playerId) ? prev.filter(id => id !== playerId) : [...prev, playerId]
     );
   }
 
   async function saveSelection() {
-    if (!match) return;
-    setSaving(true);
-    await base44.entities.Match.update(match.id, { selection: localSelection });
+    if (saveState === "saving") return;
+    setSaveState("saving");
+
+    let matchId = match?.id;
+
+    // Als er nog geen match record is, maak er één aan en koppel het
+    if (!matchId && item) {
+      const newMatch = await base44.entities.Match.create({
+        opponent: item.title,
+        date: item.date,
+        home_away: item.home_away || "Thuis",
+        team: item.team,
+        selection: localSelection,
+      });
+      await base44.entities.AgendaItem.update(item.id, { match_id: newMatch.id });
+      await qc.invalidateQueries({ queryKey: ["agenda-item", item.id] });
+      await qc.invalidateQueries({ queryKey: ["match", newMatch.id] });
+      setSavedSelection([...localSelection]);
+      setSaveState("saved");
+      setTimeout(() => setSaveState("idle"), 2500);
+      return;
+    }
+
+    await base44.entities.Match.update(matchId, { selection: localSelection });
+
     // Notify selected players
     if (localSelection.length > 0) {
       const allUsers = await base44.entities.User.list();
@@ -95,10 +120,11 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
         })
       )).catch(() => {});
     }
-    await qc.invalidateQueries({ queryKey: ["match"] });
+
+    await qc.invalidateQueries({ queryKey: ["match", matchId] });
     setSavedSelection([...localSelection]);
-    setSaving(false);
-    toast({ description: "Selectie opgeslagen", style: { background: "#4ade80", color: "white", border: "none" } });
+    setSaveState("saved");
+    setTimeout(() => setSaveState("idle"), 2500);
   }
 
   const selectedPlayers = players.filter(p => localSelection.includes(p.id));
@@ -164,21 +190,33 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
         </div>
       )}
 
-      {/* Save button */}
-      <button
-        onClick={saveSelection}
-        disabled={saving || !hasChanges}
-        style={{
-          height: 52, borderRadius: 14, background: hasChanges ? "#FF6800" : "rgba(26,26,26,0.10)",
-          color: hasChanges ? "#ffffff" : "rgba(26,26,26,0.35)", border: "2.5px solid " + (hasChanges ? "#1a1a1a" : "rgba(26,26,26,0.15)"),
-          boxShadow: hasChanges ? "3px 3px 0 #1a1a1a" : "none",
-          fontSize: 15, fontWeight: 800, cursor: hasChanges ? "pointer" : "not-allowed",
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-          transition: "all 0.15s",
-        }}
-      >
-        {saving ? "Opslaan..." : "Selectie opslaan"}
-      </button>
+      {/* Save button — three states */}
+      {(() => {
+        const isSaved = saveState === "saved";
+        const isSaving = saveState === "saving";
+        const active = hasChanges || isSaving;
+        const bg = isSaved ? "#08D068" : active ? "#FF6800" : "rgba(26,26,26,0.10)";
+        const color = active || isSaved ? "#ffffff" : "rgba(26,26,26,0.35)";
+        const border = active || isSaved ? "#1a1a1a" : "rgba(26,26,26,0.15)";
+        const shadow = active || isSaved ? "3px 3px 0 #1a1a1a" : "none";
+        const label = isSaving ? "Opslaan..." : isSaved ? "✓ Selectie opgeslagen" : "Selectie opslaan";
+        return (
+          <button
+            onClick={saveSelection}
+            disabled={isSaving || (!hasChanges && !isSaved)}
+            style={{
+              height: 52, borderRadius: 14, background: bg,
+              color, border: "2.5px solid " + border, boxShadow: shadow,
+              fontSize: 15, fontWeight: 800,
+              cursor: (isSaving || (!hasChanges && !isSaved)) ? "not-allowed" : "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              transition: "all 0.2s",
+            }}
+          >
+            {label}
+          </button>
+        );
+      })()}
     </div>
   );
 }
