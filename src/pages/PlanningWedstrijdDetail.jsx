@@ -358,9 +358,9 @@ export default function PlanningWedstrijdDetail() {
   const teamCardBg = item.team === "MO17" ? "#00C2FF" : item.team === "Dames 1" ? "#FF3DA8" : "#FF6800";
   const teamTextDark = teamCardBg === "#FF3DA8" ? "#ffffff" : "#1a1a1a";
 
-  // Tabs: trainers zien alles, spelers/ouders zien Opstelling + Selectie (geen Tactiek)
+  // Tabs: trainers zien alles, spelers/ouders zien Opstelling en Selectie (geen Tactiek/Aanwezigheid)
   const TABS = isTrainer
-    ? ["Opstelling", "Tactiek", "Selectie"]
+    ? ["Opstelling", "Tactiek", "Selectie", "Aanwezigheid"]
     : ["Opstelling", "Selectie"];
 
   return (
@@ -588,6 +588,68 @@ export default function PlanningWedstrijdDetail() {
             teamCardBg={teamCardBg}
           />
         </div>
+
+        {/* Tab: Aanwezigheid — trainer only, index 3 */}
+        {isTrainer && activeTab === 3 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {/* Aanwezig */}
+            {aanwezigList.length > 0 && (
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16 }}>
+                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "#08D068", marginBottom: 10 }}>✓ Aanwezig ({aanwezigList.length})</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {aanwezigList.map(p => (
+                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 10, background: "rgba(8,208,104,0.06)", border: "1.5px solid rgba(8,208,104,0.20)" }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,104,0,0.10)", border: "1.5px solid #1a1a1a" }}>
+                        {p.photo_url ? <img src={p.photo_url} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{p.name?.charAt(0)}</span>}
+                      </div>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{p.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Afwezig */}
+            {afwezigList.length > 0 && (
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16 }}>
+                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "#FF3DA8", marginBottom: 10 }}>✗ Afwezig ({afwezigList.length})</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {afwezigList.map(({ player: p, record }) => (
+                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 10, background: "rgba(255,61,168,0.05)", border: "1.5px solid rgba(255,61,168,0.20)" }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,104,0,0.10)", border: "1.5px solid #1a1a1a" }}>
+                        {p.photo_url ? <img src={p.photo_url} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{p.name?.charAt(0)}</span>}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{p.name}</span>
+                        {record.notes && <p style={{ fontSize: 11, color: "rgba(26,26,26,0.50)", marginTop: 1 }}>{record.notes}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Nog niet gereageerd */}
+            {nognietList.length > 0 && (
+              <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: 16 }}>
+                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.40)", marginBottom: 10 }}>? Nog niet gereageerd ({nognietList.length})</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {nognietList.map(p => (
+                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px", borderRadius: 10, background: "rgba(26,26,26,0.03)", border: "1.5px solid rgba(26,26,26,0.10)" }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,104,0,0.10)", border: "1.5px solid #1a1a1a" }}>
+                        {p.photo_url ? <img src={p.photo_url} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", fontSize: 11, fontWeight: 800, color: "#FF6800" }}>{p.name?.charAt(0)}</span>}
+                      </div>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: "rgba(26,26,26,0.50)" }}>{p.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {aanwezigList.length === 0 && afwezigList.length === 0 && nognietList.length === 0 && (
+              <div className="glass p-6 text-center" style={{ border: "2.5px solid #1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }}>
+                <p style={{ fontSize: 13, color: "rgba(26,26,26,0.40)" }}>Nog geen aanwezigheidsgegevens.</p>
+              </div>
+            )}
+          </div>
+        )}
 
           {showResetConfirm && (
         <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
