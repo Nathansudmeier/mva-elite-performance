@@ -151,18 +151,18 @@ export default function PlayerDashboard() {
       {/* Upcoming Activities Compact */}
       <UpcomingActivitiesCompact playerId={playerId} />
 
-      {/* Today Training Card */}
-      <TodayTrainingCard playerId={playerId} />
-
-      {/* Next Matches */}
-      <NextMatchGrid matches={matches} playerId={playerId} />
-
       {/* Attendance Card */}
       <PlayerAttendanceCard 
         percentage={attendancePercentage} 
         present={playerSeasonAttendance.length} 
         total={totalSeasonTrainings} 
       />
+
+      {/* Today Training Card */}
+      <TodayTrainingCard playerId={playerId} />
+
+      {/* Next Matches */}
+      <NextMatchGrid matches={matches} playerId={playerId} />
 
       {/* IOP Goals */}
       <PlayerIOPGoals player={player} />
