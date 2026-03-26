@@ -187,31 +187,6 @@ export default function PlayerDashboard() {
       {/* Champions Trophy */}
       <PlayerTrophySection players={allPlayers} winningTeams={winningTeams} currentPlayerId={playerId} />
 
-      {/* Radar Chart */}
-      {chartData.length > 0 && radarData.length > 0 && (
-        <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
-          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "12px" }}>Mijn Beoordelingen</p>
-          <ResponsiveContainer width="100%" height={220}>
-            <RadarChart data={chartData}>
-              <PolarGrid stroke="rgba(26,26,26,0.10)" />
-              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: "rgba(26,26,26,0.55)", fontWeight: 700 }} />
-              <Tooltip contentStyle={{ background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "12px", color: "#1a1a1a", boxShadow: "3px 3px 0 #1a1a1a" }} />
-              {radarData.map((r, i) => (
-                <Radar key={r.meting} name={r.meting} dataKey={r.meting} stroke={COLORS[i]} fill={COLORS[i]} fillOpacity={0.15} />
-              ))}
-            </RadarChart>
-          </ResponsiveContainer>
-          <div className="flex gap-4 justify-center mt-2">
-            {radarData.map((r, i) => (
-              <div key={r.meting} className="flex items-center gap-1.5" style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", fontWeight: 700 }}>
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i] }} />
-                {r.meting}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Wellness Log */}
       <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
         <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "14px" }}>Belastbaarheid Invullen</p>
