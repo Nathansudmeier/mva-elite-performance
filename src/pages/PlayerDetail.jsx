@@ -243,17 +243,6 @@ export default function PlayerDetail() {
       {/* Seizoensstatistieken */}
       <PlayerSeasonStats playerId={playerId} variant="compact" />
 
-      {/* Attendance */}
-      {attendance.length > 0 && (
-        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
-          <p className="t-label" style={{ marginBottom: "12px" }}>Aanwezigheid</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "12px" }}>
-            <span style={{ fontSize: "34px", fontWeight: 900, color: "#FF6800", lineHeight: 1 }}>{attendancePct}%</span>
-            <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.55)" }}>{presentCount} van {attendance.length} sessies</p>
-          </div>
-        </div>
-      )}
-
       {/* Wellness */}
       {wellness.length > 0 && (
         <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
