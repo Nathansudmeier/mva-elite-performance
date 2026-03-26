@@ -8,6 +8,7 @@ import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
 import PlayerDashboard from './pages/PlayerDashboard.jsx';
 import AccountBeheer from './pages/AccountBeheer.jsx';
+import LiveMatch from './pages/LiveMatch.jsx';
 import Spelprincipes from './pages/Spelprincipes.jsx';
 import MijnReflecties from './pages/MijnReflecties.jsx';
 import Agenda from './pages/Agenda.jsx';
@@ -22,6 +23,7 @@ import Planning from './pages/Planning.jsx';
 import PlanningTrainingDetail from './pages/PlanningTrainingDetail.jsx';
 import PlanningWedstrijdDetail from './pages/PlanningWedstrijdDetail.jsx';
 import DashboardRouter from './pages/DashboardRouter.jsx';
+import LiveTracker from './pages/LiveTracker.jsx';
 import ImportTrainingAttendance from './pages/ImportTrainingAttendance.jsx';
 import Trainingsvormen from './pages/Trainingsvormen.jsx';
 import TrainingsvormDetail from './pages/TrainingsvormDetail.jsx';
@@ -29,6 +31,7 @@ import TrainingsvormForm from './pages/TrainingsvormForm.jsx';
 import MatchResults from './pages/MatchResults.jsx';
 import Photowall from './pages/Photowall.jsx';
 import OuderDashboard from './pages/OuderDashboard';
+import LiveMatchViewer from './pages/LiveMatchViewer.jsx';
 import PendingAccess from './pages/PendingAccess';
 import EmviFeedback from './pages/EmviFeedback';
 import FeedbackOverview from './pages/FeedbackOverview';
@@ -71,7 +74,9 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-
+      <Route path="/LiveMatch" element={<LayoutWrapper currentPageName="Wedstrijden"><LiveMatch /></LayoutWrapper>} />
+      <Route path="/live/:matchId" element={<LiveMatchViewer />} />
+      <Route path="/live" element={<LiveTracker />} />
       <Route path="/" element={
         <LayoutWrapper currentPageName="Dashboard">
           <DashboardRouter />
