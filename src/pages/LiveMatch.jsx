@@ -52,13 +52,13 @@ export default function LiveMatch() {
 
   useEffect(() => {
     if (match) {
-      // lineup is stored as array [{slot, player_id}] from PlanningWedstrijdDetail
-      // Support both old format (match.basis object) and new format (match.lineup array)
+      // lineup = array [{slot, player_id}], substitutes = array van player IDs
       let basis = {};
-      if (match.lineup && Array.isArray(match.lineup) && match.lineup.length > 0) {
+      if (Array.isArray(match.lineup)) {
         match.lineup.forEach(({ slot, player_id }) => { if (slot && player_id) basis[slot] = player_id; });
-      } else if (match.basis && typeof match.basis === "object") {
-        basis = Object.entries(match.basis).reduce((acc, [slot, pid]) => { if (pid) acc[slot] = pid; return acc; }, {});
+      } else if (match.lineup && typeof match.lineup === "object") {
+        // legacy object formaat
+        Object.entries(match.lineup).forEach(([slot, pid]) => { if (pid) basis[slot] = pid; });
       }
       const wissel = match.substitutes || match.wissel || [];
       
