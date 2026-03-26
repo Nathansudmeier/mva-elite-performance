@@ -102,23 +102,25 @@ export default function SelectieTab({ match, players, isTrainer, item, qc, toast
 
     await base44.entities.Match.update(matchId, { selection: localSelection });
 
-    // Notify selected players
+    // Notify selected players via backend function (avoids direct User.list permission issue)
     if (localSelection.length > 0) {
-      const allUsers = await base44.entities.User.list();
-      const selectedPlayerObjs = players.filter(p => localSelection.includes(p.id));
-      const emails = allUsers
-        .filter(u => selectedPlayerObjs.some(p => p.name === u.full_name || p.id === u.player_id))
-        .map(u => u.email).filter(Boolean);
-      await Promise.all([...new Set(emails)].map(email =>
-        base44.entities.Notification.create({
-          user_email: email,
-          type: "selectie",
-          title: "Selectie bekend",
-          body: `Je bent geselecteerd voor ${item?.title}`,
-          is_read: false,
-          link: `/PlanningWedstrijdDetail?id=${item?.id}`,
-        })
-      )).catch(() => {});
+      base44.functions.invoke("getAllUsers", {}).then(res => {
+        const allUsers = Array.isArray(res?.data) ? res.data : [];
+        const selectedPlayerObjs = players.filter(p => localSelection.includes(p.id));
+        const emails = allUsers
+          .filter(u => selectedPlayerObjs.some(p => p.name === u.full_name || p.id === u.player_id))
+          .map(u => u.email).filter(Boolean);
+        return Promise.all([...new Set(emails)].map(email =>
+          base44.entities.Notification.create({
+            user_email: email,
+            type: "selectie",
+            title: "Selectie bekend",
+            body: `Je bent geselecteerd voor ${item?.title}`,
+            is_read: false,
+            link: `/PlanningWedstrijdDetail?id=${item?.id}`,
+          })
+        ));
+      }).catch(() => {});
     }
 
     await qc.invalidateQueries({ queryKey: ["match", matchId] });
