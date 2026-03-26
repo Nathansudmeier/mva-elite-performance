@@ -373,7 +373,7 @@ function GroupEditor({ group, players, colorMap, getAssignedGroup, onChange, onR
                 const blockedByOther = assigned && !inThisGroup;
                 return (
                   <label
-                    key={player.id}
+                    key={`${group.id}-${player.id}`}
                     style={{ display: "flex", alignItems: "center", gap: "10px", padding: "0 12px", minHeight: "48px", opacity: blockedByOther ? 0.4 : 1, cursor: blockedByOther ? "not-allowed" : "pointer", borderBottom: "1px solid rgba(26,26,26,0.06)" }}
                   >
                     <input
