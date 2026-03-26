@@ -76,7 +76,7 @@ export default function DailyFeelingCheck({ playerId }) {
       <div>
         <p className="t-section-title" style={{ color: "#ffffff", marginBottom: "8px" }}>Hoe voel je je vandaag?</p>
         <p className="t-secondary" style={{ color: "rgba(255,255,255,0.80)", marginBottom: "14px" }}>
-          Geef je dagelijks stemming aan
+          Geef aan hoe je je voelt voor de training
         </p>
         
         {/* Star rating */}
