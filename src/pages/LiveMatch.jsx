@@ -52,15 +52,19 @@ export default function LiveMatch() {
 
   useEffect(() => {
     if (match) {
-      // lineup = array [{slot, player_id}], substitutes = array van player IDs
+      // lineup = array [{player_id, slot}] waarbij slot "basis" of "wissel" is
+      // Basisspelers: slot === "basis", wissels: slot === "wissel"
       let basis = {};
+      let wisselIds = [];
       if (Array.isArray(match.lineup)) {
-        match.lineup.forEach(({ slot, player_id }) => { if (slot && player_id) basis[slot] = player_id; });
-      } else if (match.lineup && typeof match.lineup === "object") {
-        // legacy object formaat
-        Object.entries(match.lineup).forEach(([slot, pid]) => { if (pid) basis[slot] = pid; });
+        match.lineup
+          .filter(e => e.slot === "basis" && e.player_id)
+          .forEach((e, i) => { basis[`POS${i}`] = e.player_id; });
+        wisselIds = match.lineup
+          .filter(e => e.slot === "wissel" && e.player_id)
+          .map(e => e.player_id);
       }
-      const wissel = match.substitutes || match.wissel || [];
+      const wissel = wisselIds.length > 0 ? wisselIds : (match.substitutes || match.wissel || []);
       
       setLineupMap(basis);
       setSubstitutes(wissel);
