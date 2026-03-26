@@ -68,10 +68,11 @@ export default function PlanningWedstrijdDetail() {
 
   // Load linked match data if present
   const { data: match } = useQuery({
-    queryKey: ["match", item?.match_id],
+    queryKey: ["match", item?.match_id, item?.id],
+    staleTime: 0,
     queryFn: async () => {
       // Try by match_id first, then fall back to searching by opponent+date
-      let r = await base44.entities.Match.filter({ id: item.match_id });
+      let r = item?.match_id ? await base44.entities.Match.filter({ id: item.match_id }) : [];
       if (!r.length) r = await base44.entities.Match.filter({ opponent: item.title, date: item.date });
       const m = r[0];
       if (m) {
@@ -95,7 +96,8 @@ export default function PlanningWedstrijdDetail() {
   const myPlayer = playerId ? players.find(p => p.id === playerId) : null;
   const myAttendance = playerId ? attendance.find(a => a.player_id === playerId) : null;
   const today = new Date().toISOString().split("T")[0];
-  const isFuture = item?.date >= today;
+  const isFuture = item?.date > today;       // strictly future = opstelling hidden
+  const isMatchDay = item?.date === today;   // today = opstelling zichtbaar
 
   const rsvpMutation = useMutation({
     mutationFn: async ({ status, reason }) => {
