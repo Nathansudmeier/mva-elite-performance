@@ -127,7 +127,12 @@ export default function PlanningTrainingDetail() {
   }
 
   const cfg = TYPE_CONFIG["Training"];
-  const aanwezigList = attendance.filter(a => a.status === "aanwezig").map(a => players.find(p => p.id === a.player_id)).filter(Boolean);
+  const aanwezigList = Array.from(new Map(
+    attendance.filter(a => a.status === "aanwezig")
+      .map(a => players.find(p => p.id === a.player_id))
+      .filter(Boolean)
+      .map(p => [p.id, p])
+  ).values());
   const afwezigList = attendance.filter(a => a.status === "afwezig").map(a => ({ player: players.find(p => p.id === a.player_id), record: a })).filter(x => x.player);
   const respondedIds = new Set(attendance.map(a => a.player_id));
   const nognietList = players.filter(p => !respondedIds.has(p.id));
