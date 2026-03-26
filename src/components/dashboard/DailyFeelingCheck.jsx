@@ -6,7 +6,7 @@ import { Star } from "lucide-react";
 
 const EMVI_IMAGE = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/17362aae0_Emvi-point.png";
 
-export default function DailyFeelingCheck({ playerId }) {
+export default function DailyFeelingCheck({ playerId, agendaItems = [] }) {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
@@ -38,6 +38,15 @@ export default function DailyFeelingCheck({ playerId }) {
 
   // Don't show if already answered today
   if (todayFeeling) {
+    return null;
+  }
+
+  // Check if there's a training today
+  const trainingToday = agendaItems.some(
+    item => item.type === "Training" && item.date === today
+  );
+
+  if (!trainingToday) {
     return null;
   }
 

@@ -152,8 +152,8 @@ export default function PlayerDashboard() {
       {/* Upcoming Activities Compact */}
       <UpcomingActivitiesCompact playerId={playerId} />
 
-      {/* Daily Feeling Check */}
-      <DailyFeelingCheck playerId={playerId} />
+      {/* Daily Feeling Check - Only on training days */}
+      <DailyFeelingCheck playerId={playerId} agendaItems={agendaItems} />
 
       {/* Attendance Card */}
       <PlayerAttendanceCard 
