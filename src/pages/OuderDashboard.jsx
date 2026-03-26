@@ -271,13 +271,22 @@ export default function OuderDashboard() {
                 }}>
                   {match.home_away}
                 </div>
-                {childPlayerId && match.selection?.includes(childPlayerId) && (
+                {childPlayerId && match.substitutes?.length > 0 && match.substitutes.includes(childPlayerId) && (
                   <div style={{
                     background: "#08D068", border: "1.5px solid rgba(255,255,255,0.30)",
                     color: "#ffffff", borderRadius: "20px", padding: "2px 8px",
                     fontSize: "10px", fontWeight: 800, flexShrink: 0
                   }}>
-                    ✓ Ingedeeld
+                    ✓ Geselecteerd
+                  </div>
+                )}
+                {childPlayerId && match.substitutes?.length > 0 && !match.substitutes.includes(childPlayerId) && (
+                  <div style={{
+                    background: "rgba(255,61,168,0.20)", border: "1.5px solid rgba(255,255,255,0.20)",
+                    color: "#FF3DA8", borderRadius: "20px", padding: "2px 8px",
+                    fontSize: "10px", fontWeight: 800, flexShrink: 0
+                  }}>
+                    Niet geselecteerd
                   </div>
                 )}
               </div>

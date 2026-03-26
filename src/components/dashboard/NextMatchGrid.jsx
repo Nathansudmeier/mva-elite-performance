@@ -30,7 +30,8 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
     ? allMatchesForCard.find(m => m.id === nextMatch.match_id)
     : allMatchesForCard.find(m => m.date === nextMatch?.date && m.team === team);
 
-  const isInSelection = !!playerId && !!(linkedMatch?.selection?.includes(playerId));
+  const hasSelection = !!(linkedMatch?.substitutes?.length > 0);
+  const isInSelection = !!playerId && !!(linkedMatch?.substitutes?.includes(playerId));
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -166,13 +167,22 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-            {isInSelection && (
+            {hasSelection && isInSelection && (
               <div style={{
                 background: "#08D068", border: "1.5px solid #1a1a1a",
                 color: "#ffffff", borderRadius: "20px", padding: "3px 10px",
                 fontSize: "10px", fontWeight: 800, boxShadow: "1px 1px 0 #1a1a1a",
               }}>
-                ✓ Ingedeeld
+                ✓ Geselecteerd
+              </div>
+            )}
+            {hasSelection && !isInSelection && playerId && (
+              <div style={{
+                background: "rgba(255,61,168,0.12)", border: "1.5px solid #FF3DA8",
+                color: "#FF3DA8", borderRadius: "20px", padding: "3px 10px",
+                fontSize: "10px", fontWeight: 800,
+              }}>
+                Niet geselecteerd
               </div>
             )}
           </div>
