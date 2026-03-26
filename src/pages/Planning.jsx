@@ -56,7 +56,11 @@ export default function Planning() {
   }, [searchParams, items]);
 
   const today = new Date().toISOString().split("T")[0];
-  const sorted = [...items].sort((a, b) => a.date.localeCompare(b.date));
+  const sorted = [...items].sort((a, b) => {
+    const dateCompare = a.date.localeCompare(b.date);
+    if (dateCompare !== 0) return dateCompare;
+    return (a.start_time || "00:00").localeCompare(b.start_time || "00:00");
+  });
   
   // Filter by type
   const filtered = typeFilter === "alles" 
