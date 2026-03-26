@@ -19,14 +19,18 @@ function MatchCard({ team, teamLabel, nextMatch, showCheckIn: showCheckInProp, p
     enabled: !!playerId,
   });
 
-  // Fetch the linked match to check selection
-  const { data: linkedMatch } = useQuery({
-    queryKey: ["linked-match", nextMatch?.match_id],
-    queryFn: () => base44.entities.Match.get(nextMatch.match_id),
-    enabled: !!nextMatch?.match_id,
+  // Fetch all matches to find the linked one (by match_id or by date+team fallback)
+  const { data: allMatchesForCard = [] } = useQuery({
+    queryKey: ["matches-for-card"],
+    queryFn: () => base44.entities.Match.list("-date"),
+    enabled: !!nextMatch,
   });
 
-  const isInSelection = !!playerId && !!linkedMatch?.selection?.includes(playerId);
+  const linkedMatch = nextMatch?.match_id
+    ? allMatchesForCard.find(m => m.id === nextMatch.match_id)
+    : allMatchesForCard.find(m => m.date === nextMatch?.date && m.team === team);
+
+  const isInSelection = !!playerId && !!(linkedMatch?.selection?.includes(playerId));
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
