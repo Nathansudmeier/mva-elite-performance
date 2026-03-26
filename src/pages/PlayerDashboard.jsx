@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, Tooltip } from "recharts";
-import { Star, Save } from "lucide-react";
+import { Star } from "lucide-react";
 import DashboardBackground from "../components/dashboard/DashboardBackground";
 import PlayerGreetingHeader from "../components/dashboard/PlayerGreetingHeader";
 import PlayerMetricGrid from "../components/dashboard/PlayerMetricGrid";
@@ -37,11 +33,6 @@ export default function PlayerDashboard() {
   const { user, playerId } = useCurrentUser();
   const queryClient = useQueryClient();
   const { data: liveMatches = [] } = useLiveMatches();
-
-  const [wellnessForm, setWellnessForm] = useState({
-    date: new Date().toISOString().split("T")[0],
-    sleep: "", fatigue: "", muscle_pain: "", notes: ""
-  });
 
   const { data: player } = useQuery({
     queryKey: ["myPlayer", playerId],
@@ -116,14 +107,6 @@ export default function PlayerDashboard() {
     : 0;
   const totalSeasonTrainings = allSeasonTrainings.length;
 
-  const saveWellness = useMutation({
-    mutationFn: () => base44.entities.WellnessLog.create({ ...wellnessForm, player_id: playerId, sleep: Number(wellnessForm.sleep), fatigue: Number(wellnessForm.fatigue), muscle_pain: Number(wellnessForm.muscle_pain) }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["myWellness"]);
-      setWellnessForm({ date: new Date().toISOString().split("T")[0], sleep: "", fatigue: "", muscle_pain: "", notes: "" });
-    }
-  });
-
   const radarData = ["Meting 1", "Meting 2", "Meting 3"].map(m => {
     const r = ratings.find(x => x.meting === m);
     if (!r) return null;
@@ -186,34 +169,6 @@ export default function PlayerDashboard() {
 
       {/* Champions Trophy */}
       <PlayerTrophySection players={allPlayers} winningTeams={winningTeams} currentPlayerId={playerId} />
-
-      {/* Wellness Log */}
-      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
-        <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "14px" }}>Belastbaarheid Invullen</p>
-        <div className="space-y-3">
-          <Input type="date" value={wellnessForm.date} onChange={e => setWellnessForm(f => ({ ...f, date: e.target.value }))}
-            style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "12px", padding: "10px 14px", fontSize: "14px" }} />
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { key: "sleep", label: "Slaap (1-5)" },
-              { key: "fatigue", label: "Vermoeidheid" },
-              { key: "muscle_pain", label: "Spierpijn" },
-            ].map(({ key, label }) => (
-              <div key={key}>
-                <label style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.55)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: "6px" }}>{label}</label>
-                <Input type="number" min="1" max="5" value={wellnessForm[key]} onChange={e => setWellnessForm(f => ({ ...f, [key]: e.target.value }))}
-                  style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "12px" }} />
-              </div>
-            ))}
-          </div>
-          <Textarea placeholder="Opmerkingen (optioneel)" value={wellnessForm.notes} onChange={e => setWellnessForm(f => ({ ...f, notes: e.target.value }))}
-            style={{ background: "#ffffff", border: "2px solid #1a1a1a", color: "#1a1a1a", borderRadius: "12px" }} rows={2} />
-          <button onClick={() => saveWellness.mutate()} disabled={saveWellness.isPending || !wellnessForm.sleep} className="btn-primary">
-            <Save size={14} />
-            {saveWellness.isPending ? "Opslaan..." : "Belastbaarheid Opslaan"}
-          </button>
-        </div>
-      </div>
 
     </div>
   );
