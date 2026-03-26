@@ -1,0 +1,24 @@
+{
+  "name": "DailyFeeling",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Reference to Player"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the feeling check"
+    },
+    "rating": {
+      "type": "number",
+      "description": "Rating from 1 to 5 stars"
+    }
+  },
+  "required": [
+    "player_id",
+    "date",
+    "rating"
+  ]
+}

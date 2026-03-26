@@ -17,6 +17,7 @@ import { nl } from "date-fns/locale";
 import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
 import { useLiveMatches } from "@/hooks/useLiveMatches";
 import GreetingWithEmvi from "@/components/dashboard/GreetingWithEmvi";
+import DailyFeelingOverview from "@/components/dashboard/DailyFeelingOverview";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -203,6 +204,9 @@ export default function Dashboard() {
 
       {/* ── VOLGENDE WEDSTRIJDEN ── */}
       <NextMatchGrid matches={matches} agendaItems={agendaItems} playerId={null} />
+
+      {/* Daily Feeling Overview */}
+      <DailyFeelingOverview />
 
       {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }} className="mobile-grid-2col">

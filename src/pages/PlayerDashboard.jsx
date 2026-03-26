@@ -17,6 +17,7 @@ import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
 import { useLiveMatches } from "@/hooks/useLiveMatches";
 import PlayerAttendanceCard from "@/components/dashboard/PlayerAttendanceCard";
 import PlayerMergedGreeting from "@/components/dashboard/PlayerMergedGreeting";
+import DailyFeelingCheck from "@/components/dashboard/DailyFeelingCheck";
 import { subDays, isAfter } from "date-fns";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
@@ -150,6 +151,9 @@ export default function PlayerDashboard() {
 
       {/* Upcoming Activities Compact */}
       <UpcomingActivitiesCompact playerId={playerId} />
+
+      {/* Daily Feeling Check */}
+      <DailyFeelingCheck playerId={playerId} />
 
       {/* Attendance Card */}
       <PlayerAttendanceCard 
