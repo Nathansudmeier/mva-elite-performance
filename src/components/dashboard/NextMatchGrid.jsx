@@ -217,13 +217,31 @@ export default function NextMatchGrid({ matches = [], agendaItems: agendaItemsPr
   const source = agendaWedstrijden.length > 0 ? agendaWedstrijden : matches;
   const futureMatches = source.filter((m) => parseISO(m.date) >= today);
 
-  const nextMO17 = futureMatches.filter((m) => m.team === "MO17").sort((a, b) => a.date > b.date ? 1 : -1)[0] || null;
-  const nextDames = futureMatches.filter((m) => m.team === "Dames 1").sort((a, b) => a.date > b.date ? 1 : -1)[0] || null;
+  const sortByDatetime = (a, b) => {
+    const dateA = `${a.date}T${a.start_time || "00:00"}`;
+    const dateB = `${b.date}T${b.start_time || "00:00"}`;
+    return dateA.localeCompare(dateB);
+  };
+
+  const nextMO17 = futureMatches.filter((m) => m.team === "MO17").sort(sortByDatetime)[0] || null;
+  const nextDames = futureMatches.filter((m) => m.team === "Dames 1").sort(sortByDatetime)[0] || null;
+
+  // Bepaal volgorde: team met de vroegste wedstrijd staat bovenaan/links
+  const mo17DateTime = nextMO17 ? `${nextMO17.date}T${nextMO17.start_time || "00:00"}` : "9999";
+  const damesDateTime = nextDames ? `${nextDames.date}T${nextDames.start_time || "00:00"}` : "9999";
+  const mo17First = mo17DateTime <= damesDateTime;
+
+  const firstCard = mo17First
+    ? <MatchCard team="MO17" teamLabel="MO17" nextMatch={nextMO17} showCheckIn={!!playerId} playerId={playerId} />
+    : <MatchCard team="Dames 1" teamLabel="VR1" nextMatch={nextDames} showCheckIn={!!playerId} playerId={playerId} />;
+  const secondCard = mo17First
+    ? <MatchCard team="Dames 1" teamLabel="VR1" nextMatch={nextDames} showCheckIn={!!playerId} playerId={playerId} />
+    : <MatchCard team="MO17" teamLabel="MO17" nextMatch={nextMO17} showCheckIn={!!playerId} playerId={playerId} />;
 
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
-      <MatchCard team="MO17" teamLabel="MO17" nextMatch={nextMO17} showCheckIn={!!playerId} playerId={playerId} />
-      <MatchCard team="Dames 1" teamLabel="VR1" nextMatch={nextDames} showCheckIn={!!playerId} playerId={playerId} />
+      {firstCard}
+      {secondCard}
     </div>
   );
 }
