@@ -65,26 +65,32 @@ export default function PlayerMetricGrid({ yoyo, physical, attendance, agendaAtt
   const agendaTotal = agendaAttendance.filter(a => a.status !== "onbekend").length;
   const confirmationPct = agendaTotal > 0 ? Math.round((agendaConfirmed / agendaTotal) * 100) : null;
 
-  // Speelminuten (total from finished matches)
+  // Speelminuten (total from finished matches with actual live_events data)
   let totalMinutes = null;
-  let firstMatchMinutes = null;
   if (matches && playerId) {
     const finished = matches.filter(m => m.live_status === "finished");
     let total = 0;
+    let participated = false;
     finished.forEach(match => {
       const lineup = match.lineup || [];
       const events = match.live_events || [];
-      const started = lineup.some(l => l.player_id === playerId);
+      // Only count matches that actually have live event data recorded
+      if (events.length === 0 && lineup.length === 0) return;
+      const startedInBasis = lineup.some(l => l.slot === "basis" && l.player_id === playerId);
       const subIn = events.find(e => e.type === "substitution" && e.player_in_id === playerId);
       const subOut = events.find(e => e.type === "substitution" && e.player_out_id === playerId);
-      if (started) {
-        total += subOut ? Math.floor(subOut.minute / 60) : 90;
-      } else if (subIn) {
-        const start = Math.floor(subIn.minute / 60);
-        total += Math.max(0, (subOut ? Math.floor(subOut.minute / 60) : 90) - start);
+      if (startedInBasis || subIn) {
+        participated = true;
+        const matchDuration = match.team === "MO17" ? 80 : 90;
+        if (startedInBasis) {
+          total += subOut ? subOut.minute : matchDuration;
+        } else if (subIn) {
+          const start = subIn.minute;
+          total += Math.max(0, (subOut ? subOut.minute : matchDuration) - start);
+        }
       }
     });
-    totalMinutes = finished.length > 0 ? total : null;
+    totalMinutes = participated ? total : null;
   }
 
   const metrics = [
