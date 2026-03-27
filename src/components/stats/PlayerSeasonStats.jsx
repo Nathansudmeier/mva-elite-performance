@@ -129,7 +129,6 @@ export default function PlayerSeasonStats({ playerId, variant = "grid" }) {
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       {/* Big Stats Cards - 2x2 Grid */}
       <div>
-        <p className="t-label" style={{ marginBottom: "12px", color: "rgba(26,26,26,0.50)" }}>Seizoensstatistieken</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
           {[
             { label: "Goals", value: goals, bg: "#4ade80" },
