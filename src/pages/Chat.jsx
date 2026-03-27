@@ -17,7 +17,7 @@ export default function Chat() {
 
   const [messageText, setMessageText] = useState("");
   const [photoFile, setPhotoFile] = useState(null);
-  const [hoveredMessageId, setHoveredMessageId] = useState(null);
+  const [pressedMessageId, setPressedMessageId] = useState(null);
 
   const { data: chat } = useQuery({
     queryKey: ["chat", chatId],
@@ -64,26 +64,17 @@ export default function Chat() {
 
   const deleteMessageMutation = useMutation({
     mutationFn: (messageId) => base44.entities.ChatMessage.update(messageId, { is_deleted: true }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["chatMessages", chatId]);
-    },
+    onSuccess: () => queryClient.invalidateQueries(["chatMessages", chatId]),
   });
 
   const updateReadTimeMutation = useMutation({
     mutationFn: async () => {
-      const member = await base44.entities.ChatMember.filter({
-        chat_id: chatId,
-        user_email: user.email,
-      });
+      const member = await base44.entities.ChatMember.filter({ chat_id: chatId, user_email: user.email });
       if (member.length > 0) {
-        return base44.entities.ChatMember.update(member[0].id, {
-          last_read_time: new Date().toISOString(),
-        });
+        return base44.entities.ChatMember.update(member[0].id, { last_read_time: new Date().toISOString() });
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["chatMembers", user?.email]);
-    },
+    onSuccess: () => queryClient.invalidateQueries(["chatMembers", user?.email]),
   });
 
   useEffect(() => {
@@ -95,187 +86,249 @@ export default function Chat() {
   }, [chatId]);
 
   const handleSend = () => {
-    if (messageText.trim() || photoFile) {
-      sendMessageMutation.mutate();
-    }
-  };
-
-  const handleDeleteMessage = (messageId, senderEmail) => {
-    if (isTrainer || senderEmail === user.email) {
-      deleteMessageMutation.mutate(messageId);
-    }
+    if (messageText.trim() || photoFile) sendMessageMutation.mutate();
   };
 
   const canDelete = (senderEmail) => isTrainer || senderEmail === user.email;
   const sortedMessages = [...messages].sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
   const formatTime = (date) => new Date(date).toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
 
+  const isOwn = (msg) => msg.sender_email === user.email;
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: "#FFF3E8" }}>
+    <div style={{
+      display: "flex", flexDirection: "column",
+      height: "100dvh", background: "#FFF3E8",
+      position: "fixed", inset: 0, zIndex: 10,
+    }}>
       {/* Header */}
-      <div style={{ background: "#ffffff", borderBottom: "2.5px solid #1a1a1a", padding: "12px 16px", position: "sticky", top: 0, zIndex: 20 }}>
+      <div style={{
+        background: "#ffffff",
+        borderBottom: "2.5px solid #1a1a1a",
+        padding: "12px 16px",
+        paddingTop: "calc(12px + env(safe-area-inset-top))",
+        flexShrink: 0,
+      }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px", maxWidth: "720px", margin: "0 auto" }}>
-          <button onClick={() => navigate("/Messages")} style={{ width: "40px", height: "40px", borderRadius: "10px", background: "transparent", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <button
+            onClick={() => navigate("/Messages")}
+            style={{
+              width: "40px", height: "40px", borderRadius: "12px",
+              background: "#ffffff", border: "2.5px solid #1a1a1a",
+              boxShadow: "2px 2px 0 #1a1a1a",
+              display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
+            }}
+          >
             <ArrowLeft size={18} color="#1a1a1a" />
           </button>
-          <h1 className="t-page-title" style={{ flex: 1, margin: 0 }}>{chat?.name}</h1>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <h1 className="t-page-title" style={{ margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {chat?.name || "Chat"}
+            </h1>
+          </div>
         </div>
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px", maxWidth: "720px", width: "100%", margin: "0 auto", display: "flex", flexDirection: "column", gap: "10px" }}>
-        {sortedMessages.map((message) => (
-          <div
-            key={message.id}
-            onMouseEnter={() => setHoveredMessageId(message.id)}
-            onMouseLeave={() => setHoveredMessageId(null)}
-            style={{ display: "flex", gap: "8px", justifyContent: message.sender_email === user.email ? "flex-end" : "flex-start" }}
-          >
-            {message.sender_email !== user.email && (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", flexShrink: 0 }}>
-                <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#FF6800", border: "1.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 800, color: "#ffffff" }}>
-                  {message.sender_name?.[0]?.toUpperCase()}
-                </div>
-                <span style={{ fontSize: "10px", color: "rgba(26,26,26,0.40)", fontWeight: 700 }}>{message.sender_name}</span>
-              </div>
-            )}
+      <div style={{
+        flex: 1, overflowY: "auto",
+        padding: "16px",
+        display: "flex", flexDirection: "column", gap: "6px",
+      }}>
+        <div style={{ maxWidth: "720px", width: "100%", margin: "0 auto", display: "flex", flexDirection: "column", gap: "6px" }}>
+          {sortedMessages.map((message, i) => {
+            const own = isOwn(message);
+            const prevMsg = sortedMessages[i - 1];
+            const showAvatar = !own && (!prevMsg || prevMsg.sender_email !== message.sender_email);
 
-            <div style={{ maxWidth: "280px", display: "flex", flexDirection: "column", gap: "4px", flex: message.sender_email !== user.email ? "0 0 auto" : "0 1 auto" }}>
-              {message.sender_email !== user.email && (
-                <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", fontWeight: 700, marginBottom: "2px" }}>{message.sender_name}</p>
-              )}
-
+            return (
               <div
-                style={{
-                  position: "relative",
-                  background: message.sender_email === user.email ? "#FF6800" : "#ffffff",
-                  border: "2px solid #1a1a1a",
-                  borderRadius: message.sender_email === user.email ? "14px 14px 4px 14px" : "14px 14px 14px 4px",
-                  boxShadow: "2px 2px 0 #1a1a1a",
-                  padding: "10px 13px",
-                  color: message.sender_email === user.email ? "#ffffff" : "#1a1a1a",
-                  wordBreak: "break-word",
-                  fontSize: "14px",
-                  lineHeight: 1.4,
-                }}
-                onMouseEnter={() => setHoveredMessageId(message.id)}
+                key={message.id}
+                style={{ display: "flex", flexDirection: "column", alignItems: own ? "flex-end" : "flex-start", gap: "2px" }}
               >
-                {message.text}
-                {message.image_url && (
-                  <img src={message.image_url} alt="attachment" style={{ marginTop: "8px", borderRadius: "10px", maxWidth: "100%", border: "1.5px solid " + (message.sender_email === user.email ? "rgba(255,255,255,0.3)" : "#1a1a1a") }} />
+                {/* Sender name for others */}
+                {!own && showAvatar && (
+                  <p style={{ fontSize: "11px", fontWeight: 800, color: "rgba(26,26,26,0.45)", marginLeft: "12px", marginBottom: "2px" }}>
+                    {message.sender_name}
+                  </p>
                 )}
 
-                {hoveredMessageId === message.id && canDelete(message.sender_email) && (
-                  <button
-                    onClick={() => handleDeleteMessage(message.id, message.sender_email)}
-                    style={{
-                      position: "absolute",
-                      top: "-12px",
-                      right: "-12px",
-                      width: "28px",
-                      height: "28px",
-                      borderRadius: "50%",
-                      background: "#FF3DA8",
-                      border: "1.5px solid #1a1a1a",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      boxShadow: "1px 1px 0 #1a1a1a",
-                    }}
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", flexDirection: own ? "row-reverse" : "row" }}>
+                  {/* Avatar */}
+                  {!own && (
+                    <div style={{
+                      width: "30px", height: "30px", borderRadius: "50%",
+                      background: "#FF6800", border: "2px solid #1a1a1a",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: "11px", fontWeight: 900, color: "#ffffff", flexShrink: 0,
+                      opacity: showAvatar ? 1 : 0,
+                    }}>
+                      {message.sender_name?.[0]?.toUpperCase()}
+                    </div>
+                  )}
+
+                  {/* Bubble */}
+                  <div
+                    onTouchStart={() => canDelete(message.sender_email) && setPressedMessageId(message.id)}
+                    onTouchEnd={() => setPressedMessageId(null)}
+                    onMouseEnter={() => setPressedMessageId(message.id)}
+                    onMouseLeave={() => setPressedMessageId(null)}
+                    style={{ position: "relative", maxWidth: "calc(100vw - 100px)" }}
                   >
-                    <Trash2 size={13} color="#ffffff" />
-                  </button>
-                )}
+                    <div style={{
+                      background: own ? "#FF6800" : "#ffffff",
+                      border: "2.5px solid #1a1a1a",
+                      borderRadius: own ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+                      boxShadow: "2px 2px 0 #1a1a1a",
+                      padding: "10px 14px",
+                      color: own ? "#ffffff" : "#1a1a1a",
+                      wordBreak: "break-word",
+                      fontSize: "14px",
+                      lineHeight: 1.5,
+                      fontWeight: 500,
+                    }}>
+                      {message.text}
+                      {message.image_url && (
+                        <img
+                          src={message.image_url}
+                          alt="attachment"
+                          style={{
+                            marginTop: "8px", borderRadius: "12px",
+                            maxWidth: "220px", width: "100%",
+                            border: "1.5px solid " + (own ? "rgba(255,255,255,0.3)" : "#1a1a1a"),
+                            display: "block",
+                          }}
+                        />
+                      )}
+                    </div>
+
+                    {/* Delete button on hover/press */}
+                    {pressedMessageId === message.id && canDelete(message.sender_email) && (
+                      <button
+                        onClick={() => deleteMessageMutation.mutate(message.id)}
+                        style={{
+                          position: "absolute", top: "-10px", right: own ? "auto" : "-10px", left: own ? "-10px" : "auto",
+                          width: "26px", height: "26px", borderRadius: "50%",
+                          background: "#FF3DA8", border: "2px solid #1a1a1a",
+                          boxShadow: "1px 1px 0 #1a1a1a",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          cursor: "pointer", zIndex: 5,
+                        }}
+                      >
+                        <Trash2 size={12} color="#ffffff" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Timestamp */}
+                <p style={{
+                  fontSize: "10px", fontWeight: 600,
+                  color: "rgba(26,26,26,0.35)",
+                  marginLeft: own ? 0 : "46px",
+                  marginRight: own ? "4px" : 0,
+                  textAlign: own ? "right" : "left",
+                }}>
+                  {formatTime(message.created_date)}
+                </p>
               </div>
+            );
+          })}
 
-              <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.35)", fontWeight: 600, textAlign: message.sender_email === user.email ? "right" : "left" }}>{formatTime(message.created_date)}</p>
+          {sortedMessages.length === 0 && (
+            <div style={{ textAlign: "center", padding: "40px 20px" }}>
+              <p style={{ fontSize: "32px", marginBottom: "8px" }}>💬</p>
+              <p className="t-section-title">Nog geen berichten</p>
+              <p className="t-secondary" style={{ marginTop: "4px" }}>Stuur het eerste bericht!</p>
             </div>
+          )}
 
-            {message.sender_email === user.email && (
-              <div style={{ width: "32px", flexShrink: 0 }} />
-            )}
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input Bar */}
-      <div
-        style={{
-          position: "sticky",
-          bottom: 0,
-          background: "#FFF3E8",
-          borderTop: "2.5px solid #1a1a1a",
-          padding: "12px 16px 16px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
+      <div style={{
+        background: "#FFF3E8",
+        borderTop: "2.5px solid #1a1a1a",
+        padding: "10px 16px",
+        paddingBottom: "calc(10px + env(safe-area-inset-bottom))",
+        flexShrink: 0,
+      }}>
+        {/* Photo preview */}
         {photoFile && (
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "#ffffff", border: "1.5px solid rgba(26,26,26,0.15)", borderRadius: "10px", padding: "8px 12px" }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: "8px",
+            background: "#ffffff", border: "2px solid #1a1a1a",
+            borderRadius: "12px", padding: "8px 12px", marginBottom: "8px",
+            boxShadow: "2px 2px 0 #1a1a1a",
+          }}>
             <span style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a", flex: 1 }}>📸 {photoFile.name}</span>
-            <button onClick={() => setPhotoFile(null)} style={{ background: "transparent", border: "none", color: "#FF3DA8", cursor: "pointer", fontSize: "14px", fontWeight: 700 }}>✕</button>
+            <button onClick={() => setPhotoFile(null)} style={{ background: "transparent", border: "none", color: "#FF3DA8", cursor: "pointer", fontSize: "16px", fontWeight: 900, lineHeight: 1 }}>✕</button>
           </div>
         )}
-        <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", maxWidth: "720px", margin: "0 auto", width: "100%" }}>
-          <label style={{ cursor: "pointer", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <Image size={18} color="rgba(26,26,26,0.40)" />
+
+        <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", maxWidth: "720px", margin: "0 auto" }}>
+          {/* Image attach */}
+          <label style={{
+            width: "44px", height: "44px", flexShrink: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: "#ffffff", border: "2.5px solid #1a1a1a",
+            borderRadius: "12px", boxShadow: "2px 2px 0 #1a1a1a",
+            cursor: "pointer",
+          }}>
+            <Image size={18} color="rgba(26,26,26,0.55)" />
             <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files?.[0])} />
           </label>
 
+          {/* Text input */}
           <textarea
             ref={textInputRef}
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
+              if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
+            }}
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
             }}
             placeholder="Stuur een bericht..."
             rows={1}
             style={{
               flex: 1,
               background: "#ffffff",
-              border: "2px solid #1a1a1a",
+              border: "2.5px solid #1a1a1a",
               borderRadius: "14px",
-              padding: "9px 12px",
+              padding: "10px 14px",
               color: "#1a1a1a",
-              fontSize: "14px",
+              fontSize: "15px",
               fontWeight: 500,
               maxHeight: "100px",
               fontFamily: "inherit",
               resize: "none",
               outline: "none",
-            }}
-            onInput={(e) => {
-              e.target.style.height = "auto";
-              e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
+              lineHeight: 1.4,
             }}
           />
 
+          {/* Send button */}
           <button
             onClick={handleSend}
-            disabled={!messageText.trim() && !photoFile || sendMessageMutation.isPending}
+            disabled={(!messageText.trim() && !photoFile) || sendMessageMutation.isPending}
             style={{
-              width: "40px",
-              height: "40px",
+              width: "44px", height: "44px", flexShrink: 0,
               borderRadius: "12px",
-              background: messageText.trim() || photoFile ? "#FF6800" : "#ffffff",
-              border: "2px solid #1a1a1a",
+              background: (messageText.trim() || photoFile) ? "#FF6800" : "#ffffff",
+              border: "2.5px solid #1a1a1a",
               boxShadow: "2px 2px 0 #1a1a1a",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              display: "flex", alignItems: "center", justifyContent: "center",
               cursor: (messageText.trim() || photoFile) && !sendMessageMutation.isPending ? "pointer" : "not-allowed",
               opacity: (messageText.trim() || photoFile) && !sendMessageMutation.isPending ? 1 : 0.45,
-              flexShrink: 0,
+              transition: "background 0.15s",
             }}
           >
-            <Send size={16} color={messageText.trim() || photoFile ? "#ffffff" : "#1a1a1a"} />
+            <Send size={17} color={(messageText.trim() || photoFile) ? "#ffffff" : "#1a1a1a"} />
           </button>
         </div>
       </div>
