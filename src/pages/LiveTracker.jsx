@@ -216,14 +216,14 @@ export default function LiveTracker() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: `url(${BG_IMAGE}) center/cover no-repeat fixed`, paddingBottom: "40px" }}>
+    <div style={{ minHeight: "100vh", background: `url(${BG_IMAGE}) center/cover no-repeat fixed`, paddingTop: "16px", paddingBottom: "120px" }}>
       <style>{`
         @keyframes liveBlip { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
         @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
 
       {/* ── HERO SCORE CARD ── */}
-      <div style={{ padding: "16px 16px 0", maxWidth: "560px", margin: "0 auto" }}>
+      <div style={{ padding: "0 16px", maxWidth: "560px", margin: "0 auto" }}>
         <div style={{
           background: "rgba(26,26,26,0.88)",
           backdropFilter: "blur(12px)",
