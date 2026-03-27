@@ -49,6 +49,9 @@ export default function LiveMatch() {
   const [matchTimeRecords, setMatchTimeRecords] = useState([]);
 
   const intervalRef = useRef(null);
+  // startRef stores the wall-clock time when the timer started, and baseSeconds the seconds at that point
+  const startRef = useRef(null);
+  const baseSecondsRef = useRef(0);
 
   useEffect(() => {
     if (match) {
@@ -94,11 +97,34 @@ export default function LiveMatch() {
 
   useEffect(() => {
     if (running) {
-      intervalRef.current = setInterval(() => setSeconds(s => s + 1), 1000);
+      // Store the wall-clock start time and current seconds so we can compute elapsed time correctly
+      // even when the screen turns off or the tab is backgrounded (setInterval pauses in that case)
+      startRef.current = Date.now();
+      baseSecondsRef.current = seconds;
+
+      const tick = () => {
+        const elapsed = Math.floor((Date.now() - startRef.current) / 1000);
+        setSeconds(baseSecondsRef.current + elapsed);
+      };
+
+      intervalRef.current = setInterval(tick, 1000);
+
+      // Also sync when the screen/tab becomes visible again
+      const handleVisibility = () => {
+        if (document.visibilityState === "visible") {
+          const elapsed = Math.floor((Date.now() - startRef.current) / 1000);
+          setSeconds(baseSecondsRef.current + elapsed);
+        }
+      };
+      document.addEventListener("visibilitychange", handleVisibility);
+
+      return () => {
+        clearInterval(intervalRef.current);
+        document.removeEventListener("visibilitychange", handleVisibility);
+      };
     } else {
       clearInterval(intervalRef.current);
     }
-    return () => clearInterval(intervalRef.current);
   }, [running]);
 
   const saveMutation = useMutation({
