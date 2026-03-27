@@ -98,8 +98,8 @@ export default function Chat() {
   return (
     <div style={{
       display: "flex", flexDirection: "column",
-      height: "calc(100dvh - 60px - 90px)",  /* 60px topbar, 90px tabbar */
-      margin: "-1rem -1rem 0",               /* stap uit Layout padding */
+      height: "calc(100dvh - 60px - 90px)",
+      margin: "-1rem -1rem 0",
       background: "#FFF3E8",
     }}>
       {/* Back button + titel — valt binnen de Layout flow */}
