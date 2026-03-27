@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link, useNavigate } from "react-router-dom";
 
-const EMVI_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/5aa7022b8_Emvi-letop.png";
+const EMVI_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/936754586_Emvi-letop.png";
 
 const TYPE_CONFIG = {
   Annulering: { bg: "#FF3DA8", icon: "⚠️", darkText: false },
