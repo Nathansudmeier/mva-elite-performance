@@ -75,6 +75,7 @@ export default function MatchEdit() {
   const [showField, setShowField] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
 
   // Compress image to max 200x200px
   const compressImage = (file) => {
@@ -170,6 +171,8 @@ export default function MatchEdit() {
       queryClient.invalidateQueries({ queryKey: ["matches"] });
       setShowResetConfirm(false);
       setFormData(prev => ({ ...prev, score_home: "", score_away: "" }));
+      setResetSuccess(true);
+      setTimeout(() => setResetSuccess(false), 3000);
     } finally {
       setResetting(false);
     }
@@ -609,6 +612,13 @@ export default function MatchEdit() {
               >
                 🔄 Wedstrijd resetten
               </button>
+
+              {/* Reset succes melding */}
+              {resetSuccess && (
+                <div style={{ position: "fixed", bottom: "32px", left: "50%", transform: "translateX(-50%)", zIndex: 400, background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "12px 24px", fontSize: "14px", fontWeight: 800, color: "#1a1a1a", whiteSpace: "nowrap" }}>
+                  ✅ Wedstrijd gereset
+                </div>
+              )}
 
               {/* Reset bevestiging modal */}
               {showResetConfirm && (
