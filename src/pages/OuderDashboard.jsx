@@ -132,7 +132,7 @@ export default function OuderDashboard() {
             <p style={{ fontSize: "11px", fontWeight: 800, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Nu live</p>
             <p style={{ fontSize: "14px", fontWeight: 900, color: "#ffffff", marginTop: "4px" }}>Volg de wedstrijd</p>
           </div>
-          <Link to={`/live/${liveMatches[0].id}`} style={{
+          <Link to={`/live?match_id=${liveMatches[0].id}`} style={{
             background: "#ffffff", color: "#FF6800", padding: "10px 16px",
             borderRadius: "12px", fontWeight: 700, fontSize: "12px",
             border: "2px solid #1a1a1a", textDecoration: "none", cursor: "pointer"
