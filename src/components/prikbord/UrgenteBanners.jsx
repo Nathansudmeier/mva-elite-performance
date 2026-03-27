@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+const EMVI_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/5aa7022b8_Emvi-letop.png";
 
 const TYPE_CONFIG = {
   Annulering: { bg: "#FF3DA8", icon: "⚠️", darkText: false },
@@ -52,51 +54,75 @@ export default function UrgenteBanners() {
         const textColor = cfg.darkText ? "#1a1a1a" : "#ffffff";
         const subColor = cfg.darkText ? "rgba(26,26,26,0.55)" : "rgba(255,255,255,0.70)";
         const labelColor = cfg.darkText ? "rgba(26,26,26,0.55)" : "rgba(255,255,255,0.65)";
+        const isAnnulering = m.type === "Annulering";
+
         return (
-          <div key={m.id} style={{
-            background: cfg.bg,
-            border: "2.5px solid #1a1a1a",
-            borderRadius: "18px",
-            boxShadow: "3px 3px 0 #1a1a1a",
-            padding: "1rem 1.25rem",
-            display: "flex", alignItems: "flex-start", gap: "12px",
-            position: "relative",
-          }}>
-            {/* Icon */}
-            <div style={{
-              width: "40px", height: "40px", borderRadius: "12px",
-              background: "rgba(255,255,255,0.20)",
-              border: "2px solid rgba(255,255,255,0.40)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "20px", flexShrink: 0,
-            }}>
-              {cfg.icon}
-            </div>
+          <div key={m.id} style={{ position: "relative" }}>
+            <Link
+              to="/Prikbord"
+              style={{
+                display: "flex", alignItems: "flex-start", gap: "12px",
+                background: cfg.bg,
+                border: "2.5px solid #1a1a1a",
+                borderRadius: "18px",
+                boxShadow: "3px 3px 0 #1a1a1a",
+                padding: "1rem 1.25rem",
+                paddingRight: isAnnulering ? "90px" : "44px",
+                textDecoration: "none",
+                overflow: "hidden",
+                cursor: "pointer",
+              }}
+            >
+              {/* Icon */}
+              <div style={{
+                width: "40px", height: "40px", borderRadius: "12px",
+                background: "rgba(255,255,255,0.20)",
+                border: "2px solid rgba(255,255,255,0.40)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "20px", flexShrink: 0,
+              }}>
+                {cfg.icon}
+              </div>
 
-            {/* Content */}
-            <div style={{ flex: 1, minWidth: 0, paddingRight: "24px" }}>
-              <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: labelColor }}>{m.type}</p>
-              <p style={{ fontSize: "15px", fontWeight: 900, color: textColor, letterSpacing: "-0.3px", lineHeight: 1.2, marginTop: "2px" }}>{m.title}</p>
-              <p style={{
-                fontSize: "11px", color: subColor, fontWeight: 600, marginTop: "4px",
-                lineHeight: 1.4,
-                display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
-              }}>{m.body}</p>
-              <p style={{ fontSize: "10px", color: subColor, opacity: 0.8, marginTop: "6px" }}>
-                {m.author_name} · {formatTime(m.created_date)}
-              </p>
-            </div>
+              {/* Content */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: labelColor }}>{m.type}</p>
+                <p style={{ fontSize: "15px", fontWeight: 900, color: textColor, letterSpacing: "-0.3px", lineHeight: 1.2, marginTop: "2px" }}>{m.title}</p>
+                <p style={{
+                  fontSize: "11px", color: subColor, fontWeight: 600, marginTop: "4px",
+                  lineHeight: 1.4,
+                  display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
+                }}>{m.body}</p>
+                <p style={{ fontSize: "10px", color: subColor, opacity: 0.8, marginTop: "6px" }}>
+                  {m.author_name} · {formatTime(m.created_date)}
+                </p>
+              </div>
 
-            {/* Dismiss */}
+              {/* Emvi voor Annulering */}
+              {isAnnulering && (
+                <img
+                  src={EMVI_URL}
+                  alt="Emvi"
+                  style={{
+                    position: "absolute", right: "36px", bottom: "0",
+                    height: "80px", width: "auto",
+                    objectFit: "contain",
+                    pointerEvents: "none",
+                  }}
+                />
+              )}
+            </Link>
+
+            {/* Dismiss (buiten de Link zodat klik niet doorgaat naar navigatie) */}
             <button
-              onClick={() => dismiss(m.id)}
+              onClick={(e) => { e.stopPropagation(); dismiss(m.id); }}
               style={{
                 position: "absolute", top: "10px", right: "10px",
                 width: "24px", height: "24px", borderRadius: "50%",
                 background: "rgba(255,255,255,0.20)",
                 border: "1.5px solid rgba(255,255,255,0.40)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "11px", color: textColor, cursor: "pointer",
+                fontSize: "11px", color: textColor, cursor: "pointer", zIndex: 2,
               }}
             >✕</button>
           </div>
