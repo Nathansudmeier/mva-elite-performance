@@ -98,41 +98,36 @@ export default function Chat() {
   return (
     <div style={{
       display: "flex", flexDirection: "column",
-      height: "100dvh", background: "#FFF3E8",
-      position: "fixed", inset: 0, zIndex: 10,
+      height: "calc(100dvh - 60px - 90px)",  /* 60px topbar, 90px tabbar */
+      margin: "-1rem -1rem 0",               /* stap uit Layout padding */
+      background: "#FFF3E8",
     }}>
-      {/* Header */}
+      {/* Back button + titel — valt binnen de Layout flow */}
       <div style={{
-        background: "#ffffff",
-        borderBottom: "2.5px solid #1a1a1a",
-        padding: "12px 16px",
-        paddingTop: "calc(12px + env(safe-area-inset-top))",
-        flexShrink: 0,
+        display: "flex", alignItems: "center", gap: "12px",
+        marginBottom: "8px",
+        maxWidth: "720px", margin: "0 auto 8px",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", maxWidth: "720px", margin: "0 auto" }}>
-          <button
-            onClick={() => navigate("/Messages")}
-            style={{
-              width: "40px", height: "40px", borderRadius: "12px",
-              background: "#ffffff", border: "2.5px solid #1a1a1a",
-              boxShadow: "2px 2px 0 #1a1a1a",
-              display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
-            }}
-          >
-            <ArrowLeft size={18} color="#1a1a1a" />
-          </button>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <h1 className="t-page-title" style={{ margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {chat?.name || "Chat"}
-            </h1>
-          </div>
-        </div>
+        <button
+          onClick={() => navigate("/Messages")}
+          style={{
+            width: "40px", height: "40px", borderRadius: "12px",
+            background: "#ffffff", border: "2.5px solid #1a1a1a",
+            boxShadow: "2px 2px 0 #1a1a1a",
+            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0,
+          }}
+        >
+          <ArrowLeft size={18} color="#1a1a1a" />
+        </button>
+        <h1 className="t-page-title" style={{ margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+          {chat?.name || "Chat"}
+        </h1>
       </div>
 
       {/* Messages */}
       <div style={{
-        flex: 1, overflowY: "auto",
-        padding: "16px",
+        flex: 1,
+        padding: "0 0 16px 0",
         display: "flex", flexDirection: "column", gap: "6px",
       }}>
         <div style={{ maxWidth: "720px", width: "100%", margin: "0 auto", display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -252,8 +247,10 @@ export default function Chat() {
         background: "#FFF3E8",
         borderTop: "2.5px solid #1a1a1a",
         padding: "10px 16px",
-        paddingBottom: "calc(10px + env(safe-area-inset-bottom))",
+        paddingBottom: "10px",
         flexShrink: 0,
+        position: "sticky",
+        bottom: 0,
       }}>
         {/* Photo preview */}
         {photoFile && (
