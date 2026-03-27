@@ -466,6 +466,16 @@ export default function LiveMatch() {
             <AlertCircle size={22} strokeWidth={3} />
             <span className="font-bold text-xs">NOTITIE</span>
           </button>
+
+          <button onClick={() => handleEvent({ type: "chance_mva", minute: currentMinute })} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2 card-blue" style={{ color: "white" }}>
+            <span style={{ fontSize: "22px" }}>🎯</span>
+            <span className="font-bold text-xs">KANS</span>
+          </button>
+
+          <button onClick={() => handleEvent({ type: "chance_against", minute: currentMinute })} className="h-20 md:h-24 flex flex-col items-center justify-center gap-2" style={{ background: "#9B5CFF", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", color: "white" }}>
+            <span style={{ fontSize: "22px" }}>🎯</span>
+            <span className="font-bold text-xs">KANS TEGEN</span>
+          </button>
         </div>
 
         {/* Events log */}
@@ -481,8 +491,10 @@ export default function LiveMatch() {
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", background: "white", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: "12px", fontSize: "12px" }}>
                     <span style={{ fontWeight: 900, color: "#FF6800", fontSize: "12px", minWidth: "24px" }}>{e.minute}'</span>
                     <span style={{ color: "#1a1a1a", fontWeight: 600, flex: 1 }}>
-                      {e.type === "goal_mva" && <>⚽ Goal — {player?.name}{e.assist_player_id && ` (assist: ${activePlayers.find(p => p.id === e.assist_player_id)?.name})`}</>}
-                      {e.type === "goal_against" && <>⚽ Goal Tegen</>}
+                      {e.type === "goal_mva" && <>⚽ {e.goal_type === "penalty" ? "Penalty" : e.goal_type === "vrije_trap" ? "Vrije Trap" : e.goal_type === "corner" ? "Corner" : "Goal"} — {player?.name}{e.assist_player_id && ` (assist: ${activePlayers.find(p => p.id === e.assist_player_id)?.name})`}</>}
+                      {e.type === "goal_against" && <>⚽ {e.goal_type === "penalty" ? "Penalty" : e.goal_type === "vrije_trap" ? "Vrije Trap" : e.goal_type === "corner" ? "Corner" : "Goal"} Tegen</>}
+                      {e.type === "chance_mva" && <>🎯 Kans</>}
+                      {e.type === "chance_against" && <>🎯 Kans Tegenstander</>}
                       {e.type === "substitution" && <>⇄ {playerOut?.name} → {playerIn?.name}</>}
                       {e.type === "yellow_card" && <>🟨 {player?.name} Gele kaart</>}
                       {e.type === "red_card" && <>🟥 {player?.name} Rode kaart</>}

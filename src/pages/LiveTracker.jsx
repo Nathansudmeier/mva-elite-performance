@@ -68,13 +68,22 @@ function EventRow({ event, players, opponent }) {
   let accentColor = "#FF6800";
   let dotColor = "#FF6800";
 
+  const goalTypeLabel = (gt) => gt === "penalty" ? "Penalty" : gt === "vrije_trap" ? "Vrije Trap" : gt === "corner" ? "Corner" : "Goal";
+
   if (event.type === "goal_mva") {
     icon = "⚽"; title = player?.name || "Onbekend";
-    subtitle = assistPlayer ? `Assist: ${assistPlayer.name}` : "";
+    subtitle = [event.goal_type ? goalTypeLabel(event.goal_type) : "", assistPlayer ? `Assist: ${assistPlayer.name}` : ""].filter(Boolean).join(" · ");
     accentColor = "#08D068"; dotColor = "#08D068";
   } else if (event.type === "goal_against") {
-    icon = "⚽"; title = opponent || "Tegenstander"; subtitle = "Tegendoelpunt";
+    icon = "⚽"; title = opponent || "Tegenstander";
+    subtitle = event.goal_type ? goalTypeLabel(event.goal_type) : "Tegendoelpunt";
     accentColor = "#FF3DA8"; dotColor = "#FF3DA8";
+  } else if (event.type === "chance_mva") {
+    icon = "🎯"; title = "Kans"; subtitle = "";
+    accentColor = "#00C2FF"; dotColor = "#00C2FF";
+  } else if (event.type === "chance_against") {
+    icon = "🎯"; title = "Kans Tegenstander"; subtitle = "";
+    accentColor = "#9B5CFF"; dotColor = "#9B5CFF";
   } else if (event.type === "substitution") {
     icon = "🔄"; title = `${playerOut?.name || "?"} → ${playerIn?.name || "?"}`;
     subtitle = "Wissel"; accentColor = "#FF6800"; dotColor = "#FF6800";
@@ -375,7 +384,7 @@ export default function LiveTracker() {
             <p style={{ fontSize: "9px", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.40)", marginBottom: "4px" }}>
               Tijdlijn
             </p>
-            {timelineEvents.filter(e => e.type !== "note").length === 0 ? (
+            {timelineEvents.filter(e => e.type !== "note" && e.type !== "chance_mva" && e.type !== "chance_against").length === 0 ? (
               <div style={{ textAlign: "center", padding: "28px 0" }}>
                 <p style={{ fontSize: "32px", marginBottom: "8px" }}>⏳</p>
                 <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.40)", fontWeight: 700 }}>Nog geen gebeurtenissen</p>

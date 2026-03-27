@@ -119,6 +119,13 @@ export function NoteModal({ minute, onConfirm, onClose }) {
   );
 }
 
+const GOAL_TYPES = [
+  { id: "goal", label: "Goal", emoji: "⚽" },
+  { id: "penalty", label: "Penalty", emoji: "🎯" },
+  { id: "vrije_trap", label: "Vrije Trap", emoji: "🦵" },
+  { id: "corner", label: "Corner", emoji: "🏁" },
+];
+
 // GoalAgainstModal
 export function GoalAgainstModal({ minute, onConfirm, onClose }) {
   return (
@@ -137,62 +144,43 @@ export function GoalAgainstModal({ minute, onConfirm, onClose }) {
           maxWidth: "500px",
           padding: "24px",
           paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))",
-          textAlign: "center",
           pointerEvents: "auto"
         }}
       >
-        {/* Emoji */}
-        <div style={{ fontSize: "48px", marginBottom: "12px" }}>⚽</div>
+        <div style={{ fontSize: "48px", textAlign: "center", marginBottom: "8px" }}>⚽</div>
+        <div style={{ fontSize: "16px", fontWeight: 800, color: "#FF3DA8", textAlign: "center", marginBottom: "4px" }}>Goal Tegen — {minute}'</div>
+        <div style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)", textAlign: "center", marginBottom: "20px" }}>Welk type goal?</div>
 
-        {/* Header */}
-        <div style={{ marginBottom: "12px" }}>
-          <div style={{ fontSize: "16px", fontWeight: 800, color: "#FF3DA8", marginBottom: "4px" }}>Goal Tegen</div>
-          <div style={{ fontSize: "13px", color: "rgba(26,26,26,0.55)" }}>Minuut {minute}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "16px" }}>
+          {GOAL_TYPES.map(gt => (
+            <button
+              key={gt.id}
+              onClick={() => onConfirm({ type: "goal_against", goal_type: gt.id, minute })}
+              style={{
+                padding: "14px 10px",
+                background: "white",
+                border: "2.5px solid #1a1a1a",
+                borderRadius: "14px",
+                fontWeight: 800,
+                fontSize: "13px",
+                color: "#1a1a1a",
+                cursor: "pointer",
+                boxShadow: "3px 3px 0 #1a1a1a",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: "6px"
+              }}
+            >
+              <span style={{ fontSize: "24px" }}>{gt.emoji}</span>
+              {gt.label}
+            </button>
+          ))}
         </div>
 
-        {/* Description */}
-        <p style={{ fontSize: "14px", color: "rgba(26,26,26,0.65)", marginBottom: "20px" }}>
-          Goal registreren op minuut {minute}?
-        </p>
-
-        {/* Buttons */}
-        <div style={{ display: "flex", gap: "12px" }}>
-          <button 
-            onClick={onClose}
-            style={{
-              flex: 1,
-              height: "48px",
-              background: "white",
-              border: "2.5px solid #1a1a1a",
-              borderRadius: "14px",
-              fontSize: "14px",
-              fontWeight: 700,
-              color: "#1a1a1a",
-              cursor: "pointer",
-              transition: "all 0.1s"
-            }}
-          >
-            Annuleren
-          </button>
-          <button 
-            onClick={() => onConfirm({ type: "goal_against", minute })}
-            style={{
-              flex: 1,
-              height: "48px",
-              background: "#FF3DA8",
-              border: "2.5px solid #1a1a1a",
-              borderRadius: "14px",
-              fontSize: "14px",
-              fontWeight: 700,
-              color: "white",
-              cursor: "pointer",
-              boxShadow: "3px 3px 0 #1a1a1a",
-              transition: "all 0.1s"
-            }}
-          >
-            Bevestigen
-          </button>
-        </div>
+        <button 
+          onClick={onClose}
+          style={{ width: "100%", height: "48px", background: "white", border: "2.5px solid #1a1a1a", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "#1a1a1a", cursor: "pointer" }}
+        >
+          Annuleren
+        </button>
       </div>
     </div>
   );

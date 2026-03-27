@@ -1,9 +1,22 @@
 import React, { useState } from "react";
 
+const GOAL_TYPES = [
+  { id: "goal", label: "Goal", emoji: "⚽" },
+  { id: "penalty", label: "Penalty", emoji: "🎯" },
+  { id: "vrije_trap", label: "Vrije Trap", emoji: "🦵" },
+  { id: "corner", label: "Corner", emoji: "🏁" },
+];
+
 export default function GoalBottomSheet({ players, minute, onConfirm, onClose }) {
-  const [step, setStep] = useState(1); // 1 = schutter, 2 = aangever
+  const [step, setStep] = useState(0); // 0 = type, 1 = schutter, 2 = aangever
+  const [goalType, setGoalType] = useState(null);
   const [scorerId, setScorerId] = useState(null);
   const [assistId, setAssistId] = useState(null);
+
+  const handleSelectType = (type) => {
+    setGoalType(type);
+    setStep(1);
+  };
 
   const handleSelectScorer = (id) => {
     setScorerId(id);
@@ -18,6 +31,7 @@ export default function GoalBottomSheet({ players, minute, onConfirm, onClose })
   const handleConfirm = (skipAssist = false) => {
     onConfirm({
       type: "goal_mva",
+      goal_type: goalType,
       minute,
       player_id: scorerId,
       assist_player_id: skipAssist ? null : (assistId || null),
@@ -54,7 +68,7 @@ export default function GoalBottomSheet({ players, minute, onConfirm, onClose })
               Goal — {minute}'
             </div>
             <div style={{ fontSize: 12, color: "rgba(26,26,26,0.55)", marginTop: 2 }}>
-              {step === 1 ? "Stap 1 van 2: Wie scoorde?" : "Stap 2 van 2: Wie gaf assist?"}
+              {step === 0 ? "Type goal?" : step === 1 ? "Stap 2 van 3: Wie scoorde?" : "Stap 3 van 3: Wie gaf assist?"}
             </div>
           </div>
           <button onClick={onClose} style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(26,26,26,0.08)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
@@ -62,8 +76,35 @@ export default function GoalBottomSheet({ players, minute, onConfirm, onClose })
           </button>
         </div>
 
+        {/* Goal type selection */}
+        {step === 0 && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            {GOAL_TYPES.map(gt => (
+              <button
+                key={gt.id}
+                onClick={() => handleSelectType(gt.id)}
+                style={{
+                  padding: "14px 10px",
+                  background: "white",
+                  border: "2.5px solid #1a1a1a",
+                  borderRadius: "14px",
+                  fontWeight: 800,
+                  fontSize: "13px",
+                  color: "#1a1a1a",
+                  cursor: "pointer",
+                  boxShadow: "3px 3px 0 #1a1a1a",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: "6px"
+                }}
+              >
+                <span style={{ fontSize: "24px" }}>{gt.emoji}</span>
+                {gt.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Player list */}
-        <div style={{ overflowY: "auto", flex: 1, display: "flex", flexDirection: "column", gap: 8, paddingRight: "4px" }}>
+        <div style={{ overflowY: "auto", flex: 1, display: "flex", flexDirection: "column", gap: 8, paddingRight: "4px", display: step === 0 ? "none" : "flex" }}>
           {step === 2 && (
             <button
               onClick={() => handleConfirm(true)}
