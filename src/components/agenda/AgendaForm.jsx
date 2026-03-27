@@ -69,6 +69,15 @@ export default function AgendaForm({ item, onSave, onClose }) {
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const logoInputRef = useRef();
 
+  // Herhaling state
+  const [repeat, setRepeat] = useState(false);
+  const [repeatUntil, setRepeatUntil] = useState("");
+
+  // Bereken welke weekdag de gekozen datum heeft
+  const selectedDayOfWeek = form.date ? new Date(form.date + "T00:00:00").getDay() : null;
+  const DAY_NAMES = ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"];
+  const DAY_NAMES_FULL = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
+
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   async function handleLogoUpload(e) {
@@ -118,6 +127,22 @@ export default function AgendaForm({ item, onSave, onClose }) {
     ));
   }
 
+  function generateRepeatDates(startDate, untilDate) {
+    const dates = [];
+    const start = new Date(startDate + "T00:00:00");
+    const until = new Date(untilDate + "T00:00:00");
+    const dayOfWeek = start.getDay();
+    const current = new Date(start);
+    current.setDate(current.getDate() + 7); // begin met de week erna
+    while (current <= until) {
+      if (current.getDay() === dayOfWeek) {
+        dates.push(current.toISOString().split("T")[0]);
+      }
+      current.setDate(current.getDate() + 7);
+    }
+    return dates;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
@@ -127,11 +152,20 @@ export default function AgendaForm({ item, onSave, onClose }) {
         await ensureMatchRecord(item.id, form);
       }
     } else {
+      // Maak eerste (of enige) item aan
       const created = await base44.entities.AgendaItem.create(form);
       if (isWedstrijd(form.type)) {
         await ensureMatchRecord(created.id, form);
       }
       await sendActivityNotifications(created.id, form).catch(() => {});
+
+      // Herhaling: maak extra items aan voor elke volgende datum
+      if (repeat && repeatUntil && form.type === "Training") {
+        const extraDates = generateRepeatDates(form.date, repeatUntil);
+        for (const date of extraDates) {
+          await base44.entities.AgendaItem.create({ ...form, date });
+        }
+      }
     }
     await onSave();
     setSaving(false);
@@ -322,8 +356,63 @@ export default function AgendaForm({ item, onSave, onClose }) {
             ))}
           </div>
 
-          <button type="submit" disabled={saving} className="btn-primary" style={{ marginTop: 4 }}>
-            {saving ? "Opslaan..." : item ? "Wijzigingen opslaan" : "Activiteit aanmaken"}
+          {/* Herhaling — alleen bij nieuwe trainingen */}
+          {!item && form.type === "Training" && (
+            <div style={{ padding: 16, borderRadius: 14, background: repeat ? "rgba(8,208,104,0.08)" : "rgba(26,26,26,0.04)", border: `2px solid ${repeat ? "rgba(8,208,104,0.35)" : "rgba(26,26,26,0.08)"}`, transition: "all 0.2s" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                <div>
+                  <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)" }}>🔁 Training herhalen</p>
+                  <p style={{ fontSize: 11, color: "rgba(26,26,26,0.45)", marginTop: 2 }}>
+                    {selectedDayOfWeek !== null
+                      ? `Wekelijks op ${DAY_NAMES_FULL[selectedDayOfWeek]}`
+                      : "Kies eerst een datum"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setRepeat(r => !r)}
+                  disabled={!form.date}
+                  style={{
+                    width: 48, height: 28, borderRadius: 14,
+                    background: repeat ? "#08D068" : "rgba(26,26,26,0.15)",
+                    border: "2px solid #1a1a1a",
+                    cursor: form.date ? "pointer" : "not-allowed",
+                    position: "relative", transition: "background 0.2s", flexShrink: 0,
+                  }}
+                >
+                  <div style={{
+                    width: 18, height: 18, borderRadius: "50%", background: "#ffffff",
+                    border: "1.5px solid #1a1a1a",
+                    position: "absolute", top: 3,
+                    left: repeat ? 23 : 3,
+                    transition: "left 0.2s",
+                  }} />
+                </button>
+              </div>
+
+              {repeat && form.date && (
+                <div style={{ marginTop: 14 }}>
+                  <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Herhalen tot</p>
+                  <input
+                    type="date"
+                    required={repeat}
+                    value={repeatUntil}
+                    min={form.date}
+                    onChange={e => setRepeatUntil(e.target.value)}
+                    style={inputStyle}
+                  />
+                  {repeatUntil && form.date && (
+                    <p style={{ fontSize: 12, color: "#05a050", fontWeight: 700, marginTop: 8 }}>
+                      ✓ {generateRepeatDates(form.date, repeatUntil).length} extra trainingen worden aangemaakt
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          <button type="submit" disabled={saving || (repeat && !repeatUntil)} className="btn-primary" style={{ marginTop: 4 }}>
+            {saving ? "Aanmaken..." : item ? "Wijzigingen opslaan" : "Activiteit aanmaken"}
           </button>
           <div style={{ height: 32 }} />
         </form>
