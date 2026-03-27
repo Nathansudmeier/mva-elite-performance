@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
@@ -145,7 +145,30 @@ export default function LiveTracker() {
   const scoreHome = match?.score_home ?? (match?.live_events?.filter(e => e.type === "goal_mva").length ?? 0);
   const scoreAway = match?.score_away ?? (match?.live_events?.filter(e => e.type === "goal_against").length ?? 0);
   const lastEvent = match?.live_events?.length > 0 ? match.live_events[match.live_events.length - 1] : null;
-  const currentMinute = lastEvent?.minute ?? 0;
+  const lastEventMinute = lastEvent?.minute ?? 0;
+
+  // Live running clock: tick every second based on last known minute + elapsed time since last fetch
+  const [displayMinute, setDisplayMinute] = useState(lastEventMinute);
+  const lastFetchRef = useRef(Date.now());
+  const baseMinuteRef = useRef(lastEventMinute);
+
+  useEffect(() => {
+    baseMinuteRef.current = lastEventMinute;
+    lastFetchRef.current = Date.now();
+    setDisplayMinute(lastEventMinute);
+  }, [lastEventMinute]);
+
+  useEffect(() => {
+    if (!isLive) return;
+    const timer = setInterval(() => {
+      const elapsedSeconds = Math.floor((Date.now() - lastFetchRef.current) / 1000);
+      const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+      setDisplayMinute(baseMinuteRef.current + elapsedMinutes);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [isLive]);
+
+  const currentMinute = isLive ? displayMinute : lastEventMinute;
 
   const lineupPlayers = (() => {
     if (!match?.lineup) return [];
