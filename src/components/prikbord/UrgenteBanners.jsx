@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link, useNavigate } from "react-router-dom";
 
-const EMVI_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/936754586_Emvi-letop.png";
+const EMVI_URL = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/14b1f9a76_Emvi-letop.png";
 
 const TYPE_CONFIG = {
   Annulering: { bg: "#FF3DA8", icon: "⚠️", darkText: false },
@@ -105,7 +105,7 @@ export default function UrgenteBanners() {
                   alt="Emvi"
                   style={{
                     position: "absolute", right: "36px", bottom: "0",
-                    height: "80px", width: "auto",
+                    height: "120px", width: "auto",
                     objectFit: "contain",
                     pointerEvents: "none",
                   }}
