@@ -36,6 +36,7 @@ import PendingAccess from './pages/PendingAccess';
 import EmviFeedback from './pages/EmviFeedback';
 import FeedbackOverview from './pages/FeedbackOverview';
 import YoYoTestLive from './pages/YoYoTestLive';
+import Prikbord from './pages/Prikbord';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import SplashScreen from '@/components/SplashScreen';
@@ -121,6 +122,7 @@ const AuthenticatedApp = () => {
       <Route path="/EmviFeedback" element={<LayoutWrapper currentPageName="EmviFeedback"><EmviFeedback /></LayoutWrapper>} />
       <Route path="/FeedbackOverview" element={<LayoutWrapper currentPageName="FeedbackOverview"><FeedbackOverview /></LayoutWrapper>} />
       <Route path="/YoYoTestLive" element={<LayoutWrapper currentPageName="YoYoTestLive"><YoYoTestLive /></LayoutWrapper>} />
+      <Route path="/Prikbord" element={<LayoutWrapper currentPageName="Prikbord"><Prikbord /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

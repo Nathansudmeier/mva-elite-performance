@@ -1,0 +1,63 @@
+{
+  "name": "Mededeling",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Titel van de mededeling"
+    },
+    "body": {
+      "type": "string",
+      "description": "Inhoud van de mededeling"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Annulering",
+        "Info",
+        "Evenement",
+        "Urgent"
+      ],
+      "default": "Info",
+      "description": "Type mededeling"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Naam van de auteur"
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email van de auteur"
+    },
+    "author_photo_url": {
+      "type": "string",
+      "description": "Profielfoto URL van de auteur"
+    },
+    "likes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array van user emails die hebben geliked"
+    },
+    "is_urgent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Toon als banner op dashboard"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum waarop de mededeling verdwijnt (optioneel)"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Optionele foto URL"
+    }
+  },
+  "required": [
+    "title",
+    "body",
+    "type"
+  ]
+}

@@ -18,6 +18,7 @@ import LiveMatchBanner from "@/components/dashboard/LiveMatchBanner";
 import { useLiveMatches } from "@/hooks/useLiveMatches";
 import GreetingWithEmvi from "@/components/dashboard/GreetingWithEmvi";
 import DailyFeelingOverview from "@/components/dashboard/DailyFeelingOverview";
+import UrgenteBanners from "@/components/prikbord/UrgenteBanners";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -179,6 +180,7 @@ export default function Dashboard() {
   return (
     <div className="pb-20 lg:pb-6" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
       <GreetingWithEmvi />
+      <UrgenteBanners />
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
 
       {/* Hero card — winratio */}

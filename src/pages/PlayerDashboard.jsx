@@ -18,6 +18,7 @@ import { useLiveMatches } from "@/hooks/useLiveMatches";
 import PlayerAttendanceCard from "@/components/dashboard/PlayerAttendanceCard";
 import PlayerMergedGreeting from "@/components/dashboard/PlayerMergedGreeting";
 import DailyFeelingCheck from "@/components/dashboard/DailyFeelingCheck";
+import UrgenteBanners from "@/components/prikbord/UrgenteBanners";
 import { subDays, isAfter } from "date-fns";
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
@@ -147,6 +148,7 @@ export default function PlayerDashboard() {
         ratings={ratings}
         yoyo={yoyo}
       />
+      <UrgenteBanners />
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={false} />
 
       {/* Upcoming Activities Compact */}

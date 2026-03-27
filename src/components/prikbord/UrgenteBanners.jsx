@@ -1,0 +1,113 @@
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
+import { Link } from "react-router-dom";
+
+const TYPE_CONFIG = {
+  Annulering: { bg: "#FF3DA8", icon: "⚠️", darkText: false },
+  Info:       { bg: "#00C2FF", icon: "📋", darkText: true  },
+  Evenement:  { bg: "#FFD600", icon: "🎉", darkText: true  },
+  Urgent:     { bg: "#FF3DA8", icon: "🚨", darkText: false },
+};
+
+function formatTime(date) {
+  return new Date(date).toLocaleDateString("nl-NL", { day: "numeric", month: "short" });
+}
+
+export default function UrgenteBanners() {
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      const stored = sessionStorage.getItem("dismissed_banners");
+      return stored ? JSON.parse(stored) : [];
+    } catch { return []; }
+  });
+
+  const { data: mededelingen = [] } = useQuery({
+    queryKey: ["mededelingen-urgent"],
+    queryFn: () => base44.entities.Mededeling.filter({ is_urgent: true }),
+    staleTime: 60000,
+  });
+
+  const now = new Date();
+  const active = mededelingen
+    .filter(m => !dismissed.includes(m.id))
+    .filter(m => !m.expires_at || new Date(m.expires_at) >= now)
+    .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+
+  const visible = active.slice(0, 2);
+  const hasMore = active.length > 2;
+
+  const dismiss = (id) => {
+    const next = [...dismissed, id];
+    setDismissed(next);
+    try { sessionStorage.setItem("dismissed_banners", JSON.stringify(next)); } catch {}
+  };
+
+  if (visible.length === 0) return null;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "4px" }}>
+      {visible.map(m => {
+        const cfg = TYPE_CONFIG[m.type] || TYPE_CONFIG.Info;
+        const textColor = cfg.darkText ? "#1a1a1a" : "#ffffff";
+        const subColor = cfg.darkText ? "rgba(26,26,26,0.55)" : "rgba(255,255,255,0.70)";
+        const labelColor = cfg.darkText ? "rgba(26,26,26,0.55)" : "rgba(255,255,255,0.65)";
+        return (
+          <div key={m.id} style={{
+            background: cfg.bg,
+            border: "2.5px solid #1a1a1a",
+            borderRadius: "18px",
+            boxShadow: "3px 3px 0 #1a1a1a",
+            padding: "1rem 1.25rem",
+            display: "flex", alignItems: "flex-start", gap: "12px",
+            position: "relative",
+          }}>
+            {/* Icon */}
+            <div style={{
+              width: "40px", height: "40px", borderRadius: "12px",
+              background: "rgba(255,255,255,0.20)",
+              border: "2px solid rgba(255,255,255,0.40)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "20px", flexShrink: 0,
+            }}>
+              {cfg.icon}
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1, minWidth: 0, paddingRight: "24px" }}>
+              <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: labelColor }}>{m.type}</p>
+              <p style={{ fontSize: "15px", fontWeight: 900, color: textColor, letterSpacing: "-0.3px", lineHeight: 1.2, marginTop: "2px" }}>{m.title}</p>
+              <p style={{
+                fontSize: "11px", color: subColor, fontWeight: 600, marginTop: "4px",
+                lineHeight: 1.4,
+                display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
+              }}>{m.body}</p>
+              <p style={{ fontSize: "10px", color: subColor, opacity: 0.8, marginTop: "6px" }}>
+                {m.author_name} · {formatTime(m.created_date)}
+              </p>
+            </div>
+
+            {/* Dismiss */}
+            <button
+              onClick={() => dismiss(m.id)}
+              style={{
+                position: "absolute", top: "10px", right: "10px",
+                width: "24px", height: "24px", borderRadius: "50%",
+                background: "rgba(255,255,255,0.20)",
+                border: "1.5px solid rgba(255,255,255,0.40)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "11px", color: textColor, cursor: "pointer",
+              }}
+            >✕</button>
+          </div>
+        );
+      })}
+
+      {hasMore && (
+        <Link to="/Prikbord" style={{ fontSize: "11px", fontWeight: 700, color: "#FF6800", textDecoration: "none", paddingLeft: "4px" }}>
+          + {active.length - 2} meer mededelingen →
+        </Link>
+      )}
+    </div>
+  );
+}

@@ -88,6 +88,18 @@ function IconBeheer({ fill }) {
   );
 }
 
+function IconPrikbord({ fill }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="3" width="18" height="14" rx="3" fill={fill} />
+      <rect x="6" y="7" width="12" height="1.5" rx="0.75" fill="white" opacity="0.7" />
+      <rect x="6" y="10.5" width="8" height="1.5" rx="0.75" fill="white" opacity="0.5" />
+      <path d="M12 17v4" stroke={fill} strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="12" cy="17" r="1.5" fill={fill} />
+    </svg>
+  );
+}
+
 function IconEmvi({ fill }) {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -119,6 +131,7 @@ const trainerTabItems = [
   { name: "Emvi", page: "EmviFeedback", Icon: IconEmvi },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
   { name: "Spelprincipes", page: "Spelprincipes", Icon: IconSpelprincipes },
+  { name: "Prikbord", page: "Prikbord", Icon: IconPrikbord },
   { name: "Berichten", page: "Messages", Icon: IconBerichten },
   { name: "Beheer", page: "AccountBeheer", Icon: IconBeheer },
 ];
@@ -135,6 +148,7 @@ function IconProfiel({ fill }) {
 const speelsterTabItems = [
   { name: "Dashboard", page: "PlayerDashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
+  { name: "Prikbord", page: "Prikbord", Icon: IconPrikbord },
   { name: "Emvi", page: "EmviFeedback", Icon: IconEmvi },
   { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
@@ -145,6 +159,7 @@ const speelsterTabItems = [
 const ouderTabItems = [
   { name: "Dashboard", page: "OuderDashboard", Icon: IconDashboard },
   { name: "Planning", page: "Planning", Icon: IconPlanning },
+  { name: "Prikbord", page: "Prikbord", Icon: IconPrikbord },
   { name: "Emvi", page: "EmviFeedback", Icon: IconEmvi },
   { name: "Foto's", page: "Photowall", Icon: IconFoto },
   { name: "Mijn profiel", page: "PlayerDashboard", Icon: IconProfiel },
