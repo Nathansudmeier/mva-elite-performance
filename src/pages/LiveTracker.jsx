@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
+import BentoTabBar from "@/components/layout/BentoTabBar";
+import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
 const MVA_LOGO = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/c0045a171_MVAlogo.png";
 const BG_IMAGE = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/b438d1bab_Matchday-background.png";
@@ -123,6 +125,9 @@ export default function LiveTracker() {
   const [searchParams] = useSearchParams();
   const matchId = searchParams.get("match_id");
   const [activeTab, setActiveTab] = useState("tijdlijn");
+  const { isTrainer, isSpeelster, isOuder, playerId } = useCurrentUser();
+  const isSpeelsterUser = !isTrainer && isSpeelster;
+  const isOuderUser = isOuder;
 
   const { data: match, isLoading: matchLoading } = useQuery({
     queryKey: ["live-match", matchId],
@@ -512,6 +517,13 @@ export default function LiveTracker() {
           Automatisch vernieuwd elke 5 seconden
         </p>
       </div>
+
+      <BentoTabBar
+        currentPageName="live"
+        isSpeelsterUser={isSpeelsterUser}
+        isOuderUser={isOuderUser}
+        childPlayerId={playerId}
+      />
     </div>
   );
 }
