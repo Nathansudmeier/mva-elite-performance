@@ -273,7 +273,7 @@ export default function LiveTracker() {
                 <p style={{ fontSize: "44px", fontWeight: 900, color: "rgba(255,255,255,0.30)", letterSpacing: "-2px", lineHeight: 1 }}>–:–</p>
               )}
               <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", marginTop: "6px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                {isLive ? `${currentMinute}'` : isHalftime ? "Rust" : isFinished ? "FT" : formatNL(match.date)}
+                {isHalftime ? "Rust" : isFinished ? "FT" : isLive ? "" : formatNL(match.date)}
               </p>
             </div>
 
