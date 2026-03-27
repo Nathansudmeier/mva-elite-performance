@@ -370,13 +370,29 @@ export default function Prikbord() {
       {/* Header */}
       <div style={{
         background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px",
-        boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem 1.25rem",
+        boxShadow: "3px 3px 0 #1a1a1a",
         position: "relative", overflow: "hidden",
+        minHeight: "100px",
+        display: "flex", alignItems: "center",
+        padding: "1rem 1.25rem",
+        paddingRight: "160px",
       }}>
-        <div style={{ position: "absolute", width: "120px", height: "120px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.15)", top: "-40px", right: "-20px" }} />
-        <div style={{ position: "absolute", width: "60px", height: "60px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.15)", bottom: "-20px", right: "60px" }} />
-        <p style={{ fontSize: "22px", fontWeight: 900, color: "#ffffff", letterSpacing: "-0.5px" }}>📌 Prikbord</p>
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", fontWeight: 600, marginTop: "3px" }}>Mededelingen van de trainer</p>
+        {/* Decoratieve cirkel */}
+        <div style={{ position: "absolute", width: "160px", height: "160px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.15)", top: "-40px", right: "80px" }} />
+        <div style={{ position: "absolute", width: "80px", height: "80px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.15)", bottom: "-20px", right: "160px" }} />
+
+        <p style={{ fontSize: "26px", fontWeight: 900, color: "#ffffff", letterSpacing: "-0.5px", lineHeight: 1 }}>Prikbord</p>
+
+        {/* Emvi */}
+        <img
+          src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/a9e7b2253_Emvi-Prikbord.png"
+          alt="Emvi"
+          style={{
+            position: "absolute", right: "0", bottom: "0",
+            height: "140px", width: "auto",
+            objectFit: "contain", pointerEvents: "none",
+          }}
+        />
       </div>
 
       {/* Filter pills */}
