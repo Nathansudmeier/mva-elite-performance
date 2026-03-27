@@ -264,7 +264,7 @@ function AccountBeheerContent() {
 
       {/* ── HEADER ── */}
       <div style={{
-        background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "18px",
+        background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px",
         boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem",
         display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px",
       }}>
