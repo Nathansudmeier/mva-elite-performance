@@ -153,7 +153,12 @@ export default function PlanningWedstrijdDetail() {
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
               <Clock size={12} style={{ color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.70)" : "rgba(26,26,26,0.55)" }} />
-              <span style={{ fontSize: 12, fontWeight: 600, color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.80)" : "rgba(26,26,26,0.65)" }}>{formatDate(item.date)} · {item.start_time}</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: teamTextDark === "#ffffff" ? "rgba(255,255,255,0.80)" : "rgba(26,26,26,0.65)" }}>
+                {item.type === "Toernooi" && item.end_date && item.end_date !== item.date
+                  ? `${formatDate(item.date)} – ${formatDate(item.end_date)}`
+                  : formatDate(item.date)
+                } · {item.start_time}
+              </span>
             </div>
           </div>
           {item.opponent_logo_url && (

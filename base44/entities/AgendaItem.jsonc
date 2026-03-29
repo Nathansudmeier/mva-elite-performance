@@ -1,0 +1,101 @@
+{
+  "name": "AgendaItem",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "Training",
+        "Wedstrijd",
+        "Toernooi",
+        "Evenement"
+      ],
+      "description": "Type activiteit"
+    },
+    "title": {
+      "type": "string",
+      "description": "Titel van de activiteit"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum van de activiteit (of startdatum bij meerdaags toernooi)"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Einddatum (alleen voor meerdaagse toernooien)"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Aanvangstijd (HH:MM)"
+    },
+    "location": {
+      "type": "string",
+      "description": "Locatie"
+    },
+    "team": {
+      "type": "string",
+      "enum": [
+        "MO17",
+        "Dames 1",
+        "Beide"
+      ],
+      "default": "Beide",
+      "description": "Team"
+    },
+    "home_away": {
+      "type": "string",
+      "enum": [
+        "Thuis",
+        "Uit",
+        "Neutraal"
+      ],
+      "default": "Thuis",
+      "description": "Thuis of uitwedstrijd (alleen voor Wedstrijd/Toernooi)"
+    },
+    "opponent_logo_url": {
+      "type": "string",
+      "description": "Logo URL van de tegenstander (alleen voor Wedstrijd/Toernooi)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optionele notitie"
+    },
+    "training_session_id": {
+      "type": "string",
+      "description": "Koppeling aan TrainingSession"
+    },
+    "match_id": {
+      "type": "string",
+      "description": "Koppeling aan Match"
+    },
+    "reminder_1_days": {
+      "type": "number",
+      "description": "Eerste herinnering: X dagen voor de activiteit (0 = geen)",
+      "default": 3
+    },
+    "reminder_2_days": {
+      "type": "number",
+      "description": "Tweede herinnering: X dagen voor de activiteit (0 = geen)",
+      "default": 1
+    },
+    "reminder_1_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of de eerste herinnering al is verstuurd"
+    },
+    "reminder_2_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of de tweede herinnering al is verstuurd"
+    }
+  },
+  "required": [
+    "type",
+    "title",
+    "date",
+    "start_time",
+    "team"
+  ]
+}

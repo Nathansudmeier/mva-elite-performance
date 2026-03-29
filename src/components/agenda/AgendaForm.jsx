@@ -57,6 +57,7 @@ export default function AgendaForm({ item, onSave, onClose }) {
     type: item?.type || "Training",
     title: item?.title || "",
     date: item?.date || "",
+    end_date: item?.end_date || "",
     start_time: item?.start_time || "",
     team: item?.team || "Beide",
     home_away: item?.home_away || "Thuis",
@@ -267,16 +268,35 @@ export default function AgendaForm({ item, onSave, onClose }) {
           )}
 
           {/* Datum + Tijd */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <div>
-              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Datum</p>
-              <input required type="date" value={form.date} onChange={e => set("date", e.target.value)} style={inputStyle} />
+          {form.type === "Toernooi" ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div>
+                  <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Van</p>
+                  <input required type="date" value={form.date} onChange={e => set("date", e.target.value)} style={inputStyle} />
+                </div>
+                <div>
+                  <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Tot</p>
+                  <input type="date" value={form.end_date} min={form.date || undefined} onChange={e => set("end_date", e.target.value)} style={inputStyle} />
+                </div>
+              </div>
+              <div>
+                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Aanvangstijd</p>
+                <input required type="time" value={form.start_time} onChange={e => set("start_time", e.target.value)} style={inputStyle} />
+              </div>
             </div>
-            <div>
-              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Aanvangstijd</p>
-              <input required type="time" value={form.start_time} onChange={e => set("start_time", e.target.value)} style={inputStyle} />
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div>
+                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Datum</p>
+                <input required type="date" value={form.date} onChange={e => set("date", e.target.value)} style={inputStyle} />
+              </div>
+              <div>
+                <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Aanvangstijd</p>
+                <input required type="time" value={form.start_time} onChange={e => set("start_time", e.target.value)} style={inputStyle} />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Team */}
           <div>
