@@ -13,7 +13,7 @@ export default function PlanningToernooiDetail() {
   const params = new URLSearchParams(window.location.search);
   const itemId = params.get("id");
   const navigate = useNavigate();
-  const { isTrainer } = useCurrentUser();
+  const { isTrainer, isSpeelster, playerId: currentPlayerId } = useCurrentUser();
   const qc = useQueryClient();
   const { toast } = useToast();
 
@@ -61,7 +61,10 @@ export default function PlanningToernooiDetail() {
     enabled: !!itemId,
   });
 
-  const myPlayer = currentUser ? players.find(p => p.name === currentUser.full_name) : null;
+  const myPlayer = players.find(p =>
+    (currentPlayerId && p.id === currentPlayerId) ||
+    (currentUser?.full_name && p.name === currentUser.full_name)
+  ) || null;
   const myAttendance = myPlayer ? attendance.find(a => a.player_id === myPlayer.id) : null;
 
   const playerMap = {};
@@ -228,7 +231,7 @@ export default function PlanningToernooiDetail() {
         </div>
 
         {/* RSVP voor speler */}
-        {!isTrainer && myPlayer && (
+        {(isSpeelster || (!isTrainer && myPlayer)) && myPlayer && (
           <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1.5px solid rgba(26,26,26,0.15)" }}>
             <p className="t-label" style={{ color: "rgba(26,26,26,0.60)", marginBottom: 8 }}>Ga jij mee?</p>
             <AttendanceButtons
