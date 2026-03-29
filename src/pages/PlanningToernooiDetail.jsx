@@ -405,76 +405,80 @@ export default function PlanningToernooiDetail() {
             ))}
           </div>
 
-          {/* Google Maps */}
-          {item.location && (
-            <div className="glass" style={{ overflow: "hidden" }}>
-              <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", gap: 8 }}>
-                <MapPin size={14} color="#FF6800" />
-                <span className="t-section-title">Locatie</span>
-              </div>
-              <div style={{ height: 220 }}>
-                <iframe
-                  title="Locatie kaart"
-                  width="100%"
-                  height="100%"
-                  frameBorder="0"
-                  style={{ border: 0, display: "block" }}
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(item.location)}&output=embed`}
-                  allowFullScreen
-                />
-              </div>
-              <a
-                href={`https://maps.google.com/maps?q=${encodeURIComponent(item.location)}`}
-                target="_blank"
-                rel="noreferrer"
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "12px 16px", borderTop: "1.5px solid rgba(26,26,26,0.08)", fontSize: 12, fontWeight: 800, color: "#FF6800", textDecoration: "none" }}
-              >
-                <MapPin size={12} />
-                Openen in Google Maps
-              </a>
-            </div>
-          )}
+          {/* Locatie + Informatie naast elkaar */}
+          <div style={{ display: "grid", gridTemplateColumns: item.location ? "1fr 1fr" : "1fr", gap: 10 }}>
 
-          {/* Informatie / notities */}
-          <div className="glass" style={{ overflow: "hidden" }}>
-            <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Info size={14} color="#FF6800" />
-                <span className="t-section-title">Informatie</span>
-              </div>
-              {isTrainer && !editingInfo && (
-                <button onClick={() => { setEditingInfo(true); setInfoText(item.notes || ""); setWedstrijden(item.tournament_matches || []); }}
-                  style={{ width: 32, height: 32, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "2px solid #1a1a1a", boxShadow: "1px 1px 0 #1a1a1a", cursor: "pointer" }}>
-                  <Pencil size={13} color="#1a1a1a" />
-                </button>
-              )}
-            </div>
-            <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
-              {editingInfo ? (
-                <>
-                  <textarea
-                    value={infoText}
-                    onChange={e => setInfoText(e.target.value)}
-                    placeholder="Toernooi informatie, aanwijzingen, locatie details..."
-                    rows={5}
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: "2px solid #1a1a1a", fontSize: 13, fontWeight: 500, outline: "none", resize: "vertical", fontFamily: "inherit", boxSizing: "border-box" }}
+            {/* Google Maps */}
+            {item.location && (
+              <div className="glass" style={{ overflow: "hidden" }}>
+                <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", gap: 8 }}>
+                  <MapPin size={14} color="#FF6800" />
+                  <span className="t-section-title">Locatie</span>
+                </div>
+                <div style={{ height: 180 }}>
+                  <iframe
+                    title="Locatie kaart"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    style={{ border: 0, display: "block" }}
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(item.location)}&output=embed`}
+                    allowFullScreen
                   />
-                  <div style={{ display: "flex", gap: 8 }}>
-                    <button onClick={saveInfo}
-                      style={{ flex: 1, height: 42, borderRadius: 12, background: "#1a1a1a", color: "#fff", fontSize: 13, fontWeight: 800, border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-                      <Check size={14} /> Opslaan
-                    </button>
-                    <button onClick={() => { setEditingInfo(false); setAddingWedstrijd(false); }}
-                      style={{ height: 42, padding: "0 16px", borderRadius: 12, background: "#ffffff", border: "2px solid rgba(26,26,26,0.20)", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                      Annuleren
-                    </button>
-                  </div>
-                </>
-              ) : (
-                item.notes
-                  ? <p className="t-secondary" style={{ lineHeight: 1.7, whiteSpace: "pre-wrap", color: "#1a1a1a" }}>{item.notes}</p>
-                  : <p className="t-secondary">{isTrainer ? "Klik op ✏️ om informatie toe te voegen" : "Nog geen extra informatie"}</p>
-              )}
+                </div>
+                <a
+                  href={`https://maps.google.com/maps?q=${encodeURIComponent(item.location)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 16px", borderTop: "1.5px solid rgba(26,26,26,0.08)", fontSize: 12, fontWeight: 800, color: "#FF6800", textDecoration: "none" }}
+                >
+                  <MapPin size={12} />
+                  Openen in Maps
+                </a>
+              </div>
+            )}
+
+            {/* Informatie / notities */}
+            <div className="glass" style={{ overflow: "hidden" }}>
+              <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <Info size={14} color="#FF6800" />
+                  <span className="t-section-title">Informatie</span>
+                </div>
+                {isTrainer && !editingInfo && (
+                  <button onClick={() => { setEditingInfo(true); setInfoText(item.notes || ""); setWedstrijden(item.tournament_matches || []); }}
+                    style={{ width: 32, height: 32, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "2px solid #1a1a1a", boxShadow: "1px 1px 0 #1a1a1a", cursor: "pointer" }}>
+                    <Pencil size={13} color="#1a1a1a" />
+                  </button>
+                )}
+              </div>
+              <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+                {editingInfo ? (
+                  <>
+                    <textarea
+                      value={infoText}
+                      onChange={e => setInfoText(e.target.value)}
+                      placeholder="Toernooi informatie, aanwijzingen, locatie details..."
+                      rows={5}
+                      style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: "2px solid #1a1a1a", fontSize: 13, fontWeight: 500, outline: "none", resize: "vertical", fontFamily: "inherit", boxSizing: "border-box" }}
+                    />
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button onClick={saveInfo}
+                        style={{ flex: 1, height: 42, borderRadius: 12, background: "#1a1a1a", color: "#fff", fontSize: 13, fontWeight: 800, border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                        <Check size={14} /> Opslaan
+                      </button>
+                      <button onClick={() => { setEditingInfo(false); setAddingWedstrijd(false); }}
+                        style={{ height: 42, padding: "0 16px", borderRadius: 12, background: "#ffffff", border: "2px solid rgba(26,26,26,0.20)", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                        Annuleren
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  item.notes
+                    ? <p className="t-secondary" style={{ lineHeight: 1.7, whiteSpace: "pre-wrap", color: "#1a1a1a" }}>{item.notes}</p>
+                    : <p className="t-secondary">{isTrainer ? "Klik op ✏️ om informatie toe te voegen" : "Nog geen extra informatie"}</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
