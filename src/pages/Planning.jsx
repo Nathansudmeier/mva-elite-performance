@@ -82,12 +82,10 @@ export default function Planning() {
 
   function openDetail(item) {
     setSelectedDay(null);
-    if (item.type === "Training") {
+    if (item.type === "Training" || item.type === "Evenement") {
       navigate(`/PlanningTrainingDetail?id=${item.id}`);
-    } else if (item.type === "Wedstrijd") {
-      navigate(`/PlanningWedstrijdDetail?id=${item.id}`);
     } else {
-      navigate(`/PlanningTrainingDetail?id=${item.id}`);
+      navigate(`/PlanningWedstrijdDetail?id=${item.id}`);
     }
   }
 
