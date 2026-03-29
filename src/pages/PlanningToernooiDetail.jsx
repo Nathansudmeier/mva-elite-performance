@@ -410,7 +410,7 @@ export default function PlanningToernooiDetail() {
 
             {/* Google Maps */}
             {item.location && (
-              <div className="glass" style={{ overflow: "hidden" }}>
+              <div className="card-green" style={{ overflow: "hidden" }}>
                 <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", gap: 8 }}>
                   <MapPin size={14} color="#FF6800" />
                   <span className="t-section-title">Locatie</span>
@@ -439,7 +439,7 @@ export default function PlanningToernooiDetail() {
             )}
 
             {/* Informatie / notities */}
-            <div className="glass" style={{ overflow: "hidden" }}>
+            <div className="card-yellow" style={{ overflow: "hidden" }}>
               <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <Info size={14} color="#FF6800" />
