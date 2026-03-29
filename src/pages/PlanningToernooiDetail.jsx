@@ -405,6 +405,36 @@ export default function PlanningToernooiDetail() {
             ))}
           </div>
 
+          {/* Google Maps */}
+          {item.location && (
+            <div className="glass" style={{ overflow: "hidden" }}>
+              <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", gap: 8 }}>
+                <MapPin size={14} color="#FF6800" />
+                <span className="t-section-title">Locatie</span>
+              </div>
+              <div style={{ height: 220 }}>
+                <iframe
+                  title="Locatie kaart"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  style={{ border: 0, display: "block" }}
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(item.location)}&output=embed`}
+                  allowFullScreen
+                />
+              </div>
+              <a
+                href={`https://maps.google.com/maps?q=${encodeURIComponent(item.location)}`}
+                target="_blank"
+                rel="noreferrer"
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "12px 16px", borderTop: "1.5px solid rgba(26,26,26,0.08)", fontSize: 12, fontWeight: 800, color: "#FF6800", textDecoration: "none" }}
+              >
+                <MapPin size={12} />
+                Openen in Google Maps
+              </a>
+            </div>
+          )}
+
           {/* Informatie / notities */}
           <div className="glass" style={{ overflow: "hidden" }}>
             <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
