@@ -62,6 +62,27 @@
       "type": "string",
       "description": "Optionele notitie"
     },
+    "tournament_matches": {
+      "type": "array",
+      "description": "Wedstrijden binnen een toernooi",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "opponent": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "training_session_id": {
       "type": "string",
       "description": "Koppeling aan TrainingSession"
