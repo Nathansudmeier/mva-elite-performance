@@ -5,6 +5,7 @@ const GOAL_TYPES = [
   { id: "penalty", label: "Penalty", emoji: "🎯" },
   { id: "vrije_trap", label: "Vrije Trap", emoji: "🦵" },
   { id: "corner", label: "Corner", emoji: "🏁" },
+  { id: "eigen_doelpunt", label: "Eigen Doelpunt", emoji: "🤦" },
 ];
 
 export default function GoalBottomSheet({ players, minute, onConfirm, onClose }) {
@@ -15,7 +16,12 @@ export default function GoalBottomSheet({ players, minute, onConfirm, onClose })
 
   const handleSelectType = (type) => {
     setGoalType(type);
-    setStep(1);
+    if (type === "eigen_doelpunt") {
+      // Geen schutter nodig, direct bevestigen
+      onConfirm({ type: "goal_mva", goal_type: "eigen_doelpunt", minute, player_id: null, assist_player_id: null });
+    } else {
+      setStep(1);
+    }
   };
 
   const handleSelectScorer = (id) => {

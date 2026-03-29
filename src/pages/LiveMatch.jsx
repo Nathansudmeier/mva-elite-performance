@@ -517,7 +517,7 @@ export default function LiveMatch() {
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 12px", background: "white", border: "1.5px solid rgba(26,26,26,0.08)", borderRadius: "12px", fontSize: "12px" }}>
                     <span style={{ fontWeight: 900, color: "#FF6800", fontSize: "12px", minWidth: "24px" }}>{e.minute}'</span>
                     <span style={{ color: "#1a1a1a", fontWeight: 600, flex: 1 }}>
-                      {e.type === "goal_mva" && <>⚽ {e.goal_type === "penalty" ? "Penalty" : e.goal_type === "vrije_trap" ? "Vrije Trap" : e.goal_type === "corner" ? "Corner" : "Goal"} — {player?.name}{e.assist_player_id && ` (assist: ${activePlayers.find(p => p.id === e.assist_player_id)?.name})`}</>}
+                      {e.type === "goal_mva" && <>⚽ {e.goal_type === "penalty" ? "Penalty" : e.goal_type === "vrije_trap" ? "Vrije Trap" : e.goal_type === "corner" ? "Corner" : e.goal_type === "eigen_doelpunt" ? "Eigen Doelpunt 🤦" : "Goal"}{e.goal_type !== "eigen_doelpunt" && ` — ${player?.name || ""}`}{e.assist_player_id && ` (assist: ${activePlayers.find(p => p.id === e.assist_player_id)?.name})`}</>}
                       {e.type === "goal_against" && <>⚽ {e.goal_type === "penalty" ? "Penalty" : e.goal_type === "vrije_trap" ? "Vrije Trap" : e.goal_type === "corner" ? "Corner" : "Goal"} Tegen</>}
                       {e.type === "chance_mva" && <>🎯 Kans</>}
                       {e.type === "chance_against" && <>🎯 Kans Tegenstander</>}
