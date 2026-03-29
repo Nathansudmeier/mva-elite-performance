@@ -188,24 +188,24 @@ export default function PlanningToernooiDetail() {
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-              <Trophy size={13} color="#1a1a1a" />
-              <span className="t-label" style={{ color: "rgba(26,26,26,0.65)" }}>{item.team}</span>
+              <Trophy size={13} color="#ffffff" />
+              <span className="t-label" style={{ color: "rgba(255,255,255,0.75)" }}>{item.team}</span>
               {item.home_away && (
-                <span style={{ fontSize: 10, fontWeight: 800, padding: "2px 10px", borderRadius: 20, background: "rgba(26,26,26,0.18)", color: "#1a1a1a", border: "1px solid rgba(26,26,26,0.20)" }}>
+                <span style={{ fontSize: 10, fontWeight: 800, padding: "2px 10px", borderRadius: 20, background: "rgba(255,255,255,0.25)", color: "#ffffff", border: "1px solid rgba(255,255,255,0.35)" }}>
                   {item.home_away}
                 </span>
               )}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
-              <Clock size={12} color="rgba(26,26,26,0.55)" />
-              <span className="t-secondary" style={{ fontWeight: 600, color: "rgba(26,26,26,0.70)" }}>
+              <Clock size={12} color="rgba(255,255,255,0.75)" />
+              <span className="t-secondary" style={{ fontWeight: 600, color: "rgba(255,255,255,0.90)" }}>
                 {dateLabel}{item.start_time ? ` · ${item.start_time}` : ""}
               </span>
             </div>
             {item.location && (
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <MapPin size={12} color="rgba(26,26,26,0.55)" />
-                <span className="t-secondary" style={{ fontWeight: 600, color: "rgba(26,26,26,0.70)" }}>{item.location}</span>
+                <MapPin size={12} color="rgba(255,255,255,0.75)" />
+                <span className="t-secondary" style={{ fontWeight: 600, color: "rgba(255,255,255,0.90)" }}>{item.location}</span>
               </div>
             )}
           </div>
@@ -224,8 +224,8 @@ export default function PlanningToernooiDetail() {
             { label: "Onbekend", count: nognietList.length, dot: "#FFD600" },
           ].map(({ label, count, dot }) => (
             <div key={label} style={{ flex: 1, background: "rgba(26,26,26,0.14)", borderRadius: 12, padding: "8px 6px", textAlign: "center" }}>
-              <p style={{ fontSize: 22, fontWeight: 900, color: "#1a1a1a", letterSpacing: "-1px", lineHeight: 1, margin: 0 }}>{count}</p>
-              <p className="t-label" style={{ color: "rgba(26,26,26,0.55)", marginTop: 3 }}>{label}</p>
+              <p style={{ fontSize: 22, fontWeight: 900, color: "#ffffff", letterSpacing: "-1px", lineHeight: 1, margin: 0 }}>{count}</p>
+              <p className="t-label" style={{ color: "rgba(255,255,255,0.70)", marginTop: 3 }}>{label}</p>
             </div>
           ))}
         </div>
@@ -233,7 +233,7 @@ export default function PlanningToernooiDetail() {
         {/* RSVP voor speler */}
         {(isSpeelster || (!isTrainer && myPlayer)) && myPlayer && (
           <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1.5px solid rgba(26,26,26,0.15)" }}>
-            <p className="t-label" style={{ color: "rgba(26,26,26,0.60)", marginBottom: 8 }}>Ga jij mee?</p>
+            <p className="t-label" style={{ color: "rgba(255,255,255,0.75)", marginBottom: 8 }}>Ga jij mee?</p>
             <AttendanceButtons
               currentStatus={myAttendance?.status}
               loading={rsvpMutation.isPending}
