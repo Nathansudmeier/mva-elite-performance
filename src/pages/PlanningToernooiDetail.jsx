@@ -411,9 +411,9 @@ export default function PlanningToernooiDetail() {
             {/* Google Maps */}
             {item.location && (
               <div className="card-green" style={{ overflow: "hidden" }}>
-                <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", gap: 8 }}>
-                  <MapPin size={14} color="#FF6800" />
-                  <span className="t-section-title">Locatie</span>
+                <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(255,255,255,0.20)", display: "flex", alignItems: "center", gap: 8 }}>
+                  <MapPin size={14} color="#ffffff" />
+                  <span className="t-section-title" style={{ color: "#ffffff" }}>Locatie</span>
                 </div>
                 <div style={{ height: 180 }}>
                   <iframe
@@ -430,7 +430,7 @@ export default function PlanningToernooiDetail() {
                   href={`https://maps.google.com/maps?q=${encodeURIComponent(item.location)}`}
                   target="_blank"
                   rel="noreferrer"
-                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 16px", borderTop: "1.5px solid rgba(26,26,26,0.08)", fontSize: 12, fontWeight: 800, color: "#FF6800", textDecoration: "none" }}
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 16px", borderTop: "1.5px solid rgba(255,255,255,0.20)", fontSize: 12, fontWeight: 800, color: "#ffffff", textDecoration: "none" }}
                 >
                   <MapPin size={12} />
                   Openen in Maps
@@ -440,10 +440,10 @@ export default function PlanningToernooiDetail() {
 
             {/* Informatie / notities */}
             <div className="card-yellow" style={{ overflow: "hidden" }}>
-              <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ padding: "13px 16px", borderBottom: "2px solid rgba(255,255,255,0.20)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Info size={14} color="#FF6800" />
-                  <span className="t-section-title">Informatie</span>
+                  <Info size={14} color="#ffffff" />
+                  <span className="t-section-title" style={{ color: "#ffffff" }}>Informatie</span>
                 </div>
                 {isTrainer && !editingInfo && (
                   <button onClick={() => { setEditingInfo(true); setInfoText(item.notes || ""); setWedstrijden(item.tournament_matches || []); }}
@@ -475,8 +475,8 @@ export default function PlanningToernooiDetail() {
                   </>
                 ) : (
                   item.notes
-                    ? <p className="t-secondary" style={{ lineHeight: 1.7, whiteSpace: "pre-wrap", color: "#1a1a1a" }}>{item.notes}</p>
-                    : <p className="t-secondary">{isTrainer ? "Klik op ✏️ om informatie toe te voegen" : "Nog geen extra informatie"}</p>
+                    ? <p className="t-secondary" style={{ lineHeight: 1.7, whiteSpace: "pre-wrap", color: "#ffffff" }}>{item.notes}</p>
+                    : <p className="t-secondary" style={{ color: "rgba(255,255,255,0.75)" }}>{isTrainer ? "Klik op ✏️ om informatie toe te voegen" : "Nog geen extra informatie"}</p>
                 )}
               </div>
             </div>
