@@ -62,6 +62,7 @@ export default function AgendaForm({ item, onSave, onClose }) {
     team: item?.team || "Beide",
     home_away: item?.home_away || "Thuis",
     opponent_logo_url: item?.opponent_logo_url || "",
+    location: item?.location || "",
     notes: item?.notes || "",
     reminder_1_days: item?.reminder_1_days ?? 3,
     reminder_2_days: item?.reminder_2_days ?? 1,
@@ -344,6 +345,14 @@ export default function AgendaForm({ item, onSave, onClose }) {
               </div>
             </div>
           )}
+
+          {/* Locatie */}
+          <div>
+            <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.55)", marginBottom: 8 }}>Locatie (optioneel)</p>
+            <input value={form.location} onChange={e => set("location", e.target.value)}
+              style={inputStyle}
+              placeholder="Bijv. Sportpark De Toekomst, Amsterdam" />
+          </div>
 
           {/* Notitie */}
           <div>
