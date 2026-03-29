@@ -84,6 +84,8 @@ export default function Planning() {
     setSelectedDay(null);
     if (item.type === "Training" || item.type === "Evenement") {
       navigate(`/PlanningTrainingDetail?id=${item.id}`);
+    } else if (item.type === "Toernooi") {
+      navigate(`/PlanningToernooiDetail?id=${item.id}`);
     } else {
       navigate(`/PlanningWedstrijdDetail?id=${item.id}`);
     }

@@ -22,6 +22,7 @@ import Chat from './pages/Chat.jsx';
 import Planning from './pages/Planning.jsx';
 import PlanningTrainingDetail from './pages/PlanningTrainingDetail.jsx';
 import PlanningWedstrijdDetail from './pages/PlanningWedstrijdDetail.jsx';
+import PlanningToernooiDetail from './pages/PlanningToernooiDetail.jsx';
 import DashboardRouter from './pages/DashboardRouter.jsx';
 import LiveTracker from './pages/LiveTracker.jsx';
 import ImportTrainingAttendance from './pages/ImportTrainingAttendance.jsx';
@@ -108,6 +109,7 @@ const AuthenticatedApp = () => {
       <Route path="/Planning" element={<LayoutWrapper currentPageName="Planning"><Planning /></LayoutWrapper>} />
       <Route path="/PlanningTrainingDetail" element={<LayoutWrapper currentPageName="Planning"><PlanningTrainingDetail /></LayoutWrapper>} />
       <Route path="/PlanningWedstrijdDetail" element={<LayoutWrapper currentPageName="Planning"><PlanningWedstrijdDetail /></LayoutWrapper>} />
+      <Route path="/PlanningToernooiDetail" element={<LayoutWrapper currentPageName="Planning"><PlanningToernooiDetail /></LayoutWrapper>} />
       <Route path="/MatchEdit" element={<MatchEdit />} />
       <Route path="/Messages" element={<LayoutWrapper currentPageName="Messages"><Messages /></LayoutWrapper>} />
       <Route path="/Chat" element={<LayoutWrapper currentPageName="Messages"><Chat /></LayoutWrapper>} />
