@@ -6,11 +6,6 @@ import { Star } from "lucide-react";
 const EMVI_IMAGE = "https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/17362aae0_Emvi-point.png";
 
 export default function DailyFeelingAverage({ trainingDate, isTrainer }) {
-  // Only show for trainers and admin
-  if (!isTrainer) {
-    return null;
-  }
-
   const { data: allFeelings = [] } = useQuery({
     queryKey: ["daily-feelings", trainingDate],
     queryFn: () => base44.entities.DailyFeeling.list("-date"),
@@ -19,7 +14,7 @@ export default function DailyFeelingAverage({ trainingDate, isTrainer }) {
   // Filter feelings for today's training
   const todayFeelings = allFeelings.filter(f => f.date === trainingDate);
 
-  if (todayFeelings.length === 0) {
+  if (!isTrainer || todayFeelings.length === 0) {
     return null;
   }
 

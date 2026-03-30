@@ -20,7 +20,7 @@ export default function AgendaItemCard({ item, attendance = [], playerCount = 0,
 
   return (
     <button onClick={onClick}
-      style={{ width: "100%", textAlign: "left", display: "flex", gap: "12px", padding: "14px", background: cardBg, border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", cursor: "pointer", transition: "transform 0.1s, box-shadow 0.1s" }}
+      style={{ width: "100%", textAlign: "left", display: "flex", gap: "12px", padding: "14px", background: item.cancelled ? "#9ca3af" : cardBg, border: item.cancelled ? "2.5px solid #6b7280" : "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: item.cancelled ? "3px 3px 0 #6b7280" : "3px 3px 0 #1a1a1a", cursor: "pointer", transition: "transform 0.1s, box-shadow 0.1s", opacity: item.cancelled ? 0.75 : 1 }}
       onMouseDown={e => { e.currentTarget.style.transform = "translate(2px,2px)"; e.currentTarget.style.boxShadow = "1px 1px 0 #1a1a1a"; }}
       onMouseUp={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; }}
       onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "3px 3px 0 #1a1a1a"; }}
@@ -34,9 +34,16 @@ export default function AgendaItemCard({ item, attendance = [], playerCount = 0,
             <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: textMuted, marginBottom: "3px" }}>{item.type}</p>
             <p style={{ fontSize: "15px", fontWeight: 800, color: textDark, lineHeight: 1.3 }}>{item.title}</p>
           </div>
-          <span style={{ flexShrink: 0, padding: "3px 10px", borderRadius: "20px", fontSize: "10px", fontWeight: 800, background: "rgba(26,26,26,0.18)", color: textDark, border: "1.5px solid rgba(26,26,26,0.25)" }}>
-            {item.team}
-          </span>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+            {item.cancelled && (
+              <span style={{ padding: "3px 10px", borderRadius: "20px", fontSize: "10px", fontWeight: 800, background: "#FF3DA8", color: "#ffffff", border: "1.5px solid rgba(26,26,26,0.25)" }}>
+                Geannuleerd
+              </span>
+            )}
+            <span style={{ flexShrink: 0, padding: "3px 10px", borderRadius: "20px", fontSize: "10px", fontWeight: 800, background: "rgba(26,26,26,0.18)", color: item.cancelled ? "#ffffff" : textDark, border: "1.5px solid rgba(26,26,26,0.25)" }}>
+              {item.team}
+            </span>
+          </div>
         </div>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>

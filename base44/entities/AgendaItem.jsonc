@@ -62,6 +62,15 @@
       "type": "string",
       "description": "Optionele notitie"
     },
+    "cancelled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of de activiteit geannuleerd is"
+    },
+    "cancel_reason": {
+      "type": "string",
+      "description": "Reden voor annulering"
+    },
     "tournament_matches": {
       "type": "array",
       "description": "Wedstrijden binnen een toernooi",

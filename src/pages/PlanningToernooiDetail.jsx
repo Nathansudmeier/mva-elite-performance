@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { ChevronLeft, Clock, MapPin, Pencil, Trash2, Trophy, Users, Info, Plus, X, Check, Bell } from "lucide-react";
+import { ChevronLeft, Clock, MapPin, Pencil, Trash2, Trophy, Users, Info, Plus, X, Check, Bell, Ban } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { formatDate } from "@/components/agenda/agendaUtils";
@@ -18,6 +18,8 @@ export default function PlanningToernooiDetail() {
   const { toast } = useToast();
 
   const [showEdit, setShowEdit] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [absentReason, setAbsentReason] = useState("");
   const [showReasonInput, setShowReasonInput] = useState(false);
@@ -123,6 +125,22 @@ export default function PlanningToernooiDetail() {
     navigate("/Planning");
   }
 
+  async function handleCancel() {
+    await base44.entities.AgendaItem.update(item.id, { cancelled: true, cancel_reason: cancelReason });
+    await qc.invalidateQueries({ queryKey: ["agenda-item", itemId] });
+    await qc.invalidateQueries({ queryKey: ["agenda-items"] });
+    setShowCancelConfirm(false);
+    setCancelReason("");
+    toast({ description: "Activiteit geannuleerd", style: { background: "#FF3DA8", color: "white", border: "none" } });
+  }
+
+  async function handleUncancel() {
+    await base44.entities.AgendaItem.update(item.id, { cancelled: false, cancel_reason: "" });
+    await qc.invalidateQueries({ queryKey: ["agenda-item", itemId] });
+    await qc.invalidateQueries({ queryKey: ["agenda-items"] });
+    toast({ description: "Annulering ongedaan gemaakt", style: { background: "#4ade80", color: "white", border: "none" } });
+  }
+
   async function saveInfo() {
     await base44.entities.AgendaItem.update(item.id, { notes: infoText, tournament_matches: wedstrijden });
     await qc.invalidateQueries({ queryKey: ["agenda-item", itemId] });
@@ -175,6 +193,17 @@ export default function PlanningToernooiDetail() {
               style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <Pencil size={15} color="#1a1a1a" />
             </button>
+            {item.cancelled ? (
+              <button onClick={handleUncancel}
+                style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(8,208,104,0.12)", border: "2.5px solid #08D068", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
+                <Check size={15} color="#05a050" />
+              </button>
+            ) : (
+              <button onClick={() => setShowCancelConfirm(true)}
+                style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,150,0,0.12)", border: "2.5px solid #FF6800", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
+                <Ban size={15} color="#FF6800" />
+              </button>
+            )}
             <button onClick={handleDelete}
               style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,61,168,0.10)", border: "2.5px solid #FF3DA8", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
               <Trash2 size={15} color="#FF3DA8" />
@@ -183,8 +212,19 @@ export default function PlanningToernooiDetail() {
         )}
       </div>
 
+      {/* ── Geannuleerd banner ── */}
+      {item.cancelled && (
+        <div style={{ background: "#FF3DA8", border: "2.5px solid #1a1a1a", borderRadius: 14, boxShadow: "3px 3px 0 #1a1a1a", padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+          <Ban size={18} color="#ffffff" />
+          <div>
+            <p style={{ fontSize: 13, fontWeight: 900, color: "#ffffff" }}>Geannuleerd</p>
+            {item.cancel_reason && <p style={{ fontSize: 11, color: "rgba(255,255,255,0.80)", marginTop: 2 }}>{item.cancel_reason}</p>}
+          </div>
+        </div>
+      )}
+
       {/* ── Hero card ── */}
-      <div className="glass-orange" style={{ padding: 20 }}>
+      <div className="glass-orange" style={{ padding: 20, opacity: item.cancelled ? 0.6 : 1 }}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
@@ -479,6 +519,35 @@ export default function PlanningToernooiDetail() {
                     : <p className="t-secondary" style={{ color: "rgba(255,255,255,0.75)" }}>{isTrainer ? "Klik op ✏️ om informatie toe te voegen" : "Nog geen extra informatie"}</p>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel confirm */}
+      {showCancelConfirm && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+          <div onClick={() => setShowCancelConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 200 }} />
+          <div style={{ position: "relative", zIndex: 301, background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "20px 20px 0 0", padding: "24px", paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))", width: "100%", maxWidth: "500px" }}>
+            <div style={{ fontSize: "32px", textAlign: "center", marginBottom: "12px" }}>🚫</div>
+            <div style={{ fontSize: "16px", fontWeight: 800, color: "white", textAlign: "center", marginBottom: "8px" }}>Activiteit annuleren?</div>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", textAlign: "center", marginBottom: "16px" }}>De activiteit blijft zichtbaar maar wordt gemarkeerd als geannuleerd.</p>
+            <textarea
+              value={cancelReason}
+              onChange={e => setCancelReason(e.target.value)}
+              placeholder="Reden voor annulering (optioneel)..."
+              rows={2}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: "2px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", color: "#ffffff", fontSize: 13, fontWeight: 500, outline: "none", resize: "none", fontFamily: "inherit", boxSizing: "border-box", marginBottom: "16px" }}
+            />
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button onClick={() => setShowCancelConfirm(false)}
+                style={{ flex: 1, height: "48px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: "pointer" }}>
+                Terug
+              </button>
+              <button onClick={handleCancel}
+                style={{ flex: 1, height: "48px", background: "#FF3DA8", border: "none", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: "pointer" }}>
+                Ja, annuleer
+              </button>
             </div>
           </div>
         </div>

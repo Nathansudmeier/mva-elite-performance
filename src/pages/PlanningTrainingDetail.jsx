@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { ChevronLeft, MapPin, Clock, Bell, Pencil, Trash2 } from "lucide-react";
+import { ChevronLeft, MapPin, Clock, Bell, Pencil, Trash2, Ban, Check } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { formatDate, TYPE_CONFIG } from "@/components/agenda/agendaUtils";
 import AttendanceButtons from "@/components/attendance/AttendanceButtons";
@@ -22,6 +22,8 @@ export default function PlanningTrainingDetail() {
   const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState(0);
   const [showEdit, setShowEdit] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
   const [absentReason, setAbsentReason] = useState("");
   const [showReasonInput, setShowReasonInput] = useState(false);
   const [reminderSent, setReminderSent] = useState(false);
@@ -108,6 +110,20 @@ export default function PlanningTrainingDetail() {
     navigate("/Planning");
   }
 
+  async function handleCancel() {
+    await base44.entities.AgendaItem.update(item.id, { cancelled: true, cancel_reason: cancelReason });
+    await qc.invalidateQueries({ queryKey: ["agenda-item", itemId] });
+    await qc.invalidateQueries({ queryKey: ["agenda-items"] });
+    setShowCancelConfirm(false);
+    setCancelReason("");
+  }
+
+  async function handleUncancel() {
+    await base44.entities.AgendaItem.update(item.id, { cancelled: false, cancel_reason: "" });
+    await qc.invalidateQueries({ queryKey: ["agenda-item", itemId] });
+    await qc.invalidateQueries({ queryKey: ["agenda-items"] });
+  }
+
   async function handleAttendanceToggle(playerId, newStatus) {
     const existingRecord = attendance.find(a => a.player_id === playerId);
     if (existingRecord) {
@@ -156,6 +172,17 @@ export default function PlanningTrainingDetail() {
                 style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}>
                 <Pencil size={16} color="#1a1a1a" />
               </button>
+              {item.cancelled ? (
+                <button onClick={handleUncancel}
+                  style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(8,208,104,0.12)", border: "2.5px solid #08D068", cursor: "pointer" }}>
+                  <Check size={16} color="#05a050" />
+                </button>
+              ) : (
+                <button onClick={() => setShowCancelConfirm(true)}
+                  style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,150,0,0.12)", border: "2.5px solid #FF6800", cursor: "pointer" }}>
+                  <Ban size={16} color="#FF6800" />
+                </button>
+              )}
               <button onClick={handleDelete}
                 style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,61,168,0.10)", border: "2.5px solid #FF3DA8", cursor: "pointer" }}>
                 <Trash2 size={16} color="#FF3DA8" />
@@ -164,8 +191,19 @@ export default function PlanningTrainingDetail() {
           )}
         </div>
 
+        {/* Geannuleerd banner */}
+        {item.cancelled && (
+          <div style={{ background: "#FF3DA8", border: "2.5px solid #1a1a1a", borderRadius: 14, boxShadow: "3px 3px 0 #1a1a1a", padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+            <Ban size={18} color="#ffffff" />
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 900, color: "#ffffff" }}>Geannuleerd</p>
+              {item.cancel_reason && <p style={{ fontSize: 11, color: "rgba(255,255,255,0.80)", marginTop: 2 }}>{item.cancel_reason}</p>}
+            </div>
+          </div>
+        )}
+
         {/* Info card */}
-        <div style={{ background: "#08D068", border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6 }}>
+        <div style={{ background: "#08D068", opacity: item.cancelled ? 0.6 : 1, border: "2.5px solid #1a1a1a", borderRadius: 18, boxShadow: "3px 3px 0 #1a1a1a", padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <Clock size={13} style={{ color: "rgba(26,26,26,0.60)" }} />
             <span style={{ fontSize: 13, color: "#1a1a1a", fontWeight: 600 }}>{formatDate(item.date)} · {item.start_time}</span>
@@ -283,6 +321,34 @@ export default function PlanningTrainingDetail() {
             onToggleStatus={handleAttendanceToggle}
           />
         )}
+
+      {showCancelConfirm && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+          <div onClick={() => setShowCancelConfirm(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 200 }} />
+          <div style={{ position: "relative", zIndex: 301, background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "20px 20px 0 0", padding: "24px", paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))", width: "100%", maxWidth: "500px" }}>
+            <div style={{ fontSize: "32px", textAlign: "center", marginBottom: "12px" }}>🚫</div>
+            <div style={{ fontSize: "16px", fontWeight: 800, color: "white", textAlign: "center", marginBottom: "8px" }}>Activiteit annuleren?</div>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", textAlign: "center", marginBottom: "16px" }}>De activiteit blijft zichtbaar maar wordt gemarkeerd als geannuleerd.</p>
+            <textarea
+              value={cancelReason}
+              onChange={e => setCancelReason(e.target.value)}
+              placeholder="Reden voor annulering (optioneel)..."
+              rows={2}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: 12, border: "2px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", color: "#ffffff", fontSize: 13, fontWeight: 500, outline: "none", resize: "none", fontFamily: "inherit", boxSizing: "border-box", marginBottom: "16px" }}
+            />
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button onClick={() => setShowCancelConfirm(false)}
+                style={{ flex: 1, height: "48px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: "pointer" }}>
+                Terug
+              </button>
+              <button onClick={handleCancel}
+                style={{ flex: 1, height: "48px", background: "#FF3DA8", border: "none", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: "pointer" }}>
+                Ja, annuleer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showEdit && (
         <AgendaForm
