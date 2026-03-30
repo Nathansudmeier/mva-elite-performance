@@ -49,9 +49,41 @@ export default function LiveMatch() {
   const [matchTimeRecords, setMatchTimeRecords] = useState([]);
 
   const intervalRef = useRef(null);
-  // startRef stores the wall-clock time when the timer started, and baseSeconds the seconds at that point
   const startRef = useRef(null);
   const baseSecondsRef = useRef(0);
+  const wakeLockRef = useRef(null);
+
+  const isMatchActive = phase === "live";
+
+  const requestWakeLock = async () => {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLockRef.current = await navigator.wakeLock.request('screen');
+      }
+    } catch (err) {
+      console.log('Wake Lock niet beschikbaar:', err);
+    }
+  };
+
+  const releaseWakeLock = async () => {
+    if (wakeLockRef.current) {
+      await wakeLockRef.current.release();
+      wakeLockRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    const handleVisibility = async () => {
+      if (document.visibilityState === 'visible' && isMatchActive) {
+        await requestWakeLock();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      releaseWakeLock();
+    };
+  }, [isMatchActive]);
 
   useEffect(() => {
     if (match) {
@@ -188,6 +220,7 @@ export default function LiveMatch() {
 
     setPhase("live");
     setRunning(true);
+    await requestWakeLock();
   };
 
   const getHalfLengthMinutes = () => match?.team === "MO17" ? 40 : 45;
@@ -206,6 +239,7 @@ export default function LiveMatch() {
   const handleStop = async () => {
     setRunning(false);
     setPhase("finished");
+    await releaseWakeLock();
     const finalScoreHome = events.filter(e => e.type === "goal_mva").length;
     const finalScoreAway = events.filter(e => e.type === "goal_against").length;
 
