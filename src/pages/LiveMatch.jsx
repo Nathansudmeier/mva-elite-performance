@@ -181,16 +181,23 @@ export default function LiveMatch() {
   const scoreAway = events.filter(e => e.type === "goal_against").length;
 
   const lineupPlayerIds = Object.values(lineupMap);
-  const substitutedIn = events.filter(e => e.type === "substitution").map(e => e.player_in_id);
-  const substitutedOut = events.filter(e => e.type === "substitution").map(e => e.player_out_id);
 
-  const currentFieldPlayers = activePlayers.filter(p =>
-    (lineupPlayerIds.includes(p.id) && !substitutedOut.includes(p.id)) || substitutedIn.includes(p.id)
-  );
-  // Bank = originele wissels die nog niet zijn ingevallen + spelers die zijn uitgewisseld (ze zitten terug op de bank)
+  // Bereken de actuele veld/bank status op basis van de volgorde van wissels.
+  // Een speler kan meerdere keren wisselen: we tellen per speler het netto-saldo.
+  // Elke keer dat een speler "in" gaat +1, elke keer "uit" gaat -1.
+  // Starterspelers beginnen op het veld (saldo = 1), wisselspelers op de bank (saldo = 0).
+  const playerFieldCount = {};
+  lineupPlayerIds.forEach(id => { playerFieldCount[id] = 1; });
+  substitutes.forEach(id => { if (!(id in playerFieldCount)) playerFieldCount[id] = 0; });
+
+  events.filter(e => e.type === "substitution").forEach(e => {
+    if (e.player_out_id) playerFieldCount[e.player_out_id] = (playerFieldCount[e.player_out_id] || 0) - 1;
+    if (e.player_in_id) playerFieldCount[e.player_in_id] = (playerFieldCount[e.player_in_id] || 0) + 1;
+  });
+
+  const currentFieldPlayers = activePlayers.filter(p => (playerFieldCount[p.id] || 0) > 0);
   const currentBenchPlayers = activePlayers.filter(p =>
-    (substitutes.includes(p.id) && !substitutedIn.includes(p.id)) ||
-    substitutedOut.includes(p.id)
+    p.id in playerFieldCount && (playerFieldCount[p.id] || 0) <= 0
   );
 
   const createMatchTimeRecords = async (playerIds, startMin) => {
