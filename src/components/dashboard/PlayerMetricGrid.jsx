@@ -1,5 +1,6 @@
 import React from "react";
 import { Activity, Calendar, Timer, TrendingUp } from "lucide-react";
+import { calcPlayerMinutesInMatch } from "@/utils/calculateMinutes";
 
 const CARD_COLORS = ["#00C2FF", "#FFD600", "#08D068", "#FF6800"];
 
@@ -65,29 +66,17 @@ export default function PlayerMetricGrid({ yoyo, physical, attendance, agendaAtt
   const agendaTotal = agendaAttendance.filter(a => a.status !== "onbekend").length;
   const confirmationPct = agendaTotal > 0 ? Math.round((agendaConfirmed / agendaTotal) * 100) : null;
 
-  // Speelminuten (total from finished matches with actual live_events data)
+  // Speelminuten via de centrale calcPlayerMinutesInMatch logica
   let totalMinutes = null;
   if (matches && playerId) {
     const finished = matches.filter(m => m.live_status === "finished");
     let total = 0;
     let participated = false;
     finished.forEach(match => {
-      const lineup = match.lineup || [];
-      const events = match.live_events || [];
-      // Only count matches that actually have live event data recorded
-      if (events.length === 0 && lineup.length === 0) return;
-      const startedInBasis = lineup.some(l => l.slot === "basis" && l.player_id === playerId);
-      const subIn = events.find(e => e.type === "substitution" && e.player_in_id === playerId);
-      const subOut = events.find(e => e.type === "substitution" && e.player_out_id === playerId);
-      if (startedInBasis || subIn) {
+      const result = calcPlayerMinutesInMatch(match, playerId);
+      if (result && result.minutes > 0) {
         participated = true;
-        const matchDuration = match.team === "MO17" ? 80 : 90;
-        if (startedInBasis) {
-          total += subOut ? subOut.minute : matchDuration;
-        } else if (subIn) {
-          const start = subIn.minute;
-          total += Math.max(0, (subOut ? subOut.minute : matchDuration) - start);
-        }
+        total += result.minutes;
       }
     });
     totalMinutes = participated ? total : null;

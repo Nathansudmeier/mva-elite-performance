@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
+import { calcPlayerMinutesInMatch } from "@/utils/calculateMinutes";
 
 // Huidig seizoen: aug t/m jul
 function getCurrentSeasonMatchIds(matches) {
@@ -28,23 +29,21 @@ export default function PlayerSeasonStats({ playerId, variant = "grid" }) {
     queryFn: () => base44.entities.Match.list(),
   });
 
-  const { data: matchTimeRecords = [] } = useQuery({
-    queryKey: ["playerMatchTime", playerId],
-    queryFn: () => base44.entities.PlayerMatchTime.filter({ player_id: playerId }),
-    enabled: !!playerId,
-  });
-
   if (!playerId) return null;
 
   const seasonMatchIds = getCurrentSeasonMatchIds(matches);
 
-  // Goals & Assists uit match live_events
+  // Goals & Assists + speelminuten uit match live_events via centrale berekening
   let goals = 0;
   let assists = 0;
+  let totalMinutes = 0;
+  const uniqueMatchIds = new Set();
   const matchContributions = {}; // match_id → {goals, assists, minutes}
 
   matches.forEach(m => {
     if (!seasonMatchIds.has(m.id)) return;
+
+    // Goals & assists
     (m.live_events || []).forEach(ev => {
       if (ev.type === "goal_mva") {
         if (ev.player_id === playerId) {
@@ -59,24 +58,14 @@ export default function PlayerSeasonStats({ playerId, variant = "grid" }) {
         }
       }
     });
-  });
 
-  // Speelminuten uit PlayerMatchTime
-  const seasonRecords = matchTimeRecords.filter(r => seasonMatchIds.has(r.match_id));
-  let totalMinutes = 0;
-  const uniqueMatchIds = new Set();
-
-  seasonRecords.forEach(r => {
-    if (r.end_minute != null) {
-      totalMinutes += r.end_minute - r.start_minute;
-    }
-    uniqueMatchIds.add(r.match_id);
-    if (!matchContributions[r.match_id]) {
-      const m = matches.find(x => x.id === r.match_id);
-      matchContributions[r.match_id] = { goals: 0, assists: 0, minutes: 0, date: m?.date || "", opponent: m?.opponent || "" };
-    }
-    if (r.end_minute != null) {
-      matchContributions[r.match_id].minutes = (matchContributions[r.match_id].minutes || 0) + (r.end_minute - r.start_minute);
+    // Speelminuten via centrale logica
+    const result = calcPlayerMinutesInMatch(m, playerId);
+    if (result && result.minutes > 0) {
+      totalMinutes += result.minutes;
+      uniqueMatchIds.add(m.id);
+      if (!matchContributions[m.id]) matchContributions[m.id] = { goals: 0, assists: 0, minutes: 0, date: m.date, opponent: m.opponent };
+      matchContributions[m.id].minutes = result.minutes;
     }
   });
 
