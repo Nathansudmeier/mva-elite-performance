@@ -45,9 +45,9 @@ function formatRelative(date) {
   return new Date(date).toLocaleDateString("nl-NL", { day: "numeric", month: "short" });
 }
 
-function MededelingCard({ m, user, isTrainer, onLike, onDelete }) {
+function MededelingCard({ m, user, isTrainer, onLike, onDelete, onEdit }) {
   const [pressTimer, setPressTimer] = useState(null);
-  const [showDelete, setShowDelete] = useState(false);
+  const [showActions, setShowActions] = useState(false);
   const [likeAnim, setLikeAnim] = useState(false);
   const cfg = TYPE_CONFIG[m.type] || TYPE_CONFIG.Info;
   const liked = (m.likes || []).includes(user?.email);
@@ -61,7 +61,7 @@ function MededelingCard({ m, user, isTrainer, onLike, onDelete }) {
 
   const startPress = () => {
     if (!canDelete) return;
-    const t = setTimeout(() => setShowDelete(true), 600);
+    const t = setTimeout(() => setShowActions(true), 600);
     setPressTimer(t);
   };
   const endPress = () => {
@@ -71,7 +71,7 @@ function MededelingCard({ m, user, isTrainer, onLike, onDelete }) {
   return (
     <div
       style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", overflow: "hidden", position: "relative" }}
-      onTouchStart={startPress} onTouchEnd={endPress} onMouseLeave={() => { endPress(); setShowDelete(false); }}
+      onTouchStart={startPress} onTouchEnd={endPress} onMouseLeave={() => { endPress(); setShowActions(false); }}
     >
       {/* Urgent dot */}
       {m.is_urgent && (
@@ -130,15 +130,19 @@ function MededelingCard({ m, user, isTrainer, onLike, onDelete }) {
         </button>
       </div>
 
-      {/* Delete overlay */}
-      {showDelete && canDelete && (
-        <div style={{ position: "absolute", inset: 0, background: "rgba(26,26,26,0.60)", borderRadius: "18px", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 5 }}>
+      {/* Actions overlay */}
+      {showActions && canDelete && (
+        <div style={{ position: "absolute", inset: 0, background: "rgba(26,26,26,0.65)", borderRadius: "18px", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 5 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" }}>
             <button
-              onClick={() => { onDelete(m.id); setShowDelete(false); }}
-              style={{ background: "#FF3DA8", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "12px 24px", fontSize: "14px", fontWeight: 800, color: "#ffffff", cursor: "pointer" }}
-            >Verwijderen</button>
-            <button onClick={() => setShowDelete(false)} style={{ background: "none", border: "none", color: "#ffffff", fontSize: "13px", cursor: "pointer", fontWeight: 600 }}>Annuleren</button>
+              onClick={() => { onEdit(m); setShowActions(false); }}
+              style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "12px 28px", fontSize: "14px", fontWeight: 800, color: "#1a1a1a", cursor: "pointer" }}
+            >✏️ Wijzigen</button>
+            <button
+              onClick={() => { onDelete(m.id); setShowActions(false); }}
+              style={{ background: "#FF3DA8", border: "2.5px solid #1a1a1a", borderRadius: "14px", boxShadow: "3px 3px 0 #1a1a1a", padding: "12px 28px", fontSize: "14px", fontWeight: 800, color: "#ffffff", cursor: "pointer" }}
+            >🗑️ Verwijderen</button>
+            <button onClick={() => setShowActions(false)} style={{ background: "none", border: "none", color: "#ffffff", fontSize: "13px", cursor: "pointer", fontWeight: 600 }}>Annuleren</button>
           </div>
         </div>
       )}
@@ -146,10 +150,16 @@ function MededelingCard({ m, user, isTrainer, onLike, onDelete }) {
   );
 }
 
-function NieuweMededelingSheet({ user, onClose, onSaved }) {
-  const [form, setForm] = useState({ type: "Info", title: "", body: "", is_urgent: false, expires_at: "" });
+function NieuweMededelingSheet({ user, onClose, onSaved, editItem }) {
+  const [form, setForm] = useState(editItem ? {
+    type: editItem.type || "Info",
+    title: editItem.title || "",
+    body: editItem.body || "",
+    is_urgent: editItem.is_urgent || false,
+    expires_at: editItem.expires_at || "",
+  } : { type: "Info", title: "", body: "", is_urgent: false, expires_at: "" });
   const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(editItem?.photo_url || null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const photoInputRef = useRef();
@@ -167,36 +177,46 @@ function NieuweMededelingSheet({ user, onClose, onSaved }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-    let photo_url = null;
+    let photo_url = editItem?.photo_url || null;
     if (photoFile) {
       setUploading(true);
       const res = await base44.integrations.Core.UploadFile({ file: photoFile });
       photo_url = res.file_url;
       setUploading(false);
     }
-    const firstName = user?.full_name?.split(" ")[0] || user?.full_name || "Trainer";
-    const created = await base44.entities.Mededeling.create({
-      ...form,
-      author_name: firstName,
-      author_email: user?.email,
-      author_photo_url: user?.photo_url || "",
-      likes: [],
-      photo_url: photo_url || undefined,
-      expires_at: form.expires_at || undefined,
-    });
+    if (!photoPreview) photo_url = null; // foto verwijderd
 
-    // Notificaties voor alle gebruikers
-    const allUsers = await base44.entities.User.list();
-    await Promise.all(allUsers.map(u =>
-      base44.entities.Notification.create({
-        user_email: u.email,
-        type: "mededeling",
-        title: form.title,
-        body: form.body.slice(0, 60),
-        link: "/Prikbord",
-        is_read: false,
-      })
-    )).catch(() => {});
+    if (editItem) {
+      await base44.entities.Mededeling.update(editItem.id, {
+        ...form,
+        photo_url: photo_url || undefined,
+        expires_at: form.expires_at || undefined,
+      });
+    } else {
+      const firstName = user?.full_name?.split(" ")[0] || user?.full_name || "Trainer";
+      await base44.entities.Mededeling.create({
+        ...form,
+        author_name: firstName,
+        author_email: user?.email,
+        author_photo_url: user?.photo_url || "",
+        likes: [],
+        photo_url: photo_url || undefined,
+        expires_at: form.expires_at || undefined,
+      });
+
+      // Notificaties voor alle gebruikers
+      const allUsers = await base44.entities.User.list();
+      await Promise.all(allUsers.map(u =>
+        base44.entities.Notification.create({
+          user_email: u.email,
+          type: "mededeling",
+          title: form.title,
+          body: form.body.slice(0, 60),
+          link: "/Prikbord",
+          is_read: false,
+        })
+      )).catch(() => {});
+    }
 
     setSaving(false);
     onSaved();
@@ -222,7 +242,7 @@ function NieuweMededelingSheet({ user, onClose, onSaved }) {
       >
         {/* Handle */}
         <div style={{ width: "36px", height: "4px", background: "#1a1a1a", borderRadius: "2px", margin: "0 auto 1rem" }} />
-        <h2 style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a", marginBottom: "1rem" }}>Nieuwe mededeling</h2>
+        <h2 style={{ fontSize: "16px", fontWeight: 900, color: "#1a1a1a", marginBottom: "1rem" }}>{editItem ? "Mededeling wijzigen" : "Nieuwe mededeling"}</h2>
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {/* Type */}
@@ -308,7 +328,7 @@ function NieuweMededelingSheet({ user, onClose, onSaved }) {
             color: "#ffffff", marginTop: "1rem", cursor: saving ? "not-allowed" : "pointer",
             opacity: saving ? 0.6 : 1,
           }}>
-            {saving ? (uploading ? "Foto uploaden..." : "Plaatsen...") : "Mededeling plaatsen"}
+            {saving ? (uploading ? "Foto uploaden..." : "Opslaan...") : (editItem ? "Wijzigingen opslaan" : "Mededeling plaatsen")}
           </button>
           <div style={{ height: "16px" }} />
         </form>
@@ -322,6 +342,7 @@ export default function Prikbord() {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState("Alles");
   const [showForm, setShowForm] = useState(false);
+  const [editItem, setEditItem] = useState(null);
   const canPost = isTrainer || user?.role === "admin";
 
   const { data: mededelingen = [] } = useQuery({
@@ -438,6 +459,7 @@ export default function Prikbord() {
               key={m.id} m={m} user={user} isTrainer={isTrainer}
               onLike={handleLike}
               onDelete={(id) => deleteMutation.mutate(id)}
+              onEdit={(m) => { setEditItem(m); setShowForm(true); }}
             />
           ))}
         </div>
@@ -446,7 +468,8 @@ export default function Prikbord() {
       {showForm && (
         <NieuweMededelingSheet
           user={user}
-          onClose={() => setShowForm(false)}
+          editItem={editItem}
+          onClose={() => { setShowForm(false); setEditItem(null); }}
           onSaved={() => queryClient.invalidateQueries(["mededelingen"])}
         />
       )}
