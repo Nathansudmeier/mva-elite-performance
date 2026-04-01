@@ -187,8 +187,10 @@ export default function LiveMatch() {
   const currentFieldPlayers = activePlayers.filter(p =>
     (lineupPlayerIds.includes(p.id) && !substitutedOut.includes(p.id)) || substitutedIn.includes(p.id)
   );
+  // Bank = originele wissels die nog niet zijn ingevallen + spelers die zijn uitgewisseld (ze zitten terug op de bank)
   const currentBenchPlayers = activePlayers.filter(p =>
-    substitutes.includes(p.id) && !substitutedIn.includes(p.id)
+    (substitutes.includes(p.id) && !substitutedIn.includes(p.id)) ||
+    substitutedOut.includes(p.id)
   );
 
   const createMatchTimeRecords = async (playerIds, startMin) => {
