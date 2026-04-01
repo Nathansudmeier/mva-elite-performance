@@ -44,8 +44,7 @@ export default function RecentMatchCelebration({ matches, playerId }) {
     return `${parts.join(" en ")} tegen ${recentMatch.opponent || "de tegenstander"}`;
   };
 
-  const goalDetails = goals.map((g, i) => {
-    const type = g.note ? g.note : "";
+  const goalDetails = goals.map((g) => {
     const typeLabel = (() => {
       if (g.note === "Strafschop") return "Penalty";
       if (g.note === "Vrije trap") return "Vrije trap";
@@ -53,12 +52,13 @@ export default function RecentMatchCelebration({ matches, playerId }) {
       if (g.note === "Eigen doelpunt") return "Eigen doelpunt";
       return "Open spel";
     })();
-    return `⚽ ${g.minute ? `${g.minute}'` : ""} ${typeLabel}`;
+    return { type: "goal", label: `${g.minute ? `${g.minute}' ` : ""}${typeLabel}` };
   });
 
-  const assistDetails = assists.map((a) => {
-    return `🎯 ${a.minute ? `${a.minute}'` : ""} Assist`;
-  });
+  const assistDetails = assists.map((a) => ({
+    type: "assist",
+    label: `${a.minute ? `${a.minute}' ` : ""}Assist`,
+  }));
 
   const allDetails = [...goalDetails, ...assistDetails];
 
@@ -124,8 +124,24 @@ export default function RecentMatchCelebration({ matches, playerId }) {
                 fontSize: "11px",
                 fontWeight: 700,
                 color: "#ffffff",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
               }}>
-                {detail}
+                {detail.type === "goal" ? (
+                  <i className="ph-fill ph-soccer-ball" style={{
+                    fontSize: "14px",
+                    color: "#FFD600",
+                    WebkitTextStroke: "1px #1a1a1a",
+                    paintOrder: "stroke fill",
+                  }} />
+                ) : (
+                  <i className="ph-fill ph-arrow-bend-up-right" style={{
+                    fontSize: "14px",
+                    color: "#00C2FF",
+                  }} />
+                )}
+                {detail.label}
               </span>
             ))}
           </div>
