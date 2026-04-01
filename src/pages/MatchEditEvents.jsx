@@ -27,13 +27,15 @@ const GOAL_TYPES = [
 ];
 
 const fieldStyle = {
-  background: "rgba(255,255,255,0.08)",
-  border: "1px solid rgba(255,255,255,0.15)",
-  borderRadius: "8px",
-  color: "white",
-  padding: "6px 10px",
+  background: "#ffffff",
+  border: "2px solid #1a1a1a",
+  borderRadius: "10px",
+  color: "#1a1a1a",
+  padding: "7px 10px",
   fontSize: "13px",
+  fontWeight: 600,
   width: "100%",
+  outline: "none",
 };
 
 function PlayerSelect({ players, value, onChange, placeholder = "Speler" }) {
@@ -55,24 +57,16 @@ function EventRow({ event, index, players, onChange, onDelete }) {
   const isGoalAgainst = event.type === "goal_against";
 
   return (
-    <div style={{
-      background: "rgba(255,255,255,0.06)",
-      border: "1px solid rgba(255,255,255,0.10)",
-      borderRadius: "14px",
-      padding: "14px",
-      display: "flex",
-      flexDirection: "column",
-      gap: "10px",
-    }}>
+    <div className="glass" style={{ padding: "14px", display: "flex", flexDirection: "column", gap: "10px" }}>
       {/* Row 1: minute + type + delete */}
-      <div className="flex items-center gap-2">
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <input
           type="number"
           min="0"
           max="120"
           value={event.minute ?? ""}
           onChange={e => onChange(index, "minute", parseInt(e.target.value) || 0)}
-          style={{ ...fieldStyle, width: "60px", textAlign: "center" }}
+          style={{ ...fieldStyle, width: "64px", textAlign: "center" }}
           placeholder="Min"
         />
         <div style={{ flex: 1 }}>
@@ -82,12 +76,15 @@ function EventRow({ event, index, players, onChange, onDelete }) {
             ))}
           </select>
         </div>
-        <button onClick={() => onDelete(index)} style={{ background: "rgba(248,113,113,0.15)", border: "1px solid rgba(248,113,113,0.25)", borderRadius: "8px", padding: "6px", cursor: "pointer", flexShrink: 0 }}>
-          <Trash2 size={14} color="#f87171" />
+        <button
+          onClick={() => onDelete(index)}
+          style={{ background: "rgba(255,61,168,0.10)", border: "2px solid #FF3DA8", borderRadius: "10px", padding: "7px", cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <Trash2 size={14} color="#FF3DA8" />
         </button>
       </div>
 
-      {/* Goal type (for goal_mva and goal_against) */}
+      {/* Goal type */}
       {(isGoalMva || isGoalAgainst) && (
         <select value={event.goal_type || "normaal"} onChange={e => onChange(index, "goal_type", e.target.value)} style={fieldStyle}>
           {GOAL_TYPES.map(g => (
@@ -96,19 +93,19 @@ function EventRow({ event, index, players, onChange, onDelete }) {
         </select>
       )}
 
-      {/* Player selectors */}
+      {/* Player selector */}
       {needsPlayer && (
         <PlayerSelect players={players} value={event.player_id} onChange={v => onChange(index, "player_id", v)} placeholder="Speler" />
       )}
 
-      {/* Assist (only for goal_mva, not eigen doelpunt) */}
+      {/* Assist */}
       {isGoalMva && event.goal_type !== "eigen_doelpunt" && (
         <PlayerSelect players={players} value={event.assist_player_id} onChange={v => onChange(index, "assist_player_id", v)} placeholder="Assist (optioneel)" />
       )}
 
       {/* Substitution: out + in */}
       {isSubstitution && (
-        <div className="flex gap-2">
+        <div style={{ display: "flex", gap: "8px" }}>
           <div style={{ flex: 1 }}>
             <PlayerSelect players={players} value={event.player_out_id} onChange={v => onChange(index, "player_out_id", v)} placeholder="Eruit" />
           </div>
@@ -148,7 +145,6 @@ export default function MatchEditEvents() {
 
   const [events, setEvents] = useState(null);
 
-  // Initialize events from match when loaded
   useEffect(() => {
     if (match && events === null) {
       setEvents(match.live_events ? [...match.live_events] : []);
@@ -183,46 +179,50 @@ export default function MatchEditEvents() {
 
   if (!match) {
     return (
-      <div style={{ background: "#1a1a1a", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <p style={{ color: "white" }}>Wedstrijd niet gevonden</p>
+      <div style={{ background: "#FFF3E8", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <p className="t-secondary">Wedstrijd niet gevonden</p>
       </div>
     );
   }
 
+  const goalsMva = (events || []).filter(e => e.type === "goal_mva").length;
+  const goalsAgainst = (events || []).filter(e => e.type === "goal_against").length;
   const sorted = events ? [...events].sort((a, b) => (a.minute ?? 0) - (b.minute ?? 0)) : [];
 
   return (
-    <div style={{ background: "#1a1a1a", minHeight: "100vh", color: "white" }} className="pb-20">
-      <div className="p-4 md:p-6 max-w-2xl mx-auto space-y-5">
+    <div style={{ background: "#FFF3E8", minHeight: "100vh", padding: "16px", paddingBottom: "80px" }}>
+      <div style={{ maxWidth: "640px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "16px" }}>
 
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-            <ChevronLeft size={18} color="#fff" />
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <button
+            onClick={() => navigate(-1)}
+            style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: "#ffffff", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", cursor: "pointer" }}
+          >
+            <ChevronLeft size={18} color="#1a1a1a" />
           </button>
           <div>
-            <h1 style={{ fontSize: "18px", fontWeight: 900 }}>Events bewerken</h1>
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.50)" }}>
-              vs. {match.opponent} · {format(parseISO(match.date), "d MMMM yyyy", { locale: nl })}
-            </p>
+            <p className="t-label">Wedstrijd</p>
+            <h1 className="t-page-title">Events bewerken</h1>
+            <p className="t-secondary">vs. {match.opponent} · {format(parseISO(match.date), "d MMMM yyyy", { locale: nl })}</p>
           </div>
         </div>
 
-        {/* Score info */}
-        <div style={{ background: "rgba(255,104,0,0.15)", border: "1px solid rgba(255,104,0,0.25)", borderRadius: "14px", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.70)" }}>Eindstand (uit events)</span>
-          <span style={{ fontSize: "22px", fontWeight: 900 }}>
-            {(events || []).filter(e => e.type === "goal_mva").length} — {(events || []).filter(e => e.type === "goal_against").length}
+        {/* Score card */}
+        <div className="glass-orange" style={{ padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontSize: "13px", fontWeight: 700, color: "rgba(255,255,255,0.80)" }}>Eindstand (uit events)</span>
+          <span style={{ fontSize: "28px", fontWeight: 900, color: "#ffffff", letterSpacing: "-1px" }}>
+            {goalsMva} — {goalsAgainst}
           </span>
         </div>
 
         {/* Events list */}
         {events === null ? (
-          <p style={{ color: "rgba(255,255,255,0.40)", textAlign: "center" }}>Laden...</p>
+          <p className="t-secondary" style={{ textAlign: "center", padding: "20px 0" }}>Laden...</p>
         ) : (
-          <div className="space-y-3">
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {sorted.length === 0 && (
-              <p style={{ color: "rgba(255,255,255,0.40)", textAlign: "center", padding: "20px 0" }}>Geen events geregistreerd</p>
+              <p className="t-secondary" style={{ textAlign: "center", padding: "20px 0" }}>Geen events geregistreerd</p>
             )}
             {sorted.map((event, i) => {
               const originalIndex = events.indexOf(event);
@@ -241,12 +241,21 @@ export default function MatchEditEvents() {
         )}
 
         {/* Add + Save buttons */}
-        <div className="flex gap-3">
-          <button onClick={handleAdd} style={{ flex: 1, height: "44px", borderRadius: "12px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "white", fontSize: "13px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+        <div style={{ display: "flex", gap: "12px" }}>
+          <button
+            onClick={handleAdd}
+            className="btn-secondary"
+            style={{ flex: 1 }}
+          >
             <Plus size={16} /> Event toevoegen
           </button>
-          <button onClick={handleSave} disabled={saveMutation.isPending} style={{ flex: 1, height: "44px", borderRadius: "12px", background: "#FF6800", border: "none", color: "white", fontSize: "13px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-            <Save size={16} /> Opslaan
+          <button
+            onClick={handleSave}
+            disabled={saveMutation.isPending}
+            className="btn-primary"
+            style={{ flex: 1 }}
+          >
+            <Save size={16} /> {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
           </button>
         </div>
       </div>
