@@ -32,6 +32,11 @@ export default function LiveMatch() {
 
   const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
   const { data: matches = [] } = useQuery({ queryKey: ["matches"], queryFn: () => base44.entities.Match.list("-date") });
+  const { data: existingMatchTimeRecords = [] } = useQuery({
+    queryKey: ["playerMatchTime", matchId],
+    queryFn: () => base44.entities.PlayerMatchTime.filter({ match_id: matchId }),
+    enabled: !!matchId,
+  });
 
   const activePlayers = players.filter(p => p.active !== false);
   const match = matches.find(m => m.id === matchId);
@@ -47,6 +52,13 @@ export default function LiveMatch() {
   const [halftimeNotes, setHalftimeNotes] = useState("");
   const [activeModal, setActiveModal] = useState(null);
   const [matchTimeRecords, setMatchTimeRecords] = useState([]);
+
+  // Sync matchTimeRecords from DB when they load (e.g. page reload during live match)
+  useEffect(() => {
+    if (existingMatchTimeRecords.length > 0 && matchTimeRecords.length === 0) {
+      setMatchTimeRecords(existingMatchTimeRecords);
+    }
+  }, [existingMatchTimeRecords]);
 
   const intervalRef = useRef(null);
   const startRef = useRef(null);
