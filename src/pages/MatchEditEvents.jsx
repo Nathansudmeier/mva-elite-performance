@@ -144,15 +144,20 @@ export default function MatchEditEvents() {
   const activePlayers = players.filter(p => p.active !== false).sort((a, b) => a.name.localeCompare(b.name));
 
   const [events, setEvents] = useState(null);
+  const [scoreHome, setScoreHome] = useState("");
+  const [scoreAway, setScoreAway] = useState("");
 
   useEffect(() => {
     if (match && events === null) {
       setEvents(match.live_events ? [...match.live_events] : []);
+      setScoreHome(match.score_home ?? "");
+      setScoreAway(match.score_away ?? "");
     }
   }, [match]);
 
   const saveMutation = useMutation({
-    mutationFn: (live_events) => base44.entities.Match.update(matchId, { live_events }),
+    mutationFn: ({ live_events, score_home, score_away }) =>
+      base44.entities.Match.update(matchId, { live_events, score_home: score_home !== "" ? Number(score_home) : null, score_away: score_away !== "" ? Number(score_away) : null }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["matches"] });
       toast({ description: "Wedstrijdevents opgeslagen ✓", style: { background: "#4ade80", color: "white", border: "none" } });
@@ -173,7 +178,7 @@ export default function MatchEditEvents() {
 
   const handleSave = () => {
     const sorted = [...events].sort((a, b) => (a.minute ?? 0) - (b.minute ?? 0));
-    saveMutation.mutate(sorted);
+    saveMutation.mutate({ live_events: sorted, score_home: scoreHome, score_away: scoreAway });
     setEvents(sorted);
   };
 
@@ -209,11 +214,33 @@ export default function MatchEditEvents() {
         </div>
 
         {/* Score card */}
-        <div className="glass-orange" style={{ padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: "13px", fontWeight: 700, color: "rgba(255,255,255,0.80)" }}>Eindstand (uit events)</span>
-          <span style={{ fontSize: "28px", fontWeight: 900, color: "#ffffff", letterSpacing: "-1px" }}>
-            {goalsMva} — {goalsAgainst}
-          </span>
+        <div className="glass" style={{ padding: "16px 20px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "rgba(26,26,26,0.50)" }}>Uit events: {goalsMva} — {goalsAgainst}</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ flex: 1, textAlign: "center" }}>
+              <p style={{ fontSize: "9px", fontWeight: 800, color: "#FF6800", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "4px" }}>MVA Noord</p>
+              <input
+                type="number" min="0"
+                value={scoreHome}
+                onChange={e => setScoreHome(e.target.value)}
+                style={{ ...fieldStyle, fontSize: "22px", fontWeight: 900, textAlign: "center", height: "52px", letterSpacing: "-1px" }}
+                placeholder="—"
+              />
+            </div>
+            <span style={{ fontSize: "24px", fontWeight: 900, color: "rgba(26,26,26,0.30)", marginTop: "18px" }}>–</span>
+            <div style={{ flex: 1, textAlign: "center" }}>
+              <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.50)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "4px" }}>Tegenstander</p>
+              <input
+                type="number" min="0"
+                value={scoreAway}
+                onChange={e => setScoreAway(e.target.value)}
+                style={{ ...fieldStyle, fontSize: "22px", fontWeight: 900, textAlign: "center", height: "52px", letterSpacing: "-1px" }}
+                placeholder="—"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Events list */}
