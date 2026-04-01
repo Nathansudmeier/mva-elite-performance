@@ -11,7 +11,8 @@ export function calcPlayerMinutesInMatch(match, playerId) {
   const halfDuration = match.team === "MO17" ? 40 : 45;
   const MATCH_DURATION = halfDuration * 2;
 
-  const startedInLineup = lineup.some(l => l.slot === "basis" && l.player_id === playerId);
+  // Lineup slots can be "basis", "POS0", "POS1", etc. — all non-"wissel" slots are starters
+  const startedInLineup = lineup.some(l => l.player_id === playerId && l.slot !== "wissel");
 
   // Build a sorted list of all substitution events
   const subs = events
