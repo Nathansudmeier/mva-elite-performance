@@ -30,6 +30,7 @@ import Trainingsvormen from './pages/Trainingsvormen.jsx';
 import TrainingsvormDetail from './pages/TrainingsvormDetail.jsx';
 import TrainingsvormForm from './pages/TrainingsvormForm.jsx';
 import MatchResults from './pages/MatchResults.jsx';
+import MatchEditEvents from './pages/MatchEditEvents.jsx';
 import Photowall from './pages/Photowall.jsx';
 import OuderDashboard from './pages/OuderDashboard';
 import LiveMatchViewer from './pages/LiveMatchViewer.jsx';
@@ -118,6 +119,7 @@ const AuthenticatedApp = () => {
       <Route path="/TrainingsvormDetail" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormDetail /></LayoutWrapper>} />
       <Route path="/TrainingsvormForm" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormForm /></LayoutWrapper>} />
       <Route path="/MatchResults" element={<LayoutWrapper currentPageName="Dashboard"><MatchResults /></LayoutWrapper>} />
+      <Route path="/MatchEditEvents" element={<MatchEditEvents />} />
       <Route path="/Photowall" element={<LayoutWrapper currentPageName="Photowall"><Photowall /></LayoutWrapper>} />
       <Route path="/OuderDashboard" element={<LayoutWrapper currentPageName="Dashboard"><OuderDashboard /></LayoutWrapper>} />
       <Route path="/PendingAccess" element={<LayoutWrapper currentPageName="Dashboard"><PendingAccess /></LayoutWrapper>} />

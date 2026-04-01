@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { ChevronLeft, Edit2, Save, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ChevronLeft, Edit2, Save, X, ListChecks } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { format } from "date-fns";
 import { nl } from "date-fns/locale";
 
 export default function MatchResults() {
   const qc = useQueryClient();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({});
@@ -142,6 +143,13 @@ export default function MatchResults() {
                             <p className="t-tertiary text-sm">Geen score</p>
                           )}
                         </div>
+                        <button
+                          onClick={() => navigate(`/MatchEditEvents?matchId=${match.id}`)}
+                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-opacity hover:opacity-75"
+                          style={{ background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)" }}
+                          title="Events bewerken">
+                          <ListChecks size={14} color="rgba(255,255,255,0.60)" />
+                        </button>
                         <button
                           onClick={() => handleEdit(match)}
                           className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-opacity hover:opacity-75"
