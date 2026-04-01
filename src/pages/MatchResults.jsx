@@ -60,13 +60,11 @@ export default function MatchResults() {
 
   return (
     <div className="space-y-5">
-      {/* Header */}
       <div>
         <h1 className="t-page-title">Wedstrijdresultaten</h1>
         <p className="t-secondary mt-0.5">{sorted.length} wedstrijden</p>
       </div>
 
-      {/* Matches list */}
       <div className="space-y-3">
         {sorted.length === 0 ? (
           <div className="glass p-8 text-center">
@@ -80,7 +78,6 @@ export default function MatchResults() {
             return (
               <div key={match.id} className="glass p-4">
                 <div className="flex items-center justify-between gap-3">
-                  {/* Left: info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <p className="t-card-title truncate">{match.opponent}</p>
@@ -89,7 +86,6 @@ export default function MatchResults() {
                     <p className="t-secondary">{format(new Date(match.date), "d MMMM yyyy", { locale: nl })} · {match.start_time || "–"}</p>
                   </div>
 
-                  {/* Right: score or edit */}
                   {!isEditing ? (
                     <div className="flex items-center gap-3 flex-shrink-0">
                       <div className="text-right">
@@ -108,7 +104,6 @@ export default function MatchResults() {
                           <p className="t-tertiary text-sm">Geen score</p>
                         )}
                       </div>
-
                       <button
                         onClick={() => navigate(`/MatchEditEvents?matchId=${match.id}`)}
                         className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-opacity hover:opacity-75"
@@ -130,12 +125,7 @@ export default function MatchResults() {
                         min="0"
                         value={editValues.score_home}
                         onChange={(e) => setEditValues(v => ({ ...v, score_home: e.target.value }))}
-                        style={{
-                          width: "52px", height: "40px",
-                          fontSize: "18px", fontWeight: 700, textAlign: "center",
-                          background: "#ffffff", border: "2.5px solid #1a1a1a",
-                          borderRadius: "10px", color: "#1a1a1a",
-                        }}
+                        style={{ width: "52px", height: "40px", fontSize: "18px", fontWeight: 700, textAlign: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "10px", color: "#1a1a1a" }}
                       />
                       <span className="t-secondary font-bold">–</span>
                       <input
@@ -143,12 +133,7 @@ export default function MatchResults() {
                         min="0"
                         value={editValues.score_away}
                         onChange={(e) => setEditValues(v => ({ ...v, score_away: e.target.value }))}
-                        style={{
-                          width: "52px", height: "40px",
-                          fontSize: "18px", fontWeight: 700, textAlign: "center",
-                          background: "#ffffff", border: "2.5px solid #1a1a1a",
-                          borderRadius: "10px", color: "#1a1a1a",
-                        }}
+                        style={{ width: "52px", height: "40px", fontSize: "18px", fontWeight: 700, textAlign: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "10px", color: "#1a1a1a" }}
                       />
                       <button
                         onClick={() => handleSave(match.id)}
