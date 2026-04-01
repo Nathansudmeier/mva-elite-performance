@@ -85,18 +85,18 @@ export default function RecentMatchCelebration({ matches, playerId }) {
         }} />
       ))}
 
-      {/* Emvi juicht rechtsboven */}
+      {/* Emvi juicht linksboven */}
       <img
         src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/3d6278570_Emvi-juicht.png"
         alt="Emvi juicht"
         style={{
-          position: "absolute", top: 0, right: "-8px",
+          position: "absolute", top: 0, left: "-8px",
           height: "140px", width: "auto", objectFit: "contain",
           pointerEvents: "none",
         }}
       />
 
-      <div style={{ display: "flex", alignItems: "flex-start", gap: "14px" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "14px", paddingLeft: "110px" }}>
         <div style={{ flex: 1 }}>
           <p style={{
             fontSize: "9px", fontWeight: 800, textTransform: "uppercase",
@@ -107,13 +107,13 @@ export default function RecentMatchCelebration({ matches, playerId }) {
           <p style={{
             fontSize: "18px", fontWeight: 900, color: "#ffffff",
             letterSpacing: "-0.5px", lineHeight: 1.2, marginBottom: "6px",
-            textShadow: "1px 1px 0 rgba(0,0,0,0.15)", maxWidth: "65%"
+            textShadow: "1px 1px 0 rgba(0,0,0,0.15)"
           }}>
             {getTitle()}
           </p>
           <p style={{
             fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.85)",
-            marginBottom: "10px", maxWidth: "65%"
+            marginBottom: "10px"
           }}>
             {getSubtitle()}
           </p>
