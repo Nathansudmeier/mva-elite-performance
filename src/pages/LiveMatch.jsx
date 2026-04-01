@@ -265,12 +265,13 @@ export default function LiveMatch() {
     });
   };
 
-  const startSecondHalf = () => {
+  const startSecondHalf = async () => {
     const halfLength = getHalfLengthMinutes();
     setSeconds(halfLength * 60);
     setPhase("live");
     setRunning(true);
     saveMutation.mutate({ live_status: "live", halftime_notes: halftimeNotes, live_events: events });
+    await requestWakeLock();
   };
 
   const handleEvent = async (eventData) => {
