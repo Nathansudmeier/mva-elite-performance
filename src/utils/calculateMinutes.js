@@ -8,28 +8,40 @@ export function calcPlayerMinutesInMatch(match, playerId) {
   const isFinished = match.live_status === "finished";
   if (!isFinished) return null;
 
-  const MATCH_DURATION = 90;
+  const halfDuration = match.team === "MO17" ? 40 : 45;
+  const MATCH_DURATION = halfDuration * 2;
 
-  const startedInLineup = lineup.some(l => l.player_id === playerId);
+  const startedInLineup = lineup.some(l => l.slot === "basis" && l.player_id === playerId);
 
-  // Find substitution that took this player out
-  const subOut = events.find(e => e.type === "substitution" && e.player_out_id === playerId);
-  // Find substitution that brought this player in
-  const subIn = events.find(e => e.type === "substitution" && e.player_in_id === playerId);
+  // Build a sorted list of all substitution events
+  const subs = events
+    .filter(e => e.type === "substitution")
+    .sort((a, b) => a.minute - b.minute);
 
   let minutes = 0;
   let started = false;
   let cameOn = false;
 
-  if (startedInLineup) {
-    started = true;
-    const endMinute = subOut ? Math.floor(subOut.minute / 60) : MATCH_DURATION;
-    minutes = endMinute;
-  } else if (subIn) {
-    cameOn = true;
-    const startMinute = Math.floor(subIn.minute / 60);
-    const endMinute = subOut ? Math.floor(subOut.minute / 60) : MATCH_DURATION;
-    minutes = Math.max(0, endMinute - startMinute);
+  // Simulate the player's time on the field through multiple stints
+  // A stint starts when the player comes on (or at 0 if starter) and ends when subbed off
+  let currentStart = startedInLineup ? 0 : null;
+  if (startedInLineup) started = true;
+
+  for (const sub of subs) {
+    if (sub.player_in_id === playerId) {
+      // Player comes on — start a new stint
+      currentStart = sub.minute;
+      cameOn = true;
+    } else if (sub.player_out_id === playerId && currentStart !== null) {
+      // Player goes off — close the current stint
+      minutes += Math.max(0, sub.minute - currentStart);
+      currentStart = null;
+    }
+  }
+
+  // If still on field at end of match, close the final stint
+  if (currentStart !== null) {
+    minutes += Math.max(0, MATCH_DURATION - currentStart);
   }
 
   return { minutes, started, cameOn };
