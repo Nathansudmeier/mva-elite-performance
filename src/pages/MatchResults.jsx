@@ -95,6 +95,9 @@ export default function MatchResults() {
                             <p style={{ fontSize: "22px", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, letterSpacing: "-1px" }}>
                               {match.score_home} – {match.score_away}
                             </p>
+                            <p style={{ fontSize: "10px", fontWeight: 700, color: "rgba(26,26,26,0.40)", marginTop: "2px" }}>
+                              MVA – {match.opponent?.split(" ")[0]}
+                            </p>
                             {result && (
                               <span className={result === "Winst" ? "badge badge-win" : result === "Gelijk" ? "badge badge-draw" : "badge badge-loss"} style={{ marginTop: "4px" }}>
                                 {result}
@@ -120,35 +123,45 @@ export default function MatchResults() {
                       </button>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <input
-                        type="number"
-                        min="0"
-                        value={editValues.score_home}
-                        onChange={(e) => setEditValues(v => ({ ...v, score_home: e.target.value }))}
-                        style={{ width: "52px", height: "40px", fontSize: "18px", fontWeight: 700, textAlign: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "10px", color: "#1a1a1a" }}
-                      />
-                      <span className="t-secondary font-bold">–</span>
-                      <input
-                        type="number"
-                        min="0"
-                        value={editValues.score_away}
-                        onChange={(e) => setEditValues(v => ({ ...v, score_away: e.target.value }))}
-                        style={{ width: "52px", height: "40px", fontSize: "18px", fontWeight: 700, textAlign: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "10px", color: "#1a1a1a" }}
-                      />
-                      <button
-                        onClick={() => handleSave(match.id)}
-                        disabled={updateMutation.isPending}
-                        className="w-9 h-9 rounded-xl flex items-center justify-center transition-opacity hover:opacity-75"
-                        style={{ background: "#08D068", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a" }}>
-                        <Save size={15} color="#fff" />
-                      </button>
-                      <button
-                        onClick={() => setEditingId(null)}
-                        className="w-9 h-9 rounded-xl flex items-center justify-center transition-opacity hover:opacity-75"
-                        style={{ background: "rgba(255,61,168,0.10)", border: "2px solid rgba(255,61,168,0.30)" }}>
-                        <X size={15} color="#FF3DA8" />
-                      </button>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
+                      <div className="flex items-center gap-2">
+                        <div style={{ textAlign: "center" }}>
+                          <p style={{ fontSize: "9px", fontWeight: 800, color: "#FF6800", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "2px" }}>MVA Noord</p>
+                          <input
+                            type="number"
+                            min="0"
+                            value={editValues.score_home}
+                            onChange={(e) => setEditValues(v => ({ ...v, score_home: e.target.value }))}
+                            style={{ width: "52px", height: "40px", fontSize: "18px", fontWeight: 700, textAlign: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "10px", color: "#1a1a1a" }}
+                          />
+                        </div>
+                        <span className="t-secondary font-bold" style={{ marginTop: "14px" }}>–</span>
+                        <div style={{ textAlign: "center" }}>
+                          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(26,26,26,0.50)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "2px" }}>Tegenstander</p>
+                          <input
+                            type="number"
+                            min="0"
+                            value={editValues.score_away}
+                            onChange={(e) => setEditValues(v => ({ ...v, score_away: e.target.value }))}
+                            style={{ width: "52px", height: "40px", fontSize: "18px", fontWeight: 700, textAlign: "center", background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "10px", color: "#1a1a1a" }}
+                          />
+                        </div>
+                        <div style={{ display: "flex", gap: "6px", marginTop: "14px" }}>
+                          <button
+                            onClick={() => handleSave(match.id)}
+                            disabled={updateMutation.isPending}
+                            className="w-9 h-9 rounded-xl flex items-center justify-center transition-opacity hover:opacity-75"
+                            style={{ background: "#08D068", border: "2.5px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a" }}>
+                            <Save size={15} color="#fff" />
+                          </button>
+                          <button
+                            onClick={() => setEditingId(null)}
+                            className="w-9 h-9 rounded-xl flex items-center justify-center transition-opacity hover:opacity-75"
+                            style={{ background: "rgba(255,61,168,0.10)", border: "2px solid rgba(255,61,168,0.30)" }}>
+                            <X size={15} color="#FF3DA8" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
