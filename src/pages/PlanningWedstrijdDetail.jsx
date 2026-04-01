@@ -99,7 +99,8 @@ export default function PlanningWedstrijdDetail() {
   }
 
   function getScoreResult() {
-    if (match?.score_home === undefined || match?.score_away === undefined) return null;
+    if (match?.score_home == null || match?.score_away == null) return null;
+    // score_home = MVA Noord, score_away = tegenstander (altijd, ongeacht thuis/uit)
     if (match.score_home > match.score_away) return "Winst";
     if (match.score_home < match.score_away) return "Verlies";
     return "Gelijk";

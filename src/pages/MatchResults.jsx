@@ -51,9 +51,10 @@ export default function MatchResults() {
 
   const getResult = (match) => {
     if (match.score_home == null || match.score_away == null) return null;
-    const isWin = match.home_away === "Thuis" ? match.score_home > match.score_away : match.score_away > match.score_home;
-    const isDraw = match.score_home === match.score_away;
-    return isWin ? "Winst" : isDraw ? "Gelijk" : "Verlies";
+    // score_home = MVA Noord, score_away = tegenstander (altijd, ongeacht thuis/uit)
+    if (match.score_home > match.score_away) return "Winst";
+    if (match.score_home < match.score_away) return "Verlies";
+    return "Gelijk";
   };
 
   const sorted = [...matches].sort((a, b) => new Date(b.date) - new Date(a.date));
