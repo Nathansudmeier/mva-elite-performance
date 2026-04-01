@@ -101,8 +101,8 @@ export default function Dashboard() {
 
   // === WIN/LOSS STATS ===
   const playedMatches = matches.filter(m => m.score_home !== undefined && m.score_away !== undefined && m.score_home !== null && m.score_away !== null);
-  const wins = playedMatches.filter(m => m.home_away === "Thuis" ? m.score_home > m.score_away : m.score_away > m.score_home).length;
-  const losses = playedMatches.filter(m => m.home_away === "Thuis" ? m.score_home < m.score_away : m.score_away < m.score_home).length;
+  const wins = playedMatches.filter(m => m.score_home > m.score_away).length;
+  const losses = playedMatches.filter(m => m.score_home < m.score_away).length;
   const draws = playedMatches.filter(m => m.score_home === m.score_away).length;
   const winPct = playedMatches.length > 0 ? Math.round((wins / playedMatches.length) * 100) : 0;
 
@@ -342,7 +342,7 @@ export default function Dashboard() {
                 let badgeColor = "#60a5fa";
                 let dotColor = "#60a5fa";
                 if (hasScore) {
-                  const isWin = m.home_away === "Thuis" ? m.score_home > m.score_away : m.score_away > m.score_home;
+                  const isWin = m.score_home > m.score_away;
                   const isDraw = m.score_home === m.score_away;
                   result = isWin ? "W" : isDraw ? "G" : "V";
                   dotColor = isWin ? "#08D068" : isDraw ? "#FFD600" : "#FF3DA8";
