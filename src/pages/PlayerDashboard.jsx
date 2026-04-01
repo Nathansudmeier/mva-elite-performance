@@ -20,7 +20,7 @@ import PlayerMergedGreeting from "@/components/dashboard/PlayerMergedGreeting";
 import DailyFeelingCheck from "@/components/dashboard/DailyFeelingCheck";
 import UrgenteBanners from "@/components/prikbord/UrgenteBanners";
 import RecentMatchCelebration from "@/components/dashboard/RecentMatchCelebration";
-import { subDays, isAfter } from "date-fns";
+
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
 const TACTICAL = ["speelveld_groot", "omschakeling_balverlies", "speelveld_klein", "omschakeling_balbezit", "kijkgedrag"];
@@ -96,19 +96,12 @@ export default function PlayerDashboard() {
     queryFn: () => base44.entities.AgendaItem.list(),
   });
 
-  // Calculate attendance based on AgendaItem trainings
-  const seasonStart = subDays(new Date(), 180); // Approximate season start (6 months)
-  const allSeasonTrainings = agendaItems.filter(ai => 
-    ai.type === "Training" && isAfter(new Date(ai.date), seasonStart)
-  );
-  const playerSeasonAttendance = agendaAttendance.filter(aa =>
-    aa.player_id === playerId && aa.status === "aanwezig" && 
-    allSeasonTrainings.find(ai => ai.id === aa.agenda_item_id)
-  );
-  const attendancePercentage = allSeasonTrainings.length > 0
-    ? (playerSeasonAttendance.length / allSeasonTrainings.length) * 100
+  // Aanwezigheid op basis van handmatig geregistreerde Attendance records (door trainer)
+  const totalSeasonTrainings = attendance.length;
+  const playerSeasonAttendance = attendance.filter(a => a.present);
+  const attendancePercentage = totalSeasonTrainings > 0
+    ? (playerSeasonAttendance.length / totalSeasonTrainings) * 100
     : 0;
-  const totalSeasonTrainings = allSeasonTrainings.length;
 
   const radarData = ["Meting 1", "Meting 2", "Meting 3"].map(m => {
     const r = ratings.find(x => x.meting === m);
