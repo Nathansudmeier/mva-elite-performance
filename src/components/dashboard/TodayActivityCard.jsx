@@ -135,33 +135,33 @@ function MatchCard({ agendaItem, match, players, navigate }) {
 
   return (
     <div style={{
-      background: "#1a1a1a", border: "2.5px solid #1a1a1a",
+      background: "#FF6800", border: "2.5px solid #1a1a1a",
       borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem",
     }}>
       {/* Header */}
-      <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "8px" }}>Wedstrijd vandaag</p>
+      <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "8px" }}>Wedstrijd vandaag</p>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ fontSize: "18px", fontWeight: 900, color: "#ffffff", lineHeight: 1.1, letterSpacing: "-0.5px" }}>
             {agendaItem.home_away === "Thuis" ? "AFC" : agendaItem.opponent || match?.opponent || "–"}
           </p>
-          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)", marginTop: "3px", fontWeight: 600 }}>
+          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.70)", marginTop: "3px", fontWeight: 600 }}>
             vs {agendaItem.home_away === "Thuis" ? (agendaItem.opponent || match?.opponent || "–") : "AFC"}
           </p>
-          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>
+          <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.60)", marginTop: "2px" }}>
             {agendaItem.start_time && `🕐 ${agendaItem.start_time}`}
             {agendaItem.location && ` · ${agendaItem.location}`}
             {agendaItem.home_away && ` · ${agendaItem.home_away}`}
           </p>
         </div>
         {agendaItem.opponent_logo ? (
-          <div style={{ width: "52px", height: "52px", borderRadius: "12px", overflow: "hidden", border: "2px solid rgba(255,255,255,0.15)", flexShrink: 0 }}>
+          <div style={{ width: "52px", height: "52px", borderRadius: "12px", overflow: "hidden", border: "2px solid rgba(255,255,255,0.30)", flexShrink: 0 }}>
             <img src={agendaItem.opponent_logo} alt="logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
           </div>
         ) : (
-          <div style={{ width: "52px", height: "52px", borderRadius: "12px", background: "#FF6800", border: "2px solid rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <i className="ti ti-ball-football" style={{ fontSize: "24px", color: "#fff" }} />
+          <div style={{ width: "52px", height: "52px", borderRadius: "12px", background: "#1a1a1a", border: "2px solid rgba(255,255,255,0.20)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <i className="ti ti-ball-football" style={{ fontSize: "24px", color: "#FF6800" }} />
           </div>
         )}
       </div>
@@ -169,16 +169,16 @@ function MatchCard({ agendaItem, match, players, navigate }) {
       {/* Lineup preview */}
       {basisPlayers.length > 0 ? (
         <div style={{ marginBottom: "10px" }}>
-          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
             Opstelling · {match?.formation || "–"} · {basisPlayers.length}/11
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
             {basisPlayers.slice(0, 11).map(p => (
               <div key={p.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "3px", width: "44px" }}>
-                <div style={{ width: "32px", height: "32px", borderRadius: "50%", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.20)", flexShrink: 0 }}>
+                <div style={{ width: "32px", height: "32px", borderRadius: "50%", overflow: "hidden", border: "1.5px solid rgba(255,255,255,0.40)", flexShrink: 0 }}>
                   <img src={p.photo_url || PLAYER_FALLBACK_PHOTO} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
-                <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.55)", textAlign: "center", lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%" }}>
+                <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.80)", textAlign: "center", lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%" }}>
                   {p.name?.split(" ")[0]}
                 </p>
               </div>
@@ -186,8 +186,8 @@ function MatchCard({ agendaItem, match, players, navigate }) {
           </div>
         </div>
       ) : (
-        <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: "12px", padding: "12px", marginBottom: "10px", textAlign: "center" }}>
-          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", fontWeight: 600 }}>Nog geen opstelling ingevoerd</p>
+        <div style={{ background: "rgba(0,0,0,0.15)", borderRadius: "12px", padding: "12px", marginBottom: "10px", textAlign: "center" }}>
+          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", fontWeight: 600 }}>Nog geen opstelling ingevoerd</p>
         </div>
       )}
 
@@ -196,8 +196,8 @@ function MatchCard({ agendaItem, match, players, navigate }) {
         <button
           onClick={() => navigate(`/PlanningWedstrijdDetail?id=${agendaItem.id}`)}
           style={{
-            flex: 1, height: "40px", background: "rgba(255,255,255,0.08)", border: "1.5px solid rgba(255,255,255,0.15)",
-            borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "rgba(255,255,255,0.80)",
+            flex: 1, height: "40px", background: "rgba(255,255,255,0.20)", border: "1.5px solid rgba(255,255,255,0.35)",
+            borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "#ffffff",
             cursor: "pointer",
           }}
         >
@@ -209,9 +209,9 @@ function MatchCard({ agendaItem, match, players, navigate }) {
             else navigate(`/PlanningWedstrijdDetail?id=${agendaItem.id}`);
           }}
           style={{
-            flex: 1, height: "40px", background: "#FF6800", border: "2px solid rgba(255,104,0,0.60)",
+            flex: 1, height: "40px", background: "#1a1a1a", border: "2px solid #1a1a1a",
             borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "#ffffff",
-            cursor: "pointer", boxShadow: "2px 2px 0 rgba(255,104,0,0.30)",
+            cursor: "pointer", boxShadow: "2px 2px 0 rgba(0,0,0,0.30)",
             display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
           }}
         >
