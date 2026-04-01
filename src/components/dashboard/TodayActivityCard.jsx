@@ -196,9 +196,9 @@ function MatchCard({ agendaItem, match, players, navigate }) {
         <button
           onClick={() => navigate(`/PlanningWedstrijdDetail?id=${agendaItem.id}`)}
           style={{
-            flex: 1, height: "40px", background: "rgba(255,255,255,0.20)", border: "1.5px solid rgba(255,255,255,0.35)",
+            flex: 1, height: "40px", background: "rgba(255,255,255,0.25)", border: "2px solid rgba(255,255,255,0.50)",
             borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "#ffffff",
-            cursor: "pointer",
+            cursor: "pointer", boxShadow: "2px 2px 0 rgba(0,0,0,0.15)",
           }}
         >
           Details bekijken
@@ -209,9 +209,9 @@ function MatchCard({ agendaItem, match, players, navigate }) {
             else navigate(`/PlanningWedstrijdDetail?id=${agendaItem.id}`);
           }}
           style={{
-            flex: 1, height: "40px", background: "#1a1a1a", border: "2px solid #1a1a1a",
-            borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "#ffffff",
-            cursor: "pointer", boxShadow: "2px 2px 0 rgba(0,0,0,0.30)",
+            flex: 1, height: "40px", background: "#ffffff", border: "2px solid rgba(255,255,255,0.80)",
+            borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "#FF6800",
+            cursor: "pointer", boxShadow: "2px 2px 0 rgba(0,0,0,0.15)",
             display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
           }}
         >
