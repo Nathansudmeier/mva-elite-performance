@@ -102,9 +102,9 @@ function TrainingCard({ agendaItem, trainingPlan, navigate }) {
         <button
           onClick={() => navigate(`/PlanningTrainingDetail?id=${agendaItem.id}`)}
           style={{
-            flex: 1, height: "40px", background: "#ffffff", border: "2px solid #1a1a1a",
-            borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "#1a1a1a",
-            cursor: "pointer", boxShadow: "2px 2px 0 #1a1a1a",
+            flex: 1, height: "40px", background: "rgba(255,255,255,0.25)", border: "2px solid rgba(255,255,255,0.50)",
+            borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "#ffffff",
+            cursor: "pointer", boxShadow: "2px 2px 0 rgba(0,0,0,0.15)",
           }}
         >
           Plan bekijken
@@ -113,9 +113,9 @@ function TrainingCard({ agendaItem, trainingPlan, navigate }) {
           <button
             onClick={() => navigate(`/PlanningTrainingDetail?id=${agendaItem.id}&startLive=1`)}
             style={{
-              flex: 1, height: "40px", background: "#1a1a1a", border: "2px solid #1a1a1a",
+              flex: 1, height: "40px", background: "#ffffff", border: "2px solid rgba(255,255,255,0.80)",
               borderRadius: "12px", fontSize: "13px", fontWeight: 800, color: "#08D068",
-              cursor: "pointer", boxShadow: "2px 2px 0 rgba(0,0,0,0.3)",
+              cursor: "pointer", boxShadow: "2px 2px 0 rgba(0,0,0,0.15)",
               display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
             }}
           >
