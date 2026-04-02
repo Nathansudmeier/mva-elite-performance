@@ -183,50 +183,55 @@ export default function Dashboard() {
       <UrgenteBanners />
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
 
-      {/* ── SNELLE ACTIES (mobiel-vriendelijk) ── */}
-      <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
-        <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "12px", letterSpacing: "0.10em" }}>Snelle acties</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }} className="mobile-grid-2col">
-          {[
-          { icon: "ti-users", label: "Aanwezigheid", sub: "Training vandaag", action: () => navigate("/Planning") },
-          { icon: "ti-upload", label: "Team foto", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
-          { icon: "ti-clipboard-list", label: "Beoordeling", sub: `${totalRatingsNeeded - meting1Count} wachten`, action: () => navigate("/PlayerRatingForm") },
-          { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => {
-              const nextWedstrijd = agendaItems.find((ai) => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
-              if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);else
-              navigate("/Planning");
-            } }].
-          map((item, i) =>
-          <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.08)", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "14px", padding: "14px 8px", cursor: "pointer", textAlign: "center", gap: "6px", transition: "all 0.15s" }}>
-              <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <i className={`ti ${item.icon}`} style={{ fontSize: "18px", color: "#ffffff" }} />
-              </div>
-              <p style={{ fontSize: "12px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.2 }}>{item.label}</p>
-              <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.55)", lineHeight: 1.2 }}>{item.sub}</p>
-            </button>
-          )}
-        </div>
-      </div>
+      {/* ── SNELLE ACTIES + HERO CARD (naast elkaar op tablet+) ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
 
-      {/* Hero card — winratio */}
-      <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", position: "relative", overflow: "hidden", minHeight: "120px" }} className="bg-[#ffd500] text-gray-50">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoen 2025-26</p>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-              <span style={{ fontSize: "42px", fontWeight: 900, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{winPct}%</span>
-              <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", fontWeight: 700 }}>winst</span>
-            </div>
-            <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", marginTop: "4px", fontWeight: 600 }}>
-              {wins} gewonnen · {draws} gelijk · {losses} verloren
-            </p>
+        {/* Snelle acties */}
+        <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+          <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "12px", letterSpacing: "0.10em" }}>Snelle acties</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }}>
+            {[
+            { icon: "ti-users", label: "Aanwezigheid", sub: "Training vandaag", action: () => navigate("/Planning") },
+            { icon: "ti-upload", label: "Team foto", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
+            { icon: "ti-clipboard-list", label: "Beoordeling", sub: `${totalRatingsNeeded - meting1Count} wachten`, action: () => navigate("/PlayerRatingForm") },
+            { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => {
+                const nextWedstrijd = agendaItems.find((ai) => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
+                if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);else
+                navigate("/Planning");
+              } }].
+            map((item, i) =>
+            <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.08)", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "14px", padding: "14px 8px", cursor: "pointer", textAlign: "center", gap: "6px", transition: "all 0.15s" }}>
+                <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <i className={`ti ${item.icon}`} style={{ fontSize: "18px", color: "#ffffff" }} />
+                </div>
+                <p style={{ fontSize: "12px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.2 }}>{item.label}</p>
+                <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.55)", lineHeight: 1.2 }}>{item.sub}</p>
+              </button>
+            )}
           </div>
-          <TrainerGreetingPill />
         </div>
-        {/* Progress bar */}
-        <div style={{ height: "4px", background: "rgba(255,255,255,0.20)", borderRadius: "2px", marginTop: "14px", overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${winPct}%`, background: "rgba(255,255,255,0.80)", borderRadius: "2px", transition: "width 0.3s ease" }} />
+
+        {/* Hero card — winratio */}
+        <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", position: "relative", overflow: "hidden", minHeight: "120px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoen 2025-26</p>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                <span style={{ fontSize: "42px", fontWeight: 900, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{winPct}%</span>
+                <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", fontWeight: 700 }}>winst</span>
+              </div>
+              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", marginTop: "4px", fontWeight: 600 }}>
+                {wins} gewonnen · {draws} gelijk · {losses} verloren
+              </p>
+            </div>
+            <TrainerGreetingPill />
+          </div>
+          {/* Progress bar */}
+          <div style={{ height: "4px", background: "rgba(255,255,255,0.20)", borderRadius: "2px", marginTop: "14px", overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${winPct}%`, background: "rgba(255,255,255,0.80)", borderRadius: "2px", transition: "width 0.3s ease" }} />
+          </div>
         </div>
+
       </div>
 
       {/* ── VOLGENDE WEDSTRIJDEN ── */}
