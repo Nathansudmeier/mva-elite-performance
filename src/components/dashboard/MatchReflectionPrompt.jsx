@@ -63,6 +63,22 @@ export default function MatchReflectionPrompt({ playerId }) {
     );
   }
 
+  const textareaBase = {
+    width: "100%", background: "#ffffff", border: "2px solid #1a1a1a",
+    borderRadius: "12px", padding: "12px 16px", fontSize: "14px", color: "#1a1a1a",
+    resize: "none", fontFamily: "inherit", transition: "border-color 0.15s, box-shadow 0.15s",
+  };
+
+  const handleFocus = (e) => {
+    e.target.style.borderColor = "#FF6800";
+    e.target.style.boxShadow = "0 0 0 3px rgba(255,104,0,0.15)";
+    e.target.style.outline = "none";
+  };
+  const handleBlur = (e) => {
+    e.target.style.borderColor = "#1a1a1a";
+    e.target.style.boxShadow = "none";
+  };
+
   const handleSave = () => {
     if (!positief.trim() || !verbeterpunt.trim()) return;
     saveMutation.mutate({
@@ -77,25 +93,25 @@ export default function MatchReflectionPrompt({ playerId }) {
 
   return (
     <div style={{
-      background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "18px",
-      boxShadow: "3px 3px 0 #1a1a1a", padding: "20px",
+      background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px",
+      boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem",
     }}>
       {/* Header */}
       <div style={{ marginBottom: "16px" }}>
         <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "#FF6800", marginBottom: "4px" }}>
           Wedstrijdreflectie
         </p>
-        <p style={{ fontSize: "17px", fontWeight: 900, color: "#ffffff", lineHeight: 1.2 }}>
+        <p style={{ fontSize: "18px", fontWeight: 900, letterSpacing: "-0.5px", color: "#1a1a1a", lineHeight: 1.2 }}>
           Hoe was het tegen {recentMatch.opponent}?
         </p>
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.50)", marginTop: "3px" }}>
+        <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.50)", marginTop: "3px" }}>
           {recentMatch.date}
         </p>
       </div>
 
       {/* Positief */}
       <div style={{ marginBottom: "12px" }}>
-        <p style={{ fontSize: "11px", fontWeight: 800, color: "#08D068", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px" }}>
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "#08D068", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>
           ✅ Wat ging goed?
         </p>
         <textarea
@@ -103,17 +119,15 @@ export default function MatchReflectionPrompt({ playerId }) {
           onChange={(e) => setPositief(e.target.value)}
           placeholder="Beschrijf 1 positief punt..."
           rows={2}
-          style={{
-            width: "100%", background: "rgba(255,255,255,0.07)", border: "2px solid rgba(8,208,104,0.40)",
-            borderRadius: "12px", padding: "10px 12px", fontSize: "13px", color: "#ffffff",
-            resize: "none", outline: "none", fontFamily: "inherit",
-          }}
+          style={textareaBase}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       </div>
 
       {/* Verbeterpunt */}
       <div style={{ marginBottom: "16px" }}>
-        <p style={{ fontSize: "11px", fontWeight: 800, color: "#FF6800", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px" }}>
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "#FF6800", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>
           🎯 Wat kan beter?
         </p>
         <textarea
@@ -121,19 +135,20 @@ export default function MatchReflectionPrompt({ playerId }) {
           onChange={(e) => setVerbeterpunt(e.target.value)}
           placeholder="Beschrijf 1 verbeterpunt..."
           rows={2}
-          style={{
-            width: "100%", background: "rgba(255,255,255,0.07)", border: "2px solid rgba(255,104,0,0.40)",
-            borderRadius: "12px", padding: "10px 12px", fontSize: "13px", color: "#ffffff",
-            resize: "none", outline: "none", fontFamily: "inherit",
-          }}
+          style={textareaBase}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       </div>
 
       <button
         onClick={handleSave}
         disabled={saveMutation.isPending || !positief.trim() || !verbeterpunt.trim()}
-        className="btn-primary"
-        style={{ width: "100%" }}
+        style={{
+          background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "14px",
+          boxShadow: "3px 3px 0 #1a1a1a", height: "52px", fontWeight: 800, fontSize: "14px",
+          color: "#ffffff", width: "100%", cursor: "pointer", opacity: (saveMutation.isPending || !positief.trim() || !verbeterpunt.trim()) ? 0.45 : 1,
+        }}
       >
         {saveMutation.isPending ? "Opslaan..." : "Reflectie opslaan"}
       </button>
