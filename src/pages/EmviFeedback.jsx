@@ -141,7 +141,7 @@ export default function EmviFeedback() {
       <div
         ref={chatContainerRef}
         style={{
-          flex: 1,
+          flex: hasMessages ? 1 : 0,
           overflowY: "auto",
           padding: "12px 16px",
           display: "flex",
