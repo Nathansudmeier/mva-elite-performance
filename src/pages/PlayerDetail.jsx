@@ -111,22 +111,38 @@ export default function PlayerDetail() {
         )}
       </div>
 
-      {/* IOP Goals */}
-      {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
-        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
-          <p className="t-label" style={{ marginBottom: "12px" }}>IOP Doelen</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).map((goal, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                <span style={{
-                  width: "28px", height: "28px", borderRadius: "50%", background: "#FF6800",
-                  border: "2px solid #1a1a1a", display: "flex", alignItems: "center",
-                  justifyContent: "center", color: "#ffffff", fontWeight: 800, fontSize: "12px", flexShrink: 0
-                }}>{i + 1}</span>
-                <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.70)", lineHeight: 1.4, paddingTop: "2px" }}>{goal}</p>
+      {/* IOP Goals + profielfoto */}
+      {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3 || player.photo_url) && (
+        <div style={{ display: "flex", gap: "12px", alignItems: "stretch" }}>
+          {/* Profielfoto */}
+          {player.photo_url && (
+            <div className="glass" style={{ borderRadius: "18px", overflow: "hidden", flexShrink: 0, width: "110px" }}>
+              <img
+                src={player.photo_url}
+                alt={player.name}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              />
+            </div>
+          )}
+
+          {/* IOP Doelen */}
+          {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3) && (
+            <div className="glass" style={{ padding: "16px", borderRadius: "18px", flex: 1 }}>
+              <p className="t-label" style={{ marginBottom: "12px" }}>IOP Doelen</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                {[player.iop_goal_1, player.iop_goal_2, player.iop_goal_3].filter(Boolean).map((goal, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                    <span style={{
+                      width: "24px", height: "24px", borderRadius: "50%", background: "#FF6800",
+                      border: "2px solid #1a1a1a", display: "flex", alignItems: "center",
+                      justifyContent: "center", color: "#ffffff", fontWeight: 800, fontSize: "11px", flexShrink: 0
+                    }}>{i + 1}</span>
+                    <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.70)", lineHeight: 1.4, paddingTop: "2px" }}>{goal}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
       )}
 
