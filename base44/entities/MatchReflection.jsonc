@@ -1,0 +1,37 @@
+{
+  "name": "MatchReflection",
+  "type": "object",
+  "properties": {
+    "match_id": {
+      "type": "string",
+      "description": "Koppeling aan Match"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Koppeling aan Player"
+    },
+    "positief": {
+      "type": "string",
+      "description": "Wat ging goed? (positief punt van de speler)"
+    },
+    "verbeterpunt": {
+      "type": "string",
+      "description": "Wat kan beter? (verbeterpunt van de speler)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum van de wedstrijd"
+    },
+    "opponent": {
+      "type": "string",
+      "description": "Tegenstander (denormalized voor snelle weergave)"
+    }
+  },
+  "required": [
+    "match_id",
+    "player_id",
+    "positief",
+    "verbeterpunt"
+  ]
+}

@@ -43,6 +43,7 @@ export default function Dashboard() {
   const { data: playerRatings = [] } = useQuery({ queryKey: ["playerRatings"], queryFn: () => base44.entities.PlayerRating.list("-date") });
   const { data: wellnessLogs = [] } = useQuery({ queryKey: ["wellnessLogs"], queryFn: () => base44.entities.WellnessLog.list("-date") });
   const { data: selfReflections = [] } = useQuery({ queryKey: ["selfReflections"], queryFn: () => base44.entities.SelfReflection.list("-date") });
+  const { data: matchReflections = [] } = useQuery({ queryKey: ["matchReflections-all"], queryFn: () => base44.entities.MatchReflection.list("-date") });
   const { data: teamPhotos = [] } = useQuery({ queryKey: ["teamPhotos"], queryFn: () => base44.entities.TeamPhoto.list("-date") });
 
 
@@ -395,44 +396,70 @@ export default function Dashboard() {
       {/* ── ZELFREFLECTIES + WEEKREFLECTIE ── */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
 
-        {/* Zelfreflecties */}
+        {/* Wedstrijdreflecties */}
         <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-            <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Zelfreflecties</p>
-            <button onClick={() => navigate("/SelfReflection")} style={{ fontSize: "12px", color: "#FF6800", fontWeight: 700, background: "none", border: "none", cursor: "pointer" }}>Alle →</button>
+            <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Wedstrijdreflecties</p>
+            <span style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", fontWeight: 600 }}>{matchReflections.length} ingediend</span>
           </div>
 
-          {thisWeekReflections.length > 0 ?
-          <div>
-              {thisWeekReflections.map((r, i) => {
-              const player = activePlayers.find((p) => p.id === r.player_id);
-              const initials = player?.name?.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "?";
-              const avgScore = [r.goal_1_rating, r.goal_2_rating, r.goal_3_rating].filter(Boolean);
-              const scoreAvg = avgScore.length > 0 ? (avgScore.reduce((a, b) => a + b, 0) / avgScore.length).toFixed(1) : null;
-              return (
-                <div key={r.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 0", borderBottom: i < thisWeekReflections.length - 1 ? "1.5px solid rgba(26,26,26,0.07)" : "none" }}>
-                    <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <span style={{ fontSize: "10px", fontWeight: 800, color: "#ffffff" }}>{initials}</span>
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1.2 }}>{player?.name || "–"}</p>
-                      <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", lineHeight: 1.4, marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.general_notes || r.goal_1_notes || "Reflectie ingevuld"}</p>
-                    </div>
-                    {scoreAvg &&
-                  <div style={{ background: "#FF6800", border: "1.5px solid #1a1a1a", borderRadius: "8px", padding: "3px 8px", flexShrink: 0 }}>
-                        <p style={{ fontSize: "13px", fontWeight: 900, color: "#ffffff" }}>{scoreAvg}</p>
+          {(() => {
+            // Groepeer per wedstrijd (meest recent eerst)
+            const byMatch = {};
+            matchReflections.forEach((r) => {
+              if (!byMatch[r.match_id]) byMatch[r.match_id] = { opponent: r.opponent, date: r.date, reflections: [] };
+              byMatch[r.match_id].reflections.push(r);
+            });
+            const matchGroups = Object.entries(byMatch)
+              .sort((a, b) => (b[1].date > a[1].date ? 1 : -1))
+              .slice(0, 2);
+
+            if (matchGroups.length === 0) return (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 0" }}>
+                <i className="ti ti-message-2" style={{ fontSize: "28px", color: "rgba(26,26,26,0.15)" }} />
+                <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.35)", marginTop: "10px", fontWeight: 600 }}>Nog geen reflecties ingediend</p>
+              </div>
+            );
+
+            return matchGroups.map(([matchId, group], gi) => (
+              <div key={matchId} style={{ marginBottom: gi < matchGroups.length - 1 ? "16px" : 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "8px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 800, color: "#1a1a1a" }}>vs. {group.opponent || "–"}</span>
+                  <span style={{ fontSize: "10px", color: "rgba(26,26,26,0.40)" }}>{group.date}</span>
+                  <span style={{ fontSize: "10px", fontWeight: 700, background: "rgba(255,104,0,0.10)", color: "#FF6800", borderRadius: "20px", padding: "1px 8px", border: "1px solid rgba(255,104,0,0.20)" }}>{group.reflections.length}x</span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  {group.reflections.slice(0, 3).map((r, i) => {
+                    const player = activePlayers.find((p) => p.id === r.player_id);
+                    const initials = player?.name?.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "?";
+                    return (
+                      <div key={r.id} style={{ background: "rgba(26,26,26,0.04)", borderRadius: "10px", padding: "8px 10px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                          <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FF6800", border: "1.5px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                            <span style={{ fontSize: "9px", fontWeight: 800, color: "#ffffff" }}>{initials}</span>
+                          </div>
+                          <span style={{ fontSize: "12px", fontWeight: 700, color: "#1a1a1a" }}>{player?.name || "–"}</span>
+                        </div>
+                        <div style={{ display: "flex", gap: "6px" }}>
+                          <div style={{ flex: 1, background: "rgba(8,208,104,0.10)", border: "1px solid rgba(8,208,104,0.25)", borderRadius: "8px", padding: "5px 8px" }}>
+                            <p style={{ fontSize: "9px", fontWeight: 800, color: "#05a050", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "2px" }}>✅ Positief</p>
+                            <p style={{ fontSize: "11px", color: "#1a1a1a", lineHeight: 1.4 }}>{r.positief}</p>
+                          </div>
+                          <div style={{ flex: 1, background: "rgba(255,104,0,0.08)", border: "1px solid rgba(255,104,0,0.20)", borderRadius: "8px", padding: "5px 8px" }}>
+                            <p style={{ fontSize: "9px", fontWeight: 800, color: "#FF6800", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "2px" }}>🎯 Verbeter</p>
+                            <p style={{ fontSize: "11px", color: "#1a1a1a", lineHeight: 1.4 }}>{r.verbeterpunt}</p>
+                          </div>
+                        </div>
                       </div>
-                  }
-                  </div>);
-
-            })}
-            </div> :
-
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 0" }}>
-              <i className="ti ti-message-2" style={{ fontSize: "28px", color: "rgba(26,26,26,0.15)" }} />
-              <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.35)", marginTop: "10px", fontWeight: 600 }}>Nog geen reflecties deze week</p>
-            </div>
-          }
+                    );
+                  })}
+                  {group.reflections.length > 3 && (
+                    <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", textAlign: "center", padding: "4px 0" }}>+{group.reflections.length - 3} meer</p>
+                  )}
+                </div>
+              </div>
+            ));
+          })()}
         </div>
 
         {/* Trainer weekreflectie */}

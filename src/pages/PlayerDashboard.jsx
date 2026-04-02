@@ -20,6 +20,7 @@ import PlayerMergedGreeting from "@/components/dashboard/PlayerMergedGreeting";
 import DailyFeelingCheck from "@/components/dashboard/DailyFeelingCheck";
 import UrgenteBanners from "@/components/prikbord/UrgenteBanners";
 import RecentMatchCelebration from "@/components/dashboard/RecentMatchCelebration";
+import MatchReflectionPrompt from "@/components/dashboard/MatchReflectionPrompt";
 
 
 const TECHNICAL = ["pass_kort", "pass_lang", "koppen", "scorend_vermogen", "duel_aanvallend", "duel_verdedigend", "balaanname"];
@@ -148,6 +149,9 @@ export default function PlayerDashboard() {
 
       {/* Upcoming Activities Compact */}
       <UpcomingActivitiesCompact playerId={playerId} />
+
+      {/* Wedstrijdreflectie prompt */}
+      <MatchReflectionPrompt playerId={playerId} />
 
       {/* Daily Feeling Check - Only on training days */}
       <DailyFeelingCheck playerId={playerId} agendaItems={agendaItems} />
