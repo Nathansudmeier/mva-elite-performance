@@ -217,24 +217,28 @@ export default function Dashboard() {
         </div>
 
         {/* Hero card — winratio */}
-        <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", position: "relative", overflow: "hidden", minHeight: "120px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoen 2025-26</p>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-                <span style={{ fontSize: "42px", fontWeight: 900, color: "#ffffff", letterSpacing: "-2px", lineHeight: 1 }}>{winPct}%</span>
-                <span style={{ fontSize: "16px", color: "rgba(255,255,255,0.65)", fontWeight: 700 }}>winst</span>
-              </div>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.70)", marginTop: "4px", fontWeight: 600 }}>
-                {wins} gewonnen · {draws} gelijk · {losses} verloren
-              </p>
+        <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", position: "relative", overflow: "hidden", minHeight: "140px" }}>
+          {/* Content — padding-right zodat Emvi er niet overheen valt */}
+          <div style={{ paddingRight: "120px" }}>
+            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "8px" }}>Seizoen 2025-26</p>
+            <p style={{ fontSize: "64px", fontWeight: 900, color: "#ffffff", letterSpacing: "-3px", lineHeight: 1 }}>{winPct}%</p>
+            <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.12em", marginTop: "4px", marginBottom: "14px" }}>Winst</p>
+            {/* W / G / V mini-blokjes */}
+            <div style={{ display: "flex", gap: "6px" }}>
+              {[{ label: "W", value: wins }, { label: "G", value: draws }, { label: "V", value: losses }].map(({ label, value }) => (
+                <div key={label} style={{ background: "rgba(255,255,255,0.60)", border: "1.5px solid rgba(255,255,255,0.4)", borderRadius: "10px", padding: "6px 10px", textAlign: "center" }}>
+                  <p style={{ fontSize: "20px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1 }}>{value}</p>
+                  <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "#1a1a1a", marginTop: "2px" }}>{label}</p>
+                </div>
+              ))}
             </div>
-            <TrainerGreetingPill />
           </div>
-          {/* Progress bar */}
-          <div style={{ height: "4px", background: "rgba(255,255,255,0.20)", borderRadius: "2px", marginTop: "14px", overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${winPct}%`, background: "rgba(255,255,255,0.80)", borderRadius: "2px", transition: "width 0.3s ease" }} />
-          </div>
+          {/* Emvi absoluut rechtsonder */}
+          <img
+            src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e8207fa84_Emvi-tevreden.png"
+            alt="Emvi"
+            style={{ position: "absolute", right: 0, bottom: 0, height: "110px", zIndex: 3, pointerEvents: "none" }}
+          />
         </div>
 
       </div>
