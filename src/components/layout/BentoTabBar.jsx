@@ -180,24 +180,24 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderU
         className="xl:hidden"
         style={{
           position: "fixed", bottom: 0, left: 0, right: 0,
-          zIndex: 100, padding: "0 8px 1rem",
-          background: "linear-gradient(to top, #edb188 0%, transparent 100%)",
-        }}
-      >
-        <div style={{
-          background: "#ffffff",
-          border: "2.5px solid #1a1a1a",
-          borderRadius: "22px",
-          boxShadow: "3px 3px 0 #1a1a1a",
-          display: "flex",
-          overflowX: "auto",
-          scrollSnapType: "x mandatory",
-          WebkitOverflowScrolling: "touch",
-          padding: "10px 10px 14px",
-          gap: "8px",
-        }}>
-          {tabItems.map((item) => {
-            const isActive = item.page === currentPageName;
+          zIndex: 100, padding: "0 8px 12px",
+          backgroundColor: "#fefcf9",
+          }}
+          >
+          <div style={{
+            background: "#ffffff",
+            border: "2.5px solid #1a1a1a",
+            borderRadius: "22px",
+            boxShadow: "3px 3px 0 #1a1a1a",
+            display: "flex",
+            overflowX: "auto",
+            scrollSnapType: "x mandatory",
+            WebkitOverflowScrolling: "touch",
+            padding: "10px 10px 14px",
+            gap: "8px",
+          }}>
+            {tabItems.map((item) => {
+              const isActive = item.page === currentPageName;
             return (
               <Link
                 key={item.page}
@@ -252,11 +252,11 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderU
       className="xl:hidden"
       style={{
         position: "fixed", bottom: 0, left: 0, right: 0,
-        zIndex: 100, padding: "0 8px 1rem",
-        background: "linear-gradient(to top, #edb188 0%, transparent 100%)",
-      }}
-    >
-      <div style={{
+        zIndex: 100, padding: "0 8px 12px",
+        backgroundColor: "#fefcf9",
+        }}
+        >
+        <div style={{
         background: "#ffffff",
         border: "2.5px solid #1a1a1a",
         borderRadius: "22px",
