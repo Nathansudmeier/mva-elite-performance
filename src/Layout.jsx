@@ -101,7 +101,7 @@ export default function Layout({ children, currentPageName }) {
   const isOuderUser = isOuder;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#FFF3E8" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "transparent" }}>
       <IOSInstallBanner />
       <TopBar />
 
