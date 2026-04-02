@@ -105,8 +105,9 @@ export default function Dashboard() {
     m.score_home !== null && m.score_away !== null &&
     m.score_home !== "" && m.score_away !== ""
   );
-  const wins = playedMatches.filter((m) => m.home_away === "Thuis" ? Number(m.score_home) > Number(m.score_away) : Number(m.score_away) > Number(m.score_home)).length;
-  const losses = playedMatches.filter((m) => m.home_away === "Thuis" ? Number(m.score_home) < Number(m.score_away) : Number(m.score_away) < Number(m.score_home)).length;
+  // score_home = MVA Noord, score_away = tegenstander (altijd, ongeacht thuis/uit)
+  const wins = playedMatches.filter((m) => Number(m.score_home) > Number(m.score_away)).length;
+  const losses = playedMatches.filter((m) => Number(m.score_home) < Number(m.score_away)).length;
   const draws = playedMatches.filter((m) => Number(m.score_home) === Number(m.score_away)).length;
   const winPct = playedMatches.length > 0 ? Math.round(wins / playedMatches.length * 100) : 0;
 
