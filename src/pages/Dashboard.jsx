@@ -225,10 +225,14 @@ export default function Dashboard() {
             <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.12em", marginTop: "4px", marginBottom: "14px" }}>Winst</p>
             {/* W / G / V mini-blokjes */}
             <div style={{ display: "flex", gap: "6px" }}>
-              {[{ label: "W", value: wins }, { label: "G", value: draws }, { label: "V", value: losses }].map(({ label, value }) => (
-                <div key={label} style={{ background: "rgba(255,255,255,0.60)", border: "1.5px solid rgba(255,255,255,0.4)", borderRadius: "10px", padding: "6px 10px", textAlign: "center" }}>
-                  <p style={{ fontSize: "20px", fontWeight: 700, color: "#1a1a1a", lineHeight: 1 }}>{value}</p>
-                  <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "#1a1a1a", marginTop: "2px" }}>{label}</p>
+              {[
+                { label: "W", value: wins, bg: "#08D068" },
+                { label: "G", value: draws, bg: "#FFD600" },
+                { label: "V", value: losses, bg: "#FF3DA8" },
+              ].map(({ label, value, bg }) => (
+                <div key={label} style={{ background: bg, border: "2px solid #1a1a1a", borderRadius: "12px", padding: "10px 16px", textAlign: "center", boxShadow: "2px 2px 0 #1a1a1a" }}>
+                  <p style={{ fontSize: "28px", fontWeight: 900, color: "#ffffff", lineHeight: 1, letterSpacing: "-1px" }}>{value}</p>
+                  <p style={{ fontSize: "10px", fontWeight: 800, textTransform: "uppercase", color: "rgba(255,255,255,0.85)", marginTop: "3px" }}>{label}</p>
                 </div>
               ))}
             </div>
