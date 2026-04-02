@@ -30,7 +30,6 @@ const secondaryNavItems = [
   { name: "Prikbord", icon: "pin", page: "Prikbord" },
   { name: "Spelprincipes", icon: "grid-dots", page: "Spelprincipes" },
   { name: "Foto's", icon: "photo", page: "Photowall" },
-  { name: "Resultaten", icon: "trophy", page: "MatchResults" },
   { name: "Feedback", icon: "message-2", page: "FeedbackOverview" },
   { name: "Beheer", icon: "settings", page: "AccountBeheer" },
 ];
