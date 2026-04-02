@@ -23,6 +23,7 @@ const mainNavItems = [
   { name: "Spelers", icon: "users", page: "Players" },
   { name: "Staff", icon: "user-cog", page: "Staff" },
   { name: "Berichten", icon: "message-circle", page: "Messages" },
+  { name: "Resultaten", icon: "trophy", page: "MatchResults" },
   { name: "Trainingsvormen", icon: "ball-football", page: "Trainingsvormen" },
 ];
 
