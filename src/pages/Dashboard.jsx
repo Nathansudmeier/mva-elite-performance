@@ -237,7 +237,7 @@ export default function Dashboard() {
           <img
             src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/e8207fa84_Emvi-tevreden.png"
             alt="Emvi"
-            style={{ position: "absolute", right: 0, bottom: 0, height: "110px", zIndex: 3, pointerEvents: "none" }}
+            style={{ position: "absolute", right: 0, bottom: 0, height: "220px", zIndex: 3, pointerEvents: "none" }}
           />
         </div>
 
