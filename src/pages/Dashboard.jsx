@@ -183,6 +183,31 @@ export default function Dashboard() {
       <UrgenteBanners />
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
 
+      {/* ── SNELLE ACTIES (mobiel-vriendelijk) ── */}
+      <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
+        <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "12px", letterSpacing: "0.10em" }}>Snelle acties</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }} className="mobile-grid-2col">
+          {[
+          { icon: "ti-users", label: "Aanwezigheid", sub: "Training vandaag", action: () => navigate("/Planning") },
+          { icon: "ti-upload", label: "Team foto", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
+          { icon: "ti-clipboard-list", label: "Beoordeling", sub: `${totalRatingsNeeded - meting1Count} wachten`, action: () => navigate("/PlayerRatingForm") },
+          { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => {
+              const nextWedstrijd = agendaItems.find((ai) => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
+              if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);else
+              navigate("/Planning");
+            } }].
+          map((item, i) =>
+          <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.08)", border: "2px solid rgba(26,26,26,0.15)", borderRadius: "14px", padding: "14px 8px", cursor: "pointer", textAlign: "center", gap: "6px", transition: "all 0.15s" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <i className={`ti ${item.icon}`} style={{ fontSize: "18px", color: "#ffffff" }} />
+              </div>
+              <p style={{ fontSize: "12px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.2 }}>{item.label}</p>
+              <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.55)", lineHeight: 1.2 }}>{item.sub}</p>
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Hero card — winratio */}
       <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", position: "relative", overflow: "hidden", minHeight: "120px" }} className="bg-[#ffd500] text-gray-50">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -294,31 +319,6 @@ export default function Dashboard() {
           </div>
         </div>
       }
-
-      {/* ── SNELLE ACTIES (mobiel-vriendelijk) ── */}
-      <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }} className="bg-[#ffd500]">
-        <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "12px", letterSpacing: "0.10em" }}>Snelle acties</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px" }} className="mobile-grid-2col">
-          {[
-          { icon: "ti-users", label: "Aanwezigheid", sub: "Training vandaag", action: () => navigate("/Planning") },
-          { icon: "ti-upload", label: "Team foto", sub: "Team of the Week", action: () => setUploadModalOpen(true) },
-          { icon: "ti-clipboard-list", label: "Beoordeling", sub: `${totalRatingsNeeded - meting1Count} wachten`, action: () => navigate("/PlayerRatingForm") },
-          { icon: "ti-player-play", label: "Wedstrijd", sub: "Live modus", action: () => {
-              const nextWedstrijd = agendaItems.find((ai) => ai.type === "Wedstrijd" && ai.date >= new Date().toISOString().split("T")[0]);
-              if (nextWedstrijd) navigate(`/PlanningWedstrijdDetail?id=${nextWedstrijd.id}`);else
-              navigate("/Planning");
-            } }].
-          map((item, i) =>
-          <button key={i} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(26,26,26,0.04)", border: "2px solid rgba(26,26,26,0.10)", borderRadius: "14px", padding: "14px 8px", cursor: "pointer", textAlign: "center", gap: "6px", transition: "all 0.15s" }}>
-              <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <i className={`ti ${item.icon}`} style={{ fontSize: "18px", color: "#ffffff" }} />
-              </div>
-              <p style={{ fontSize: "12px", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.2 }}>{item.label}</p>
-              <p style={{ fontSize: "10px", color: "rgba(26,26,26,0.45)", lineHeight: 1.2 }}>{item.sub}</p>
-            </button>
-          )}
-        </div>
-      </div>
 
       {/* ── WEDSTRIJDEN + SEIZOENSRESULTATEN ── */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }} className="mobile-grid-1col">
