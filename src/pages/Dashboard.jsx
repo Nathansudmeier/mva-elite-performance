@@ -184,7 +184,7 @@ export default function Dashboard() {
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
 
       {/* Hero card — winratio */}
-      <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", position: "relative", overflow: "hidden", minHeight: "120px" }} className="bg-[#ffd500]">
+      <div style={{ background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1.25rem", position: "relative", overflow: "hidden", minHeight: "120px" }} className="bg-[#ffd500] text-gray-50">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div>
             <p style={{ fontSize: "9px", fontWeight: 800, color: "rgba(255,255,255,0.65)", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>Seizoen 2025-26</p>
