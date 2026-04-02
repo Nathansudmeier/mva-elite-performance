@@ -181,7 +181,7 @@ export default function Layout({ children, currentPageName }) {
       )}
 
       {/* Main content */}
-      <main className="xl:pl-56 pb-28 xl:pb-8 relative min-h-screen" style={{ backgroundColor: "#fefcf9" }}>
+      <main className="xl:pl-56 pb-28 xl:pb-8 relative min-h-screen" style={{ background: "linear-gradient(160deg, #fefcf9 0%, #edb188 100%)" }}>
         <div className="relative p-4 md:p-6 xl:p-8 max-w-7xl mx-auto">
           {children}
         </div>
