@@ -331,7 +331,7 @@ export default function Dashboard() {
           </div>
           <div>
             {(() => {
-              const displayMatches = allMatches.slice(-4).reverse();
+              const displayMatches = [...allMatches].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 4);
               if (displayMatches.length === 0) return (
                 <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.35)", padding: "12px 0" }}>Nog geen wedstrijden</p>
               );
