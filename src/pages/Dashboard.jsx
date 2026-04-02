@@ -400,7 +400,7 @@ export default function Dashboard() {
         <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <p style={{ fontSize: "13px", fontWeight: 800, color: "#1a1a1a" }}>Wedstrijdreflecties</p>
-            <span style={{ fontSize: "11px", color: "rgba(26,26,26,0.40)", fontWeight: 600 }}>{matchReflections.length} ingediend</span>
+            <button onClick={() => navigate("/MijnReflecties")} style={{ fontSize: "12px", color: "#FF6800", fontWeight: 700, background: "none", border: "none", cursor: "pointer" }}>Alle →</button>
           </div>
 
           {(() => {
