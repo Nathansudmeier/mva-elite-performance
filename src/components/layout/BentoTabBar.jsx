@@ -179,8 +179,9 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderU
       <nav
         className="xl:hidden"
         style={{
-          position: "fixed", bottom: 0, left: "8px", right: "8px",
-          zIndex: 100, padding: "0 0 1rem",
+          position: "fixed", bottom: 0, left: 0, right: 0,
+          zIndex: 100, padding: "0 8px 1rem",
+          background: "linear-gradient(to top, #edb188 0%, transparent 100%)",
         }}
       >
         <div style={{
@@ -250,8 +251,9 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderU
     <nav
       className="xl:hidden"
       style={{
-        position: "fixed", bottom: 0, left: "8px", right: "8px",
-        zIndex: 100, padding: "0 0 1rem",
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        zIndex: 100, padding: "0 8px 1rem",
+        background: "linear-gradient(to top, #edb188 0%, transparent 100%)",
       }}
     >
       <div style={{
