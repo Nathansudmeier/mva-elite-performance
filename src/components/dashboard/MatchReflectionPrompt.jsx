@@ -30,13 +30,18 @@ export default function MatchReflectionPrompt({ playerId }) {
 
   if (!playerId) return null;
 
-  // Vind de meest recente afgelopen wedstrijd
-  const today = new Date().toISOString().split("T")[0];
-  const pastMatches = matches
-    .filter((m) => m.date <= today)
-    .sort((a, b) => (b.date > a.date ? 1 : -1));
+  // Vind de meest recente wedstrijd binnen 4 dagen geleden
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayStr = today.toISOString().split("T")[0];
+  const fourDaysAgo = new Date(today);
+  fourDaysAgo.setDate(fourDaysAgo.getDate() - 4);
+  const fourDaysAgoStr = fourDaysAgo.toISOString().split("T")[0];
 
-  const recentMatch = pastMatches[0];
+  const recentMatch = matches
+    .filter((m) => m.date <= todayStr && m.date >= fourDaysAgoStr)
+    .sort((a, b) => (b.date > a.date ? 1 : -1))[0];
+
   if (!recentMatch) return null;
 
   // Check of er al een reflectie is voor deze wedstrijd
