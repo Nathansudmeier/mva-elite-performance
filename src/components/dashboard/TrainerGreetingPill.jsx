@@ -68,12 +68,12 @@ export default function TrainerGreetingPill() {
       alignItems: "center",
       gap: "5px",
       borderRadius: "20px",
-      padding: "4px 12px",
-      background: c.bg,
-      border: `0.5px solid ${c.border}`,
-      fontSize: "11px",
-      fontWeight: 600,
-      color: c.color
+      padding: "5px 14px",
+      background: "#1A6FFF",
+      border: "2px solid #1a1a1a",
+      fontSize: "12px",
+      fontWeight: 800,
+      color: "#ffffff"
     }}>
       <i className={`ti ${c.icon}`} style={{ fontSize: "12px" }} />
       {c.label}
