@@ -111,8 +111,9 @@ export default function MatchReflectionPrompt({ playerId }) {
 
       {/* Positief */}
       <div style={{ marginBottom: "12px" }}>
-        <p style={{ fontSize: "9px", fontWeight: 800, color: "#08D068", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>
-          ✅ Wat ging goed?
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "#08D068", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px", display: "flex", alignItems: "center", gap: "5px" }}>
+          <i className="ph-fill ph-check-circle" style={{ fontSize: "13px", color: "#08D068" }} />
+          Wat ging goed?
         </p>
         <textarea
           value={positief}
@@ -127,8 +128,9 @@ export default function MatchReflectionPrompt({ playerId }) {
 
       {/* Verbeterpunt */}
       <div style={{ marginBottom: "16px" }}>
-        <p style={{ fontSize: "9px", fontWeight: 800, color: "#FF6800", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px" }}>
-          🎯 Wat kan beter?
+        <p style={{ fontSize: "9px", fontWeight: 800, color: "#FF6800", textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: "6px", display: "flex", alignItems: "center", gap: "5px" }}>
+          <i className="ph-fill ph-arrow-circle-up" style={{ fontSize: "13px", color: "#FF6800" }} />
+          Wat kan beter?
         </p>
         <textarea
           value={verbeterpunt}
@@ -148,8 +150,10 @@ export default function MatchReflectionPrompt({ playerId }) {
           background: "#FF6800", border: "2.5px solid #1a1a1a", borderRadius: "14px",
           boxShadow: "3px 3px 0 #1a1a1a", height: "52px", fontWeight: 800, fontSize: "14px",
           color: "#ffffff", width: "100%", cursor: "pointer", opacity: (saveMutation.isPending || !positief.trim() || !verbeterpunt.trim()) ? 0.45 : 1,
+          display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
         }}
       >
+        <i className="ph-fill ph-floppy-disk" style={{ fontSize: "18px" }} />
         {saveMutation.isPending ? "Opslaan..." : "Reflectie opslaan"}
       </button>
     </div>
