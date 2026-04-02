@@ -150,7 +150,7 @@ export default function EmviFeedback() {
         }}
       >
         {!hasMessages && (
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", color: "rgba(26,26,26,0.35)", textAlign: "center", padding: "20px" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", color: "rgba(26,26,26,0.35)", textAlign: "center", padding: "10px" }}>
             <MessageSquare size={28} style={{ opacity: 0.4 }} />
             <p style={{ fontSize: "14px", fontWeight: 600, margin: 0 }}>Nog geen berichten</p>
             <p style={{ fontSize: "12px", margin: 0 }}>Stuur hieronder je eerste vraag, tip of opmerking.</p>
