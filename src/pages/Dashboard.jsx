@@ -184,7 +184,7 @@ export default function Dashboard() {
       <LiveMatchBanner liveMatches={liveMatches} isTrainer={isTrainer} />
 
       {/* ── SNELLE ACTIES + HERO CARD (naast elkaar op tablet+) ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-[10px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-[10px]">
 
         {/* Snelle acties */}
         <div style={{ background: "#FFD600", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
