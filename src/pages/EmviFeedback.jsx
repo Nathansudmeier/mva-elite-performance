@@ -99,7 +99,6 @@ export default function EmviFeedback() {
   return (
     <div
       style={{
-        background: "#FFF3E8",
         display: "flex",
         flexDirection: "column",
         height: "calc(100dvh - 64px)", /* subtract bottom nav */
