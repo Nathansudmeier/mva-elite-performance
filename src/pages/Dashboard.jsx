@@ -204,12 +204,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── VOLGENDE WEDSTRIJDEN ── */}
-      <NextMatchGrid matches={matches} agendaItems={agendaItems} playerId={null} />
-
-      {/* Daily Feeling Overview */}
-      <DailyFeelingOverview />
-
       {/* ── SNELLE ACTIES (mobiel-vriendelijk) ── */}
       <div style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: "18px", boxShadow: "3px 3px 0 #1a1a1a", padding: "1rem" }}>
         <p style={{ fontSize: "9px", fontWeight: 800, textTransform: "uppercase", color: "rgba(26,26,26,0.50)", marginBottom: "12px", letterSpacing: "0.10em" }}>Snelle acties</p>
@@ -234,6 +228,12 @@ export default function Dashboard() {
           ))}
         </div>
       </div>
+
+      {/* ── VOLGENDE WEDSTRIJDEN ── */}
+      <NextMatchGrid matches={matches} agendaItems={agendaItems} playerId={null} />
+
+      {/* Daily Feeling Overview */}
+      <DailyFeelingOverview />
 
       {/* ── 4-KOLOMS METRIC GRID (2-col op mobiel) ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }} className="mobile-grid-2col">
