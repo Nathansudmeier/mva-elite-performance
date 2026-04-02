@@ -101,7 +101,7 @@ export default function EmviFeedback() {
       style={{
         display: "flex",
         flexDirection: "column",
-        height: "calc(100dvh - 120px)", /* subtract top nav + bottom nav */
+        height: "calc(100dvh - 190px)", /* subtract top nav + bottom nav */
         overflow: "hidden",
         maxWidth: "680px",
         margin: "0 auto",
