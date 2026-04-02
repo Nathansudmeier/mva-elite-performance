@@ -253,7 +253,7 @@ export default function BentoTabBar({ currentPageName, isSpeelsterUser, isOuderU
       style={{
         position: "fixed", bottom: 0, left: 0, right: 0,
         zIndex: 100, padding: "0 8px 12px",
-        backgroundColor: "#fefcf9",
+        backgroundColor: "transparent",
         }}
         >
         <div style={{
