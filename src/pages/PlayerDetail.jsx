@@ -232,8 +232,16 @@ export default function PlayerDetail() {
         </>
       )}
 
-      {/* Section header: Testen en resultaten */}
+      {/* Section header: Seizoensstatistieken */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "16px", marginBottom: "4px" }}>
+        <Trophy size={20} color="#FF6800" />
+        <h2 style={{ fontSize: "17px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px" }}>Seizoensstatistieken</h2>
+      </div>
+
+      <PlayerSeasonStats playerId={playerId} variant="compact" />
+
+      {/* Section header: Testen en resultaten */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "24px", marginBottom: "4px" }}>
         <Target size={20} color="#FF6800" />
         <h2 style={{ fontSize: "17px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px" }}>Testen en resultaten</h2>
       </div>
@@ -261,14 +269,6 @@ export default function PlayerDetail() {
 
       {/* Metric Grid */}
       <PlayerMetricGrid yoyo={yoyoTests} physical={physicalTests} attendance={attendance} matches={matches} playerId={playerId} />
-
-      {/* Section header: Seizoensstatistieken */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "24px", marginBottom: "4px" }}>
-        <Trophy size={20} color="#FF6800" />
-        <h2 style={{ fontSize: "17px", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px" }}>Seizoensstatistieken</h2>
-      </div>
-
-      <PlayerSeasonStats playerId={playerId} variant="compact" />
 
       {/* Wellness */}
       {wellness.length > 0 && (
