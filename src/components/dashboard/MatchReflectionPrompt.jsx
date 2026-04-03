@@ -30,7 +30,7 @@ export default function MatchReflectionPrompt({ playerId }) {
 
   if (!playerId) return null;
 
-  // Vind de meest recente wedstrijd binnen 4 dagen geleden
+  // Vind de meest recente wedstrijd binnen 4 dagen geleden waarbij de speler heeft gespeeld
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayStr = today.toISOString().split("T")[0];
@@ -38,8 +38,18 @@ export default function MatchReflectionPrompt({ playerId }) {
   fourDaysAgo.setDate(fourDaysAgo.getDate() - 4);
   const fourDaysAgoStr = fourDaysAgo.toISOString().split("T")[0];
 
+  const playerPlayedInMatch = (match) => {
+    const lineupIds = (match.lineup || []).map(l => l.player_id).filter(Boolean);
+    const substituteIds = (match.substitutes || []).filter(Boolean);
+    // Ook live_events controleren op invalbeurten
+    const subInIds = (match.live_events || [])
+      .filter(e => e.type === "substitution" && e.player_in_id)
+      .map(e => e.player_in_id);
+    return lineupIds.includes(playerId) || substituteIds.includes(playerId) || subInIds.includes(playerId);
+  };
+
   const recentMatch = matches
-    .filter((m) => m.date <= todayStr && m.date >= fourDaysAgoStr)
+    .filter((m) => m.date <= todayStr && m.date >= fourDaysAgoStr && playerPlayedInMatch(m))
     .sort((a, b) => (b.date > a.date ? 1 : -1))[0];
 
   if (!recentMatch) return null;
