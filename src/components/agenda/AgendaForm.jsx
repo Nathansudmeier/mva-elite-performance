@@ -131,15 +131,19 @@ export default function AgendaForm({ item, onSave, onClose }) {
 
   function generateRepeatDates(startDate, untilDate) {
     const dates = [];
-    const start = new Date(startDate + "T00:00:00");
-    const until = new Date(untilDate + "T00:00:00");
-    const dayOfWeek = start.getDay();
-    const current = new Date(start);
+    // Gebruik de datumstring direct, zonder Date object conversie naar ISO (voorkomt UTC-verschuiving)
+    const [sy, sm, sd] = startDate.split("-").map(Number);
+    const [uy, um, ud] = untilDate.split("-").map(Number);
+    const until = new Date(uy, um - 1, ud);
+
+    const current = new Date(sy, sm - 1, sd);
     current.setDate(current.getDate() + 7); // begin met de week erna
+
     while (current <= until) {
-      if (current.getDay() === dayOfWeek) {
-        dates.push(current.toISOString().split("T")[0]);
-      }
+      const y = current.getFullYear();
+      const m = String(current.getMonth() + 1).padStart(2, "0");
+      const d = String(current.getDate()).padStart(2, "0");
+      dates.push(`${y}-${m}-${d}`);
       current.setDate(current.getDate() + 7);
     }
     return dates;
