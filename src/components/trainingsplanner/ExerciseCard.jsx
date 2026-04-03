@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { ChevronDown, ChevronUp, Plus, X, GripVertical, Camera, Youtube } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, X, GripVertical, Camera, Youtube, Maximize2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const GROUP_COLORS = [
@@ -47,6 +47,7 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
   const [expanded, setExpanded] = useState(true);
   const [newPoint, setNewPoint] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [lightbox, setLightbox] = useState(false);
   const fileInputRef = useRef(null);
 
   function update(patch) {
@@ -121,6 +122,18 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
 
   return (
     <div style={cardStyle}>
+      {/* Lightbox */}
+      {lightbox && exercise.field_drawing && (
+        <div
+          onClick={() => setLightbox(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}
+        >
+          <button onClick={() => setLightbox(false)} style={{ position: "absolute", top: "20px", right: "20px", background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%", width: "44px", height: "44px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <X size={22} color="#fff" />
+          </button>
+          <img src={exercise.field_drawing} alt="Velddiagram" style={{ maxWidth: "100%", maxHeight: "90vh", borderRadius: "14px", objectFit: "contain" }} onClick={e => e.stopPropagation()} />
+        </div>
+      )}
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "14px 16px", borderBottom: expanded ? "2px solid rgba(26,26,26,0.08)" : "none" }}>
         {!readOnly && (
@@ -235,10 +248,13 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
             <div>
               <label style={labelStyle}>Velddiagram foto</label>
               {exercise.field_drawing && (
-                <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "8px", border: "2px solid #1a1a1a" }}>
+                <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "8px", border: "2px solid #1a1a1a", cursor: "zoom-in" }} onClick={() => setLightbox(true)}>
                   <img src={exercise.field_drawing} alt="Velddiagram" style={{ width: "100%", borderRadius: "10px", display: "block" }} />
+                  <div style={{ position: "absolute", top: "8px", left: "8px", background: "rgba(26,26,26,0.55)", borderRadius: "8px", width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                    <Maximize2 size={13} color="#fff" />
+                  </div>
                   <button
-                    onClick={() => { update({ field_drawing: null }); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+                    onClick={(e) => { e.stopPropagation(); update({ field_drawing: null }); if (fileInputRef.current) fileInputRef.current.value = ""; }}
                     style={{ position: "absolute", top: "8px", right: "8px", background: "rgba(26,26,26,0.7)", border: "none", borderRadius: "8px", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
                   >
                     <X size={14} color="#fff" />
@@ -257,8 +273,11 @@ export default function ExerciseCard({ exercise, players, onChange, onRemove, dr
             </div>
           )}
           {readOnly && exercise.field_drawing && (
-            <div style={{ border: "2.5px solid #1a1a1a", borderRadius: "12px", overflow: "hidden" }}>
+            <div style={{ position: "relative", border: "2.5px solid #1a1a1a", borderRadius: "12px", overflow: "hidden", cursor: "zoom-in" }} onClick={() => setLightbox(true)}>
               <img src={exercise.field_drawing} alt="Velddiagram" style={{ width: "100%", display: "block" }} />
+              <div style={{ position: "absolute", top: "8px", left: "8px", background: "rgba(26,26,26,0.55)", borderRadius: "8px", width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Maximize2 size={13} color="#fff" />
+              </div>
             </div>
           )}
 
