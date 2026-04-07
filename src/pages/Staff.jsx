@@ -51,6 +51,7 @@ function StaffContent() {
 
   const openEdit = (trainer) => {
     setEditing(trainer);
+    setPhotoFile(null);
     setForm({
       name: trainer.name || "",
       role_title: trainer.role_title || "",
@@ -105,7 +106,7 @@ function StaffContent() {
                   <User size={22} style={{ color: "#FF8C3A" }} />
                 )}
                 {isTrainer && (
-                  <label onClick={(e) => e.preventDefault()} className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40 cursor-pointer">
+                  <label onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40 cursor-pointer">
                     <Camera size={14} className="text-white" />
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => { e.stopPropagation(); handleQuickPhoto(e, trainer); }} />
                   </label>
