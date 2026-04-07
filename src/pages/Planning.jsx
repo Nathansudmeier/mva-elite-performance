@@ -13,9 +13,9 @@ export default function Planning() {
   const { isTrainer } = useCurrentUser();
   const qc = useQueryClient();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [view, setView] = useState("lijst");
-  const [typeFilter, setTypeFilter] = useState("alles");
+  const [typeFilter, setTypeFilter] = useState(() => searchParams.get("filter") || "alles");
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
@@ -185,7 +185,7 @@ export default function Planning() {
             { key: "wedstrijden", label: "Wedstrijden" },
             { key: "toernooien", label: "Toernooien" }
           ].map(({ key, label }) => (
-            <button key={key} onClick={() => setTypeFilter(key)}
+            <button key={key} onClick={() => { setTypeFilter(key); setSearchParams(p => { const np = new URLSearchParams(p); if (key === "alles") np.delete("filter"); else np.set("filter", key); return np; }); }}
               style={{
                 padding: "8px 14px", fontSize: "12px", fontWeight: 800,
                 background: typeFilter === key ? "#1a1a1a" : "transparent",
