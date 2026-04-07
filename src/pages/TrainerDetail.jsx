@@ -124,26 +124,39 @@ export default function TrainerDetail() {
       <div className="glass p-6">
         {editing ? (
           <div className="space-y-4">
+            <p className="t-section-title">Staflid bewerken</p>
             {/* Photo upload in edit mode */}
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.10)", border: "0.5px solid rgba(255,255,255,0.15)" }}>
+              <div className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center flex-shrink-0" style={{ background: "#f5f5f5", border: "2px solid #e0e0e0" }}>
                 {(photoFile ? URL.createObjectURL(photoFile) : editForm.photo_url) ? (
                   <img src={photoFile ? URL.createObjectURL(photoFile) : editForm.photo_url} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <User size={32} style={{ color: "#FF8C3A" }} />
+                  <User size={32} style={{ color: "#FF6800" }} />
                 )}
               </div>
-              <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer" style={{ border: "1px dashed rgba(255,107,0,0.5)", background: "rgba(255,107,0,0.08)" }}>
-                <Upload size={14} style={{ color: "#FF8C3A" }} />
-                <span className="t-secondary text-sm">{photoFile ? photoFile.name : "Foto uploaden"}</span>
+              <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer" style={{ border: "2px dashed #FF6800", background: "rgba(255,104,0,0.06)" }}>
+                <Upload size={14} style={{ color: "#FF6800" }} />
+                <span className="t-secondary" style={{ color: "#FF6800", fontWeight: 700 }}>{photoFile ? photoFile.name : "Foto uploaden"}</span>
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => setPhotoFile(e.target.files[0])} />
               </label>
             </div>
-            <Input placeholder="Naam *" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
-            <Input placeholder="Functietitel (bijv. Hoofdtrainer, Assistent)" value={editForm.role_title} onChange={(e) => setEditForm({ ...editForm, role_title: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
-            <Input placeholder="Telefoonnummer" value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
-            <Input placeholder="E-mailadres" type="email" value={editForm.email} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} style={{ background: "rgba(255,255,255,0.07)", border: "0.5px solid rgba(255,255,255,0.15)", color: "#fff", borderRadius: "10px" }} />
-            <div className="flex gap-3">
+            <div className="space-y-1">
+              <label className="t-label">Naam *</label>
+              <Input placeholder="Naam" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} style={{ background: "#f5f5f5", border: "2px solid #e0e0e0", color: "#1a1a1a", borderRadius: "10px" }} />
+            </div>
+            <div className="space-y-1">
+              <label className="t-label">Functietitel</label>
+              <Input placeholder="bijv. Hoofdtrainer, Assistent" value={editForm.role_title} onChange={(e) => setEditForm({ ...editForm, role_title: e.target.value })} style={{ background: "#f5f5f5", border: "2px solid #e0e0e0", color: "#1a1a1a", borderRadius: "10px" }} />
+            </div>
+            <div className="space-y-1">
+              <label className="t-label">Telefoonnummer</label>
+              <Input placeholder="+31 6 00000000" value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })} style={{ background: "#f5f5f5", border: "2px solid #e0e0e0", color: "#1a1a1a", borderRadius: "10px" }} />
+            </div>
+            <div className="space-y-1">
+              <label className="t-label">E-mailadres</label>
+              <Input placeholder="naam@club.nl" type="email" value={editForm.email} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} style={{ background: "#f5f5f5", border: "2px solid #e0e0e0", color: "#1a1a1a", borderRadius: "10px" }} />
+            </div>
+            <div className="flex gap-3 pt-2">
               <button onClick={() => updateMutation.mutate(editForm)} disabled={updateMutation.isPending || !editForm.name} className="btn-primary">
                 {updateMutation.isPending ? "Opslaan..." : "Opslaan"}
               </button>
