@@ -16,6 +16,7 @@ export default function LiveTrainingMode({ plan, players, onClose }) {
   const [showHints, setShowHints] = useState({});
   const [showImage, setShowImage] = useState({});
   const [showGroups, setShowGroups] = useState({});
+  const [lightboxImg, setLightboxImg] = useState(null);
   const [saving, setSaving] = useState(false);
   const [tick, setTick] = useState(0);
 
@@ -64,6 +65,18 @@ export default function LiveTrainingMode({ plan, players, onClose }) {
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "#FFF3E8", overflowY: "auto", paddingBottom: "100px" }}>
+      {/* Lightbox */}
+      {lightboxImg && (
+        <div
+          onClick={() => setLightboxImg(null)}
+          style={{ position: "fixed", inset: 0, zIndex: 300, background: "rgba(0,0,0,0.90)", display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}
+        >
+          <img src={lightboxImg} alt="Velddiagram" style={{ maxWidth: "100%", maxHeight: "90vh", borderRadius: "16px", border: "3px solid #ffffff" }} />
+          <button onClick={() => setLightboxImg(null)} style={{ position: "absolute", top: "16px", right: "16px", width: "40px", height: "40px", borderRadius: "50%", background: "#ffffff", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <X size={20} color="#1a1a1a" />
+          </button>
+        </div>
+      )}
       {/* Sticky header */}
       <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#FFF3E8", borderBottom: "2.5px solid #1a1a1a" }}>
         {/* Progress bar */}
@@ -180,7 +193,8 @@ export default function LiveTrainingMode({ plan, players, onClose }) {
                       <img
                         src={ex.field_drawing}
                         alt="Velddiagram"
-                        style={{ width: "100%", borderRadius: "12px", border: "2.5px solid #1a1a1a", display: "block" }}
+                        onClick={() => setLightboxImg(ex.field_drawing)}
+                        style={{ width: "100%", borderRadius: "12px", border: "2.5px solid #1a1a1a", display: "block", cursor: "zoom-in" }}
                       />
                     </div>
                   )}
