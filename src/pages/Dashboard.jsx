@@ -350,7 +350,9 @@ export default function Dashboard() {
           </div>
           <div>
             {(() => {
-              const displayMatches = allMatches.slice(-4).reverse();
+              const displayMatches = allMatches
+                .filter(m => m.score_home !== null && m.score_home !== undefined && m.score_away !== null && m.score_away !== undefined)
+                .slice(-4).reverse();
               if (displayMatches.length === 0) return (
                 <p style={{ fontSize: "12px", color: "rgba(26,26,26,0.35)", padding: "12px 0" }}>Nog geen wedstrijden</p>);
 
