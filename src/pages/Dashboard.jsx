@@ -380,7 +380,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <span style={{ fontSize: "11px", fontWeight: 800, padding: "4px 10px", borderRadius: "20px", background: badgeBg, color: badgeColor, border: `1.5px solid ${badgeColor}`, flexShrink: 0 }}>
-                      {result}
+                      {hasScore ? `${m.score_home}-${m.score_away}` : result}
                     </span>
                   </button>);
 
