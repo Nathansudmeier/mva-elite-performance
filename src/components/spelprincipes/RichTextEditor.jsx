@@ -37,23 +37,17 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
   };
 
   return (
-    <div
-      style={{
-        background: "rgba(255,255,255,0.06)",
-        border: "0.5px solid rgba(255,255,255,0.12)",
-        borderRadius: "14px",
-        overflow: "hidden",
-      }}
-    >
+    <div style={{ background: "#ffffff", borderRadius: "12px", overflow: "hidden" }}>
       {/* Toolbar */}
       <div
         style={{
           display: "flex",
           gap: "4px",
           padding: "8px 10px",
-          borderBottom: "0.5px solid rgba(255,255,255,0.10)",
+          borderBottom: "1.5px solid rgba(26,26,26,0.10)",
           flexWrap: "wrap",
           alignItems: "center",
+          background: "#f7f5f2",
         }}
       >
         {TOOLS.map((t) => (
@@ -66,9 +60,9 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
               width: "32px",
               height: "32px",
               borderRadius: "8px",
-              background: "rgba(255,255,255,0.08)",
-              border: "0.5px solid rgba(255,255,255,0.12)",
-              color: "rgba(255,255,255,0.75)",
+              background: "#ffffff",
+              border: "1.5px solid rgba(26,26,26,0.20)",
+              color: "#1a1a1a",
               fontSize: "13px",
               cursor: "pointer",
               display: "flex",
@@ -82,7 +76,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
         ))}
 
         {/* Divider */}
-        <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.12)", margin: "0 4px" }} />
+        <div style={{ width: "1px", height: "20px", background: "rgba(26,26,26,0.15)", margin: "0 4px" }} />
 
         {/* Heading buttons */}
         {[["H2", "h2"], ["H3", "h3"], ["P", "p"]].map(([label, tag]) => (
@@ -95,9 +89,9 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
               padding: "0 10px",
               height: "32px",
               borderRadius: "8px",
-              background: "rgba(255,255,255,0.08)",
-              border: "0.5px solid rgba(255,255,255,0.12)",
-              color: "rgba(255,255,255,0.75)",
+              background: "#ffffff",
+              border: "1.5px solid rgba(26,26,26,0.20)",
+              color: "#1a1a1a",
               fontSize: "12px",
               fontWeight: 600,
               cursor: "pointer",
@@ -118,7 +112,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
         style={{
           minHeight: "180px",
           padding: "14px 16px",
-          color: "#ffffff",
+          color: "#1a1a1a",
           fontSize: "15px",
           lineHeight: 1.7,
           outline: "none",
@@ -129,7 +123,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
       <style>{`
         [contenteditable][data-placeholder]:empty:before {
           content: attr(data-placeholder);
-          color: rgba(255,255,255,0.30);
+          color: rgba(26,26,26,0.30);
           pointer-events: none;
         }
         [contenteditable] h2 { font-size: 18px; font-weight: 700; margin: 8px 0 4px; }
