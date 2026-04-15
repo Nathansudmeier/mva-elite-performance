@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { ChevronLeft, MapPin, Clock, Bell, Pencil, Trash2, Ban, Check } from "lucide-react";
+import { ChevronLeft, MapPin, Clock, Bell, Pencil, Trash2, Ban, Check, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { formatDate, TYPE_CONFIG } from "@/components/agenda/agendaUtils";
 import AttendanceButtons from "@/components/attendance/AttendanceButtons";
@@ -365,7 +365,114 @@ export default function PlanningTrainingDetail() {
   );
 }
 
+function ExerciseDetailModal({ exercise, index, onClose }) {
+  const GROUP_COLORS_MAP = {
+    red: "#FF3DA8", orange: "#FF6800", yellow: "#FFD600",
+    green: "#08D068", blue: "#00C2FF", white: "#f0f0f0",
+  };
+  const [lightbox, setLightbox] = useState(false);
+
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)", display: "flex", alignItems: "flex-end", justifyContent: "center" }} onClick={onClose}>
+      <div
+        style={{ background: "#FFF3E8", border: "2.5px solid #1a1a1a", borderRadius: "24px 24px 0 0", boxShadow: "0 -4px 0 #1a1a1a", width: "100%", maxWidth: "720px", maxHeight: "92vh", overflowY: "auto", overscrollBehavior: "contain" }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "16px 16px 12px", borderBottom: "2px solid rgba(26,26,26,0.08)", position: "sticky", top: 0, background: "#FFF3E8", zIndex: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <span style={{ fontSize: 11, fontWeight: 900, color: "#fff" }}>{index + 1}</span>
+            </div>
+            <h2 style={{ fontSize: 17, fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.3px" }}>{exercise.name || "Oefenvorm"}</h2>
+            {exercise.duration_minutes > 0 && (
+              <span style={{ fontSize: 11, fontWeight: 700, background: "rgba(26,26,26,0.08)", borderRadius: 6, padding: "2px 8px", color: "rgba(26,26,26,0.55)" }}>{exercise.duration_minutes} min</span>
+            )}
+          </div>
+          <button onClick={onClose} style={{ width: 36, height: 36, borderRadius: 10, background: "#ffffff", border: "2px solid #1a1a1a", boxShadow: "2px 2px 0 #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+            <X size={16} color="#1a1a1a" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: 14, paddingBottom: 32 }}>
+
+          {/* Field drawing */}
+          {exercise.field_drawing && (
+            <>
+              {lightbox && (
+                <div onClick={() => setLightbox(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+                  <img src={exercise.field_drawing} alt="Velddiagram" style={{ maxWidth: "100%", maxHeight: "90vh", borderRadius: 14, objectFit: "contain" }} onClick={e => e.stopPropagation()} />
+                </div>
+              )}
+              <div style={{ position: "relative", border: "2.5px solid #1a1a1a", borderRadius: 14, overflow: "hidden", cursor: "zoom-in" }} onClick={() => setLightbox(true)}>
+                <img src={exercise.field_drawing} alt="Velddiagram" style={{ width: "100%", display: "block" }} />
+              </div>
+            </>
+          )}
+
+          {/* Description */}
+          {exercise.description && (
+            <div>
+              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.45)", marginBottom: 6 }}>Beschrijving</p>
+              <p style={{ fontSize: 14, color: "#1a1a1a", lineHeight: 1.6 }}>{exercise.description}</p>
+            </div>
+          )}
+
+          {/* Coaching points */}
+          {(exercise.coaching_points || []).length > 0 && (
+            <div>
+              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.45)", marginBottom: 8 }}>Coaching Points</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {exercise.coaching_points.map((pt, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, background: "#ffffff", border: "2px solid #1a1a1a", borderRadius: 10, padding: "10px 12px" }}>
+                    <div style={{ width: 20, height: 20, borderRadius: 6, background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <span style={{ fontSize: 9, fontWeight: 900, color: "#fff" }}>{i + 1}</span>
+                    </div>
+                    <span style={{ fontSize: 13, color: "#1a1a1a", fontWeight: 600 }}>{pt}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* YouTube */}
+          {exercise.youtube_url && (
+            <div>
+              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.45)", marginBottom: 6 }}>Video</p>
+              <a href={exercise.youtube_url} target="_blank" rel="noopener noreferrer"
+                style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(255,0,0,0.08)", border: "2px solid rgba(255,0,0,0.25)", borderRadius: 10, padding: "10px 14px", textDecoration: "none" }}>
+                <span style={{ fontSize: 16 }}>▶</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: "#FF0000" }}>Bekijk video</span>
+              </a>
+            </div>
+          )}
+
+          {/* Groups */}
+          {(exercise.groups || []).length > 0 && (
+            <div>
+              <p style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(26,26,26,0.45)", marginBottom: 8 }}>Spelersgroepen</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {exercise.groups.map(g => {
+                  const hex = GROUP_COLORS_MAP[g.color] || "#FF6800";
+                  return (
+                    <div key={g.id} style={{ background: hex + "18", border: `2px solid ${hex}`, borderRadius: 12, padding: "10px 12px" }}>
+                      <p style={{ fontSize: 12, fontWeight: 800, color: "#1a1a1a", marginBottom: g.player_ids?.length > 0 ? 4 : 0 }}>{g.name}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function OuderTrainingsPlanView({ trainingDate }) {
+  const [selectedEx, setSelectedEx] = useState(null);
+
   const { data: allPlans = [], isLoading } = useQuery({
     queryKey: ["training-plans"],
     queryFn: () => base44.entities.TrainingPlan.list("-date"),
@@ -398,7 +505,11 @@ function OuderTrainingsPlanView({ trainingDate }) {
         {total > 0 && <p style={{ fontSize: 12, color: "rgba(26,26,26,0.55)", fontWeight: 600 }}>{total} min totaal</p>}
       </div>
       {plan.exercises.map((ex, i) => (
-        <div key={ex.id || i} style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 14, boxShadow: "2px 2px 0 #1a1a1a", padding: "12px 14px", display: "flex", alignItems: "center", gap: 12 }}>
+        <button key={ex.id || i} onClick={() => setSelectedEx({ ex, i })}
+          style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 14, boxShadow: "2px 2px 0 #1a1a1a", padding: "12px 14px", display: "flex", alignItems: "center", gap: 12, width: "100%", cursor: "pointer", textAlign: "left", transition: "transform 0.1s, box-shadow 0.1s" }}
+          onMouseDown={e => { e.currentTarget.style.transform = "translate(2px,2px)"; e.currentTarget.style.boxShadow = "0px 0px 0 #1a1a1a"; }}
+          onMouseUp={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "2px 2px 0 #1a1a1a"; }}
+        >
           <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#FF6800", border: "2px solid #1a1a1a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <span style={{ fontSize: 11, fontWeight: 900, color: "#fff" }}>{i + 1}</span>
           </div>
@@ -406,11 +517,18 @@ function OuderTrainingsPlanView({ trainingDate }) {
             <p style={{ fontSize: 14, fontWeight: 800, color: "#1a1a1a" }}>{ex.name || "Oefenvorm"}</p>
             {ex.description && <p style={{ fontSize: 12, color: "rgba(26,26,26,0.55)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{ex.description}</p>}
           </div>
-          {ex.duration_minutes > 0 && (
-            <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(26,26,26,0.55)", flexShrink: 0 }}>{ex.duration_minutes} min</span>
-          )}
-        </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+            {ex.duration_minutes > 0 && (
+              <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(26,26,26,0.55)" }}>{ex.duration_minutes} min</span>
+            )}
+            <span style={{ fontSize: 16, color: "rgba(26,26,26,0.30)" }}>›</span>
+          </div>
+        </button>
       ))}
+
+      {selectedEx && (
+        <ExerciseDetailModal exercise={selectedEx.ex} index={selectedEx.i} onClose={() => setSelectedEx(null)} />
+      )}
     </div>
   );
 }
