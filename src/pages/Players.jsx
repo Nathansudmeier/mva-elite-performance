@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Edit2, Upload, Target, User, Camera } from "lucide-react";
+import { Plus, Edit2, Upload, Target, User, Camera, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { resizeImage } from "@/components/utils/imageResize";
@@ -66,6 +66,21 @@ function PlayersContent() {
     setDialogOpen(true);
   };
 
+  const handleExportCSV = () => {
+    const rows = [["Nummer", "Naam", "Positie", "Geboortedatum"]];
+    activePlayers.forEach((p) => {
+      rows.push([p.shirt_number || "", p.name || "", p.position || "", p.birth_date || ""]);
+    });
+    const csv = rows.map((r) => r.map((v) => `"${v}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "speelsters.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const activePlayers = players.filter((p) => p.active !== false);
   const displayPlayers = isTrainer ? activePlayers : activePlayers.filter(p => p.id === playerId);
 
@@ -88,9 +103,14 @@ function PlayersContent() {
           <p className="t-secondary">{isTrainer ? activePlayers.length : displayPlayers.length} speelsters</p>
         </div>
         {isTrainer && (
-          <button onClick={openNew} className="btn-secondary">
-            <Plus size={14} /> Toevoegen
-          </button>
+          <div className="flex gap-2">
+            <button onClick={handleExportCSV} className="btn-secondary">
+              <Download size={14} /> Export CSV
+            </button>
+            <button onClick={openNew} className="btn-secondary">
+              <Plus size={14} /> Toevoegen
+            </button>
+          </div>
         )}
       </div>
 
