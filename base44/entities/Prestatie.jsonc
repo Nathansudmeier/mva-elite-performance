@@ -1,0 +1,26 @@
+{
+  "name": "Prestatie",
+  "type": "object",
+  "properties": {
+    "icon_type": {
+      "type": "string",
+      "description": "Icon type: trophy, football, users, arrow-up"
+    },
+    "titel": {
+      "type": "string",
+      "description": "Titel van de prestatie"
+    },
+    "beschrijving": {
+      "type": "string",
+      "description": "Beschrijving van de prestatie"
+    },
+    "volgorde": {
+      "type": "number",
+      "description": "Sorteervolgorde"
+    }
+  },
+  "required": [
+    "titel",
+    "beschrijving"
+  ]
+}
