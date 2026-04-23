@@ -50,6 +50,7 @@ export default function WebsiteHome() {
         ctaLabel="Meld je aan voor een proeftraining"
         ctaHref="/proeftraining"
         minHeight="100vh"
+        bgImage="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/6dc060f4d_hero-mv-artemis.png"
       />
 
       {/* Stats balk */}
