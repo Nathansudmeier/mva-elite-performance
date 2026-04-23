@@ -56,11 +56,13 @@ import SplashScreen from '@/components/SplashScreen';
 
 const { Pages, Layout } = pagesConfig;
 
+// Domein check — één regel beslist alles
+const isWebsite = window.location.hostname === 'mv-artemis.nl';
+
 const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
 
-// Wrapper die auth afhandelt maar geen eigen <Routes> bevat
 const AuthGuard = ({ children }) => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
@@ -85,13 +87,13 @@ const AuthGuard = ({ children }) => {
 };
 
 function App() {
-  return (
-    <AuthProvider>
+
+  // ── PUBLIEKE WEBSITE (mv-artemis.nl) ──
+  if (isWebsite) {
+    return (
       <QueryClientProvider client={queryClientInstance}>
-        <SplashScreen />
         <Router>
           <Routes>
-            {/* ── Publieke website routes (geen auth) ── */}
             <Route path="/" element={<WebsiteLayout><WebsiteHome /></WebsiteLayout>} />
             <Route path="/selecties" element={<WebsiteLayout><WebsiteSelecties /></WebsiteLayout>} />
             <Route path="/mo17" element={<WebsiteLayout><WebsiteMO17 /></WebsiteLayout>} />
@@ -101,8 +103,21 @@ function App() {
             <Route path="/de-club" element={<WebsiteLayout><WebsiteDeClub /></WebsiteLayout>} />
             <Route path="/proeftraining" element={<WebsiteLayout><WebsiteProeftraining /></WebsiteLayout>} />
             <Route path="/contact" element={<WebsiteLayout><WebsiteContact /></WebsiteLayout>} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Router>
+        <Toaster />
+      </QueryClientProvider>
+    );
+  }
 
-            {/* ── Interne app routes (auth vereist) ── */}
+  // ── INTERNE APP (mva-elite.com / mva-elite.base44.app) ──
+  return (
+    <AuthProvider>
+      <QueryClientProvider client={queryClientInstance}>
+        <SplashScreen />
+        <Router>
+          <Routes>
             <Route path="/LiveMatch" element={<AuthGuard><LayoutWrapper currentPageName="Wedstrijden"><LiveMatch /></LayoutWrapper></AuthGuard>} />
             <Route path="/live/:matchId" element={<AuthGuard><LiveMatchViewer /></AuthGuard>} />
             <Route path="/live" element={<AuthGuard><LiveTracker /></AuthGuard>} />
@@ -150,7 +165,7 @@ function App() {
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
-  )
+  );
 }
 
 export default App
