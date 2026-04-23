@@ -1,14 +1,4 @@
 import { Toaster } from "@/components/ui/toaster"
-import WebsiteLayout from '@/components/website/WebsiteLayout';
-import WebsiteHome from '@/pages/website/WebsiteHome';
-import WebsiteSelecties from '@/pages/website/WebsiteSelecties';
-import WebsiteMO17 from '@/pages/website/WebsiteMO17';
-import WebsiteMO20 from '@/pages/website/WebsiteMO20';
-import WebsiteVrouwen1 from '@/pages/website/WebsiteVrouwen1';
-import WebsiteWedstrijden from '@/pages/website/WebsiteWedstrijden';
-import WebsiteDeClub from '@/pages/website/WebsiteDeClub';
-import WebsiteProeftraining from '@/pages/website/WebsiteProeftraining';
-import WebsiteContact from '@/pages/website/WebsiteContact';
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { pagesConfig } from './pages.config'
@@ -54,18 +44,18 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import SplashScreen from '@/components/SplashScreen';
 
-const { Pages, Layout } = pagesConfig;
-
-// Domein check — één regel beslist alles
-const isWebsite = window.location.hostname === 'mv-artemis.nl';
+const { Pages, Layout, mainPage } = pagesConfig;
+const mainPageKey = mainPage ?? Object.keys(Pages)[0];
+const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
 const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
 
-const AuthGuard = ({ children }) => {
+const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
+  // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -74,98 +64,90 @@ const AuthGuard = ({ children }) => {
     );
   }
 
+  // Handle authentication errors
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
+      // Redirect to login automatically
       navigateToLogin();
       return null;
     }
   }
 
-  return children;
+  // Render the main app
+  return (
+    <Routes>
+      <Route path="/LiveMatch" element={<LayoutWrapper currentPageName="Wedstrijden"><LiveMatch /></LayoutWrapper>} />
+      <Route path="/live/:matchId" element={<LiveMatchViewer />} />
+      <Route path="/live" element={<LiveTracker />} />
+      <Route path="/" element={
+        <LayoutWrapper currentPageName="Dashboard">
+          <DashboardRouter />
+        </LayoutWrapper>
+      } />
+      {Object.entries(Pages).map(([path, Page]) => (
+        <Route
+          key={path}
+          path={`/${path}`}
+          element={
+            <LayoutWrapper currentPageName={path}>
+              <Page />
+            </LayoutWrapper>
+          }
+        />
+      ))}
+      <Route path="/PlayerRatingForm" element={<LayoutWrapper currentPageName="PlayerRatingForm"><PlayerRatingForm /></LayoutWrapper>} />
+      <Route path="/PlayerDetail" element={<LayoutWrapper currentPageName="PlayerDetail"><PlayerDetail /></LayoutWrapper>} />
+      <Route path="/PlayerDashboard" element={<LayoutWrapper currentPageName="Dashboard"><PlayerDashboard /></LayoutWrapper>} />
+      <Route path="/AccountBeheer" element={<LayoutWrapper currentPageName="AccountBeheer"><AccountBeheer /></LayoutWrapper>} />
+      <Route path="/Leaderboard" element={<LayoutWrapper currentPageName="Leaderboard"><Leaderboard /></LayoutWrapper>} />
+      <Route path="/Spelprincipes" element={<LayoutWrapper currentPageName="Spelprincipes"><Spelprincipes /></LayoutWrapper>} />
+      <Route path="/Staff" element={<LayoutWrapper currentPageName="Staff"><Staff /></LayoutWrapper>} />
+      <Route path="/TrainerDetail" element={<LayoutWrapper currentPageName="Staff"><TrainerDetail /></LayoutWrapper>} />
+      <Route path="/Speelminuten" element={<LayoutWrapper currentPageName="Speelminuten"><Speelminuten /></LayoutWrapper>} />
+      <Route path="/MijnReflecties" element={<LayoutWrapper currentPageName="MijnReflecties"><MijnReflecties /></LayoutWrapper>} />
+      <Route path="/Agenda" element={<LayoutWrapper currentPageName="Agenda"><Agenda /></LayoutWrapper>} />
+      <Route path="/Planning" element={<LayoutWrapper currentPageName="Planning"><Planning /></LayoutWrapper>} />
+      <Route path="/PlanningTrainingDetail" element={<LayoutWrapper currentPageName="Planning"><PlanningTrainingDetail /></LayoutWrapper>} />
+      <Route path="/PlanningWedstrijdDetail" element={<LayoutWrapper currentPageName="Planning"><PlanningWedstrijdDetail /></LayoutWrapper>} />
+      <Route path="/PlanningToernooiDetail" element={<LayoutWrapper currentPageName="Planning"><PlanningToernooiDetail /></LayoutWrapper>} />
+      <Route path="/MatchEdit" element={<MatchEdit />} />
+      <Route path="/Messages" element={<LayoutWrapper currentPageName="Messages"><Messages /></LayoutWrapper>} />
+      <Route path="/Chat" element={<LayoutWrapper currentPageName="Messages"><Chat /></LayoutWrapper>} />
+      <Route path="/ImportTrainingAttendance" element={<LayoutWrapper currentPageName="ImportTrainingAttendance"><ImportTrainingAttendance /></LayoutWrapper>} />
+      <Route path="/Trainingsvormen" element={<LayoutWrapper currentPageName="Trainingsvormen"><Trainingsvormen /></LayoutWrapper>} />
+      <Route path="/TrainingsvormDetail" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormDetail /></LayoutWrapper>} />
+      <Route path="/TrainingsvormForm" element={<LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormForm /></LayoutWrapper>} />
+      <Route path="/MatchResults" element={<LayoutWrapper currentPageName="Dashboard"><MatchResults /></LayoutWrapper>} />
+      <Route path="/MatchEditEvents" element={<MatchEditEvents />} />
+      <Route path="/Photowall" element={<LayoutWrapper currentPageName="Photowall"><Photowall /></LayoutWrapper>} />
+      <Route path="/OuderDashboard" element={<LayoutWrapper currentPageName="Dashboard"><OuderDashboard /></LayoutWrapper>} />
+      <Route path="/PendingAccess" element={<LayoutWrapper currentPageName="Dashboard"><PendingAccess /></LayoutWrapper>} />
+      <Route path="/EmviFeedback" element={<LayoutWrapper currentPageName="EmviFeedback"><EmviFeedback /></LayoutWrapper>} />
+      <Route path="/FeedbackOverview" element={<LayoutWrapper currentPageName="FeedbackOverview"><FeedbackOverview /></LayoutWrapper>} />
+      <Route path="/YoYoTestLive" element={<LayoutWrapper currentPageName="YoYoTestLive"><YoYoTestLive /></LayoutWrapper>} />
+      <Route path="/Prikbord" element={<LayoutWrapper currentPageName="Prikbord"><Prikbord /></LayoutWrapper>} />
+      <Route path="/WedstrijdReflecties" element={<LayoutWrapper currentPageName="WedstrijdReflecties"><WedstrijdReflecties /></LayoutWrapper>} />
+      <Route path="*" element={<PageNotFound />} />
+    </Routes>
+  );
 };
+
 
 function App() {
 
-  // ── PUBLIEKE WEBSITE (mv-artemis.nl) ──
-  if (isWebsite) {
-    return (
-      <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <Routes>
-            <Route path="/" element={<WebsiteLayout><WebsiteHome /></WebsiteLayout>} />
-            <Route path="/selecties" element={<WebsiteLayout><WebsiteSelecties /></WebsiteLayout>} />
-            <Route path="/mo17" element={<WebsiteLayout><WebsiteMO17 /></WebsiteLayout>} />
-            <Route path="/mo20" element={<WebsiteLayout><WebsiteMO20 /></WebsiteLayout>} />
-            <Route path="/vrouwen-1" element={<WebsiteLayout><WebsiteVrouwen1 /></WebsiteLayout>} />
-            <Route path="/wedstrijden" element={<WebsiteLayout><WebsiteWedstrijden /></WebsiteLayout>} />
-            <Route path="/de-club" element={<WebsiteLayout><WebsiteDeClub /></WebsiteLayout>} />
-            <Route path="/proeftraining" element={<WebsiteLayout><WebsiteProeftraining /></WebsiteLayout>} />
-            <Route path="/contact" element={<WebsiteLayout><WebsiteContact /></WebsiteLayout>} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Router>
-        <Toaster />
-      </QueryClientProvider>
-    );
-  }
-
-  // ── INTERNE APP (mva-elite.com / mva-elite.base44.app) ──
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
         <SplashScreen />
         <Router>
-          <Routes>
-            <Route path="/LiveMatch" element={<AuthGuard><LayoutWrapper currentPageName="Wedstrijden"><LiveMatch /></LayoutWrapper></AuthGuard>} />
-            <Route path="/live/:matchId" element={<AuthGuard><LiveMatchViewer /></AuthGuard>} />
-            <Route path="/live" element={<AuthGuard><LiveTracker /></AuthGuard>} />
-            <Route path="/Dashboard" element={<AuthGuard><LayoutWrapper currentPageName="Dashboard"><DashboardRouter /></LayoutWrapper></AuthGuard>} />
-            {Object.entries(Pages).map(([path, Page]) => (
-              <Route key={path} path={`/${path}`} element={
-                <AuthGuard><LayoutWrapper currentPageName={path}><Page /></LayoutWrapper></AuthGuard>
-              } />
-            ))}
-            <Route path="/PlayerRatingForm" element={<AuthGuard><LayoutWrapper currentPageName="PlayerRatingForm"><PlayerRatingForm /></LayoutWrapper></AuthGuard>} />
-            <Route path="/PlayerDetail" element={<AuthGuard><LayoutWrapper currentPageName="PlayerDetail"><PlayerDetail /></LayoutWrapper></AuthGuard>} />
-            <Route path="/PlayerDashboard" element={<AuthGuard><LayoutWrapper currentPageName="Dashboard"><PlayerDashboard /></LayoutWrapper></AuthGuard>} />
-            <Route path="/AccountBeheer" element={<AuthGuard><LayoutWrapper currentPageName="AccountBeheer"><AccountBeheer /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Leaderboard" element={<AuthGuard><LayoutWrapper currentPageName="Leaderboard"><Leaderboard /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Spelprincipes" element={<AuthGuard><LayoutWrapper currentPageName="Spelprincipes"><Spelprincipes /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Staff" element={<AuthGuard><LayoutWrapper currentPageName="Staff"><Staff /></LayoutWrapper></AuthGuard>} />
-            <Route path="/TrainerDetail" element={<AuthGuard><LayoutWrapper currentPageName="Staff"><TrainerDetail /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Speelminuten" element={<AuthGuard><LayoutWrapper currentPageName="Speelminuten"><Speelminuten /></LayoutWrapper></AuthGuard>} />
-            <Route path="/MijnReflecties" element={<AuthGuard><LayoutWrapper currentPageName="MijnReflecties"><MijnReflecties /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Agenda" element={<AuthGuard><LayoutWrapper currentPageName="Agenda"><Agenda /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Planning" element={<AuthGuard><LayoutWrapper currentPageName="Planning"><Planning /></LayoutWrapper></AuthGuard>} />
-            <Route path="/PlanningTrainingDetail" element={<AuthGuard><LayoutWrapper currentPageName="Planning"><PlanningTrainingDetail /></LayoutWrapper></AuthGuard>} />
-            <Route path="/PlanningWedstrijdDetail" element={<AuthGuard><LayoutWrapper currentPageName="Planning"><PlanningWedstrijdDetail /></LayoutWrapper></AuthGuard>} />
-            <Route path="/PlanningToernooiDetail" element={<AuthGuard><LayoutWrapper currentPageName="Planning"><PlanningToernooiDetail /></LayoutWrapper></AuthGuard>} />
-            <Route path="/MatchEdit" element={<AuthGuard><MatchEdit /></AuthGuard>} />
-            <Route path="/Messages" element={<AuthGuard><LayoutWrapper currentPageName="Messages"><Messages /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Chat" element={<AuthGuard><LayoutWrapper currentPageName="Messages"><Chat /></LayoutWrapper></AuthGuard>} />
-            <Route path="/ImportTrainingAttendance" element={<AuthGuard><LayoutWrapper currentPageName="ImportTrainingAttendance"><ImportTrainingAttendance /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Trainingsvormen" element={<AuthGuard><LayoutWrapper currentPageName="Trainingsvormen"><Trainingsvormen /></LayoutWrapper></AuthGuard>} />
-            <Route path="/TrainingsvormDetail" element={<AuthGuard><LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormDetail /></LayoutWrapper></AuthGuard>} />
-            <Route path="/TrainingsvormForm" element={<AuthGuard><LayoutWrapper currentPageName="Trainingsvormen"><TrainingsvormForm /></LayoutWrapper></AuthGuard>} />
-            <Route path="/MatchResults" element={<AuthGuard><LayoutWrapper currentPageName="Dashboard"><MatchResults /></LayoutWrapper></AuthGuard>} />
-            <Route path="/MatchEditEvents" element={<AuthGuard><MatchEditEvents /></AuthGuard>} />
-            <Route path="/Photowall" element={<AuthGuard><LayoutWrapper currentPageName="Photowall"><Photowall /></LayoutWrapper></AuthGuard>} />
-            <Route path="/OuderDashboard" element={<AuthGuard><LayoutWrapper currentPageName="Dashboard"><OuderDashboard /></LayoutWrapper></AuthGuard>} />
-            <Route path="/PendingAccess" element={<AuthGuard><LayoutWrapper currentPageName="Dashboard"><PendingAccess /></LayoutWrapper></AuthGuard>} />
-            <Route path="/EmviFeedback" element={<AuthGuard><LayoutWrapper currentPageName="EmviFeedback"><EmviFeedback /></LayoutWrapper></AuthGuard>} />
-            <Route path="/FeedbackOverview" element={<AuthGuard><LayoutWrapper currentPageName="FeedbackOverview"><FeedbackOverview /></LayoutWrapper></AuthGuard>} />
-            <Route path="/YoYoTestLive" element={<AuthGuard><LayoutWrapper currentPageName="YoYoTestLive"><YoYoTestLive /></LayoutWrapper></AuthGuard>} />
-            <Route path="/Prikbord" element={<AuthGuard><LayoutWrapper currentPageName="Prikbord"><Prikbord /></LayoutWrapper></AuthGuard>} />
-            <Route path="/WedstrijdReflecties" element={<AuthGuard><LayoutWrapper currentPageName="WedstrijdReflecties"><WedstrijdReflecties /></LayoutWrapper></AuthGuard>} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
+          <AuthenticatedApp />
         </Router>
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
-  );
+  )
 }
 
 export default App
