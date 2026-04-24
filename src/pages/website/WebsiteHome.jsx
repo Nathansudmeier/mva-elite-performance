@@ -43,6 +43,7 @@ export default function WebsiteHome() {
   const [prestaties, setPrestaties] = useState([]);
   const [players, setPlayers] = useState([]);
   const [uitslagen, setUitslagen] = useState([]);
+  const [sponsors, setSponsors] = useState([]);
 
   useEffect(() => {
     fetchWebsiteData().then(data => {
@@ -58,6 +59,22 @@ export default function WebsiteHome() {
       }
     });
     base44.entities.Player.filter({ active: true }).then(pl => setPlayers(pl || []));
+    base44.entities.Sponsor.filter({ actief: true }).then(sp => {
+      if (sp && sp.length > 0) {
+        setSponsors(sp.sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde));
+      } else {
+        const seedData = [
+          { naam: "Sportmonks", logo_url: "https://images.unsplash.com/photo-1599474227159-cd17a3e5f59a?w=200", website_url: "https://sportmonks.com", categorie: "Official partner", tier: 1, volgorde: 1, actief: true },
+          { naam: "Cameranu", logo_url: "https://images.unsplash.com/photo-1600505016908-8d3cebfc0ee5?w=200", website_url: "https://cameranu.nl", categorie: "Shirt partner", tier: 1, volgorde: 2, actief: true },
+          { naam: "Set in", logo_url: "https://images.unsplash.com/photo-1578702746067-2d7ee822537b?w=200", website_url: "https://setinnl.nl", categorie: "Clubsponsor", tier: 2, volgorde: 1, actief: true },
+          { naam: "Muta Sport", logo_url: "https://images.unsplash.com/photo-1577014543670-d5f0d320f5f8?w=200", website_url: "https://mutasport.nl", categorie: "Clubsponsor", tier: 2, volgorde: 2, actief: true },
+          { naam: "Prima Reclame", logo_url: "https://images.unsplash.com/photo-1599474227-159cd17a3e5f?w=200", website_url: "https://primareclame.nl", categorie: "Clubsponsor", tier: 2, volgorde: 3, actief: true },
+        ];
+        Promise.all(seedData.map(s => base44.entities.Sponsor.create(s))).then(() => {
+          setSponsors(seedData);
+        });
+      }
+    });
   }, []);
 
   const stats = instellingen ? [
@@ -274,6 +291,99 @@ export default function WebsiteHome() {
           <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(36px, 5vw, 52px)", color: "#FF6800", marginBottom: "20px", lineHeight: 1 }}>JIJ BENT HET BEGIN.</h2>
           <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.65)", marginBottom: "28px", lineHeight: 1.6 }}>Kom trainen. Kijk of het klikt. Als jij de instelling hebt die wij zoeken, vinden we elkaar vanzelf.</p>
           <Link to="/proeftraining" style={{ background: "#FFD600", color: "#000", borderRadius: "3px", fontWeight: 700, fontSize: "14px", padding: "14px 28px", textDecoration: "none", display: "inline-block" }}>Proeftraining aanvragen ↗</Link>
+        </div>
+      </section>
+
+      {/* SPONSORS */}
+      <section style={{ background: "#0C0E14", padding: "56px 28px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "12px" }}>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "10px", fontWeight: 700, letterSpacing: "3px", textTransform: "uppercase", color: "#FF6800" }}>PARTNERS & SPONSORS</div>
+          </div>
+          <div style={{ maxWidth: "480px", margin: "0 auto 48px", textAlign: "center" }}>
+            <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.45)", lineHeight: 1.65 }}>
+              Onze partners maken het mogelijk. Niet als reclamebord, maar als partner in de ambitie van MV Artemis.
+            </p>
+          </div>
+
+          {/* TIER 1 - HOOFDSPONSORS */}
+          {sponsors.filter(s => s.tier === 1).length > 0 && (
+            <>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "16px", marginBottom: "40px" }}>
+                {sponsors.filter(s => s.tier === 1).map(s => (
+                  <a key={s.id} href={s.website_url} target="_blank" rel="noopener noreferrer"
+                    style={{ position: "relative", background: "#161A24", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", padding: "28px 40px", minWidth: "180px", minHeight: "110px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", cursor: "pointer", transition: "border-color 0.2s, transform 0.15s", textDecoration: "none" }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,104,0,0.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "9px", fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", color: "#FF6800" }}>{s.categorie}</div>
+                    {s.logo_url ? (
+                      <img src={s.logo_url} alt={s.naam} style={{ maxHeight: "36px", maxWidth: "140px", objectFit: "contain", filter: "brightness(0) invert(1)", opacity: "0.7", transition: "opacity 0.2s" }}
+                        onMouseEnter={e => e.currentTarget.style.opacity = "1"}
+                        onMouseLeave={e => e.currentTarget.style.opacity = "0.7"} />
+                    ) : (
+                      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "22px", color: "rgba(255,255,255,0.6)" }}>{s.naam}</div>
+                    )}
+                  </a>
+                ))}
+              </div>
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", margin: "8px 0 32px" }} />
+            </>
+          )}
+
+          {/* TIER 2 - CLUBSPONSORS */}
+          {sponsors.filter(s => s.tier === 2).length > 0 && (
+            <>
+              <div style={{ textAlign: "center", marginBottom: "16px" }}>
+                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "rgba(255,255,255,0.3)" }}>CLUBSPONSORS</div>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px", marginBottom: "32px" }}>
+                {sponsors.filter(s => s.tier === 2).map(s => (
+                  <a key={s.id} href={s.website_url} target="_blank" rel="noopener noreferrer"
+                    style={{ background: "#161A24", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "4px", padding: "14px 24px", minWidth: "120px", height: "60px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", transition: "border-color 0.2s", textDecoration: "none" }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"}>
+                    <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>{s.categorie}</div>
+                    {s.logo_url ? (
+                      <img src={s.logo_url} alt={s.naam} style={{ maxHeight: "20px", maxWidth: "90px", filter: "brightness(0) invert(1) opacity(0.45)", transition: "opacity 0.2s" }}
+                        onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
+                        onMouseLeave={e => e.currentTarget.style.opacity = "0.45"} />
+                    ) : (
+                      <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.35)" }}>{s.naam}</div>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* TIER 3 - SUPPORTERS */}
+          {sponsors.filter(s => s.tier === 3).length > 0 && (
+            <>
+              <div style={{ textAlign: "center", marginBottom: "16px" }}>
+                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "rgba(255,255,255,0.3)" }}>SUPPORTERS</div>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px", marginBottom: "20px" }}>
+                {sponsors.filter(s => s.tier === 3).map(s => (
+                  <a key={s.id} href={s.website_url} target="_blank" rel="noopener noreferrer"
+                    style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "3px", padding: "6px 14px", fontFamily: "'Space Grotesk', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.3)", cursor: "pointer", textDecoration: "none", transition: "all 0.2s" }}
+                    onMouseEnter={e => { e.currentTarget.style.color = "rgba(255,255,255,0.6)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}>
+                    {s.naam}
+                  </a>
+                ))}
+              </div>
+            </>
+          )}
+
+          <div style={{ textAlign: "center", marginTop: "40px" }}>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.35)", marginBottom: "10px" }}>Interesse in een samenwerking?</div>
+            <Link to="/contact"
+              style={{ background: "transparent", border: "1px solid rgba(255,104,0,0.4)", color: "#FF6800", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: "13px", padding: "9px 20px", borderRadius: "3px", textDecoration: "none", display: "inline-block", transition: "all 0.2s", cursor: "pointer" }}
+              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,104,0,0.08)"}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+              Neem contact op →
+            </Link>
+          </div>
         </div>
       </section>
     </WebsiteLayout>

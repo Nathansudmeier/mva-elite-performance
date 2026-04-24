@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
-const TABS = ["Algemeen", "Prestaties", "Routekaart", "Proeftraining aanvragen", "Berichten"];
+const TABS = ["Algemeen", "Prestaties", "Routekaart", "Proeftraining aanvragen", "Berichten", "Sponsors"];
 
 const FASE_DEFAULTS = {
   fase1: { label: "FASE 1 · NU BEZIG", jaar: "2025-26", items: ["V1 consolideert in 3e klasse", "MO17 handhaaft koploperspositie", "Financiële basis staat", "Naamswijziging naar MV Artemis"] },
@@ -43,6 +43,9 @@ export default function WebsiteBeheer() {
   const [berichten, setBerichten] = useState([]);
   const [selectedBericht, setSelectedBericht] = useState(null);
   const [berichtStatusFilter, setBerichtStatusFilter] = useState("alle");
+  const [sponsors, setSponsors] = useState([]);
+  const [editingSponsor, setEditingSponsor] = useState(null);
+  const [showSponsorForm, setShowSponsorForm] = useState(false);
 
   useEffect(() => {
     base44.entities.WebsiteInstellingen.list().then(list => {
@@ -59,6 +62,7 @@ export default function WebsiteBeheer() {
     base44.entities.Prestatie.list().then(p => setPrestaties((p || []).sort((a, b) => a.volgorde - b.volgorde)));
     base44.entities.ProeftrainingAanvraag.list("-datum").then(a => setAanvragen(a || []));
     base44.entities.ContactBericht.list("-datum").then(b => setBerichten(b || []));
+    base44.entities.Sponsor.list().then(s => setSponsors((s || []).sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde)));
   }, []);
 
   if (!isTrainer) {
@@ -135,6 +139,28 @@ export default function WebsiteBeheer() {
   };
 
   const filteredBerichten = berichtStatusFilter === "alle" ? berichten : berichten.filter(b => b.status === berichtStatusFilter);
+
+  const saveSponsor = async (data) => {
+    if (editingSponsor) {
+      await base44.entities.Sponsor.update(editingSponsor.id, data);
+      setSponsors(prev => prev.map(s => s.id === editingSponsor.id ? { ...s, ...data } : s).sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde));
+    } else {
+      const created = await base44.entities.Sponsor.create(data);
+      setSponsors(prev => [...prev, created].sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde));
+    }
+    setEditingSponsor(null);
+    setShowSponsorForm(false);
+  };
+
+  const deleteSponsor = async (id) => {
+    await base44.entities.Sponsor.delete(id);
+    setSponsors(prev => prev.filter(s => s.id !== id));
+  };
+
+  const toggleSponsorActief = async (id, actief) => {
+    await base44.entities.Sponsor.update(id, { actief: !actief });
+    setSponsors(prev => prev.map(s => s.id === id ? { ...s, actief: !s.actief } : s));
+  };
 
   return (
     <div>
@@ -402,6 +428,110 @@ export default function WebsiteBeheer() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* TAB 5: SPONSORS */}
+      {activeTab === 5 && (
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+            <div className="t-section-title">Sponsors beheren</div>
+            <button className="btn-primary" onClick={() => { setEditingSponsor(null); setShowSponsorForm(true); }} style={{ width: "auto" }}>+ Nieuwe sponsor</button>
+          </div>
+
+          {showSponsorForm && (
+            <div className="glass" style={{ padding: "20px", marginBottom: "20px" }}>
+              <SponsorForm sponsor={editingSponsor} onSave={saveSponsor} onCancel={() => { setShowSponsorForm(false); setEditingSponsor(null); }} />
+            </div>
+          )}
+
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+              <thead>
+                <tr style={{ borderBottom: "2px solid rgba(26,26,26,0.12)" }}>
+                  {["Volgorde","Naam","Categorie","Tier","Actief","Acties"].map(h => (
+                    <th key={h} style={{ padding: "8px 12px", textAlign: "left", fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "rgba(26,26,26,0.45)", whiteSpace: "nowrap" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {sponsors.map(s => (
+                  <tr key={s.id} style={{ borderBottom: "1px solid rgba(26,26,26,0.07)" }}>
+                    <td style={{ padding: "10px 12px" }}>{s.volgorde}</td>
+                    <td style={{ padding: "10px 12px", fontWeight: 700 }}>{s.naam}</td>
+                    <td style={{ padding: "10px 12px", fontSize: "12px" }}>{s.categorie}</td>
+                    <td style={{ padding: "10px 12px" }}>{s.tier}</td>
+                    <td style={{ padding: "10px 12px" }}>
+                      <input type="checkbox" checked={s.actief} onChange={() => toggleSponsorActief(s.id, s.actief)} style={{ cursor: "pointer" }} />
+                    </td>
+                    <td style={{ padding: "10px 12px", display: "flex", gap: "6px" }}>
+                      <button onClick={() => { setEditingSponsor(s); setShowSponsorForm(true); }} style={{ padding: "4px 10px", borderRadius: "6px", border: "1px solid #FF6800", background: "transparent", color: "#FF6800", fontWeight: 700, cursor: "pointer", fontSize: "11px" }}>Bewerk</button>
+                      <button onClick={() => { if (confirm("Verwijderen?")) deleteSponsor(s.id); }} style={{ padding: "4px 10px", borderRadius: "6px", border: "1px solid #FF3DA8", background: "transparent", color: "#FF3DA8", fontWeight: 700, cursor: "pointer", fontSize: "11px" }}>Verwijder</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {sponsors.length === 0 && <div style={{ padding: "32px", textAlign: "center", color: "rgba(26,26,26,0.35)", fontSize: "13px" }}>Geen sponsors</div>}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SponsorForm({ sponsor, onSave, onCancel }) {
+  const [data, setData] = useState(sponsor || { naam: "", logo_url: "", website_url: "", categorie: "", tier: 2, volgorde: 1, actief: true });
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 200px", gap: "16px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <div>
+          <div style={sectionLabel}>Naam *</div>
+          <input style={inputCls} value={data.naam} onChange={e => setData({ ...data, naam: e.target.value })} placeholder="Bedrijfsnaam" />
+        </div>
+        <div>
+          <div style={sectionLabel}>Logo URL</div>
+          <input style={inputCls} value={data.logo_url || ""} onChange={e => setData({ ...data, logo_url: e.target.value })} placeholder="https://..." />
+        </div>
+        <div>
+          <div style={sectionLabel}>Website URL</div>
+          <input style={inputCls} value={data.website_url || ""} onChange={e => setData({ ...data, website_url: e.target.value })} placeholder="https://..." />
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+          <div>
+            <div style={sectionLabel}>Categorie *</div>
+            <select style={{ ...inputCls, appearance: "auto" }} value={data.categorie} onChange={e => setData({ ...data, categorie: e.target.value })}>
+              <option value="">Selecteer</option>
+              {["Shirt partner","Stadium partner","Official partner","Academy partner","Training partner","Clubsponsor","Supporter"].map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          <div>
+            <div style={sectionLabel}>Tier *</div>
+            <select style={{ ...inputCls, appearance: "auto" }} value={data.tier} onChange={e => setData({ ...data, tier: Number(e.target.value) })}>
+              <option value={1}>1 - Hoofdsponsor</option>
+              <option value={2}>2 - Clubsponsor</option>
+              <option value={3}>3 - Supporter</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div style={sectionLabel}>Volgorde</div>
+          <input type="number" style={inputCls} value={data.volgorde} onChange={e => setData({ ...data, volgorde: Number(e.target.value) })} min="1" />
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <input type="checkbox" id="actief-check" checked={data.actief} onChange={e => setData({ ...data, actief: e.target.checked })} style={{ cursor: "pointer" }} />
+          <label htmlFor="actief-check" style={{ cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>Actief</label>
+        </div>
+        <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+          <button className="btn-primary" onClick={() => onSave(data)}>Opslaan</button>
+          <button onClick={onCancel} style={{ padding: "8px 16px", borderRadius: "10px", border: "2px solid #1a1a1a", background: "#fff", color: "#1a1a1a", fontWeight: 700, cursor: "pointer" }}>Annuleren</button>
+        </div>
+      </div>
+      {data.logo_url && (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", background: "#1B2A5E", borderRadius: "8px", padding: "12px" }}>
+          <div style={{ fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "rgba(26,26,26,0.45)", marginBottom: "8px" }}>Preview</div>
+          <img src={data.logo_url} alt="preview" style={{ maxHeight: "80px", maxWidth: "180px", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
         </div>
       )}
     </div>

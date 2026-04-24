@@ -1,0 +1,55 @@
+{
+  "name": "Sponsor",
+  "type": "object",
+  "properties": {
+    "naam": {
+      "type": "string",
+      "description": "Naam van de sponsor"
+    },
+    "logo_url": {
+      "type": "string",
+      "description": "URL naar logo afbeelding"
+    },
+    "website_url": {
+      "type": "string",
+      "description": "Website URL van de sponsor"
+    },
+    "categorie": {
+      "type": "string",
+      "enum": [
+        "Shirt partner",
+        "Stadium partner",
+        "Official partner",
+        "Academy partner",
+        "Training partner",
+        "Clubsponsor",
+        "Supporter"
+      ],
+      "description": "Soort partnership"
+    },
+    "tier": {
+      "type": "number",
+      "enum": [
+        1,
+        2,
+        3
+      ],
+      "description": "1 = hoofdsponsor, 2 = clubsponsor, 3 = supporter"
+    },
+    "volgorde": {
+      "type": "number",
+      "description": "Sorteervolgorde binnen tier"
+    },
+    "actief": {
+      "type": "boolean",
+      "default": true,
+      "description": "Of de sponsor zichtbaar is"
+    }
+  },
+  "required": [
+    "naam",
+    "categorie",
+    "tier",
+    "volgorde"
+  ]
+}
