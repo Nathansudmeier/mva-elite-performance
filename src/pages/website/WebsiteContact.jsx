@@ -26,7 +26,7 @@ export default function WebsiteContact() {
 
   return (
     <WebsiteLayout>
-      <section style={{ height: "300px", background: "linear-gradient(160deg, #1B2A5E 0%, #0F1630 100%)", display: "flex", alignItems: "flex-end", position: "relative" }}>
+      <section style={{ height: "300px", background: inst?.contact_image_url ? `url(${inst.contact_image_url}) center/cover` : "linear-gradient(160deg, #1B2A5E 0%, #0F1630 100%)", display: "flex", alignItems: "flex-end", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, background: "rgba(16,18,26,0.5)" }} />
         <div style={{ position: "relative", zIndex: 1, padding: "0 28px 48px" }}>
           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(36px, 5vw, 56px)", color: "#fff", lineHeight: 1 }}>NEEM CONTACT OP</div>

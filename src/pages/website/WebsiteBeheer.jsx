@@ -152,7 +152,7 @@ export default function WebsiteBeheer() {
 
           <div className="glass" style={{ padding: "20px" }}>
             <div className="t-section-title" style={{ marginBottom: "16px" }}>Hero afbeeldingen</div>
-            {[["Homepage hero","hero_image_url"],["Selecties hero","selecties_image_url"],["MO17 hero","mo17_image_url"],["MO20 hero","mo20_image_url"],["Vrouwen 1 hero","vrouwen1_image_url"],["De Club hero","declub_image_url"]].map(([label, field]) => (
+            {[["Homepage hero","hero_image_url"],["Selecties hero","selecties_image_url"],["MO17 hero","mo17_image_url"],["MO20 hero","mo20_image_url"],["Vrouwen 1 hero","vrouwen1_image_url"],["De Club hero","declub_image_url"],["Wedstrijden hero","wedstrijden_image_url"],["Contact hero","contact_image_url"]].map(([label, field]) => (
               <div key={field} style={{ marginBottom: "14px" }}>
                 <div style={sectionLabel}>{label}</div>
                 <input style={inputCls} value={instellingen[field] || ""} placeholder="https://..." onChange={e => setInstellingen({ ...instellingen, [field]: e.target.value })} />

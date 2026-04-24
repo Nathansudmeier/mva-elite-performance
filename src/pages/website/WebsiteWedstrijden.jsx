@@ -9,9 +9,13 @@ const FILTER_TABS = ["Alle", "MO17", "MO20", "Vrouwen 1"];
 export default function WebsiteWedstrijden() {
   const [wedstrijden, setWedstrijden] = useState([]);
   const [activeTab, setActiveTab] = useState("Alle");
+  const [inst, setInst] = useState(null);
 
   useEffect(() => {
     base44.entities.AgendaItem.filter({ type: "Wedstrijd" }).then(data => setWedstrijden(data || []));
+    base44.functions.invoke('getWebsiteData', {}).then(res => {
+      if (res?.data?.instellingen) setInst(res.data.instellingen);
+    });
   }, []);
 
   const today = new Date().toISOString().split("T")[0];
@@ -38,7 +42,9 @@ export default function WebsiteWedstrijden() {
 
   return (
     <WebsiteLayout>
-      <section style={{ background: "#14192A", padding: "48px 28px 32px" }}>
+      <section style={{ background: inst?.wedstrijden_image_url ? `url(${inst.wedstrijden_image_url}) center/cover` : "#14192A", padding: "48px 28px 32px", position: "relative" }}>
+        {inst?.wedstrijden_image_url && <div style={{ position: "absolute", inset: 0, background: "rgba(16,18,26,0.7)" }} />}
+        <div style={{ position: "relative", zIndex: 1 }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "8px" }}>SCHEMA</div>
           <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(36px, 5vw, 52px)", color: "#fff", marginBottom: "24px" }}>WEDSTRIJDEN</h1>
@@ -47,6 +53,7 @@ export default function WebsiteWedstrijden() {
               <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: activeTab === tab ? "#FF6800" : "#202840", color: "#fff", border: "none", borderRadius: "4px", padding: "8px 18px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>{tab}</button>
             ))}
           </div>
+        </div>
         </div>
       </section>
       <section style={{ background: "#10121A", padding: "32px 28px 64px" }}>

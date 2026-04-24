@@ -30,6 +30,14 @@
       "type": "string",
       "description": "De Club pagina hero URL"
     },
+    "wedstrijden_image_url": {
+      "type": "string",
+      "description": "Wedstrijden pagina hero URL"
+    },
+    "contact_image_url": {
+      "type": "string",
+      "description": "Contact pagina hero URL"
+    },
     "club_email": {
       "type": "string",
       "description": "Club e-mailadres"
