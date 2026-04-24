@@ -50,6 +50,14 @@
       "type": "string",
       "description": "Instagram URL"
     },
+    "tiktok_url": {
+      "type": "string",
+      "description": "TikTok URL"
+    },
+    "facebook_url": {
+      "type": "string",
+      "description": "Facebook URL"
+    },
     "kvk_nummer": {
       "type": "string",
       "description": "KVK nummer"

@@ -45,6 +45,8 @@ export default function WebsiteLayout({ children }) {
   const email = inst?.club_email || "contact@fcmvanoord.com";
   const locatie = inst?.club_locatie || "Opeinde, Friesland";
   const instagram = inst?.instagram_url || null;
+  const tiktok = inst?.tiktok_url || null;
+  const facebook = inst?.facebook_url || null;
   const kvk = inst?.kvk_nummer || null;
 
   return (
@@ -111,9 +113,13 @@ export default function WebsiteLayout({ children }) {
           <div>
             <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "12px" }}>CONTACT</div>
             <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "6px" }}>{email}</div>
-            <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "6px" }}>mv-artemis.nl</div>
-            {instagram && <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "16px" }}><a href={instagram} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>Instagram ↗</a></div>}
-            <Link to="/proeftraining" style={{ background: "#FF6800", color: "#fff", borderRadius: "3px", fontWeight: 700, fontSize: "13px", padding: "10px 20px", textDecoration: "none", display: "inline-block" }}>Proeftraining aanvragen</Link>
+             <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "6px" }}>mv-artemis.nl</div>
+             <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
+               {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "13px", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.6)"}>Instagram ↗</a>}
+               {tiktok && <a href={tiktok} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "13px", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.6)"}>TikTok ↗</a>}
+               {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "13px", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.6)"}>Facebook ↗</a>}
+             </div>
+             <Link to="/proeftraining" style={{ background: "#FF6800", color: "#fff", borderRadius: "3px", fontWeight: 700, fontSize: "13px", padding: "10px 20px", textDecoration: "none", display: "inline-block" }}>Proeftraining aanvragen</Link>
           </div>
         </div>
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "24px", paddingTop: "16px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", maxWidth: "1200px", margin: "24px auto 0" }}>

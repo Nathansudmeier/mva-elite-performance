@@ -210,7 +210,7 @@ export default function WebsiteBeheer() {
 
           <div className="glass" style={{ padding: "20px" }}>
             <div className="t-section-title" style={{ marginBottom: "16px" }}>Clubgegevens</div>
-            {[["Club email","club_email"],["Club locatie","club_locatie"],["Instagram URL","instagram_url"],["KVK nummer","kvk_nummer"]].map(([label, field]) => (
+            {[["Club email","club_email"],["Club locatie","club_locatie"],["Instagram URL","instagram_url"],["TikTok URL","tiktok_url"],["Facebook URL","facebook_url"],["KVK nummer","kvk_nummer"]].map(([label, field]) => (
               <div key={field} style={{ marginBottom: "14px" }}>
                 <div style={sectionLabel}>{label}</div>
                 <input style={inputCls} value={instellingen[field] || ""} onChange={e => setInstellingen({ ...instellingen, [field]: e.target.value })} />
