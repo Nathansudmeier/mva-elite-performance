@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
     base44.asServiceRole.entities.Player.filter({ active: true }, null, 200),
     base44.asServiceRole.entities.AgendaItem.filter({ type: "Wedstrijd" }, null, 500),
     base44.asServiceRole.entities.Trainer.filter({ active: true }),
-    base44.asServiceRole.entities.Match.list(null, 500),
+    base44.asServiceRole.entities.Match.list("-date", 500),
   ]);
 
   return Response.json({
