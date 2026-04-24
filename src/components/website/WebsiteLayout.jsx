@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { applyWebsiteMeta } from "@/lib/websiteMeta";
 
 const navLinks = [
   { label: "Homepage", href: "/" },
@@ -42,6 +43,13 @@ export default function WebsiteLayout({ children }) {
       document.body.style.background = "";
     };
   }, []);
+
+  // Update meta tags bij elke route-wijziging
+  useEffect(() => {
+    // Niet overschrijven op nieuwsdetail-pagina's — die zetten hun eigen meta's
+    if (location.pathname.startsWith("/nieuws/")) return;
+    applyWebsiteMeta({ pathname: location.pathname });
+  }, [location.pathname]);
 
   const email = inst?.club_email || "contact@fcmvanoord.com";
   const locatie = inst?.club_locatie || "Opeinde, Friesland";

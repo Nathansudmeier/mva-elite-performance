@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "@/components/website/WebsiteLayout";
+import { applyWebsiteMeta } from "@/lib/websiteMeta";
 
 const categoryColors = {
   "Wedstrijdverslag": { bg: "rgba(255,104,0,0.15)", color: "#FF6800" },
@@ -40,6 +41,13 @@ export default function WebsiteNieuwsDetail() {
         .sort((a, b) => (a.categorie === found.categorie ? -1 : 0))
         .slice(0, 3);
       setGerelateerd(related);
+
+      // Meta tags voor nieuwsdetail
+      applyWebsiteMeta({
+        title: `${found.titel} | MV Artemis`,
+        description: found.samenvatting || found.titel,
+        ogImage: found.afbeelding_url || undefined,
+      });
     });
   }, [slug, navigate]);
 
