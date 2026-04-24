@@ -49,6 +49,7 @@ export default function WebsiteHome() {
     fetchWebsiteData().then(data => {
       if (data?.instellingen) setInstellingen(data.instellingen);
       if (data?.prestaties?.length > 0) setPrestaties(data.prestaties.slice(0, 4));
+      if (data?.sponsors?.length > 0) setSponsors(data.sponsors);
       if (data?.matches) {
         const today = new Date().toISOString().split("T")[0];
         const filtered = (data.matches)
@@ -59,7 +60,6 @@ export default function WebsiteHome() {
       }
     });
     base44.entities.Player.filter({ active: true }).then(pl => setPlayers(pl || []));
-    base44.entities.Sponsor.filter({ actief: true }).then(sp => setSponsors((sp || []).sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde)));
   }, []);
 
   const stats = instellingen ? [
