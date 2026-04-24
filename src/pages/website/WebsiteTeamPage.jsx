@@ -37,7 +37,7 @@ export default function WebsiteTeamPage({ teamNaam, teamTitel, accentKleur, comp
   const initials = (naam) => naam ? naam.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() : "?";
 
   const heroStyle = {
-    height: "500px", position: "relative", overflow: "hidden",
+    height: "1000px", position: "relative", overflow: "hidden",
     background: (instellingen && instellingen[imageVeld])
       ? `url(${instellingen[imageVeld]}) top center/cover no-repeat`
       : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",

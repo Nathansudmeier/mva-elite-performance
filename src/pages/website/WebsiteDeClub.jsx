@@ -29,7 +29,7 @@ export default function WebsiteDeClub() {
   const initials = (naam) => naam ? naam.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() : "?";
 
   const heroStyle = {
-    height: "400px", position: "relative", overflow: "hidden",
+    height: "800px", position: "relative", overflow: "hidden",
     background: instellingen?.declub_image_url
       ? `url(${instellingen.declub_image_url}) top center/cover no-repeat`
       : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",

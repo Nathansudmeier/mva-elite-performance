@@ -31,7 +31,7 @@ export default function WebsiteSelecties() {
   };
 
   const heroStyle = {
-    height: "400px", position: "relative", overflow: "hidden",
+    height: "800px", position: "relative", overflow: "hidden",
     background: instellingen?.selecties_image_url
       ? `url(${instellingen.selecties_image_url}) top center/cover no-repeat`
       : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",
