@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { base44 } from "@/api/base44Client";
 
 const navLinks = [
   { label: "Homepage", href: "/" },
@@ -12,6 +13,7 @@ const navLinks = [
 export default function WebsiteLayout({ children }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [inst, setInst] = useState(null);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -21,8 +23,18 @@ export default function WebsiteLayout({ children }) {
     document.body.style.background = "#10121A";
     document.body.style.margin = "0";
     document.body.style.padding = "0";
+
+    base44.entities.WebsiteInstellingen.list().then(list => {
+      if (list && list.length > 0) setInst(list[0]);
+    });
+
     return () => { document.body.style.background = ""; };
   }, []);
+
+  const email = inst?.club_email || "contact@fcmvanoord.com";
+  const locatie = inst?.club_locatie || "Opeinde, Friesland";
+  const instagram = inst?.instagram_url || null;
+  const kvk = inst?.kvk_nummer || null;
 
   return (
     <div style={{ fontFamily: "'Space Grotesk', sans-serif", background: "#10121A", minHeight: "100vh" }}>
@@ -65,7 +77,7 @@ export default function WebsiteLayout({ children }) {
             <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "20px", color: "#fff", marginBottom: "8px" }}>MV<span style={{ color: "#FF6800" }}>/</span>ARTEMIS</div>
             <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)", marginBottom: "4px" }}>Meiden Vereniging Artemis</div>
             <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", marginBottom: "4px" }}>Jouw ambitie. Ons doel.</div>
-            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Opeinde, Friesland</div>
+            <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>{locatie}</div>
           </div>
           <div>
             <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "12px" }}>NAVIGATIE</div>
@@ -73,14 +85,15 @@ export default function WebsiteLayout({ children }) {
           </div>
           <div>
             <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "12px" }}>CONTACT</div>
-            <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "6px" }}>contact@fcmvanoord.com</div>
-            <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "16px" }}>mv-artemis.nl</div>
+            <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "6px" }}>{email}</div>
+            <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "6px" }}>mv-artemis.nl</div>
+            {instagram && <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "16px" }}><a href={instagram} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>Instagram ↗</a></div>}
             <Link to="/proeftraining" style={{ background: "#FF6800", color: "#fff", borderRadius: "3px", fontWeight: 700, fontSize: "13px", padding: "10px 20px", textDecoration: "none", display: "inline-block" }}>Proeftraining aanvragen</Link>
           </div>
         </div>
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "24px", paddingTop: "16px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", maxWidth: "1200px", margin: "24px auto 0" }}>
           <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)" }}>© 2025 MV Artemis · Meiden Vereniging Artemis</span>
-          <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)" }}>KVK: Opeinde · KNVB</span>
+          {kvk && <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)" }}>KVK: {kvk}</span>}
         </div>
       </footer>
 

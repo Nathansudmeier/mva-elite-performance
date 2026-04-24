@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 
 export default function WebsiteContact() {
+  const [inst, setInst] = useState(null);
+
+  useEffect(() => {
+    base44.entities.WebsiteInstellingen.list().then(list => {
+      if (list && list.length > 0) setInst(list[0]);
+    });
+  }, []);
+
+  const email = inst?.club_email || "contact@fcmvanoord.com";
+  const locatie = inst?.club_locatie || "Sportpark Opeinde, Friesland";
+  const instagram = inst?.instagram_url || "https://instagram.com/mv.artemis";
+  const instagramHandle = instagram.replace(/.*instagram\.com\/?/, "@").replace(/\/$/, "") || "@mv.artemis";
+
   const contactItems = [
-    { label: "E-mail", value: "contact@fcmvanoord.com", link: "mailto:contact@fcmvanoord.com" },
+    { label: "E-mail", value: email, link: `mailto:${email}` },
     { label: "Website", value: "mv-artemis.nl", link: "https://mv-artemis.nl" },
-    { label: "Locatie", value: "Sportpark Opeinde, Friesland", link: null },
-    { label: "Instagram", value: "@mv.artemis", link: "https://instagram.com/mv.artemis" },
+    { label: "Locatie", value: locatie, link: null },
+    { label: "Instagram", value: instagramHandle, link: instagram },
   ];
 
   return (
@@ -33,7 +47,7 @@ export default function WebsiteContact() {
             ))}
           </div>
           <div style={{ textAlign: "center" }}>
-            <a href="mailto:contact@fcmvanoord.com" style={{ background: "#FF6800", color: "#fff", borderRadius: "3px", fontWeight: 700, fontSize: "14px", padding: "14px 28px", textDecoration: "none", display: "inline-block", marginBottom: "24px" }}>Stuur een e-mail</a>
+            <a href={`mailto:${email}`} style={{ background: "#FF6800", color: "#fff", borderRadius: "3px", fontWeight: 700, fontSize: "14px", padding: "14px 28px", textDecoration: "none", display: "inline-block", marginBottom: "24px" }}>Stuur een e-mail</a>
             <div style={{ padding: "24px", background: "#151D35", borderRadius: "6px" }}>
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "22px", color: "#fff", marginBottom: "12px" }}>OF MELD JE AAN VOOR EEN PROEFTRAINING</div>
               <Link to="/proeftraining" style={{ background: "#FFD600", color: "#000", borderRadius: "3px", fontWeight: 700, fontSize: "14px", padding: "12px 24px", textDecoration: "none", display: "inline-block" }}>Proeftraining aanvragen ↗</Link>
