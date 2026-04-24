@@ -59,22 +59,7 @@ export default function WebsiteHome() {
       }
     });
     base44.entities.Player.filter({ active: true }).then(pl => setPlayers(pl || []));
-    base44.entities.Sponsor.filter({ actief: true }).then(sp => {
-      if (sp && sp.length > 0) {
-        setSponsors(sp.sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde));
-      } else {
-        const seedData = [
-          { naam: "Sportmonks", logo_url: "https://images.unsplash.com/photo-1599474227159-cd17a3e5f59a?w=200", website_url: "https://sportmonks.com", categorie: "Official partner", tier: 1, volgorde: 1, actief: true },
-          { naam: "Cameranu", logo_url: "https://images.unsplash.com/photo-1600505016908-8d3cebfc0ee5?w=200", website_url: "https://cameranu.nl", categorie: "Shirt partner", tier: 1, volgorde: 2, actief: true },
-          { naam: "Set in", logo_url: "https://images.unsplash.com/photo-1578702746067-2d7ee822537b?w=200", website_url: "https://setinnl.nl", categorie: "Clubsponsor", tier: 2, volgorde: 1, actief: true },
-          { naam: "Muta Sport", logo_url: "https://images.unsplash.com/photo-1577014543670-d5f0d320f5f8?w=200", website_url: "https://mutasport.nl", categorie: "Clubsponsor", tier: 2, volgorde: 2, actief: true },
-          { naam: "Prima Reclame", logo_url: "https://images.unsplash.com/photo-1599474227-159cd17a3e5f?w=200", website_url: "https://primareclame.nl", categorie: "Clubsponsor", tier: 2, volgorde: 3, actief: true },
-        ];
-        Promise.all(seedData.map(s => base44.entities.Sponsor.create(s))).then(() => {
-          setSponsors(seedData);
-        });
-      }
-    });
+    base44.entities.Sponsor.filter({ actief: true }).then(sp => setSponsors((sp || []).sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde)));
   }, []);
 
   const stats = instellingen ? [
