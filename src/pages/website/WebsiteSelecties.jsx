@@ -115,14 +115,16 @@ export default function WebsiteSelecties() {
             <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "rgba(0,0,0,0.4)", marginBottom: "10px" }}>SELECTIEPROFIEL</div>
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "42px", color: "#fff", margin: 0 }}>Wat zoeken wij in een speler?</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "12px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
             {[
               { nr: "01", titel: "Technisch", body: "Beheerst de basisvaardigheden op wedstrijdtempo. Passing, aannemen, dribbelen en schieten met beide voeten. Niet perfect, wel functioneel onder druk." },
               { nr: "02", titel: "Tactisch", body: "Begrijpt of is in staat te begrijpen hoe het spel werkt. Leest ruimte, kiest positie. Coachbaarheid weegt zwaar: een speler die bereid is te denken, ontwikkelt sneller." },
               { nr: "03", titel: "Mentaal", body: "Competitief ingesteld, veerkrachtig bij tegenslagen en eerlijk over de eigen rol. Een speler die harder werkt als het tegenzit." },
               { nr: "04", titel: "Fysiek", body: "Fit genoeg om de trainingsbelasting aan te kunnen en bereid te investeren in de eigen conditie. Wij vragen geen topatleet bij instroom, wel de bereidheid om daar naartoe te groeien." },
+              { nr: "05", titel: "Discipline", body: "Niet alleen op de wedstrijddag. Op elke training, in elk duel, in elke coaching. Discipline om te luisteren, om uit te voeren en om voor jezelf te zorgen. Dat is de basis waarop alles gebouwd wordt." },
+              { nr: "06", titel: "Ambitie", body: "We zoeken geen meiden die gewoon een balletje willen trappen. We zoeken meiden die het maximale uit zichzelf willen halen. Omdat voetbal leuk is. Omdat ze zo hoog en goed mogelijk willen spelen. Dat vuur is niet aan te leren." },
             ].map(k => (
-              <div key={k.nr} style={{ position: "relative", background: "rgba(0,0,0,0.15)", borderRadius: "6px", padding: "24px", border: "1px solid rgba(255,255,255,0.15)" }}>
+              <div key={k.nr} style={{ position: "relative", background: "rgba(0,0,0,0.15)", borderRadius: "6px", padding: "24px", border: "1px solid rgba(255,255,255,0.15)", overflow: "hidden" }}>
                 <div style={{ position: "absolute", top: "12px", right: "16px", fontFamily: "'Bebas Neue', sans-serif", fontSize: "56px", color: "rgba(255,255,255,0.12)", lineHeight: 1 }}>{k.nr}</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "22px", color: "#fff", marginBottom: "8px" }}>{k.titel}</div>
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.75)", lineHeight: 1.6 }}>{k.body}</div>
