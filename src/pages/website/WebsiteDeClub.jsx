@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import WebsiteLayout from "../../components/website/WebsiteLayout";
+import WebsiteLayout from "@/components/website/WebsiteLayout";
+import AmbitieSectie from "@/components/website/AmbitieSectie.jsx";
+import MensenSectie from "@/components/website/MensenSectie.jsx";
 
 async function fetchWebsiteData() {
   const res = await base44.functions.invoke('getWebsiteData', {});
@@ -16,12 +18,14 @@ const STAFF_SEED = [
 export default function WebsiteDeClub() {
   const [instellingen, setInstellingen] = useState(null);
   const [staff, setStaff] = useState([]);
+  const [personen, setPersonen] = useState([]);
 
   useEffect(() => {
     fetchWebsiteData().then(data => {
       if (data?.instellingen) setInstellingen(data.instellingen);
       if (data?.trainers?.length > 0) setStaff(data.trainers);
       else setStaff(STAFF_SEED);
+      if (data?.personen) setPersonen(data.personen);
     });
   }, []);
 
@@ -71,6 +75,8 @@ export default function WebsiteDeClub() {
         </div>
       </section>
 
+      <AmbitieSectie />
+
       <section style={{ background: "#181E2C", padding: "64px 28px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "8px" }}>TECHNISCHE STAF</div>
@@ -99,6 +105,8 @@ export default function WebsiteDeClub() {
           ))}
         </div>
       </section>
+
+      <MensenSectie personen={personen} />
 
       <section style={{ background: "#0F1630", padding: "64px 28px" }}>
         <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", gap: "48px", alignItems: "center", flexWrap: "wrap" }}>
