@@ -76,7 +76,7 @@ export default function WebsiteDeClub() {
         <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
           <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "8px" }}>TECHNISCHE STAF</div>
           <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(28px, 4vw, 38px)", color: "#fff", marginBottom: "28px" }}>HET TEAM ACHTER HET TEAM</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "12px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "12px", marginBottom: "40px" }}>
             {staff.map(s => (
               <div key={s.id} style={{ background: "#202840", borderRadius: "6px", padding: "18px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -91,6 +91,13 @@ export default function WebsiteDeClub() {
               </div>
             ))}
           </div>
+          {[
+            "Bij MV Artemis wordt elke training gebouwd vanuit één overtuiging: begrip gaat boven automatisme. We coachen geen posities, we coachen gedrag. Spelers leren waarom ze ergens staan, niet alleen waar. Dat betekent langzamer beginnen, dieper werken en hogere eisen stellen aan inzicht dan aan uitvoering. Het resultaat is een speler die in elk systeem functioneert, omdat ze de principes begrijpt en niet afhankelijk is van een vaste route.",
+            "De weekstructuur van MV Artemis is gebaseerd op periodisering: elke sessie heeft een functie in het grotere geheel. Vroeg in de week herstellen en techniek onderhouden, midden in de week tactisch verdiepen, de dag voor de wedstrijd scherp activeren. Thema's worden vier tot zes weken aangehouden zodat spelers echte begripsopbouw doormaken in plaats van wekelijks iets nieuws te verwerken. Herhaling is geen gebrek aan creativiteit, het is de manier waarop leren werkt.",
+            "Fysieke ontwikkeling is bij MV Artemis geen bijzaak. Wekelijkse performance coaching richt zich op kracht, loopscholing en stabiliteit, afgestemd op de belasting van drie trainingssessies per week. De cijfers spreken voor zich: dit seizoen kwamen blessures uitsluitend voort uit contactmomenten tijdens wedstrijden. Geen spierblessures door overbelasting, geen knieproblemen door instabiliteit. Een goed opgebouwde fysieke basis is niet zichtbaar in de statistieken, maar wel in de speelsters die de hele wedstrijd op het veld staan.",
+          ].map((tekst, i) => (
+            <p key={i} style={{ fontSize: "15px", color: "rgba(255,255,255,0.65)", lineHeight: 1.8, marginBottom: i < 2 ? "20px" : 0 }}>{tekst}</p>
+          ))}
         </div>
       </section>
 
