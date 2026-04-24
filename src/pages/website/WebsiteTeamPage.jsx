@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
+
+async function fetchWebsiteData() {
+  const res = await base44.functions.invoke('getWebsiteData', {});
+  return res.data;
+}
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
@@ -12,16 +17,17 @@ export default function WebsiteTeamPage({ teamNaam, teamTitel, accentKleur, comp
 
   useEffect(() => {
     const teamFilter = teamNaam === "Vrouwen 1" ? ["Dames 1", "Vrouwen 1"] : [teamNaam];
+    fetchWebsiteData().then(data => {
+      if (data?.instellingen) setInstellingen(data.instellingen);
+    });
     Promise.all([
       base44.entities.Player.filter({ active: true }),
       base44.entities.AgendaItem.filter({ type: "Wedstrijd" }),
       base44.entities.Trainer.filter({ active: true }),
-      base44.entities.WebsiteInstellingen.list(),
-    ]).then(([pl, wedstr, st, inst]) => {
+    ]).then(([pl, wedstr, st]) => {
       setPlayers((pl || []).filter(p => teamFilter.includes(p.team)).sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99)));
       setWedstrijden((wedstr || []).filter(w => w.team === teamNaam || w.team === "Beide" || (teamNaam === "Vrouwen 1" && w.team === "Dames 1")));
       setStaff(st || []);
-      if (inst && inst.length > 0) setInstellingen(inst[0]);
     });
   }, [teamNaam]);
 

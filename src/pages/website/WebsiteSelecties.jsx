@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 
+async function fetchWebsiteData() {
+  const res = await base44.functions.invoke('getWebsiteData', {});
+  return res.data;
+}
+
 const TEAMS = [
   { team: "MO17", href: "/mo17", accent: "#FF6800", titel: "Hier begin je.", sub: "Jongenscompetitie. Maximale intensiteit. Hier wordt talent gevormd dat elders niet gemaakt wordt.", footer: "Landelijke Divisie 1" },
   { team: "MO20", href: "/mo20", accent: "#FFD600", titel: "De schakel omhoog.", sub: "Je hebt de basis. Nu gaat het om consistentie onder druk.", footer: "Seizoen 2026/27" },
@@ -14,13 +19,10 @@ export default function WebsiteSelecties() {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    Promise.all([
-      base44.entities.WebsiteInstellingen.list(),
-      base44.entities.Player.filter({ active: true }),
-    ]).then(([inst, pl]) => {
-      if (inst && inst.length > 0) setInstellingen(inst[0]);
-      setPlayers(pl || []);
+    fetchWebsiteData().then(data => {
+      if (data?.instellingen) setInstellingen(data.instellingen);
     });
+    base44.entities.Player.filter({ active: true }).then(pl => setPlayers(pl || []));
   }, []);
 
   const countFor = (team) => {

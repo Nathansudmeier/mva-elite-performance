@@ -7,8 +7,8 @@ export default function WebsiteContact() {
   const [inst, setInst] = useState(null);
 
   useEffect(() => {
-    base44.entities.WebsiteInstellingen.list().then(list => {
-      if (list && list.length > 0) setInst(list[0]);
+    base44.functions.invoke('getWebsiteData', {}).then(res => {
+      if (res?.data?.instellingen) setInst(res.data.instellingen);
     });
   }, []);
 

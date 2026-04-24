@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 
+async function fetchWebsiteData() {
+  const res = await base44.functions.invoke('getWebsiteData', {});
+  return res.data;
+}
+
 const STAFF_SEED = [
   { name: "Nathan Sudmeier", role_title: "Hoofdtrainer / Technisch Coördinator", active: true },
   { name: "Hendrik Overeinder", role_title: "Keeperstrainer", active: true },
@@ -13,16 +18,11 @@ export default function WebsiteDeClub() {
   const [staff, setStaff] = useState([]);
 
   useEffect(() => {
-    Promise.all([
-      base44.entities.WebsiteInstellingen.list(),
-      base44.entities.Trainer.filter({ active: true }),
-    ]).then(([inst, st]) => {
-      if (inst && inst.length > 0) setInstellingen(inst[0]);
-      if (st && st.length > 0) {
-        setStaff(st);
-      } else {
-        base44.entities.Trainer.bulkCreate(STAFF_SEED).then(r => setStaff(r));
-      }
+    fetchWebsiteData().then(data => {
+      if (data?.instellingen) setInstellingen(data.instellingen);
+    });
+    base44.entities.Trainer.filter({ active: true }).then(st => {
+      if (st && st.length > 0) setStaff(st);
     });
   }, []);
 

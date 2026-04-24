@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 
+async function fetchWebsiteData() {
+  const res = await base44.functions.invoke('getWebsiteData', {});
+  return res.data;
+}
+
 const PRESTATIE_SEED = [
   { icon_type: "trophy", kleur: "#FFD600", titel: "Open Fries Kampioenschap", beschrijving: "Finale gewonnen van SC Heerenveen academie-team.", volgorde: 1 },
   { icon_type: "football", kleur: "#FF6800", titel: "5-1 vs NEC Nijmegen MO17", beschrijving: "Landelijke Divisie 1. Welk niveau hier wordt gehaald.", volgorde: 2 },
@@ -33,23 +38,11 @@ export default function WebsiteHome() {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    Promise.all([
-      base44.entities.WebsiteInstellingen.list(),
-      base44.entities.Prestatie.list(),
-      base44.entities.Player.filter({ active: true }),
-    ]).then(([inst, prest, pl]) => {
-      if (inst && inst.length > 0) {
-        setInstellingen(inst[0]);
-      } else {
-        base44.entities.WebsiteInstellingen.create(WEBSITE_SEED).then(r => setInstellingen(r));
-      }
-      if (prest && prest.length > 0) {
-        setPrestaties(prest.sort((a, b) => a.volgorde - b.volgorde).slice(0, 4));
-      } else {
-        base44.entities.Prestatie.bulkCreate(PRESTATIE_SEED).then(r => setPrestaties(r));
-      }
-      setPlayers(pl || []);
+    fetchWebsiteData().then(data => {
+      if (data?.instellingen) setInstellingen(data.instellingen);
+      if (data?.prestaties?.length > 0) setPrestaties(data.prestaties.slice(0, 4));
     });
+    base44.entities.Player.filter({ active: true }).then(pl => setPlayers(pl || []));
   }, []);
 
   const stats = instellingen ? [

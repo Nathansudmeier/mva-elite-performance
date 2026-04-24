@@ -24,8 +24,8 @@ export default function WebsiteLayout({ children }) {
     document.body.style.margin = "0";
     document.body.style.padding = "0";
 
-    base44.entities.WebsiteInstellingen.list().then(list => {
-      if (list && list.length > 0) setInst(list[0]);
+    base44.functions.invoke('getWebsiteData', {}).then(res => {
+      if (res?.data?.instellingen) setInst(res.data.instellingen);
     });
 
     return () => { document.body.style.background = ""; };
