@@ -20,9 +20,8 @@ export default function WebsiteDeClub() {
   useEffect(() => {
     fetchWebsiteData().then(data => {
       if (data?.instellingen) setInstellingen(data.instellingen);
-    });
-    base44.entities.Trainer.filter({ active: true }).then(st => {
-      if (st && st.length > 0) setStaff(st);
+      if (data?.trainers?.length > 0) setStaff(data.trainers);
+      else setStaff(STAFF_SEED);
     });
   }, []);
 
