@@ -18,6 +18,8 @@ import WebsiteContact from './pages/website/WebsiteContact';
 import WebsiteNieuws from './pages/website/WebsiteNieuws';
 import WebsiteNieuwsDetail from './pages/website/WebsiteNieuwsDetail';
 import WebsiteBeheer from './pages/website/WebsiteBeheer';
+import SitemapXml from './pages/website/SitemapXml';
+import RobotsTxt from './pages/website/RobotsTxt';
 import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
 import PlayerDashboard from './pages/PlayerDashboard.jsx';
@@ -163,6 +165,8 @@ const WebsiteApp = () => (
         <Route path="/wedstrijden" element={<WebsiteWedstrijden />} />
         <Route path="/nieuws" element={<WebsiteNieuws />} />
         <Route path="/nieuws/:slug" element={<WebsiteNieuwsDetail />} />
+        <Route path="/sitemap.xml" element={<SitemapXml />} />
+        <Route path="/robots.txt" element={<RobotsTxt />} />
         <Route path="/de-club" element={<WebsiteDeClub />} />
         <Route path="/proeftraining" element={<WebsiteProeftraining />} />
         <Route path="/contact" element={<WebsiteContact />} />
