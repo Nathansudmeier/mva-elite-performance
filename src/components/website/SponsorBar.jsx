@@ -5,8 +5,9 @@ export default function SponsorBar() {
   const [sponsors, setSponsors] = useState([]);
 
   useEffect(() => {
-    base44.entities.Sponsor.filter({ actief: true }).then(list => {
-      const sorted = (list || []).sort((a, b) => (a.tier || 99) - (b.tier || 99) || (a.volgorde || 0) - (b.volgorde || 0));
+    base44.functions.invoke('getWebsiteData', {}).then(res => {
+      const list = (res?.data?.sponsors || []).filter(s => s.actief);
+      const sorted = list.sort((a, b) => (a.tier || 99) - (b.tier || 99) || (a.volgorde || 0) - (b.volgorde || 0));
       setSponsors(sorted);
     });
   }, []);
