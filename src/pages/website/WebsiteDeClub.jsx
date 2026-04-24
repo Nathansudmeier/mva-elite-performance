@@ -101,15 +101,20 @@ export default function WebsiteDeClub() {
       </section>
 
       <section style={{ background: "#0F1630", padding: "64px 28px" }}>
-        <div style={{ maxWidth: "720px", margin: "0 auto" }}>
-          <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "8px" }}>ONZE GESCHIEDENIS</div>
-          <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(28px, 4vw, 38px)", color: "#fff", marginBottom: "24px" }}>HOEZO MV ARTEMIS?</h2>
-          <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.65)", lineHeight: 1.8, marginBottom: "16px" }}>
-            MV Artemis is opgericht in mei 2025 met een simpele overtuiging: meiden verdienen een voetbalomgeving die volledig op hen is gericht. Niet als bijzaak naast een mannenclub. Niet als invulling van een subsidiepot. Maar als zelfstandige, ambitieuze organisatie met een eigen filosofie, eigen structuur en een eigen koers.
-          </p>
-          <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.65)", lineHeight: 1.8 }}>
-            De naam Artemis is de Griekse godin van de jacht. Ze jaagt niet omdat het moet. Ze jaagt omdat ze het wil en er goed in is. Dat is precies de instelling die wij zoeken in elke speler die voor MV Artemis kiest.
-          </p>
+        <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", gap: "48px", alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ flex: "1 1 320px" }}>
+            <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "8px" }}>ONZE GESCHIEDENIS</div>
+            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(28px, 4vw, 38px)", color: "#fff", marginBottom: "24px" }}>HOEZO MV ARTEMIS?</h2>
+            <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.65)", lineHeight: 1.8, marginBottom: "16px" }}>
+              MV Artemis is opgericht in mei 2025 met een simpele overtuiging: meiden verdienen een voetbalomgeving die volledig op hen is gericht. Niet als bijzaak naast een mannenclub. Niet als invulling van een subsidiepot. Maar als zelfstandige, ambitieuze organisatie met een eigen filosofie, eigen structuur en een eigen koers.
+            </p>
+            <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.65)", lineHeight: 1.8 }}>
+              De naam Artemis is de Griekse godin van de jacht. Ze jaagt niet omdat het moet. Ze jaagt omdat ze het wil en er goed in is. Dat is precies de instelling die wij zoeken in elke speler die voor MV Artemis kiest.
+            </p>
+          </div>
+          <div style={{ flexShrink: 0, display: "flex", justifyContent: "center" }}>
+            <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/a8e346859_MVAartemis.png" alt="MV Artemis logo" style={{ width: "220px", height: "220px", objectFit: "contain" }} />
+          </div>
         </div>
       </section>
     </WebsiteLayout>
