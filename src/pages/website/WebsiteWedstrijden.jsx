@@ -13,6 +13,7 @@ const FILTER_TABS = [
 
 export default function WebsiteWedstrijden() {
   const [wedstrijden, setWedstrijden] = useState([]);
+  const [matches, setMatches] = useState([]);
   const [activeTab, setActiveTab] = useState("Alle");
   const [inst, setInst] = useState(null);
 
@@ -20,8 +21,22 @@ export default function WebsiteWedstrijden() {
     base44.functions.invoke('getWebsiteData', {}).then(res => {
       if (res?.data?.instellingen) setInst(res.data.instellingen);
       if (res?.data?.wedstrijden) setWedstrijden(res.data.wedstrijden);
+      if (res?.data?.matches) setMatches(res.data.matches);
     });
   }, []);
+
+  // Koppel Match scores aan AgendaItems via match_id of datum+tegenstander
+  const getMatchScore = (w) => {
+    // Probeer via match_id te koppelen
+    if (w.match_id) {
+      const m = matches.find(m => m.id === w.match_id);
+      if (m && m.score_home != null) return m;
+    }
+    // Fallback: koppel via datum
+    const m = matches.find(m => m.date === w.date);
+    if (m && m.score_home != null) return m;
+    return null;
+  };
 
   const today = new Date().toISOString().split("T")[0];
   const filtered = activeTab === "Alle"
@@ -30,22 +45,42 @@ export default function WebsiteWedstrijden() {
   const programma = filtered.filter(w => w.date >= today).sort((a, b) => a.date.localeCompare(b.date));
   const resultaten = filtered.filter(w => w.date < today).sort((a, b) => b.date.localeCompare(a.date));
 
-  const WedstrijdRij = ({ w }) => (
-    <div style={{ background: "#202840", borderRadius: "6px", padding: "14px 16px", marginBottom: "8px", display: "grid", gridTemplateColumns: "120px 1fr auto", gap: "12px", alignItems: "center" }}>
-      <div>
-        <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)" }}>{w.date ? format(parseISO(w.date), "d MMM yyyy", { locale: nl }) : "—"}</div>
-        <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", marginTop: "2px" }}>{w.team}</div>
+  const WedstrijdRij = ({ w }) => {
+    const matchScore = getMatchScore(w);
+    const heeftScore = matchScore && matchScore.score_home != null && matchScore.score_away != null;
+    const scoreHome = heeftScore ? matchScore.score_home : null;
+    const scoreAway = heeftScore ? matchScore.score_away : null;
+    const resultaat = heeftScore
+      ? scoreHome > scoreAway ? "W" : scoreHome < scoreAway ? "V" : "G"
+      : null;
+    const resultaatKleur = resultaat === "W" ? "#08D068" : resultaat === "V" ? "#FF3DA8" : "#FFD600";
+
+    return (
+      <div style={{ background: "#202840", borderRadius: "6px", padding: "14px 16px", marginBottom: "8px", display: "grid", gridTemplateColumns: "120px 1fr auto", gap: "12px", alignItems: "center" }}>
+        <div>
+          <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)" }}>{w.date ? format(parseISO(w.date), "d MMM yyyy", { locale: nl }) : "—"}</div>
+          <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", marginTop: "2px" }}>{w.team}</div>
+        </div>
+        <div>
+          <div style={{ fontSize: "13px", fontWeight: 600, color: "#fff" }}>MV Artemis vs {w.title || w.notes || "Tegenstander"}</div>
+          <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", marginTop: "2px" }}>{w.location || "Locatie onbekend"}</div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
+          {heeftScore ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "22px", color: "#fff", letterSpacing: "1px" }}>{scoreHome} – {scoreAway}</span>
+              <span style={{ fontSize: "11px", fontWeight: 800, padding: "2px 8px", borderRadius: "3px", background: `${resultaatKleur}22`, color: resultaatKleur }}>{resultaat}</span>
+            </div>
+          ) : (
+            <>
+              <span style={{ fontSize: "10px", padding: "2px 8px", borderRadius: "3px", background: w.home_away === "Thuis" ? "rgba(255,104,0,0.15)" : "rgba(255,255,255,0.07)", color: w.home_away === "Thuis" ? "#FF6800" : "rgba(255,255,255,0.5)" }}>{w.home_away || "Thuis"}</span>
+              {w.start_time && <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", color: "#FF6800" }}>{w.start_time}</span>}
+            </>
+          )}
+        </div>
       </div>
-      <div>
-        <div style={{ fontSize: "13px", fontWeight: 600, color: "#fff" }}>MV Artemis vs {w.title || w.notes || "Tegenstander"}</div>
-        <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", marginTop: "2px" }}>{w.location || "Locatie onbekend"}</div>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
-        <span style={{ fontSize: "10px", padding: "2px 8px", borderRadius: "3px", background: w.home_away === "Thuis" ? "rgba(255,104,0,0.15)" : "rgba(255,255,255,0.07)", color: w.home_away === "Thuis" ? "#FF6800" : "rgba(255,255,255,0.5)" }}>{w.home_away || "Thuis"}</span>
-        {w.start_time && <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", color: "#FF6800" }}>{w.start_time}</span>}
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <WebsiteLayout>
