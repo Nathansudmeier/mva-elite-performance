@@ -7,13 +7,13 @@ import { nl } from "date-fns/locale";
 export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, accentKleur, competitie, imageVeld, breadcrumb }) {
   const [players, setPlayers] = useState([]);
   const [wedstrijden, setWedstrijden] = useState([]);
+  const [matches, setMatches] = useState([]);
   const [staff, setStaff] = useState([]);
   const [instellingen, setInstellingen] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const playerTeam = playerTeamNaam || teamNaam;
-    // AgendaItem.team kan "MO17", "Dames 1", "Beide" zijn
     const agendaTeams = teamNaam === "Vrouwen 1" ? ["Dames 1", "Vrouwen 1"] : [teamNaam];
 
     base44.functions.invoke('getWebsiteData', {}).then(res => {
@@ -30,10 +30,21 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
           (data.wedstrijden).filter(w => agendaTeams.includes(w.team) || w.team === "Beide")
         );
       }
+      if (data?.matches) setMatches(data.matches);
       if (data?.trainers) setStaff(data.trainers);
       setLoading(false);
     });
   }, [teamNaam, playerTeamNaam]);
+
+  const getMatchScore = (w) => {
+    if (w.match_id) {
+      const m = matches.find(m => m.id === w.match_id);
+      if (m && m.score_home != null) return m;
+    }
+    const m = matches.find(m => m.date === w.date);
+    if (m && m.score_home != null) return m;
+    return null;
+  };
 
   const today = new Date().toISOString().split("T")[0];
   const programma = wedstrijden.filter(w => w.date >= today).sort((a, b) => a.date.localeCompare(b.date));
@@ -161,13 +172,13 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
                     <div style={{ marginTop: "24px" }}>
                       <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.5px", color: "rgba(255,255,255,0.35)", marginBottom: "8px" }}>UITSLAGEN</div>
                       {resultaten.slice(0, 8).map(w => {
-                        const hasScore = w.score_home != null && w.score_away != null;
-                        // Bepaal uitslag vanuit MV Artemis perspectief
-                        const artemisScore = w.home_away === "Thuis" ? w.score_home : w.score_away;
-                        const tegScore = w.home_away === "Thuis" ? w.score_away : w.score_home;
+                        const matchData = getMatchScore(w);
+                        const hasScore = matchData != null;
+                        // score_home = MVA Noord, score_away = tegenstander (altijd)
+                        const artemisScore = hasScore ? matchData.score_home : null;
+                        const tegScore = hasScore ? matchData.score_away : null;
                         const resultaat = !hasScore ? null : artemisScore > tegScore ? "W" : artemisScore < tegScore ? "V" : "G";
                         const resultaatKleur = resultaat === "W" ? "#22c55e" : resultaat === "G" ? "#eab308" : resultaat === "V" ? "#ef4444" : null;
-                        // Score weergave: altijd MV Artemis eerst
                         const scoreText = hasScore ? `${artemisScore} - ${tegScore}` : null;
 
                         return (
