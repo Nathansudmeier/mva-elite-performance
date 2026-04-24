@@ -160,10 +160,18 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
                   {resultaten.length > 0 && (
                     <div style={{ marginTop: "24px" }}>
                       <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.5px", color: "rgba(255,255,255,0.35)", marginBottom: "8px" }}>UITSLAGEN</div>
-                      {resultaten.slice(0, 5).map(w => {
+                      {resultaten.slice(0, 8).map(w => {
                         const hasScore = w.score_home != null && w.score_away != null;
+                        // Bepaal uitslag vanuit MV Artemis perspectief
+                        const artemisScore = w.home_away === "Thuis" ? w.score_home : w.score_away;
+                        const tegScore = w.home_away === "Thuis" ? w.score_away : w.score_home;
+                        const resultaat = !hasScore ? null : artemisScore > tegScore ? "W" : artemisScore < tegScore ? "V" : "G";
+                        const resultaatKleur = resultaat === "W" ? "#22c55e" : resultaat === "G" ? "#eab308" : resultaat === "V" ? "#ef4444" : null;
+                        // Score weergave: altijd MV Artemis eerst
+                        const scoreText = hasScore ? `${artemisScore} - ${tegScore}` : null;
+
                         return (
-                          <div key={w.id} style={{ background: "#1C2438", borderRadius: "6px", padding: "10px 14px", marginBottom: "6px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div key={w.id} style={{ background: "#1C2438", borderRadius: "6px", padding: "10px 14px", marginBottom: "6px", display: "flex", justifyContent: "space-between", alignItems: "center", borderLeft: resultaatKleur ? `3px solid ${resultaatKleur}` : "3px solid rgba(255,255,255,0.08)" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                               {w.opponent_logo_url && <img src={w.opponent_logo_url} alt={w.title} style={{ width: "22px", height: "22px", objectFit: "contain", background: "#fff", borderRadius: "3px", padding: "1px", flexShrink: 0 }} />}
                               <div>
@@ -171,8 +179,13 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
                                 <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)" }}>{w.date ? format(parseISO(w.date), "d MMM", { locale: nl }) : ""} · {w.home_away}</div>
                               </div>
                             </div>
-                            {hasScore && (
-                              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "16px", color: "#fff" }}>{w.score_home} - {w.score_away}</span>
+                            {hasScore ? (
+                              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", color: resultaatKleur || "#fff", fontWeight: 700 }}>{scoreText}</span>
+                                {resultaat && <span style={{ fontSize: "9px", fontWeight: 800, padding: "2px 5px", borderRadius: "3px", background: resultaatKleur + "22", color: resultaatKleur, letterSpacing: "0.5px" }}>{resultaat}</span>}
+                              </div>
+                            ) : (
+                              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.2)", fontStyle: "italic" }}>—</span>
                             )}
                           </div>
                         );
