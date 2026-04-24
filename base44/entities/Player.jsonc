@@ -1,0 +1,68 @@
+{
+  "name": "Player",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Full name of the player"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Profile photo URL"
+    },
+    "position": {
+      "type": "string",
+      "enum": [
+        "Keeper",
+        "Centrale Verdediger",
+        "Linksback",
+        "Rechtsback",
+        "Controleur",
+        "Middenvelder",
+        "Aanvallende Middenvelder",
+        "Linksbuiten",
+        "Rechtsbuiten",
+        "Spits"
+      ],
+      "description": "Playing position"
+    },
+    "shirt_number": {
+      "type": "number",
+      "description": "Shirt number"
+    },
+    "team": {
+      "type": "string",
+      "enum": [
+        "MO17",
+        "MO20",
+        "VR1"
+      ],
+      "description": "Team waar de speler aan is toegewezen"
+    },
+    "geboortedatum": {
+      "type": "string",
+      "format": "date",
+      "description": "Geboortedatum van de speler"
+    },
+    "iop_goal_1": {
+      "type": "string",
+      "description": "Individual development goal 1"
+    },
+    "iop_goal_2": {
+      "type": "string",
+      "description": "Individual development goal 2"
+    },
+    "iop_goal_3": {
+      "type": "string",
+      "description": "Individual development goal 3"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the player is currently active in the squad"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

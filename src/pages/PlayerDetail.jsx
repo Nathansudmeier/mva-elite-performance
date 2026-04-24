@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList, Zap, Brain, Shield, Dumbbell, TrendingUp, Target, Trophy } from "lucide-react";
+import { ArrowLeft, Star, Activity, Calendar, Heart, ClipboardList, Zap, Brain, Shield, Dumbbell, TrendingUp, Target, Trophy, Pencil, Check, X } from "lucide-react";
 import PlayerMetricGrid from "@/components/dashboard/PlayerMetricGrid";
 
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
@@ -18,6 +18,9 @@ export default function PlayerDetail() {
   const { isTrainer, playerId: myPlayerId, isOuder } = useCurrentUser();
   const isOwnProfile = myPlayerId === playerId;
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [editingExtra, setEditingExtra] = useState(false);
+  const [extraForm, setExtraForm] = useState({});
+  const queryClient = useQueryClient();
 
   const { data: player } = useQuery({
     queryKey: ["player", playerId],
@@ -110,6 +113,74 @@ export default function PlayerDetail() {
           </Link>
         )}
       </div>
+
+      {/* Geboortedatum & Team — alleen voor trainers */}
+      {isTrainer && (
+        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+            <p className="t-label">Spelersinformatie</p>
+            {!editingExtra ? (
+              <button
+                onClick={() => { setExtraForm({ team: player.team || "", geboortedatum: player.geboortedatum || "" }); setEditingExtra(true); }}
+                style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px", color: "#FF6800", fontSize: "12px", fontWeight: 700 }}
+              >
+                <Pencil size={14} /> Bewerken
+              </button>
+            ) : (
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button
+                  onClick={async () => {
+                    await base44.entities.Player.update(playerId, extraForm);
+                    queryClient.invalidateQueries(["player", playerId]);
+                    setEditingExtra(false);
+                  }}
+                  style={{ background: "#FF6800", border: "2px solid #1a1a1a", borderRadius: "8px", padding: "4px 10px", color: "#fff", fontWeight: 700, fontSize: "12px", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
+                >
+                  <Check size={13} /> Opslaan
+                </button>
+                <button
+                  onClick={() => setEditingExtra(false)}
+                  style={{ background: "#fff", border: "2px solid #1a1a1a", borderRadius: "8px", padding: "4px 10px", fontWeight: 700, fontSize: "12px", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
+                >
+                  <X size={13} /> Annuleren
+                </button>
+              </div>
+            )}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+            <div>
+              <p style={{ fontSize: "11px", fontWeight: 700, color: "rgba(26,26,26,0.45)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "4px" }}>Team</p>
+              {editingExtra ? (
+                <select
+                  value={extraForm.team}
+                  onChange={e => setExtraForm(f => ({ ...f, team: e.target.value }))}
+                  style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: "8px", padding: "6px 10px", width: "100%", background: "#fff" }}
+                >
+                  <option value="">— Geen team —</option>
+                  <option value="MO17">MO17</option>
+                  <option value="MO20">MO20</option>
+                  <option value="VR1">VR1</option>
+                </select>
+              ) : (
+                <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.team || <span style={{ color: "rgba(26,26,26,0.35)", fontWeight: 400 }}>Niet ingesteld</span>}</p>
+              )}
+            </div>
+            <div>
+              <p style={{ fontSize: "11px", fontWeight: 700, color: "rgba(26,26,26,0.45)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "4px" }}>Geboortedatum</p>
+              {editingExtra ? (
+                <input
+                  type="date"
+                  value={extraForm.geboortedatum}
+                  onChange={e => setExtraForm(f => ({ ...f, geboortedatum: e.target.value }))}
+                  style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: "8px", padding: "6px 10px", width: "100%", background: "#fff" }}
+                />
+              ) : (
+                <p style={{ fontSize: "14px", fontWeight: 700, color: "#1a1a1a" }}>{player.geboortedatum || <span style={{ color: "rgba(26,26,26,0.35)", fontWeight: 400 }}>Niet ingesteld</span>}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* IOP Goals + profielfoto */}
       {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3 || player.photo_url) && (
