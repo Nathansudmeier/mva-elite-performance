@@ -14,6 +14,7 @@ export default function WebsiteLayout({ children }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [inst, setInst] = useState(null);
+  const [liveMatches, setLiveMatches] = useState([]);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -24,11 +25,21 @@ export default function WebsiteLayout({ children }) {
     document.body.style.margin = "0";
     document.body.style.padding = "0";
 
-    base44.functions.invoke('getWebsiteData', {}).then(res => {
-      if (res?.data?.instellingen) setInst(res.data.instellingen);
-    });
+    const fetchData = () => {
+      base44.functions.invoke('getWebsiteData', {}).then(res => {
+        if (res?.data?.instellingen) setInst(res.data.instellingen);
+        if (res?.data?.liveMatches) setLiveMatches(res.data.liveMatches);
+      });
+    };
 
-    return () => { document.body.style.background = ""; };
+    fetchData();
+    // Poll every 30 seconds to check for live matches
+    const interval = setInterval(fetchData, 30000);
+
+    return () => {
+      clearInterval(interval);
+      document.body.style.background = "";
+    };
   }, []);
 
   const email = inst?.club_email || "contact@fcmvanoord.com";
@@ -69,7 +80,20 @@ export default function WebsiteLayout({ children }) {
         </div>
       )}
 
-      <main style={{ paddingTop: "70px", minHeight: "100vh" }}>{children}</main>
+      {/* LIVE MATCH BANNER */}
+      {liveMatches.length > 0 && (
+        <div style={{ position: "fixed", top: "70px", left: 0, right: 0, zIndex: 98, background: "linear-gradient(90deg, #FF6800, #cc4400)", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "12px" }}>
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#fff", display: "inline-block", animation: "livePulse 1.5s ease-in-out infinite" }} />
+          <span style={{ color: "#fff", fontWeight: 700, fontSize: "13px" }}>
+            🔴 LIVE — MV Artemis vs {liveMatches[0].opponent}
+          </span>
+          <Link to={`/live/${liveMatches[0].id}`} style={{ background: "#fff", color: "#FF6800", borderRadius: "3px", fontWeight: 800, fontSize: "12px", padding: "5px 14px", textDecoration: "none", whiteSpace: "nowrap" }}>
+            Volg live →
+          </Link>
+        </div>
+      )}
+
+      <main style={{ paddingTop: liveMatches.length > 0 ? "116px" : "70px", minHeight: "100vh" }}>{children}</main>
 
       {/* FOOTER */}
       <footer style={{ background: "#1B2A5E", padding: "40px 28px 24px" }}>
@@ -101,6 +125,7 @@ export default function WebsiteLayout({ children }) {
       <style>{`
         @media (min-width: 768px) { .w-desktop-nav { display: flex !important; } .w-hamburger { display: none !important; } }
         @media (max-width: 767px) { .w-desktop-nav { display: none !important; } .w-hamburger { display: block !important; } }
+        @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
       `}</style>
     </div>
   );

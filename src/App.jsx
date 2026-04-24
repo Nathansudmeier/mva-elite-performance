@@ -162,6 +162,7 @@ const WebsiteApp = () => (
         <Route path="/de-club" element={<WebsiteDeClub />} />
         <Route path="/proeftraining" element={<WebsiteProeftraining />} />
         <Route path="/contact" element={<WebsiteContact />} />
+        <Route path="/live/:matchId" element={<LiveMatchViewer />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>

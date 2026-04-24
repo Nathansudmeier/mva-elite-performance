@@ -12,6 +12,8 @@ Deno.serve(async (req) => {
     base44.asServiceRole.entities.Match.list("-date", 500),
   ]);
 
+  const liveMatches = (matches || []).filter(m => m.live_status === "live" || m.live_status === "halftime");
+
   return Response.json({
     instellingen: instellingen?.[0] || null,
     prestaties: (prestaties || []).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)),
@@ -19,5 +21,6 @@ Deno.serve(async (req) => {
     wedstrijden: agendaItems || [],
     trainers: trainers || [],
     matches: matches || [],
+    liveMatches: liveMatches,
   });
 });
