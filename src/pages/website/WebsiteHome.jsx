@@ -81,11 +81,11 @@ export default function WebsiteHome() {
   const v1Count = players.filter(p => p.team === "Dames 1" || p.team === "Vrouwen 1").length;
 
   const heroStyle = {
-    height: "100vh", position: "relative", overflow: "hidden",
+    height: "85vh", position: "relative", overflow: "hidden",
     background: instellingen?.hero_image_url
       ? `url(${instellingen.hero_image_url}) top center/cover no-repeat`
       : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",
-    display: "flex", alignItems: "flex-end",
+    display: "flex", alignItems: "center",
   };
 
   return (
@@ -100,9 +100,9 @@ export default function WebsiteHome() {
       <section style={heroStyle}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(16,18,26,0.88) 0%, rgba(16,18,26,0.3) 60%)" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(16,18,26,1) 0%, rgba(16,18,26,0) 40%)" }} />
-        <div style={{ position: "relative", zIndex: 1, padding: "0 28px 52px", maxWidth: "1200px", width: "100%" }}>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(52px, 8vw, 80px)", fontWeight: 700, color: "#fff", lineHeight: 1 }}>JOUW AMBITIE.</div>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(52px, 8vw, 80px)", fontWeight: 700, color: "#FF6800", lineHeight: 1 }}>ONS DOEL.</div>
+        <div style={{ position: "relative", zIndex: 1, padding: "0 28px 0 28px", maxWidth: "1200px", width: "100%", marginTop: "-80px" }}>
+          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(68px, 10vw, 110px)", fontWeight: 700, color: "#fff", lineHeight: 0.95 }}>JOUW AMBITIE.</div>
+          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(68px, 10vw, 110px)", fontWeight: 700, color: "#FF6800", lineHeight: 0.95 }}>ONS DOEL.</div>
         </div>
       </section>
 
