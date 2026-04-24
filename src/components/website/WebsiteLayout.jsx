@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { applyWebsiteMeta } from "@/lib/websiteMeta";
+import SponsorBar from "@/components/website/SponsorBar.jsx";
 
 const navLinks = [
   { label: "Homepage", href: "/" },
@@ -105,6 +106,8 @@ export default function WebsiteLayout({ children }) {
       )}
 
       <main style={{ paddingTop: liveMatches.length > 0 ? "116px" : "70px", minHeight: "100vh" }}>{children}</main>
+
+      {location.pathname !== "/" && <SponsorBar />}
 
       {/* FOOTER */}
       <footer style={{ background: "#1B2A5E", padding: "40px 28px 24px" }}>
