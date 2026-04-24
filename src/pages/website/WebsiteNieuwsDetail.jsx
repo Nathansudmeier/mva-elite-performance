@@ -59,13 +59,14 @@ export default function WebsiteNieuwsDetail() {
   return (
     <WebsiteLayout>
       <style>{`
-        .artikel-content p { font-family: 'Space Grotesk', sans-serif; font-size: 16px; color: rgba(255,255,255,0.75); line-height: 1.8; margin-bottom: 20px; margin-top: 0; }
+        .artikel-content { font-family: 'Space Grotesk', sans-serif; font-size: 16px; color: #e8e8ea; line-height: 1.8; }
+        .artikel-content p { font-size: 16px; color: #e8e8ea; line-height: 1.8; margin-bottom: 20px; margin-top: 0; }
         .artikel-content h2 { font-family: 'Bebas Neue', serif; font-size: 32px; font-weight: 700; color: #fff; margin: 32px 0 12px 0; }
         .artikel-content h3 { font-family: 'Bebas Neue', serif; font-size: 24px; font-weight: 700; color: #FF6800; margin: 24px 0 10px 0; }
         .artikel-content strong { color: #fff; font-weight: 700; }
         .artikel-content a { color: #FF6800; text-decoration: underline; }
         .artikel-content ul { margin-left: 20px; margin-bottom: 20px; }
-        .artikel-content li { margin-bottom: 6px; color: rgba(255,255,255,0.65); }
+        .artikel-content li { margin-bottom: 6px; color: #d4d4d8; }
       `}</style>
 
       {/* HERO */}
