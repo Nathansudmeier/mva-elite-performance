@@ -85,7 +85,7 @@ export default function WebsiteHome() {
     background: instellingen?.hero_image_url
       ? `url(${instellingen.hero_image_url}) top center/cover no-repeat`
       : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",
-    display: "flex", alignItems: "center",
+    display: "flex", alignItems: "flex-end", justifyContent: "flex-end",
   };
 
   return (
@@ -100,7 +100,7 @@ export default function WebsiteHome() {
       <section style={heroStyle}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(16,18,26,0.88) 0%, rgba(16,18,26,0.3) 60%)" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(16,18,26,1) 0%, rgba(16,18,26,0) 40%)" }} />
-        <div style={{ position: "absolute", zIndex: 1, top: "12%", right: "28px", maxWidth: "70%" }}>
+        <div style={{ position: "relative", zIndex: 1, padding: "0 28px 60px 0", maxWidth: "65%", textAlign: "right" }}>
           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(72px, 12vw, 120px)", fontWeight: 700, color: "#fff", lineHeight: 0.95 }}>JOUW AMBITIE.</div>
           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(72px, 12vw, 120px)", fontWeight: 700, color: "#FF6800", lineHeight: 0.95 }}>ONS DOEL.</div>
         </div>
