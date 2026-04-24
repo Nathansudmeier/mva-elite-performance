@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
-const TABS = ["Algemeen", "Prestaties", "Routekaart", "Proeftraining aanvragen"];
+const TABS = ["Algemeen", "Prestaties", "Routekaart", "Proeftraining aanvragen", "Berichten"];
 
 const FASE_DEFAULTS = {
   fase1: { label: "FASE 1 · NU BEZIG", jaar: "2025-26", items: ["V1 consolideert in 3e klasse", "MO17 handhaaft koploperspositie", "Financiële basis staat", "Naamswijziging naar MV Artemis"] },
@@ -40,6 +40,9 @@ export default function WebsiteBeheer() {
   const [fase2, setFase2] = useState(FASE_DEFAULTS.fase2);
   const [fase3, setFase3] = useState(FASE_DEFAULTS.fase3);
   const [statusFilter, setStatusFilter] = useState("alle");
+  const [berichten, setBerichten] = useState([]);
+  const [selectedBericht, setSelectedBericht] = useState(null);
+  const [berichtStatusFilter, setBerichtStatusFilter] = useState("alle");
 
   useEffect(() => {
     base44.entities.WebsiteInstellingen.list().then(list => {
@@ -55,6 +58,7 @@ export default function WebsiteBeheer() {
     });
     base44.entities.Prestatie.list().then(p => setPrestaties((p || []).sort((a, b) => a.volgorde - b.volgorde)));
     base44.entities.ProeftrainingAanvraag.list("-datum").then(a => setAanvragen(a || []));
+    base44.entities.ContactBericht.list("-datum").then(b => setBerichten(b || []));
   }, []);
 
   if (!isTrainer) {
@@ -115,6 +119,22 @@ export default function WebsiteBeheer() {
   };
 
   const filteredAanvragen = statusFilter === "alle" ? aanvragen : aanvragen.filter(a => a.status === statusFilter);
+
+  const updateBerichtStatus = async (id, status) => {
+    await base44.entities.ContactBericht.update(id, { status });
+    setBerichten(prev => prev.map(b => b.id === id ? { ...b, status } : b));
+    if (selectedBericht?.id === id) setSelectedBericht(prev => ({ ...prev, status }));
+  };
+
+  const exportBerichtenCSV = () => {
+    const headers = ["datum","naam","email","onderwerp","status"];
+    const rows = berichten.map(b => headers.map(h => `"${(b[h] || "").toString().replace(/"/g, '""')}"`).join(","));
+    const blob = new Blob([[headers.join(","), ...rows].join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const el = document.createElement("a"); el.href = url; el.download = "berichten.csv"; el.click();
+  };
+
+  const filteredBerichten = berichtStatusFilter === "alle" ? berichten : berichten.filter(b => b.status === berichtStatusFilter);
 
   return (
     <div>
@@ -318,6 +338,67 @@ export default function WebsiteBeheer() {
                   </div>
                 ))}
                 {selectedAanvraag.bericht && <div style={{ marginTop: "12px", padding: "12px", background: "rgba(26,26,26,0.04)", borderRadius: "8px", fontSize: "13px", lineHeight: 1.5 }}>{selectedAanvraag.bericht}</div>}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: BERICHTEN */}
+      {activeTab === 4 && (
+        <div>
+          <div style={{ display: "flex", gap: "10px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
+            <div style={{ display: "flex", gap: "6px" }}>
+              {["alle","nieuw","gelezen","beantwoord"].map(s => (
+                <button key={s} onClick={() => setBerichtStatusFilter(s)} style={{ padding: "6px 14px", borderRadius: "8px", border: "1.5px solid #1a1a1a", fontWeight: 700, fontSize: "12px", cursor: "pointer", background: berichtStatusFilter === s ? "#1a1a1a" : "#fff", color: berichtStatusFilter === s ? "#fff" : "#1a1a1a" }}>{s}</button>
+              ))}
+            </div>
+            <button className="btn-secondary" onClick={exportBerichtenCSV}>↓ CSV exporteren</button>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: selectedBericht ? "1fr 340px" : "1fr", gap: "16px" }}>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+                <thead>
+                  <tr style={{ borderBottom: "2px solid rgba(26,26,26,0.12)" }}>
+                    {["Datum","Naam","Email","Onderwerp","Status"].map(h => (
+                      <th key={h} style={{ padding: "8px 12px", textAlign: "left", fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "rgba(26,26,26,0.45)", whiteSpace: "nowrap" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredBerichten.map(b => (
+                    <tr key={b.id} onClick={() => setSelectedBericht(b)} style={{ borderBottom: "1px solid rgba(26,26,26,0.07)", cursor: "pointer", background: selectedBericht?.id === b.id ? "rgba(255,104,0,0.05)" : "transparent" }}>
+                      <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{b.datum ? new Date(b.datum).toLocaleDateString("nl-NL") : "—"}</td>
+                      <td style={{ padding: "10px 12px", fontWeight: 700 }}>{b.naam}</td>
+                      <td style={{ padding: "10px 12px", color: "rgba(26,26,26,0.65)" }}>{b.email}</td>
+                      <td style={{ padding: "10px 12px" }}>{b.onderwerp}</td>
+                      <td style={{ padding: "10px 12px" }}>
+                        <select value={b.status || "nieuw"} onClick={e => e.stopPropagation()} onChange={e => updateBerichtStatus(b.id, e.target.value)}
+                          style={{ padding: "3px 8px", borderRadius: "8px", fontSize: "11px", fontWeight: 700, border: "none", cursor: "pointer", background: STATUS_COLORS[b.status || "nieuw"]?.bg, color: STATUS_COLORS[b.status || "nieuw"]?.color }}>
+                          <option value="nieuw">Nieuw</option>
+                          <option value="gelezen">Gelezen</option>
+                          <option value="beantwoord">Beantwoord</option>
+                        </select>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {filteredBerichten.length === 0 && <div style={{ padding: "32px", textAlign: "center", color: "rgba(26,26,26,0.35)", fontSize: "13px" }}>Geen berichten gevonden.</div>}
+            </div>
+            {selectedBericht && (
+              <div className="glass" style={{ padding: "20px", position: "sticky", top: "80px", alignSelf: "start" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                  <div className="t-card-title">{selectedBericht.naam}</div>
+                  <button onClick={() => setSelectedBericht(null)} style={{ background: "none", border: "none", fontSize: "18px", cursor: "pointer" }}>✕</button>
+                </div>
+                {[["Email",selectedBericht.email],["Onderwerp",selectedBericht.onderwerp],["Datum",selectedBericht.datum ? new Date(selectedBericht.datum).toLocaleDateString("nl-NL") : "—"]].map(([l,v]) => (
+                  <div key={l} style={{ marginBottom: "10px" }}>
+                    <div style={{ fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "rgba(26,26,26,0.45)", marginBottom: "2px" }}>{l}</div>
+                    <div style={{ fontSize: "13px" }}>{v}</div>
+                  </div>
+                ))}
+                {selectedBericht.bericht && <div style={{ marginTop: "12px", padding: "12px", background: "rgba(26,26,26,0.04)", borderRadius: "8px", fontSize: "13px", lineHeight: 1.5 }}>{selectedBericht.bericht}</div>}
               </div>
             )}
           </div>

@@ -1,0 +1,49 @@
+{
+  "name": "ContactBericht",
+  "type": "object",
+  "properties": {
+    "naam": {
+      "type": "string",
+      "description": "Naam van de afzender"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-mailadres van de afzender"
+    },
+    "onderwerp": {
+      "type": "string",
+      "enum": [
+        "Algemene vraag",
+        "Samenwerking/Sponsoring",
+        "Media/Pers",
+        "Anders"
+      ],
+      "description": "Onderwerp van het bericht"
+    },
+    "bericht": {
+      "type": "string",
+      "description": "Inhoud van het bericht"
+    },
+    "datum": {
+      "type": "string",
+      "description": "Datum waarop het bericht is verzonden"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "nieuw",
+        "gelezen",
+        "beantwoord"
+      ],
+      "default": "nieuw",
+      "description": "Status van het bericht"
+    }
+  },
+  "required": [
+    "naam",
+    "email",
+    "onderwerp",
+    "bericht",
+    "datum"
+  ]
+}
