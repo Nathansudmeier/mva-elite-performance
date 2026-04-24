@@ -130,6 +130,27 @@ export default function WebsiteBeheer() {
       {activeTab === 0 && instellingen !== null && (
         <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "700px" }}>
           <div className="glass" style={{ padding: "20px" }}>
+            <div className="t-section-title" style={{ marginBottom: "16px" }}>Club logo</div>
+            <div style={{ marginBottom: "14px" }}>
+              <div style={sectionLabel}>Logo URL</div>
+              <input style={inputCls} value={instellingen.logo_url || ""} placeholder="https://..." onChange={e => setInstellingen({ ...instellingen, logo_url: e.target.value })} />
+              <div style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "10px" }}>
+                <label style={{ cursor: "pointer", padding: "6px 14px", borderRadius: "8px", border: "1.5px solid #1a1a1a", fontSize: "12px", fontWeight: 700, background: "#fff", display: "inline-block" }}>
+                  📁 Afbeelding uploaden
+                  <input type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                    setInstellingen(prev => ({ ...prev, logo_url: file_url }));
+                  }} />
+                </label>
+                {instellingen.logo_url && <img src={instellingen.logo_url} alt="logo" style={{ height: "48px", objectFit: "contain", background: "#1B2A5E", borderRadius: "6px", padding: "6px" }} />}
+              </div>
+            </div>
+            <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
+          </div>
+
+          <div className="glass" style={{ padding: "20px" }}>
             <div className="t-section-title" style={{ marginBottom: "16px" }}>Hero afbeeldingen</div>
             {[["Homepage hero","hero_image_url"],["Selecties hero","selecties_image_url"],["MO17 hero","mo17_image_url"],["MO20 hero","mo20_image_url"],["Vrouwen 1 hero","vrouwen1_image_url"],["De Club hero","declub_image_url"]].map(([label, field]) => (
               <div key={field} style={{ marginBottom: "14px" }}>

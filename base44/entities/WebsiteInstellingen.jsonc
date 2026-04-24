@@ -2,6 +2,10 @@
   "name": "WebsiteInstellingen",
   "type": "object",
   "properties": {
+    "logo_url": {
+      "type": "string",
+      "description": "Club logo URL (weergegeven in de navigatiebalk)"
+    },
     "hero_image_url": {
       "type": "string",
       "description": "Homepage hero afbeelding URL"

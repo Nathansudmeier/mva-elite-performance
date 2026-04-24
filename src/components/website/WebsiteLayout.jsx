@@ -40,7 +40,8 @@ export default function WebsiteLayout({ children }) {
     <div style={{ fontFamily: "'Space Grotesk', sans-serif", background: "#10121A", minHeight: "100vh" }}>
       {/* NAV */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, height: "70px", background: "#1B2A5E", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 28px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
+          {inst?.logo_url && <img src={inst.logo_url} alt="logo" style={{ height: "38px", width: "38px", objectFit: "contain" }} />}
           <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "22px", letterSpacing: "2px", color: "#fff" }}>
             MV<span style={{ color: "#FF6800" }}>/</span>ARTEMIS
           </span>
