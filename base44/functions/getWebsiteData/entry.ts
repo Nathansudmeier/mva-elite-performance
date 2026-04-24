@@ -3,13 +3,14 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
 
-  const [instellingen, prestaties, players, agendaItems, trainers, matches] = await Promise.all([
+  const [instellingen, prestaties, players, agendaItems, trainers, matches, nieuwsberichten] = await Promise.all([
     base44.asServiceRole.entities.WebsiteInstellingen.list(),
     base44.asServiceRole.entities.Prestatie.list(),
     base44.asServiceRole.entities.Player.filter({ active: true }, null, 200),
     base44.asServiceRole.entities.AgendaItem.filter({ type: "Wedstrijd" }, null, 500),
     base44.asServiceRole.entities.Trainer.filter({ active: true }),
     base44.asServiceRole.entities.Match.list("-date", 500),
+    base44.asServiceRole.entities.Nieuwsbericht.filter({ gepubliceerd: true }, "-datum", 100),
   ]);
 
   const sponsors = await base44.asServiceRole.entities.Sponsor.list();
@@ -27,5 +28,6 @@ Deno.serve(async (req) => {
     matches: matches || [],
     liveMatches: liveMatches,
     sponsors: activeSponsors,
+    nieuwsberichten: nieuwsberichten || [],
   });
 });

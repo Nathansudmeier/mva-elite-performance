@@ -45,16 +45,10 @@ const categoryColors = {
   "Resultaten": { bg: "rgba(34,197,94,0.1)", color: "#22C55E" },
 };
 
-function NewsTeaser() {
-  const [berichten, setBerichten] = useState([]);
+function NewsTeaser({ berichten }) {
+  if (!berichten || berichten.length === 0) return null;
 
-  useEffect(() => {
-    base44.entities.Nieuwsbericht.filter({ gepubliceerd: true }, "-datum", 3).then(b => {
-      setBerichten(b || []);
-    });
-  }, []);
-
-  if (berichten.length === 0) return null;
+  const displayBerichten = berichten.slice(0, 3);
 
   const getCategoryIcon = (cat) => {
     const icons = { "Wedstrijdverslag": "🏆", "Clubnieuws": "📰", "Selectie-update": "👥", "Resultaten": "📊" };
@@ -79,7 +73,7 @@ function NewsTeaser() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px" }}>
-          {berichten.map(b => (
+          {displayBerichten.map(b => (
             <Link
               key={b.id}
               to={`/nieuws/${b.slug}`}
@@ -139,12 +133,14 @@ export default function WebsiteHome() {
   const [players, setPlayers] = useState([]);
   const [uitslagen, setUitslagen] = useState([]);
   const [sponsors, setSponsors] = useState([]);
+  const [nieuwsberichten, setNieuwsberichten] = useState([]);
 
   useEffect(() => {
     fetchWebsiteData().then(data => {
       if (data?.instellingen) setInstellingen(data.instellingen);
       if (data?.prestaties?.length > 0) setPrestaties(data.prestaties.slice(0, 4));
       if (data?.sponsors?.length > 0) setSponsors(data.sponsors);
+      if (data?.nieuwsberichten) setNieuwsberichten(data.nieuwsberichten);
       if (data?.matches) {
         const today = new Date().toISOString().split("T")[0];
         const filtered = (data.matches)
@@ -315,7 +311,7 @@ export default function WebsiteHome() {
       </section>
 
       {/* NIEUWS TEASER */}
-      <NewsTeaser />
+      <NewsTeaser berichten={nieuwsberichten} />
 
       {/* WAARDEN */}
       <section style={{ background: "#10121A", padding: "64px 28px" }}>

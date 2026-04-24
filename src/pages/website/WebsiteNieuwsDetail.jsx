@@ -27,22 +27,19 @@ export default function WebsiteNieuwsDetail() {
   const [gerelateerd, setGerelateerd] = useState([]);
 
   useEffect(() => {
-    base44.entities.Nieuwsbericht.filter({ slug, gepubliceerd: true }).then(results => {
-      if (!results || results.length === 0) {
+    base44.functions.invoke('getWebsiteData', {}).then(res => {
+      const all = res?.data?.nieuwsberichten || [];
+      const found = all.find(x => x.slug === slug);
+      if (!found) {
         navigate("/nieuws");
         return;
       }
-      const b = results[0];
-      setBericht(b);
-
-      // Haal gerelateerde berichten op
-      base44.entities.Nieuwsbericht.filter({ gepubliceerd: true }, "-datum", 10).then(all => {
-        const related = all
-          .filter(x => x.id !== b.id)
-          .sort((a, b) => (a.categorie === b.categorie ? 0 : -1))
-          .slice(0, 3);
-        setGerelateerd(related);
-      });
+      setBericht(found);
+      const related = all
+        .filter(x => x.id !== found.id)
+        .sort((a, b) => (a.categorie === found.categorie ? -1 : 0))
+        .slice(0, 3);
+      setGerelateerd(related);
     });
   }, [slug, navigate]);
 

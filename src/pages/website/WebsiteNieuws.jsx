@@ -21,9 +21,8 @@ export default function WebsiteNieuws() {
   const itemsPerPage = 9;
 
   useEffect(() => {
-    base44.entities.Nieuwsbericht.list("-datum").then(b => {
-      const published = (b || []).filter(item => item.gepubliceerd === true);
-      setBerichten(published);
+    base44.functions.invoke('getWebsiteData', {}).then(res => {
+      setBerichten(res?.data?.nieuwsberichten || []);
     });
   }, []);
 
