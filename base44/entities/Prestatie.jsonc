@@ -1,0 +1,36 @@
+{
+  "name": "Prestatie",
+  "type": "object",
+  "properties": {
+    "icon_type": {
+      "type": "string",
+      "enum": [
+        "trophy",
+        "football",
+        "users",
+        "arrow-up"
+      ],
+      "description": "Type icoon"
+    },
+    "kleur": {
+      "type": "string",
+      "description": "Hex kleur van het icoon"
+    },
+    "titel": {
+      "type": "string",
+      "description": "Titel van de prestatie"
+    },
+    "beschrijving": {
+      "type": "string",
+      "description": "Beschrijving"
+    },
+    "volgorde": {
+      "type": "number",
+      "description": "Weergavevolgorde (1-4)"
+    }
+  },
+  "required": [
+    "titel",
+    "volgorde"
+  ]
+}

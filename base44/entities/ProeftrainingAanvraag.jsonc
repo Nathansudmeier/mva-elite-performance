@@ -1,0 +1,68 @@
+{
+  "name": "ProeftrainingAanvraag",
+  "type": "object",
+  "properties": {
+    "naam": {
+      "type": "string",
+      "description": "Volledige naam"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-mailadres"
+    },
+    "telefoon": {
+      "type": "string",
+      "description": "Telefoonnummer"
+    },
+    "huidige_club": {
+      "type": "string",
+      "description": "Huidige club"
+    },
+    "huidig_team": {
+      "type": "string",
+      "description": "Huidig team"
+    },
+    "leeftijd": {
+      "type": "number",
+      "description": "Leeftijd"
+    },
+    "positie": {
+      "type": "string",
+      "enum": [
+        "Keeper",
+        "Verdediger",
+        "Middenvelder",
+        "Aanvaller",
+        "Nog niet zeker"
+      ],
+      "description": "Voorkeurspositie"
+    },
+    "bericht": {
+      "type": "string",
+      "description": "Persoonlijk bericht"
+    },
+    "datum": {
+      "type": "string",
+      "description": "Aanvraagdatum ISO string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "nieuw",
+        "bekeken",
+        "gecontacteerd"
+      ],
+      "default": "nieuw",
+      "description": "Status van de aanvraag"
+    }
+  },
+  "required": [
+    "naam",
+    "email",
+    "telefoon",
+    "huidige_club",
+    "huidig_team",
+    "leeftijd",
+    "positie"
+  ]
+}

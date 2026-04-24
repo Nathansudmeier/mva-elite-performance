@@ -1,0 +1,83 @@
+{
+  "name": "WebsiteInstellingen",
+  "type": "object",
+  "properties": {
+    "hero_image_url": {
+      "type": "string",
+      "description": "Homepage hero afbeelding URL"
+    },
+    "selecties_image_url": {
+      "type": "string",
+      "description": "Selecties pagina hero URL"
+    },
+    "mo17_image_url": {
+      "type": "string",
+      "description": "MO17 pagina hero URL"
+    },
+    "mo20_image_url": {
+      "type": "string",
+      "description": "MO20 pagina hero URL"
+    },
+    "vrouwen1_image_url": {
+      "type": "string",
+      "description": "Vrouwen 1 pagina hero URL"
+    },
+    "declub_image_url": {
+      "type": "string",
+      "description": "De Club pagina hero URL"
+    },
+    "club_email": {
+      "type": "string",
+      "description": "Club e-mailadres"
+    },
+    "club_locatie": {
+      "type": "string",
+      "description": "Club locatie"
+    },
+    "instagram_url": {
+      "type": "string",
+      "description": "Instagram URL"
+    },
+    "kvk_nummer": {
+      "type": "string",
+      "description": "KVK nummer"
+    },
+    "stat1_waarde": {
+      "type": "string"
+    },
+    "stat1_label": {
+      "type": "string"
+    },
+    "stat2_waarde": {
+      "type": "string"
+    },
+    "stat2_label": {
+      "type": "string"
+    },
+    "stat3_waarde": {
+      "type": "string"
+    },
+    "stat3_label": {
+      "type": "string"
+    },
+    "stat4_waarde": {
+      "type": "string"
+    },
+    "stat4_label": {
+      "type": "string"
+    },
+    "routekaart_fase1": {
+      "type": "string",
+      "description": "JSON string met fase 1 data"
+    },
+    "routekaart_fase2": {
+      "type": "string",
+      "description": "JSON string met fase 2 data"
+    },
+    "routekaart_fase3": {
+      "type": "string",
+      "description": "JSON string met fase 3 data"
+    }
+  },
+  "required": []
+}

@@ -4,6 +4,18 @@ import { queryClientInstance } from '@/lib/query-client'
 import { pagesConfig } from './pages.config'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
+
+// Website imports
+import WebsiteHome from './pages/website/WebsiteHome';
+import WebsiteSelecties from './pages/website/WebsiteSelecties';
+import WebsiteMO17 from './pages/website/WebsiteMO17';
+import WebsiteMO20 from './pages/website/WebsiteMO20';
+import WebsiteVrouwen1 from './pages/website/WebsiteVrouwen1';
+import WebsiteWedstrijden from './pages/website/WebsiteWedstrijden';
+import WebsiteDeClub from './pages/website/WebsiteDeClub';
+import WebsiteProeftraining from './pages/website/WebsiteProeftraining';
+import WebsiteContact from './pages/website/WebsiteContact';
+import WebsiteBeheer from './pages/website/WebsiteBeheer';
 import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
 import PlayerDashboard from './pages/PlayerDashboard.jsx';
@@ -129,13 +141,39 @@ const AuthenticatedApp = () => {
       <Route path="/YoYoTestLive" element={<LayoutWrapper currentPageName="YoYoTestLive"><YoYoTestLive /></LayoutWrapper>} />
       <Route path="/Prikbord" element={<LayoutWrapper currentPageName="Prikbord"><Prikbord /></LayoutWrapper>} />
       <Route path="/WedstrijdReflecties" element={<LayoutWrapper currentPageName="WedstrijdReflecties"><WedstrijdReflecties /></LayoutWrapper>} />
+      <Route path="/website-beheer" element={<LayoutWrapper currentPageName="WebsiteBeheer"><WebsiteBeheer /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };
 
 
+// Website App (geen auth nodig)
+const WebsiteApp = () => (
+  <QueryClientProvider client={queryClientInstance}>
+    <Router>
+      <Routes>
+        <Route path="/" element={<WebsiteHome />} />
+        <Route path="/selecties" element={<WebsiteSelecties />} />
+        <Route path="/mo17" element={<WebsiteMO17 />} />
+        <Route path="/mo20" element={<WebsiteMO20 />} />
+        <Route path="/vrouwen-1" element={<WebsiteVrouwen1 />} />
+        <Route path="/wedstrijden" element={<WebsiteWedstrijden />} />
+        <Route path="/de-club" element={<WebsiteDeClub />} />
+        <Route path="/proeftraining" element={<WebsiteProeftraining />} />
+        <Route path="/contact" element={<WebsiteContact />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </Router>
+  </QueryClientProvider>
+);
+
 function App() {
+  const isWebsite = window.location.hostname === 'mv-artemis.nl';
+
+  if (isWebsite) {
+    return <WebsiteApp />;
+  }
 
   return (
     <AuthProvider>
