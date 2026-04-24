@@ -15,6 +15,8 @@ import WebsiteWedstrijden from './pages/website/WebsiteWedstrijden';
 import WebsiteDeClub from './pages/website/WebsiteDeClub';
 import WebsiteProeftraining from './pages/website/WebsiteProeftraining';
 import WebsiteContact from './pages/website/WebsiteContact';
+import WebsiteNieuws from './pages/website/WebsiteNieuws';
+import WebsiteNieuwsDetail from './pages/website/WebsiteNieuwsDetail';
 import WebsiteBeheer from './pages/website/WebsiteBeheer';
 import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
@@ -159,6 +161,8 @@ const WebsiteApp = () => (
         <Route path="/mo20" element={<WebsiteMO20 />} />
         <Route path="/vrouwen-1" element={<WebsiteVrouwen1 />} />
         <Route path="/wedstrijden" element={<WebsiteWedstrijden />} />
+        <Route path="/nieuws" element={<WebsiteNieuws />} />
+        <Route path="/nieuws/:slug" element={<WebsiteNieuwsDetail />} />
         <Route path="/de-club" element={<WebsiteDeClub />} />
         <Route path="/proeftraining" element={<WebsiteProeftraining />} />
         <Route path="/contact" element={<WebsiteContact />} />

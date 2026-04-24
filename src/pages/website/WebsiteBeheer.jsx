@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
 
-const TABS = ["Algemeen", "Prestaties", "Routekaart", "Proeftraining aanvragen", "Berichten", "Sponsors"];
+const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors"];
 
 const FASE_DEFAULTS = {
   fase1: { label: "FASE 1 · NU BEZIG", jaar: "2025-26", items: ["V1 consolideert in 3e klasse", "MO17 handhaaft koploperspositie", "Financiële basis staat", "Naamswijziging naar MV Artemis"] },
@@ -46,6 +46,9 @@ export default function WebsiteBeheer() {
   const [sponsors, setSponsors] = useState([]);
   const [editingSponsor, setEditingSponsor] = useState(null);
   const [showSponsorForm, setShowSponsorForm] = useState(false);
+  const [nieuwsberichten, setNieuwsberichten] = useState([]);
+  const [editingNieuwsbericht, setEditingNieuwsbericht] = useState(null);
+  const [showNieuwsberichtForm, setShowNieuwsberichtForm] = useState(false);
 
   useEffect(() => {
     base44.entities.WebsiteInstellingen.list().then(list => {
@@ -63,6 +66,7 @@ export default function WebsiteBeheer() {
     base44.entities.ProeftrainingAanvraag.list("-datum").then(a => setAanvragen(a || []));
     base44.entities.ContactBericht.list("-datum").then(b => setBerichten(b || []));
     base44.entities.Sponsor.list().then(s => setSponsors((s || []).sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde)));
+    base44.entities.Nieuwsbericht.list("-datum").then(n => setNieuwsberichten(n || []));
   }, []);
 
   if (!isTrainer) {
@@ -306,8 +310,67 @@ export default function WebsiteBeheer() {
         </div>
       )}
 
-      {/* TAB 3: AANVRAGEN */}
+      {/* TAB 3: NIEUWS */}
       {activeTab === 3 && (
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+            <div className="t-section-title">Nieuwsberichten</div>
+            <button className="btn-primary" onClick={() => { setEditingNieuwsbericht(null); setShowNieuwsberichtForm(true); }} style={{ width: "auto" }}>+ Nieuw bericht</button>
+          </div>
+
+          {showNieuwsberichtForm && (
+            <div className="glass" style={{ padding: "20px", marginBottom: "20px" }}>
+              <BerichtForm bericht={editingNieuwsbericht} onSave={async (data) => {
+                if (editingNieuwsbericht) {
+                  await base44.entities.Nieuwsbericht.update(editingNieuwsbericht.id, data);
+                  setNieuwsberichten(prev => prev.map(b => b.id === editingNieuwsbericht.id ? { ...b, ...data } : b).sort((a, b) => new Date(b.datum) - new Date(a.datum)));
+                } else {
+                  const created = await base44.entities.Nieuwsbericht.create(data);
+                  setNieuwsberichten(prev => [...prev, created].sort((a, b) => new Date(b.datum) - new Date(a.datum)));
+                }
+                setEditingNieuwsbericht(null);
+                setShowNieuwsberichtForm(false);
+              }} onCancel={() => { setShowNieuwsberichtForm(false); setEditingNieuwsbericht(null); }} />
+            </div>
+          )}
+
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+              <thead>
+                <tr style={{ borderBottom: "2px solid rgba(26,26,26,0.12)" }}>
+                  {["Datum","Titel","Categorie","Team","Gepubliceerd","Acties"].map(h => (
+                    <th key={h} style={{ padding: "8px 12px", textAlign: "left", fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "rgba(26,26,26,0.45)", whiteSpace: "nowrap" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {nieuwsberichten.map(b => (
+                  <tr key={b.id} style={{ borderBottom: "1px solid rgba(26,26,26,0.07)" }}>
+                    <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{b.datum ? new Date(b.datum).toLocaleDateString("nl-NL") : "—"}</td>
+                    <td style={{ padding: "10px 12px", fontWeight: 700 }}>{b.titel}</td>
+                    <td style={{ padding: "10px 12px", fontSize: "12px" }}>{b.categorie}</td>
+                    <td style={{ padding: "10px 12px" }}>{b.team}</td>
+                    <td style={{ padding: "10px 12px" }}>
+                      <input type="checkbox" checked={b.gepubliceerd || false} onChange={async () => {
+                        await base44.entities.Nieuwsbericht.update(b.id, { gepubliceerd: !b.gepubliceerd });
+                        setNieuwsberichten(prev => prev.map(x => x.id === b.id ? { ...x, gepubliceerd: !x.gepubliceerd } : x));
+                      }} style={{ cursor: "pointer" }} />
+                    </td>
+                    <td style={{ padding: "10px 12px", display: "flex", gap: "6px" }}>
+                      <button onClick={() => { setEditingNieuwsbericht(b); setShowNieuwsberichtForm(true); }} style={{ padding: "4px 10px", borderRadius: "6px", border: "1px solid #FF6800", background: "transparent", color: "#FF6800", fontWeight: 700, cursor: "pointer", fontSize: "11px" }}>Bewerk</button>
+                      <button onClick={() => { if (confirm("Verwijderen?")) base44.entities.Nieuwsbericht.delete(b.id).then(() => setNieuwsberichten(prev => prev.filter(x => x.id !== b.id))); }} style={{ padding: "4px 10px", borderRadius: "6px", border: "1px solid #FF3DA8", background: "transparent", color: "#FF3DA8", fontWeight: 700, cursor: "pointer", fontSize: "11px" }}>Verwijder</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {nieuwsberichten.length === 0 && <div style={{ padding: "32px", textAlign: "center", color: "rgba(26,26,26,0.35)", fontSize: "13px" }}>Geen berichten</div>}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: AANVRAGEN */}
+      {activeTab === 4 && (
         <div>
           <div style={{ display: "flex", gap: "10px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ display: "flex", gap: "6px" }}>
@@ -370,8 +433,8 @@ export default function WebsiteBeheer() {
         </div>
       )}
 
-      {/* TAB 4: BERICHTEN */}
-      {activeTab === 4 && (
+      {/* TAB 5: BERICHTEN */}
+      {activeTab === 5 && (
         <div>
           <div style={{ display: "flex", gap: "10px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ display: "flex", gap: "6px" }}>
@@ -431,8 +494,8 @@ export default function WebsiteBeheer() {
         </div>
       )}
 
-      {/* TAB 5: SPONSORS */}
-      {activeTab === 5 && (
+      {/* TAB 6: SPONSORS */}
+      {activeTab === 6 && (
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
             <div className="t-section-title">Sponsors beheren</div>
@@ -476,6 +539,87 @@ export default function WebsiteBeheer() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function BerichtForm({ bericht, onSave, onCancel }) {
+  const [data, setData] = useState(bericht || {
+    titel: "",
+    slug: "",
+    samenvatting: "",
+    inhoud: "",
+    afbeelding_url: "",
+    categorie: "Clubnieuws",
+    team: "Alle",
+    datum: new Date().toISOString().split("T")[0],
+    auteur: "",
+    gepubliceerd: false
+  });
+
+  const generateSlug = (title) => {
+    return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  };
+
+  const handleTitleChange = (val) => {
+    setData({ ...data, titel: val, slug: generateSlug(val) });
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <div>
+        <div style={sectionLabel}>Titel *</div>
+        <input style={inputCls} value={data.titel} onChange={e => handleTitleChange(e.target.value)} placeholder="Titel van het bericht" />
+      </div>
+      <div>
+        <div style={sectionLabel}>Slug (auto-gegenereerd)</div>
+        <input style={inputCls} value={data.slug} onChange={e => setData({ ...data, slug: e.target.value })} placeholder="artikel-slug" />
+      </div>
+      <div>
+        <div style={sectionLabel}>Afbeelding URL</div>
+        <input style={inputCls} value={data.afbeelding_url || ""} onChange={e => setData({ ...data, afbeelding_url: e.target.value })} placeholder="https://..." />
+        {data.afbeelding_url && <img src={data.afbeelding_url} alt="preview" style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "6px", marginTop: "8px" }} />}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+        <div>
+          <div style={sectionLabel}>Categorie *</div>
+          <select style={{ ...inputCls, appearance: "auto" }} value={data.categorie} onChange={e => setData({ ...data, categorie: e.target.value })}>
+            {["Wedstrijdverslag", "Clubnieuws", "Selectie-update", "Resultaten"].map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+        <div>
+          <div style={sectionLabel}>Team</div>
+          <select style={{ ...inputCls, appearance: "auto" }} value={data.team} onChange={e => setData({ ...data, team: e.target.value })}>
+            {["Alle", "MO17", "MO20", "Vrouwen 1"].map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+        <div>
+          <div style={sectionLabel}>Datum</div>
+          <input type="date" style={inputCls} value={data.datum} onChange={e => setData({ ...data, datum: e.target.value })} />
+        </div>
+        <div>
+          <div style={sectionLabel}>Auteur</div>
+          <input style={inputCls} value={data.auteur || ""} onChange={e => setData({ ...data, auteur: e.target.value })} placeholder="Naam auteur" />
+        </div>
+      </div>
+      <div>
+        <div style={{ ...sectionLabel, display: "flex", justifyContent: "space-between" }}>Samenvatting <span>{(data.samenvatting || "").length}/160</span></div>
+        <textarea style={{ ...inputCls, minHeight: "60px", resize: "vertical" }} value={data.samenvatting || ""} onChange={e => setData({ ...data, samenvatting: e.target.value.slice(0, 160) })} placeholder="Korte samenvatting" />
+      </div>
+      <div>
+        <div style={sectionLabel}>Inhoud (ondersteunt **vet**, ## kop, ### subkop, - lijstitems)</div>
+        <textarea style={{ ...inputCls, minHeight: "300px", resize: "vertical", fontFamily: "monospace", fontSize: "12px" }} value={data.inhoud} onChange={e => setData({ ...data, inhoud: e.target.value })} placeholder="Artikel tekst..." />
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <input type="checkbox" id="gepubliceerd-check" checked={data.gepubliceerd} onChange={e => setData({ ...data, gepubliceerd: e.target.checked })} style={{ cursor: "pointer" }} />
+        <label htmlFor="gepubliceerd-check" style={{ cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>Gepubliceerd</label>
+      </div>
+      <div style={{ display: "flex", gap: "8px" }}>
+        <button className="btn-primary" onClick={() => onSave(data)}>Opslaan</button>
+        <button onClick={onCancel} style={{ padding: "8px 16px", borderRadius: "10px", border: "2px solid #1a1a1a", background: "#fff", color: "#1a1a1a", fontWeight: 700, cursor: "pointer" }}>Annuleren</button>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
@@ -37,6 +37,101 @@ const TEAM_BADGE = {
   "MO20": { bg: "rgba(255,214,0,0.2)", color: "#FFD600", label: "MO20" },
   "Dames 1": { bg: "rgba(255,255,255,0.1)", color: "#ffffff", label: "V1" },
 };
+
+const categoryColors = {
+  "Wedstrijdverslag": { bg: "rgba(255,104,0,0.15)", color: "#FF6800" },
+  "Clubnieuws": { bg: "rgba(27,42,94,0.5)", color: "rgba(255,255,255,0.7)" },
+  "Selectie-update": { bg: "rgba(255,214,0,0.1)", color: "#FFD600" },
+  "Resultaten": { bg: "rgba(34,197,94,0.1)", color: "#22C55E" },
+};
+
+function NewsTeaser() {
+  const [berichten, setBerichten] = useState([]);
+
+  useEffect(() => {
+    base44.entities.Nieuwsbericht.filter({ gepubliceerd: true }, "-datum", 3).then(b => {
+      setBerichten(b || []);
+    });
+  }, []);
+
+  if (berichten.length === 0) return null;
+
+  const getCategoryIcon = (cat) => {
+    const icons = { "Wedstrijdverslag": "🏆", "Clubnieuws": "📰", "Selectie-update": "👥", "Resultaten": "📊" };
+    return icons[cat] || "📰";
+  };
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("nl-NL", { month: "short", day: "numeric", year: "numeric" });
+  };
+
+  return (
+    <section style={{ background: "#151D35", padding: "48px 28px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "28px", flexWrap: "wrap", gap: "16px" }}>
+          <div>
+            <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "8px", fontFamily: "'Space Grotesk', sans-serif" }}>LAATSTE NIEUWS</div>
+            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "36px", fontWeight: 700, color: "#fff", lineHeight: 1, margin: 0 }}>Blijf op de hoogte.</h2>
+          </div>
+          <Link to="/nieuws" style={{ fontSize: "13px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, color: "#FF6800", textDecoration: "none", transition: "opacity 0.2s" }} onMouseEnter={e => e.target.style.opacity = 0.8} onMouseLeave={e => e.target.style.opacity = 1}>
+            Bekijk al het nieuws →
+          </Link>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px" }}>
+          {berichten.map(b => (
+            <Link
+              key={b.id}
+              to={`/nieuws/${b.slug}`}
+              style={{
+                background: "#202840",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "6px",
+                overflow: "hidden",
+                cursor: "pointer",
+                textDecoration: "none",
+                display: "flex",
+                flexDirection: "column",
+                transition: "border-color 0.2s, transform 0.15s",
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,104,0,0.3)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.transform = "none"; }}
+            >
+              <div style={{ height: "160px", overflow: "hidden", background: b.afbeelding_url ? "none" : "linear-gradient(135deg, #1B2A5E, #0F1630)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {b.afbeelding_url ? (
+                  <img src={b.afbeelding_url} alt={b.titel} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  <span style={{ fontSize: "40px" }}>{getCategoryIcon(b.categorie)}</span>
+                )}
+              </div>
+              <div style={{ padding: "16px", flex: 1, display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", gap: "8px", marginBottom: "10px", flexWrap: "wrap" }}>
+                  <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", padding: "3px 8px", borderRadius: "3px", ...categoryColors[b.categorie] }}>
+                    {b.categorie}
+                  </span>
+                  {b.team !== "Alle" && (
+                    <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "1px", padding: "3px 7px", borderRadius: "3px", background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.5)" }}>
+                      {b.team === "Vrouwen 1" ? "V1" : b.team}
+                    </span>
+                  )}
+                </div>
+                <h3 style={{ fontFamily: "'Bebas Neue', serif", fontSize: "20px", color: "#fff", lineHeight: 1.1, marginBottom: "8px", margin: 0, flex: 1 }}>
+                  {b.titel}
+                </h3>
+                <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.5)", lineHeight: 1.55, marginBottom: "14px", margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                  {b.samenvatting}
+                </p>
+                <div style={{ marginTop: "auto", fontSize: "11px", color: "rgba(255,255,255,0.3)" }}>
+                  {formatDate(b.datum)}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function WebsiteHome() {
   const [instellingen, setInstellingen] = useState(null);
@@ -219,12 +314,15 @@ export default function WebsiteHome() {
         </div>
       </section>
 
+      {/* NIEUWS TEASER */}
+      <NewsTeaser />
+
       {/* WAARDEN */}
       <section style={{ background: "#10121A", padding: "64px 28px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ marginBottom: "32px" }}>
             <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "8px" }}>WIE WIJ ZIJN</div>
-            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(28px, 4vw, 38px)", color: "#fff" }}>ARTEMIS IS NIET VOOR IEDEREEN.</h2>
+            <h2 style={{ fontFamily: "'Bebas Nieuwe', sans-serif", fontSize: "clamp(28px, 4vw, 38px)", color: "#fff" }}>ARTEMIS IS NIET VOOR IEDEREEN.</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "10px" }}>
             {[

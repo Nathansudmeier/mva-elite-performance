@@ -1,0 +1,68 @@
+{
+  "name": "Nieuwsbericht",
+  "type": "object",
+  "properties": {
+    "titel": {
+      "type": "string",
+      "description": "Titel van het nieuwsbericht"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-vriendelijke slug (auto-gegenereerd uit titel)"
+    },
+    "samenvatting": {
+      "type": "string",
+      "description": "Korte samenvatting (max 160 tekens)"
+    },
+    "inhoud": {
+      "type": "string",
+      "description": "Volledige artikel tekst (ondersteunt basis markdown)"
+    },
+    "afbeelding_url": {
+      "type": "string",
+      "description": "URL naar headerafbeelding"
+    },
+    "categorie": {
+      "type": "string",
+      "enum": [
+        "Wedstrijdverslag",
+        "Clubnieuws",
+        "Selectie-update",
+        "Resultaten"
+      ],
+      "description": "Categorie van het bericht"
+    },
+    "team": {
+      "type": "string",
+      "enum": [
+        "Alle",
+        "MO17",
+        "MO20",
+        "Vrouwen 1"
+      ],
+      "default": "Alle",
+      "description": "Team waarop het bericht betrekking heeft"
+    },
+    "datum": {
+      "type": "string",
+      "format": "date",
+      "description": "Publicatiedatum"
+    },
+    "gepubliceerd": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of het bericht gepubliceerd is"
+    },
+    "auteur": {
+      "type": "string",
+      "description": "Naam van de auteur"
+    }
+  },
+  "required": [
+    "titel",
+    "slug",
+    "inhoud",
+    "categorie",
+    "datum"
+  ]
+}

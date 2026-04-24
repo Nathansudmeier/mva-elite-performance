@@ -6,6 +6,7 @@ const navLinks = [
   { label: "Homepage", href: "/" },
   { label: "Selecties", href: "/selecties" },
   { label: "Wedstrijden", href: "/wedstrijden" },
+  { label: "Nieuws", href: "/nieuws" },
   { label: "De Club", href: "/de-club" },
   { label: "Contact", href: "/contact" },
 ];
@@ -109,6 +110,7 @@ export default function WebsiteLayout({ children }) {
           <div>
             <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "12px" }}>NAVIGATIE</div>
             {navLinks.map(l => <div key={l.href} style={{ marginBottom: "8px" }}><Link to={l.href} style={{ textDecoration: "none", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>{l.label}</Link></div>)}
+            <div style={{ marginBottom: "8px" }}><Link to="/nieuws" style={{ textDecoration: "none", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>Nieuws</Link></div>
           </div>
           <div>
             <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "12px" }}>CONTACT</div>
