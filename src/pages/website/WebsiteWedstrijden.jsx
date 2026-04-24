@@ -4,7 +4,12 @@ import WebsiteLayout from "../../components/website/WebsiteLayout";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
-const FILTER_TABS = ["Alle", "MO17", "MO20", "Vrouwen 1"];
+const FILTER_TABS = [
+  { label: "Alle", value: "Alle" },
+  { label: "MO17", value: "MO17" },
+  { label: "MO20", value: "MO20" },
+  { label: "Vrouwen 1", value: "Dames 1" },
+];
 
 export default function WebsiteWedstrijden() {
   const [wedstrijden, setWedstrijden] = useState([]);
@@ -12,14 +17,16 @@ export default function WebsiteWedstrijden() {
   const [inst, setInst] = useState(null);
 
   useEffect(() => {
-    base44.entities.AgendaItem.filter({ type: "Wedstrijd" }).then(data => setWedstrijden(data || []));
     base44.functions.invoke('getWebsiteData', {}).then(res => {
       if (res?.data?.instellingen) setInst(res.data.instellingen);
+      if (res?.data?.wedstrijden) setWedstrijden(res.data.wedstrijden);
     });
   }, []);
 
   const today = new Date().toISOString().split("T")[0];
-  const filtered = activeTab === "Alle" ? wedstrijden : wedstrijden.filter(w => w.team === activeTab || w.team === "Beide");
+  const filtered = activeTab === "Alle"
+    ? wedstrijden
+    : wedstrijden.filter(w => w.team === activeTab || w.team === "Beide");
   const programma = filtered.filter(w => w.date >= today).sort((a, b) => a.date.localeCompare(b.date));
   const resultaten = filtered.filter(w => w.date < today).sort((a, b) => b.date.localeCompare(a.date));
 
@@ -30,7 +37,7 @@ export default function WebsiteWedstrijden() {
         <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", marginTop: "2px" }}>{w.team}</div>
       </div>
       <div>
-        <div style={{ fontSize: "13px", fontWeight: 600, color: "#fff" }}>MV Artemis vs {w.notes || "Tegenstander"}</div>
+        <div style={{ fontSize: "13px", fontWeight: 600, color: "#fff" }}>MV Artemis vs {w.title || w.notes || "Tegenstander"}</div>
         <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", marginTop: "2px" }}>{w.location || "Locatie onbekend"}</div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
@@ -50,7 +57,7 @@ export default function WebsiteWedstrijden() {
           <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(36px, 5vw, 52px)", color: "#fff", marginBottom: "24px" }}>WEDSTRIJDEN</h1>
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
             {FILTER_TABS.map(tab => (
-              <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: activeTab === tab ? "#FF6800" : "#202840", color: "#fff", border: "none", borderRadius: "4px", padding: "8px 18px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>{tab}</button>
+              <button key={tab.value} onClick={() => setActiveTab(tab.value)} style={{ background: activeTab === tab.value ? "#FF6800" : "#202840", color: "#fff", border: "none", borderRadius: "4px", padding: "8px 18px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>{tab.label}</button>
             ))}
           </div>
         </div>
