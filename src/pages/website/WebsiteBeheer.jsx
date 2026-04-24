@@ -554,7 +554,7 @@ function BerichtForm({ bericht, onSave, onCancel }) {
     team: "Alle",
     datum: new Date().toISOString().split("T")[0],
     auteur: "",
-    gepubliceerd: false
+    gepubliceerd: true
   });
 
   const generateSlug = (title) => {
