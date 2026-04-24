@@ -21,12 +21,12 @@ export default function WebsiteSelecties() {
   useEffect(() => {
     fetchWebsiteData().then(data => {
       if (data?.instellingen) setInstellingen(data.instellingen);
+      if (data?.players) setPlayers(data.players);
     });
-    base44.entities.Player.filter({ active: true }).then(pl => setPlayers(pl || []));
   }, []);
 
   const countFor = (team) => {
-    if (team === "Vrouwen 1") return players.filter(p => p.team === "Dames 1" || p.team === "Vrouwen 1").length;
+    if (team === "Vrouwen 1") return players.filter(p => p.team === "VR1" || p.team === "Dames 1" || p.team === "Vrouwen 1").length;
     return players.filter(p => p.team === team).length;
   };
 
