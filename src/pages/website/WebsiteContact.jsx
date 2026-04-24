@@ -26,7 +26,7 @@ export default function WebsiteContact() {
 
   return (
     <WebsiteLayout>
-      <section style={{ height: "300px", background: inst?.contact_image_url ? `url(${inst.contact_image_url}) center/cover` : "linear-gradient(160deg, #1B2A5E 0%, #0F1630 100%)", display: "flex", alignItems: "flex-end", position: "relative", backgroundPosition: "center 30%" }}>
+      <section style={{ height: "450px", background: inst?.contact_image_url ? `url(${inst.contact_image_url}) center/cover` : "linear-gradient(160deg, #1B2A5E 0%, #0F1630 100%)", display: "flex", alignItems: "flex-end", position: "relative", backgroundPosition: "center 20%" }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(16,18,26,0.85) 0%, rgba(16,18,26,0.6) 60%)" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(16,18,26,1) 0%, rgba(16,18,26,0) 40%)" }} />
         <div style={{ position: "relative", zIndex: 1, padding: "0 28px 48px" }}>
