@@ -6,8 +6,8 @@ Deno.serve(async (req) => {
   const [instellingen, prestaties, players, agendaItems, trainers] = await Promise.all([
     base44.asServiceRole.entities.WebsiteInstellingen.list(),
     base44.asServiceRole.entities.Prestatie.list(),
-    base44.asServiceRole.entities.Player.filter({ active: true }),
-    base44.asServiceRole.entities.AgendaItem.filter({ type: "Wedstrijd" }),
+    base44.asServiceRole.entities.Player.filter({ active: true }, null, 200),
+    base44.asServiceRole.entities.AgendaItem.filter({ type: "Wedstrijd" }, null, 200),
     base44.asServiceRole.entities.Trainer.filter({ active: true }),
   ]);
 
