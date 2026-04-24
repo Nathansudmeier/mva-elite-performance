@@ -9,14 +9,18 @@ async function fetchWebsiteData() {
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
-export default function WebsiteTeamPage({ teamNaam, teamTitel, accentKleur, competitie, imageVeld, breadcrumb }) {
+export default function WebsiteTeamPage({ teamNaam, teamTitel, accentKleur, competitie, imageVeld, breadcrumb, playerTeamNaam }) {
   const [players, setPlayers] = useState([]);
   const [wedstrijden, setWedstrijden] = useState([]);
   const [staff, setStaff] = useState([]);
   const [instellingen, setInstellingen] = useState(null);
 
   useEffect(() => {
-    const teamFilter = teamNaam === "Vrouwen 1" ? ["Dames 1", "Vrouwen 1"] : [teamNaam];
+    // playerTeamNaam is het team-veld in de Player entiteit (MO17, MO20, VR1)
+    // teamNaam is het team-veld in AgendaItem (MO17, Dames 1, Beide)
+    const playerTeam = playerTeamNaam || teamNaam;
+    const agendaTeams = teamNaam === "Vrouwen 1" ? ["Dames 1", "Vrouwen 1"] : [teamNaam];
+
     fetchWebsiteData().then(data => {
       if (data?.instellingen) setInstellingen(data.instellingen);
     });
@@ -25,11 +29,11 @@ export default function WebsiteTeamPage({ teamNaam, teamTitel, accentKleur, comp
       base44.entities.AgendaItem.filter({ type: "Wedstrijd" }),
       base44.entities.Trainer.filter({ active: true }),
     ]).then(([pl, wedstr, st]) => {
-      setPlayers((pl || []).filter(p => teamFilter.includes(p.team)).sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99)));
-      setWedstrijden((wedstr || []).filter(w => w.team === teamNaam || w.team === "Beide" || (teamNaam === "Vrouwen 1" && w.team === "Dames 1")));
+      setPlayers((pl || []).filter(p => p.team === playerTeam).sort((a, b) => (a.shirt_number || 99) - (b.shirt_number || 99)));
+      setWedstrijden((wedstr || []).filter(w => agendaTeams.includes(w.team) || w.team === "Beide"));
       setStaff(st || []);
     });
-  }, [teamNaam]);
+  }, [teamNaam, playerTeamNaam]);
 
   const today = new Date().toISOString().split("T")[0];
   const programma = wedstrijden.filter(w => w.date >= today).sort((a, b) => a.date.localeCompare(b.date));
@@ -99,16 +103,24 @@ export default function WebsiteTeamPage({ teamNaam, teamTitel, accentKleur, comp
             {programma.length === 0 && resultaten.length === 0 && (
               <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.35)", marginBottom: "24px" }}>Geen wedstrijden gevonden.</div>
             )}
-            {programma.slice(0, 5).map(w => (
-              <div key={w.id} style={{ background: "#202840", borderRadius: "6px", padding: "12px 14px", marginBottom: "8px" }}>
-                <div style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.55)", marginBottom: "4px" }}>
-                  {w.date ? format(parseISO(w.date), "d MMM yyyy", { locale: nl }) : ""}
+            {programma.slice(0, 8).map(w => (
+              <div key={w.id} style={{ background: "#202840", borderRadius: "6px", padding: "12px 14px", marginBottom: "8px", borderLeft: `3px solid ${w.home_away === "Thuis" ? accentKleur : "rgba(255,255,255,0.15)"}` }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.55)" }}>
+                    {w.date ? format(parseISO(w.date), "EEEE d MMM", { locale: nl }) : ""}
+                    {w.start_time ? ` · ${w.start_time}` : ""}
+                  </span>
+                  <span style={{ fontSize: "10px", padding: "2px 7px", borderRadius: "3px", background: w.home_away === "Thuis" ? "rgba(255,104,0,0.18)" : "rgba(255,255,255,0.07)", color: w.home_away === "Thuis" ? accentKleur : "rgba(255,255,255,0.45)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>{w.home_away || "Thuis"}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "13px", fontWeight: 600, color: "#fff" }}>{w.title || "Wedstrijd"}</span>
-                  <span style={{ fontSize: "10px", padding: "2px 6px", borderRadius: "3px", background: w.home_away === "Thuis" ? "rgba(255,104,0,0.15)" : "rgba(255,255,255,0.07)", color: w.home_away === "Thuis" ? "#FF6800" : "rgba(255,255,255,0.5)" }}>{w.home_away || "Thuis"}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  {w.opponent_logo_url && <img src={w.opponent_logo_url} alt={w.title} style={{ width: "28px", height: "28px", objectFit: "contain", borderRadius: "4px", background: "#fff", padding: "2px" }} />}
+                  <div>
+                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#fff" }}>
+                      {w.home_away === "Thuis" ? `MV Artemis — ${w.title || "Tegenstander"}` : `${w.title || "Tegenstander"} — MV Artemis`}
+                    </div>
+                    {w.location && <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>{w.location}</div>}
+                  </div>
                 </div>
-                {w.start_time && <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.35)", marginTop: "3px" }}>{w.start_time}</div>}
               </div>
             ))}
 
