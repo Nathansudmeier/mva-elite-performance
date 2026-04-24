@@ -32,15 +32,30 @@ const FASE_DEFAULTS = {
   fase3: { label: "FASE 3 · DOORBRAAK", jaar: "2029-30", items: ["V1 in de Topklasse", "Licentieaanvraag Tweede Divisie", "Eigen accommodatie gerealiseerd"] },
 };
 
+const TEAM_BADGE = {
+  "MO17": { bg: "rgba(255,104,0,0.2)", color: "#FF6800", label: "MO17" },
+  "MO20": { bg: "rgba(255,214,0,0.2)", color: "#FFD600", label: "MO20" },
+  "Dames 1": { bg: "rgba(255,255,255,0.1)", color: "#ffffff", label: "V1" },
+};
+
 export default function WebsiteHome() {
   const [instellingen, setInstellingen] = useState(null);
   const [prestaties, setPrestaties] = useState([]);
   const [players, setPlayers] = useState([]);
+  const [uitslagen, setUitslagen] = useState([]);
 
   useEffect(() => {
     fetchWebsiteData().then(data => {
       if (data?.instellingen) setInstellingen(data.instellingen);
       if (data?.prestaties?.length > 0) setPrestaties(data.prestaties.slice(0, 4));
+      if (data?.matches) {
+        const today = new Date().toISOString().split("T")[0];
+        const filtered = (data.matches)
+          .filter(m => m.date < today && m.score_home != null && m.score_away != null)
+          .sort((a, b) => b.date.localeCompare(a.date))
+          .slice(0, 10);
+        setUitslagen(filtered);
+      }
     });
     base44.entities.Player.filter({ active: true }).then(pl => setPlayers(pl || []));
   }, []);
@@ -75,6 +90,12 @@ export default function WebsiteHome() {
 
   return (
     <WebsiteLayout>
+      <style>{`
+        @keyframes tickerScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
       {/* HERO */}
       <section style={heroStyle}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(16,18,26,0.88) 0%, rgba(16,18,26,0.3) 60%)" }} />
@@ -84,6 +105,39 @@ export default function WebsiteHome() {
           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(52px, 8vw, 80px)", fontWeight: 700, color: "#FF6800", lineHeight: 1 }}>ONS DOEL.</div>
         </div>
       </section>
+
+      {/* NIEUWS-TICKER */}
+      {uitslagen.length > 0 && (() => {
+        const items = [...uitslagen, ...uitslagen];
+        return (
+          <div style={{ background: "#1B2A5E", borderTop: "1px solid rgba(255,255,255,0.1)", borderBottom: "1px solid rgba(255,255,255,0.1)", padding: "10px 0", overflow: "hidden", whiteSpace: "nowrap", display: "flex", alignItems: "center" }}
+            onMouseEnter={e => e.currentTarget.querySelector('.ticker-track').style.animationPlayState = 'paused'}
+            onMouseLeave={e => e.currentTarget.querySelector('.ticker-track').style.animationPlayState = 'running'}
+          >
+            {/* Label */}
+            <div style={{ background: "#FF6800", padding: "4px 16px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", color: "#fff", zIndex: 2, flexShrink: 0, marginRight: "16px" }}>
+              UITSLAGEN
+            </div>
+            {/* Scrollende items */}
+            <div style={{ overflow: "hidden", flex: 1 }}>
+              <div className="ticker-track" style={{ display: "inline-flex", gap: "48px", animation: "tickerScroll 30s linear infinite", alignItems: "center" }}>
+                {items.map((m, i) => {
+                  const badge = TEAM_BADGE[m.team] || { bg: "rgba(255,255,255,0.1)", color: "#fff", label: m.team };
+                  return (
+                    <React.Fragment key={i}>
+                      <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.8)", display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                        <span style={{ background: badge.bg, color: badge.color, fontSize: "10px", fontWeight: 700, letterSpacing: "1px", padding: "2px 7px", borderRadius: "3px" }}>{badge.label}</span>
+                        MV Artemis {Math.round(m.score_home)} - {Math.round(m.score_away)} {m.opponent}
+                      </span>
+                      <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "16px" }}>·</span>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* STATS */}
       <section style={{ background: "#14192A", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
