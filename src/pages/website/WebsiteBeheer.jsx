@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
+import WysiwygEditor from "@/components/website/WysiwygEditor";
 
 const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors"];
 
@@ -609,8 +610,12 @@ function BerichtForm({ bericht, onSave, onCancel }) {
         <textarea style={{ ...inputCls, minHeight: "60px", resize: "vertical" }} value={data.samenvatting || ""} onChange={e => setData({ ...data, samenvatting: e.target.value.slice(0, 160) })} placeholder="Korte samenvatting" />
       </div>
       <div>
-        <div style={sectionLabel}>Inhoud (ondersteunt **vet**, ## kop, ### subkop, - lijstitems)</div>
-        <textarea style={{ ...inputCls, minHeight: "300px", resize: "vertical", fontFamily: "monospace", fontSize: "12px" }} value={data.inhoud} onChange={e => setData({ ...data, inhoud: e.target.value })} placeholder="Artikel tekst..." />
+        <div style={sectionLabel}>Inhoud</div>
+        <WysiwygEditor
+          value={data.inhoud}
+          onChange={(html) => setData({ ...data, inhoud: html })}
+          placeholder="Schrijf hier je artikel..."
+        />
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <input type="checkbox" id="gepubliceerd-check" checked={data.gepubliceerd} onChange={e => setData({ ...data, gepubliceerd: e.target.checked })} style={{ cursor: "pointer" }} />

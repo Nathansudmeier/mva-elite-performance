@@ -11,8 +11,13 @@ const categoryColors = {
   "Resultaten": { bg: "rgba(34,197,94,0.1)", color: "#22C55E" },
 };
 
-const renderMarkdown = (text) => {
+const renderInhoud = (text) => {
   if (!text) return "";
+  // Als het al HTML is (van WysiwygEditor), direct tonen
+  if (/<\/?(p|h1|h2|h3|ul|ol|li|strong|em|blockquote|a|img|hr|br|mark|u|s)\b/i.test(text)) {
+    return text;
+  }
+  // Anders: oude markdown notatie omzetten
   return text
     .replace(/^### (.*?)$/gm, "<h3>$1</h3>")
     .replace(/^## (.*?)$/gm, "<h2>$1</h2>")
@@ -117,7 +122,7 @@ export default function WebsiteNieuwsDetail() {
             ← Terug naar nieuws
           </Link>
 
-          <div className="artikel-content" dangerouslySetInnerHTML={{ __html: renderMarkdown(bericht.inhoud) }} />
+          <div className="artikel-content" dangerouslySetInnerHTML={{ __html: renderInhoud(bericht.inhoud) }} />
         </div>
       </div>
 
