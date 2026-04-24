@@ -68,7 +68,7 @@ export default function WebsiteHome() {
   const heroStyle = {
     height: "100vh", position: "relative", overflow: "hidden",
     background: instellingen?.hero_image_url
-      ? `url(${instellingen.hero_image_url}) center/cover no-repeat`
+      ? `url(${instellingen.hero_image_url}) top center/cover no-repeat`
       : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",
     display: "flex", alignItems: "flex-end",
   };

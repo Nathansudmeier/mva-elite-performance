@@ -39,7 +39,7 @@ export default function WebsiteTeamPage({ teamNaam, teamTitel, accentKleur, comp
   const heroStyle = {
     height: "500px", position: "relative", overflow: "hidden",
     background: (instellingen && instellingen[imageVeld])
-      ? `url(${instellingen[imageVeld]}) center/cover no-repeat`
+      ? `url(${instellingen[imageVeld]}) top center/cover no-repeat`
       : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",
     display: "flex", alignItems: "flex-end",
   };
