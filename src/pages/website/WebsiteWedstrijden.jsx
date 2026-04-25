@@ -25,16 +25,20 @@ export default function WebsiteWedstrijden() {
     });
   }, []);
 
-  // Koppel Match scores aan AgendaItems via match_id of datum+tegenstander
+  // Koppel Match scores aan AgendaItems strikt via match_id, of via datum + team + tegenstander
   const getMatchScore = (w) => {
-    // Probeer via match_id te koppelen
     if (w.match_id) {
       const m = matches.find(m => m.id === w.match_id);
-      if (m && m.score_home != null) return m;
+      if (m && m.score_home != null && m.score_away != null) return m;
+      return null;
     }
-    // Fallback: koppel via datum
-    const m = matches.find(m => m.date === w.date);
-    if (m && m.score_home != null) return m;
+    // Fallback alleen wanneer datum, team én tegenstander overeenkomen
+    const m = matches.find(m =>
+      m.date === w.date &&
+      m.team === w.team &&
+      (m.opponent || "").toLowerCase() === (w.title || "").toLowerCase()
+    );
+    if (m && m.score_home != null && m.score_away != null) return m;
     return null;
   };
 
