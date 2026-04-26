@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { MapPin } from "lucide-react";
+import domtoimage from 'dom-to-image-more';
 
 const DAG_NAMEN = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
 const MAAND_NAMEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
@@ -84,81 +85,62 @@ export default function MatchdayCard({ match, onClose }) {
   const headline = "MATCHDAY";
 
   const downloadPNG = async () => {
-    if (!kaartRef.current) return;
     setIsDownloading(true);
-    const kaart = kaartRef.current;
-    let blobUrls = [];
-
+    
     try {
-      const html2canvasModule = await import("html2canvas");
-      const html2canvas = html2canvasModule.default || html2canvasModule;
-
-      // Stap 1: Laad alle afbeeldingen vooraf als blob URLs (CORS-safe)
-      const alleAfbeeldingen = kaart.querySelectorAll("img");
-      for (const img of alleAfbeeldingen) {
-        if (img.src && !img.src.startsWith("blob:") && !img.src.startsWith("data:")) {
-          try {
-            const response = await fetch(img.src, { mode: "cors", cache: "force-cache" });
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
-            blobUrls.push({ img, originalSrc: img.src, blobUrl });
-            img.src = blobUrl;
-            await new Promise((resolve) => {
-              if (img.complete) resolve();
-              else { img.onload = resolve; img.onerror = resolve; }
-            });
-          } catch (e) {
-            console.warn("Kon afbeelding niet laden:", img.src);
-            blobUrls.push({ img, originalSrc: img.src, blobUrl: null });
-          }
-        }
-      }
-
-      await new Promise(r => setTimeout(r, 100));
-
-      // Genereer canvas op de GESCHAALDE preview (540×960) met scale=2 → 1080×1920
-      // Dit garandeert dat de PNG IDENTIEK is aan de preview
-      const canvas = await html2canvas(kaart, {
-        width: 540,
-        height: 960,
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#10121A",
-        logging: false,
-        imageTimeout: 30000,
-        foreignObjectRendering: false,
-        onclone: (clonedDoc) => {
-          const imgs = clonedDoc.querySelectorAll(".logo-img");
-          imgs.forEach(img => {
-            img.style.mixBlendMode = "screen";
-            img.style.background = "transparent";
-            img.style.backgroundColor = "transparent";
-          });
+      const kaart = kaartRef.current;
+      
+      // Tijdelijk schaling verwijderen
+      kaart.style.transform = 'none';
+      kaart.style.width = '1080px';
+      kaart.style.height = '1920px';
+      
+      // Kleine wachttijd voor render
+      await new Promise(r => setTimeout(r, 200));
+      
+      const blob = await domtoimage.toBlob(kaart, {
+        width: 1080,
+        height: 1920,
+        quality: 1,
+        bgcolor: '#10121A',
+        style: {
+          transform: 'none',
+          transformOrigin: 'top left'
         },
+        filter: (node) => {
+          // Sluit geen enkele node uit
+          return true;
+        }
       });
-
-      // Herstel originele src URLs
-      for (const { img, originalSrc, blobUrl } of blobUrls) {
-        img.src = originalSrc;
-        if (blobUrl) URL.revokeObjectURL(blobUrl);
-      }
-      blobUrls = [];
-
+      
+      // Herstel schaling
+      kaart.style.transform = 'scale(0.5)';
+      kaart.style.width = '';
+      kaart.style.height = '';
+      
       // Download
-      const link = document.createElement("a");
-      const team = match?.team?.replace(/\s+/g, "_") || "team";
-      const datum = match?.date?.split("T")[0] || "datum";
-      link.download = `matchday-${team}-${datum}.png`;
-      link.href = canvas.toDataURL("image/png", 1.0);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const team = match.team
+        ?.replace(/\s+/g, '_') || 'team';
+      const datum = match.date
+        ?.split('T')[0] || 'datum';
+      link.download = 
+        `matchday-${team}-${datum}.png`;
+      link.href = url;
       link.click();
+      
+      // Cleanup
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
+
     } catch (error) {
-      console.error("Download fout:", error);
-      for (const { img, originalSrc, blobUrl } of blobUrls) {
-        img.src = originalSrc;
-        if (blobUrl) URL.revokeObjectURL(blobUrl);
-      }
-      alert("Download mislukt. Probeer een screenshot.");
+      console.error('Download fout:', error);
+      alert(
+        'Download mislukt. ' +
+        'Maak een screenshot van de preview.'
+      );
     } finally {
       setIsDownloading(false);
     }
