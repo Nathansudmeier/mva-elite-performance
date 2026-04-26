@@ -182,6 +182,53 @@ export default function PlayerDetail() {
         </div>
       )}
 
+      {/* Matchday foto - alleen voor trainers */}
+      {isTrainer && (
+        <div className="glass" style={{ padding: "16px", borderRadius: "18px" }}>
+          <p className="t-label" style={{ marginBottom: "4px" }}>Matchday foto (transparante PNG)</p>
+          <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.55)", marginBottom: "12px", lineHeight: 1.4 }}>
+            Upload een vrijstaande PNG zonder achtergrond, 1080×1920px. De speler staat rechtsboven in het frame.
+          </p>
+          <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
+              <input
+                type="text"
+                value={player.matchday_foto_url || ""}
+                placeholder="https://..."
+                onChange={async (e) => {
+                  await base44.entities.Player.update(playerId, { matchday_foto_url: e.target.value });
+                  queryClient.invalidateQueries(["player", playerId]);
+                }}
+                style={{ fontSize: "13px", color: "#1a1a1a", border: "2px solid #1a1a1a", borderRadius: "8px", padding: "8px 12px", width: "100%", background: "#fff", boxSizing: "border-box" }}
+              />
+              <label style={{ cursor: "pointer", padding: "8px 14px", borderRadius: "8px", border: "2px solid #1a1a1a", fontSize: "12px", fontWeight: 700, background: "#fff", display: "inline-block", alignSelf: "flex-start" }}>
+                📁 PNG uploaden
+                <input type="file" accept="image/png,image/*" style={{ display: "none" }} onChange={async (e) => {
+                  const file = e.target.files[0];
+                  if (!file) return;
+                  const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                  await base44.entities.Player.update(playerId, { matchday_foto_url: file_url });
+                  queryClient.invalidateQueries(["player", playerId]);
+                }} />
+              </label>
+            </div>
+            <div style={{
+              width: "120px", height: "200px", background: "#202840",
+              borderRadius: "4px", border: "1px solid rgba(255,255,255,0.1)",
+              overflow: "hidden", flexShrink: 0,
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              {player.matchday_foto_url ? (
+                <img src={player.matchday_foto_url} alt="matchday preview"
+                  style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+              ) : (
+                <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", textAlign: "center", padding: "0 8px" }}>Geen foto</span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* IOP Goals + profielfoto */}
       {(player.iop_goal_1 || player.iop_goal_2 || player.iop_goal_3 || player.photo_url) && (
         <div style={{ display: "flex", gap: "12px", alignItems: "stretch" }}>

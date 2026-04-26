@@ -21,6 +21,7 @@ export default function MatchdayCard({ match, onClose }) {
   const [spelers, setSpelers] = useState([]);
   const [achtergronden, setAchtergronden] = useState([]);
   const [selectedAchtergrond, setSelectedAchtergrond] = useState(null);
+  const [uitgelichteSpeler, setUitgelichteSpeler] = useState(null);
   const [sponsors, setSponsors] = useState([]);
   const [instellingen, setInstellingen] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -53,10 +54,20 @@ export default function MatchdayCard({ match, onClose }) {
     .map(item => {
       const s = spelers.find(p => p.id === item.player_id);
       return {
+        id: item.player_id,
         naam: s?.name || "Onbekend",
         nummer: s?.shirt_number || "",
+        matchday_foto_url: s?.matchday_foto_url || null,
       };
     });
+
+  // Auto-select eerste speler met matchday_foto_url
+  const beschikbareUitgelicht = basisSpelers.filter(s => s.matchday_foto_url);
+  useEffect(() => {
+    if (!uitgelichteSpeler && beschikbareUitgelicht.length > 0) {
+      setUitgelichteSpeler(beschikbareUitgelicht[0]);
+    }
+  }, [beschikbareUitgelicht.length]);
 
   const subIds = match?.substitutes || [];
   const wisselSpelers = subIds.map(id => {
@@ -84,9 +95,20 @@ export default function MatchdayCard({ match, onClose }) {
         height: 1920,
         scale: 1,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: "#10121A",
         logging: false,
+        imageTimeout: 15000,
+        onclone: (clonedDoc) => {
+          const imgs = clonedDoc.querySelectorAll("img");
+          return Promise.all(
+            Array.from(imgs).map(img =>
+              img.complete
+                ? Promise.resolve()
+                : new Promise(resolve => { img.onload = resolve; img.onerror = resolve; })
+            )
+          );
+        },
       });
       node.style.transform = originalTransform;
       const link = document.createElement("a");
@@ -121,28 +143,66 @@ export default function MatchdayCard({ match, onClose }) {
         }}>×</button>
       </div>
 
-      {/* Foto selector */}
-      <div style={{
-        width: "100%", maxWidth: 600, display: "flex", gap: 8,
-        marginBottom: 12, overflowX: "auto", paddingBottom: 4,
-      }}>
-        <button onClick={() => setSelectedAchtergrond(null)} style={{
-          background: "#202840",
-          border: `2px solid ${selectedAchtergrond === null ? "#FF6800" : "rgba(255,255,255,0.1)"}`,
-          width: 60, height: 80, borderRadius: 4, display: "flex", alignItems: "center",
-          justifyContent: "center", fontSize: 10, color: "rgba(255,255,255,0.5)",
-          cursor: "pointer", flexShrink: 0,
-        }}>Geen</button>
-        {achtergronden.map(bg => (
-          <img key={bg.id} src={bg.foto_url} alt={bg.naam || ""}
-            onClick={() => setSelectedAchtergrond(bg)}
-            style={{
-              width: 60, height: 80, objectFit: "cover", borderRadius: 4, cursor: "pointer",
-              border: `2px solid ${selectedAchtergrond?.id === bg.id ? "#FF6800" : "transparent"}`,
-              flexShrink: 0,
-            }} />
-        ))}
+      {/* Achtergrond selector */}
+      <div style={{ width: "100%", maxWidth: 600, marginBottom: 12 }}>
+        <div style={{
+          fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 10,
+          color: "rgba(255,255,255,0.4)", letterSpacing: 2, textTransform: "uppercase",
+          marginBottom: 8,
+        }}>ACHTERGROND</div>
+        <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
+          <button onClick={() => setSelectedAchtergrond(null)} style={{
+            background: "#202840",
+            border: `2px solid ${selectedAchtergrond === null ? "#FF6800" : "rgba(255,255,255,0.1)"}`,
+            width: 60, height: 80, borderRadius: 4, display: "flex", alignItems: "center",
+            justifyContent: "center", fontSize: 10, color: "rgba(255,255,255,0.5)",
+            cursor: "pointer", flexShrink: 0,
+          }}>Geen</button>
+          {achtergronden.map(bg => (
+            <img key={bg.id} src={bg.foto_url} alt={bg.naam || ""}
+              onClick={() => setSelectedAchtergrond(bg)}
+              style={{
+                width: 60, height: 80, objectFit: "cover", borderRadius: 4, cursor: "pointer",
+                border: `2px solid ${selectedAchtergrond?.id === bg.id ? "#FF6800" : "transparent"}`,
+                flexShrink: 0,
+              }} />
+          ))}
+        </div>
       </div>
+
+      {/* Uitgelichte speler selector */}
+      {beschikbareUitgelicht.length > 0 && (
+        <div style={{ width: "100%", maxWidth: 600, marginBottom: 12 }}>
+          <div style={{
+            fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 10,
+            color: "rgba(255,255,255,0.4)", letterSpacing: 2, textTransform: "uppercase",
+            marginBottom: 8,
+          }}>UITGELICHTE SPELER</div>
+          <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
+            <button onClick={() => setUitgelichteSpeler(null)} style={{
+              background: "#202840",
+              border: `2px solid ${uitgelichteSpeler === null ? "#FF6800" : "rgba(255,255,255,0.1)"}`,
+              padding: "6px 12px", borderRadius: 4, fontSize: 12,
+              color: "rgba(255,255,255,0.4)", cursor: "pointer", flexShrink: 0,
+              fontFamily: "'Space Grotesk', sans-serif",
+            }}>Geen uitgelichte speler</button>
+            {beschikbareUitgelicht.map(sp => (
+              <button key={sp.id} onClick={() => setUitgelichteSpeler(sp)} style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "6px 12px", background: "#202840",
+                border: `2px solid ${uitgelichteSpeler?.id === sp.id ? "#FF6800" : "transparent"}`,
+                borderRadius: 4, cursor: "pointer", flexShrink: 0,
+              }}>
+                <img src={sp.matchday_foto_url} alt={sp.naam}
+                  style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover", background: "#10121A" }} />
+                <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, fontWeight: 600, color: "#fff" }}>
+                  {sp.naam.split(" ")[0]}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Kaart preview */}
       <div style={{ width: 540, height: 960, position: "relative", overflow: "hidden", borderRadius: 8 }}>
@@ -153,6 +213,7 @@ export default function MatchdayCard({ match, onClose }) {
           basisSpelers={basisSpelers}
           wisselSpelers={wisselSpelers}
           selectedAchtergrond={selectedAchtergrond}
+          uitgelichteSpeler={uitgelichteSpeler}
           sponsors={sponsors}
           instellingen={instellingen}
         />
@@ -179,7 +240,7 @@ export default function MatchdayCard({ match, onClose }) {
 }
 
 const CardCanvas = React.forwardRef(function CardCanvas(
-  { match, headline, basisSpelers, wisselSpelers, selectedAchtergrond, sponsors, instellingen },
+  { match, headline, basisSpelers, wisselSpelers, selectedAchtergrond, uitgelichteSpeler, sponsors, instellingen },
   ref
 ) {
   const FONT_STACK = "Arial, Helvetica, sans-serif";
@@ -191,7 +252,9 @@ const CardCanvas = React.forwardRef(function CardCanvas(
   const datumTijd = `${formatDateNL(match?.date).toUpperCase()} | ${match?.start_time || ""}`;
   const locatie = homeAway === "Thuis" ? "Sportpark Douwekamp, Opeinde" : "";
 
-  // Splits basis in twee kolommen
+  const hasPlayer = !!uitgelichteSpeler?.matchday_foto_url;
+
+  // Splits basis in twee kolommen (alleen bij geen speler)
   const halfIndex = Math.ceil(basisSpelers.length / 2);
   const colA = basisSpelers.slice(0, halfIndex);
   const colB = basisSpelers.slice(halfIndex);
@@ -199,6 +262,8 @@ const CardCanvas = React.forwardRef(function CardCanvas(
   const wisselNamen = wisselSpelers.map(w => w.naam.split(" ")[0]).join(", ");
 
   const clubLogo = instellingen?.logo_url || null;
+
+  const sectionMaxWidth = hasPlayer ? 580 : "none";
 
   return (
     <div ref={ref} style={{
@@ -219,14 +284,34 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         )}
       </div>
 
-      {/* LAAG 2: Gradient overlay */}
+      {/* LAAG 2: Speler overlay */}
+      {hasPlayer && (
+        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(to right, rgba(10,12,20,0.95) 0%, rgba(10,12,20,0.7) 40%, rgba(10,12,20,0.1) 65%, transparent 80%)",
+            zIndex: 1,
+          }} />
+          <img src={uitgelichteSpeler.matchday_foto_url} alt="" crossOrigin="anonymous"
+            style={{
+              position: "absolute", bottom: 0, right: 0,
+              height: "85%", width: "auto", objectFit: "contain",
+              objectPosition: "bottom right", zIndex: 2,
+            }} />
+        </div>
+      )}
+
+      {/* LAAG 3: Donkere gradient overlay */}
       <div style={{
         position: "absolute", inset: 0,
-        background: "linear-gradient(to bottom, rgba(10,12,20,0.3) 0%, rgba(10,12,20,0.5) 30%, rgba(10,12,20,0.85) 55%, rgba(10,12,20,0.97) 70%, rgba(10,12,20,1) 100%)",
+        background: hasPlayer
+          ? "linear-gradient(to bottom, rgba(10,12,20,0.2) 0%, rgba(10,12,20,0.3) 25%, rgba(10,12,20,0.75) 50%, rgba(10,12,20,0.95) 65%, rgba(10,12,20,1) 75%, rgba(10,12,20,1) 100%)"
+          : "linear-gradient(to bottom, rgba(10,12,20,0.3) 0%, rgba(10,12,20,0.5) 30%, rgba(10,12,20,0.85) 55%, rgba(10,12,20,0.97) 70%, rgba(10,12,20,1) 100%)",
+        zIndex: 3,
       }} />
 
-      {/* LAAG 3: Content */}
-      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column" }}>
+      {/* LAAG 4: Tekstcontent */}
+      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", zIndex: 4 }}>
         {/* SECTIE A: Bovenste balk */}
         <div style={{
           padding: "60px 64px 0", display: "flex",
@@ -254,7 +339,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         <div style={{ flex: 1 }} />
 
         {/* SECTIE B: Headline */}
-        <div style={{ padding: "40px 64px 0" }}>
+        <div style={{ padding: "40px 64px 0", maxWidth: hasPlayer ? 600 : "none" }}>
           <div style={{
             fontFamily: FONT_STACK, fontWeight: 900, fontSize: 180, color: "#fff",
             lineHeight: 0.85, letterSpacing: "-4px",
@@ -264,7 +349,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         </div>
 
         {/* SECTIE C: Datum + tijd + locatie */}
-        <div style={{ padding: "0 64px", marginTop: 24 }}>
+        <div style={{ padding: "0 64px", marginTop: 24, maxWidth: sectionMaxWidth }}>
           <div style={{
             fontSize: 32, fontWeight: 700, color: "#FF6800",
             letterSpacing: "1px", textTransform: "uppercase",
@@ -279,7 +364,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         </div>
 
         {/* SECTIE D: VS blok */}
-        <div style={{ padding: "32px 64px", display: "flex", alignItems: "center", gap: 40 }}>
+        <div style={{ padding: "32px 64px", display: "flex", alignItems: "center", gap: 40, maxWidth: sectionMaxWidth }}>
           {/* MV Artemis kant */}
           <div style={{ display: "flex", alignItems: "center", gap: 16, flex: 1 }}>
             {clubLogo && (
@@ -321,7 +406,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
 
         {/* SECTIE E: Starting XI */}
         {basisSpelers.length > 0 && (
-          <div style={{ padding: "24px 64px" }}>
+          <div style={{ padding: "24px 64px", maxWidth: sectionMaxWidth }}>
             <div style={{
               fontFamily: FONT_STACK, fontWeight: 900, fontSize: 52, color: "#FF6800",
               letterSpacing: "2px", borderBottom: "2px solid #FF6800",
@@ -329,34 +414,55 @@ const CardCanvas = React.forwardRef(function CardCanvas(
             }}>
               STARTING XI
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
-              {[colA, colB].map((col, ci) => (
-                <div key={ci} style={{ display: "flex", flexDirection: "column" }}>
-                  {col.map((sp, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "6px 0" }}>
-                      <div style={{
-                        background: "#FF6800", color: "#fff", fontSize: 22, fontWeight: 700,
-                        width: 44, height: 44, display: "flex", alignItems: "center",
-                        justifyContent: "center", borderRadius: 4, flexShrink: 0,
-                      }}>{sp.nummer || "—"}</div>
-                      <div style={{
-                        fontSize: 28, fontWeight: 700, color: "#fff",
-                        textTransform: "uppercase", letterSpacing: "0.5px",
-                        whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-                      }}>
-                        {sp.naam.split(" ")[0]}
-                      </div>
+            {hasPlayer ? (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 4 }}>
+                {basisSpelers.map((sp, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "4px 0" }}>
+                    <div style={{
+                      background: "#FF6800", color: "#fff", fontSize: 20, fontWeight: 700,
+                      width: 38, height: 38, display: "flex", alignItems: "center",
+                      justifyContent: "center", borderRadius: 4, flexShrink: 0,
+                    }}>{sp.nummer || "—"}</div>
+                    <div style={{
+                      fontSize: 26, fontWeight: 700, color: "#fff",
+                      textTransform: "uppercase", letterSpacing: "0.5px",
+                      whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                    }}>
+                      {sp.naam.split(" ")[0]}
                     </div>
-                  ))}
-                </div>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
+                {[colA, colB].map((col, ci) => (
+                  <div key={ci} style={{ display: "flex", flexDirection: "column" }}>
+                    {col.map((sp, i) => (
+                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "6px 0" }}>
+                        <div style={{
+                          background: "#FF6800", color: "#fff", fontSize: 22, fontWeight: 700,
+                          width: 44, height: 44, display: "flex", alignItems: "center",
+                          justifyContent: "center", borderRadius: 4, flexShrink: 0,
+                        }}>{sp.nummer || "—"}</div>
+                        <div style={{
+                          fontSize: 28, fontWeight: 700, color: "#fff",
+                          textTransform: "uppercase", letterSpacing: "0.5px",
+                          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                        }}>
+                          {sp.naam.split(" ")[0]}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {/* SECTIE F: Substitutions */}
         {wisselSpelers.length > 0 && (
-          <div style={{ padding: "16px 64px 120px" }}>
+          <div style={{ padding: "16px 64px 120px", maxWidth: sectionMaxWidth }}>
             <div style={{
               background: "#1B2A5E", display: "inline-block",
               padding: "6px 20px", borderRadius: 3,

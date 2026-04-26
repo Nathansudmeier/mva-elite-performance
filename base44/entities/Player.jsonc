@@ -10,6 +10,10 @@
       "type": "string",
       "description": "Profile photo URL"
     },
+    "matchday_foto_url": {
+      "type": "string",
+      "description": "Transparante PNG voor matchday kaarten (1080\u00d71920px)"
+    },
     "position": {
       "type": "string",
       "enum": [
