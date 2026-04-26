@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
 import { applyWebsiteMeta } from "@/lib/websiteMeta";
 import SponsorBar from "@/components/website/SponsorBar.jsx";
 import { InstagramLogo, TiktokLogo, FacebookLogo } from "@phosphor-icons/react";
 import NieuwsbriefAanmeld from "@/components/website/NieuwsbriefAanmeld";
+import { useWebsiteData } from "@/hooks/useWebsiteData";
 
 const navLinks = [
   { label: "Homepage", href: "/" },
@@ -30,8 +30,9 @@ const tempBadgeStyle = {
 export default function WebsiteLayout({ children }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [inst, setInst] = useState(null);
-  const [liveMatches, setLiveMatches] = useState([]);
+  const { data } = useWebsiteData();
+  const inst = data?.instellingen || null;
+  const liveMatches = data?.liveMatches || [];
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -42,19 +43,7 @@ export default function WebsiteLayout({ children }) {
     document.body.style.margin = "0";
     document.body.style.padding = "0";
 
-    const fetchData = () => {
-      base44.functions.invoke('getWebsiteData', {}).then(res => {
-        if (res?.data?.instellingen) setInst(res.data.instellingen);
-        if (res?.data?.liveMatches) setLiveMatches(res.data.liveMatches);
-      });
-    };
-
-    fetchData();
-    // Poll every 30 seconds to check for live matches
-    const interval = setInterval(fetchData, 30000);
-
     return () => {
-      clearInterval(interval);
       document.body.style.background = "";
     };
   }, []);

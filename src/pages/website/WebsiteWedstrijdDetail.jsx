@@ -1,32 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
+import { useWebsiteData } from "@/hooks/useWebsiteData";
 
 export default function WebsiteWedstrijdDetail() {
   const { id } = useParams();
-  const [wedstrijd, setWedstrijd] = useState(null);
-  const [match, setMatch] = useState(null);
-  const [players, setPlayers] = useState([]);
-  const [inst, setInst] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading: loading } = useWebsiteData();
 
-  useEffect(() => {
-    base44.functions.invoke("getWebsiteData", {}).then((res) => {
-      const data = res?.data || {};
-      setInst(data.instellingen || null);
-      setPlayers(data.players || []);
-      const w = (data.wedstrijden || []).find((x) => x.id === id);
-      setWedstrijd(w || null);
-      if (w?.match_id) {
-        const m = (data.matches || []).find((x) => x.id === w.match_id);
-        setMatch(m || null);
-      }
-      setLoading(false);
-    });
-  }, [id]);
+  const players = data?.players || [];
+  const wedstrijd = (data?.wedstrijden || []).find((x) => x.id === id) || null;
+  const match = wedstrijd?.match_id
+    ? (data?.matches || []).find((x) => x.id === wedstrijd.match_id) || null
+    : null;
 
   if (loading) {
     return (
