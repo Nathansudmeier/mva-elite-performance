@@ -11,6 +11,8 @@ export default function NieuwsbriefTab() {
   const [filter, setFilter] = useState("alle");
   const [versturen, setVersturen] = useState(false);
   const [resultaat, setResultaat] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [importResultaat, setImportResultaat] = useState(null);
 
   useEffect(() => {
     base44.entities.Abonnee.list("-aangemeld_op").then(list => setAbonnees(list || []));
@@ -56,6 +58,89 @@ export default function NieuwsbriefTab() {
     setAbonnees(prev => prev.filter(a => a.id !== id));
   };
 
+  const handleAddAbonnee = async (data) => {
+    const email = data.email.trim().toLowerCase();
+    const bestaand = abonnees.find(a => a.email === email);
+    if (bestaand) {
+      alert("Deze e-mail is al aangemeld.");
+      return;
+    }
+
+    if (data.bevestigd) {
+      // Direct toevoegen zonder bevestigingsmail
+      const created = await base44.entities.Abonnee.create({
+        email,
+        naam: data.naam || "",
+        team_voorkeur: data.team_voorkeur || "Alle",
+        actief: true,
+        bevestigd: true,
+        bevestigingscode: crypto.randomUUID(),
+        aangemeld_op: new Date().toISOString(),
+      });
+      setAbonnees(prev => [created, ...prev]);
+    } else {
+      // Via aanmeldfunctie zodat bevestigingsmail wordt verstuurd
+      await base44.functions.invoke("nieuwsbriefAanmelden", {
+        email,
+        naam: data.naam || "",
+        team_voorkeur: data.team_voorkeur || "Alle",
+      });
+      const verse = await base44.entities.Abonnee.list("-aangemeld_op");
+      setAbonnees(verse || []);
+    }
+
+    setShowAddModal(false);
+    setResultaat({ status: "ok", message: "Abonnee toegevoegd." });
+  };
+
+  const handleImportCSV = async (file) => {
+    if (!file) return;
+    const text = await file.text();
+    const lines = text.split(/\r?\n/).filter(l => l.trim());
+    if (lines.length < 2) {
+      alert("Lege of ongeldige CSV.");
+      return;
+    }
+    const headers = lines[0].split(",").map(h => h.trim().toLowerCase());
+    const emailIdx = headers.indexOf("email");
+    const naamIdx = headers.indexOf("naam");
+    const teamIdx = headers.indexOf("team_voorkeur");
+    if (emailIdx === -1) {
+      alert("CSV moet een 'email' kolom bevatten.");
+      return;
+    }
+
+    const bestaandeEmails = new Set(abonnees.map(a => a.email.toLowerCase()));
+    let toegevoegd = 0;
+    let alBestaand = 0;
+    const nieuwe = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const cells = lines[i].split(",").map(c => c.trim().replace(/^"|"$/g, ""));
+      const email = (cells[emailIdx] || "").toLowerCase();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) continue;
+      if (bestaandeEmails.has(email)) {
+        alBestaand++;
+        continue;
+      }
+      const created = await base44.entities.Abonnee.create({
+        email,
+        naam: naamIdx !== -1 ? (cells[naamIdx] || "") : "",
+        team_voorkeur: teamIdx !== -1 && cells[teamIdx] ? cells[teamIdx] : "Alle",
+        actief: true,
+        bevestigd: true,
+        bevestigingscode: crypto.randomUUID(),
+        aangemeld_op: new Date().toISOString(),
+      });
+      nieuwe.push(created);
+      bestaandeEmails.add(email);
+      toegevoegd++;
+    }
+
+    setAbonnees(prev => [...nieuwe, ...prev]);
+    setImportResultaat({ toegevoegd, alBestaand });
+  };
+
   const StatBlok = ({ label, waarde, kleur }) => (
     <div className="glass" style={{ padding: "16px 20px", flex: 1, minWidth: "160px" }}>
       <div style={sectionLabel}>{label}</div>
@@ -78,10 +163,32 @@ export default function NieuwsbriefTab() {
           ))}
         </div>
         <button className="btn-secondary" onClick={exportCSV}>↓ CSV exporteren</button>
+        <button className="btn-secondary" onClick={() => setShowAddModal(true)}>+ Abonnee toevoegen</button>
+        <label
+          className="btn-secondary"
+          style={{ cursor: "pointer" }}
+          title="CSV met kolommen:&#10;email,naam,team_voorkeur&#10;jan@email.nl,Jan de Vries,MO17&#10;petra@email.nl,Petra Smit,Alle"
+        >
+          ↑ Importeer CSV
+          <input type="file" accept=".csv,text/csv" style={{ display: "none" }} onChange={async (e) => {
+            await handleImportCSV(e.target.files[0]);
+            e.target.value = "";
+          }} />
+        </label>
         <button className="btn-primary" onClick={handleVerstuur} disabled={versturen} style={{ width: "auto" }}>
           {versturen ? "Versturen..." : "Verstuur nieuwsbrief nu"}
         </button>
       </div>
+
+      {importResultaat && (
+        <div style={{ marginBottom: "16px", padding: "12px 16px", borderRadius: "8px", background: "rgba(8,208,104,0.1)", color: "#08D068", fontSize: "13px", fontWeight: 600 }}>
+          ✓ {importResultaat.toegevoegd} abonnees toegevoegd, {importResultaat.alBestaand} al bestaand.
+        </div>
+      )}
+
+      {showAddModal && (
+        <AddAbonneeModal onSave={handleAddAbonnee} onCancel={() => setShowAddModal(false)} />
+      )}
 
       {resultaat && (
         <div style={{ marginBottom: "16px", padding: "12px 16px", borderRadius: "8px", background: resultaat.status === "ok" ? "rgba(8,208,104,0.1)" : "rgba(255,61,168,0.1)", color: resultaat.status === "ok" ? "#08D068" : "#FF3DA8", fontSize: "13px", fontWeight: 600 }}>
@@ -116,6 +223,67 @@ export default function NieuwsbriefTab() {
         </table>
         {filtered.length === 0 && <div style={{ padding: "32px", textAlign: "center", color: "rgba(26,26,26,0.35)", fontSize: "13px" }}>Geen abonnees gevonden.</div>}
       </div>
+    </div>
+  );
+}
+
+function AddAbonneeModal({ onSave, onCancel }) {
+  const [data, setData] = useState({ naam: "", email: "", team_voorkeur: "Alle", bevestigd: true });
+  const [bezig, setBezig] = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!data.email) return;
+    setBezig(true);
+    await onSave(data);
+    setBezig(false);
+  };
+
+  const inputCls = {
+    width: "100%", padding: "8px 12px", borderRadius: "8px",
+    border: "1.5px solid rgba(26,26,26,0.15)", fontSize: "13px",
+    background: "#fff", boxSizing: "border-box",
+  };
+  const labelCls = {
+    fontSize: "11px", fontWeight: 800, textTransform: "uppercase",
+    letterSpacing: "1px", color: "rgba(26,26,26,0.45)", marginBottom: "6px",
+  };
+
+  return (
+    <div onClick={onCancel} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: "20px" }}>
+      <form onClick={e => e.stopPropagation()} onSubmit={submit} style={{ background: "#fff", borderRadius: "16px", padding: "24px", maxWidth: "440px", width: "100%", display: "flex", flexDirection: "column", gap: "12px" }}>
+        <div style={{ fontSize: "18px", fontWeight: 900, marginBottom: "4px" }}>Abonnee toevoegen</div>
+
+        <div>
+          <div style={labelCls}>Naam</div>
+          <input style={inputCls} value={data.naam} onChange={e => setData({ ...data, naam: e.target.value })} placeholder="Optioneel" />
+        </div>
+
+        <div>
+          <div style={labelCls}>E-mail *</div>
+          <input type="email" required style={inputCls} value={data.email} onChange={e => setData({ ...data, email: e.target.value })} placeholder="naam@email.nl" />
+        </div>
+
+        <div>
+          <div style={labelCls}>Team voorkeur</div>
+          <select style={{ ...inputCls, appearance: "auto" }} value={data.team_voorkeur} onChange={e => setData({ ...data, team_voorkeur: e.target.value })}>
+            {["Alle", "MO15", "MO17", "MO20", "Vrouwen 1"].map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+
+        <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", padding: "10px 12px", background: "rgba(26,26,26,0.04)", borderRadius: "8px" }} title="Uit = abonnee ontvangt eerst een bevestigingsmail">
+          <input type="checkbox" checked={data.bevestigd} onChange={e => setData({ ...data, bevestigd: e.target.checked })} style={{ cursor: "pointer" }} />
+          <div>
+            <div style={{ fontSize: "13px", fontWeight: 700 }}>Bevestigd</div>
+            <div style={{ fontSize: "11px", color: "rgba(26,26,26,0.5)" }}>Uit = abonnee ontvangt eerst een bevestigingsmail</div>
+          </div>
+        </label>
+
+        <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+          <button type="submit" className="btn-primary" disabled={bezig}>{bezig ? "Bezig..." : "Toevoegen"}</button>
+          <button type="button" onClick={onCancel} style={{ padding: "8px 16px", borderRadius: "10px", border: "2px solid #1a1a1a", background: "#fff", color: "#1a1a1a", fontWeight: 700, cursor: "pointer" }}>Annuleren</button>
+        </div>
+      </form>
     </div>
   );
 }
