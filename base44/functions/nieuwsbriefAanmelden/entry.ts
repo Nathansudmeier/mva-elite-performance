@@ -53,39 +53,152 @@ Deno.serve(async (req) => {
   }
 });
 
-async function sendBevestigingsmail(base44, email, code) {
+async function sendBevestigingsmail(base44, email, bevestigingscode) {
   const html = `<!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
 <meta charset="UTF-8">
-<style>
-  body { margin: 0; padding: 0; background: #10121A; font-family: Arial, sans-serif; }
-  .container { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
-  .logo { font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: 2px; margin-bottom: 32px; }
-  .logo span { color: #FF6800; }
-  .card { background: #1B2A5E; border-radius: 8px; padding: 32px; margin-bottom: 24px; }
-  h1 { color: #ffffff; font-size: 32px; margin: 0 0 12px; line-height: 1.1; }
-  p { color: rgba(255,255,255,0.65); font-size: 15px; line-height: 1.6; margin: 0 0 20px; }
-  .btn { display: inline-block; background: #FF6800; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 4px; font-weight: 700; font-size: 15px; }
-  .footer { color: rgba(255,255,255,0.25); font-size: 12px; text-align: center; margin-top: 32px; line-height: 1.6; }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bevestig je aanmelding</title>
 </head>
-<body>
-<div class="container">
-  <div class="logo">MV<span>/</span>ARTEMIS</div>
-  <div class="card">
-    <h1>Bevestig je aanmelding.</h1>
-    <p>Je hebt je aangemeld voor de wekelijkse nieuwsbrief van MV Artemis. Klik op de knop hieronder om je aanmelding te bevestigen.</p>
-    <a href="https://mv-artemis.nl/nieuwsbrief/bevestig?code=${code}" class="btn">
-      Bevestig aanmelding →
-    </a>
-  </div>
-  <div class="footer">
-    MV Artemis · Meiden Vereniging Artemis<br>
-    Sportpark Douwekamp, Opeinde<br>
-    info@mv-artemis.nl
-  </div>
-</div>
+<body style="margin:0;padding:0;background:#10121A;font-family:Arial,Helvetica,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#10121A;padding:40px 20px;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+
+  <!-- HEADER -->
+  <tr>
+    <td style="background:#1B2A5E;padding:24px 32px;border-radius:8px 8px 0 0;">
+      <span style="font-size:24px;font-weight:700;color:#ffffff;letter-spacing:2px;">
+        MV<span style="color:#FF6800;">/</span>ARTEMIS
+      </span>
+    </td>
+  </tr>
+
+  <!-- ORANJE ACCENT LIJN -->
+  <tr>
+    <td style="background:#FF6800;height:3px;font-size:0;line-height:0;">&nbsp;</td>
+  </tr>
+
+  <!-- HERO SECTIE -->
+  <tr>
+    <td style="background:#151D35;padding:40px 32px;">
+      <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;">
+        NIEUWSBRIEF
+      </p>
+      <h1 style="margin:0 0 16px;font-size:36px;font-weight:700;color:#ffffff;line-height:1.1;">
+        Bevestig je<br>aanmelding.
+      </h1>
+      <p style="margin:0;font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;">
+        Je hebt je aangemeld voor de wekelijkse nieuwsbrief van MV Artemis. Elke vrijdag ontvang je het laatste nieuws, uitslagen en aankondigingen van alle teams.
+      </p>
+    </td>
+  </tr>
+
+  <!-- WAT JE KUNT VERWACHTEN -->
+  <tr>
+    <td style="background:#10121A;padding:28px 32px;">
+      <p style="margin:0 0 16px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);">
+        WAT JE KUNT VERWACHTEN
+      </p>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td width="33%" style="padding:0 8px 0 0;vertical-align:top;">
+            <table width="100%" cellpadding="12" cellspacing="0" border="0" style="background:#202840;border-radius:6px;">
+              <tr><td>
+                <p style="margin:0 0 6px;font-size:20px;">⚽</p>
+                <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#ffffff;">Uitslagen</p>
+                <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;">
+                  Alle resultaten van de week
+                </p>
+              </td></tr>
+            </table>
+          </td>
+          <td width="33%" style="padding:0 4px;vertical-align:top;">
+            <table width="100%" cellpadding="12" cellspacing="0" border="0" style="background:#202840;border-radius:6px;">
+              <tr><td>
+                <p style="margin:0 0 6px;font-size:20px;">📰</p>
+                <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#ffffff;">Nieuws</p>
+                <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;">
+                  Laatste artikelen en updates
+                </p>
+              </td></tr>
+            </table>
+          </td>
+          <td width="33%" style="padding:0 0 0 8px;vertical-align:top;">
+            <table width="100%" cellpadding="12" cellspacing="0" border="0" style="background:#202840;border-radius:6px;">
+              <tr><td>
+                <p style="margin:0 0 6px;font-size:20px;">📅</p>
+                <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#ffffff;">Programma</p>
+                <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;">
+                  Komende wedstrijden
+                </p>
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- CTA KNOP -->
+  <tr>
+    <td style="background:#FF6800;padding:36px 32px;text-align:center;border-radius:0;">
+      <h2 style="margin:0 0 8px;font-size:28px;font-weight:700;color:#ffffff;line-height:1;">
+        Klik hieronder om je<br>aanmelding te bevestigen.
+      </h2>
+      <p style="margin:0 0 24px;font-size:14px;color:rgba(255,255,255,0.75);">
+        Na bevestiging ontvang je elke vrijdag om 18:00 de nieuwsbrief.
+      </p>
+      <a href="https://mv-artemis.nl/nieuwsbrief/bevestig?code=${bevestigingscode}"
+        style="display:inline-block;background:#ffffff;color:#FF6800;text-decoration:none;padding:16px 36px;border-radius:4px;font-weight:700;font-size:16px;letter-spacing:0.5px;">
+        Bevestig aanmelding →
+      </a>
+    </td>
+  </tr>
+
+  <!-- QUOTE -->
+  <tr>
+    <td style="background:#0F1630;padding:28px 32px;text-align:center;">
+      <p style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:1px;">
+        Jouw Ambitie.
+        <span style="color:#FF6800;">Ons Doel.</span>
+      </p>
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td style="background:#1B2A5E;padding:20px 32px;border-radius:0 0 8px 8px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td>
+            <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#ffffff;">
+              MV Artemis
+            </p>
+            <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;">
+              Meiden Vereniging Artemis<br>
+              Sportpark Douwekamp, Opeinde<br>
+              info@mv-artemis.nl
+            </p>
+          </td>
+          <td align="right" valign="top">
+            <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.25);">
+              mv-artemis.nl
+            </p>
+          </td>
+        </tr>
+      </table>
+      <p style="margin:16px 0 0;font-size:11px;color:rgba(255,255,255,0.2);border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;">
+        Je ontvangt deze mail omdat je je hebt aangemeld via mv-artemis.nl. Niet aangemeld? Dan kun je deze mail negeren.
+      </p>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
 </body>
 </html>`;
 
