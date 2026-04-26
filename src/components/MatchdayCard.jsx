@@ -86,41 +86,96 @@ export default function MatchdayCard({ match, onClose }) {
   const downloadPNG = async () => {
     if (!kaartRef.current) return;
     setIsDownloading(true);
-    const node = kaartRef.current;
-    const originalTransform = node.style.transform;
+    const kaart = kaartRef.current;
+    const originalTransform = kaart.style.transform;
+    let blobUrls = [];
+
     try {
       const html2canvasModule = await import("html2canvas");
       const html2canvas = html2canvasModule.default || html2canvasModule;
-      node.style.transform = "none";
-      const canvas = await html2canvas(node, {
+
+      // Stap 1: Laad alle afbeeldingen vooraf als blob URLs (CORS-safe)
+      const alleAfbeeldingen = kaart.querySelectorAll("img");
+      for (const img of alleAfbeeldingen) {
+        if (img.src && !img.src.startsWith("blob:") && !img.src.startsWith("data:")) {
+          try {
+            const response = await fetch(img.src, { mode: "cors", cache: "force-cache" });
+            const blob = await response.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            blobUrls.push({ img, originalSrc: img.src, blobUrl });
+            img.src = blobUrl;
+            await new Promise((resolve) => {
+              if (img.complete) resolve();
+              else { img.onload = resolve; img.onerror = resolve; }
+            });
+          } catch (e) {
+            console.warn("Kon afbeelding niet laden:", img.src);
+            blobUrls.push({ img, originalSrc: img.src, blobUrl: null });
+          }
+        }
+      }
+
+      // Stap 2: Verwijder schaling
+      kaart.style.transform = "none";
+      await new Promise(r => setTimeout(r, 100));
+
+      // Stap 3: Genereer canvas
+      const canvas = await html2canvas(kaart, {
         width: 1080,
         height: 1920,
         scale: 1,
         useCORS: true,
-        allowTaint: false,
+        allowTaint: true,
         backgroundColor: "#10121A",
         logging: false,
-        imageTimeout: 15000,
-        onclone: (clonedDoc) => {
-          const imgs = clonedDoc.querySelectorAll("img");
-          return Promise.all(
-            Array.from(imgs).map(img =>
-              img.complete
-                ? Promise.resolve()
-                : new Promise(resolve => { img.onload = resolve; img.onerror = resolve; })
-            )
-          );
-        },
+        imageTimeout: 30000,
+        foreignObjectRendering: false,
       });
-      node.style.transform = originalTransform;
+
+      // Stap 4: Herstel schaling
+      kaart.style.transform = originalTransform;
+
+      // Stap 5: Herstel originele src URLs
+      for (const { img, originalSrc, blobUrl } of blobUrls) {
+        img.src = originalSrc;
+        if (blobUrl) URL.revokeObjectURL(blobUrl);
+      }
+      blobUrls = [];
+
+      // Stap 6: Download
       const link = document.createElement("a");
-      link.download = `matchday-${match.team || "team"}-${match.date || "wedstrijd"}.png`;
+      const team = match?.team?.replace(/\s+/g, "_") || "team";
+      const datum = match?.date?.split("T")[0] || "datum";
+      link.download = `matchday-${team}-${datum}.png`;
       link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
     } catch (error) {
-      console.error("Download mislukt:", error);
-      alert("Download mislukt. Probeer opnieuw.");
-      node.style.transform = originalTransform;
+      console.error("Download fout:", error);
+      // Herstel state bij fout
+      kaart.style.transform = originalTransform;
+      for (const { img, originalSrc, blobUrl } of blobUrls) {
+        img.src = originalSrc;
+        if (blobUrl) URL.revokeObjectURL(blobUrl);
+      }
+
+      // Fallback: probeer zonder CORS preload
+      try {
+        const html2canvasModule = await import("html2canvas");
+        const html2canvas = html2canvasModule.default || html2canvasModule;
+        kaart.style.transform = "none";
+        const canvas = await html2canvas(kaart, {
+          width: 1080, height: 1920, scale: 1,
+          useCORS: true, allowTaint: true, backgroundColor: "#10121A",
+        });
+        kaart.style.transform = originalTransform;
+        const link = document.createElement("a");
+        link.download = "matchday-card.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      } catch (fallbackError) {
+        console.error("Fallback ook mislukt:", fallbackError);
+        alert("Download mislukt. Probeer een screenshot.");
+      }
     } finally {
       setIsDownloading(false);
     }
@@ -224,12 +279,14 @@ export default function MatchdayCard({ match, onClose }) {
       {/* Acties */}
       <div style={{ width: "100%", maxWidth: 540, display: "flex", gap: 12, marginTop: 16 }}>
         <button onClick={downloadPNG} disabled={isDownloading} style={{
-          flex: 1, background: "#FF6800", color: "#fff",
+          flex: 1,
+          background: isDownloading ? "rgba(255,104,0,0.6)" : "#FF6800",
+          color: "#fff",
           fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15,
-          padding: 14, border: "none", borderRadius: 4, cursor: isDownloading ? "wait" : "pointer",
-          opacity: isDownloading ? 0.7 : 1,
+          padding: 14, border: "none", borderRadius: 4,
+          cursor: isDownloading ? "not-allowed" : "pointer",
         }}>
-          {isDownloading ? "Bezig met genereren..." : "↓ Download PNG (1080×1920)"}
+          {isDownloading ? "⏳ Genereren... even geduld" : "↓ Download PNG (1080×1920)"}
         </button>
         <button onClick={onClose} style={{
           background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)",
@@ -280,18 +337,21 @@ const CardCanvas = React.forwardRef(function CardCanvas(
       fontFamily: FONT_STACK, background: "#10121A",
       transform: "scale(0.5)", transformOrigin: "top left",
     }}>
-      {/* LAAG 1: Achtergrond */}
-      <div style={{ position: "absolute", inset: 0 }}>
-        {selectedAchtergrond?.foto_url ? (
-          <img src={selectedAchtergrond.foto_url} alt="" crossOrigin="anonymous"
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
-        ) : (
-          <div style={{
-            width: "100%", height: "100%",
-            background: "linear-gradient(160deg, #1B2A5E 0%, #0F1630 60%, #FF6800 200%)",
-          }} />
-        )}
-      </div>
+      {/* LAAG 1: Achtergrond (CSS background-image voor betere html2canvas support) */}
+      {selectedAchtergrond?.foto_url ? (
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: `url(${selectedAchtergrond.foto_url})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center top",
+          backgroundRepeat: "no-repeat",
+        }} />
+      ) : (
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(160deg, #1B2A5E 0%, #0F1630 60%, #FF6800 200%)",
+        }} />
+      )}
 
       {/* LAAG 2: Speler overlay */}
       {hasPlayer && (
