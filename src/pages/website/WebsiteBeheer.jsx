@@ -720,6 +720,7 @@ function UitgelichtForm({ wedstrijd, onSave, onCancel }) {
     tegenstander: "",
     tegenstander_logo_url: "",
     achtergrond_url: "",
+    matchday_poster_url: "",
     actief: true,
     volgorde: 1,
   });
@@ -772,6 +773,23 @@ function UitgelichtForm({ wedstrijd, onSave, onCancel }) {
         <input style={inputCls} value={data.achtergrond_url || ""} onChange={e => setData({ ...data, achtergrond_url: e.target.value })} placeholder="https://..." />
         <div style={{ fontSize: "11px", color: "rgba(26,26,26,0.5)", marginTop: "4px" }}>Tip: gebruik een speelsterfoto voor maximaal effect.</div>
         {data.achtergrond_url && <img src={data.achtergrond_url} alt="achtergrond preview" style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "6px", marginTop: "8px" }} />}
+      </div>
+      <div>
+        <div style={sectionLabel}>Matchday poster URL</div>
+        <input style={inputCls} value={data.matchday_poster_url || ""} onChange={e => setData({ ...data, matchday_poster_url: e.target.value })} placeholder="https://..." />
+        <div style={{ marginTop: "6px", display: "flex", alignItems: "center", gap: "10px" }}>
+          <label style={{ cursor: "pointer", padding: "6px 14px", borderRadius: "8px", border: "1.5px solid #1a1a1a", fontSize: "12px", fontWeight: 700, background: "#fff", display: "inline-block" }}>
+            📁 Poster uploaden
+            <input type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
+              const file = e.target.files[0];
+              if (!file) return;
+              const { file_url } = await base44.integrations.Core.UploadFile({ file });
+              setData(prev => ({ ...prev, matchday_poster_url: file_url }));
+            }} />
+          </label>
+        </div>
+        <div style={{ fontSize: "11px", color: "rgba(26,26,26,0.5)", marginTop: "6px" }}>Optioneel. Wanneer ingevuld, wordt deze poster getoond in plaats van de standaard layout. Aanbevolen: portret-formaat (4:5).</div>
+        {data.matchday_poster_url && <img src={data.matchday_poster_url} alt="poster preview" style={{ maxWidth: "240px", borderRadius: "6px", marginTop: "8px", display: "block" }} />}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", alignItems: "center" }}>
         <div>

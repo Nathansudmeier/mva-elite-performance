@@ -45,6 +45,10 @@
       "type": "string",
       "description": "Optionele achtergrondfoto (speelster/sfeer)"
     },
+    "matchday_poster_url": {
+      "type": "string",
+      "description": "Optionele matchday poster afbeelding (volledige poster, vervangt standaard layout)"
+    },
     "actief": {
       "type": "boolean",
       "default": true,

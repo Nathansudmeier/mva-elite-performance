@@ -70,7 +70,7 @@ function WedstrijdKaart({ w, compact = false }) {
           <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "20px", color: "#FF6800", opacity: 0.8 }}>VS</span>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             {w.tegenstander_logo_url && (
-              <img src={w.tegenstander_logo_url} alt={w.tegenstander} style={{ width: "32px", height: "32px", objectFit: "contain", filter: "brightness(0) invert(1) opacity(0.7)" }} />
+              <img src={w.tegenstander_logo_url} alt={w.tegenstander} style={{ width: "32px", height: "32px", objectFit: "contain" }} />
             )}
             <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: teamNaamSize, color: "rgba(255,255,255,0.7)" }}>{w.tegenstander}</span>
           </div>
@@ -113,6 +113,17 @@ export default function UitgelichtSection({ items: itemsProp }) {
   if (!items || items.length === 0) return null;
 
   if (items.length === 1) {
+    const w = items[0];
+    if (w.matchday_poster_url) {
+      return (
+        <section style={{ background: "#08090D", padding: 0, overflow: "hidden", display: "flex", justifyContent: "center" }}>
+          <style>{`
+            .uitgelicht-poster { max-width: 720px; width: 100%; display: block; }
+          `}</style>
+          <img src={w.matchday_poster_url} alt={`${w.titel} – matchday poster`} className="uitgelicht-poster" />
+        </section>
+      );
+    }
     return (
       <section style={{ background: "#08090D", padding: 0, overflow: "hidden" }}>
         <style>{`
@@ -120,7 +131,7 @@ export default function UitgelichtSection({ items: itemsProp }) {
           @media (max-width: 767px) { .uitgelicht-hero { height: 360px; } }
         `}</style>
         <div className="uitgelicht-hero">
-          <WedstrijdKaart w={items[0]} />
+          <WedstrijdKaart w={w} />
         </div>
       </section>
     );
@@ -131,7 +142,11 @@ export default function UitgelichtSection({ items: itemsProp }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1px", background: "#08090D" }}>
         {items.map(w => (
           <div key={w.id} style={{ height: "280px", background: "#08090D" }}>
-            <WedstrijdKaart w={w} compact />
+            {w.matchday_poster_url ? (
+              <img src={w.matchday_poster_url} alt={`${w.titel} – matchday poster`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            ) : (
+              <WedstrijdKaart w={w} compact />
+            )}
           </div>
         ))}
       </div>
