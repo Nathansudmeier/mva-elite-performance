@@ -69,7 +69,8 @@ export default function MatchdayCard({ match, onClose }) {
     }
   }, [beschikbareUitgelicht.length]);
 
-  const subIds = match?.substitutes || [];
+  const basisIds = new Set(basisSpelers.map(b => b.id));
+  const subIds = (match?.substitutes || []).filter(id => !basisIds.has(id));
   const wisselSpelers = subIds.map(id => {
     const s = spelers.find(p => p.id === id);
     return {
@@ -385,7 +386,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
           <div style={{ display: "flex", alignItems: "center", gap: 16, flex: 1 }}>
             {opponentLogo ? (
               <img src={opponentLogo} alt="" crossOrigin="anonymous"
-                style={{ width: 100, height: 100, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+                style={{ width: 100, height: 100, objectFit: "contain" }} />
             ) : (
               <div style={{
                 width: 100, height: 100, borderRadius: "50%", background: "#1B2A5E",
