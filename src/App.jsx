@@ -17,6 +17,7 @@ import WebsiteWedstrijdDetail from './pages/website/WebsiteWedstrijdDetail';
 import WebsiteDeClub from './pages/website/WebsiteDeClub';
 import WebsiteProeftraining from './pages/website/WebsiteProeftraining';
 import WebsiteContact from './pages/website/WebsiteContact';
+import WebsitePrivacy from './pages/website/WebsitePrivacy';
 import WebsiteNieuws from './pages/website/WebsiteNieuws';
 import WebsiteNieuwsDetail from './pages/website/WebsiteNieuwsDetail';
 import WebsiteBeheer from './pages/website/WebsiteBeheer';
@@ -180,6 +181,7 @@ const WebsiteApp = () => (
         <Route path="/de-club" element={<WebsiteDeClub />} />
         <Route path="/proeftraining" element={<WebsiteProeftraining />} />
         <Route path="/contact" element={<WebsiteContact />} />
+        <Route path="/privacy" element={<WebsitePrivacy />} />
         <Route path="/live/:matchId" element={<LiveMatchViewer />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

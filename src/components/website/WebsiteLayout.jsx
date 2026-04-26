@@ -149,6 +149,11 @@ export default function WebsiteLayout({ children }) {
         </div>
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "24px", paddingTop: "16px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", maxWidth: "1200px", margin: "24px auto 0" }}>
           <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)" }}>© 2025 MV Artemis · Meiden Vereniging Artemis</span>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Link to="/privacy" style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)", textDecoration: "none", fontFamily: "'Space Grotesk', sans-serif" }}>Privacyverklaring</Link>
+            <span style={{ color: "rgba(255,255,255,0.15)", margin: "0 8px" }}>·</span>
+            <Link to="/contact" style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)", textDecoration: "none", fontFamily: "'Space Grotesk', sans-serif" }}>Contact</Link>
+          </div>
           {kvk && <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)" }}>KVK: {kvk}</span>}
         </div>
       </footer>

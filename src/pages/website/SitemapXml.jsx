@@ -80,6 +80,12 @@ export default function SitemapXml() {
         changefreq: 'monthly',
         lastmod: vandaag
       },
+      {
+        url: '/privacy',
+        priority: '0.3',
+        changefreq: 'yearly',
+        lastmod: vandaag
+      },
     ];
 
     let nieuwsItems = [];
