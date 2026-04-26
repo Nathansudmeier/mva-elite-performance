@@ -79,7 +79,7 @@ export default function MatchdayCard({ match, onClose }) {
   }).filter(w => w.naam !== "Onbekend");
 
   const homeAway = match?.home_away || "Thuis";
-  const headline = homeAway === "Uit" ? "OP PAD" : "MATCHDAY";
+  const headline = "MATCHDAY";
 
   const downloadPNG = async () => {
     if (!kaartRef.current) return;
