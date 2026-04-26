@@ -6,8 +6,9 @@ export default function AuteurBlok({ auteur }) {
 
   useEffect(() => {
     if (!auteur) return;
-    base44.entities.Trainer?.list?.().then(list => {
-      const found = (list || []).find(t => (t.naam || "").toLowerCase() === auteur.toLowerCase());
+    base44.functions.invoke('getWebsiteData', {}).then(res => {
+      const list = res?.data?.trainers || [];
+      const found = list.find(t => (t.naam || "").toLowerCase() === auteur.toLowerCase());
       setStaff(found || null);
     }).catch(() => setStaff(null));
   }, [auteur]);

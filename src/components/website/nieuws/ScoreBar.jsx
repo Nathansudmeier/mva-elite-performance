@@ -7,7 +7,8 @@ export default function ScoreBar({ bericht, settings }) {
   useEffect(() => {
     if (!bericht || bericht.team === "Alle" || bericht.categorie !== "Wedstrijdverslag") return;
 
-    base44.entities.AgendaItem.list().then(items => {
+    base44.functions.invoke('getWebsiteData', {}).then(res => {
+      const items = res?.data?.wedstrijden || [];
       const berichtDatum = new Date(bericht.datum);
       const found = items.find(item => {
         if (item.type !== "Wedstrijd") return false;
