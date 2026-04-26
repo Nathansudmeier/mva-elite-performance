@@ -66,7 +66,18 @@ export default function WebsiteWedstrijdDetail() {
     .filter((x) => x.player);
   const wisselSpelers = subs.map((pid) => playerById(pid)).filter(Boolean);
 
-  const heeftSelectie = opstellingSpelers.length > 0 || wisselSpelers.length > 0;
+  // Auto-detectie: als basisopstelling en wissels dezelfde spelers bevatten,
+  // is de selectie nog niet echt gemaakt (auto-gevuld met alle spelers).
+  const opstellingIds = new Set(opstellingSpelers.map((x) => x.player.id));
+  const wisselIds = new Set(wisselSpelers.map((p) => p.id));
+  const overlap = [...opstellingIds].filter((id) => wisselIds.has(id)).length;
+  const isAutoGevuld =
+    opstellingIds.size > 0 &&
+    wisselIds.size > 0 &&
+    overlap === Math.min(opstellingIds.size, wisselIds.size);
+
+  const heeftSelectie =
+    !isAutoGevuld && (opstellingSpelers.length > 0 || wisselSpelers.length > 0);
 
   const locatieEncoded = encodeURIComponent(wedstrijd.location || "");
   const mapsEmbed = wedstrijd.location
