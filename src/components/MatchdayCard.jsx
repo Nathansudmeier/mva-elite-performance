@@ -130,6 +130,14 @@ export default function MatchdayCard({ match, onClose }) {
         logging: false,
         imageTimeout: 30000,
         foreignObjectRendering: false,
+        onclone: (clonedDoc) => {
+          const imgs = clonedDoc.querySelectorAll(".logo-img");
+          imgs.forEach(img => {
+            img.style.mixBlendMode = "screen";
+            img.style.background = "transparent";
+            img.style.backgroundColor = "transparent";
+          });
+        },
       });
 
       // Stap 4: Herstel schaling
@@ -386,10 +394,14 @@ const CardCanvas = React.forwardRef(function CardCanvas(
           padding: "40px 64px 0", display: "flex",
           justifyContent: "space-between", alignItems: "center",
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, background: "transparent" }}>
             {clubLogo && (
-              <img src={clubLogo} alt="" crossOrigin="anonymous"
-                style={{ width: 70, height: 70, objectFit: "contain", flexShrink: 0 }} />
+              <img src={clubLogo} alt="" crossOrigin="anonymous" className="logo-img"
+                style={{
+                  width: 70, height: 70, objectFit: "contain", flexShrink: 0,
+                  background: "transparent", backgroundColor: "transparent",
+                  mixBlendMode: "screen", borderRadius: 0,
+                }} />
             )}
             <div style={{
               display: "flex", alignItems: "center",
@@ -453,10 +465,14 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         {/* SECTIE D: VS blok */}
         <div style={{ padding: "16px 64px", display: "flex", alignItems: "center", gap: 32, maxWidth: sectionMaxWidth }}>
           {/* MV Artemis kant */}
-          <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1, background: "transparent" }}>
             {clubLogo && (
-              <img src={clubLogo} alt="" crossOrigin="anonymous"
-                style={{ width: 80, height: 80, objectFit: "contain" }} />
+              <img src={clubLogo} alt="" crossOrigin="anonymous" className="logo-img"
+                style={{
+                  width: 80, height: 80, objectFit: "contain",
+                  background: "transparent", backgroundColor: "transparent",
+                  mixBlendMode: "screen",
+                }} />
             )}
             <div style={{ fontFamily: FONT_STACK, fontWeight: 900, fontSize: 32, color: "#fff", letterSpacing: "1px" }}>
               MV ARTEMIS
@@ -469,10 +485,14 @@ const CardCanvas = React.forwardRef(function CardCanvas(
           </div>
 
           {/* Tegenstander */}
-          <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1, background: "transparent" }}>
             {opponentLogo ? (
-              <img src={opponentLogo} alt="" crossOrigin="anonymous"
-                style={{ width: 80, height: 80, objectFit: "contain" }} />
+              <img src={opponentLogo} alt="" crossOrigin="anonymous" className="logo-img"
+                style={{
+                  width: 80, height: 80, objectFit: "contain",
+                  background: "transparent", backgroundColor: "transparent",
+                  mixBlendMode: "screen",
+                }} />
             ) : (
               <div style={{
                 width: 80, height: 80, borderRadius: "50%", background: "#1B2A5E",
@@ -580,11 +600,13 @@ const CardCanvas = React.forwardRef(function CardCanvas(
             </div>
           ) : (
             sponsors.map(s => s.logo_url ? (
-              <img key={s.id} src={s.logo_url} alt={s.naam} crossOrigin="anonymous"
+              <img key={s.id} src={s.logo_url} alt={s.naam} crossOrigin="anonymous" className="logo-img"
                 style={{
                   maxHeight: 32, maxWidth: 110, objectFit: "contain",
-                  filter: "brightness(0) invert(1)", opacity: 0.85,
-                  background: "transparent",
+                  background: "transparent", backgroundColor: "transparent",
+                  mixBlendMode: "screen",
+                  filter: "brightness(10) saturate(0)",
+                  opacity: 0.85,
                 }} />
             ) : (
               <div key={s.id} style={{
