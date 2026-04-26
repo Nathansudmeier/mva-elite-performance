@@ -267,12 +267,17 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
             <h3 style="margin:8px 0 8px 0;font-size:17px;font-weight:700;color:#ffffff;line-height:1.2;font-family:Arial,sans-serif;">
               ${b.titel || ''}
             </h3>
-            <p style="margin:0 0 10px 0;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;font-family:Arial,sans-serif;">
-              ${b.samenvatting || ''}
+            ${b.samenvatting ? `
+            <p style="margin:0 0 8px 0;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;font-style:italic;font-family:Arial,sans-serif;">
+              ${b.samenvatting}
             </p>
-            <a href="https://mv-artemis.nl/nieuws/${b.slug}" style="color:#FF6800;font-size:13px;font-weight:600;text-decoration:none;font-family:Arial,sans-serif;">
-              Lees verder →
-            </a>
+            ` : ''}
+            <p style="margin:0 0 10px 0;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;font-family:Arial,sans-serif;">
+              ${eersteAlinea(b.inhoud)}
+              <a href="https://mv-artemis.nl/nieuws/${b.slug}" style="color:#FF6800;font-weight:600;text-decoration:none;font-family:Arial,sans-serif;white-space:nowrap;">
+                Lees verder →
+              </a>
+            </p>
           </td>
         </tr>
       </table>
