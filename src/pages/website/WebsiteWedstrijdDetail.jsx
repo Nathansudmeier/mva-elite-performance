@@ -4,6 +4,7 @@ import WebsiteLayout from "../../components/website/WebsiteLayout";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 import { useWebsiteData } from "@/hooks/useWebsiteData";
+import MatchEvents from "@/components/website/wedstrijden/MatchEvents";
 
 export default function WebsiteWedstrijdDetail() {
   const { id } = useParams();
@@ -204,6 +205,9 @@ export default function WebsiteWedstrijdDetail() {
           )}
         </div>
       </section>
+
+      {/* WEDSTRIJDVERLOOP - alleen bij gespeelde wedstrijden met events */}
+      <MatchEvents match={match} players={players} />
     </WebsiteLayout>
   );
 }
