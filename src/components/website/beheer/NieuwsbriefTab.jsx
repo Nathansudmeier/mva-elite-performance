@@ -14,8 +14,13 @@ export default function NieuwsbriefTab() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [importResultaat, setImportResultaat] = useState(null);
 
+  const reloadAbonnees = async () => {
+    const res = await base44.functions.invoke("abonneesBeheer", { action: "list" });
+    setAbonnees(res?.data?.abonnees || []);
+  };
+
   useEffect(() => {
-    base44.entities.Abonnee.list("-aangemeld_op").then(list => setAbonnees(list || []));
+    reloadAbonnees();
   }, []);
 
   const totaalActief = abonnees.filter(a => a.actief && a.bevestigd).length;
@@ -54,7 +59,7 @@ export default function NieuwsbriefTab() {
 
   const verwijderAbonnee = async (id) => {
     if (!confirm("Verwijderen?")) return;
-    await base44.entities.Abonnee.delete(id);
+    await base44.functions.invoke("abonneesBeheer", { action: "delete", id });
     setAbonnees(prev => prev.filter(a => a.id !== id));
   };
 
@@ -67,26 +72,21 @@ export default function NieuwsbriefTab() {
     }
 
     if (data.bevestigd) {
-      // Direct toevoegen zonder bevestigingsmail
-      const created = await base44.entities.Abonnee.create({
+      const res = await base44.functions.invoke("abonneesBeheer", {
+        action: "create",
         email,
         naam: data.naam || "",
         team_voorkeur: data.team_voorkeur || "Alle",
-        actief: true,
         bevestigd: true,
-        bevestigingscode: crypto.randomUUID(),
-        aangemeld_op: new Date().toISOString(),
       });
-      setAbonnees(prev => [created, ...prev]);
+      if (res?.data?.abonnee) setAbonnees(prev => [res.data.abonnee, ...prev]);
     } else {
-      // Via aanmeldfunctie zodat bevestigingsmail wordt verstuurd
       await base44.functions.invoke("nieuwsbriefAanmelden", {
         email,
         naam: data.naam || "",
         team_voorkeur: data.team_voorkeur || "Alle",
       });
-      const verse = await base44.entities.Abonnee.list("-aangemeld_op");
-      setAbonnees(verse || []);
+      await reloadAbonnees();
     }
 
     setShowAddModal(false);
@@ -110,34 +110,20 @@ export default function NieuwsbriefTab() {
       return;
     }
 
-    const bestaandeEmails = new Set(abonnees.map(a => a.email.toLowerCase()));
-    let toegevoegd = 0;
-    let alBestaand = 0;
-    const nieuwe = [];
-
+    const items = [];
     for (let i = 1; i < lines.length; i++) {
       const cells = lines[i].split(",").map(c => c.trim().replace(/^"|"$/g, ""));
       const email = (cells[emailIdx] || "").toLowerCase();
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) continue;
-      if (bestaandeEmails.has(email)) {
-        alBestaand++;
-        continue;
-      }
-      const created = await base44.entities.Abonnee.create({
+      if (!email) continue;
+      items.push({
         email,
         naam: naamIdx !== -1 ? (cells[naamIdx] || "") : "",
         team_voorkeur: teamIdx !== -1 && cells[teamIdx] ? cells[teamIdx] : "Alle",
-        actief: true,
-        bevestigd: true,
-        bevestigingscode: crypto.randomUUID(),
-        aangemeld_op: new Date().toISOString(),
       });
-      nieuwe.push(created);
-      bestaandeEmails.add(email);
-      toegevoegd++;
     }
-
-    setAbonnees(prev => [...nieuwe, ...prev]);
+    const res = await base44.functions.invoke("abonneesBeheer", { action: "bulkCreate", items });
+    const { toegevoegd = 0, alBestaand = 0 } = res?.data || {};
+    await reloadAbonnees();
     setImportResultaat({ toegevoegd, alBestaand });
   };
 
