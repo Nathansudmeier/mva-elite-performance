@@ -383,22 +383,29 @@ const CardCanvas = React.forwardRef(function CardCanvas(
       <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", zIndex: 4 }}>
         {/* SECTIE A: Bovenste balk */}
         <div style={{
-          padding: "60px 64px 0", display: "flex",
-          justifyContent: "space-between", alignItems: "flex-start",
+          padding: "40px 64px 0", display: "flex",
+          justifyContent: "space-between", alignItems: "center",
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             {clubLogo && (
               <img src={clubLogo} alt="" crossOrigin="anonymous"
-                style={{ width: 80, height: 80, objectFit: "contain" }} />
+                style={{ width: 70, height: 70, objectFit: "contain", flexShrink: 0 }} />
             )}
-            <div style={{ fontFamily: FONT_STACK, fontWeight: 900, fontSize: 36, color: "#fff", letterSpacing: "2px" }}>
+            <div style={{
+              display: "flex", alignItems: "center",
+              fontFamily: FONT_STACK, fontWeight: 700, fontSize: 30,
+              color: "#ffffff", letterSpacing: "2px", lineHeight: 1,
+            }}>
               MV<span style={{ color: "#FF6800" }}>/</span>ARTEMIS
             </div>
           </div>
           <div style={{
-            background: "#FF6800", color: "#fff", fontSize: 20, fontWeight: 700,
-            letterSpacing: "2px", textTransform: "uppercase",
-            padding: "8px 20px", borderRadius: 4,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: "#FF6800", color: "#ffffff",
+            fontSize: 18, fontWeight: 700, letterSpacing: "2px",
+            textTransform: "uppercase", padding: "10px 20px",
+            borderRadius: 4, height: 44, minWidth: 100,
+            textAlign: "center", lineHeight: 1,
           }}>
             {team}
           </div>
@@ -407,69 +414,76 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         {/* SPACER duwt content naar onderen */}
         <div style={{ flex: 1 }} />
 
-        {/* SECTIE B: Headline */}
-        <div style={{ padding: "40px 64px 0", maxWidth: hasPlayer ? 600 : "none" }}>
+        {/* SECTIE B + C: Headline + datum/locatie wrapper */}
+        <div style={{
+          display: "flex", flexDirection: "column", gap: 12,
+          padding: "20px 64px 0", maxWidth: hasPlayer ? 600 : "none",
+        }}>
+          {/* SECTIE B: MATCHDAY headline */}
           <div style={{
-            fontFamily: FONT_STACK, fontWeight: 900, fontSize: 180, color: "#fff",
+            fontFamily: FONT_STACK, fontWeight: 900, fontSize: 140, color: "#fff",
             lineHeight: 0.85, letterSpacing: "-4px",
+            marginBottom: 0, paddingBottom: 0,
           }}>
             {headline}
           </div>
-        </div>
 
-        {/* SECTIE C: Datum + tijd + locatie */}
-        <div style={{ padding: "0 64px", marginTop: 24, maxWidth: sectionMaxWidth }}>
-          <div style={{
-            fontSize: 32, fontWeight: 700, color: "#FF6800",
-            letterSpacing: "1px", textTransform: "uppercase",
-          }}>
-            {datumTijd}
-          </div>
-          {locatie && (
+          {/* SECTIE C: Datum + tijd + locatie */}
+          <div style={{ marginTop: 16, maxWidth: sectionMaxWidth }}>
             <div style={{
-              fontSize: 26, color: "rgba(255,255,255,0.55)", marginTop: 6,
-              display: "flex", alignItems: "center", gap: 10,
+              fontSize: 24, fontWeight: 700, color: "#FF6800",
+              letterSpacing: "1px", textTransform: "uppercase",
+              display: "block", clear: "both", position: "relative",
+              zIndex: 10, marginBottom: 12, lineHeight: 1.1,
             }}>
-              <MapPin size={24} strokeWidth={2.5} color="rgba(255,255,255,0.4)" />
-              <span>{locatie}</span>
+              {datumTijd}
             </div>
-          )}
+            {locatie && (
+              <div style={{
+                fontSize: 24, color: "rgba(255,255,255,0.55)", marginTop: 6,
+                display: "flex", alignItems: "center", gap: 8,
+              }}>
+                <span>📍</span>
+                <span>{locatie}</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* SECTIE D: VS blok */}
-        <div style={{ padding: "32px 64px", display: "flex", alignItems: "center", gap: 40, maxWidth: sectionMaxWidth }}>
+        <div style={{ padding: "16px 64px", display: "flex", alignItems: "center", gap: 32, maxWidth: sectionMaxWidth }}>
           {/* MV Artemis kant */}
-          <div style={{ display: "flex", alignItems: "center", gap: 16, flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1 }}>
             {clubLogo && (
               <img src={clubLogo} alt="" crossOrigin="anonymous"
-                style={{ width: 100, height: 100, objectFit: "contain" }} />
+                style={{ width: 80, height: 80, objectFit: "contain" }} />
             )}
-            <div style={{ fontFamily: FONT_STACK, fontWeight: 900, fontSize: 40, color: "#fff", letterSpacing: "1px" }}>
+            <div style={{ fontFamily: FONT_STACK, fontWeight: 900, fontSize: 32, color: "#fff", letterSpacing: "1px" }}>
               MV ARTEMIS
             </div>
           </div>
 
           {/* VS */}
-          <div style={{ fontFamily: FONT_STACK, fontWeight: 900, fontSize: 60, color: "#FF6800" }}>
+          <div style={{ fontFamily: FONT_STACK, fontWeight: 900, fontSize: 48, color: "#FF6800" }}>
             VS
           </div>
 
           {/* Tegenstander */}
-          <div style={{ display: "flex", alignItems: "center", gap: 16, flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1 }}>
             {opponentLogo ? (
               <img src={opponentLogo} alt="" crossOrigin="anonymous"
-                style={{ width: 100, height: 100, objectFit: "contain" }} />
+                style={{ width: 80, height: 80, objectFit: "contain" }} />
             ) : (
               <div style={{
-                width: 100, height: 100, borderRadius: "50%", background: "#1B2A5E",
+                width: 80, height: 80, borderRadius: "50%", background: "#1B2A5E",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontFamily: FONT_STACK, fontWeight: 900, fontSize: 36, color: "#fff",
+                fontFamily: FONT_STACK, fontWeight: 900, fontSize: 30, color: "#fff",
               }}>{getInitials(opponent)}</div>
             )}
             <div style={{
               fontFamily: FONT_STACK, fontWeight: 900, fontSize: tegFontSize,
               color: "rgba(255,255,255,0.85)", letterSpacing: "1px",
-              maxWidth: 280, lineHeight: 1.1,
+              maxWidth: 240, lineHeight: 1.1,
               wordWrap: "break-word", wordBreak: "break-word", whiteSpace: "normal",
             }}>
               {opponent}
@@ -479,25 +493,25 @@ const CardCanvas = React.forwardRef(function CardCanvas(
 
         {/* SECTIE E: Starting XI */}
         {basisSpelers.length > 0 && (
-          <div style={{ padding: "24px 64px", maxWidth: sectionMaxWidth }}>
+          <div style={{ padding: "16px 64px 0", maxWidth: sectionMaxWidth }}>
             <div style={{
-              fontFamily: FONT_STACK, fontWeight: 900, fontSize: 52, color: "#FF6800",
+              fontFamily: FONT_STACK, fontWeight: 900, fontSize: 40, color: "#FF6800",
               letterSpacing: "2px", borderBottom: "2px solid #FF6800",
-              paddingBottom: 12, marginBottom: 16,
+              paddingBottom: 10, marginBottom: 12,
             }}>
               STARTING XI
             </div>
             {hasPlayer ? (
-              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 4 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 2 }}>
                 {basisSpelers.map((sp, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "4px 0" }}>
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 14, padding: "4px 0" }}>
                     <div style={{
-                      background: "#FF6800", color: "#fff", fontSize: 20, fontWeight: 700,
-                      width: 38, height: 38, display: "flex", alignItems: "center",
+                      background: "#FF6800", color: "#fff", fontSize: 18, fontWeight: 700,
+                      width: 36, height: 36, display: "flex", alignItems: "center",
                       justifyContent: "center", borderRadius: 4, flexShrink: 0,
                     }}>{sp.nummer || "—"}</div>
                     <div style={{
-                      fontSize: 26, fontWeight: 700, color: "#fff",
+                      fontSize: 22, fontWeight: 700, color: "#fff",
                       textTransform: "uppercase", letterSpacing: "0.5px",
                       whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                     }}>
@@ -511,14 +525,14 @@ const CardCanvas = React.forwardRef(function CardCanvas(
                 {[colA, colB].map((col, ci) => (
                   <div key={ci} style={{ display: "flex", flexDirection: "column" }}>
                     {col.map((sp, i) => (
-                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "6px 0" }}>
+                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 14, padding: "4px 0" }}>
                         <div style={{
-                          background: "#FF6800", color: "#fff", fontSize: 22, fontWeight: 700,
-                          width: 44, height: 44, display: "flex", alignItems: "center",
+                          background: "#FF6800", color: "#fff", fontSize: 18, fontWeight: 700,
+                          width: 36, height: 36, display: "flex", alignItems: "center",
                           justifyContent: "center", borderRadius: 4, flexShrink: 0,
                         }}>{sp.nummer || "—"}</div>
                         <div style={{
-                          fontSize: 28, fontWeight: 700, color: "#fff",
+                          fontSize: 22, fontWeight: 700, color: "#fff",
                           textTransform: "uppercase", letterSpacing: "0.5px",
                           whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
                         }}>
@@ -535,16 +549,17 @@ const CardCanvas = React.forwardRef(function CardCanvas(
 
         {/* SECTIE F: Substitutions */}
         {wisselSpelers.length > 0 && (
-          <div style={{ padding: "16px 64px 120px", maxWidth: sectionMaxWidth }}>
+          <div style={{ padding: "12px 64px 120px", maxWidth: sectionMaxWidth }}>
             <div style={{
-              background: "#1B2A5E", display: "inline-block",
-              padding: "6px 20px", borderRadius: 3,
-              fontFamily: FONT_STACK, fontWeight: 900, fontSize: 28, color: "#fff",
-              letterSpacing: "2px",
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              background: "#1B2A5E", padding: "8px 24px", borderRadius: 3,
+              fontFamily: FONT_STACK, fontWeight: 700, fontSize: 24, color: "#ffffff",
+              letterSpacing: "2px", textTransform: "uppercase",
+              lineHeight: 1, height: 48,
             }}>
               SUBSTITUTIONS
             </div>
-            <div style={{ fontSize: 24, color: "rgba(255,255,255,0.7)", marginTop: 10 }}>
+            <div style={{ fontSize: 22, color: "rgba(255,255,255,0.7)", marginTop: 10 }}>
               {wisselNamen}
             </div>
           </div>
@@ -553,11 +568,11 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         {/* SECTIE G: Sponsors balk */}
         <div style={{
           position: "absolute", bottom: 0, left: 0, right: 0,
-          padding: "28px 64px",
-          background: "rgba(10,12,20,0.97)",
-          borderTop: "1px solid rgba(255,255,255,0.15)",
+          padding: "20px 64px",
+          background: "rgba(8,9,13,0.98)",
+          borderTop: "1px solid rgba(255,255,255,0.12)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 48, flexWrap: "wrap",
+          gap: 40, flexWrap: "wrap", minHeight: 70,
         }}>
           {sponsors.length === 0 ? (
             <div style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", letterSpacing: "2px" }}>
@@ -567,13 +582,16 @@ const CardCanvas = React.forwardRef(function CardCanvas(
             sponsors.map(s => s.logo_url ? (
               <img key={s.id} src={s.logo_url} alt={s.naam} crossOrigin="anonymous"
                 style={{
-                  maxHeight: 36, maxWidth: 120, objectFit: "contain",
-                  filter: "brightness(0) invert(1) contrast(1.2)", opacity: 0.9,
+                  maxHeight: 32, maxWidth: 110, objectFit: "contain",
+                  filter: "brightness(0) invert(1)", opacity: 0.85,
+                  background: "transparent",
                 }} />
             ) : (
               <div key={s.id} style={{
-                fontSize: 20, color: "rgba(255,255,255,0.7)",
+                fontFamily: "Arial, sans-serif",
+                fontSize: 18, color: "rgba(255,255,255,0.8)",
                 fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase",
+                background: "transparent",
               }}>{s.naam}</div>
             ))
           )}
