@@ -4,8 +4,9 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import WysiwygEditor from "@/components/website/WysiwygEditor";
 import MensenTab from "@/components/website/beheer/MensenTab";
 import NieuwsbriefTab from "@/components/website/beheer/NieuwsbriefTab";
+import MatchdayTab from "@/components/website/beheer/MatchdayTab";
 
-const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors", "Mensen", "Uitgelicht", "Nieuwsbrief"];
+const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors", "Mensen", "Uitgelicht", "Nieuwsbrief", "Matchday"];
 
 const FASE_DEFAULTS = {
   fase1: { label: "FASE 1 · NU BEZIG", jaar: "2025-26", items: ["V1 consolideert in 3e klasse", "MO17 handhaaft koploperspositie", "Financiële basis staat", "Naamswijziging naar MV Artemis"] },
@@ -534,6 +535,9 @@ export default function WebsiteBeheer() {
 
       {/* TAB 9: NIEUWSBRIEF */}
       {activeTab === 9 && <NieuwsbriefTab />}
+
+      {/* TAB 10: MATCHDAY */}
+      {activeTab === 10 && <MatchdayTab />}
 
       {/* TAB 8: UITGELICHTE WEDSTRIJDEN */}
       {activeTab === 8 && (

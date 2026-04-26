@@ -1,0 +1,56 @@
+{
+  "name": "MatchdayAchtergrond",
+  "type": "object",
+  "properties": {
+    "team": {
+      "type": "string",
+      "enum": [
+        "MO17",
+        "MO20",
+        "Vrouwen 1",
+        "Dames 1",
+        "Alle"
+      ],
+      "default": "Alle",
+      "description": "Voor welk team deze achtergrond bedoeld is"
+    },
+    "naam": {
+      "type": "string",
+      "description": "Korte naam, bijv. 'Teamfoto april 2026'"
+    },
+    "foto_url": {
+      "type": "string",
+      "description": "URL naar achtergrondfoto (1080\u00d71920 ideaal)"
+    },
+    "volgorde": {
+      "type": "number",
+      "default": 1,
+      "description": "Sorteervolgorde"
+    },
+    "actief": {
+      "type": "boolean",
+      "default": true,
+      "description": "Of de achtergrond beschikbaar is"
+    }
+  },
+  "required": [
+    "foto_url"
+  ],
+  "rls": {
+    "read": {},
+    "write": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "trainer"
+          }
+        }
+      ]
+    }
+  }
+}

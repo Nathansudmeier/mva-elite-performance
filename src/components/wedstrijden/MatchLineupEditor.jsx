@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { PLAYER_FALLBACK_PHOTO } from "@/lib/playerFallback";
+import MatchdayCard from "@/components/MatchdayCard";
 
 export default function MatchLineupEditor({ match, players, item, isTrainer, matchQueryKey }) {
   const qc = useQueryClient();
@@ -11,6 +12,8 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
   const [wissel, setWissel] = useState([]);
   const [saving, setSaving] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
+  const [showMatchdayCard, setShowMatchdayCard] = useState(false);
+  const [matchdayCardMatch, setMatchdayCardMatch] = useState(null);
 
   // Initialiseer opstelling vanuit match data
   useEffect(() => {
@@ -60,6 +63,22 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
       await qc.invalidateQueries({ queryKey: matchQueryKey });
       toast.success("Opstelling opgeslagen");
       setShowEditor(false);
+
+      // Open matchday card generator met up-to-date match data
+      const updatedMatch = {
+        ...(match || {}),
+        id: matchId,
+        team: match?.team || item?.team,
+        date: match?.date || item?.date,
+        start_time: match?.start_time || item?.start_time,
+        opponent: match?.opponent || item?.title,
+        opponent_logo: match?.opponent_logo || item?.opponent_logo_url,
+        home_away: match?.home_away || item?.home_away,
+        lineup: lineupData,
+        substitutes: match?.substitutes || [],
+      };
+      setMatchdayCardMatch(updatedMatch);
+      setShowMatchdayCard(true);
     } catch (e) {
       toast.error("Opslaan mislukt");
     }
@@ -240,6 +259,13 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
             {saving ? "Opslaan..." : "Opstelling opslaan"}
           </button>
         </div>
+      )}
+
+      {showMatchdayCard && matchdayCardMatch && (
+        <MatchdayCard
+          match={matchdayCardMatch}
+          onClose={() => setShowMatchdayCard(false)}
+        />
       )}
     </div>
   );
