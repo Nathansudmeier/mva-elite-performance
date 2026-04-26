@@ -16,21 +16,21 @@ Deno.serve(async (req) => {
 
     if (bestaande && bestaande.length > 0) {
       const ab = bestaande[0];
-      if (ab.bevestigd && ab.actief) {
+      if (ab.actief) {
         return Response.json({ status: "already_subscribed", message: "Je bent al aangemeld." });
       }
-      // Hernieuwde aanmelding: actief weer aanzetten en mail opnieuw sturen indien niet bevestigd
+      // Hernieuwde aanmelding: weer activeren
       const code = ab.bevestigingscode || crypto.randomUUID();
       await base44.asServiceRole.entities.Abonnee.update(ab.id, {
         actief: true,
+        bevestigd: true,
         bevestigingscode: code,
         naam: naam || ab.naam,
         team_voorkeur: team_voorkeur || ab.team_voorkeur,
       });
-      if (!ab.bevestigd) {
-        await sendBevestigingsmail(base44, email, code);
-      }
-      return Response.json({ status: "ok", message: "Check je inbox voor de bevestigingslink." });
+      // Best-effort welkomstmail (mag falen)
+      try { await sendWelkomstmail(base44, email, code); } catch (e) { console.warn("[nieuwsbriefAanmelden] mail mislukt:", e?.message); }
+      return Response.json({ status: "ok", message: "Aanmelding gelukt! Je ontvangt vanaf nu de wekelijkse nieuwsbrief." });
     }
 
     const code = crypto.randomUUID();
@@ -39,21 +39,22 @@ Deno.serve(async (req) => {
       naam,
       team_voorkeur,
       actief: true,
-      bevestigd: false,
+      bevestigd: true,
       bevestigingscode: code,
       aangemeld_op: new Date().toISOString(),
     });
 
-    await sendBevestigingsmail(base44, email, code);
+    // Best-effort welkomstmail (mag falen — aanmelding blijft geldig)
+    try { await sendWelkomstmail(base44, email, code); } catch (e) { console.warn("[nieuwsbriefAanmelden] mail mislukt:", e?.message); }
 
-    return Response.json({ status: "ok", message: "Check je inbox voor de bevestigingslink." });
+    return Response.json({ status: "ok", message: "Aanmelding gelukt! Je ontvangt vanaf nu de wekelijkse nieuwsbrief." });
   } catch (error) {
     console.error("[nieuwsbriefAanmelden]", error);
     return Response.json({ status: "error", message: error.message }, { status: 500 });
   }
 });
 
-async function sendBevestigingsmail(base44, email, bevestigingscode) {
+async function sendWelkomstmail(base44, email, bevestigingscode) {
   const html = `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -88,10 +89,10 @@ async function sendBevestigingsmail(base44, email, bevestigingscode) {
         NIEUWSBRIEF
       </p>
       <h1 style="margin:0 0 16px;font-size:36px;font-weight:700;color:#ffffff;line-height:1.1;">
-        Bevestig je<br>aanmelding.
+        Welkom bij<br>MV Artemis.
       </h1>
       <p style="margin:0;font-size:15px;color:rgba(255,255,255,0.65);line-height:1.7;">
-        Je hebt je aangemeld voor de wekelijkse nieuwsbrief van MV Artemis. Elke vrijdag ontvang je het laatste nieuws, uitslagen en aankondigingen van alle teams.
+        Je bent aangemeld voor de wekelijkse nieuwsbrief van MV Artemis. Elke vrijdag om 18:00 ontvang je het laatste nieuws, uitslagen en aankondigingen van alle teams.
       </p>
     </td>
   </tr>
@@ -146,14 +147,14 @@ async function sendBevestigingsmail(base44, email, bevestigingscode) {
   <tr>
     <td style="background:#FF6800;padding:36px 32px;text-align:center;border-radius:0;">
       <h2 style="margin:0 0 8px;font-size:28px;font-weight:700;color:#ffffff;line-height:1;">
-        Klik hieronder om je<br>aanmelding te bevestigen.
+        Bedankt voor je<br>aanmelding!
       </h2>
       <p style="margin:0 0 24px;font-size:14px;color:rgba(255,255,255,0.75);">
-        Na bevestiging ontvang je elke vrijdag om 18:00 de nieuwsbrief.
+        Vanaf nu ontvang je elke vrijdag om 18:00 de nieuwsbrief.
       </p>
-      <a href="https://mv-artemis.nl/nieuwsbrief/bevestig?code=${bevestigingscode}"
+      <a href="https://mv-artemis.nl/nieuws"
         style="display:inline-block;background:#ffffff;color:#FF6800;text-decoration:none;padding:16px 36px;border-radius:4px;font-weight:700;font-size:16px;letter-spacing:0.5px;">
-        Bevestig aanmelding →
+        Bekijk laatste nieuws →
       </a>
     </td>
   </tr>
@@ -205,7 +206,7 @@ async function sendBevestigingsmail(base44, email, bevestigingscode) {
   await base44.asServiceRole.integrations.Core.SendEmail({
     from_name: "MV Artemis",
     to: email,
-    subject: "Bevestig je aanmelding — MV Artemis",
+    subject: "Welkom bij de nieuwsbrief — MV Artemis",
     body: html,
   });
 }
