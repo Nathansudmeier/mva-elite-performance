@@ -808,8 +808,8 @@ function UitgelichtForm({ wedstrijd, onSave, onCancel }) {
         </div>
       </div>
       <div style={{ display: "flex", gap: "8px" }}>
-        <button className="btn-primary" onClick={() => onSave(data)}>Opslaan</button>
-        <button onClick={onCancel} style={{ padding: "8px 16px", borderRadius: "10px", border: "2px solid #1a1a1a", background: "#fff", color: "#1a1a1a", fontWeight: 700, cursor: "pointer" }}>Annuleren</button>
+        <button type="button" className="btn-primary" onClick={(e) => { e.preventDefault(); console.log("[Uitgelicht] Opslaan clicked", data); onSave(data); }}>Opslaan</button>
+        <button type="button" onClick={onCancel} style={{ padding: "8px 16px", borderRadius: "10px", border: "2px solid #1a1a1a", background: "#fff", color: "#1a1a1a", fontWeight: 700, cursor: "pointer" }}>Annuleren</button>
       </div>
     </div>
   );
