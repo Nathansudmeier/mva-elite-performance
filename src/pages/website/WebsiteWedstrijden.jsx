@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 import { format, parseISO } from "date-fns";
@@ -60,7 +61,10 @@ export default function WebsiteWedstrijden() {
     const resultaatKleur = resultaat === "W" ? "#08D068" : resultaat === "V" ? "#FF3DA8" : "#FFD600";
 
     return (
-      <div style={{ background: "#202840", borderRadius: "6px", padding: "14px 16px", marginBottom: "8px", display: "grid", gridTemplateColumns: "120px 1fr auto", gap: "12px", alignItems: "center" }}>
+      <Link to={`/wedstrijden/${w.id}`} style={{ textDecoration: "none", color: "inherit", display: "block", background: "#202840", borderRadius: "6px", padding: "14px 16px", marginBottom: "8px", display: "grid", gridTemplateColumns: "120px 1fr auto", gap: "12px", alignItems: "center", transition: "background 0.15s, transform 0.15s", cursor: "pointer" }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = "#2a3450"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = "#202840"; }}
+      >
         <div>
           <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)" }}>{w.date ? format(parseISO(w.date), "d MMM yyyy", { locale: nl }) : "—"}</div>
           <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", marginTop: "2px" }}>{w.team}</div>
@@ -82,7 +86,7 @@ export default function WebsiteWedstrijden() {
             </>
           )}
         </div>
-      </div>
+      </Link>
     );
   };
 
