@@ -165,8 +165,8 @@ export default function WebsiteHome() {
           .slice(0, 10);
         setUitslagen(filtered);
       }
+      if (data?.players) setPlayers(data.players);
     });
-    base44.entities.Player.filter({ active: true }).then(pl => setPlayers(pl || []));
   }, []);
 
   const stats = instellingen ? [
