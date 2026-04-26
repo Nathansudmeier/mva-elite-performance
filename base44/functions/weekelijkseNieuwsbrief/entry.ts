@@ -74,7 +74,7 @@ async function sendViaResend({ to, subject, html }) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "MV Artemis <nieuwsbrief@mv-artemis.nl>",
+      from: "MV Artemis <onboarding@resend.dev>",
       to: [to],
       subject,
       html,
