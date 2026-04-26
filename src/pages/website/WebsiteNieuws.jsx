@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { NewspaperClipping } from "@phosphor-icons/react";
 import WebsiteLayout from "@/components/website/WebsiteLayout";
 
 const CATEGORIES = ["Alle", "Wedstrijdverslag", "Clubnieuws", "Selectie-update", "Resultaten"];
@@ -198,6 +199,9 @@ export default function WebsiteNieuws() {
           </>
         ) : (
           <div style={{ textAlign: "center", padding: "48px 28px", color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px" }}>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "16px" }}>
+              <NewspaperClipping weight="bold" size={48} color="rgba(255,255,255,0.15)" />
+            </div>
             Geen berichten gevonden.
           </div>
         )}

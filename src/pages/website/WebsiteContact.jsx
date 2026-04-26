@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { EnvelopeSimple, Globe, MapPin, InstagramLogo, CheckCircle } from "@phosphor-icons/react";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 
 const inputStyle = {
@@ -53,10 +54,10 @@ export default function WebsiteContact() {
   const instagramHandle = instagram.replace(/.*instagram\.com\/?/, "@").replace(/\/$/, "") || "@mv.artemis";
 
   const contactItems = [
-    { label: "E-mail", value: email, link: `mailto:${email}` },
-    { label: "Website", value: "mv-artemis.nl", link: "https://mv-artemis.nl" },
-    { label: "Locatie", value: locatie, link: null },
-    { label: "Instagram", value: instagramHandle, link: instagram },
+    { label: "E-mail", value: email, link: `mailto:${email}`, icon: <EnvelopeSimple weight="bold" size={20} color="#FF6800" /> },
+    { label: "Website", value: "mv-artemis.nl", link: "https://mv-artemis.nl", icon: <Globe weight="bold" size={20} color="#FF6800" /> },
+    { label: "Locatie", value: locatie, link: null, icon: <MapPin weight="bold" size={20} color="#FF6800" /> },
+    { label: "Instagram", value: instagramHandle, link: instagram, icon: <InstagramLogo weight="bold" size={20} color="#FF6800" /> },
   ];
 
   return (
@@ -82,12 +83,17 @@ export default function WebsiteContact() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "12px", marginBottom: "48px" }}>
             {contactItems.map(item => (
-              <div key={item.label} style={{ background: "#202840", borderRadius: "6px", padding: "20px" }}>
-                <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "8px" }}>{item.label}</div>
-                {item.link
-                  ? <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontSize: "14px", color: "#FF6800", textDecoration: "none", fontWeight: 600 }}>{item.value}</a>
-                  : <div style={{ fontSize: "14px", color: "rgba(255,255,255,0.8)" }}>{item.value}</div>
-                }
+              <div key={item.label} style={{ background: "#202840", borderRadius: "6px", padding: "20px", display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                <div style={{ width: "36px", height: "36px", borderRadius: "6px", background: "rgba(255,104,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  {item.icon}
+                </div>
+                <div>
+                  <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "8px" }}>{item.label}</div>
+                  {item.link
+                    ? <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontSize: "14px", color: "#FF6800", textDecoration: "none", fontWeight: 600 }}>{item.value}</a>
+                    : <div style={{ fontSize: "14px", color: "rgba(255,255,255,0.8)" }}>{item.value}</div>
+                  }
+                </div>
               </div>
             ))}
           </div>
@@ -95,7 +101,9 @@ export default function WebsiteContact() {
           <div style={{ maxWidth: "600px", margin: "0 auto 48px", background: "#202840", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", padding: "32px" }}>
             {submitted ? (
               <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "48px", marginBottom: "16px" }}>✓</div>
+                <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}>
+                  <CheckCircle weight="bold" size={32} color="#22C55E" />
+                </div>
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "16px", color: "#fff", fontWeight: 600, marginBottom: "8px" }}>Bericht ontvangen!</div>
                 <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.65)" }}>Bedankt {form.naam}. We nemen binnen 2 werkdagen contact met je op via {form.email}.</p>
               </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { CheckCircle } from "@phosphor-icons/react";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 
 const inputStyle = {
@@ -55,7 +56,9 @@ export default function WebsiteProeftraining() {
         <div style={{ maxWidth: "600px", margin: "0 auto" }}>
           {submitted ? (
             <div style={{ textAlign: "center", padding: "48px 0" }}>
-              <div style={{ fontSize: "48px", marginBottom: "16px" }}>✓</div>
+              <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}>
+                <CheckCircle weight="bold" size={32} color="#22C55E" />
+              </div>
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "32px", color: "#fff", marginBottom: "12px" }}>Aanmelding ontvangen!</div>
               <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.65)", marginBottom: "8px" }}>Bedankt {form.naam}! We nemen binnen 2 werkdagen contact met je op.</p>
               <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", fontStyle: "italic" }}>Jouw ambitie. Ons doel. — MV Artemis</p>

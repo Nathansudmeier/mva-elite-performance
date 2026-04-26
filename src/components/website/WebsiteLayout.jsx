@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { applyWebsiteMeta } from "@/lib/websiteMeta";
 import SponsorBar from "@/components/website/SponsorBar.jsx";
+import { InstagramLogo, TiktokLogo, FacebookLogo } from "@phosphor-icons/react";
 
 const navLinks = [
   { label: "Homepage", href: "/" },
@@ -145,10 +146,10 @@ export default function WebsiteLayout({ children }) {
             <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "12px" }}>CONTACT</div>
             <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "6px" }}>{email}</div>
              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "6px" }}>mv-artemis.nl</div>
-             <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
-               {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "13px", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.6)"}>Instagram ↗</a>}
-               {tiktok && <a href={tiktok} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "13px", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.6)"}>TikTok ↗</a>}
-               {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none", fontSize: "13px", transition: "color 0.2s" }} onMouseEnter={e => e.target.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.6)"}>Facebook ↗</a>}
+             <div style={{ display: "flex", gap: "14px", marginBottom: "16px" }}>
+               {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" style={{ color: "rgba(255,255,255,0.6)", display: "inline-flex", transition: "color 0.2s" }} onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.6)"}><InstagramLogo weight="bold" size={20} /></a>}
+               {tiktok && <a href={tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok" style={{ color: "rgba(255,255,255,0.6)", display: "inline-flex", transition: "color 0.2s" }} onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.6)"}><TiktokLogo weight="bold" size={20} /></a>}
+               {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ color: "rgba(255,255,255,0.6)", display: "inline-flex", transition: "color 0.2s" }} onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.6)"}><FacebookLogo weight="bold" size={20} /></a>}
              </div>
              <Link to="/proeftraining" style={{ background: "#FF6800", color: "#fff", borderRadius: "3px", fontWeight: 700, fontSize: "13px", padding: "10px 20px", textDecoration: "none", display: "inline-block" }}>Proeftraining aanvragen</Link>
           </div>

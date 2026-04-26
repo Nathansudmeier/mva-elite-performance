@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { Trophy, SoccerBall, Users, TrendUp, Target, ChatCircleText, UsersThree, Lightning } from "@phosphor-icons/react";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 
 async function fetchWebsiteData() {
@@ -24,7 +25,19 @@ const WEBSITE_SEED = {
   stat4_waarde: "2030", stat4_label: "Topklasse doel",
 };
 
-const ICON_MAP = { trophy: "🏆", football: "⚽", users: "👥", "arrow-up": "↑" };
+const ICON_MAP = {
+  trophy: <Trophy weight="bold" size={24} />,
+  football: <SoccerBall weight="bold" size={24} />,
+  users: <Users weight="bold" size={24} />,
+  "arrow-up": <TrendUp weight="bold" size={24} />,
+};
+
+const WAARDEN_ICONS = {
+  "01": <Target weight="bold" size={24} color="#fff" />,
+  "02": <ChatCircleText weight="bold" size={24} color="#fff" />,
+  "03": <UsersThree weight="bold" size={24} color="#fff" />,
+  "04": <Lightning weight="bold" size={24} color="#fff" />,
+};
 
 const FASE_DEFAULTS = {
   fase1: { label: "FASE 1 · NU BEZIG", jaar: "2025-26", items: ["V1 consolideert in 3e klasse", "MO17 handhaaft koploperspositie", "Financiële basis staat", "Naamswijziging naar MV Artemis"] },
@@ -299,7 +312,9 @@ export default function WebsiteHome() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "12px" }}>
             {(prestaties.length ? prestaties : PRESTATIE_SEED).map((p, i) => (
               <div key={i} style={{ background: "#202840", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", padding: "16px", minHeight: "100px", display: "flex", gap: "14px", alignItems: "flex-start" }}>
-                <div style={{ fontSize: "28px", minWidth: "36px" }}>{ICON_MAP[p.icon_type] || "⭐"}</div>
+                <div style={{ width: "36px", height: "36px", minWidth: "36px", borderRadius: "6px", background: "rgba(255,104,0,0.12)", display: "flex", alignItems: "center", justifyContent: "center", color: p.kleur || "#FF6800" }}>
+                  {ICON_MAP[p.icon_type] || <Trophy weight="bold" size={20} />}
+                </div>
                 <div>
                   <div style={{ fontSize: "13px", fontWeight: 700, color: p.kleur || "#fff", marginBottom: "6px" }}>{p.titel}</div>
                   <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.65)", lineHeight: 1.5 }}>{p.beschrijving}</div>
@@ -329,6 +344,7 @@ export default function WebsiteHome() {
             ].map((w) => (
               <div key={w.nr} style={{ background: "#FF6800", borderRadius: "6px", padding: "20px", minHeight: "130px", display: "flex", flexDirection: "column", justifyContent: "flex-end", position: "relative", overflow: "hidden" }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "80px", color: "rgba(255,255,255,0.15)", position: "absolute", top: "-10px", right: "10px", lineHeight: 1 }}>{w.nr}</div>
+                <div style={{ position: "absolute", top: "16px", left: "16px", color: "rgba(255,255,255,0.9)" }}>{WAARDEN_ICONS[w.nr]}</div>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "22px", color: "#fff", marginBottom: "6px" }}>{w.titel}</div>
                 <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.8)", lineHeight: 1.5 }}>{w.body}</div>
               </div>

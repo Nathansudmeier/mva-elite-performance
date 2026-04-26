@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { ArrowLeft } from "@phosphor-icons/react";
 import WebsiteLayout from "@/components/website/WebsiteLayout";
 import { applyWebsiteMeta } from "@/lib/websiteMeta";
 
@@ -118,8 +119,8 @@ export default function WebsiteNieuwsDetail() {
       {/* ARTIKEL INHOUD */}
       <div style={{ padding: "48px 28px" }}>
         <div style={{ maxWidth: "720px", margin: "0 auto" }}>
-          <Link to="/nieuws" style={{ display: "inline-block", marginBottom: "32px", fontSize: "13px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, color: "#FF6800", textDecoration: "none", transition: "opacity 0.2s" }} onMouseEnter={e => e.target.style.opacity = 0.8} onMouseLeave={e => e.target.style.opacity = 1}>
-            ← Terug naar nieuws
+          <Link to="/nieuws" style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "32px", fontSize: "13px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, color: "#FF6800", textDecoration: "none", transition: "opacity 0.2s" }} onMouseEnter={e => e.currentTarget.style.opacity = 0.8} onMouseLeave={e => e.currentTarget.style.opacity = 1}>
+            <ArrowLeft weight="bold" size={16} /> Terug naar nieuws
           </Link>
 
           <div className="artikel-content" dangerouslySetInnerHTML={{ __html: renderInhoud(bericht.inhoud) }} />
