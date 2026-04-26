@@ -1,0 +1,75 @@
+{
+  "name": "UitgelichtWedstrijd",
+  "type": "object",
+  "properties": {
+    "titel": {
+      "type": "string",
+      "description": "Titel zoals 'De Topper'"
+    },
+    "subtitel": {
+      "type": "string",
+      "description": "Korte ondertitel"
+    },
+    "team": {
+      "type": "string",
+      "enum": [
+        "MO15",
+        "MO17",
+        "MO20",
+        "Vrouwen 1"
+      ],
+      "description": "Team dat speelt"
+    },
+    "datum": {
+      "type": "string",
+      "format": "date",
+      "description": "Wedstrijddatum"
+    },
+    "tijdstip": {
+      "type": "string",
+      "description": "Aanvangstijd, bijv. '20:00 uur'"
+    },
+    "locatie": {
+      "type": "string",
+      "description": "Locatie van de wedstrijd"
+    },
+    "tegenstander": {
+      "type": "string",
+      "description": "Naam tegenstander"
+    },
+    "tegenstander_logo_url": {
+      "type": "string",
+      "description": "Optioneel logo tegenstander"
+    },
+    "achtergrond_url": {
+      "type": "string",
+      "description": "Optionele achtergrondfoto (speelster/sfeer)"
+    },
+    "actief": {
+      "type": "boolean",
+      "default": true,
+      "description": "Of de wedstrijd zichtbaar is op de website"
+    },
+    "volgorde": {
+      "type": "number",
+      "default": 1,
+      "description": "Sorteervolgorde"
+    }
+  },
+  "required": [
+    "titel",
+    "team",
+    "datum",
+    "tijdstip",
+    "locatie",
+    "tegenstander"
+  ],
+  "rls": {
+    "read": {},
+    "write": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

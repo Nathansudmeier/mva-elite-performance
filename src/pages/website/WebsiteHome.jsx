@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Trophy, SoccerBall, Users, TrendUp, Target, ChatCircleText, UsersThree, Lightning } from "@phosphor-icons/react";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
+import UitgelichtSection from "../../components/website/UitgelichtSection";
 
 async function fetchWebsiteData() {
   const res = await base44.functions.invoke('getWebsiteData', {});
@@ -244,6 +245,9 @@ export default function WebsiteHome() {
           </div>
         );
       })()}
+
+      {/* UITGELICHTE WEDSTRIJDEN */}
+      <UitgelichtSection />
 
       {/* STATS */}
       <section style={{ background: "#14192A", borderTop: "1px solid rgba(255,255,255,0.06)" }}>

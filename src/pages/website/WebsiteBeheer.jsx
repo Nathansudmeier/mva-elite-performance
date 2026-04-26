@@ -4,7 +4,7 @@ import { useCurrentUser } from "@/components/auth/useCurrentUser";
 import WysiwygEditor from "@/components/website/WysiwygEditor";
 import MensenTab from "@/components/website/beheer/MensenTab";
 
-const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors", "Mensen"];
+const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors", "Mensen", "Uitgelicht"];
 
 const FASE_DEFAULTS = {
   fase1: { label: "FASE 1 · NU BEZIG", jaar: "2025-26", items: ["V1 consolideert in 3e klasse", "MO17 handhaaft koploperspositie", "Financiële basis staat", "Naamswijziging naar MV Artemis"] },
@@ -51,6 +51,9 @@ export default function WebsiteBeheer() {
   const [nieuwsberichten, setNieuwsberichten] = useState([]);
   const [editingNieuwsbericht, setEditingNieuwsbericht] = useState(null);
   const [showNieuwsberichtForm, setShowNieuwsberichtForm] = useState(false);
+  const [uitgelicht, setUitgelicht] = useState([]);
+  const [editingUitgelicht, setEditingUitgelicht] = useState(null);
+  const [showUitgelichtForm, setShowUitgelichtForm] = useState(false);
 
   useEffect(() => {
     base44.entities.WebsiteInstellingen.list().then(list => {
@@ -69,6 +72,7 @@ export default function WebsiteBeheer() {
     base44.entities.ContactBericht.list("-datum").then(b => setBerichten(b || []));
     base44.entities.Sponsor.list().then(s => setSponsors((s || []).sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde)));
     base44.entities.Nieuwsbericht.list("-datum").then(n => setNieuwsberichten(n || []));
+    base44.entities.UitgelichtWedstrijd.list().then(u => setUitgelicht((u || []).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0))));
   }, []);
 
   if (!isTrainer) {
@@ -166,6 +170,28 @@ export default function WebsiteBeheer() {
   const toggleSponsorActief = async (id, actief) => {
     await base44.entities.Sponsor.update(id, { actief: !actief });
     setSponsors(prev => prev.map(s => s.id === id ? { ...s, actief: !s.actief } : s));
+  };
+
+  const saveUitgelicht = async (data) => {
+    if (editingUitgelicht) {
+      await base44.entities.UitgelichtWedstrijd.update(editingUitgelicht.id, data);
+      setUitgelicht(prev => prev.map(u => u.id === editingUitgelicht.id ? { ...u, ...data } : u).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)));
+    } else {
+      const created = await base44.entities.UitgelichtWedstrijd.create(data);
+      setUitgelicht(prev => [...prev, created].sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)));
+    }
+    setEditingUitgelicht(null);
+    setShowUitgelichtForm(false);
+  };
+
+  const deleteUitgelicht = async (id) => {
+    await base44.entities.UitgelichtWedstrijd.delete(id);
+    setUitgelicht(prev => prev.filter(u => u.id !== id));
+  };
+
+  const toggleUitgelichtActief = async (id, actief) => {
+    await base44.entities.UitgelichtWedstrijd.update(id, { actief: !actief });
+    setUitgelicht(prev => prev.map(u => u.id === id ? { ...u, actief: !u.actief } : u));
   };
 
   return (
@@ -499,6 +525,56 @@ export default function WebsiteBeheer() {
       {/* TAB 7: MENSEN */}
       {activeTab === 7 && <MensenTab />}
 
+      {/* TAB 8: UITGELICHTE WEDSTRIJDEN */}
+      {activeTab === 8 && (
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+            <div className="t-section-title">Uitgelichte wedstrijden</div>
+            <button className="btn-primary" onClick={() => { setEditingUitgelicht(null); setShowUitgelichtForm(true); }} style={{ width: "auto" }}>+ Nieuwe wedstrijd</button>
+          </div>
+
+          <div style={{ background: "rgba(255,104,0,0.08)", border: "1px solid rgba(255,104,0,0.2)", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", fontSize: "12px", color: "rgba(26,26,26,0.7)" }}>
+            Voeg maximaal 3 uitgelichte wedstrijden toe. Verlopen wedstrijden (datum in verleden) worden automatisch verborgen.
+          </div>
+
+          {showUitgelichtForm && (
+            <div className="glass" style={{ padding: "20px", marginBottom: "20px" }}>
+              <UitgelichtForm wedstrijd={editingUitgelicht} onSave={saveUitgelicht} onCancel={() => { setShowUitgelichtForm(false); setEditingUitgelicht(null); }} />
+            </div>
+          )}
+
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+              <thead>
+                <tr style={{ borderBottom: "2px solid rgba(26,26,26,0.12)" }}>
+                  {["Volgorde","Titel","Team","Datum","Actief","Acties"].map(h => (
+                    <th key={h} style={{ padding: "8px 12px", textAlign: "left", fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "rgba(26,26,26,0.45)", whiteSpace: "nowrap" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {uitgelicht.map(u => (
+                  <tr key={u.id} style={{ borderBottom: "1px solid rgba(26,26,26,0.07)" }}>
+                    <td style={{ padding: "10px 12px" }}>{u.volgorde}</td>
+                    <td style={{ padding: "10px 12px", fontWeight: 700 }}>{u.titel}</td>
+                    <td style={{ padding: "10px 12px", fontSize: "12px" }}>{u.team}</td>
+                    <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{u.datum ? new Date(u.datum).toLocaleDateString("nl-NL") : "—"}</td>
+                    <td style={{ padding: "10px 12px" }}>
+                      <input type="checkbox" checked={u.actief !== false} onChange={() => toggleUitgelichtActief(u.id, u.actief !== false)} style={{ cursor: "pointer" }} />
+                    </td>
+                    <td style={{ padding: "10px 12px", display: "flex", gap: "6px" }}>
+                      <button onClick={() => { setEditingUitgelicht(u); setShowUitgelichtForm(true); }} style={{ padding: "4px 10px", borderRadius: "6px", border: "1px solid #FF6800", background: "transparent", color: "#FF6800", fontWeight: 700, cursor: "pointer", fontSize: "11px" }}>Bewerk</button>
+                      <button onClick={() => { if (confirm("Verwijderen?")) deleteUitgelicht(u.id); }} style={{ padding: "4px 10px", borderRadius: "6px", border: "1px solid #FF3DA8", background: "transparent", color: "#FF3DA8", fontWeight: 700, cursor: "pointer", fontSize: "11px" }}>Verwijder</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {uitgelicht.length === 0 && <div style={{ padding: "32px", textAlign: "center", color: "rgba(26,26,26,0.35)", fontSize: "13px" }}>Geen uitgelichte wedstrijden</div>}
+          </div>
+        </div>
+      )}
+
       {/* TAB 6: SPONSORS */}
       {activeTab === 6 && (
         <div>
@@ -624,6 +700,88 @@ function BerichtForm({ bericht, onSave, onCancel }) {
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <input type="checkbox" id="gepubliceerd-check" checked={data.gepubliceerd} onChange={e => setData({ ...data, gepubliceerd: e.target.checked })} style={{ cursor: "pointer" }} />
         <label htmlFor="gepubliceerd-check" style={{ cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>Gepubliceerd</label>
+      </div>
+      <div style={{ display: "flex", gap: "8px" }}>
+        <button className="btn-primary" onClick={() => onSave(data)}>Opslaan</button>
+        <button onClick={onCancel} style={{ padding: "8px 16px", borderRadius: "10px", border: "2px solid #1a1a1a", background: "#fff", color: "#1a1a1a", fontWeight: 700, cursor: "pointer" }}>Annuleren</button>
+      </div>
+    </div>
+  );
+}
+
+function UitgelichtForm({ wedstrijd, onSave, onCancel }) {
+  const [data, setData] = useState(wedstrijd || {
+    titel: "",
+    subtitel: "",
+    team: "Vrouwen 1",
+    datum: new Date().toISOString().split("T")[0],
+    tijdstip: "",
+    locatie: "",
+    tegenstander: "",
+    tegenstander_logo_url: "",
+    achtergrond_url: "",
+    actief: true,
+    volgorde: 1,
+  });
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+        <div>
+          <div style={sectionLabel}>Titel *</div>
+          <input style={inputCls} value={data.titel} onChange={e => setData({ ...data, titel: e.target.value })} placeholder="De Topper" />
+        </div>
+        <div>
+          <div style={sectionLabel}>Subtitel</div>
+          <input style={inputCls} value={data.subtitel || ""} onChange={e => setData({ ...data, subtitel: e.target.value })} placeholder="Korte omschrijving" />
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "10px" }}>
+        <div>
+          <div style={sectionLabel}>Team *</div>
+          <select style={{ ...inputCls, appearance: "auto" }} value={data.team} onChange={e => setData({ ...data, team: e.target.value })}>
+            {["MO15", "MO17", "MO20", "Vrouwen 1"].map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <div style={sectionLabel}>Datum *</div>
+          <input type="date" style={inputCls} value={data.datum} onChange={e => setData({ ...data, datum: e.target.value })} />
+        </div>
+        <div>
+          <div style={sectionLabel}>Tijdstip *</div>
+          <input style={inputCls} value={data.tijdstip} onChange={e => setData({ ...data, tijdstip: e.target.value })} placeholder="20:00 uur" />
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+        <div>
+          <div style={sectionLabel}>Locatie *</div>
+          <input style={inputCls} value={data.locatie} onChange={e => setData({ ...data, locatie: e.target.value })} placeholder="Sportpark De Bosk, Harkema" />
+        </div>
+        <div>
+          <div style={sectionLabel}>Tegenstander *</div>
+          <input style={inputCls} value={data.tegenstander} onChange={e => setData({ ...data, tegenstander: e.target.value })} placeholder="Harkemase Boys" />
+        </div>
+      </div>
+      <div>
+        <div style={sectionLabel}>Tegenstander logo URL</div>
+        <input style={inputCls} value={data.tegenstander_logo_url || ""} onChange={e => setData({ ...data, tegenstander_logo_url: e.target.value })} placeholder="https://..." />
+        {data.tegenstander_logo_url && <img src={data.tegenstander_logo_url} alt="logo preview" style={{ height: "60px", objectFit: "contain", marginTop: "8px", background: "#1B2A5E", borderRadius: "6px", padding: "8px" }} />}
+      </div>
+      <div>
+        <div style={sectionLabel}>Achtergrond URL</div>
+        <input style={inputCls} value={data.achtergrond_url || ""} onChange={e => setData({ ...data, achtergrond_url: e.target.value })} placeholder="https://..." />
+        <div style={{ fontSize: "11px", color: "rgba(26,26,26,0.5)", marginTop: "4px" }}>Tip: gebruik een speelsterfoto voor maximaal effect.</div>
+        {data.achtergrond_url && <img src={data.achtergrond_url} alt="achtergrond preview" style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "6px", marginTop: "8px" }} />}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", alignItems: "center" }}>
+        <div>
+          <div style={sectionLabel}>Volgorde</div>
+          <input type="number" style={inputCls} value={data.volgorde} onChange={e => setData({ ...data, volgorde: Number(e.target.value) })} min="1" />
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", paddingTop: "20px" }}>
+          <input type="checkbox" id="uitgelicht-actief" checked={data.actief !== false} onChange={e => setData({ ...data, actief: e.target.checked })} style={{ cursor: "pointer" }} />
+          <label htmlFor="uitgelicht-actief" style={{ cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>Actief</label>
+        </div>
       </div>
       <div style={{ display: "flex", gap: "8px" }}>
         <button className="btn-primary" onClick={() => onSave(data)}>Opslaan</button>
