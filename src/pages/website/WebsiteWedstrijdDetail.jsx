@@ -173,7 +173,7 @@ export default function WebsiteWedstrijdDetail() {
 
           {!heeftSelectie ? (
             <div style={{ background: "#1B2A5E", borderRadius: "8px", padding: "32px", textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>
-              De selectie voor deze wedstrijd is nog niet bekendgemaakt.
+              De selectie wordt binnenkort bekend gemaakt.
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
