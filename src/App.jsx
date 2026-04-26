@@ -22,6 +22,8 @@ import WebsiteBeheer from './pages/website/WebsiteBeheer';
 import SitemapXml from './pages/website/SitemapXml';
 import RobotsTxt from './pages/website/RobotsTxt';
 import ScrollToTop from './components/website/ScrollToTop';
+import WebsiteNieuwsbriefBevestig from './pages/website/WebsiteNieuwsbriefBevestig';
+import WebsiteNieuwsbriefAfmelden from './pages/website/WebsiteNieuwsbriefAfmelden';
 import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
 import PlayerDashboard from './pages/PlayerDashboard.jsx';
@@ -171,6 +173,8 @@ const WebsiteApp = () => (
         <Route path="/nieuws/:slug" element={<WebsiteNieuwsDetail />} />
         <Route path="/sitemap.xml" element={<SitemapXml />} />
         <Route path="/robots.txt" element={<RobotsTxt />} />
+        <Route path="/nieuwsbrief/bevestig" element={<WebsiteNieuwsbriefBevestig />} />
+        <Route path="/nieuwsbrief/afmelden" element={<WebsiteNieuwsbriefAfmelden />} />
         <Route path="/de-club" element={<WebsiteDeClub />} />
         <Route path="/proeftraining" element={<WebsiteProeftraining />} />
         <Route path="/contact" element={<WebsiteContact />} />

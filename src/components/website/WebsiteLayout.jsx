@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { applyWebsiteMeta } from "@/lib/websiteMeta";
 import SponsorBar from "@/components/website/SponsorBar.jsx";
 import { InstagramLogo, TiktokLogo, FacebookLogo } from "@phosphor-icons/react";
+import NieuwsbriefAanmeld from "@/components/website/NieuwsbriefAanmeld";
 
 const navLinks = [
   { label: "Homepage", href: "/" },
@@ -152,6 +153,9 @@ export default function WebsiteLayout({ children }) {
                {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ color: "rgba(255,255,255,0.6)", display: "inline-flex", transition: "color 0.2s" }} onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,0.9)"} onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.6)"}><FacebookLogo weight="bold" size={20} /></a>}
              </div>
              <Link to="/proeftraining" style={{ background: "#FF6800", color: "#fff", borderRadius: "3px", fontWeight: 700, fontSize: "13px", padding: "10px 20px", textDecoration: "none", display: "inline-block" }}>Proeftraining aanvragen</Link>
+             <div style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+               <NieuwsbriefAanmeld />
+             </div>
           </div>
         </div>
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "24px", paddingTop: "16px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", maxWidth: "1200px", margin: "24px auto 0" }}>

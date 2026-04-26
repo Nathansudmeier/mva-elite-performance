@@ -1,0 +1,60 @@
+{
+  "name": "Abonnee",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "E-mailadres van de abonnee"
+    },
+    "naam": {
+      "type": "string",
+      "description": "Naam (optioneel)"
+    },
+    "actief": {
+      "type": "boolean",
+      "default": true,
+      "description": "Of de abonnee actief is (niet afgemeld)"
+    },
+    "bevestigd": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of de aanmelding bevestigd is via de bevestigingsmail"
+    },
+    "bevestigingscode": {
+      "type": "string",
+      "description": "Unieke UUID voor bevestiging en afmelding"
+    },
+    "aangemeld_op": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Tijdstip van aanmelding"
+    },
+    "team_voorkeur": {
+      "type": "string",
+      "enum": [
+        "Alle",
+        "MO15",
+        "MO17",
+        "MO20",
+        "Vrouwen 1"
+      ],
+      "default": "Alle",
+      "description": "Voorkeur voor team-specifiek nieuws"
+    }
+  },
+  "required": [
+    "email"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "write": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
