@@ -26,28 +26,49 @@ Deno.serve(async (req) => {
       base44.asServiceRole.entities.Abonnee.filter({ actief: true, bevestigd: true }),
     ]);
 
-    const komendWedstrijden = (agendaAlle || []).filter(i => {
-      const d = new Date(i.date);
-      return d >= vandaag && d <= zevenDagenVooruit;
+    // Map agenda-items naar template-vriendelijke shape
+    const mapAgendaItem = (i) => ({
+      team: i.team || '',
+      titel: i.title || '',
+      datum: i.date,
+      tijdstip: i.start_time || '',
+      locatie: i.location || '',
+      score_thuis: i.score_thuis,
+      score_uit: i.score_uit,
     });
-    const uitslagen = (agendaAlle || []).filter(i => {
-      const d = new Date(i.date);
-      return d >= zevenDagenGeleden && d < vandaag;
-    });
+
+    const komendWedstrijden = (agendaAlle || [])
+      .filter(i => {
+        const d = new Date(i.date);
+        return d >= vandaag && d <= zevenDagenVooruit;
+      })
+      .map(mapAgendaItem);
+
+    const uitslagen = (agendaAlle || [])
+      .filter(i => {
+        const d = new Date(i.date);
+        return d >= zevenDagenGeleden && d < vandaag;
+      })
+      .map(mapAgendaItem);
+
     const uitgelicht = (uitgelichtAlle || []).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0));
+    const nieuws = nieuwsAlle || [];
 
     if (!abonnees || abonnees.length === 0) {
       return Response.json({ status: "ok", verstuurd: 0, message: "Geen actieve abonnees." });
     }
 
-    const subject = `MV Artemis · Week ${vandaag.getDate()} ${MAANDEN_LANG[vandaag.getMonth()]} — Nieuws & Uitslagen`;
+    const dag = vandaag.getDate();
+    const maand = MAANDEN_KORT[vandaag.getMonth()];
+    const subject = `MV Artemis · Week ${dag} ${MAANDEN_LANG[vandaag.getMonth()]} — Nieuws & Uitslagen`;
 
     let verstuurd = 0;
     let mislukt = 0;
     for (const abonnee of abonnees) {
       try {
-        const html = bouwNieuwsbrief({ abonnee, vandaag, nieuws: nieuwsAlle || [], komendWedstrijden, uitslagen, uitgelicht });
-        await sendViaResend({ to: abonnee.email, subject, html });
+        const html = nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht });
+        const text = nieuwsbriefText({ abonnee, nieuws, komendWedstrijden, uitgelicht });
+        await sendViaResend({ to: abonnee.email, subject, html, text });
         verstuurd++;
         await new Promise(r => setTimeout(r, 200));
       } catch (e) {
@@ -64,7 +85,7 @@ Deno.serve(async (req) => {
   }
 });
 
-async function sendViaResend({ to, subject, html }) {
+async function sendViaResend({ to, subject, html, text }) {
   const apiKey = Deno.env.get("RESEND_API_KEY");
   if (!apiKey) throw new Error("RESEND_API_KEY ontbreekt");
   const res = await fetch("https://api.resend.com/emails", {
@@ -75,9 +96,11 @@ async function sendViaResend({ to, subject, html }) {
     },
     body: JSON.stringify({
       from: "MV Artemis <onboarding@resend.dev>",
+      reply_to: "info@mv-artemis.nl",
       to: [to],
       subject,
       html,
+      text,
     }),
   });
   if (!res.ok) {
@@ -87,142 +110,286 @@ async function sendViaResend({ to, subject, html }) {
   return res.json();
 }
 
-function bouwNieuwsbrief({ abonnee, vandaag, nieuws, komendWedstrijden, uitslagen, uitgelicht }) {
-  const formatLangeDatum = (d) => new Date(d).toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
-  const formatKorteDatum = (d) => new Date(d).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' });
-  const weekLabel = `Week ${vandaag.getDate()} ${MAANDEN_KORT[vandaag.getMonth()]}`;
+function nieuwsbriefText({ abonnee, nieuws, komendWedstrijden, uitgelicht }) {
+  return `
+MV Artemis — Wekelijkse Update
 
-  return `<!DOCTYPE html>
-<html>
+Jouw Ambitie. Ons Doel.
+
+${uitgelicht.length > 0 ? `
+NIET MISSEN: ${uitgelicht[0].titel}
+MV Artemis vs ${uitgelicht[0].tegenstander}
+${uitgelicht[0].datum} · ${uitgelicht[0].tijdstip}
+${uitgelicht[0].locatie}
+` : ''}
+
+LAATSTE NIEUWS
+${nieuws.map(b => `
+${b.titel}
+${b.samenvatting || ''}
+Lees meer: https://mv-artemis.nl/nieuws/${b.slug}
+`).join('\n')}
+
+KOMENDE WEDSTRIJDEN
+${komendWedstrijden.map(w => `
+${w.team || ''} · ${w.titel}
+${w.datum} · ${w.tijdstip || ''} · ${w.locatie || ''}
+`).join('\n')}
+
+---
+MV Artemis · Meiden Vereniging Artemis
+Sportpark Douwekamp, Opeinde
+info@mv-artemis.nl · mv-artemis.nl
+
+Afmelden: https://mv-artemis.nl/nieuwsbrief/afmelden?code=${abonnee.bevestigingscode}
+  `.trim();
+}
+
+function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht }) {
+  return `
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<style>
-  body { margin: 0; padding: 0; background: #10121A; font-family: Arial, sans-serif; }
-  .container { max-width: 600px; margin: 0 auto; padding: 0 0 40px; }
-  .header { background: #1B2A5E; padding: 24px 32px; display: flex; align-items: center; }
-  .logo { font-size: 24px; font-weight: 700; color: #ffffff; letter-spacing: 2px; }
-  .logo span { color: #FF6800; }
-  .week-label { margin-left: auto; color: rgba(255,255,255,0.4); font-size: 12px; }
-  .hero { background: #FF6800; padding: 32px; }
-  .hero-tag { color: rgba(255,255,255,0.7); font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
-  .hero h1 { color: #ffffff; font-size: 36px; margin: 0; line-height: 1.1; }
-  .hero p { color: rgba(255,255,255,0.8); font-size: 14px; margin: 12px 0 0; line-height: 1.6; }
-  .section { padding: 28px 32px; }
-  .section-label { color: #FF6800; font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .nieuws-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .nieuws-item:last-child { border-bottom: none; margin-bottom: 0; }
-  .nieuws-cat { display: inline-block; background: rgba(255,104,0,0.2); color: #FF6800; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-  .nieuws-titel { color: #ffffff; font-size: 18px; font-weight: 700; margin: 0 0 8px; line-height: 1.2; }
-  .nieuws-samen { color: rgba(255,255,255,0.55); font-size: 13px; line-height: 1.5; margin: 0 0 10px; }
-  .lees-meer { color: #FF6800; font-size: 13px; font-weight: 600; text-decoration: none; }
-  .wedstrijd { background: #1B2A5E; border-radius: 6px; padding: 14px 16px; margin-bottom: 8px; }
-  .wed-team { color: rgba(255,255,255,0.4); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-  .wed-teams { color: #ffffff; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .wed-info { color: rgba(255,255,255,0.45); font-size: 12px; }
-  .uitslag { background: #202840; border-radius: 6px; padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-  .uitslag-teams { color: #ffffff; font-size: 14px; font-weight: 600; }
-  .uitslag-score { color: #FF6800; font-size: 18px; font-weight: 700; }
-  .uitgelicht { background: linear-gradient(135deg, #1B2A5E, #0F1630); border-radius: 6px; padding: 24px; margin-bottom: 24px; border-left: 3px solid #FF6800; }
-  .uitgelicht-label { color: #FF6800; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-  .uitgelicht h2 { color: #ffffff; font-size: 28px; margin: 0 0 12px; }
-  .uitgelicht-info { color: rgba(255,255,255,0.6); font-size: 13px; line-height: 1.6; }
-  .cta-btn { display: inline-block; background: #FF6800; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 4px; font-weight: 700; font-size: 14px; margin-top: 16px; }
-  .footer { background: #1B2A5E; padding: 24px 32px; text-align: center; }
-  .footer p { color: rgba(255,255,255,0.3); font-size: 12px; margin: 0 0 8px; line-height: 1.6; }
-  .footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
-  .afmeld-link { color: rgba(255,255,255,0.25); font-size: 11px; }
-</style>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MV Artemis Nieuwsbrief</title>
 </head>
-<body>
-<div class="container">
-  <div class="header">
-    <div class="logo">MV<span>/</span>ARTEMIS</div>
-    <div class="week-label">${weekLabel}</div>
-  </div>
+<body style="margin:0;padding:0;background-color:#10121A;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 
-  <div class="hero">
-    <div class="hero-tag">Wekelijkse update</div>
-    <h1>Jouw Ambitie.<br>Ons Doel.</h1>
-    <p>Het laatste nieuws, uitslagen en aankondigingen van MV Artemis — samengevat voor jou.</p>
-  </div>
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#10121A;">
+<tr><td align="center" style="padding:32px 16px;">
+
+<table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;">
+
+  <!-- HEADER -->
+  <tr>
+    <td style="background-color:#1B2A5E;padding:20px 32px;border-radius:8px 8px 0 0;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td>
+            <span style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:2px;font-family:Arial,sans-serif;">
+              MV<span style="color:#FF6800;">/</span>ARTEMIS
+            </span>
+          </td>
+          <td align="right">
+            <span style="font-size:12px;color:rgba(255,255,255,0.3);font-family:Arial,sans-serif;">
+              Week ${dag} ${maand}
+            </span>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- ORANJE LIJN -->
+  <tr>
+    <td style="background-color:#FF6800;height:3px;font-size:0;line-height:0;">&nbsp;</td>
+  </tr>
+
+  <!-- HERO -->
+  <tr>
+    <td style="background-color:#151D35;padding:36px 32px;">
+      <p style="margin:0 0 6px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;">
+        WEKELIJKSE UPDATE
+      </p>
+      <h1 style="margin:0 0 14px 0;font-size:34px;font-weight:700;color:#ffffff;line-height:1.1;font-family:Arial,sans-serif;">
+        Jouw Ambitie.<br/>Ons Doel.
+      </h1>
+      <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.6);line-height:1.7;font-family:Arial,sans-serif;">
+        Het laatste nieuws, uitslagen en aankondigingen van MV Artemis — samengevat voor jou.
+      </p>
+    </td>
+  </tr>
 
   ${uitgelicht.length > 0 ? `
-  <div class="section">
-    <div class="section-label">Niet missen</div>
-    <div class="uitgelicht">
-      <div class="uitgelicht-label">${uitgelicht[0].titel || ''}</div>
-      <h2>MV Artemis vs ${uitgelicht[0].tegenstander || ''}</h2>
-      <div class="uitgelicht-info">
-        📅 ${uitgelicht[0].datum ? formatLangeDatum(uitgelicht[0].datum) : ''}<br>
-        🕐 ${uitgelicht[0].tijdstip || ''}<br>
-        📍 ${uitgelicht[0].locatie || ''}
-      </div>
-    </div>
-  </div>
+  <!-- UITGELICHTE WEDSTRIJD -->
+  <tr>
+    <td style="background-color:#10121A;padding:28px 32px 0;">
+      <p style="margin:0 0 14px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        NIET MISSEN
+      </p>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#1B2A5E;border-radius:6px;border-left:3px solid #FF6800;">
+        <tr>
+          <td style="padding:20px 24px;">
+            <p style="margin:0 0 6px 0;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;">
+              ${uitgelicht[0].titel || ''}
+            </p>
+            <h2 style="margin:0 0 12px 0;font-size:22px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;">
+              MV Artemis vs ${uitgelicht[0].tegenstander || ''}
+            </h2>
+            <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.8;font-family:Arial,sans-serif;">
+              📅 ${uitgelicht[0].datum ? new Date(uitgelicht[0].datum).toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' }) : ''}<br/>
+              🕐 ${uitgelicht[0].tijdstip || ''}<br/>
+              📍 ${uitgelicht[0].locatie || ''}
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
   ` : ''}
 
   ${nieuws.length > 0 ? `
-  <div class="section">
-    <div class="section-label">Laatste nieuws</div>
-    ${nieuws.map(b => `
-    <div class="nieuws-item">
-      <div class="nieuws-cat">${b.categorie || ''}</div>
-      <div class="nieuws-titel">${b.titel || ''}</div>
-      <div class="nieuws-samen">${b.samenvatting || ''}</div>
-      <a href="https://mv-artemis.nl/nieuws/${b.slug}" class="lees-meer">Lees verder →</a>
-    </div>
-    `).join('')}
-  </div>
+  <!-- LAATSTE NIEUWS -->
+  <tr>
+    <td style="background-color:#10121A;padding:28px 32px 0;">
+      <p style="margin:0 0 16px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        LAATSTE NIEUWS
+      </p>
+      ${nieuws.map((b, i) => `
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:${i < nieuws.length - 1 ? '20px' : '0'};padding-bottom:${i < nieuws.length - 1 ? '20px' : '0'};border-bottom:${i < nieuws.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none'};">
+        <tr>
+          <td>
+            <p style="margin:0 0 6px 0;display:inline-block;background-color:rgba(255,104,0,0.2);color:#FF6800;font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">
+              ${b.categorie || ''}
+            </p>
+            ${b.team && b.team !== 'Alle' ? `
+            <p style="margin:0 0 6px 8px;display:inline-block;background-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">
+              ${b.team}
+            </p>
+            ` : ''}
+            <h3 style="margin:8px 0 8px 0;font-size:17px;font-weight:700;color:#ffffff;line-height:1.2;font-family:Arial,sans-serif;">
+              ${b.titel || ''}
+            </h3>
+            <p style="margin:0 0 10px 0;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;font-family:Arial,sans-serif;">
+              ${b.samenvatting || ''}
+            </p>
+            <a href="https://mv-artemis.nl/nieuws/${b.slug}" style="color:#FF6800;font-size:13px;font-weight:600;text-decoration:none;font-family:Arial,sans-serif;">
+              Lees verder →
+            </a>
+          </td>
+        </tr>
+      </table>
+      `).join('')}
+    </td>
+  </tr>
   ` : ''}
 
   ${uitslagen.length > 0 ? `
-  <div class="section" style="background:#161A24; padding: 24px 32px;">
-    <div class="section-label">Uitslagen</div>
-    ${uitslagen.map(w => `
-    <div class="uitslag">
-      <div class="uitslag-teams">${w.title || 'MV Artemis'}</div>
-      <div class="uitslag-score">${w.score_thuis ?? '-'} - ${w.score_uit ?? '-'}</div>
-    </div>
-    `).join('')}
-  </div>
+  <!-- UITSLAGEN -->
+  <tr>
+    <td style="background-color:#161A24;padding:28px 32px;">
+      <p style="margin:0 0 16px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        UITSLAGEN
+      </p>
+      ${uitslagen.map(w => `
+      <table width="100%" cellpadding="12" cellspacing="0" border="0" style="background-color:#202840;border-radius:6px;margin-bottom:8px;">
+        <tr>
+          <td style="font-size:13px;font-weight:600;color:#ffffff;font-family:Arial,sans-serif;">
+            ${w.titel || 'MV Artemis'}
+          </td>
+          <td align="right" style="font-size:20px;font-weight:700;color:#FF6800;font-family:Arial,sans-serif;">
+            ${w.score_thuis ?? ''} - ${w.score_uit ?? ''}
+          </td>
+        </tr>
+      </table>
+      `).join('')}
+    </td>
+  </tr>
   ` : ''}
 
   ${komendWedstrijden.length > 0 ? `
-  <div class="section">
-    <div class="section-label">Komende wedstrijden</div>
-    ${komendWedstrijden.map(w => `
-    <div class="wedstrijd">
-      <div class="wed-team">${w.team || ''}</div>
-      <div class="wed-teams">${w.title || ''}</div>
-      <div class="wed-info">
-        ${formatKorteDatum(w.date)}
-        ${w.start_time ? '· ' + w.start_time : ''}
-        ${w.location ? '· ' + w.location : ''}
-      </div>
-    </div>
-    `).join('')}
-  </div>
+  <!-- KOMENDE WEDSTRIJDEN -->
+  <tr>
+    <td style="background-color:#10121A;padding:28px 32px;">
+      <p style="margin:0 0 16px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        KOMENDE WEDSTRIJDEN
+      </p>
+      ${komendWedstrijden.map(w => `
+      <table width="100%" cellpadding="14" cellspacing="0" border="0" style="background-color:#1B2A5E;border-radius:6px;margin-bottom:8px;">
+        <tr>
+          <td>
+            ${w.team ? `
+            <p style="margin:0 0 4px 0;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.4);font-family:Arial,sans-serif;">
+              ${w.team}
+            </p>
+            ` : ''}
+            <p style="margin:0 0 4px 0;font-size:14px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;">
+              ${w.titel || ''}
+            </p>
+            <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.45);font-family:Arial,sans-serif;">
+              ${w.datum ? new Date(w.datum).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' }) : ''}
+              ${w.tijdstip ? ' · ' + w.tijdstip : ''}
+              ${w.locatie ? ' · ' + w.locatie : ''}
+            </p>
+          </td>
+        </tr>
+      </table>
+      `).join('')}
+    </td>
+  </tr>
   ` : ''}
 
-  <div class="section" style="text-align: center;">
-    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 16px;">Wil jij bij MV Artemis komen voetballen?</p>
-    <a href="https://mv-artemis.nl/proeftraining" class="cta-btn">Proeftraining aanvragen →</a>
-  </div>
-
-  <div class="footer">
-    <p>
-      MV Artemis · Meiden Vereniging Artemis<br>
-      Sportpark Douwekamp, Opeinde · info@mv-artemis.nl
-    </p>
-    <p><a href="https://mv-artemis.nl">mv-artemis.nl</a></p>
-    <p>
-      <a href="https://mv-artemis.nl/nieuwsbrief/afmelden?code=${abonnee.bevestigingscode}" class="afmeld-link">
-        Afmelden voor deze nieuwsbrief
+  <!-- CTA -->
+  <tr>
+    <td style="background-color:#FF6800;padding:32px;text-align:center;">
+      <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);font-family:Arial,sans-serif;">
+        MELD JE AAN
+      </p>
+      <h2 style="margin:0 0 8px 0;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;font-family:Arial,sans-serif;">
+        Wil jij bij MV Artemis<br/>komen voetballen?
+      </h2>
+      <p style="margin:0 0 20px 0;font-size:13px;color:rgba(255,255,255,0.75);font-family:Arial,sans-serif;">
+        Kom een proeftraining doen. Kijk of het klikt.
+      </p>
+      <a href="https://mv-artemis.nl/proeftraining" style="display:inline-block;background-color:#ffffff;color:#FF6800;text-decoration:none;padding:14px 32px;border-radius:4px;font-weight:700;font-size:15px;font-family:Arial,sans-serif;">
+        Proeftraining aanvragen →
       </a>
-    </p>
-  </div>
-</div>
+    </td>
+  </tr>
+
+  <!-- QUOTE -->
+  <tr>
+    <td style="background-color:#0F1630;padding:24px 32px;text-align:center;">
+      <p style="margin:0;font-size:20px;font-weight:700;color:#ffffff;letter-spacing:1px;font-family:Arial,sans-serif;">
+        Jouw Ambitie. <span style="color:#FF6800;">Ons Doel.</span>
+      </p>
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td style="background-color:#1B2A5E;padding:20px 32px;border-radius:0 0 8px 8px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td>
+            <p style="margin:0 0 2px 0;font-size:13px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;">
+              MV Artemis
+            </p>
+            <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;font-family:Arial,sans-serif;">
+              Meiden Vereniging Artemis<br/>
+              Sportpark Douwekamp, Opeinde<br/>
+              info@mv-artemis.nl
+            </p>
+          </td>
+          <td align="right" valign="top">
+            <a href="https://mv-artemis.nl" style="font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;font-family:Arial,sans-serif;">
+              mv-artemis.nl
+            </a>
+          </td>
+        </tr>
+      </table>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);">
+        <tr>
+          <td>
+            <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.2);font-family:Arial,sans-serif;">
+              Je ontvangt deze mail omdat je je hebt aangemeld via mv-artemis.nl.
+            </p>
+          </td>
+          <td align="right">
+            <a href="https://mv-artemis.nl/nieuwsbrief/afmelden?code=${abonnee.bevestigingscode}" style="font-size:11px;color:rgba(255,255,255,0.25);text-decoration:underline;font-family:Arial,sans-serif;">
+              Afmelden
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
 </body>
-</html>`;
+</html>
+`;
 }
