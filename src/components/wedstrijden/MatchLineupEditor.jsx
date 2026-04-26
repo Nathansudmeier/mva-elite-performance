@@ -68,11 +68,11 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
       const updatedMatch = {
         ...(match || {}),
         id: matchId,
-        team: match?.team || item?.team,
+        team: item?.team || match?.team,
         date: match?.date || item?.date,
         start_time: match?.start_time || item?.start_time,
         opponent: match?.opponent || item?.title,
-        opponent_logo: match?.opponent_logo || item?.opponent_logo_url,
+        opponent_logo: item?.opponent_logo_url || match?.opponent_logo,
         home_away: match?.home_away || item?.home_away,
         lineup: lineupData,
         substitutes: match?.substitutes || [],

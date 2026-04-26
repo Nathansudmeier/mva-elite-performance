@@ -28,24 +28,24 @@ export default function MatchdayCard({ match, onClose }) {
 
   // Data ophalen
   useEffect(() => {
-    if (!match?.team) return;
+    if (!match) return;
     (async () => {
       const [allPlayers, allBg, allSponsors, instList] = await Promise.all([
-        base44.entities.Player.filter({ team: match.team }).catch(() => []),
+        base44.entities.Player.list().catch(() => []),
         base44.entities.MatchdayAchtergrond.list().catch(() => []),
         base44.entities.Sponsor.filter({ actief: true }).catch(() => []),
         base44.entities.WebsiteInstellingen.list().catch(() => []),
       ]);
       setSpelers(allPlayers || []);
       const filteredBg = (allBg || [])
-        .filter(b => b.actief !== false && (b.team === match.team || b.team === "Alle"))
+        .filter(b => b.actief !== false && (!match.team || b.team === match.team || b.team === "Alle"))
         .sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0));
       setAchtergronden(filteredBg);
       if (filteredBg.length > 0) setSelectedAchtergrond(filteredBg[0]);
       setSponsors((allSponsors || []).sort((a, b) => (a.tier || 9) - (b.tier || 9) || (a.volgorde || 0) - (b.volgorde || 0)).slice(0, 6));
       if (instList && instList.length > 0) setInstellingen(instList[0]);
     })();
-  }, [match?.team]);
+  }, [match?.id, match?.team]);
 
   // Lineup koppelen
   const lineupArr = Array.isArray(match?.lineup) ? match.lineup : [];
