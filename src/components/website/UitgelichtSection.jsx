@@ -87,22 +87,30 @@ function WedstrijdKaart({ w, compact = false }) {
   );
 }
 
-export default function UitgelichtSection() {
-  const [items, setItems] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+export default function UitgelichtSection({ items: itemsProp }) {
+  const [items, setItems] = useState(itemsProp || null);
 
   useEffect(() => {
-    base44.entities.UitgelichtWedstrijd.list().then(list => {
-      const today = new Date().toISOString().split("T")[0];
-      const filtered = (list || [])
-        .filter(w => w.actief !== false && w.datum && w.datum >= today)
-        .sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0));
-      setItems(filtered);
-      setLoaded(true);
-    }).catch(() => setLoaded(true));
-  }, []);
+    if (itemsProp !== undefined) {
+      setItems(itemsProp);
+      return;
+    }
+    // Fallback: laad zelf via getWebsiteData (publieke functie)
+    base44.functions.invoke('getWebsiteData', {})
+      .then(res => {
+        const today = new Date().toISOString().split("T")[0];
+        const list = res?.data?.uitgelichteWedstrijden
+          || (res?.data?.uitgelichte_wedstrijden)
+          || [];
+        const filtered = list
+          .filter(w => w.actief !== false && w.datum && w.datum >= today)
+          .sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0));
+        setItems(filtered);
+      })
+      .catch(() => setItems([]));
+  }, [itemsProp]);
 
-  if (!loaded || items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   if (items.length === 1) {
     return (

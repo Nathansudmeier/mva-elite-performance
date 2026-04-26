@@ -148,6 +148,7 @@ export default function WebsiteHome() {
   const [uitslagen, setUitslagen] = useState([]);
   const [sponsors, setSponsors] = useState([]);
   const [nieuwsberichten, setNieuwsberichten] = useState([]);
+  const [uitgelichteWedstrijden, setUitgelichteWedstrijden] = useState([]);
 
   useEffect(() => {
     fetchWebsiteData().then(data => {
@@ -155,6 +156,7 @@ export default function WebsiteHome() {
       if (data?.prestaties?.length > 0) setPrestaties(data.prestaties.slice(0, 4));
       if (data?.sponsors?.length > 0) setSponsors(data.sponsors);
       if (data?.nieuwsberichten) setNieuwsberichten(data.nieuwsberichten);
+      if (data?.uitgelichteWedstrijden) setUitgelichteWedstrijden(data.uitgelichteWedstrijden);
       if (data?.matches) {
         const today = new Date().toISOString().split("T")[0];
         const filtered = (data.matches)
@@ -247,7 +249,7 @@ export default function WebsiteHome() {
       })()}
 
       {/* UITGELICHTE WEDSTRIJDEN */}
-      <UitgelichtSection />
+      <UitgelichtSection items={uitgelichteWedstrijden} />
 
       {/* STATS */}
       <section style={{ background: "#14192A", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
