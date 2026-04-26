@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
+import TeamNav from "../../components/website/TeamNav";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
@@ -70,10 +71,14 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(16,18,26,1) 0%, rgba(16,18,26,0) 40%)" }} />
         <div style={{ position: "relative", zIndex: 1, padding: "0 28px 48px", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
           <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "10px" }}>{breadcrumb}</div>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(48px, 8vw, 80px)", color: "#fff", lineHeight: 1 }}>
-            {teamTitel.split(/(\d+)/).map((part, i) =>
-              /\d/.test(part) ? <span key={i} style={{ color: accentKleur }}>{part}</span> : part
-            )}
+          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "72px", color: "#fff", lineHeight: 0.9 }}>
+            {teamTitel.split("\n").map((line, lineIdx) => (
+              <div key={lineIdx}>
+                {line.split(/(\d+)/).map((part, i) =>
+                  /\d/.test(part) ? <span key={i} style={{ color: accentKleur }}>{part}</span> : part
+                )}
+              </div>
+            ))}
           </div>
           <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.65)", marginTop: "12px", maxWidth: "440px", lineHeight: 1.5 }}>{competitie}</p>
           <div style={{ display: "flex", gap: "8px", marginTop: "16px", flexWrap: "wrap" }}>
@@ -83,6 +88,8 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
           </div>
         </div>
       </section>
+
+      <TeamNav />
 
       {/* CONTENT */}
       <section style={{ background: "#10121A", padding: "48px 28px" }}>

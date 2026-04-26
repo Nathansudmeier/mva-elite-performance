@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
+import TeamNav from "../../components/website/TeamNav";
 
 const ACCENT = "#FFD600";
 const IMAGE_VELD = "mo20_image_url";
@@ -74,8 +75,8 @@ export default function WebsiteMO20() {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(16,18,26,1) 0%, rgba(16,18,26,0) 40%)" }} />
         <div style={{ position: "relative", zIndex: 1, padding: "0 28px 48px", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
           <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "10px" }}>SELECTIES / MO20</div>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(48px, 8vw, 80px)", color: "#fff", lineHeight: 1 }}>
-            UNDER <span style={{ color: ACCENT }}>20</span>
+          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "72px", color: "#fff", lineHeight: 0.9 }}>
+            MO <span style={{ color: ACCENT }}>20</span>
           </div>
           <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.65)", marginTop: "12px", maxWidth: "440px", lineHeight: 1.5 }}>
             De MO20 van MV Artemis start seizoen 2026/27. Ben jij er straks bij?
@@ -86,6 +87,8 @@ export default function WebsiteMO20() {
           </div>
         </div>
       </section>
+
+      <TeamNav />
 
       {/* WERVING + ANTICIPATIE */}
       <section style={{ background: "#10121A", padding: "48px 28px" }}>

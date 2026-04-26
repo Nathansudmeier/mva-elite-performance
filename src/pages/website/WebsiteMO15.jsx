@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
+import TeamNav from "../../components/website/TeamNav";
 
 const STAND = [
   { rank: 1, team: "FC MVA Noord MO15-1", g: 8, w: 8, gl: 0, v: 0, p: 24, voor: 60, tegen: 2, highlight: true },
@@ -39,7 +40,7 @@ export default function WebsiteMO15() {
           <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "8px" }}>SELECTIES / MO15</div>
           <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", marginBottom: "10px" }}>Seizoen 2025/26 · Tijdelijk</div>
           <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "72px", color: "#fff", lineHeight: 0.9 }}>
-            UNDER <span style={{ color: "#FF6800" }}>15</span>
+            MO <span style={{ color: "#FF6800" }}>15</span>
           </div>
           <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.6)", marginTop: "12px", maxWidth: "560px", lineHeight: 1.55 }}>
             De MO15 speelt dit seizoen mee en vormt volgend jaar de kern van de MO17. Koploper in de 1e klasse.
@@ -51,6 +52,8 @@ export default function WebsiteMO15() {
           </div>
         </div>
       </section>
+
+      <TeamNav />
 
       {/* CONTENT */}
       <section style={{ background: "#10121A", padding: "48px 28px" }}>
