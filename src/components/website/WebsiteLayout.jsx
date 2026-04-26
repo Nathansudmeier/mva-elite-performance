@@ -7,11 +7,23 @@ import SponsorBar from "@/components/website/SponsorBar.jsx";
 const navLinks = [
   { label: "Homepage", href: "/" },
   { label: "Selecties", href: "/selecties" },
+  { label: "MO15", href: "/mo15", tempBadge: "Dit seizoen" },
   { label: "Wedstrijden", href: "/wedstrijden" },
   { label: "Nieuws", href: "/nieuws" },
   { label: "De Club", href: "/de-club" },
   { label: "Contact", href: "/contact" },
 ];
+
+const tempBadgeStyle = {
+  fontSize: "9px",
+  background: "rgba(255,104,0,0.2)",
+  color: "#FF6800",
+  padding: "2px 5px",
+  borderRadius: "2px",
+  fontWeight: 700,
+  letterSpacing: "0.5px",
+  textTransform: "none",
+};
 
 export default function WebsiteLayout({ children }) {
   const location = useLocation();
@@ -72,7 +84,10 @@ export default function WebsiteLayout({ children }) {
 
         <div style={{ display: "flex", gap: "28px", alignItems: "center" }} className="w-desktop-nav">
           {navLinks.map((l) => (
-            <Link key={l.href} to={l.href} style={{ textDecoration: "none", fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: location.pathname === l.href ? "#FF6800" : "#fff" }}>{l.label}</Link>
+            <Link key={l.href} to={l.href} style={{ textDecoration: "none", fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: location.pathname === l.href ? "#FF6800" : "#fff", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              {l.label}
+              {l.tempBadge && <span style={tempBadgeStyle}>{l.tempBadge}</span>}
+            </Link>
           ))}
         </div>
 
@@ -87,7 +102,10 @@ export default function WebsiteLayout({ children }) {
       {menuOpen && (
         <div style={{ position: "fixed", top: "70px", left: 0, right: 0, background: "#1B2A5E", zIndex: 99, padding: "16px 28px", borderBottom: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column", gap: "16px" }}>
           {navLinks.map((l) => (
-            <Link key={l.href} to={l.href} onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: location.pathname === l.href ? "#FF6800" : "#fff" }}>{l.label}</Link>
+            <Link key={l.href} to={l.href} onClick={() => setMenuOpen(false)} style={{ textDecoration: "none", fontSize: "14px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: location.pathname === l.href ? "#FF6800" : "#fff", display: "inline-flex", alignItems: "center", gap: "8px" }}>
+              {l.label}
+              {l.tempBadge && <span style={tempBadgeStyle}>{l.tempBadge}</span>}
+            </Link>
           ))}
         </div>
       )}

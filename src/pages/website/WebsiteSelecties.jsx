@@ -71,6 +71,24 @@ export default function WebsiteSelecties() {
               </div>
             </Link>
           ))}
+
+          {/* TIJDELIJKE MO15 KAART */}
+          <Link to="/mo15" style={{ textDecoration: "none" }}>
+            <div style={{ background: "#0F1630", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "6px", minHeight: "260px", display: "flex", flexDirection: "column", overflow: "hidden", borderTop: "3px solid rgba(255,104,0,0.4)" }}>
+              <div style={{ padding: "20px 20px 16px", flex: 1 }}>
+                <span style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.5)", fontSize: "11px", fontWeight: 700, padding: "5px 12px", borderRadius: "3px", letterSpacing: "2px" }}>MO15 · Dit seizoen</span>
+                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "34px", color: "rgba(255,255,255,0.7)", marginTop: "12px", lineHeight: 1 }}>De basis van morgen.</div>
+                <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", marginTop: "10px", lineHeight: 1.5 }}>De MO15 speelt dit seizoen mee en vormt volgend jaar de kern van de MO17.</p>
+              </div>
+              <div style={{ padding: "12px 20px", borderTop: "1px solid rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "rgba(255,255,255,0.3)" }} />
+                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.45)" }}>Seizoen 2025/26 · Tijdelijk</span>
+                </div>
+                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "16px" }}>→</span>
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
 

@@ -11,6 +11,7 @@ import WebsiteSelecties from './pages/website/WebsiteSelecties';
 import WebsiteMO17 from './pages/website/WebsiteMO17';
 import WebsiteMO20 from './pages/website/WebsiteMO20';
 import WebsiteVrouwen1 from './pages/website/WebsiteVrouwen1';
+import WebsiteMO15 from './pages/website/WebsiteMO15';
 import WebsiteWedstrijden from './pages/website/WebsiteWedstrijden';
 import WebsiteDeClub from './pages/website/WebsiteDeClub';
 import WebsiteProeftraining from './pages/website/WebsiteProeftraining';
@@ -162,6 +163,7 @@ const WebsiteApp = () => (
         <Route path="/mo17" element={<WebsiteMO17 />} />
         <Route path="/mo20" element={<WebsiteMO20 />} />
         <Route path="/vrouwen-1" element={<WebsiteVrouwen1 />} />
+        <Route path="/mo15" element={<WebsiteMO15 />} />
         <Route path="/wedstrijden" element={<WebsiteWedstrijden />} />
         <Route path="/nieuws" element={<WebsiteNieuws />} />
         <Route path="/nieuws/:slug" element={<WebsiteNieuwsDetail />} />
