@@ -87,7 +87,6 @@ export default function MatchdayCard({ match, onClose }) {
     if (!kaartRef.current) return;
     setIsDownloading(true);
     const kaart = kaartRef.current;
-    const originalTransform = kaart.style.transform;
     let blobUrls = [];
 
     try {
@@ -115,15 +114,14 @@ export default function MatchdayCard({ match, onClose }) {
         }
       }
 
-      // Stap 2: Verwijder schaling
-      kaart.style.transform = "none";
       await new Promise(r => setTimeout(r, 100));
 
-      // Stap 3: Genereer canvas
+      // Genereer canvas op de GESCHAALDE preview (540×960) met scale=2 → 1080×1920
+      // Dit garandeert dat de PNG IDENTIEK is aan de preview
       const canvas = await html2canvas(kaart, {
-        width: 1080,
-        height: 1920,
-        scale: 1,
+        width: 540,
+        height: 960,
+        scale: 2,
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#10121A",
@@ -140,17 +138,14 @@ export default function MatchdayCard({ match, onClose }) {
         },
       });
 
-      // Stap 4: Herstel schaling
-      kaart.style.transform = originalTransform;
-
-      // Stap 5: Herstel originele src URLs
+      // Herstel originele src URLs
       for (const { img, originalSrc, blobUrl } of blobUrls) {
         img.src = originalSrc;
         if (blobUrl) URL.revokeObjectURL(blobUrl);
       }
       blobUrls = [];
 
-      // Stap 6: Download
+      // Download
       const link = document.createElement("a");
       const team = match?.team?.replace(/\s+/g, "_") || "team";
       const datum = match?.date?.split("T")[0] || "datum";
@@ -159,31 +154,11 @@ export default function MatchdayCard({ match, onClose }) {
       link.click();
     } catch (error) {
       console.error("Download fout:", error);
-      // Herstel state bij fout
-      kaart.style.transform = originalTransform;
       for (const { img, originalSrc, blobUrl } of blobUrls) {
         img.src = originalSrc;
         if (blobUrl) URL.revokeObjectURL(blobUrl);
       }
-
-      // Fallback: probeer zonder CORS preload
-      try {
-        const html2canvasModule = await import("html2canvas");
-        const html2canvas = html2canvasModule.default || html2canvasModule;
-        kaart.style.transform = "none";
-        const canvas = await html2canvas(kaart, {
-          width: 1080, height: 1920, scale: 1,
-          useCORS: true, allowTaint: true, backgroundColor: "#10121A",
-        });
-        kaart.style.transform = originalTransform;
-        const link = document.createElement("a");
-        link.download = "matchday-card.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      } catch (fallbackError) {
-        console.error("Fallback ook mislukt:", fallbackError);
-        alert("Download mislukt. Probeer een screenshot.");
-      }
+      alert("Download mislukt. Probeer een screenshot.");
     } finally {
       setIsDownloading(false);
     }
