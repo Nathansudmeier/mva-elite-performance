@@ -7,12 +7,12 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Voor handmatige trigger: alleen admins
+    // Handmatige trigger: admins en trainers. Automation: geen user (service role).
     let user = null;
     try { user = await base44.auth.me(); } catch {}
     const isAutomation = !user;
-    if (!isAutomation && user?.role !== 'admin') {
-      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+    if (!isAutomation && user?.role !== 'admin' && user?.role !== 'trainer') {
+      return Response.json({ error: 'Forbidden: Admin/trainer access required' }, { status: 403 });
     }
 
     const vandaag = new Date();
