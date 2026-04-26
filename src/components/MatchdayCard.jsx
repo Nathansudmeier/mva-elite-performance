@@ -571,7 +571,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
 
         {/* SECTIE F: Substitutions */}
         {wisselSpelers.length > 0 && (
-          <div style={{ padding: "10px 64px 110px", maxWidth: sectionMaxWidth }}>
+          <div style={{ padding: "16px 64px 140px", maxWidth: sectionMaxWidth }}>
             <div style={{
               display: "inline-block",
               background: "#1B2A5E", borderRadius: 3,
@@ -581,7 +581,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
             }}>
               SUBSTITUTIONS
             </div>
-            <div style={{ fontSize: 20, color: "rgba(255,255,255,0.7)", marginTop: 8 }}>
+            <div style={{ fontSize: 20, color: "rgba(255,255,255,0.7)", marginTop: 12 }}>
               {wisselNamen}
             </div>
           </div>
