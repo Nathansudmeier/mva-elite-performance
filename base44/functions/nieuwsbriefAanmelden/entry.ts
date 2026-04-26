@@ -203,10 +203,32 @@ async function sendWelkomstmail(base44, email, bevestigingscode) {
 </body>
 </html>`;
 
-  await base44.asServiceRole.integrations.Core.SendEmail({
-    from_name: "MV Artemis",
+  await sendViaResend({
     to: email,
     subject: "Welkom bij de nieuwsbrief — MV Artemis",
-    body: html,
+    html,
   });
+}
+
+async function sendViaResend({ to, subject, html }) {
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  if (!apiKey) throw new Error("RESEND_API_KEY ontbreekt");
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "MV Artemis <nieuwsbrief@mv-artemis.nl>",
+      to: [to],
+      subject,
+      html,
+    }),
+  });
+  if (!res.ok) {
+    const t = await res.text();
+    throw new Error(`Resend ${res.status}: ${t}`);
+  }
+  return res.json();
 }

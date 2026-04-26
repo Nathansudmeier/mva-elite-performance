@@ -47,12 +47,7 @@ Deno.serve(async (req) => {
     for (const abonnee of abonnees) {
       try {
         const html = bouwNieuwsbrief({ abonnee, vandaag, nieuws: nieuwsAlle || [], komendWedstrijden, uitslagen, uitgelicht });
-        await base44.asServiceRole.integrations.Core.SendEmail({
-          from_name: "MV Artemis",
-          to: abonnee.email,
-          subject,
-          body: html,
-        });
+        await sendViaResend({ to: abonnee.email, subject, html });
         verstuurd++;
         await new Promise(r => setTimeout(r, 200));
       } catch (e) {
@@ -68,6 +63,29 @@ Deno.serve(async (req) => {
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
+
+async function sendViaResend({ to, subject, html }) {
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  if (!apiKey) throw new Error("RESEND_API_KEY ontbreekt");
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "MV Artemis <nieuwsbrief@mv-artemis.nl>",
+      to: [to],
+      subject,
+      html,
+    }),
+  });
+  if (!res.ok) {
+    const t = await res.text();
+    throw new Error(`Resend ${res.status}: ${t}`);
+  }
+  return res.json();
+}
 
 function bouwNieuwsbrief({ abonnee, vandaag, nieuws, komendWedstrijden, uitslagen, uitgelicht }) {
   const formatLangeDatum = (d) => new Date(d).toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
