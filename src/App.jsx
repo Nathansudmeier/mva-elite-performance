@@ -21,6 +21,7 @@ import WebsiteNieuwsDetail from './pages/website/WebsiteNieuwsDetail';
 import WebsiteBeheer from './pages/website/WebsiteBeheer';
 import SitemapXml from './pages/website/SitemapXml';
 import RobotsTxt from './pages/website/RobotsTxt';
+import ScrollToTop from './components/website/ScrollToTop';
 import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
 import PlayerDashboard from './pages/PlayerDashboard.jsx';
@@ -157,6 +158,7 @@ const AuthenticatedApp = () => {
 const WebsiteApp = () => (
   <QueryClientProvider client={queryClientInstance}>
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<WebsiteHome />} />
         <Route path="/selecties" element={<WebsiteSelecties />} />
