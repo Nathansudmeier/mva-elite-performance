@@ -174,15 +174,20 @@ export default function WebsiteBeheer() {
 
   const saveUitgelicht = async (data) => {
     const { id, created_date, updated_date, created_by, created_by_id, ...payload } = data;
-    if (editingUitgelicht) {
-      await base44.entities.UitgelichtWedstrijd.update(editingUitgelicht.id, payload);
-      setUitgelicht(prev => prev.map(u => u.id === editingUitgelicht.id ? { ...u, ...payload } : u).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)));
-    } else {
-      const created = await base44.entities.UitgelichtWedstrijd.create(payload);
-      setUitgelicht(prev => [...prev, created].sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)));
+    try {
+      if (editingUitgelicht) {
+        await base44.entities.UitgelichtWedstrijd.update(editingUitgelicht.id, payload);
+        setUitgelicht(prev => prev.map(u => u.id === editingUitgelicht.id ? { ...u, ...payload } : u).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)));
+      } else {
+        const created = await base44.entities.UitgelichtWedstrijd.create(payload);
+        setUitgelicht(prev => [...prev, created].sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)));
+      }
+      setEditingUitgelicht(null);
+      setShowUitgelichtForm(false);
+    } catch (err) {
+      console.error("[UitgelichtWedstrijd save error]", err, "payload:", payload);
+      alert("Opslaan mislukt: " + (err?.message || "onbekende fout") + "\n\nCheck de console voor details.");
     }
-    setEditingUitgelicht(null);
-    setShowUitgelichtForm(false);
   };
 
   const deleteUitgelicht = async (id) => {
