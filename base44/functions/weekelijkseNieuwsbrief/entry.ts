@@ -19,37 +19,40 @@ Deno.serve(async (req) => {
     const zevenDagenGeleden = new Date(vandaag.getTime() - 7 * 24 * 60 * 60 * 1000);
     const zevenDagenVooruit = new Date(vandaag.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-    const [nieuwsAlle, agendaAlle, uitgelichtAlle, abonnees] = await Promise.all([
+    const [nieuwsAlle, agendaAlle, matchesAlle, uitgelichtAlle, abonnees] = await Promise.all([
       base44.asServiceRole.entities.Nieuwsbericht.filter({ gepubliceerd: true }, '-datum', 3),
       base44.asServiceRole.entities.AgendaItem.filter({ type: 'Wedstrijd' }),
+      base44.asServiceRole.entities.Match.list('-date', 100),
       base44.asServiceRole.entities.UitgelichtWedstrijd.filter({ actief: true }),
       base44.asServiceRole.entities.Abonnee.filter({ actief: true, bevestigd: true }),
     ]);
-
-    // Map agenda-items naar template-vriendelijke shape
-    const mapAgendaItem = (i) => ({
-      team: i.team || '',
-      titel: i.title || '',
-      datum: i.date,
-      tijdstip: i.start_time || '',
-      locatie: i.location || '',
-      score_thuis: i.score_thuis,
-      score_uit: i.score_uit,
-    });
 
     const komendWedstrijden = (agendaAlle || [])
       .filter(i => {
         const d = new Date(i.date);
         return d >= vandaag && d <= zevenDagenVooruit;
       })
-      .map(mapAgendaItem);
+      .map(i => ({
+        team: i.team || '',
+        titel: i.title || '',
+        datum: i.date,
+        tijdstip: i.start_time || '',
+        locatie: i.location || '',
+      }));
 
-    const uitslagen = (agendaAlle || [])
-      .filter(i => {
-        const d = new Date(i.date);
+    // Uitslagen uit Match entity (met score_home/score_away)
+    const uitslagen = (matchesAlle || [])
+      .filter(m => {
+        if (m.score_home == null || m.score_away == null) return false;
+        const d = new Date(m.date);
         return d >= zevenDagenGeleden && d < vandaag;
       })
-      .map(mapAgendaItem);
+      .map(m => ({
+        team: m.team || '',
+        titel: `${m.home_away === 'Uit' ? m.opponent : 'MV Artemis'} - ${m.home_away === 'Uit' ? 'MV Artemis' : m.opponent}`,
+        score_thuis: m.home_away === 'Uit' ? m.score_away : m.score_home,
+        score_uit: m.home_away === 'Uit' ? m.score_home : m.score_away,
+      }));
 
     const uitgelicht = (uitgelichtAlle || []).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0));
     const nieuws = nieuwsAlle || [];
