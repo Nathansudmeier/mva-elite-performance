@@ -274,6 +274,9 @@ export default function WebsiteHome() {
         </div>
       </section>
 
+      {/* NIEUWS TEASER */}
+      <NewsTeaser berichten={nieuwsberichten} />
+
       {/* SELECTIES */}
       <section style={{ background: "#FF6800", padding: "48px 28px" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -330,9 +333,6 @@ export default function WebsiteHome() {
           </div>
         </div>
       </section>
-
-      {/* NIEUWS TEASER */}
-      <NewsTeaser berichten={nieuwsberichten} />
 
       {/* WAARDEN */}
       <section style={{ background: "#10121A", padding: "64px 28px" }}>
