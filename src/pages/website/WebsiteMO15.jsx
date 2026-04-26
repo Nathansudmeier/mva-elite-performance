@@ -29,9 +29,12 @@ export default function WebsiteMO15() {
   return (
     <WebsiteLayout>
       {/* HERO */}
-      <section style={{ height: "400px", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #0F1630, #1B2A5E)", display: "flex", alignItems: "flex-end" }}>
+      <section style={{ height: "400px", position: "relative", overflow: "hidden", background: "url('https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/482ec233d_header-contact_qlwaz0.png') center/cover no-repeat, linear-gradient(135deg, #0F1630, #1B2A5E)", display: "flex", alignItems: "flex-end" }}>
+        {/* Donkere overlay voor leesbaarheid */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(15,22,48,0.88) 0%, rgba(15,22,48,0.45) 60%, rgba(15,22,48,0.25) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(15,22,48,0.95) 0%, rgba(15,22,48,0) 50%)" }} />
         {/* Oranje gloed rechtsboven */}
-        <div style={{ position: "absolute", top: 0, right: 0, width: "60%", height: "70%", background: "radial-gradient(circle at top right, rgba(255,104,0,0.08), transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: 0, right: 0, width: "60%", height: "70%", background: "radial-gradient(circle at top right, rgba(255,104,0,0.15), transparent 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", zIndex: 1, padding: "0 28px 40px", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
           <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "8px" }}>SELECTIES / MO15</div>
           <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", marginBottom: "10px" }}>Seizoen 2025/26 · Tijdelijk</div>
