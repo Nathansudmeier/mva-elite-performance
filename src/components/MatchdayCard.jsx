@@ -369,22 +369,27 @@ const CardCanvas = React.forwardRef(function CardCanvas(
           padding: "40px 64px 0", display: "flex",
           justifyContent: "space-between", alignItems: "center",
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, background: "transparent", height: 70 }}>
-            {clubLogo && (
-              <img src={clubLogo} alt="" crossOrigin="anonymous" className="logo-img"
-                style={{
-                  width: 70, height: 70, objectFit: "contain", flexShrink: 0,
-                  background: "transparent", backgroundColor: "transparent",
-                  mixBlendMode: "screen", borderRadius: 0,
-                  display: "block",
-                }} />
-            )}
-            <div style={{
-              fontFamily: FONT_STACK, fontWeight: 700, fontSize: 30,
-              color: "#ffffff", letterSpacing: "2px",
-              lineHeight: 1, padding: 0, margin: 0,
-            }}>
-              MV<span style={{ color: "#FF6800" }}>/</span>ARTEMIS
+          <div style={{ display: "table" }}>
+            <div style={{ display: "table-row" }}>
+              {clubLogo && (
+                <div style={{ display: "table-cell", verticalAlign: "middle", paddingRight: 14 }}>
+                  <img src={clubLogo} alt="" crossOrigin="anonymous" className="logo-img"
+                    style={{
+                      width: 70, height: 70, objectFit: "contain",
+                      background: "transparent", backgroundColor: "transparent",
+                      mixBlendMode: "screen", borderRadius: 0,
+                      display: "block",
+                    }} />
+                </div>
+              )}
+              <div style={{
+                display: "table-cell", verticalAlign: "middle",
+                fontFamily: FONT_STACK, fontWeight: 700, fontSize: 30,
+                color: "#ffffff", letterSpacing: "2px",
+                lineHeight: 1,
+              }}>
+                MV<span style={{ color: "#FF6800" }}>/</span>ARTEMIS
+              </div>
             </div>
           </div>
           <div style={{
@@ -392,7 +397,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
             fontSize: 18, fontWeight: 700, letterSpacing: "2px",
             textTransform: "uppercase",
             borderRadius: 4,
-            padding: "14px 22px",
+            padding: "13px 22px 11px",
             textAlign: "center",
             lineHeight: 1,
           }}>
@@ -405,35 +410,33 @@ const CardCanvas = React.forwardRef(function CardCanvas(
 
         {/* SECTIE B + C: Headline + datum/locatie wrapper */}
         <div style={{
-          display: "flex", flexDirection: "column",
+          display: "block",
           padding: "20px 64px 0", maxWidth: hasPlayer ? 600 : "none",
         }}>
           {/* SECTIE B: MATCHDAY headline */}
           <div style={{
             fontFamily: FONT_STACK, fontWeight: 900, fontSize: 130, color: "#fff",
             lineHeight: 1, letterSpacing: "-4px",
-            marginBottom: 0, paddingBottom: 0,
+            margin: 0, padding: 0,
           }}>
             {headline}
           </div>
 
           {/* SECTIE C: Datum + tijd + locatie */}
-          <div style={{ marginTop: 24, maxWidth: sectionMaxWidth }}>
+          <div style={{ paddingTop: 28, maxWidth: sectionMaxWidth }}>
             <div style={{
               fontSize: 22, fontWeight: 700, color: "#FF6800",
               letterSpacing: "1px", textTransform: "uppercase",
-              display: "block", position: "relative",
-              zIndex: 10, marginBottom: 8, lineHeight: 1.2,
+              lineHeight: 1.2, marginBottom: 8,
             }}>
               {datumTijd}
             </div>
             {locatie && (
               <div style={{
                 fontSize: 22, color: "rgba(255,255,255,0.55)",
-                display: "flex", alignItems: "center", gap: 8, lineHeight: 1.2,
+                lineHeight: 1.2,
               }}>
-                <span>📍</span>
-                <span>{locatie}</span>
+                📍 {locatie}
               </div>
             )}
           </div>
@@ -552,7 +555,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
               background: "#1B2A5E", borderRadius: 3,
               fontFamily: FONT_STACK, fontWeight: 700, fontSize: 22, color: "#ffffff",
               letterSpacing: "2px", textTransform: "uppercase",
-              padding: "14px 26px", lineHeight: 1,
+              padding: "13px 26px 11px", lineHeight: 1,
             }}>
               SUBSTITUTIONS
             </div>
@@ -577,7 +580,7 @@ const CardCanvas = React.forwardRef(function CardCanvas(
             </div>
           ) : (
             sponsors.map(s => s.logo_url ? (
-              <img key={s.id} src={s.logo_url} alt={s.naam} crossOrigin="anonymous" className="logo-img"
+              <img key={s.id} src={s.logo_url} alt={s.naam} crossOrigin="anonymous" className="sponsor-logo"
                 style={{
                   maxHeight: 32, maxWidth: 110, objectFit: "contain",
                   background: "transparent", backgroundColor: "transparent",
