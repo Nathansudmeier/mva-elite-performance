@@ -74,7 +74,7 @@ function NewsTeaser({ berichten }) {
   };
 
   return (
-    <section style={{ background: "#151D35", padding: "48px 28px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+    <section style={{ background: "#FF6800", padding: "48px 28px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "28px", flexWrap: "wrap", gap: "16px" }}>
           <div>
