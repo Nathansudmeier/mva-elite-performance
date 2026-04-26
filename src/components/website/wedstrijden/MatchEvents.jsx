@@ -11,16 +11,13 @@ export default function MatchEvents({ match, players }) {
   const playerById = (pid) => players.find((p) => p.id === pid);
   const playerName = (pid) => playerById(pid)?.name || "Onbekend";
 
-  const goals = events.filter((e) => e.type === "goal" || e.type === "doelpunt");
-  const subs = events.filter(
-    (e) => e.type === "substitution" || e.type === "wissel"
+  // Doelpunten van MV Artemis (geen eigen doelpunten — die hebben geen scorer)
+  const goals = events.filter(
+    (e) => e.type === "goal_mva" && e.goal_type !== "eigen_doelpunt"
   );
-  const yellows = events.filter(
-    (e) => e.type === "yellow_card" || e.type === "gele_kaart" || e.type === "yellow"
-  );
-  const reds = events.filter(
-    (e) => e.type === "red_card" || e.type === "rode_kaart" || e.type === "red"
-  );
+  const subs = events.filter((e) => e.type === "substitution");
+  const yellows = events.filter((e) => e.type === "yellow_card");
+  const reds = events.filter((e) => e.type === "red_card");
 
   if (goals.length === 0 && subs.length === 0 && yellows.length === 0 && reds.length === 0) {
     return null;
