@@ -394,34 +394,34 @@ const CardCanvas = React.forwardRef(function CardCanvas(
           padding: "40px 64px 0", display: "flex",
           justifyContent: "space-between", alignItems: "center",
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, background: "transparent" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, background: "transparent", height: 70 }}>
             {clubLogo && (
               <img src={clubLogo} alt="" crossOrigin="anonymous" className="logo-img"
                 style={{
                   width: 70, height: 70, objectFit: "contain", flexShrink: 0,
                   background: "transparent", backgroundColor: "transparent",
                   mixBlendMode: "screen", borderRadius: 0,
+                  display: "block",
                 }} />
             )}
             <div style={{
-              display: "inline-flex", alignItems: "center",
               fontFamily: FONT_STACK, fontWeight: 700, fontSize: 30,
               color: "#ffffff", letterSpacing: "2px",
-              lineHeight: "70px", height: 70,
+              lineHeight: 1, padding: 0, margin: 0,
             }}>
               MV<span style={{ color: "#FF6800" }}>/</span>ARTEMIS
             </div>
           </div>
           <div style={{
-            display: "inline-flex", alignItems: "center", justifyContent: "center",
             background: "#FF6800", color: "#ffffff",
             fontSize: 18, fontWeight: 700, letterSpacing: "2px",
             textTransform: "uppercase",
-            borderRadius: 4, height: 44, minWidth: 110,
-            padding: "0 20px", textAlign: "center",
-            lineHeight: "44px", boxSizing: "border-box",
+            borderRadius: 4,
+            padding: "14px 22px",
+            textAlign: "center",
+            lineHeight: 1,
           }}>
-            <span style={{ display: "inline-block", lineHeight: 1, transform: "translateY(1px)" }}>{team}</span>
+            {team}
           </div>
         </div>
 
@@ -573,14 +573,13 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         {wisselSpelers.length > 0 && (
           <div style={{ padding: "10px 64px 110px", maxWidth: sectionMaxWidth }}>
             <div style={{
-              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              display: "inline-block",
               background: "#1B2A5E", borderRadius: 3,
               fontFamily: FONT_STACK, fontWeight: 700, fontSize: 22, color: "#ffffff",
               letterSpacing: "2px", textTransform: "uppercase",
-              height: 44, padding: "0 24px", lineHeight: "44px",
-              boxSizing: "border-box",
+              padding: "14px 26px", lineHeight: 1,
             }}>
-              <span style={{ display: "inline-block", lineHeight: 1, transform: "translateY(1px)" }}>SUBSTITUTIONS</span>
+              SUBSTITUTIONS
             </div>
             <div style={{ fontSize: 20, color: "rgba(255,255,255,0.7)", marginTop: 8 }}>
               {wisselNamen}
