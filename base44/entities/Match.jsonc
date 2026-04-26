@@ -1,0 +1,146 @@
+{
+  "name": "Match",
+  "type": "object",
+  "properties": {
+    "team": {
+      "type": "string",
+      "enum": [
+        "MO17",
+        "Dames 1"
+      ],
+      "description": "Which team this match belongs to"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Match date"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Match start time (HH:MM format)"
+    },
+    "opponent": {
+      "type": "string",
+      "description": "Opponent team name"
+    },
+    "opponent_logo": {
+      "type": "string",
+      "description": "Opponent logo URL"
+    },
+    "home_away": {
+      "type": "string",
+      "enum": [
+        "Thuis",
+        "Uit"
+      ],
+      "default": "Thuis"
+    },
+    "location": {
+      "type": "string",
+      "description": "Naam en plaats van het sportpark"
+    },
+    "score_home": {
+      "type": "number"
+    },
+    "score_away": {
+      "type": "number"
+    },
+    "formation": {
+      "type": "string",
+      "enum": [
+        "4-3-3",
+        "4-4-2",
+        "3-5-2",
+        "4-2-3-1",
+        "3-4-3"
+      ],
+      "default": "4-3-3"
+    },
+    "lineup": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slot": {
+            "type": "string"
+          },
+          "player_id": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Starting lineup"
+    },
+    "substitutes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of player IDs selected as substitutes"
+    },
+    "ball_possession": {
+      "type": "string"
+    },
+    "pressing": {
+      "type": "string"
+    },
+    "transition": {
+      "type": "string"
+    },
+    "set_pieces": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "live_events": {
+      "type": "array",
+      "description": "Live match events",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "minute": {
+            "type": "number"
+          },
+          "player_id": {
+            "type": "string"
+          },
+          "assist_player_id": {
+            "type": "string"
+          },
+          "player_out_id": {
+            "type": "string"
+          },
+          "player_in_id": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "halftime_notes": {
+      "type": "string",
+      "description": "Halftime discussion notes"
+    },
+    "live_status": {
+      "type": "string",
+      "enum": [
+        "pre",
+        "live",
+        "halftime",
+        "finished"
+      ],
+      "default": "pre"
+    }
+  },
+  "required": [
+    "team",
+    "date",
+    "opponent"
+  ]
+}

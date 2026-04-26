@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { MapPin } from "lucide-react";
 
 const DAG_NAMEN = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
 const MAAND_NAMEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
@@ -251,7 +252,14 @@ const CardCanvas = React.forwardRef(function CardCanvas(
   const homeAway = match?.home_away || "Thuis";
 
   const datumTijd = `${formatDateNL(match?.date).toUpperCase()} | ${match?.start_time || ""}`;
-  const locatie = homeAway === "Thuis" ? "Sportpark Douwekamp, Opeinde" : "";
+  const locatie = match?.location
+    ? match.location
+    : homeAway === "Thuis"
+      ? "Sportpark Douwekamp, Opeinde"
+      : "";
+
+  const tegName = opponent || "";
+  const tegFontSize = tegName.length > 20 ? 22 : tegName.length > 15 ? 28 : 36;
 
   const hasPlayer = !!uitgelichteSpeler?.matchday_foto_url;
 
@@ -358,8 +366,12 @@ const CardCanvas = React.forwardRef(function CardCanvas(
             {datumTijd}
           </div>
           {locatie && (
-            <div style={{ fontSize: 28, color: "rgba(255,255,255,0.6)", marginTop: 8 }}>
-              {locatie}
+            <div style={{
+              fontSize: 26, color: "rgba(255,255,255,0.55)", marginTop: 6,
+              display: "flex", alignItems: "center", gap: 10,
+            }}>
+              <MapPin size={24} strokeWidth={2.5} color="rgba(255,255,255,0.4)" />
+              <span>{locatie}</span>
             </div>
           )}
         </div>
@@ -395,10 +407,10 @@ const CardCanvas = React.forwardRef(function CardCanvas(
               }}>{getInitials(opponent)}</div>
             )}
             <div style={{
-              fontFamily: FONT_STACK, fontWeight: 900, fontSize: 40,
-              color: "rgba(255,255,255,0.75)", letterSpacing: "1px",
-              wordBreak: "break-word", lineHeight: 1.05,
-              display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
+              fontFamily: FONT_STACK, fontWeight: 900, fontSize: tegFontSize,
+              color: "rgba(255,255,255,0.85)", letterSpacing: "1px",
+              maxWidth: 280, lineHeight: 1.1,
+              wordWrap: "break-word", wordBreak: "break-word", whiteSpace: "normal",
             }}>
               {opponent}
             </div>
@@ -481,9 +493,9 @@ const CardCanvas = React.forwardRef(function CardCanvas(
         {/* SECTIE G: Sponsors balk */}
         <div style={{
           position: "absolute", bottom: 0, left: 0, right: 0,
-          padding: "24px 64px",
-          background: "rgba(10,12,20,0.9)",
-          borderTop: "1px solid rgba(255,255,255,0.1)",
+          padding: "28px 64px",
+          background: "rgba(10,12,20,0.97)",
+          borderTop: "1px solid rgba(255,255,255,0.15)",
           display: "flex", alignItems: "center", justifyContent: "center",
           gap: 48, flexWrap: "wrap",
         }}>
@@ -496,11 +508,11 @@ const CardCanvas = React.forwardRef(function CardCanvas(
               <img key={s.id} src={s.logo_url} alt={s.naam} crossOrigin="anonymous"
                 style={{
                   maxHeight: 36, maxWidth: 120, objectFit: "contain",
-                  filter: "brightness(0) invert(1)", opacity: 0.7,
+                  filter: "brightness(0) invert(1) contrast(1.2)", opacity: 0.9,
                 }} />
             ) : (
               <div key={s.id} style={{
-                fontSize: 16, color: "rgba(255,255,255,0.7)",
+                fontSize: 20, color: "rgba(255,255,255,0.7)",
                 fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase",
               }}>{s.naam}</div>
             ))
