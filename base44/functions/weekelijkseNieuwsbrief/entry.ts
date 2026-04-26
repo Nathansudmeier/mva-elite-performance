@@ -19,13 +19,15 @@ Deno.serve(async (req) => {
     const zevenDagenGeleden = new Date(vandaag.getTime() - 7 * 24 * 60 * 60 * 1000);
     const zevenDagenVooruit = new Date(vandaag.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-    const [nieuwsAlle, agendaAlle, matchesAlle, uitgelichtAlle, abonnees] = await Promise.all([
+    const [nieuwsAlle, agendaAlle, matchesAlle, uitgelichtAlle, abonnees, instellingen] = await Promise.all([
       base44.asServiceRole.entities.Nieuwsbericht.filter({ gepubliceerd: true }, '-datum', 3),
       base44.asServiceRole.entities.AgendaItem.filter({ type: 'Wedstrijd' }),
       base44.asServiceRole.entities.Match.list('-date', 100),
       base44.asServiceRole.entities.UitgelichtWedstrijd.filter({ actief: true }),
       base44.asServiceRole.entities.Abonnee.filter({ actief: true, bevestigd: true }),
+      base44.asServiceRole.entities.WebsiteInstellingen.list(),
     ]);
+    const logoUrl = instellingen?.[0]?.logo_url || '';
 
     const komendWedstrijden = (agendaAlle || [])
       .filter(i => {
@@ -69,7 +71,7 @@ Deno.serve(async (req) => {
     let mislukt = 0;
     for (const abonnee of abonnees) {
       try {
-        const html = nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht });
+        const html = nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht, logoUrl });
         const text = nieuwsbriefText({ abonnee, nieuws, komendWedstrijden, uitgelicht });
         await sendViaResend({ to: abonnee.email, subject, html, text });
         verstuurd++;
@@ -148,7 +150,7 @@ Afmelden: https://mv-artemis.nl/nieuwsbrief/afmelden?code=${abonnee.bevestigings
   `.trim();
 }
 
-function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht }) {
+function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht, logoUrl }) {
   return `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl">
@@ -169,12 +171,23 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
     <td style="background-color:#1B2A5E;padding:20px 32px;border-radius:8px 8px 0 0;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td>
-            <span style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:2px;font-family:Arial,sans-serif;">
-              MV<span style="color:#FF6800;">/</span>ARTEMIS
-            </span>
+          <td valign="middle">
+            <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                ${logoUrl ? `
+                <td valign="middle" style="padding-right:12px;">
+                  <img src="${logoUrl}" alt="MV Artemis" width="36" height="36" style="display:block;width:36px;height:36px;border:0;outline:none;" />
+                </td>
+                ` : ''}
+                <td valign="middle">
+                  <span style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:2px;font-family:Arial,sans-serif;">
+                    MV<span style="color:#FF6800;">/</span>ARTEMIS
+                  </span>
+                </td>
+              </tr>
+            </table>
           </td>
-          <td align="right">
+          <td align="right" valign="middle">
             <span style="font-size:12px;color:rgba(255,255,255,0.3);font-family:Arial,sans-serif;">
               Week ${dag} ${maand}
             </span>
