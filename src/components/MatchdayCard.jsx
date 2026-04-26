@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import html2canvas from "html2canvas";
 import { base44 } from "@/api/base44Client";
 
 const DAG_NAMEN = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
@@ -77,6 +76,8 @@ export default function MatchdayCard({ match, onClose }) {
     const node = kaartRef.current;
     const originalTransform = node.style.transform;
     try {
+      const html2canvasModule = await import("html2canvas");
+      const html2canvas = html2canvasModule.default || html2canvasModule;
       node.style.transform = "none";
       const canvas = await html2canvas(node, {
         width: 1080,
