@@ -115,6 +115,12 @@ async function sendViaResend({ to, subject, html, text }) {
   return res.json();
 }
 
+function eersteAlinea(inhoud) {
+  if (!inhoud) return '';
+  const tekst = inhoud.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  return tekst.length > 200 ? tekst.slice(0, 200) + '… ' : tekst + ' ';
+}
+
 function nieuwsbriefText({ abonnee, nieuws, komendWedstrijden, uitgelicht }) {
   return `
 MV Artemis — Wekelijkse Update
