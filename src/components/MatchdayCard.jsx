@@ -52,10 +52,11 @@ export default function MatchdayCard({ match, onClose }) {
           .sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0));
         setAchtergronden(filteredBg);
 
-        // Lineup koppelen — alle items met player_id zijn basisspelers
+        // Lineup koppelen via slot veld
         const lineupArr = Array.isArray(match?.lineup) ? match.lineup : [];
+        
         const basisSpelers = lineupArr
-          .filter(item => item.player_id)
+          .filter(item => item.slot === "basis" && item.player_id)
           .map(item => {
             const s = spelersData.find(p => p.id === item.player_id);
             return {
@@ -64,15 +65,19 @@ export default function MatchdayCard({ match, onClose }) {
               nummer: s?.shirt_number || "",
             };
           })
-          .filter(sp => sp.naam); // verwijder niet-gevonden spelers
+          .filter(sp => sp.naam);
 
-        const basisIds = new Set(basisSpelers.map(b => b.id));
-        const wisselSpelers = (match?.substitutes || [])
-          .map(id => {
-            const s = spelersData.find(p => p.id === id);
-            return { naam: s?.name || "", nummer: s?.shirt_number || "" };
+        const wisselSpelers = lineupArr
+          .filter(item => item.slot === "wissel" && item.player_id)
+          .map(item => {
+            const s = spelersData.find(p => p.id === item.player_id);
+            return {
+              id: item.player_id,
+              naam: s?.name || "",
+              nummer: s?.shirt_number || "",
+            };
           })
-          .filter(w => w.naam && !basisIds.has(w.id));
+          .filter(sp => sp.naam);
 
         // Laad alle afbeeldingen parallel
         const clubLogoUrl = instList?.[0]?.logo_url || null;
