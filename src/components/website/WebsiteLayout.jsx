@@ -5,6 +5,7 @@ import SponsorBar from "@/components/website/SponsorBar.jsx";
 import { InstagramLogo, TiktokLogo, FacebookLogo } from "@phosphor-icons/react";
 import NieuwsbriefAanmeld from "@/components/website/NieuwsbriefAanmeld";
 import { useWebsiteData } from "@/hooks/useWebsiteData";
+import WebsiteChatbot from "@/components/website/WebsiteChatbot";
 
 const navLinks = [
   { label: "Homepage", href: "/" },
@@ -157,6 +158,8 @@ export default function WebsiteLayout({ children }) {
           {kvk && <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)" }}>KVK: {kvk}</span>}
         </div>
       </footer>
+
+      <WebsiteChatbot />
 
       <style>{`
         @media (min-width: 768px) { .w-desktop-nav { display: flex !important; } .w-hamburger { display: none !important; } }
