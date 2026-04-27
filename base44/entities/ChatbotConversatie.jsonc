@@ -1,0 +1,50 @@
+{
+  "name": "ChatbotConversatie",
+  "type": "object",
+  "properties": {
+    "sessie_id": {
+      "type": "string",
+      "description": "Unieke UUID per browsersessie"
+    },
+    "berichten": {
+      "type": "string",
+      "description": "JSON string van alle berichten in de conversatie"
+    },
+    "eerste_bericht": {
+      "type": "string",
+      "description": "De eerste vraag van de gebruiker"
+    },
+    "aantal_berichten": {
+      "type": "number",
+      "description": "Totaal aantal berichten in de conversatie"
+    },
+    "pagina": {
+      "type": "string",
+      "description": "Pagina waarop de chat gestart werd (window.location.pathname)"
+    },
+    "datum": {
+      "type": "string",
+      "description": "Datum en tijd van de conversatie (ISO string)"
+    },
+    "afgerond": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of de chat afgesloten is door de gebruiker"
+    },
+    "doorverwezen_naar": {
+      "type": "string",
+      "description": "Optioneel: proeftraining / contact / nieuws etc."
+    }
+  },
+  "required": [
+    "sessie_id"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "write": {}
+  }
+}

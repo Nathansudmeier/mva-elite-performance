@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { ChatCircle, X, PaperPlaneRight } from "@phosphor-icons/react";
 import { base44 } from "@/api/base44Client";
 
@@ -24,6 +24,8 @@ const chatbotStyles = `
 `;
 
 export default function WebsiteChatbot() {
+  const sessieId = useMemo(() => crypto.randomUUID(), []);
+
   const [open, setOpen] = useState(() => {
     try { return localStorage.getItem('mv_artemis_chat_open') === 'true'; } catch { return false; }
   });
@@ -36,6 +38,39 @@ export default function WebsiteChatbot() {
   const [lastMessageTime, setLastMessageTime] = useState(0);
   const berichtenEindRef = useRef(null);
   const textareaRef = useRef(null);
+
+  const slaConversatieOp = async (allesBerichten) => {
+    try {
+      const gebruikersBerichten = allesBerichten.filter(b => b.rol === 'user');
+      if (gebruikersBerichten.length === 0) return;
+
+      const alleInhoud = allesBerichten.map(b => b.inhoud).join(' ').toLowerCase();
+      let doorverwezen = null;
+      if (alleInhoud.includes('proeftraining')) doorverwezen = 'proeftraining';
+      else if (alleInhoud.includes('contact') || alleInhoud.includes('mail')) doorverwezen = 'contact';
+      else if (alleInhoud.includes('nieuws')) doorverwezen = 'nieuws';
+
+      // Zoek bestaand record op sessie_id
+      const bestaand = await base44.entities.ChatbotConversatie.filter({ sessie_id: sessieId });
+      const payload = {
+        sessie_id: sessieId,
+        berichten: JSON.stringify(allesBerichten),
+        eerste_bericht: gebruikersBerichten[0]?.inhoud || '',
+        aantal_berichten: allesBerichten.length,
+        pagina: window.location.pathname,
+        datum: new Date().toISOString(),
+        doorverwezen_naar: doorverwezen,
+        afgerond: false,
+      };
+      if (bestaand && bestaand.length > 0) {
+        await base44.entities.ChatbotConversatie.update(bestaand[0].id, payload);
+      } else {
+        await base44.entities.ChatbotConversatie.create(payload);
+      }
+    } catch (e) {
+      console.log('Logging fout:', e);
+    }
+  };
 
   // Badge na 3 seconden tonen als chat nooit geopend is
   useEffect(() => {
@@ -69,9 +104,16 @@ export default function WebsiteChatbot() {
     } catch {}
   };
 
-  const sluitChat = () => {
+  const sluitChat = async () => {
     setOpen(false);
     try { localStorage.setItem('mv_artemis_chat_open', 'false'); } catch {}
+    // Markeer als afgerond
+    try {
+      const bestaand = await base44.entities.ChatbotConversatie.filter({ sessie_id: sessieId });
+      if (bestaand && bestaand.length > 0) {
+        await base44.entities.ChatbotConversatie.update(bestaand[0].id, { afgerond: true });
+      }
+    } catch {}
   };
 
   const stuurBericht = async (tekst) => {
@@ -94,7 +136,10 @@ export default function WebsiteChatbot() {
       const res = await base44.functions.invoke('artemisChat', {
         berichten: contextBerichten,
       });
-      setBerichten(prev => [...prev, { rol: 'assistant', inhoud: res.data.antwoord }]);
+      const antwoord = res.data.antwoord;
+      const bijgewerkt = [...nieuweBerichten, { rol: 'assistant', inhoud: antwoord }];
+      setBerichten(bijgewerkt);
+      await slaConversatieOp(bijgewerkt);
     } catch {
       setBerichten(prev => [...prev, {
         rol: 'assistant',

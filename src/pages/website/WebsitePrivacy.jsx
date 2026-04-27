@@ -182,6 +182,15 @@ export default function WebsitePrivacy() {
           <strong style={{ color: "#fff" }}>Bewaartermijn:</strong> maximaal 1 jaar.
         </p>
 
+        <h3 style={styles.h3}>Chatbot gesprekken</h3>
+        <p style={styles.p}>
+          Als je gebruik maakt van onze chatbot worden de gestelde vragen en antwoorden opgeslagen om onze service te verbeteren. Deze gegevens worden niet gedeeld met derden en worden maximaal 6 maanden bewaard.
+        </p>
+        <p style={styles.p}>
+          <strong style={{ color: "#fff" }}>Grondslag:</strong> gerechtvaardigd belang (serviceverbetering).<br />
+          <strong style={{ color: "#fff" }}>Bewaartermijn:</strong> maximaal 6 maanden.
+        </p>
+
         <h3 style={styles.h3}>Spelersgegevens</h3>
         <p style={styles.p}>
           Voor actieve spelers van MV Artemis verwerken wij:
