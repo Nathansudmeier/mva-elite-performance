@@ -214,7 +214,7 @@ export default function MatchdayCard({ match, onClose }) {
 
     if (locatie) {
       ctx.font = 'bold 28px Arial';
-      ctx.fillStyle = '#FF6800';
+      ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'alphabetic';
       ctx.fillText(locatie, 56, 926);
