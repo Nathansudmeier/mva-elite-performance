@@ -206,18 +206,18 @@ export default function MatchdayCard({ match, onClose }) {
     const datumTekst = `${DAG_NAMEN[datum.getDay()].toUpperCase()} ${datum.getDate()} ${MAAND_NAMEN[datum.getMonth()].toUpperCase()} | ${match.start_time || ''}`;
 
     ctx.font = 'bold 36px Arial';
-    ctx.fillStyle = '#FF6800';
+    ctx.fillStyle = '#ffffff';
     ctx.fillText(datumTekst, 56, 880);
 
     // Locatie
     const locatie = match.location || (match.home_away === 'Thuis' ? 'Sportpark Douwekamp, Opeinde' : '');
 
     if (locatie) {
-      ctx.font = '28px Arial';
-      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.font = 'bold 28px Arial';
+      ctx.fillStyle = '#FF6800';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'alphabetic';
-      ctx.fillText('📍 ' + locatie, 56, 926);
+      ctx.fillText(locatie, 56, 926);
     }
 
     // Thuis/Uit badge
