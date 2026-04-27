@@ -196,9 +196,7 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
             <table cellpadding="0" cellspacing="0" border="0">
               <tr>
                 <td valign="middle" style="padding-right:12px;">
-                  <div style="width:44px;height:44px;border-radius:50%;background-color:#ffffff;display:inline-block;text-align:center;line-height:44px;">
-                    <span style="font-size:13px;font-weight:900;color:#FF6800;font-family:'Barlow Condensed',Arial,sans-serif;letter-spacing:-0.5px;">MV/A</span>
-                  </div>
+                  <img src="https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/d45d4be0f_artemis-logo.png" alt="MV Artemis" width="48" height="48" style="display:block;width:48px;height:48px;border-radius:50%;border:0;outline:none;" />
                 </td>
                 <td valign="middle">
                   <span style="font-size:22px;font-weight:900;color:#ffffff;letter-spacing:0px;font-family:'Barlow Condensed',Arial,sans-serif;display:block;line-height:1.1;">
