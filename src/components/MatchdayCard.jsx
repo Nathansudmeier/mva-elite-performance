@@ -207,20 +207,15 @@ export default function MatchdayCard({ match, onClose }) {
     ctx.textBaseline = 'middle';
     ctx.fillText(badgeTekst.toUpperCase(), badgeX + badgeBreedte / 2, badgeY + badgeH / 2);
 
-    // MATCHDAY tekst
-    ctx.textAlign = 'left';
-    ctx.font = 'bold 160px Arial';
-    ctx.fillStyle = '#ffffff';
-    ctx.textBaseline = 'alphabetic';
-    ctx.fillText('MATCHDAY', 56, 1080);
-
     // Datum + tijd
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
     const datum = new Date(match.date);
     const datumTekst = `${DAG_NAMEN[datum.getDay()].toUpperCase()} ${datum.getDate()} ${MAAND_NAMEN[datum.getMonth()].toUpperCase()} | ${match.start_time || ''}`;
 
     ctx.font = 'bold 36px Arial';
     ctx.fillStyle = '#FF6800';
-    ctx.fillText(datumTekst, 56, 1130);
+    ctx.fillText(datumTekst, 56, 1050);
 
     // Locatie
     const locatie = match.location || (match.home_away === 'Thuis' ? 'Sportpark Douwekamp, Opeinde' : '');
@@ -228,61 +223,79 @@ export default function MatchdayCard({ match, onClose }) {
     if (locatie) {
       ctx.font = '28px Arial';
       ctx.fillStyle = 'rgba(255,255,255,0.55)';
-      ctx.fillText('📍 ' + locatie, 56, 1176);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText('📍 ' + locatie, 56, 1096);
     }
 
     // Thuis/Uit badge
     const thuisUit = match.home_away || 'Thuis';
+    const isUit = thuisUit === 'Uit';
+
     ctx.font = 'bold 24px Arial';
     const thuisBreedte = ctx.measureText(thuisUit.toUpperCase()).width + 28;
-    ctx.fillStyle = thuisUit === 'Thuis' ? 'rgba(8,208,104,0.25)' : 'rgba(0,194,255,0.25)';
+    ctx.fillStyle = isUit ? 'rgba(0,194,255,0.25)' : 'rgba(8,208,104,0.25)';
     ctx.beginPath();
-    ctx.roundRect(56, 1195, thuisBreedte, 38, 4);
+    ctx.roundRect(56, 1114, thuisBreedte, 38, 4);
     ctx.fill();
-    ctx.fillStyle = thuisUit === 'Thuis' ? '#08D068' : '#00C2FF';
+    ctx.fillStyle = isUit ? '#00C2FF' : '#08D068';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText(thuisUit.toUpperCase(), 56 + 14, 1195 + 19);
+    ctx.fillText(thuisUit.toUpperCase(), 56 + 14, 1114 + 19);
 
-    // VS blok
-    const vsY = 1260;
+    // VS blok — bij Uit: Artemis rechts, tegenstander links
+    const vsY = 1180;
+    const logoMaat = 72;
+    const naamFont = 'bold 34px Arial';
 
-    if (clubLogo) {
-      ctx.drawImage(clubLogo, 56, vsY, 72, 72);
-    }
-    
-    ctx.font = 'bold 36px Arial';
-    ctx.fillStyle = '#ffffff';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('MV ARTEMIS', 144, vsY + 36);
+    const drawTeamNaam = (naam, x, align) => {
+      const woorden = naam.split(' ');
+      ctx.font = naamFont;
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = align;
+      ctx.textBaseline = 'middle';
+      if (naam.length > 12) {
+        const helft = Math.ceil(woorden.length / 2);
+        ctx.fillText(woorden.slice(0, helft).join(' '), x, vsY + 22);
+        ctx.fillText(woorden.slice(helft).join(' '), x, vsY + 58);
+      } else {
+        ctx.fillText(naam, x, vsY + 36);
+      }
+    };
 
+    // VS midden
     ctx.font = 'bold 52px Arial';
     ctx.fillStyle = '#FF6800';
     ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     ctx.fillText('VS', 540, vsY + 36);
 
-    if (tegLogo) {
-      ctx.drawImage(tegLogo, BREEDTE - 56 - 72, vsY, 72, 72);
-    }
+    if (isUit) {
+      // Tegenstander links, Artemis rechts
+      if (tegLogo) ctx.drawImage(tegLogo, 56, vsY, logoMaat, logoMaat);
+      drawTeamNaam(match.opponent || '', 56 + logoMaat + 14, 'left');
 
-    const tegNaam = match.opponent || '';
-    ctx.font = 'bold 36px Arial';
-    ctx.fillStyle = 'rgba(255,255,255,0.8)';
-    ctx.textAlign = 'right';
-    
-    if (tegNaam.length > 12) {
-      const woorden = tegNaam.split(' ');
-      const helft = Math.ceil(woorden.length / 2);
-      const regel1 = woorden.slice(0, helft).join(' ');
-      const regel2 = woorden.slice(helft).join(' ');
-      ctx.fillText(regel1, BREEDTE - 56, vsY + 24);
-      ctx.fillText(regel2, BREEDTE - 56, vsY + 64);
+      if (clubLogo) ctx.drawImage(clubLogo, BREEDTE - 56 - logoMaat, vsY, logoMaat, logoMaat);
+      ctx.font = naamFont;
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('MV ARTEMIS', BREEDTE - 56 - logoMaat - 14, vsY + 36);
     } else {
-      ctx.fillText(tegNaam, BREEDTE - 56, vsY + 36);
+      // Artemis links, tegenstander rechts
+      if (clubLogo) ctx.drawImage(clubLogo, 56, vsY, logoMaat, logoMaat);
+      ctx.font = naamFont;
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('MV ARTEMIS', 56 + logoMaat + 14, vsY + 36);
+
+      if (tegLogo) ctx.drawImage(tegLogo, BREEDTE - 56 - logoMaat, vsY, logoMaat, logoMaat);
+      drawTeamNaam(match.opponent || '', BREEDTE - 56 - logoMaat - 14, 'right');
     }
 
     // STARTING XI
-    const xiY = 1380;
+    const xiY = 1300;
     
     ctx.font = 'bold 52px Arial';
     ctx.fillStyle = '#FF6800';
@@ -353,7 +366,7 @@ export default function MatchdayCard({ match, onClose }) {
     ctx.fillText(wisselNamen, 56, subY + 80);
 
     // Sponsor balk (2 rijen)
-    const sponsorHoogte = 180;
+    const sponsorHoogte = 220;
     const sponsorY = HOOGTE - sponsorHoogte;
 
     ctx.fillStyle = 'rgba(8,9,13,0.98)';
