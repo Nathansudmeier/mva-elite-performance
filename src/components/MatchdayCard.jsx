@@ -163,15 +163,7 @@ export default function MatchdayCard({ match, onClose }) {
       ctx.drawImage(achtergrond, x, y, w, h);
     }
 
-    // Gradient overlay
-    const gradient = ctx.createLinearGradient(0, 0, 0, HOOGTE);
-    gradient.addColorStop(0, 'rgba(10,12,20,0.15)');
-    gradient.addColorStop(0.35, 'rgba(10,12,20,0.4)');
-    gradient.addColorStop(0.55, 'rgba(10,12,20,0.85)');
-    gradient.addColorStop(0.7, 'rgba(10,12,20,0.97)');
-    gradient.addColorStop(1, 'rgba(10,12,20,1)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, BREEDTE, HOOGTE);
+    // Geen gradient overlay — zit al in de achtergrond
 
     // Header balk
     if (clubLogo) {
@@ -215,7 +207,7 @@ export default function MatchdayCard({ match, onClose }) {
 
     ctx.font = 'bold 36px Arial';
     ctx.fillStyle = '#FF6800';
-    ctx.fillText(datumTekst, 56, 1050);
+    ctx.fillText(datumTekst, 56, 880);
 
     // Locatie
     const locatie = match.location || (match.home_away === 'Thuis' ? 'Sportpark Douwekamp, Opeinde' : '');
@@ -225,7 +217,7 @@ export default function MatchdayCard({ match, onClose }) {
       ctx.fillStyle = 'rgba(255,255,255,0.55)';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'alphabetic';
-      ctx.fillText('📍 ' + locatie, 56, 1096);
+      ctx.fillText('📍 ' + locatie, 56, 926);
     }
 
     // Thuis/Uit badge
@@ -236,15 +228,15 @@ export default function MatchdayCard({ match, onClose }) {
     const thuisBreedte = ctx.measureText(thuisUit.toUpperCase()).width + 28;
     ctx.fillStyle = isUit ? 'rgba(0,194,255,0.25)' : 'rgba(8,208,104,0.25)';
     ctx.beginPath();
-    ctx.roundRect(56, 1114, thuisBreedte, 38, 4);
+    ctx.roundRect(56, 944, thuisBreedte, 38, 4);
     ctx.fill();
     ctx.fillStyle = isUit ? '#00C2FF' : '#08D068';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText(thuisUit.toUpperCase(), 56 + 14, 1114 + 19);
+    ctx.fillText(thuisUit.toUpperCase(), 56 + 14, 944 + 19);
 
     // VS blok — bij Uit: Artemis rechts, tegenstander links
-    const vsY = 1180;
+    const vsY = 1010;
     const logoMaat = 72;
     const naamFont = 'bold 34px Arial';
 
@@ -295,7 +287,7 @@ export default function MatchdayCard({ match, onClose }) {
     }
 
     // STARTING XI
-    const xiY = 1300;
+    const xiY = 1160;
     
     ctx.font = 'bold 52px Arial';
     ctx.fillStyle = '#FF6800';
