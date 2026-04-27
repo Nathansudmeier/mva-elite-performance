@@ -2,8 +2,38 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 Deno.serve(async (req) => {
   const base44 = createClientFromRequest(req);
+  const { berichten } = await req.json();
 
-  const { berichten, liveData } = await req.json();
+  // Haal alle relevante data op via service role (publieke website, geen auth nodig)
+  const [wedstrijden, matches, nieuws, agendaItems] = await Promise.all([
+    base44.asServiceRole.entities.AgendaItem.list('-date', 50),
+    base44.asServiceRole.entities.Match.list('-date', 50),
+    base44.asServiceRole.entities.Nieuwsbericht.filter({ gepubliceerd: true }, '-datum', 10),
+    base44.asServiceRole.entities.AgendaItem.list('date', 100),
+  ]);
+
+  const nu = new Date();
+  const vandaag = nu.toISOString().split('T')[0];
+
+  const komende = agendaItems
+    .filter(w => w.date >= vandaag)
+    .slice(0, 8)
+    .map(w => `- ${w.title} op ${new Date(w.date).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'long' })} om ${w.start_time || '?'}${w.location ? ' bij ' + w.location : ''} (${w.team || 'Alle'})`);
+
+  const gespeeld = matches
+    .filter(m => m.score_home !== null && m.score_home !== undefined && m.score_away !== null && m.score_away !== undefined)
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 20)
+    .map(m => {
+      const thuisScore = m.score_home;
+      const uitScore = m.score_away;
+      const resultaat = thuisScore > uitScore ? 'Gewonnen' : thuisScore < uitScore ? 'Verloren' : 'Gelijkgespeeld';
+      return `- ${new Date(m.date).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' })}: MV Artemis vs ${m.opponent} — ${m.score_home}-${m.score_away} (${resultaat}) [${m.home_away}] [${m.team}]`;
+    });
+
+  const nieuwsLijst = nieuws.map(n =>
+    `- ${n.titel} (${new Date(n.datum).toLocaleDateString('nl-NL')}): ${n.samenvatting || ''}`
+  );
 
   const systeemPrompt = `Je bent de Artemis Assistent, de vriendelijke en enthousiaste AI-assistent van MV Artemis (Meiden Vereniging Artemis).
 
@@ -43,7 +73,6 @@ Drie pijlers:
 1. Positiespel als basis
 2. Verticaal-direct aanvallen
 3. Gegenpressing als houding
-
 Kernregel: "De bal moet naar de ruimte waar de meeste winst te halen valt."
 
 PROEFTRAINING:
@@ -52,25 +81,20 @@ PROEFTRAINING:
 - Leeftijd: 15 jaar en ouder
 - Zowel MO17 als Vrouwen 1
 
-LIVE WEDSTRIJDDATA:
-Komende wedstrijden:
-${liveData?.komendWedstrijden?.length > 0
-  ? liveData.komendWedstrijden.map(w =>
-      `- ${w.title} op ${new Date(w.date).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' })} om ${w.start_time || '?'}${w.location ? ' bij ' + w.location : ''}`
-    ).join('\n')
-  : 'Geen komende wedstrijden bekend'}
+KOMENDE WEDSTRIJDEN & ACTIVITEITEN:
+${komende.length > 0 ? komende.join('\n') : 'Geen komende activiteiten gevonden'}
 
-Laatste nieuws:
-${liveData?.recentNieuws?.length > 0
-  ? liveData.recentNieuws.map(n =>
-      `- ${n.titel} (${new Date(n.datum).toLocaleDateString('nl-NL')})`
-    ).join('\n')
-  : 'Geen recent nieuws'}
+GESPEELDE WEDSTRIJDEN & UITSLAGEN (meest recent eerst):
+${gespeeld.length > 0 ? gespeeld.join('\n') : 'Nog geen wedstrijden gespeeld'}
+
+RECENT NIEUWS:
+${nieuwsLijst.length > 0 ? nieuwsLijst.join('\n') : 'Geen recent nieuws'}
 
 REGELS:
+- Gebruik de wedstrijddata hierboven om vragen over uitslagen, tegenstanders en resultaten te beantwoorden
 - Verwijs voor proeftraining aanvragen altijd naar mv-artemis.nl/proeftraining
 - Verwijs voor contact naar info@mv-artemis.nl
-- Als je iets niet weet: zeg dat eerlijk en verwijs naar info@mv-artemis.nl
+- Als iets niet in bovenstaande data staat: zeg dat eerlijk en verwijs naar info@mv-artemis.nl
 - Geef nooit persoonlijke spelersdata zoals telefoonnummers of e-mailadressen
 - Houd antwoorden kort: max 3-4 zinnen
 - Als iemand wil aanmelden: stuur naar /proeftraining pagina`;

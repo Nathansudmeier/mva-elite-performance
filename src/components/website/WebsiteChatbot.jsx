@@ -87,26 +87,12 @@ export default function WebsiteChatbot() {
     setInputWaarde('');
     setLaden(true);
 
-    // Haal live data op
-    let liveData = {};
-    try {
-      const [wedstrijden, nieuws] = await Promise.all([
-        base44.entities.AgendaItem.filter({ type: 'Wedstrijd' }, 'date', 10),
-        base44.entities.Nieuwsbericht.filter({ gepubliceerd: true }, '-datum', 3),
-      ]);
-      liveData = {
-        komendWedstrijden: wedstrijden.filter(w => new Date(w.date) >= new Date()).slice(0, 5),
-        recentNieuws: nieuws,
-      };
-    } catch {}
-
     // Stuur naar backend, max 10 berichten context (exclusief welkomst)
     const contextBerichten = nieuweBerichten.slice(1).slice(-10);
 
     try {
       const res = await base44.functions.invoke('artemisChat', {
         berichten: contextBerichten,
-        liveData,
       });
       setBerichten(prev => [...prev, { rol: 'assistant', inhoud: res.data.antwoord }]);
     } catch {
