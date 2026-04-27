@@ -35,6 +35,27 @@ const secondaryNavItems = [
   { name: "Beheer", icon: "settings", page: "AccountBeheer" },
 ];
 
+function WebsiteBeheerLink({ currentPageName, onClick }) {
+  const isActive = currentPageName === "WebsiteBeheer";
+  return (
+    <Link
+      to="/website-beheer"
+      onClick={onClick}
+      style={{
+        display: "flex", alignItems: "center", gap: "10px",
+        padding: "9px 12px", borderRadius: "12px",
+        textDecoration: "none", fontSize: "14px", fontWeight: isActive ? 800 : 500,
+        color: isActive ? "#ffffff" : "rgba(26,26,26,0.55)",
+        background: isActive ? "#FF6800" : "transparent",
+        transition: "all 0.15s ease",
+      }}
+    >
+      <i className="ti ti-world" style={{ fontSize: "18px", color: isActive ? "#ffffff" : "rgba(26,26,26,0.40)" }} />
+      Website beheer
+    </Link>
+  );
+}
+
 function NavLink({ item, currentPageName, onClick, variant = "desktop" }) {
   const isActive = currentPageName === item.page;
 
@@ -129,6 +150,7 @@ export default function Layout({ children, currentPageName }) {
               {mainNavItems.map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} />)}
               <DeveloperGroup currentPageName={currentPageName} />
               {secondaryNavItems.map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} />)}
+              <WebsiteBeheerLink currentPageName={currentPageName} />
             </>
           )}
         </nav>
@@ -174,6 +196,7 @@ export default function Layout({ children, currentPageName }) {
                   {mainNavItems.map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />)}
                   <DeveloperGroup currentPageName={currentPageName} onItemClick={() => setMobileOpen(false)} />
                   {secondaryNavItems.map((item) => <NavLink key={item.page} item={item} currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />)}
+                  <WebsiteBeheerLink currentPageName={currentPageName} onClick={() => setMobileOpen(false)} />
                 </>
               )}
             </nav>
