@@ -223,9 +223,7 @@ export default function MatchdayCard({ match, onClose }) {
     ctx.fillText(datumTekst, 56, 1130);
 
     // Locatie
-    const locatie = match.home_away === 'Thuis'
-      ? (match.location || 'Sportpark Douwekamp, Opeinde')
-      : (match.location || '');
+    const locatie = match.location || (match.home_away === 'Thuis' ? 'Sportpark Douwekamp, Opeinde' : '');
 
     if (locatie) {
       ctx.font = '28px Arial';
@@ -233,8 +231,21 @@ export default function MatchdayCard({ match, onClose }) {
       ctx.fillText('📍 ' + locatie, 56, 1176);
     }
 
+    // Thuis/Uit badge
+    const thuisUit = match.home_away || 'Thuis';
+    ctx.font = 'bold 24px Arial';
+    const thuisBreedte = ctx.measureText(thuisUit.toUpperCase()).width + 28;
+    ctx.fillStyle = thuisUit === 'Thuis' ? 'rgba(8,208,104,0.25)' : 'rgba(0,194,255,0.25)';
+    ctx.beginPath();
+    ctx.roundRect(56, 1195, thuisBreedte, 38, 4);
+    ctx.fill();
+    ctx.fillStyle = thuisUit === 'Thuis' ? '#08D068' : '#00C2FF';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(thuisUit.toUpperCase(), 56 + 14, 1195 + 19);
+
     // VS blok
-    const vsY = 1220;
+    const vsY = 1260;
 
     if (clubLogo) {
       ctx.drawImage(clubLogo, 56, vsY, 72, 72);
@@ -271,7 +282,7 @@ export default function MatchdayCard({ match, onClose }) {
     }
 
     // STARTING XI
-    const xiY = 1340;
+    const xiY = 1380;
     
     ctx.font = 'bold 52px Arial';
     ctx.fillStyle = '#FF6800';
@@ -341,8 +352,8 @@ export default function MatchdayCard({ match, onClose }) {
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(wisselNamen, 56, subY + 80);
 
-    // Sponsor balk
-    const sponsorHoogte = 90;
+    // Sponsor balk (2 rijen)
+    const sponsorHoogte = 180;
     const sponsorY = HOOGTE - sponsorHoogte;
 
     ctx.fillStyle = 'rgba(8,9,13,0.98)';
@@ -356,40 +367,47 @@ export default function MatchdayCard({ match, onClose }) {
     ctx.stroke();
 
     if (sponsors.length > 0) {
-      const sponsorAfstand = BREEDTE / (sponsors.length + 1);
-      
-      for (let i = 0; i < sponsors.length; i++) {
-        const sponsor = sponsors[i];
-        const sx = sponsorAfstand * (i + 1);
-        const sy = sponsorY + sponsorHoogte / 2;
+      const perRij = Math.ceil(sponsors.length / 2);
+      const rij1 = sponsors.slice(0, perRij);
+      const rij2 = sponsors.slice(perRij);
+      const rijen = [rij1, rij2].filter(r => r.length > 0);
+      const rijHoogtes = [sponsorY + sponsorHoogte * 0.3, sponsorY + sponsorHoogte * 0.72];
 
-        if (sponsor.logo) {
-          const logoMaxH = 36;
-          const schaalFactor = logoMaxH / sponsor.logo.height;
-          const logoW = sponsor.logo.width * schaalFactor;
-          const logoH = logoMaxH;
+      rijen.forEach((rij, rijIdx) => {
+        const afstand = BREEDTE / (rij.length + 1);
+        const sy = rijHoogtes[rijIdx];
 
-          const tmpCanvas = document.createElement('canvas');
-          tmpCanvas.width = logoW;
-          tmpCanvas.height = logoH;
-          const tmpCtx = tmpCanvas.getContext('2d');
-          
-          tmpCtx.drawImage(sponsor.logo, 0, 0, logoW, logoH);
-          tmpCtx.globalCompositeOperation = 'source-in';
-          tmpCtx.fillStyle = '#ffffff';
-          tmpCtx.fillRect(0, 0, logoW, logoH);
-          
-          ctx.globalAlpha = 0.85;
-          ctx.drawImage(tmpCanvas, sx - logoW / 2, sy - logoH / 2, logoW, logoH);
-          ctx.globalAlpha = 1;
-        } else {
-          ctx.font = 'bold 22px Arial';
-          ctx.fillStyle = 'rgba(255,255,255,0.8)';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(sponsor.naam || '', sx, sy);
-        }
-      }
+        rij.forEach((sponsor, i) => {
+          const sx = afstand * (i + 1);
+
+          if (sponsor.logo) {
+            const logoMaxH = 32;
+            const schaalFactor = logoMaxH / sponsor.logo.height;
+            const logoW = sponsor.logo.width * schaalFactor;
+            const logoH = logoMaxH;
+
+            const tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = logoW;
+            tmpCanvas.height = logoH;
+            const tmpCtx = tmpCanvas.getContext('2d');
+            
+            tmpCtx.drawImage(sponsor.logo, 0, 0, logoW, logoH);
+            tmpCtx.globalCompositeOperation = 'source-in';
+            tmpCtx.fillStyle = '#ffffff';
+            tmpCtx.fillRect(0, 0, logoW, logoH);
+            
+            ctx.globalAlpha = 0.85;
+            ctx.drawImage(tmpCanvas, sx - logoW / 2, sy - logoH / 2, logoW, logoH);
+            ctx.globalAlpha = 1;
+          } else {
+            ctx.font = 'bold 22px Arial';
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(sponsor.naam || '', sx, sy);
+          }
+        });
+      });
     }
   };
 
