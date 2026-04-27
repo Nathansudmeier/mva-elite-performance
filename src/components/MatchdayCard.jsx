@@ -26,100 +26,83 @@ const laadAfbeelding = (url) => {
 export default function MatchdayCard({ match, onClose }) {
   const canvasRef = useRef(null);
   const [achtergronden, setAchtergronden] = useState([]);
-  const [geselecteerdeAchtergrond, setGeselecteerdeAchtergrond] = useState(null);
-  const [spelers, setSpelers] = useState([]);
-  const [sponsors, setSponsors] = useState([]);
+  const [geselecteerdeAchtergrondId, setGeselecteerdeAchtergrondId] = useState('eerste');
+  const [gelaadenData, setGelaadenData] = useState(null); // { clubLogo, tegLogo, achtergrondImgs, basisSpelers, wisselSpelers, sponsorsMetLogos }
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [instellingen, setInstellingen] = useState(null);
 
   const BREEDTE = 1080;
   const HOOGTE = 1920;
   const SCHAAL = 0.45;
 
-  // Data laden en canvas tekenen
+  // Initieel data laden (éénmalig per match)
   useEffect(() => {
-    const laadEnTeken = async () => {
+    const laadData = async () => {
       setIsLoading(true);
       try {
-        const [
-          spelersData,
-          sponsorsData,
-          achtergrondData,
-          instList
-        ] = await Promise.all([
+        const [spelersData, sponsorsData, achtergrondData, instList] = await Promise.all([
           base44.entities.Player.list().catch(() => []),
           base44.entities.Sponsor.filter({ actief: true }).catch(() => []),
           base44.entities.MatchdayAchtergrond.list().catch(() => []),
           base44.entities.WebsiteInstellingen.list().catch(() => [])
         ]);
 
-        setSpelers(spelersData);
         const filteredBg = (achtergrondData || [])
           .filter(b => b.actief !== false && (!match.team || b.team === match.team || b.team === "Alle"))
           .sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0));
         setAchtergronden(filteredBg);
-        setSponsors((sponsorsData || []).sort((a, b) => (a.tier || 9) - (b.tier || 9) || (a.volgorde || 0) - (b.volgorde || 0)).slice(0, 6));
-        if (instList && instList.length > 0) setInstellingen(instList[0]);
 
-        // Lineup koppelen
+        // Lineup koppelen — alle items met player_id zijn basisspelers
         const lineupArr = Array.isArray(match?.lineup) ? match.lineup : [];
         const basisSpelers = lineupArr
-          .filter(item => item.slot === "basis" && item.player_id)
+          .filter(item => item.player_id)
           .map(item => {
             const s = spelersData.find(p => p.id === item.player_id);
             return {
               id: item.player_id,
-              naam: s?.name || "Onbekend",
+              naam: s?.name || "",
               nummer: s?.shirt_number || "",
             };
-          });
+          })
+          .filter(sp => sp.naam); // verwijder niet-gevonden spelers
 
         const basisIds = new Set(basisSpelers.map(b => b.id));
-        const subIds = (match?.substitutes || []).filter(id => !basisIds.has(id));
-        const wisselSpelers = subIds.map(id => {
-          const s = spelersData.find(p => p.id === id);
-          return {
-            naam: s?.name || "Onbekend",
-            nummer: s?.shirt_number || "",
-          };
-        }).filter(w => w.naam !== "Onbekend");
+        const wisselSpelers = (match?.substitutes || [])
+          .map(id => {
+            const s = spelersData.find(p => p.id === id);
+            return { naam: s?.name || "", nummer: s?.shirt_number || "" };
+          })
+          .filter(w => w.naam && !basisIds.has(w.id));
 
-        // Laad afbeeldingen
-        const clubLogoImg = instellingen?.logo_url || (instList?.[0]?.logo_url)
-          ? await laadAfbeelding(instellingen?.logo_url || instList?.[0]?.logo_url)
-          : null;
+        // Laad alle afbeeldingen parallel
+        const clubLogoUrl = instList?.[0]?.logo_url || null;
+        const [clubLogoImg, tegLogoImg, ...bgImgs] = await Promise.all([
+          laadAfbeelding(clubLogoUrl),
+          laadAfbeelding(match?.opponent_logo || null),
+          ...filteredBg.map(bg => laadAfbeelding(bg.foto_url))
+        ]);
 
-        const tegLogoImg = match?.opponent_logo
-          ? await laadAfbeelding(match.opponent_logo)
-          : null;
-
-        const achtergrondImg = filteredBg[0]?.foto_url
-          ? await laadAfbeelding(filteredBg[0].foto_url)
-          : null;
-
-        if (filteredBg.length > 0) setGeselecteerdeAchtergrond(achtergrondImg);
-
-        // Sponsor logos laden
         const sponsorsMetLogos = await Promise.all(
-          ((sponsorsData || []).slice(0, 6)).map(async (s) => ({
-            ...s,
-            logo: s.logo_url ? await laadAfbeelding(s.logo_url) : null
-          }))
+          ((sponsorsData || [])
+            .sort((a, b) => (a.tier || 9) - (b.tier || 9) || (a.volgorde || 0) - (b.volgorde || 0))
+            .slice(0, 6))
+            .map(async (s) => ({
+              ...s,
+              logo: s.logo_url ? await laadAfbeelding(s.logo_url) : null
+            }))
         );
 
-        // Teken kaart
-        if (canvasRef.current) {
-          await tekenKaart(canvasRef.current, {
-            achtergrond: achtergrondImg,
-            clubLogo: clubLogoImg,
-            tegLogo: tegLogoImg,
-            basisSpelers: basisSpelers,
-            wisselSpelers: wisselSpelers,
-            sponsors: sponsorsMetLogos,
-            match: match
-          });
-        }
+        // Sla alles op in één state object
+        const data = {
+          clubLogo: clubLogoImg,
+          tegLogo: tegLogoImg,
+          achtergrondImgs: bgImgs, // array van Image objecten, index matcht filteredBg
+          basisSpelers,
+          wisselSpelers,
+          sponsorsMetLogos,
+        };
+        setGelaadenData(data);
+
       } catch (e) {
         console.error('Laad fout:', e);
       } finally {
@@ -127,10 +110,33 @@ export default function MatchdayCard({ match, onClose }) {
       }
     };
 
-    if (match) laadEnTeken();
-  }, [match?.id, match?.team, geselecteerdeAchtergrond]);
+    if (match) laadData();
+  }, [match?.id, match?.team]);
 
-  const tekenKaart = async (canvas, data) => {
+  // Herteken canvas wanneer data of geselecteerde achtergrond verandert
+  useEffect(() => {
+    if (!gelaadenData || !canvasRef.current) return;
+
+    const bgIdx = geselecteerdeAchtergrondId === 'geen'
+      ? -1
+      : geselecteerdeAchtergrondId === 'eerste'
+        ? 0
+        : achtergronden.findIndex(bg => bg.id === geselecteerdeAchtergrondId);
+
+    const achtergrond = bgIdx >= 0 ? gelaadenData.achtergrondImgs[bgIdx] : null;
+
+    tekenKaart(canvasRef.current, {
+      achtergrond,
+      clubLogo: gelaadenData.clubLogo,
+      tegLogo: gelaadenData.tegLogo,
+      basisSpelers: gelaadenData.basisSpelers,
+      wisselSpelers: gelaadenData.wisselSpelers,
+      sponsors: gelaadenData.sponsorsMetLogos,
+      match,
+    });
+  }, [gelaadenData, geselecteerdeAchtergrondId]);
+
+  const tekenKaart = (canvas, data) => {
     const ctx = canvas.getContext('2d');
     canvas.width = BREEDTE;
     canvas.height = HOOGTE;
@@ -420,22 +426,19 @@ export default function MatchdayCard({ match, onClose }) {
           marginBottom: 8,
         }}>ACHTERGROND</div>
         <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
-          <button onClick={() => setGeselecteerdeAchtergrond(null)} style={{
+          <button onClick={() => setGeselecteerdeAchtergrondId('geen')} style={{
             background: "#202840",
-            border: `2px solid ${geselecteerdeAchtergrond === null ? "#FF6800" : "rgba(255,255,255,0.1)"}`,
+            border: `2px solid ${geselecteerdeAchtergrondId === 'geen' ? "#FF6800" : "rgba(255,255,255,0.1)"}`,
             width: 60, height: 80, borderRadius: 4, display: "flex", alignItems: "center",
             justifyContent: "center", fontSize: 10, color: "rgba(255,255,255,0.5)",
             cursor: "pointer", flexShrink: 0,
           }}>Geen</button>
-          {achtergronden.map(bg => (
+          {achtergronden.map((bg, idx) => (
             <img key={bg.id} src={bg.foto_url} alt={bg.naam || ""}
-              onClick={async () => {
-                const img = await laadAfbeelding(bg.foto_url);
-                setGeselecteerdeAchtergrond(img);
-              }}
+              onClick={() => setGeselecteerdeAchtergrondId(bg.id)}
               style={{
                 width: 60, height: 80, objectFit: "cover", borderRadius: 4, cursor: "pointer",
-                border: `2px solid ${geselecteerdeAchtergrond ? "#FF6800" : "transparent"}`,
+                border: `2px solid ${geselecteerdeAchtergrondId === bg.id || (geselecteerdeAchtergrondId === 'eerste' && idx === 0) ? "#FF6800" : "transparent"}`,
                 flexShrink: 0,
               }} />
           ))}
