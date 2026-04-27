@@ -257,7 +257,17 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
 
   <!-- BODY START -->
   <tr>
-    <td style="background-color:#FFF8F2;padding:28px 20px 24px;position:relative;overflow:hidden;">
+    <td style="background-color:#FFF8F2;padding:0;">
+      <div style="position:relative;overflow:hidden;background:#FFF8F2;padding:28px 20px 24px;">
+
+        <!-- Decoratieve cirkels -->
+        <div style="position:absolute;top:40px;right:-60px;width:200px;height:200px;border-radius:50%;border:2px solid rgba(255,104,0,0.08);pointer-events:none;"></div>
+        <div style="position:absolute;top:80px;right:-20px;width:120px;height:120px;border-radius:50%;border:2px solid rgba(255,104,0,0.06);pointer-events:none;"></div>
+        <div style="position:absolute;top:460px;left:-70px;width:180px;height:180px;border-radius:50%;border:2px solid rgba(26,26,46,0.06);pointer-events:none;"></div>
+        <div style="position:absolute;top:520px;left:-30px;width:100px;height:100px;border-radius:50%;border:2px solid rgba(26,26,46,0.04);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:200px;right:-50px;width:150px;height:150px;border-radius:50%;border:2px solid rgba(255,104,0,0.07);pointer-events:none;"></div>
+
+        <div style="position:relative;z-index:1;">
 
       ${uitgelicht.length > 0 ? `
       <!-- UITGELICHTE WEDSTRIJD -->
@@ -399,6 +409,8 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
       <div style="height:16px;">&nbsp;</div>
       ` : ''}
 
+        </div><!-- /z-index wrapper -->
+      </div><!-- /overflow:hidden wrapper -->
     </td>
   </tr>
   <!-- BODY END -->
