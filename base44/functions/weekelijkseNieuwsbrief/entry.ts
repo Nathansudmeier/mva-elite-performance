@@ -157,6 +157,20 @@ Afmelden: https://mv-artemis.nl/nieuwsbrief/afmelden?code=${abonnee.bevestigings
 }
 
 function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht, logoUrl }) {
+  const fontLink = `https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600&display=swap`;
+
+  const sectionLabel = (text) => `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+      <tr>
+        <td style="white-space:nowrap;padding-right:12px;font-size:9px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#FF6800;font-family:'Barlow Condensed',Arial,sans-serif;vertical-align:middle;">
+          ${text}
+        </td>
+        <td width="100%" style="vertical-align:middle;">
+          <div style="height:1px;background:#F0E8E0;font-size:0;line-height:0;">&nbsp;</div>
+        </td>
+      </tr>
+    </table>`;
+
   return `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="nl">
@@ -164,37 +178,41 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MV Artemis Nieuwsbrief</title>
+  <link href="${fontLink}" rel="stylesheet" type="text/css"/>
 </head>
-<body style="margin:0;padding:0;background-color:#10121A;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<body style="margin:0;padding:0;background-color:#F0E8DC;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 
-<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#10121A;">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F0E8DC;">
 <tr><td align="center" style="padding:32px 16px;">
 
-<table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;">
+<table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;width:100%;background-color:#FFF8F2;border-radius:16px;overflow:hidden;border:1px solid #E8E0D8;">
 
   <!-- HEADER -->
   <tr>
-    <td style="background-color:#1B2A5E;padding:20px 32px;border-radius:8px 8px 0 0;">
+    <td style="background-color:#FF6800;padding:16px 24px;border-radius:16px 16px 0 0;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td valign="middle">
             <table cellpadding="0" cellspacing="0" border="0">
               <tr>
-                ${logoUrl ? `
                 <td valign="middle" style="padding-right:12px;">
-                  <img src="${logoUrl}" alt="MV Artemis" width="36" height="36" style="display:block;width:36px;height:36px;border:0;outline:none;" />
+                  <div style="width:44px;height:44px;border-radius:50%;background-color:#ffffff;display:inline-block;text-align:center;line-height:44px;">
+                    <span style="font-size:13px;font-weight:900;color:#FF6800;font-family:'Barlow Condensed',Arial,sans-serif;letter-spacing:-0.5px;">MV/A</span>
+                  </div>
                 </td>
-                ` : ''}
                 <td valign="middle">
-                  <span style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:2px;font-family:Arial,sans-serif;">
-                    MV<span style="color:#FF6800;">/</span>ARTEMIS
+                  <span style="font-size:22px;font-weight:900;color:#ffffff;letter-spacing:0px;font-family:'Barlow Condensed',Arial,sans-serif;display:block;line-height:1.1;">
+                    MV/ARTEMIS
+                  </span>
+                  <span style="font-size:11px;color:rgba(255,255,255,0.75);font-family:'Barlow',Arial,sans-serif;text-transform:uppercase;letter-spacing:0.5px;">
+                    Meiden Vereniging Artemis
                   </span>
                 </td>
               </tr>
             </table>
           </td>
           <td align="right" valign="middle">
-            <span style="font-size:12px;color:rgba(255,255,255,0.3);font-family:Arial,sans-serif;">
+            <span style="font-size:12px;color:#ffffff;font-family:'Barlow',Arial,sans-serif;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:4px 12px;display:inline-block;">
               Week ${dag} ${maand}
             </span>
           </td>
@@ -203,208 +221,221 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
     </td>
   </tr>
 
-  <!-- ORANJE LIJN -->
-  <tr>
-    <td style="background-color:#FF6800;height:3px;font-size:0;line-height:0;">&nbsp;</td>
-  </tr>
-
   <!-- HERO -->
   <tr>
-    <td style="background-color:#151D35;padding:36px 32px;">
-      <p style="margin:0 0 6px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;">
+    <td style="background-color:#1A1A2E;padding:28px 28px 24px;position:relative;overflow:hidden;">
+      <p style="margin:0 0 8px 0;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FF6800;font-family:'Barlow',Arial,sans-serif;">
         WEKELIJKSE UPDATE
       </p>
-      <h1 style="margin:0 0 14px 0;font-size:34px;font-weight:700;color:#ffffff;line-height:1.1;font-family:Arial,sans-serif;">
-        Jouw Ambitie.<br/>Ons Doel.
+      <h1 style="margin:0 0 16px 0;font-size:40px;font-weight:900;color:#ffffff;line-height:1.0;letter-spacing:-0.5px;font-family:'Barlow Condensed',Arial,sans-serif;">
+        Jouw <span style="color:#FF6800;">Ambitie.</span><br/>Ons Doel.
       </h1>
-      <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.6);line-height:1.7;font-family:Arial,sans-serif;">
-        Het laatste nieuws, uitslagen en aankondigingen van MV Artemis — samengevat voor jou.
-      </p>
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="padding-right:8px;">
+            <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;display:inline-block;">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#FF6800;vertical-align:middle;margin-right:6px;"></span>
+              <span style="font-size:12px;color:#ffffff;font-family:'Barlow',Arial,sans-serif;">Nieuws</span>
+            </span>
+          </td>
+          <td style="padding-right:8px;">
+            <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;display:inline-block;">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#FF6800;vertical-align:middle;margin-right:6px;"></span>
+              <span style="font-size:12px;color:#ffffff;font-family:'Barlow',Arial,sans-serif;">Uitslagen</span>
+            </span>
+          </td>
+          <td>
+            <span style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;display:inline-block;">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#FF6800;vertical-align:middle;margin-right:6px;"></span>
+              <span style="font-size:12px;color:#ffffff;font-family:'Barlow',Arial,sans-serif;">Wedstrijden</span>
+            </span>
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
 
-  ${uitgelicht.length > 0 ? `
-  <!-- UITGELICHTE WEDSTRIJD -->
+  <!-- BODY START -->
   <tr>
-    <td style="background-color:#10121A;padding:28px 32px 0;">
-      <p style="margin:0 0 14px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
-        NIET MISSEN
-      </p>
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#1B2A5E;border-radius:6px;border-left:3px solid #FF6800;">
+    <td style="background-color:#FFF8F2;padding:28px 20px 24px;position:relative;overflow:hidden;">
+
+      ${uitgelicht.length > 0 ? `
+      <!-- UITGELICHTE WEDSTRIJD -->
+      ${sectionLabel('NIET MISSEN')}
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border-radius:16px;border:1.5px solid #1A1A2E;box-shadow:3px 3px 0 #1A1A2E;margin-bottom:28px;overflow:hidden;">
         <tr>
-          <td style="padding:20px 24px;">
-            <p style="margin:0 0 6px 0;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;">
-              ${uitgelicht[0].titel || ''}
-            </p>
-            <h2 style="margin:0 0 12px 0;font-size:22px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;">
+          <td style="background-color:#FF6800;padding:8px 16px;">
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;color:#ffffff;letter-spacing:1px;font-family:'Barlow',Arial,sans-serif;">
+              ${uitgelicht[0].titel || 'De Topper'}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:18px 18px 20px;">
+            <h2 style="margin:0 0 6px 0;font-size:26px;font-weight:900;color:#1A1A2E;line-height:1.1;font-family:'Barlow Condensed',Arial,sans-serif;">
               MV Artemis vs ${uitgelicht[0].tegenstander || ''}
             </h2>
-            <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.55);line-height:1.8;font-family:Arial,sans-serif;">
-              📅 ${uitgelicht[0].datum ? new Date(uitgelicht[0].datum).toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' }) : ''}<br/>
-              🕐 ${uitgelicht[0].tijdstip || ''}<br/>
-              📍 ${uitgelicht[0].locatie || ''}
+            <p style="margin:0 0 14px 0;font-size:13px;font-weight:600;color:#FF6800;font-family:'Barlow',Arial,sans-serif;">
+              ${uitgelicht[0].team || ''} · Eredivisie Women
             </p>
+            <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="padding-bottom:4px;">
+                  <span style="font-size:12px;color:#888;font-family:'Barlow',Arial,sans-serif;">
+                    📅&nbsp;${uitgelicht[0].datum ? new Date(uitgelicht[0].datum).toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' }) : ''}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-bottom:4px;">
+                  <span style="font-size:12px;color:#888;font-family:'Barlow',Arial,sans-serif;">
+                    🕐&nbsp;${uitgelicht[0].tijdstip || ''}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span style="font-size:12px;color:#888;font-family:'Barlow',Arial,sans-serif;">
+                    📍&nbsp;${uitgelicht[0].locatie || ''}
+                  </span>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
       </table>
-    </td>
-  </tr>
-  ` : ''}
+      ` : ''}
 
-  ${nieuws.length > 0 ? `
-  <!-- LAATSTE NIEUWS -->
-  <tr>
-    <td style="background-color:#10121A;padding:28px 32px 0;">
-      <p style="margin:0 0 16px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
-        LAATSTE NIEUWS
-      </p>
+      ${nieuws.length > 0 ? `
+      <!-- LAATSTE NIEUWS -->
+      ${sectionLabel('LAATSTE NIEUWS')}
       ${nieuws.map((b, i) => `
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:${i < nieuws.length - 1 ? '20px' : '0'};padding-bottom:${i < nieuws.length - 1 ? '20px' : '0'};border-bottom:${i < nieuws.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none'};">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border-radius:14px;border:1px solid #EEE7DF;margin-bottom:12px;overflow:hidden;">
         <tr>
-          <td>
-            <p style="margin:0 0 6px 0;display:inline-block;background-color:rgba(255,104,0,0.2);color:#FF6800;font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">
-              ${b.categorie || ''}
-            </p>
-            ${b.team && b.team !== 'Alle' ? `
-            <p style="margin:0 0 6px 8px;display:inline-block;background-color:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">
-              ${b.team}
-            </p>
-            ` : ''}
-            <h3 style="margin:8px 0 8px 0;font-size:17px;font-weight:700;color:#ffffff;line-height:1.2;font-family:Arial,sans-serif;">
+          <td style="padding:16px;">
+            <table cellpadding="0" cellspacing="4" border="0" style="margin-bottom:8px;">
+              <tr>
+                <td>
+                  <span style="display:inline-block;background:#FFF0E6;color:#CC5500;border:1px solid #FFD4B0;border-radius:20px;font-size:10px;font-weight:700;padding:2px 10px;letter-spacing:0.5px;text-transform:uppercase;font-family:'Barlow',Arial,sans-serif;">
+                    ${b.categorie || ''}
+                  </span>
+                </td>
+                ${b.team && b.team !== 'Alle' ? `
+                <td>
+                  <span style="display:inline-block;background:#F0F0F0;color:#555;border:1px solid #DDD;border-radius:20px;font-size:10px;font-weight:700;padding:2px 10px;letter-spacing:0.5px;text-transform:uppercase;font-family:'Barlow',Arial,sans-serif;">
+                    ${b.team}
+                  </span>
+                </td>
+                ` : ''}
+              </tr>
+            </table>
+            <h3 style="margin:0 0 4px 0;font-size:20px;font-weight:800;color:#1A1A2E;line-height:1.2;font-family:'Barlow Condensed',Arial,sans-serif;">
               ${b.titel || ''}
             </h3>
-            ${b.samenvatting ? `
-            <p style="margin:0 0 8px 0;font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;font-style:italic;font-family:Arial,sans-serif;">
-              ${b.samenvatting}
-            </p>
-            ` : ''}
-            <p style="margin:0 0 10px 0;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;font-family:Arial,sans-serif;">
-              ${eersteAlinea(b.inhoud)}
-              <a href="https://mv-artemis.nl/nieuws/${b.slug}" style="color:#FF6800;font-weight:600;text-decoration:none;font-family:Arial,sans-serif;white-space:nowrap;">
-                Lees verder →
-              </a>
+            ${b.datum ? `<p style="margin:0 0 8px 0;font-size:11px;color:#AAA;font-style:italic;font-family:'Barlow',Arial,sans-serif;">${new Date(b.datum).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' })}</p>` : ''}
+            ${b.samenvatting ? `<p style="margin:0 0 8px 0;font-size:13px;color:#555;line-height:1.6;font-family:'Barlow',Arial,sans-serif;">${b.samenvatting}</p>` : ''}
+            <p style="margin:0;font-size:13px;color:#555;line-height:1.6;font-family:'Barlow',Arial,sans-serif;">
+              ${eersteAlinea(b.inhoud)}<a href="https://mv-artemis.nl/nieuws/${b.slug}" style="color:#FF6800;font-weight:700;text-decoration:none;font-size:12px;font-family:'Barlow',Arial,sans-serif;white-space:nowrap;">Lees verder →</a>
             </p>
           </td>
         </tr>
       </table>
       `).join('')}
-    </td>
-  </tr>
-  ` : ''}
+      <div style="height:16px;">&nbsp;</div>
+      ` : ''}
 
-  ${uitslagen.length > 0 ? `
-  <!-- UITSLAGEN -->
-  <tr>
-    <td style="background-color:#161A24;padding:28px 32px;">
-      <p style="margin:0 0 16px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
-        UITSLAGEN
-      </p>
+      ${uitslagen.length > 0 ? `
+      <!-- UITSLAGEN -->
+      ${sectionLabel('UITSLAGEN')}
+      <h2 style="margin:0 0 12px 0;font-size:18px;font-weight:800;color:#1A1A2E;font-family:'Barlow Condensed',Arial,sans-serif;">
+        Resultaten van <span style="color:#FF6800;">deze week</span>
+      </h2>
       ${uitslagen.map(w => `
-      <table width="100%" cellpadding="12" cellspacing="0" border="0" style="background-color:#202840;border-radius:6px;margin-bottom:8px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border-radius:12px;border:1px solid #EEE7DF;margin-bottom:8px;overflow:hidden;">
         <tr>
-          <td style="font-size:13px;font-weight:600;color:#ffffff;font-family:Arial,sans-serif;">
-            ${w.titel || 'MV Artemis'}
+          <td style="padding:12px 16px;">
+            <p style="margin:0 0 2px 0;font-size:10px;text-transform:uppercase;color:#AAA;font-family:'Barlow',Arial,sans-serif;">${w.team || 'MV Artemis'}</p>
+            <p style="margin:0;font-size:16px;font-weight:700;color:#1A1A2E;font-family:'Barlow Condensed',Arial,sans-serif;">${w.titel || ''}</p>
           </td>
-          <td align="right" style="font-size:20px;font-weight:700;color:#FF6800;font-family:Arial,sans-serif;">
-            ${w.score_thuis ?? ''} - ${w.score_uit ?? ''}
+          <td align="right" style="background-color:#1A1A2E;min-width:72px;padding:12px 16px;vertical-align:middle;">
+            <span style="font-size:22px;font-weight:900;color:#FF6800;font-family:'Barlow Condensed',Arial,sans-serif;white-space:nowrap;">
+              ${w.score_thuis ?? ''} - ${w.score_uit ?? ''}
+            </span>
           </td>
         </tr>
       </table>
       `).join('')}
-    </td>
-  </tr>
-  ` : ''}
+      <div style="height:16px;">&nbsp;</div>
+      ` : ''}
 
-  ${komendWedstrijden.length > 0 ? `
-  <!-- KOMENDE WEDSTRIJDEN -->
-  <tr>
-    <td style="background-color:#10121A;padding:28px 32px;">
-      <p style="margin:0 0 16px 0;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#FF6800;font-family:Arial,sans-serif;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
-        KOMENDE WEDSTRIJDEN
-      </p>
-      ${komendWedstrijden.map(w => `
-      <table width="100%" cellpadding="14" cellspacing="0" border="0" style="background-color:#1B2A5E;border-radius:6px;margin-bottom:8px;">
+      ${komendWedstrijden.length > 0 ? `
+      <!-- KOMENDE WEDSTRIJDEN -->
+      ${sectionLabel('KOMENDE WEDSTRIJDEN')}
+      ${komendWedstrijden.map((w, i) => `
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border-radius:12px;border:1px solid #EEE7DF;margin-bottom:8px;overflow:hidden;">
         <tr>
-          <td>
-            ${w.team ? `
-            <p style="margin:0 0 4px 0;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.4);font-family:Arial,sans-serif;">
-              ${w.team}
-            </p>
-            ` : ''}
-            <p style="margin:0 0 4px 0;font-size:14px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;">
-              ${w.titel || ''}
-            </p>
-            <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.45);font-family:Arial,sans-serif;">
-              ${w.datum ? new Date(w.datum).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' }) : ''}
-              ${w.tijdstip ? ' · ' + w.tijdstip : ''}
-              ${w.locatie ? ' · ' + w.locatie : ''}
+          <td style="width:44px;min-width:44px;padding:12px 0 12px 12px;vertical-align:top;">
+            <div style="width:44px;height:44px;border-radius:10px;background-color:${i === 0 ? '#FF6800' : '#1A1A2E'};text-align:center;display:inline-block;vertical-align:top;">
+              <div style="padding-top:6px;">
+                <span style="display:block;font-size:20px;font-weight:900;color:#ffffff;line-height:1;font-family:'Barlow Condensed',Arial,sans-serif;">
+                  ${w.datum ? new Date(w.datum).getDate() : '?'}
+                </span>
+                <span style="display:block;font-size:8px;text-transform:uppercase;color:rgba(255,255,255,0.8);font-family:'Barlow',Arial,sans-serif;">
+                  ${w.datum ? MAANDEN_KORT[new Date(w.datum).getMonth()] : ''}
+                </span>
+              </div>
+            </div>
+          </td>
+          <td style="padding:12px 14px;vertical-align:middle;">
+            ${w.team ? `<p style="margin:0 0 2px 0;font-size:9px;text-transform:uppercase;color:#FF6800;letter-spacing:0.5px;font-family:'Barlow',Arial,sans-serif;">${w.team}</p>` : ''}
+            <p style="margin:0 0 2px 0;font-size:17px;font-weight:800;color:#1A1A2E;line-height:1.1;font-family:'Barlow Condensed',Arial,sans-serif;">${w.titel || ''}</p>
+            <p style="margin:0;font-size:11px;color:#999;font-family:'Barlow',Arial,sans-serif;">
+              ${w.tijdstip ? w.tijdstip + ' · ' : ''}${w.locatie || ''}
             </p>
           </td>
         </tr>
       </table>
       `).join('')}
+      <div style="height:16px;">&nbsp;</div>
+      ` : ''}
+
     </td>
   </tr>
-  ` : ''}
+  <!-- BODY END -->
 
   <!-- CTA -->
   <tr>
-    <td style="background-color:#FF6800;padding:32px;text-align:center;">
-      <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);font-family:Arial,sans-serif;">
+    <td style="background-color:#1A1A2E;padding:28px 24px;text-align:center;position:relative;overflow:hidden;">
+      <p style="margin:0 0 6px 0;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#FF6800;font-family:'Barlow',Arial,sans-serif;">
         MELD JE AAN
       </p>
-      <h2 style="margin:0 0 8px 0;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;font-family:Arial,sans-serif;">
+      <h2 style="margin:0 0 8px 0;font-size:28px;font-weight:900;color:#ffffff;line-height:1.1;font-family:'Barlow Condensed',Arial,sans-serif;">
         Wil jij bij MV Artemis<br/>komen voetballen?
       </h2>
-      <p style="margin:0 0 20px 0;font-size:13px;color:rgba(255,255,255,0.75);font-family:Arial,sans-serif;">
+      <p style="margin:0 0 20px 0;font-size:13px;color:rgba(255,255,255,0.6);font-family:'Barlow',Arial,sans-serif;">
         Kom een proeftraining doen. Kijk of het klikt.
       </p>
-      <a href="https://mv-artemis.nl/proeftraining" style="display:inline-block;background-color:#ffffff;color:#FF6800;text-decoration:none;padding:14px 32px;border-radius:4px;font-weight:700;font-size:15px;font-family:Arial,sans-serif;">
+      <a href="https://mv-artemis.nl/proeftraining" style="display:inline-block;background-color:#FF6800;color:#ffffff;text-decoration:none;padding:13px 28px;border-radius:12px;font-weight:800;font-size:16px;font-family:'Barlow Condensed',Arial,sans-serif;border:2px solid rgba(255,255,255,0.2);">
         Proeftraining aanvragen →
       </a>
     </td>
   </tr>
 
-  <!-- QUOTE -->
-  <tr>
-    <td style="background-color:#0F1630;padding:24px 32px;text-align:center;">
-      <p style="margin:0;font-size:20px;font-weight:700;color:#ffffff;letter-spacing:1px;font-family:Arial,sans-serif;">
-        Jouw Ambitie. <span style="color:#FF6800;">Ons Doel.</span>
-      </p>
-    </td>
-  </tr>
-
   <!-- FOOTER -->
   <tr>
-    <td style="background-color:#1B2A5E;padding:20px 32px;border-radius:0 0 8px 8px;">
+    <td style="background-color:#F5EDE4;border-top:1px solid #E8DDD4;padding:20px 24px;border-radius:0 0 16px 16px;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td>
-            <p style="margin:0 0 2px 0;font-size:13px;font-weight:700;color:#ffffff;font-family:Arial,sans-serif;">
-              MV Artemis
+          <td valign="middle">
+            <p style="margin:0 0 2px 0;font-size:18px;font-weight:900;color:#1A1A2E;font-family:'Barlow Condensed',Arial,sans-serif;">
+              Jouw Ambitie. <span style="color:#FF6800;">Ons Doel.</span>
             </p>
-            <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;font-family:Arial,sans-serif;">
-              Meiden Vereniging Artemis<br/>
-              Sportpark Douwekamp, Opeinde<br/>
-              info@mv-artemis.nl
+            <p style="margin:0;font-size:11px;color:#999;font-family:'Barlow',Arial,sans-serif;">
+              Sportpark Douwekamp, Opeinde · info@mv-artemis.nl
             </p>
           </td>
-          <td align="right" valign="top">
-            <a href="https://mv-artemis.nl" style="font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;font-family:Arial,sans-serif;">
-              mv-artemis.nl
-            </a>
-          </td>
-        </tr>
-      </table>
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);">
-        <tr>
-          <td>
-            <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.2);font-family:Arial,sans-serif;">
-              Je ontvangt deze mail omdat je je hebt aangemeld via mv-artemis.nl.
-            </p>
-          </td>
-          <td align="right">
-            <a href="https://mv-artemis.nl/nieuwsbrief/afmelden?code=${abonnee.bevestigingscode}" style="font-size:11px;color:rgba(255,255,255,0.25);text-decoration:underline;font-family:Arial,sans-serif;">
+          <td align="right" valign="middle">
+            <a href="https://mv-artemis.nl/nieuwsbrief/afmelden?code=${abonnee.bevestigingscode}" style="font-size:11px;color:#BBB;text-decoration:underline;font-family:'Barlow',Arial,sans-serif;">
               Afmelden
             </a>
           </td>
