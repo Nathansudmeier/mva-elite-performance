@@ -6,8 +6,9 @@ import MensenTab from "@/components/website/beheer/MensenTab";
 import NieuwsbriefTab from "@/components/website/beheer/NieuwsbriefTab";
 import MatchdayTab from "@/components/website/beheer/MatchdayTab";
 import ChatbotTab from "@/components/website/beheer/ChatbotTab";
+import DocumentenTab from "@/components/website/beheer/DocumentenTab";
 
-const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors", "Mensen", "Uitgelicht", "Nieuwsbrief", "Matchday", "Chatbot"];
+const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors", "Mensen", "Uitgelicht", "Nieuwsbrief", "Matchday", "Chatbot", "Documenten"];
 
 const FASE_DEFAULTS = {
   fase1: { label: "FASE 1 · NU BEZIG", jaar: "2025-26", items: ["V1 consolideert in 3e klasse", "MO17 handhaaft koploperspositie", "Financiële basis staat", "Naamswijziging naar MV Artemis"] },
@@ -542,6 +543,9 @@ export default function WebsiteBeheer() {
 
       {/* TAB 11: CHATBOT */}
       {activeTab === 11 && <ChatbotTab />}
+
+      {/* TAB 12: DOCUMENTEN */}
+      {activeTab === 12 && <DocumentenTab />}
 
       {/* TAB 8: UITGELICHTE WEDSTRIJDEN */}
       {activeTab === 8 && (

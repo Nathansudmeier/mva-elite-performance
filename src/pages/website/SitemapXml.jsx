@@ -86,6 +86,12 @@ export default function SitemapXml() {
         changefreq: 'yearly',
         lastmod: vandaag
       },
+      {
+        url: '/leden',
+        priority: '0.6',
+        changefreq: 'monthly',
+        lastmod: vandaag
+      },
     ];
 
     let nieuwsItems = [];

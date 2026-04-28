@@ -1,0 +1,59 @@
+{
+  "name": "ClubDocument",
+  "type": "object",
+  "properties": {
+    "naam": {
+      "type": "string",
+      "description": "Naam van het document"
+    },
+    "beschrijving": {
+      "type": "string",
+      "description": "Korte beschrijving"
+    },
+    "bestand_url": {
+      "type": "string",
+      "description": "Directe link naar het PDF bestand"
+    },
+    "categorie": {
+      "type": "string",
+      "enum": [
+        "Reglement",
+        "Protocol",
+        "Overig"
+      ],
+      "description": "Categorie van het document"
+    },
+    "volgorde": {
+      "type": "number",
+      "description": "Sorteervolgorde"
+    },
+    "actief": {
+      "type": "boolean",
+      "default": true,
+      "description": "Of het document zichtbaar is"
+    }
+  },
+  "required": [
+    "naam",
+    "categorie"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "actief": true
+        }
+      ]
+    },
+    "write": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
