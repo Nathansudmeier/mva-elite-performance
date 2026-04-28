@@ -95,6 +95,16 @@ export default function DocumentenTab() {
 
 function DocForm({ doc, onSave, onCancel }) {
   const [data, setData] = useState(doc || { naam: "", beschrijving: "", bestand_url: "", categorie: "Protocol", volgorde: 1, actief: true });
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    setData(prev => ({ ...prev, bestand_url: file_url }));
+    setUploading(false);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -115,11 +125,18 @@ function DocForm({ doc, onSave, onCancel }) {
         <input style={inputCls} value={data.beschrijving || ""} onChange={e => setData({ ...data, beschrijving: e.target.value })} placeholder="Korte omschrijving" />
       </div>
       <div>
-        <div style={sectionLabel}>Bestand URL</div>
-        <input style={inputCls} value={data.bestand_url || ""} onChange={e => setData({ ...data, bestand_url: e.target.value })} placeholder="https://..." />
-        <div style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", marginTop: "4px" }}>
-          Tip: upload de PDF ergens en plak hier de directe link.
-        </div>
+        <div style={sectionLabel}>PDF uploaden</div>
+        <label style={{ display: "inline-flex", alignItems: "center", gap: "8px", cursor: uploading ? "not-allowed" : "pointer", padding: "8px 16px", borderRadius: "8px", border: "1.5px solid #1a1a1a", fontSize: "12px", fontWeight: 700, background: "#fff", opacity: uploading ? 0.6 : 1 }}>
+          {uploading ? "⏳ Bezig met uploaden..." : "📄 PDF uploaden"}
+          <input type="file" accept="application/pdf" style={{ display: "none" }} disabled={uploading} onChange={handleFileUpload} />
+        </label>
+        {data.bestand_url && (
+          <div style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "11px", color: "#08D068", fontWeight: 700 }}>✓ Bestand geüpload</span>
+            <a href={data.bestand_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: "11px", color: "#FF6800", textDecoration: "underline" }}>Bekijk PDF</a>
+            <button onClick={() => setData(prev => ({ ...prev, bestand_url: "" }))} style={{ fontSize: "11px", color: "#FF3DA8", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}>Verwijder</button>
+          </div>
+        )}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", alignItems: "center" }}>
         <div>
