@@ -38,18 +38,7 @@
     "categorie"
   ],
   "rls": {
-    "read": {
-      "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "actief": true
-        }
-      ]
-    },
+    "read": {},
     "write": {
       "user_condition": {
         "role": "admin"

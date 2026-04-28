@@ -38,6 +38,10 @@
       "type": "string",
       "description": "Contact pagina hero URL"
     },
+    "leden_image_url": {
+      "type": "string",
+      "description": "Ledeninformatie pagina hero URL"
+    },
     "club_email": {
       "type": "string",
       "description": "Club e-mailadres"

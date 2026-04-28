@@ -61,6 +61,7 @@ function InfoKaart({ accent, icon, titel, children }) {
 export default function WebsiteLeden() {
   const [personen, setPersonen] = useState([]);
   const [documenten, setDocumenten] = useState([]);
+  const [heroUrl, setHeroUrl] = useState("");
 
   useEffect(() => {
     document.title = "Ledeninformatie — MV Artemis";
@@ -68,6 +69,9 @@ export default function WebsiteLeden() {
     base44.entities.ClubDocument.filter({ actief: true }).then(d =>
       setDocumenten((d || []).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)))
     );
+    base44.entities.WebsiteInstellingen.list().then(list => {
+      if (list && list.length > 0) setHeroUrl(list[0].leden_image_url || "");
+    });
   }, []);
 
   return (
@@ -75,6 +79,9 @@ export default function WebsiteLeden() {
       {/* HERO */}
       <section style={{
         background: "linear-gradient(135deg, #0F1630, #1B2A5E)",
+        backgroundImage: heroUrl ? `linear-gradient(135deg, rgba(15,22,48,0.82), rgba(27,42,94,0.75)), url(${heroUrl})` : undefined,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
         height: "250px",
         display: "flex",
         alignItems: "flex-end",
