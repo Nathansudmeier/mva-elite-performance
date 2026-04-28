@@ -57,11 +57,42 @@ export default function WebsiteNieuwsDetail() {
         .slice(0, 3);
       setGerelateerd(related);
 
-      applyWebsiteMeta({
-        title: `${found.titel} | MV Artemis`,
-        description: found.samenvatting || found.titel,
-        ogImage: found.afbeelding_url || undefined,
-      });
+      // Artikel-specifieke Open Graph meta tags
+      const setMeta = (property, content) => {
+        if (!content) return;
+        let meta = document.querySelector(`meta[property="${property}"]`) || document.querySelector(`meta[name="${property}"]`);
+        if (!meta) {
+          meta = document.createElement('meta');
+          if (property.startsWith('og:') || property.startsWith('article:')) {
+            meta.setAttribute('property', property);
+          } else {
+            meta.setAttribute('name', property);
+          }
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', content);
+      };
+
+      const titel = found.titel || 'Nieuws | MV Artemis';
+      const fallbackImg = 'https://media.base44.com/images/public/69ad40ab17517be2ed782cdd/c7a4cfd45_MVAartemis.png';
+      const artikelUrl = `https://mv-artemis.nl/nieuws/${slug}`;
+
+      document.title = `${titel} | MV Artemis`;
+      setMeta('og:title', titel);
+      setMeta('og:description', found.samenvatting || 'Lees het laatste nieuws van MV Artemis.');
+      setMeta('og:url', artikelUrl);
+      setMeta('og:type', 'article');
+      setMeta('og:image', found.afbeelding_url || fallbackImg);
+      setMeta('og:image:width', '1200');
+      setMeta('og:image:height', '630');
+      setMeta('og:image:alt', titel);
+      setMeta('twitter:card', 'summary_large_image');
+      setMeta('twitter:title', titel);
+      setMeta('twitter:description', found.samenvatting || 'Lees het laatste nieuws van MV Artemis.');
+      setMeta('twitter:image', found.afbeelding_url || fallbackImg);
+      setMeta('article:published_time', new Date(found.datum).toISOString());
+      setMeta('article:author', found.auteur || 'MV Artemis');
+      setMeta('article:section', found.categorie || 'Nieuws');
     });
   }, [slug, navigate]);
 
