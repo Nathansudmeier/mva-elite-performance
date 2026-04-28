@@ -81,7 +81,7 @@ export default function WebsiteLeden() {
         background: "linear-gradient(135deg, #0F1630, #1B2A5E)",
         backgroundImage: heroUrl ? `linear-gradient(135deg, rgba(15,22,48,0.82), rgba(27,42,94,0.75)), url(${heroUrl})` : undefined,
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition: "top",
         height: "250px",
         display: "flex",
         alignItems: "flex-end",
