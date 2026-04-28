@@ -6,6 +6,7 @@ import { InstagramLogo, TiktokLogo, FacebookLogo } from "@phosphor-icons/react";
 import NieuwsbriefAanmeld from "@/components/website/NieuwsbriefAanmeld";
 import { useWebsiteData } from "@/hooks/useWebsiteData";
 import WebsiteChatbot from "@/components/website/WebsiteChatbot";
+import { base44 } from "@/api/base44Client";
 
 const navLinks = [
   { label: "Homepage", href: "/" },
@@ -54,6 +55,132 @@ export default function WebsiteLayout({ children }) {
     // Niet overschrijven op nieuwsdetail-pagina's — die zetten hun eigen meta's
     if (location.pathname.startsWith("/nieuws/")) return;
     applyWebsiteMeta({ pathname: location.pathname });
+  }, [location.pathname]);
+
+  // JSON-LD Structured Data
+  useEffect(() => {
+    // Verwijder bestaande structured data
+    document.querySelectorAll('script[data-mv-artemis]').forEach(s => s.remove());
+
+    // Organisatie schema (altijd aanwezig)
+    const organisatieSchema = {
+      "@context": "https://schema.org",
+      "@type": "SportsOrganization",
+      "name": "MV Artemis",
+      "alternateName": "Meiden Vereniging Artemis",
+      "url": "https://mv-artemis.nl",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://mv-artemis.nl/logo.png"
+      },
+      "sport": "Football",
+      "description": "MV Artemis is de enige zelfstandige vrouwenvoetbalclub in Noord-Nederland. Prestatiegericht, filosofiegedreven en volledig gericht op de ontwikkeling van meiden en vrouwen.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Sportpark Douwekamp",
+        "addressLocality": "Opeinde",
+        "addressRegion": "Friesland",
+        "addressCountry": "NL"
+      },
+      "email": "info@mv-artemis.nl",
+      "foundingDate": "2025-05",
+      "sameAs": [
+        "https://www.instagram.com/mv.artemis",
+        "https://www.facebook.com/mvartemis"
+      ]
+    };
+
+    const orgScript = document.createElement('script');
+    orgScript.type = 'application/ld+json';
+    orgScript.setAttribute('data-mv-artemis', 'org');
+    orgScript.text = JSON.stringify(organisatieSchema);
+    document.head.appendChild(orgScript);
+
+    // Event schemas voor wedstrijden
+    const laadWedstrijden = async () => {
+      try {
+        const alleItems = await base44.entities.AgendaItem.filter({ type: 'Wedstrijd' });
+        const vandaag = new Date();
+        vandaag.setHours(0, 0, 0, 0);
+        const wedstrijden = (alleItems || [])
+          .filter(i => i.date && new Date(i.date) >= vandaag)
+          .sort((a, b) => new Date(a.date) - new Date(b.date))
+          .slice(0, 5);
+
+        wedstrijden.forEach(wedstrijd => {
+          const datum = new Date(wedstrijd.date);
+
+          let startDate;
+          if (wedstrijd.start_time) {
+            const [uur, minuut] = wedstrijd.start_time.split(':');
+            datum.setHours(parseInt(uur), parseInt(minuut), 0, 0);
+            startDate = datum.toISOString();
+          } else {
+            startDate = datum.toISOString().split('T')[0];
+          }
+
+          const eindDatum = new Date(datum);
+          eindDatum.setHours(eindDatum.getHours() + 2);
+          const endDate = eindDatum.toISOString();
+
+          const locatieNaam = wedstrijd.home_away === 'Thuis'
+            ? 'Sportpark Douwekamp'
+            : (wedstrijd.location || 'Locatie volgt');
+
+          const locatieAdres = wedstrijd.home_away === 'Thuis'
+            ? { "@type": "PostalAddress", "streetAddress": "Sportpark Douwekamp", "addressLocality": "Opeinde", "addressRegion": "Friesland", "addressCountry": "NL" }
+            : { "@type": "PostalAddress", "addressLocality": wedstrijd.location || "Friesland", "addressCountry": "NL" };
+
+          const eventSchema = {
+            "@context": "https://schema.org",
+            "@type": "SportsEvent",
+            "name": wedstrijd.title || `MV Artemis vs ${wedstrijd.opponent || 'Tegenstander'}`,
+            "description": `${wedstrijd.team || 'MV Artemis'} speelt ${wedstrijd.home_away === 'Thuis' ? 'thuis' : 'uit'} tegen ${wedstrijd.opponent || 'de tegenstander'}. Competitie: KNVB`,
+            "startDate": startDate,
+            "endDate": endDate,
+            "eventStatus": "https://schema.org/EventScheduled",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "location": {
+              "@type": "SportsActivityLocation",
+              "name": locatieNaam,
+              "address": locatieAdres
+            },
+            "image": "https://mv-artemis.nl/og-image.jpg",
+            "organizer": {
+              "@type": "SportsOrganization",
+              "name": "MV Artemis",
+              "url": "https://mv-artemis.nl"
+            },
+            "competitor": [
+              { "@type": "SportsOrganization", "name": "MV Artemis" },
+              { "@type": "SportsOrganization", "name": wedstrijd.opponent || "Tegenstander" }
+            ],
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR",
+              "availability": "https://schema.org/InStock",
+              "url": "https://mv-artemis.nl/wedstrijden"
+            },
+            "sport": "Football"
+          };
+
+          const eventScript = document.createElement('script');
+          eventScript.type = 'application/ld+json';
+          eventScript.setAttribute('data-mv-artemis', `event-${wedstrijd.id}`);
+          eventScript.text = JSON.stringify(eventSchema);
+          document.head.appendChild(eventScript);
+        });
+      } catch (e) {
+        console.log('Schema fout:', e);
+      }
+    };
+
+    laadWedstrijden();
+
+    return () => {
+      document.querySelectorAll('script[data-mv-artemis]').forEach(s => s.remove());
+    };
   }, [location.pathname]);
 
   const email = inst?.club_email || "contact@fcmvanoord.com";
