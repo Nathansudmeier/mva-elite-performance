@@ -217,7 +217,10 @@ export default function WebsiteLeden() {
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "10px" }}>VOOR LEDEN</div>
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "36px", color: "#fff", margin: "0 0 14px 0" }}>TRAININGSTIJDEN</h2>
             <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
-              Alle trainingen worden gespeeld op Sportpark Douwekamp, Opeinde.
+              Alle trainingen worden gespeeld op{" "}
+              <a href="https://maps.google.com/?q=Sportpark+Douwekamp,+Opeinde" target="_blank" rel="noopener noreferrer" style={{ color: "#FF6800", textDecoration: "underline" }}>
+                Sportpark Douwekamp, Opeinde
+              </a>.
             </p>
           </div>
 
