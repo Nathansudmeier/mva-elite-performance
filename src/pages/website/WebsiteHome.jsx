@@ -440,16 +440,16 @@ export default function WebsiteHome() {
               <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px", marginBottom: "32px" }}>
                 {sponsors.filter(s => s.tier === 2).map(s => (
                   <a key={s.id} href={s.website_url} target="_blank" rel="noopener noreferrer"
-                    style={{ background: "#161A24", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "4px", padding: "14px 24px", minWidth: "120px", height: "60px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", transition: "border-color 0.2s", textDecoration: "none" }}
+                    style={{ background: "#161A24", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "4px", padding: "20px 32px", minWidth: "150px", height: "90px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "8px", cursor: "pointer", transition: "border-color 0.2s", textDecoration: "none" }}
                     onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"}
                     onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"}>
-                    <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>{s.categorie}</div>
+                    <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>{s.categorie}</div>
                     {s.logo_url ? (
-                      <img src={s.logo_url} alt={s.naam} style={{ maxHeight: "20px", maxWidth: "90px", filter: "brightness(0) invert(1) opacity(0.45)", transition: "opacity 0.2s" }}
+                      <img src={s.logo_url} alt={s.naam} style={{ maxHeight: "32px", maxWidth: "130px", filter: "brightness(0) invert(1) opacity(0.45)", transition: "opacity 0.2s" }}
                         onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
                         onMouseLeave={e => e.currentTarget.style.opacity = "0.45"} />
                     ) : (
-                      <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.35)" }}>{s.naam}</div>
+                      <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px", fontWeight: 600, color: "rgba(255,255,255,0.35)" }}>{s.naam}</div>
                     )}
                   </a>
                 ))}
