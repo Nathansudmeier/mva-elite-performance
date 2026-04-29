@@ -70,7 +70,7 @@ export default function SponsorBar() {
             display: "flex",
             alignItems: "center",
             height: "100%",
-            animation: "sponsorTicker 30s linear infinite",
+            animation: "sponsorTicker 45s linear infinite",
             animationPlayState: paused ? "paused" : "running",
             width: "max-content",
           }}
