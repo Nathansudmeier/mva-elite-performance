@@ -13,6 +13,13 @@ const STAND = [
   { rank: 7, team: "vv Winsum MO15-1", g: 8, w: 1, gl: 2, v: 5, p: 5, voor: 6, tegen: 28 },
 ];
 
+const PROGRAMMA = [
+  { datum: "Za 9 mei 2026", tijd: "11:15", thuis: "Fc. Grootegast MO15-1", uit: "FC MVA Noord MO15-1", thuis_highlight: false },
+  { datum: "Za 16 mei 2026", tijd: "12:15", thuis: "FC MVA Noord MO15-1", uit: "Zwaagwesteinde MO15-1", thuis_highlight: true },
+  { datum: "Vr 22 mei 2026", tijd: "19:00", thuis: "FC MVA Noord MO15-1", uit: "ST Ternaard/Holwerd/Blija MO15-1", thuis_highlight: true },
+  { datum: "Za 30 mei 2026", tijd: "10:30", thuis: "ST Ternaard/Holwerd/Blija MO15-1", uit: "FC MVA Noord MO15-1", thuis_highlight: false },
+];
+
 const UITSLAGEN = [
   { datum: "wo 22 apr", thuis: "FC MVA Noord", uit: "VEV'67", score: "3-1", win: true },
   { datum: "za 18 apr", thuis: "FC Surhústerfean", uit: "FC MVA Noord", score: "0-5", win: true },
@@ -108,8 +115,24 @@ export default function WebsiteMO15() {
               Bron: voetbal.nl · Bijgewerkt april 2026
             </div>
 
+            {/* PROGRAMMA */}
+            <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginTop: "32px", marginBottom: "6px" }}>PROGRAMMA</div>
+            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "28px", color: "#fff", marginBottom: "16px", margin: 0 }}>Komende wedstrijden</h2>
+            <div style={{ marginTop: "16px", marginBottom: "32px" }}>
+              {PROGRAMMA.map((w, i) => (
+                <div key={i} style={{ background: "#202840", borderRadius: "6px", padding: "12px 16px", marginBottom: "8px" }}>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "11px", fontWeight: 700, color: "#FF6800", textTransform: "uppercase", marginBottom: "8px" }}>{w.datum}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ flex: 1, fontFamily: "'Space Grotesk', sans-serif", fontSize: "13px", fontWeight: w.thuis_highlight ? 700 : 500, color: w.thuis_highlight ? "#fff" : "rgba(255,255,255,0.6)", textAlign: "right" }}>{w.thuis}</div>
+                    <div style={{ background: "#1B2A5E", borderRadius: "4px", padding: "4px 12px", fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", color: "#fff", flexShrink: 0 }}>{w.tijd}</div>
+                    <div style={{ flex: 1, fontFamily: "'Space Grotesk', sans-serif", fontSize: "13px", fontWeight: !w.thuis_highlight ? 700 : 500, color: !w.thuis_highlight ? "#fff" : "rgba(255,255,255,0.6)" }}>{w.uit}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             {/* UITSLAGEN */}
-            <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginTop: "32px", marginBottom: "6px" }}>UITSLAGEN</div>
+            <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginTop: "0", marginBottom: "6px" }}>UITSLAGEN</div>
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "28px", color: "#fff", marginBottom: "16px", margin: 0 }}>Resultaten</h2>
             <div style={{ marginTop: "16px" }}>
               {UITSLAGEN.map((u, i) => (
