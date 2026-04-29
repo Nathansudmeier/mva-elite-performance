@@ -286,7 +286,7 @@ export default function WebsiteHome() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "10px" }}>
             {[
-              { team: "MO17", href: "/mo17", accent: "#FF6800", titel: "Hier begin je.", sub: "Jongenscompetitie. Maximale intensiteit. Hier wordt talent gevormd dat elders niet gemaakt wordt.", footer: "Landelijke Divisie 1", count: mo17Count },
+              { team: "MO17", href: "/mo17", accent: "#FF6800", titel: "Hier begin je.", sub: "Jongenscompetitie of landelijke 1e divisie meiden. We zoeken steeds naar de maximale intensiteit. Hier wordt talent gevormd dat elders niet gemaakt wordt.", footer: "Landelijke Divisie 1", count: mo17Count },
               { team: "MO20", href: "/mo20", accent: "#FFD600", titel: "De schakel omhoog.", sub: "Je hebt de basis. Nu gaat het om consistentie onder druk.", footer: "Seizoen 2026/27", count: 0 },
               { team: "Vrouwen 1", href: "/vrouwen-1", accent: "#FFFFFF", titel: "Hier speel je het.", sub: "Het vlaggenschip. Tactische flexibiliteit, winnen als het niet loopt.", footer: "3e klasse · Groeiende selectie", count: v1Count },
             ].map((t) => (
