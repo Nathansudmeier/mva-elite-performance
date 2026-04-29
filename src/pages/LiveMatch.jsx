@@ -9,6 +9,7 @@ import GoalBottomSheet from "../components/live/GoalBottomSheet";
 import SubstitutionBottomSheet from "../components/live/SubstitutionBottomSheet";
 import MatchReport from "../components/live/MatchReport";
 import { NoteModal, GoalAgainstModal, YellowCardModal, RedCardModal } from "../components/live/EventModals";
+import FTCardModal from "../components/live/FTCardModal";
 import { format, parseISO } from "date-fns";
 import { nl } from "date-fns/locale";
 
@@ -444,8 +445,27 @@ export default function LiveMatch() {
             </div>
           </div>
           {match && <MatchReport match={{ ...match, live_events: events, halftime_notes: halftimeNotes }} players={activePlayers} />}
+          <button
+            onClick={() => setActiveModal("ft_card")}
+            style={{
+              background: "#FF6800", color: "#ffffff", border: "none",
+              borderRadius: "3px", fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700, fontSize: "14px", padding: "12px 24px",
+              cursor: "pointer", width: "100%", marginBottom: "0",
+            }}
+          >
+            🎨 Genereer FT Card
+          </button>
           <button onClick={() => navigate("/Planning")} className="btn-primary">Terug naar Planning</button>
         </div>
+        {activeModal === "ft_card" && (
+          <FTCardModal
+            match={match}
+            events={events}
+            players={activePlayers}
+            onClose={() => setActiveModal(null)}
+          />
+        )}
       </div>
     );
   }
