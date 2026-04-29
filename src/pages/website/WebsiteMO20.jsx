@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 import TeamNav from "../../components/website/TeamNav";
 import { CalendarBlank, Star, ArrowUp } from "@phosphor-icons/react";
+import TrainingsTijdenBlok, { TIJDEN_STANDAARD } from "@/components/website/TrainingsTijdenBlok";
 
 const ACCENT = "#FFD600";
 const IMAGE_VELD = "mo20_image_url";
@@ -144,7 +145,7 @@ export default function WebsiteMO20() {
 
               {/* STAF */}
               {staff.length > 0 && (
-                <div>
+                <div style={{ marginBottom: "32px" }}>
                   <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "6px" }}>TECHNISCHE STAF</div>
                   <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "32px", color: "#fff", marginBottom: "16px" }}>STAF</div>
                   {staff.map(s => (
@@ -164,6 +165,9 @@ export default function WebsiteMO20() {
                   ))}
                 </div>
               )}
+
+              {/* TRAININGSTIJDEN */}
+              <TrainingsTijdenBlok tijden={TIJDEN_STANDAARD} />
             </div>
           </div>
         </div>

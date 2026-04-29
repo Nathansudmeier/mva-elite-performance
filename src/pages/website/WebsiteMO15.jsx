@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import WebsiteLayout from "../../components/website/WebsiteLayout";
 import TeamNav from "../../components/website/TeamNav";
+import TrainingsTijdenBlok, { TIJDEN_MO15 } from "@/components/website/TrainingsTijdenBlok";
 
 const STAND = [
   { rank: 1, team: "FC MVA Noord MO15-1", g: 8, w: 8, gl: 0, v: 0, p: 24, voor: 60, tegen: 2, highlight: true },
@@ -187,6 +188,11 @@ export default function WebsiteMO15() {
               <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, marginTop: "6px", margin: 0 }}>
                 De MO15 speelt dit seizoen als tijdelijke selectie binnen MV Artemis. Vanaf seizoen 2026/27 stromen deze speelsters door naar de MO17. De pagina wordt aan het einde van het seizoen verwijderd.
               </p>
+            </div>
+
+            {/* TRAININGSTIJDEN */}
+            <div style={{ marginBottom: "16px" }}>
+              <TrainingsTijdenBlok tijden={TIJDEN_MO15} />
             </div>
 
             {/* DOORSTROOM BERICHT */}
