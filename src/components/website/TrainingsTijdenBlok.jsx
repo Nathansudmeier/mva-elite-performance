@@ -37,7 +37,7 @@ export default function TrainingsTijdenBlok({ tijden = TIJDEN_STANDAARD }) {
 
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "16px", marginTop: "16px" }}>
         <a
-          href="https://www.google.com/maps/search/?api=1&query=Sportpark+Douwekamp+Healwei+2+Opeinde"
+          href="https://maps.app.goo.gl/vToMPjwCwEvsNomB7"
           target="_blank"
           rel="noopener noreferrer"
           style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none", color: "#fff" }}
