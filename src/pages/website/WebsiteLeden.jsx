@@ -208,8 +208,73 @@ export default function WebsiteLeden() {
           </div>
         </div>
 
+      </div>
+
+      {/* TRAININGSTIJDEN */}
+      <section style={{ background: "#151D35", padding: "60px 0" }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 28px" }}>
+          <div style={{ textAlign: "center", marginBottom: "40px" }}>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "3px", color: "#FF6800", marginBottom: "10px" }}>VOOR LEDEN</div>
+            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "36px", color: "#fff", margin: "0 0 14px 0" }}>TRAININGSTIJDEN</h2>
+            <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "16px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+              Alle trainingen worden gespeeld op Sportpark Douwekamp, Opeinde.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+            {/* Maandag */}
+            <div style={{ background: "#202840", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", padding: "24px" }}>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "22px", color: "#FF6800", marginBottom: "16px" }}>Maandag</div>
+              {[
+                { tijd: "17:30 – 18:30", info: "MO15 · Loop- & performancetraining" },
+                { tijd: "18:00 – 19:00", info: "Keeperstraining (alle teams)" },
+                { tijd: "18:45 – 20:15", info: "MO17 + Vrouwen 1 · Loop- & performancetraining" },
+              ].map((r, i, arr) => (
+                <div key={i} style={{ paddingBottom: i < arr.length - 1 ? "12px" : 0, marginBottom: i < arr.length - 1 ? "12px" : 0, borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px", fontWeight: 700, color: "#fff" }}>{r.tijd}</div>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.6)", marginTop: "2px" }}>{r.info}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Woensdag */}
+            <div style={{ background: "#202840", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", padding: "24px" }}>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "22px", color: "#FF6800", marginBottom: "16px" }}>Woensdag</div>
+              {[
+                { tijd: "18:15 – 19:45", info: "MO15" },
+                { tijd: "19:30 – 21:00", info: "MO17 + Vrouwen 1" },
+              ].map((r, i, arr) => (
+                <div key={i} style={{ paddingBottom: i < arr.length - 1 ? "12px" : 0, marginBottom: i < arr.length - 1 ? "12px" : 0, borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px", fontWeight: 700, color: "#fff" }}>{r.tijd}</div>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.6)", marginTop: "2px" }}>{r.info}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Vrijdag */}
+            <div style={{ background: "#202840", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px", padding: "24px" }}>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "22px", color: "#FF6800", marginBottom: "16px" }}>Vrijdag</div>
+              {[
+                { tijd: "17:00 – 18:15", info: "MO15" },
+                { tijd: "18:30 – 20:00", info: "MO17 + Vrouwen 1" },
+              ].map((r, i, arr) => (
+                <div key={i} style={{ paddingBottom: i < arr.length - 1 ? "12px" : 0, marginBottom: i < arr.length - 1 ? "12px" : 0, borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px", fontWeight: 700, color: "#fff" }}>{r.tijd}</div>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.6)", marginTop: "2px" }}>{r.info}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.5)", fontStyle: "italic", textAlign: "center", marginTop: "28px", marginBottom: 0 }}>
+            Vanaf seizoen 2026/27: MO15 wordt MO17, MO17 wordt MO20.
+          </p>
+        </div>
+      </section>
+
+      <div style={{ maxWidth: "900px", margin: "0 auto", padding: "48px 28px 0" }}>
         {/* DOCUMENTEN */}
-        <div style={{ marginTop: "40px" }}>
+        <div style={{ marginTop: "0" }}>
           <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "28px", color: "#fff", marginBottom: "8px" }}>Clubdocumenten</h2>
           <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.5)", marginBottom: "24px" }}>
             Alle officiële documenten van MV Artemis op één plek.
