@@ -466,10 +466,16 @@ export default function WebsiteHome() {
               <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px", marginBottom: "20px" }}>
                 {sponsors.filter(s => s.tier === 3).map(s => (
                   <a key={s.id} href={s.website_url} target="_blank" rel="noopener noreferrer"
-                    style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "3px", padding: "6px 14px", fontFamily: "'Space Grotesk', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.3)", cursor: "pointer", textDecoration: "none", transition: "all 0.2s" }}
-                    onMouseEnter={e => { e.currentTarget.style.color = "rgba(255,255,255,0.6)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.3)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}>
-                    {s.naam}
+                    style={{ background: "#161A24", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "4px", padding: "14px 24px", minWidth: "120px", height: "70px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", textDecoration: "none", transition: "border-color 0.2s" }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}>
+                    {s.logo_url ? (
+                      <img src={s.logo_url} alt={s.naam} style={{ maxHeight: "24px", maxWidth: "100px", filter: "brightness(0) invert(1) opacity(0.35)", transition: "opacity 0.2s" }}
+                        onMouseEnter={e => e.currentTarget.style.opacity = "0.6"}
+                        onMouseLeave={e => e.currentTarget.style.opacity = "0.35"} />
+                    ) : (
+                      <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.3)" }}>{s.naam}</span>
+                    )}
                   </a>
                 ))}
               </div>
