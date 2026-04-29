@@ -470,7 +470,7 @@ export default function WebsiteHome() {
                     onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"}
                     onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}>
                     {s.logo_url ? (
-                      <img src={s.logo_url} alt={s.naam} style={{ maxHeight: "24px", maxWidth: "100px", filter: "brightness(0) invert(1) opacity(0.35)", transition: "opacity 0.2s" }}
+                      <img src={s.logo_url} alt={s.naam} style={{ maxHeight: "40px", maxWidth: "110px", filter: "brightness(0) invert(1) opacity(0.35)", transition: "opacity 0.2s" }}
                         onMouseEnter={e => e.currentTarget.style.opacity = "0.6"}
                         onMouseLeave={e => e.currentTarget.style.opacity = "0.35"} />
                     ) : (
