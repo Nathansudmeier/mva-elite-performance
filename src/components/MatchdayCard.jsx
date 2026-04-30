@@ -160,85 +160,80 @@ export default function MatchdayCard({ match, item, onClose }) {
     ctx.textBaseline = 'middle';
     ctx.fillText(badgeTekst.toUpperCase(), badgeX + badgeBreedte / 2, 52 + 26);
 
-    // Datum + tijd
+    // VS blok — logo's groot met namen eronder, gecentreerd dicht bij elkaar
+    const thuisUit = match.home_away || 'Thuis';
+    const isUit = thuisUit === 'Uit';
+    const vsY = 800;
+    const logoMaat = 180;
+    const midX = BREEDTE / 2;
+    const logoAfstand = 230; // center van elk logo t.o.v. midden
+
+    const drawLogoMetNaam = (img, naam, centerX, y) => {
+      if (img) {
+        ctx.drawImage(img, centerX - logoMaat / 2, y, logoMaat, logoMaat);
+      }
+      // Naam eronder
+      ctx.font = 'bold 32px Arial';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      const woorden = naam.split(' ');
+      if (naam.length > 12 && woorden.length > 1) {
+        const helft = Math.ceil(woorden.length / 2);
+        ctx.fillText(woorden.slice(0, helft).join(' '), centerX, y + logoMaat + 14);
+        ctx.fillText(woorden.slice(helft).join(' '), centerX, y + logoMaat + 52);
+      } else {
+        ctx.fillText(naam, centerX, y + logoMaat + 14);
+      }
+    };
+
+    // VS tekst in het midden, verticaal gecentreerd op logo hoogte
+    ctx.font = 'bold 72px Arial';
+    ctx.fillStyle = '#FF6800';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('VS', midX, vsY + logoMaat / 2);
+
+    if (isUit) {
+      drawLogoMetNaam(tegLogo, match.opponent || '', midX - logoAfstand, vsY);
+      drawLogoMetNaam(clubLogo, 'MV ARTEMIS', midX + logoAfstand, vsY);
+    } else {
+      drawLogoMetNaam(clubLogo, 'MV ARTEMIS', midX - logoAfstand, vsY);
+      drawLogoMetNaam(tegLogo, match.opponent || '', midX + logoAfstand, vsY);
+    }
+
+    // Datum + tijd (onder de logo's)
+    const datumStartY = vsY + logoMaat + 110;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
     const datum = new Date(match.date);
     const datumTekst = `${DAG_NAMEN[datum.getDay()].toUpperCase()} ${datum.getDate()} ${MAAND_NAMEN[datum.getMonth()].toUpperCase()} | ${match.start_time || ''}`;
     ctx.font = 'bold 36px Arial';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(datumTekst, 56, 880);
+    ctx.fillText(datumTekst, 56, datumStartY);
 
     // Locatie
     const locatie = match.location || (match.home_away === 'Thuis' ? 'Sportpark Douwekamp, Opeinde' : '');
     if (locatie) {
       ctx.font = 'bold 28px Arial';
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(locatie, 56, 926);
+      ctx.fillText(locatie, 56, datumStartY + 46);
     }
 
     // Thuis/Uit badge
-    const thuisUit = match.home_away || 'Thuis';
-    const isUit = thuisUit === 'Uit';
     ctx.font = 'bold 24px Arial';
     const thuisBreedte = ctx.measureText(thuisUit.toUpperCase()).width + 28;
     ctx.fillStyle = isUit ? 'rgba(0,194,255,0.25)' : 'rgba(8,208,104,0.25)';
     ctx.beginPath();
-    ctx.roundRect(56, 944, thuisBreedte, 38, 4);
+    ctx.roundRect(56, datumStartY + 64, thuisBreedte, 38, 4);
     ctx.fill();
     ctx.fillStyle = isUit ? '#00C2FF' : '#08D068';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText(thuisUit.toUpperCase(), 56 + 14, 944 + 19);
+    ctx.fillText(thuisUit.toUpperCase(), 56 + 14, datumStartY + 64 + 19);
 
-    // VS blok
-    const vsY = 1010;
-    const logoMaat = 72;
-    const naamFont = 'bold 34px Arial';
-
-    const drawTeamNaam = (naam, x, align) => {
-      const woorden = naam.split(' ');
-      ctx.font = naamFont;
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = align;
-      ctx.textBaseline = 'middle';
-      if (naam.length > 12) {
-        const helft = Math.ceil(woorden.length / 2);
-        ctx.fillText(woorden.slice(0, helft).join(' '), x, vsY + 22);
-        ctx.fillText(woorden.slice(helft).join(' '), x, vsY + 58);
-      } else {
-        ctx.fillText(naam, x, vsY + 36);
-      }
-    };
-
-    ctx.font = 'bold 52px Arial';
-    ctx.fillStyle = '#FF6800';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('VS', 540, vsY + 36);
-
-    if (isUit) {
-      if (tegLogo) ctx.drawImage(tegLogo, 56, vsY, logoMaat, logoMaat);
-      drawTeamNaam(match.opponent || '', 56 + logoMaat + 14, 'left');
-      if (clubLogo) ctx.drawImage(clubLogo, BREEDTE - 56 - logoMaat, vsY, logoMaat, logoMaat);
-      ctx.font = naamFont;
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('MV ARTEMIS', BREEDTE - 56 - logoMaat - 14, vsY + 36);
-    } else {
-      if (clubLogo) ctx.drawImage(clubLogo, 56, vsY, logoMaat, logoMaat);
-      ctx.font = naamFont;
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('MV ARTEMIS', 56 + logoMaat + 14, vsY + 36);
-      if (tegLogo) ctx.drawImage(tegLogo, BREEDTE - 56 - logoMaat, vsY, logoMaat, logoMaat);
-      drawTeamNaam(match.opponent || '', BREEDTE - 56 - logoMaat - 14, 'right');
-    }
-
-    // STARTING XI
-    const xiY = 1160;
+    // STARTING XI — start dynamisch na datum/badge blok
+    const xiY = vsY + logoMaat + 240;
     ctx.font = 'bold 52px Arial';
     ctx.fillStyle = '#FF6800';
     ctx.textAlign = 'left';
