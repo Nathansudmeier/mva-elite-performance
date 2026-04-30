@@ -293,7 +293,7 @@ export default function MatchdayCard({ match, item, onClose }) {
     ctx.fillText(subTekst, 56 + subBreedte / 2, subY + 29);
 
     const wisselNamen = wisselSpelers.map(s => s.naam.split(' ')[0]).join(', ');
-    ctx.font = 'bold 34px Arial';
+    ctx.font = '34px Arial';
     ctx.fillStyle = 'rgba(255,255,255,0.85)';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
