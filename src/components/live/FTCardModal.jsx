@@ -27,14 +27,29 @@ export default function FTCardModal({ match, events, players, onClose }) {
     });
   }, [match?.team]);
 
-  const loadImage = (src) => new Promise((resolve) => {
+  const loadImage = (src, useProxy = false) => new Promise((resolve) => {
     if (!src) return resolve(null);
     const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    // Voeg cache-busting toe voor CORS-gevoelige afbeeldingen
-    img.src = src.includes("?") ? src : src + "?cb=1";
+    // Probeer eerst zonder proxy
+    const tryLoad = (url, fallbackProxy) => {
+      img.crossOrigin = "anonymous";
+      img.onload = () => resolve(img);
+      img.onerror = () => {
+        if (fallbackProxy) {
+          // Tweede poging via allorigins proxy
+          const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(src)}`;
+          const img2 = new Image();
+          img2.crossOrigin = "anonymous";
+          img2.onload = () => resolve(img2);
+          img2.onerror = () => resolve(null);
+          img2.src = proxyUrl;
+        } else {
+          resolve(null);
+        }
+      };
+      img.src = url;
+    };
+    tryLoad(src, true);
   });
 
   const drawCard = useCallback(async (targetCanvas, scale = 1) => {
@@ -70,21 +85,21 @@ export default function FTCardModal({ match, events, players, onClose }) {
     }
 
     // --- FULL TIME label (rechthoek met tekst) ---
-    const labelW = 500;
-    const labelH = 80;
+    const labelW = 700;
+    const labelH = 110;
     const labelX = (1080 - labelW) / 2;
-    const labelY = 80;
+    const labelY = 70;
 
     ctx.strokeStyle = "#FF6800";
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 6;
     ctx.strokeRect(labelX, labelY, labelW, labelH);
 
-    ctx.font = `bold ${Math.min(56, Math.floor(labelW * 0.1))}px 'Bebas Neue', Impact, sans-serif`;
+    ctx.font = `bold 82px 'Bebas Neue', Impact, sans-serif`;
     ctx.textAlign = "center";
     ctx.fillStyle = "#ffffff";
-    ctx.shadowColor = "rgba(0,0,0,0.8)";
-    ctx.shadowBlur = 12;
-    ctx.fillText(titelTekst.toUpperCase(), 540, labelY + 56);
+    ctx.shadowColor = "rgba(0,0,0,0.9)";
+    ctx.shadowBlur = 16;
+    ctx.fillText(titelTekst.toUpperCase(), 540, labelY + 84);
     ctx.shadowBlur = 0;
 
     // --- Logo's ---
@@ -164,7 +179,7 @@ export default function FTCardModal({ match, events, players, onClose }) {
     // --- Scorerslijst ---
     const scorers = getScorers();
     if (scorers.length > 0) {
-      const listY = scoreY + rectH + 70;
+      const listY = scoreY + rectH + 220;
       const listPad = 20;
       const listH = scorers.length * 50 + listPad * 2;
 
