@@ -102,7 +102,13 @@ export default function AgendaForm({ item, onSave, onClose }) {
         body: formData,
       });
       const data = await res.json();
+      if (!data.secure_url) {
+        alert("Upload mislukt: " + (data.error?.message || "Onbekende fout"));
+        return;
+      }
       set("opponent_logo_url", data.secure_url);
+    } catch (err) {
+      alert("Upload mislukt: " + err.message);
     } finally {
       setUploadingLogo(false);
     }
