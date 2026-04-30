@@ -204,8 +204,11 @@ export default function MatchdayCard({ match, item, onClose }) {
 
     // Datum + tijd — links uitgelijnd
     const datumStartY = 850;
-    const datum = new Date(match.date);
-    const datumTekst = `${DAG_NAMEN[datum.getDay()].toUpperCase()} ${datum.getDate()} ${MAAND_NAMEN[datum.getMonth()].toUpperCase()} | ${match.start_time || ''}`;
+    // Gebruik AgendaItem datum/tijd als primair, fallback naar Match
+    const datumString = item?.date || match.date;
+    const startTijd = item?.start_time || match.start_time || '';
+    const datum = new Date(datumString);
+    const datumTekst = `${DAG_NAMEN[datum.getDay()].toUpperCase()} ${datum.getDate()} ${MAAND_NAMEN[datum.getMonth()].toUpperCase()} | ${startTijd}`;
     ctx.font = 'bold 44px Arial';
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'left';
