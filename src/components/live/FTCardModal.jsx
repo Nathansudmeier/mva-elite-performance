@@ -86,21 +86,25 @@ export default function FTCardModal({ match, events, players, onClose }) {
     }
 
     // --- FULL TIME label (rechthoek met tekst) ---
-    const labelW = 700;
-    const labelH = 110;
-    const labelX = (1080 - labelW) / 2;
+    ctx.font = `bold 96px 'Bebas Neue', Impact, sans-serif`;
+    ctx.textAlign = "center";
+    const labelText = titelTekst.toUpperCase();
+    const textMetrics = ctx.measureText(labelText);
+    const labelPadX = 40;
+    const labelPadY = 14;
+    const labelW = textMetrics.width + labelPadX * 2;
+    const labelH = 96 + labelPadY * 2;
+    const labelX = 1080 - labelW - 60;
     const labelY = 70;
 
     ctx.strokeStyle = "#FF6800";
     ctx.lineWidth = 6;
     ctx.strokeRect(labelX, labelY, labelW, labelH);
 
-    ctx.font = `bold 82px 'Bebas Neue', Impact, sans-serif`;
-    ctx.textAlign = "center";
     ctx.fillStyle = "#ffffff";
     ctx.shadowColor = "rgba(0,0,0,0.9)";
     ctx.shadowBlur = 16;
-    ctx.fillText(titelTekst.toUpperCase(), 540, labelY + 84);
+    ctx.fillText(labelText, labelX + labelW / 2, labelY + labelH - labelPadY - 4);
     ctx.shadowBlur = 0;
 
     // --- Logo's ---
@@ -182,7 +186,8 @@ export default function FTCardModal({ match, events, players, onClose }) {
     if (scorers.length > 0) {
       const listY = scoreY + rectH + 220;
       const listPad = 20;
-      const listH = scorers.length * 50 + listPad * 2;
+      const withAssist = scorers.filter(e => e.assist_player_id).length;
+      const listH = scorers.length * 50 + withAssist * 10 + listPad * 2;
 
       ctx.fillStyle = "rgba(0,0,0,0.55)";
       ctx.beginPath();
@@ -192,13 +197,21 @@ export default function FTCardModal({ match, events, players, onClose }) {
       let sy = listY + listPad + 32;
       for (const ev of scorers) {
         const pl = players?.find(p => p.id === ev.player_id);
+        const assist = ev.assist_player_id ? players?.find(p => p.id === ev.assist_player_id) : null;
         ctx.font = "700 26px 'Space Grotesk', Arial, sans-serif";
         ctx.textAlign = "left";
         ctx.fillStyle = "#FF6800";
         ctx.fillText(`${ev.minute}'`, 88, sy);
         ctx.fillStyle = "#ffffff";
         ctx.fillText(pl?.name || "Onbekend", 170, sy);
-        sy += 50;
+        if (assist) {
+          ctx.font = "400 20px 'Space Grotesk', Arial, sans-serif";
+          ctx.fillStyle = "rgba(255,255,255,0.55)";
+          ctx.fillText(`assist: ${assist.name}`, 170, sy + 24);
+          sy += 60;
+        } else {
+          sy += 50;
+        }
       }
     }
 
