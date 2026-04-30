@@ -20,6 +20,7 @@ export default function FTCardModal({ match, events, players, onClose }) {
     (events || []).filter(e => e.type === "goal_mva" && e.goal_type !== "eigen_doelpunt");
 
   useEffect(() => {
+    // Haal alle actieve spelers op en filter daarna op team + matchday foto
     // Match.team gebruikt andere waarden dan Player.team
     // Match: "MO17", "Dames 1" → Player: "MO17", "MO20", "VR1"
     const teamMap = {
@@ -30,10 +31,16 @@ export default function FTCardModal({ match, events, players, onClose }) {
       "VR1": "VR1",
     };
     const playerTeam = teamMap[match?.team] || match?.team;
-    base44.entities.Player.filter({ team: playerTeam, active: true }).then(data => {
-      const withPhoto = data.filter(p => p.matchday_foto_url);
-      setTeamPlayers(withPhoto);
-      if (withPhoto.length > 0) setSelectedPlayerId(withPhoto[0].id);
+    base44.entities.Player.list().then(data => {
+      const active = data.filter(p => p.active !== false);
+      const teamFiltered = playerTeam
+        ? active.filter(p => p.team === playerTeam)
+        : active;
+      const withPhoto = teamFiltered.filter(p => p.matchday_foto_url);
+      // Als geen resultaat met teamfilter, toon alle spelers met matchday foto
+      const final = withPhoto.length > 0 ? withPhoto : active.filter(p => p.matchday_foto_url);
+      setTeamPlayers(final);
+      if (final.length > 0) setSelectedPlayerId(final[0].id);
     });
   }, [match?.team]);
 
