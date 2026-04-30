@@ -21,7 +21,7 @@ const laadAfbeelding = (url) => new Promise((resolve) => {
   img.src = url;
 });
 
-export default function MatchdayCard({ match, onClose }) {
+export default function MatchdayCard({ match, item, onClose }) {
   const canvasRef = useRef(null);
   const renderTimeoutRef = useRef(null);
   const [teamPlayers, setTeamPlayers] = useState([]);
@@ -78,9 +78,11 @@ export default function MatchdayCard({ match, onClose }) {
           .filter(sp => sp.naam);
 
         const clubLogoUrl = instList?.[0]?.logo_url || null;
+        // Gebruik opponent_logo_url van AgendaItem (Cloudinary) als primaire bron, dan match.opponent_logo als fallback
+        const tegLogoUrl = item?.opponent_logo_url || match?.opponent_logo || null;
         const [clubLogoImg, tegLogoImg] = await Promise.all([
           laadAfbeelding(clubLogoUrl),
-          laadAfbeelding(match?.opponent_logo || null),
+          laadAfbeelding(tegLogoUrl),
         ]);
 
         const sponsorsMetLogos = await Promise.all(

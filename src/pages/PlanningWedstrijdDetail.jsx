@@ -347,7 +347,7 @@ export default function PlanningWedstrijdDetail() {
 
       {/* Matchday Card modal */}
       {showMatchdayCard && match && createPortal(
-        <MatchdayCard match={match} onClose={() => setShowMatchdayCard(false)} />,
+        <MatchdayCard match={match} item={item} onClose={() => setShowMatchdayCard(false)} />,
         document.body
       )}
 

@@ -265,6 +265,7 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
       {showMatchdayCard && matchdayCardMatch && createPortal(
         <MatchdayCard
           match={matchdayCardMatch}
+          item={item}
           onClose={() => setShowMatchdayCard(false)}
         />,
         document.body
