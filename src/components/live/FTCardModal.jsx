@@ -44,40 +44,14 @@ export default function FTCardModal({ match, events, players, onClose }) {
     });
   }, [match?.team]);
 
-  const loadImage = async (src) => {
-    if (!src) return null;
-    // Fetch als blob zodat CORS geen probleem is voor canvas
-    const toBlobUrl = async (url) => {
-      const res = await fetch(url, { mode: "cors" });
-      if (!res.ok) throw new Error("fetch failed");
-      const blob = await res.blob();
-      return URL.createObjectURL(blob);
-    };
-
-    const loadFromUrl = (url) => new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => resolve(null);
-      img.src = url;
-    });
-
-    // Probeer direct als blob ophalen
-    try {
-      const blobUrl = await toBlobUrl(src);
-      const img = await loadFromUrl(blobUrl);
-      if (img) return img;
-    } catch {}
-
-    // Fallback: corsproxy.io
-    try {
-      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(src)}`;
-      const blobUrl = await toBlobUrl(proxyUrl);
-      const img = await loadFromUrl(blobUrl);
-      if (img) return img;
-    } catch {}
-
-    return null;
-  };
+  const loadImage = (src) => new Promise((resolve) => {
+    if (!src) return resolve(null);
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
 
   const drawCard = useCallback(async (targetCanvas, scale = 1) => {
     const W = 1080 * scale;

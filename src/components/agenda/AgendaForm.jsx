@@ -86,10 +86,26 @@ export default function AgendaForm({ item, onSave, onClose }) {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploadingLogo(true);
-    const compressed = await compressImage(file);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file: compressed });
-    set("opponent_logo_url", file_url);
-    setUploadingLogo(false);
+    try {
+      // Haal Cloudinary config op via backend
+      const configRes = await base44.functions.invoke("cloudinaryUpload", {});
+      const { cloudName, uploadPreset } = configRes.data;
+
+      // Upload direct naar Cloudinary (unsigned)
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", uploadPreset);
+      formData.append("folder", "tegenstander_logos");
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      set("opponent_logo_url", data.secure_url);
+    } finally {
+      setUploadingLogo(false);
+    }
   }
 
   async function ensureMatchRecord(agendaItemId, formData) {
