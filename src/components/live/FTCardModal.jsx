@@ -105,9 +105,9 @@ export default function FTCardModal({ match, events, players, onClose }) {
 
     // --- Logo's ---
     const logoSize = 130;
-    const logoY = 220;
-    const leftX = 200;   // tegenstander
-    const rightX = 880;  // MV Artemis
+    const logoY = 320;
+    const leftX = 290;   // tegenstander
+    const rightX = 790;  // MV Artemis
 
     const [opponentLogoImg, artemisLogoImg] = await Promise.all([
       loadImage(opponentLogoUrl),
