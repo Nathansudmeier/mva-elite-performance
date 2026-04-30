@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
@@ -261,11 +262,12 @@ export default function MatchLineupEditor({ match, players, item, isTrainer, mat
         </div>
       )}
 
-      {showMatchdayCard && matchdayCardMatch && (
+      {showMatchdayCard && matchdayCardMatch && createPortal(
         <MatchdayCard
           match={matchdayCardMatch}
           onClose={() => setShowMatchdayCard(false)}
-        />
+        />,
+        document.body
       )}
     </div>
   );
