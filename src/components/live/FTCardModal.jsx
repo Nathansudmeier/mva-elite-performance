@@ -108,36 +108,24 @@ export default function FTCardModal({ match, events, players, onClose }) {
     ctx.shadowBlur = 0;
 
     // --- Logo's ---
-    const logoSize = 160;
-    const logoY = 320;
-    const leftX = 330;   // tegenstander
-    const rightX = 750;  // MV Artemis
+    const logoSize = 210;
+    const logoY = 300;
+    const leftX = 230;   // tegenstander
+    const rightX = 530;  // MV Artemis
 
     const [opponentLogoImg, artemisLogoImg] = await Promise.all([
       loadImage(opponentLogoUrl),
       loadImage(ARTEMIS_LOGO_URL),
     ]);
 
-    // Tegenstander logo met witte achtergrond cirkel
-    ctx.fillStyle = "rgba(255,255,255,0.92)";
-    ctx.beginPath();
-    ctx.arc(leftX, logoY + logoSize / 2, logoSize / 2 + 8, 0, Math.PI * 2);
-    ctx.fill();
-
     if (opponentLogoImg) {
       ctx.drawImage(opponentLogoImg, leftX - logoSize / 2, logoY, logoSize, logoSize);
     } else {
       ctx.font = "bold 40px sans-serif";
       ctx.textAlign = "center";
-      ctx.fillStyle = "#333";
+      ctx.fillStyle = "#ffffff";
       ctx.fillText("?", leftX, logoY + logoSize / 2 + 14);
     }
-
-    // Artemis logo met witte achtergrond
-    ctx.fillStyle = "rgba(255,255,255,0.92)";
-    ctx.beginPath();
-    ctx.arc(rightX, logoY + logoSize / 2, logoSize / 2 + 8, 0, Math.PI * 2);
-    ctx.fill();
 
     if (artemisLogoImg) {
       ctx.drawImage(artemisLogoImg, rightX - logoSize / 2, logoY, logoSize, logoSize);
@@ -145,8 +133,8 @@ export default function FTCardModal({ match, events, players, onClose }) {
 
     // --- Score blok ---
     const scoreY = logoY + logoSize + 30;
-    const rectW = 160;
-    const rectH = 110;
+    const rectW = 180;
+    const rectH = 120;
 
     // Tegenstander score (links)
     ctx.fillStyle = "rgba(255,104,0,0.9)";
@@ -160,19 +148,19 @@ export default function FTCardModal({ match, events, players, onClose }) {
     ctx.fill();
 
     // Score getallen
-    ctx.font = "bold 90px 'Bebas Neue', Impact, sans-serif";
+    ctx.font = "bold 106px 'Bebas Neue', Impact, sans-serif";
     ctx.textAlign = "center";
     ctx.fillStyle = "#ffffff";
     ctx.shadowColor = "rgba(0,0,0,0.5)";
     ctx.shadowBlur = 10;
-    ctx.fillText(String(scoreAway), leftX, scoreY + 88);
-    ctx.fillText(String(scoreHome), rightX, scoreY + 88);
+    ctx.fillText(String(scoreAway), leftX, scoreY + 100);
+    ctx.fillText(String(scoreHome), rightX, scoreY + 100);
     ctx.shadowBlur = 0;
 
     // Dash tussen scores
     ctx.font = "bold 60px 'Bebas Neue', Impact, sans-serif";
     ctx.fillStyle = "rgba(255,255,255,0.7)";
-    ctx.fillText("—", 540, scoreY + 76);
+    ctx.fillText("—", (leftX + rightX) / 2, scoreY + 86);
 
     // Team namen onder scores
     ctx.font = "700 22px 'Space Grotesk', Arial, sans-serif";
@@ -184,7 +172,7 @@ export default function FTCardModal({ match, events, players, onClose }) {
     // --- Scorerslijst ---
     const scorers = getScorers();
     if (scorers.length > 0) {
-      const listY = scoreY + rectH + 340;
+      const listY = scoreY + rectH + 480;
       const listPad = 20;
       const withAssist = scorers.filter(e => e.assist_player_id).length;
       const listH = scorers.length * 50 + withAssist * 10 + listPad * 2;
