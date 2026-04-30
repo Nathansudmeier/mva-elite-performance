@@ -259,11 +259,7 @@ export default function PlanningWedstrijdDetail() {
                   url: `${window.location.origin}/live?match_id=${match.id}`,
                 });
               }
-            }} style={{
-              background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)",
-              color: "rgba(255,255,255,0.70)", borderRadius: "14px", height: "44px", padding: "0 16px",
-              display: "inline-flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "14px", fontWeight: 600,
-            }}>
+            }} className="card-orange w-11 h-11 flex items-center justify-center text-white">
               <i className="ti ti-share" style={{ fontSize: "16px" }}></i>
             </button>
           </div>
