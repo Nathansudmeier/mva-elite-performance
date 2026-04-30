@@ -202,35 +202,36 @@ export default function MatchdayCard({ match, item, onClose }) {
       drawLogoMetNaam(tegLogo, match.opponent || '', midX + logoAfstand, vsY);
     }
 
-    // Datum + tijd (onder de logo's)
-    const datumStartY = vsY + logoMaat + 110;
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'alphabetic';
+    // Datum + tijd — gecentreerd in het midden van de kaart
+    const datumStartY = 700;
     const datum = new Date(match.date);
     const datumTekst = `${DAG_NAMEN[datum.getDay()].toUpperCase()} ${datum.getDate()} ${MAAND_NAMEN[datum.getMonth()].toUpperCase()} | ${match.start_time || ''}`;
-    ctx.font = 'bold 36px Arial';
+    ctx.font = 'bold 44px Arial';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(datumTekst, 56, datumStartY);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText(datumTekst, midX, datumStartY);
 
     // Locatie
     const locatie = match.location || (match.home_away === 'Thuis' ? 'Sportpark Douwekamp, Opeinde' : '');
     if (locatie) {
-      ctx.font = 'bold 28px Arial';
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(locatie, 56, datumStartY + 46);
+      ctx.font = 'bold 34px Arial';
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.textAlign = 'center';
+      ctx.fillText(locatie, midX, datumStartY + 56);
     }
 
-    // Thuis/Uit badge
-    ctx.font = 'bold 24px Arial';
-    const thuisBreedte = ctx.measureText(thuisUit.toUpperCase()).width + 28;
+    // Thuis/Uit badge — gecentreerd
+    ctx.font = 'bold 28px Arial';
+    const thuisBreedte = ctx.measureText(thuisUit.toUpperCase()).width + 36;
     ctx.fillStyle = isUit ? 'rgba(0,194,255,0.25)' : 'rgba(8,208,104,0.25)';
     ctx.beginPath();
-    ctx.roundRect(56, datumStartY + 64, thuisBreedte, 38, 4);
+    ctx.roundRect(midX - thuisBreedte / 2, datumStartY + 76, thuisBreedte, 46, 6);
     ctx.fill();
     ctx.fillStyle = isUit ? '#00C2FF' : '#08D068';
-    ctx.textAlign = 'left';
+    ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(thuisUit.toUpperCase(), 56 + 14, datumStartY + 64 + 19);
+    ctx.fillText(thuisUit.toUpperCase(), midX, datumStartY + 76 + 23);
 
     // STARTING XI — boven sponsorbalk (sponsorbalk start op HOOGTE - 220 = 1700)
     const xiY = 1100;
@@ -280,23 +281,23 @@ export default function MatchdayCard({ match, item, onClose }) {
     // SUBSTITUTIONS
     const subY = rijY + (6 * rijHoogte) + 20;
     const subTekst = 'SUBSTITUTIONS';
-    ctx.font = 'bold 24px Arial';
-    const subBreedte = ctx.measureText(subTekst).width + 48;
-    ctx.fillStyle = '#1B2A5E';
+    ctx.font = 'bold 30px Arial';
+    const subBreedte = ctx.measureText(subTekst).width + 60;
+    ctx.fillStyle = '#FF6800';
     ctx.beginPath();
-    ctx.roundRect(56, subY, subBreedte, 48, 4);
+    ctx.roundRect(56, subY, subBreedte, 58, 6);
     ctx.fill();
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(subTekst, 56 + subBreedte / 2, subY + 24);
+    ctx.fillText(subTekst, 56 + subBreedte / 2, subY + 29);
 
     const wisselNamen = wisselSpelers.map(s => s.naam.split(' ')[0]).join(', ');
-    ctx.font = '26px Arial';
-    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = 'bold 34px Arial';
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText(wisselNamen, 56, subY + 80);
+    ctx.fillText(wisselNamen, 56, subY + 96);
 
     // Sponsor balk
     const sponsorHoogte = 220;
