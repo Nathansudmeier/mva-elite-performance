@@ -164,7 +164,7 @@ export default function MatchdayCard({ match, item, onClose }) {
     const thuisUit = match.home_away || 'Thuis';
     const isUit = thuisUit === 'Uit';
     const vsY = 450;
-    const logoMaat = 180;
+    const logoMaat = 200;
     const midX = BREEDTE / 2;
     const logoAfstand = 170; // center van elk logo t.o.v. midden
 
@@ -173,17 +173,17 @@ export default function MatchdayCard({ match, item, onClose }) {
         ctx.drawImage(img, centerX - logoMaat / 2, y, logoMaat, logoMaat);
       }
       // Naam eronder
-      ctx.font = 'bold 32px Arial';
+      ctx.font = 'bold 38px Arial';
       ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       const woorden = naam.split(' ');
       if (naam.length > 12 && woorden.length > 1) {
         const helft = Math.ceil(woorden.length / 2);
-        ctx.fillText(woorden.slice(0, helft).join(' '), centerX, y + logoMaat + 14);
-        ctx.fillText(woorden.slice(helft).join(' '), centerX, y + logoMaat + 52);
+        ctx.fillText(woorden.slice(0, helft).join(' '), centerX, y + logoMaat + 16);
+        ctx.fillText(woorden.slice(helft).join(' '), centerX, y + logoMaat + 58);
       } else {
-        ctx.fillText(naam, centerX, y + logoMaat + 14);
+        ctx.fillText(naam, centerX, y + logoMaat + 16);
       }
     };
 
