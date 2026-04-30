@@ -134,17 +134,17 @@ export default function MatchdayCard({ match, item, onClose }) {
     }
 
     // Header balk
-    if (clubLogo) ctx.drawImage(clubLogo, 56, 150, 80, 80);
+    if (clubLogo) ctx.drawImage(clubLogo, 56, 100, 80, 80);
 
     ctx.font = 'bold 38px Arial';
     ctx.fillStyle = '#ffffff';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'left';
-    ctx.fillText('MV', 152, 190);
+    ctx.fillText('MV', 152, 140);
     ctx.fillStyle = '#FF6800';
-    ctx.fillText('/', 152 + ctx.measureText('MV').width, 190);
+    ctx.fillText('/', 152 + ctx.measureText('MV').width, 140);
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('ARTEMIS', 152 + ctx.measureText('MV/').width, 190);
+    ctx.fillText('ARTEMIS', 152 + ctx.measureText('MV/').width, 140);
 
     // Team badge
     const badgeTekst = match.team || 'TEAM';
@@ -153,12 +153,12 @@ export default function MatchdayCard({ match, item, onClose }) {
     const badgeX = BREEDTE - badgeBreedte - 48;
     ctx.fillStyle = '#FF6800';
     ctx.beginPath();
-    ctx.roundRect(badgeX, 150, badgeBreedte, 52, 6);
+    ctx.roundRect(badgeX, 100, badgeBreedte, 52, 6);
     ctx.fill();
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(badgeTekst.toUpperCase(), badgeX + badgeBreedte / 2, 150 + 26);
+    ctx.fillText(badgeTekst.toUpperCase(), badgeX + badgeBreedte / 2, 100 + 26);
 
     // VS blok — logo's groot met namen eronder, gecentreerd dicht bij elkaar
     const thuisUit = match.home_away || 'Thuis';
