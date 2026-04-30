@@ -163,7 +163,7 @@ export default function MatchdayCard({ match, item, onClose }) {
     // VS blok — logo's groot met namen eronder, gecentreerd dicht bij elkaar
     const thuisUit = match.home_away || 'Thuis';
     const isUit = thuisUit === 'Uit';
-    const vsY = 160;
+    const vsY = 500;
     const logoMaat = 180;
     const midX = BREEDTE / 2;
     const logoAfstand = 170; // center van elk logo t.o.v. midden
@@ -202,36 +202,36 @@ export default function MatchdayCard({ match, item, onClose }) {
       drawLogoMetNaam(tegLogo, match.opponent || '', midX + logoAfstand, vsY);
     }
 
-    // Datum + tijd — gecentreerd in het midden van de kaart
+    // Datum + tijd — links uitgelijnd
     const datumStartY = 700;
     const datum = new Date(match.date);
     const datumTekst = `${DAG_NAMEN[datum.getDay()].toUpperCase()} ${datum.getDate()} ${MAAND_NAMEN[datum.getMonth()].toUpperCase()} | ${match.start_time || ''}`;
     ctx.font = 'bold 44px Arial';
     ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'center';
+    ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText(datumTekst, midX, datumStartY);
+    ctx.fillText(datumTekst, 56, datumStartY);
 
     // Locatie
     const locatie = match.location || (match.home_away === 'Thuis' ? 'Sportpark Douwekamp, Opeinde' : '');
     if (locatie) {
       ctx.font = 'bold 34px Arial';
       ctx.fillStyle = 'rgba(255,255,255,0.75)';
-      ctx.textAlign = 'center';
-      ctx.fillText(locatie, midX, datumStartY + 56);
+      ctx.textAlign = 'left';
+      ctx.fillText(locatie, 56, datumStartY + 56);
     }
 
-    // Thuis/Uit badge — gecentreerd
+    // Thuis/Uit badge — links
     ctx.font = 'bold 28px Arial';
     const thuisBreedte = ctx.measureText(thuisUit.toUpperCase()).width + 36;
     ctx.fillStyle = isUit ? 'rgba(0,194,255,0.25)' : 'rgba(8,208,104,0.25)';
     ctx.beginPath();
-    ctx.roundRect(midX - thuisBreedte / 2, datumStartY + 76, thuisBreedte, 46, 6);
+    ctx.roundRect(56, datumStartY + 76, thuisBreedte, 46, 6);
     ctx.fill();
     ctx.fillStyle = isUit ? '#00C2FF' : '#08D068';
-    ctx.textAlign = 'center';
+    ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText(thuisUit.toUpperCase(), midX, datumStartY + 76 + 23);
+    ctx.fillText(thuisUit.toUpperCase(), 56 + 18, datumStartY + 76 + 23);
 
     // STARTING XI — boven sponsorbalk (sponsorbalk start op HOOGTE - 220 = 1700)
     const xiY = 1100;
