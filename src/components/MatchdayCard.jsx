@@ -106,7 +106,7 @@ export default function MatchdayCard({ match, onClose }) {
     canvas.width = BREEDTE;
     canvas.height = HOOGTE;
 
-    const { clubLogo, tegLogo, basisSpelers, wisselSpelers, sponsors } = gelaadenData;
+    const { clubLogo, tegLogo, basisSpelers, wisselSpelers, sponsorsMetLogos: sponsors = [] } = gelaadenData;
 
     // Achtergrond (zelfde als FTCard)
     const bgImg = await laadAfbeelding(BG_URL);
