@@ -108,10 +108,10 @@ export default function FTCardModal({ match, events, players, onClose }) {
     ctx.shadowBlur = 0;
 
     // --- Logo's ---
-    const logoSize = 210;
-    const logoY = 300;
-    const leftX = 230;   // tegenstander
-    const rightX = 530;  // MV Artemis
+    const logoSize = 270;
+    const logoY = 280;
+    const leftX = 240;   // tegenstander
+    const rightX = 570;  // MV Artemis
 
     const [opponentLogoImg, artemisLogoImg] = await Promise.all([
       loadImage(opponentLogoUrl),
@@ -133,8 +133,8 @@ export default function FTCardModal({ match, events, players, onClose }) {
 
     // --- Score blok ---
     const scoreY = logoY + logoSize + 30;
-    const rectW = 180;
-    const rectH = 120;
+    const rectW = 210;
+    const rectH = 135;
 
     // Tegenstander score (links)
     ctx.fillStyle = "rgba(255,104,0,0.9)";
@@ -148,13 +148,13 @@ export default function FTCardModal({ match, events, players, onClose }) {
     ctx.fill();
 
     // Score getallen
-    ctx.font = "bold 106px 'Bebas Neue', Impact, sans-serif";
+    ctx.font = "bold 124px 'Bebas Neue', Impact, sans-serif";
     ctx.textAlign = "center";
     ctx.fillStyle = "#ffffff";
     ctx.shadowColor = "rgba(0,0,0,0.5)";
     ctx.shadowBlur = 10;
-    ctx.fillText(String(scoreAway), leftX, scoreY + 100);
-    ctx.fillText(String(scoreHome), rightX, scoreY + 100);
+    ctx.fillText(String(scoreAway), leftX, scoreY + 116);
+    ctx.fillText(String(scoreHome), rightX, scoreY + 116);
     ctx.shadowBlur = 0;
 
     // Dash tussen scores
