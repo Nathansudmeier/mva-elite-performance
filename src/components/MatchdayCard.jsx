@@ -163,7 +163,7 @@ export default function MatchdayCard({ match, item, onClose }) {
     // VS blok — logo's groot met namen eronder, gecentreerd dicht bij elkaar
     const thuisUit = match.home_away || 'Thuis';
     const isUit = thuisUit === 'Uit';
-    const vsY = 300;
+    const vsY = 400;
     const logoMaat = 200;
     const midX = BREEDTE / 2;
     const logoAfstand = 170; // center van elk logo t.o.v. midden
