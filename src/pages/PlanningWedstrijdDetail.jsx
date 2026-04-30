@@ -9,6 +9,7 @@ import { formatDate } from "@/components/agenda/agendaUtils";
 import AgendaForm from "@/components/agenda/AgendaForm";
 import WedstrijdSelectie from "@/components/wedstrijden/WedstrijdSelectie";
 import MatchLineupEditor from "@/components/wedstrijden/MatchLineupEditor";
+import MatchdayCard from "@/components/MatchdayCard";
 
 export default function PlanningWedstrijdDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -22,6 +23,7 @@ export default function PlanningWedstrijdDetail() {
   const [cancelReason, setCancelReason] = useState("");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [showMatchdayCard, setShowMatchdayCard] = useState(false);
 
   const { data: item, isLoading } = useQuery({
     queryKey: ["agenda-item", itemId],
@@ -245,6 +247,13 @@ export default function PlanningWedstrijdDetail() {
               style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 12, background: "#1a1a1a", color: "#ffffff", textDecoration: "none", fontWeight: 800, fontSize: 13 }}>
               <Play size={16} /> Live modus
             </Link>
+            <button onClick={() => setShowMatchdayCard(true)} style={{
+              background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)",
+              color: "rgba(255,255,255,0.70)", borderRadius: "14px", height: "44px", padding: "0 16px",
+              display: "inline-flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", fontWeight: 700,
+            }}>
+              🎴 Matchday Card
+            </button>
             <button onClick={() => {
               if (navigator.share) {
                 navigator.share({
@@ -333,6 +342,11 @@ export default function PlanningWedstrijdDetail() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Matchday Card modal */}
+      {showMatchdayCard && match && (
+        <MatchdayCard match={match} onClose={() => setShowMatchdayCard(false)} />
       )}
 
       {/* Edit form */}
