@@ -95,7 +95,7 @@ export default function FTCardModal({ match, events, players, onClose }) {
     const labelW = textMetrics.width + labelPadX * 2;
     const labelH = 96 + labelPadY * 2;
     const labelX = 1080 - labelW - 60;
-    const labelY = 70;
+    const labelY = 160;
 
     ctx.strokeStyle = "#FF6800";
     ctx.lineWidth = 6;
@@ -184,7 +184,7 @@ export default function FTCardModal({ match, events, players, onClose }) {
     // --- Scorerslijst ---
     const scorers = getScorers();
     if (scorers.length > 0) {
-      const listY = scoreY + rectH + 220;
+      const listY = scoreY + rectH + 340;
       const listPad = 20;
       const withAssist = scorers.filter(e => e.assist_player_id).length;
       const listH = scorers.length * 50 + withAssist * 10 + listPad * 2;
