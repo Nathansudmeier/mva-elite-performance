@@ -20,7 +20,17 @@ export default function FTCardModal({ match, events, players, onClose }) {
     (events || []).filter(e => e.type === "goal_mva" && e.goal_type !== "eigen_doelpunt");
 
   useEffect(() => {
-    base44.entities.Player.filter({ team: match?.team, active: true }).then(data => {
+    // Match.team gebruikt andere waarden dan Player.team
+    // Match: "MO17", "Dames 1" → Player: "MO17", "MO20", "VR1"
+    const teamMap = {
+      "MO17": "MO17",
+      "MO20": "MO20",
+      "Dames 1": "VR1",
+      "Vrouwen 1": "VR1",
+      "VR1": "VR1",
+    };
+    const playerTeam = teamMap[match?.team] || match?.team;
+    base44.entities.Player.filter({ team: playerTeam, active: true }).then(data => {
       const withPhoto = data.filter(p => p.matchday_foto_url);
       setTeamPlayers(withPhoto);
       if (withPhoto.length > 0) setSelectedPlayerId(withPhoto[0].id);
