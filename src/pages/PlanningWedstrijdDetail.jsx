@@ -248,11 +248,7 @@ export default function PlanningWedstrijdDetail() {
               style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, height: 44, borderRadius: 12, background: "#1a1a1a", color: "#ffffff", textDecoration: "none", fontWeight: 800, fontSize: 13 }}>
               <Play size={16} /> Live modus
             </Link>
-            <button onClick={() => setShowMatchdayCard(true)} style={{
-              background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)",
-              color: "rgba(255,255,255,0.70)", borderRadius: "14px", height: "44px", padding: "0 16px",
-              display: "inline-flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "13px", fontWeight: 700,
-            }}>
+            <button onClick={() => setShowMatchdayCard(true)} className="card-orange flex items-center gap-2 px-4 h-11 text-white font-bold text-sm">
               🎴 Matchday Card
             </button>
             <button onClick={() => {
