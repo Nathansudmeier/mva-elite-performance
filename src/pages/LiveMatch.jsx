@@ -33,6 +33,7 @@ export default function LiveMatch() {
 
   const { data: players = [] } = useQuery({ queryKey: ["players"], queryFn: () => base44.entities.Player.list() });
   const { data: matches = [] } = useQuery({ queryKey: ["matches"], queryFn: () => base44.entities.Match.list("-date") });
+  const { data: agendaItems = [] } = useQuery({ queryKey: ["agendaItems"], queryFn: () => base44.entities.AgendaItem.list() });
   const { data: existingMatchTimeRecords = [] } = useQuery({
     queryKey: ["playerMatchTime", matchId],
     queryFn: () => base44.entities.PlayerMatchTime.filter({ match_id: matchId }),
@@ -41,6 +42,8 @@ export default function LiveMatch() {
 
   const activePlayers = players.filter(p => p.active !== false);
   const match = matches.find(m => m.id === matchId);
+  const agendaItem = agendaItems.find(a => a.match_id === matchId);
+  const matchWithLogo = match ? { ...match, opponent_logo_url: agendaItem?.opponent_logo_url || match.opponent_logo_url } : match;
 
   // State
   const [phase, setPhase] = useState("pre");
@@ -460,7 +463,7 @@ export default function LiveMatch() {
         </div>
         {activeModal === "ft_card" && (
           <FTCardModal
-            match={match}
+            match={matchWithLogo}
             events={events}
             players={activePlayers}
             onClose={() => setActiveModal(null)}
