@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
@@ -345,8 +346,9 @@ export default function PlanningWedstrijdDetail() {
       )}
 
       {/* Matchday Card modal */}
-      {showMatchdayCard && match && (
-        <MatchdayCard match={match} onClose={() => setShowMatchdayCard(false)} />
+      {showMatchdayCard && match && createPortal(
+        <MatchdayCard match={match} onClose={() => setShowMatchdayCard(false)} />,
+        document.body
       )}
 
       {/* Edit form */}
