@@ -232,8 +232,8 @@ export default function MatchdayCard({ match, item, onClose }) {
     ctx.textBaseline = 'middle';
     ctx.fillText(thuisUit.toUpperCase(), 56 + 14, datumStartY + 64 + 19);
 
-    // STARTING XI — start dynamisch na datum/badge blok
-    const xiY = vsY + logoMaat + 240;
+    // STARTING XI — onderaan de kaart
+    const xiY = 1350;
     ctx.font = 'bold 52px Arial';
     ctx.fillStyle = '#FF6800';
     ctx.textAlign = 'left';
