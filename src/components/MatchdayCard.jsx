@@ -203,7 +203,7 @@ export default function MatchdayCard({ match, item, onClose }) {
     }
 
     // Datum + tijd — links uitgelijnd
-    const datumStartY = 750;
+    const datumStartY = 950;
     const datum = new Date(match.date);
     const datumTekst = `${DAG_NAMEN[datum.getDay()].toUpperCase()} ${datum.getDate()} ${MAAND_NAMEN[datum.getMonth()].toUpperCase()} | ${match.start_time || ''}`;
     ctx.font = 'bold 44px Arial';
