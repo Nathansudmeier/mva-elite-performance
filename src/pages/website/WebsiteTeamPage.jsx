@@ -53,26 +53,24 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
   const resultaten = wedstrijden.filter(w => w.date < today).sort((a, b) => b.date.localeCompare(a.date));
   const initials = (naam) => naam ? naam.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() : "?";
 
-  const heroStyle = {
-    height: "520px",
-    position: "relative",
-    overflow: "hidden",
-    background: (instellingen && instellingen[imageVeld])
-      ? `url(${instellingen[imageVeld]}) top center/cover no-repeat`
-      : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",
-    display: "flex",
-    alignItems: "flex-end",
-  };
-
   return (
     <WebsiteLayout>
       {/* HERO */}
-      <section style={heroStyle}>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(16,18,26,0.88) 0%, rgba(16,18,26,0.3) 60%)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(16,18,26,1) 0%, rgba(16,18,26,0) 40%)" }} />
-        <div style={{ position: "relative", zIndex: 1, padding: "0 28px 48px", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
-          <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "10px" }}>{breadcrumb}</div>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "72px", color: "#fff", lineHeight: 0.9 }}>
+      <section style={{
+        minHeight: "clamp(280px, 50vw, 520px)",
+        position: "relative",
+        overflow: "hidden",
+        background: (instellingen && instellingen[imageVeld])
+          ? `url(${instellingen[imageVeld]}) top center/cover no-repeat`
+          : "linear-gradient(160deg, #1B2A5E 0%, #10121A 100%)",
+        display: "flex",
+        alignItems: "flex-end",
+      }}>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(16,18,26,0.92) 0%, rgba(16,18,26,0.4) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(16,18,26,1) 0%, rgba(16,18,26,0) 50%)" }} />
+        <div style={{ position: "relative", zIndex: 1, padding: "clamp(24px, 5vw, 48px) clamp(16px, 4vw, 28px)", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
+          <div style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "8px" }}>{breadcrumb}</div>
+          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontWeight: 700, fontSize: "clamp(48px, 12vw, 72px)", color: "#fff", lineHeight: 0.9 }}>
             {teamTitel.split("\n").map((line, lineIdx) => (
               <div key={lineIdx}>
                 {line.split(/(\d+)/).map((part, i) =>
@@ -81,8 +79,8 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
               </div>
             ))}
           </div>
-          <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.65)", marginTop: "12px", maxWidth: "440px", lineHeight: 1.5 }}>{competitie}</p>
-          <div style={{ display: "flex", gap: "8px", marginTop: "16px", flexWrap: "wrap" }}>
+          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.65)", marginTop: "10px", maxWidth: "440px", lineHeight: 1.5 }}>{competitie}</p>
+          <div style={{ display: "flex", gap: "8px", marginTop: "14px", flexWrap: "wrap" }}>
             <span style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)", fontSize: "11px", padding: "4px 10px", borderRadius: "3px", fontWeight: 600 }}>{competitie}</span>
             <span style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)", fontSize: "11px", padding: "4px 10px", borderRadius: "3px", fontWeight: 600 }}>Seizoen 2025/26</span>
             {!loading && <span style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)", fontSize: "11px", padding: "4px 10px", borderRadius: "3px", fontWeight: 600 }}>{players.length} spelers</span>}
@@ -93,12 +91,12 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
       <TeamNav />
 
       {/* CONTENT */}
-      <section style={{ background: "#10121A", padding: "48px 28px" }}>
+      <section style={{ background: "#10121A", padding: "clamp(24px, 5vw, 48px) clamp(16px, 4vw, 28px)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           {loading ? (
             <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", textAlign: "center", padding: "40px 0" }}>Laden...</div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "48px" }}>
+            <div className="team-page-grid">
 
               {/* SPELERS */}
               <div>
@@ -107,39 +105,41 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
                 {players.length === 0 ? (
                   <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>Nog geen spelers gekoppeld aan dit team.</div>
                 ) : (
-                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                    <thead>
-                      <tr style={{ background: "#1B2A5E" }}>
-                        {["#", "SPELER", "POSITIE"].map(h => (
-                          <th key={h} style={{ padding: "10px 14px", fontSize: "10px", fontWeight: 700, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", textAlign: "left", letterSpacing: "1px" }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {players.map((p, i) => (
-                        <tr key={p.id} style={{ background: i % 2 === 0 ? "#202840" : "#1C2438", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                          <td style={{ padding: "12px 14px", fontFamily: "'Bebas Neue', sans-serif", fontSize: "20px", color: accentKleur, width: "48px" }}>{p.shirt_number || "—"}</td>
-                          <td style={{ padding: "12px 14px" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                              {p.photo_url ? (
-                                <img src={p.photo_url} alt={p.name} style={{ width: "32px", height: "32px", borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
-                              ) : (
-                                <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#1B2A5E", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "12px", color: accentKleur }}>{initials(p.name)}</span>
-                                </div>
-                              )}
-                              <span style={{ fontSize: "13px", fontWeight: 600, color: "#fff" }}>{p.name}</span>
-                            </div>
-                          </td>
-                          <td style={{ padding: "12px 14px", fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>{p.position || "—"}</td>
+                  <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "280px" }}>
+                      <thead>
+                        <tr style={{ background: "#1B2A5E" }}>
+                          {["#", "SPELER", "POSITIE"].map(h => (
+                            <th key={h} style={{ padding: "10px 12px", fontSize: "10px", fontWeight: 700, textTransform: "uppercase", color: "rgba(255,255,255,0.5)", textAlign: "left", letterSpacing: "1px", whiteSpace: "nowrap" }}>{h}</th>
+                          ))}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {players.map((p, i) => (
+                          <tr key={p.id} style={{ background: i % 2 === 0 ? "#202840" : "#1C2438", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                            <td style={{ padding: "10px 12px", fontFamily: "'Bebas Neue', sans-serif", fontSize: "20px", color: accentKleur, width: "40px" }}>{p.shirt_number || "—"}</td>
+                            <td style={{ padding: "10px 12px" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                {p.photo_url ? (
+                                  <img src={p.photo_url} alt={p.name} style={{ width: "30px", height: "30px", borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />
+                                ) : (
+                                  <div style={{ width: "30px", height: "30px", borderRadius: "50%", background: "#1B2A5E", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                                    <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "11px", color: accentKleur }}>{initials(p.name)}</span>
+                                  </div>
+                                )}
+                                <span style={{ fontSize: "13px", fontWeight: 600, color: "#fff" }}>{p.name}</span>
+                              </div>
+                            </td>
+                            <td style={{ padding: "10px 12px", fontSize: "11px", color: "rgba(255,255,255,0.55)", whiteSpace: "nowrap" }}>{p.position || "—"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 )}
               </div>
 
-              {/* SIDEBAR: Wedstrijden + Staf */}
+              {/* SIDEBAR */}
               <div>
                 {/* PROGRAMMA */}
                 <div style={{ marginBottom: "40px" }}>
@@ -155,17 +155,17 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
                       <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.5px", color: "rgba(255,255,255,0.35)", marginBottom: "8px" }}>KOMENDE WEDSTRIJDEN</div>
                       {programma.slice(0, 6).map(w => (
                         <div key={w.id} style={{ background: "#202840", borderRadius: "6px", padding: "12px 14px", marginBottom: "8px", borderLeft: `3px solid ${w.home_away === "Thuis" ? accentKleur : "rgba(255,255,255,0.15)"}` }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px", gap: "8px" }}>
                             <span style={{ fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.55)" }}>
                               {w.date ? format(parseISO(w.date), "EEE d MMM", { locale: nl }) : ""}
                               {w.start_time ? ` · ${w.start_time}` : ""}
                             </span>
-                            <span style={{ fontSize: "10px", padding: "2px 7px", borderRadius: "3px", background: w.home_away === "Thuis" ? "rgba(255,104,0,0.18)" : "rgba(255,255,255,0.07)", color: w.home_away === "Thuis" ? accentKleur : "rgba(255,255,255,0.45)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>{w.home_away || "Thuis"}</span>
+                            <span style={{ fontSize: "10px", padding: "2px 7px", borderRadius: "3px", flexShrink: 0, background: w.home_away === "Thuis" ? "rgba(255,104,0,0.18)" : "rgba(255,255,255,0.07)", color: w.home_away === "Thuis" ? accentKleur : "rgba(255,255,255,0.45)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>{w.home_away || "Thuis"}</span>
                           </div>
                           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             {w.opponent_logo_url && <img src={w.opponent_logo_url} alt={w.title} style={{ width: "28px", height: "28px", objectFit: "contain", borderRadius: "4px", background: "#fff", padding: "2px", flexShrink: 0 }} />}
-                            <div>
-                              <div style={{ fontSize: "13px", fontWeight: 700, color: "#fff" }}>
+                            <div style={{ minWidth: 0 }}>
+                              <div style={{ fontSize: "13px", fontWeight: 700, color: "#fff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                 {w.home_away === "Thuis" ? `MV Artemis — ${w.title || "Tegenstander"}` : `${w.title || "Tegenstander"} — MV Artemis`}
                               </div>
                               {w.location && <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.35)", marginTop: "2px" }}>{w.location}</div>}
@@ -182,7 +182,6 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
                       {resultaten.slice(0, 8).map(w => {
                         const matchData = getMatchScore(w);
                         const hasScore = matchData != null;
-                        // score_home = MVA Noord, score_away = tegenstander (altijd)
                         const artemisScore = hasScore ? matchData.score_home : null;
                         const tegScore = hasScore ? matchData.score_away : null;
                         const resultaat = !hasScore ? null : artemisScore > tegScore ? "W" : artemisScore < tegScore ? "V" : "G";
@@ -190,21 +189,21 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
                         const scoreText = hasScore ? `${artemisScore} - ${tegScore}` : null;
 
                         return (
-                          <div key={w.id} style={{ background: "#1C2438", borderRadius: "6px", padding: "10px 14px", marginBottom: "6px", display: "flex", justifyContent: "space-between", alignItems: "center", borderLeft: resultaatKleur ? `3px solid ${resultaatKleur}` : "3px solid rgba(255,255,255,0.08)" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <div key={w.id} style={{ background: "#1C2438", borderRadius: "6px", padding: "10px 14px", marginBottom: "6px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8px", borderLeft: resultaatKleur ? `3px solid ${resultaatKleur}` : "3px solid rgba(255,255,255,0.08)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
                               {w.opponent_logo_url && <img src={w.opponent_logo_url} alt={w.title} style={{ width: "22px", height: "22px", objectFit: "contain", background: "#fff", borderRadius: "3px", padding: "1px", flexShrink: 0 }} />}
-                              <div>
-                                <div style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.75)" }}>{w.title || "Tegenstander"}</div>
+                              <div style={{ minWidth: 0 }}>
+                                <div style={{ fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.75)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{w.title || "Tegenstander"}</div>
                                 <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)" }}>{w.date ? format(parseISO(w.date), "d MMM", { locale: nl }) : ""} · {w.home_away}</div>
                               </div>
                             </div>
                             {hasScore ? (
-                              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
                                 <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "18px", color: resultaatKleur || "#fff", fontWeight: 700 }}>{scoreText}</span>
                                 {resultaat && <span style={{ fontSize: "9px", fontWeight: 800, padding: "2px 5px", borderRadius: "3px", background: resultaatKleur + "22", color: resultaatKleur, letterSpacing: "0.5px" }}>{resultaat}</span>}
                               </div>
                             ) : (
-                              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.2)", fontStyle: "italic" }}>—</span>
+                              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.2)", fontStyle: "italic", flexShrink: 0 }}>—</span>
                             )}
                           </div>
                         );
@@ -244,6 +243,20 @@ export default function WebsiteTeamPage({ teamNaam, playerTeamNaam, teamTitel, a
           )}
         </div>
       </section>
+
+      <style>{`
+        .team-page-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+          gap: 48px;
+        }
+        @media (max-width: 768px) {
+          .team-page-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+        }
+      `}</style>
     </WebsiteLayout>
   );
 }
