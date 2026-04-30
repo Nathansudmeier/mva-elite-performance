@@ -450,12 +450,7 @@ export default function LiveMatch() {
           {match && <MatchReport match={{ ...match, live_events: events, halftime_notes: halftimeNotes }} players={activePlayers} />}
           <button
             onClick={() => setActiveModal("ft_card")}
-            style={{
-              background: "#FF6800", color: "#ffffff", border: "none",
-              borderRadius: "3px", fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 700, fontSize: "14px", padding: "12px 24px",
-              cursor: "pointer", width: "100%", marginBottom: "0",
-            }}
+            className="card-orange w-full flex items-center justify-center gap-2 p-4 text-white font-bold"
           >
             🎨 Genereer FT Card
           </button>
