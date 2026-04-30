@@ -46,20 +46,34 @@ export default function FTCardModal({ match, events, players, onClose }) {
 
   const loadImage = async (src) => {
     if (!src) return null;
+    // Fetch als blob zodat CORS geen probleem is voor canvas
+    const toBlobUrl = async (url) => {
+      const res = await fetch(url, { mode: "cors" });
+      if (!res.ok) throw new Error("fetch failed");
+      const blob = await res.blob();
+      return URL.createObjectURL(blob);
+    };
 
-    const loadFromDataUrl = (dataUrl) => new Promise((resolve) => {
+    const loadFromUrl = (url) => new Promise((resolve) => {
       const img = new Image();
       img.onload = () => resolve(img);
       img.onerror = () => resolve(null);
-      img.src = dataUrl;
+      img.src = url;
     });
 
-    // Haal afbeelding op via backend proxy (omzeilt CORS volledig)
+    // Probeer direct als blob ophalen
     try {
-      const res = await base44.functions.invoke("proxyImage", { url: src });
-      if (res?.data?.dataUrl) {
-        return await loadFromDataUrl(res.data.dataUrl);
-      }
+      const blobUrl = await toBlobUrl(src);
+      const img = await loadFromUrl(blobUrl);
+      if (img) return img;
+    } catch {}
+
+    // Fallback: corsproxy.io
+    try {
+      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(src)}`;
+      const blobUrl = await toBlobUrl(proxyUrl);
+      const img = await loadFromUrl(blobUrl);
+      if (img) return img;
     } catch {}
 
     return null;
