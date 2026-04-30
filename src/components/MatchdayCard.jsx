@@ -161,19 +161,19 @@ export default function MatchdayCard({ match, item, onClose }) {
     ctx.fillText(badgeTekst.toUpperCase(), badgeX + badgeBreedte / 2, 100 + 26);
 
     // MATCHDAY header
-    const headerY = 330;
+    const headerY = 300;
     const headerTekst = 'MATCHDAY';
-    ctx.font = 'bold 42px Arial';
+    ctx.font = 'bold 60px Arial';
     const headerBreedte = ctx.measureText(headerTekst).width + 60;
     const headerX = (BREEDTE - headerBreedte) / 2;
     ctx.fillStyle = '#FF6800';
     ctx.beginPath();
-    ctx.roundRect(headerX, headerY, headerBreedte, 56, 8);
+    ctx.roundRect(headerX, headerY, headerBreedte, 70, 8);
     ctx.fill();
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(headerTekst, BREEDTE / 2, headerY + 28);
+    ctx.fillText(headerTekst, BREEDTE / 2, headerY + 35);
 
     // VS blok — logo's groot met namen eronder, gecentreerd dicht bij elkaar
     const thuisUit = match.home_away || 'Thuis';
