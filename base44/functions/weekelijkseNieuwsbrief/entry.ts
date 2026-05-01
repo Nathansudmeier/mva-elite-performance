@@ -19,15 +19,17 @@ Deno.serve(async (req) => {
     const zevenDagenGeleden = new Date(vandaag.getTime() - 7 * 24 * 60 * 60 * 1000);
     const zevenDagenVooruit = new Date(vandaag.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-    const [nieuwsAlle, agendaAlle, matchesAlle, uitgelichtAlle, abonnees, instellingen] = await Promise.all([
+    const [nieuwsAlle, agendaAlle, matchesAlle, uitgelichtAlle, abonnees, instellingen, sponsorsAlle] = await Promise.all([
       base44.asServiceRole.entities.Nieuwsbericht.filter({ gepubliceerd: true }, '-datum', 3),
       base44.asServiceRole.entities.AgendaItem.filter({ type: 'Wedstrijd' }),
       base44.asServiceRole.entities.Match.list('-date', 100),
       base44.asServiceRole.entities.UitgelichtWedstrijd.filter({ actief: true }),
       base44.asServiceRole.entities.Abonnee.filter({ actief: true, bevestigd: true }),
       base44.asServiceRole.entities.WebsiteInstellingen.list(),
+      base44.asServiceRole.entities.Sponsor.filter({ actief: true }),
     ]);
     const logoUrl = instellingen?.[0]?.logo_url || '';
+    const sponsors = (sponsorsAlle || []).sort((a, b) => (a.tier - b.tier) || ((a.volgorde || 0) - (b.volgorde || 0)));
 
     const komendWedstrijden = (agendaAlle || [])
       .filter(i => {
@@ -71,7 +73,7 @@ Deno.serve(async (req) => {
     let mislukt = 0;
     for (const abonnee of abonnees) {
       try {
-        const html = nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht, logoUrl });
+        const html = nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht, logoUrl, sponsors });
         const text = nieuwsbriefText({ abonnee, nieuws, komendWedstrijden, uitgelicht });
         await sendViaResend({ to: abonnee.email, subject, html, text });
         verstuurd++;
@@ -156,7 +158,7 @@ Afmelden: https://mv-artemis.nl/nieuwsbrief/afmelden?code=${abonnee.bevestigings
   `.trim();
 }
 
-function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht, logoUrl }) {
+function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitslagen, uitgelicht, logoUrl, sponsors }) {
   const fontLink = `https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600&display=swap`;
 
   const sectionLabel = (text) => `
@@ -405,6 +407,60 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
     </td>
   </tr>
   <!-- BODY END -->
+
+  ${sponsors && sponsors.length > 0 ? `
+  <!-- SPONSORS -->
+  <tr>
+    <td style="background-color:#FFF8F2;padding:24px 24px 8px;border-top:1px solid #F0E8E0;">
+      ${sectionLabel('ONZE PARTNERS')}
+      <!-- Tier 1: hoofdsponsors -->
+      ${sponsors.filter(s => s.tier === 1).length > 0 ? `
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+        <tr>
+          ${sponsors.filter(s => s.tier === 1).map(s => `
+          <td align="center" style="padding:4px;">
+            <a href="${s.website_url || '#'}" style="text-decoration:none;display:block;">
+              <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;background:#fff;border-radius:12px;border:1.5px solid #1A1A2E;box-shadow:2px 2px 0 #1A1A2E;overflow:hidden;">
+                <tr>
+                  <td style="padding:10px 16px;text-align:center;vertical-align:middle;">
+                    ${s.logo_url ? `<img src="${s.logo_url}" alt="${s.naam}" height="44" style="display:block;max-height:44px;max-width:140px;width:auto;margin:0 auto;" />` : `<span style="font-size:14px;font-weight:800;color:#1A1A2E;font-family:'Barlow Condensed',Arial,sans-serif;">${s.naam}</span>`}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background:#FF6800;padding:3px 8px;text-align:center;">
+                    <span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#fff;font-family:'Barlow',Arial,sans-serif;">${s.categorie}</span>
+                  </td>
+                </tr>
+              </table>
+            </a>
+          </td>
+          `).join('')}
+        </tr>
+      </table>
+      ` : ''}
+      <!-- Tier 2 & 3: overige sponsors -->
+      ${sponsors.filter(s => s.tier > 1).length > 0 ? `
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+        <tr>
+          ${sponsors.filter(s => s.tier > 1).map(s => `
+          <td align="center" style="padding:4px;width:${Math.floor(100 / Math.min(sponsors.filter(x => x.tier > 1).length, 4))}%;">
+            <a href="${s.website_url || '#'}" style="text-decoration:none;display:block;">
+              <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;background:#fff;border-radius:10px;border:1px solid #E8DDD4;overflow:hidden;">
+                <tr>
+                  <td style="padding:8px 12px;text-align:center;vertical-align:middle;">
+                    ${s.logo_url ? `<img src="${s.logo_url}" alt="${s.naam}" height="32" style="display:block;max-height:32px;max-width:90px;width:auto;margin:0 auto;" />` : `<span style="font-size:12px;font-weight:700;color:#1A1A2E;font-family:'Barlow Condensed',Arial,sans-serif;">${s.naam}</span>`}
+                  </td>
+                </tr>
+              </table>
+            </a>
+          </td>
+          `).join('')}
+        </tr>
+      </table>
+      ` : ''}
+    </td>
+  </tr>
+  ` : ''}
 
   <!-- CTA -->
   <tr>
