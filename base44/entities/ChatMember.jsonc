@@ -1,0 +1,52 @@
+{
+  "name": "ChatMember",
+  "type": "object",
+  "properties": {
+    "chat_id": {
+      "type": "string",
+      "description": "Reference to Chat"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email van chatlidlid"
+    },
+    "last_read_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Tijdstip van laatste gelezen bericht"
+    }
+  },
+  "required": [
+    "chat_id",
+    "user_email"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
