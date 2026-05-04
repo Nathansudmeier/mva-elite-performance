@@ -411,53 +411,27 @@ function nieuwsbriefHtml({ abonnee, dag, maand, nieuws, komendWedstrijden, uitsl
   ${sponsors && sponsors.length > 0 ? `
   <!-- SPONSORS -->
   <tr>
-    <td style="background-color:#FFF8F2;padding:24px 24px 8px;border-top:1px solid #F0E8E0;">
-      ${sectionLabel('ONZE PARTNERS')}
-      <!-- Tier 1: hoofdsponsors -->
-      ${sponsors.filter(s => s.tier === 1).length > 0 ? `
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+    <td style="background-color:#0C0E14;padding:24px 24px 20px;border-top:1px solid rgba(255,255,255,0.06);">
+      <p style="margin:0 0 20px 0;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.25);font-family:'Barlow',Arial,sans-serif;text-align:center;">
+        PARTNERS
+      </p>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          ${sponsors.filter(s => s.tier === 1).map(s => `
-          <td align="center" style="padding:4px;">
-            <a href="${s.website_url || '#'}" style="text-decoration:none;display:block;">
-              <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;background:#fff;border-radius:12px;border:1.5px solid #1A1A2E;box-shadow:2px 2px 0 #1A1A2E;overflow:hidden;">
-                <tr>
-                  <td style="padding:10px 16px;text-align:center;vertical-align:middle;">
-                    ${s.logo_url ? `<img src="${s.logo_url}" alt="${s.naam}" height="44" style="display:block;max-height:44px;max-width:140px;width:auto;margin:0 auto;" />` : `<span style="font-size:14px;font-weight:800;color:#1A1A2E;font-family:'Barlow Condensed',Arial,sans-serif;">${s.naam}</span>`}
-                  </td>
-                </tr>
-                <tr>
-                  <td style="background:#FF6800;padding:3px 8px;text-align:center;">
-                    <span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#fff;font-family:'Barlow',Arial,sans-serif;">${s.categorie}</span>
-                  </td>
-                </tr>
-              </table>
-            </a>
+          ${sponsors.map(s => `
+          <td align="center" style="padding:8px 12px;vertical-align:middle;">
+            ${s.website_url
+              ? `<a href="${s.website_url}" style="text-decoration:none;display:inline-block;opacity:0.5;">`
+              : `<div style="display:inline-block;opacity:0.5;">`
+            }
+              ${s.logo_url
+                ? `<img src="${s.logo_url}" alt="${s.naam}" style="display:block;max-height:${s.tier === 1 ? '32px' : '24px'};max-width:${s.tier === 1 ? '120px' : '90px'};width:auto;margin:0 auto;filter:brightness(0) invert(1);" />`
+                : `<span style="font-size:${s.tier === 1 ? '13px' : '11px'};font-weight:600;color:rgba(255,255,255,0.5);font-family:'Barlow',Arial,sans-serif;white-space:nowrap;">${s.naam}</span>`
+              }
+            ${s.website_url ? `</a>` : `</div>`}
           </td>
           `).join('')}
         </tr>
       </table>
-      ` : ''}
-      <!-- Tier 2 & 3: overige sponsors -->
-      ${sponsors.filter(s => s.tier > 1).length > 0 ? `
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
-        <tr>
-          ${sponsors.filter(s => s.tier > 1).map(s => `
-          <td align="center" style="padding:4px;width:${Math.floor(100 / Math.min(sponsors.filter(x => x.tier > 1).length, 4))}%;">
-            <a href="${s.website_url || '#'}" style="text-decoration:none;display:block;">
-              <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;background:#fff;border-radius:10px;border:1px solid #E8DDD4;overflow:hidden;">
-                <tr>
-                  <td style="padding:8px 12px;text-align:center;vertical-align:middle;">
-                    ${s.logo_url ? `<img src="${s.logo_url}" alt="${s.naam}" height="32" style="display:block;max-height:32px;max-width:90px;width:auto;margin:0 auto;" />` : `<span style="font-size:12px;font-weight:700;color:#1A1A2E;font-family:'Barlow Condensed',Arial,sans-serif;">${s.naam}</span>`}
-                  </td>
-                </tr>
-              </table>
-            </a>
-          </td>
-          `).join('')}
-        </tr>
-      </table>
-      ` : ''}
     </td>
   </tr>
   ` : ''}
