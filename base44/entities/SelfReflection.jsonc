@@ -1,0 +1,76 @@
+{
+  "name": "SelfReflection",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Reference to Player"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Reflection date"
+    },
+    "match_opponent": {
+      "type": "string",
+      "description": "Match opponent"
+    },
+    "goal_1_rating": {
+      "type": "number",
+      "description": "Self-rating on goal 1 (1-10)"
+    },
+    "goal_1_notes": {
+      "type": "string",
+      "description": "Notes on goal 1"
+    },
+    "goal_2_rating": {
+      "type": "number",
+      "description": "Self-rating on goal 2 (1-10)"
+    },
+    "goal_2_notes": {
+      "type": "string",
+      "description": "Notes on goal 2"
+    },
+    "goal_3_rating": {
+      "type": "number",
+      "description": "Self-rating on goal 3 (1-10)"
+    },
+    "goal_3_notes": {
+      "type": "string",
+      "description": "Notes on goal 3"
+    },
+    "general_notes": {
+      "type": "string",
+      "description": "General self-reflection"
+    }
+  },
+  "required": [
+    "player_id",
+    "date"
+  ],
+  "rls": {
+    "create": {
+      "player_id": "{{user.player_id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "player_id": "{{user.player_id}}"
+        }
+      ]
+    },
+    "update": {
+      "player_id": "{{user.player_id}}"
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
