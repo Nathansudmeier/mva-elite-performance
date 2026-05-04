@@ -20,5 +20,30 @@
     "player_id",
     "date",
     "rating"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "player_id": "{{user.player_id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "player_id": "{{user.player_id}}"
+        }
+      ]
+    },
+    "update": {
+      "player_id": "{{user.player_id}}"
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }
