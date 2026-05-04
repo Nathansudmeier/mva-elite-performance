@@ -1,0 +1,109 @@
+{
+  "name": "TrainingPlan",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "Optionele koppeling aan TrainingSession"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum van de training"
+    },
+    "objective": {
+      "type": "string",
+      "description": "Sessiedoelstelling"
+    },
+    "exercises": {
+      "type": "array",
+      "description": "Oefenvormen in volgorde",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "duration_minutes": {
+            "type": "number"
+          },
+          "coaching_points": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "field_drawing": {
+            "type": "string"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "player_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "completed"
+      ],
+      "default": "draft"
+    },
+    "live_log": {
+      "type": "array",
+      "description": "Per oefenvorm voltooiingstijdstip",
+      "items": {
+        "type": "object",
+        "properties": {
+          "exercise_id": {
+            "type": "string"
+          },
+          "completed_at": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "date"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
