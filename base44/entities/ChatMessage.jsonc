@@ -1,0 +1,71 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "chat_id": {
+      "type": "string",
+      "description": "Reference to Chat"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email van afzender"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Voornaam van afzender"
+    },
+    "sender_photo_url": {
+      "type": "string",
+      "description": "Profielfoto van afzender"
+    },
+    "text": {
+      "type": "string",
+      "description": "Berichttekst"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Bijgevoegde afbeelding URL"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of bericht verwijderd is"
+    }
+  },
+  "required": [
+    "chat_id",
+    "text"
+  ],
+  "rls": {
+    "create": {
+      "sender_email": "{{user.email}}"
+    },
+    "read": {
+      "chat_id": {
+        "$in": {
+          "__type": "entity_ids",
+          "entity": "ChatMember",
+          "field": "chat_id",
+          "query": {
+            "user_email": "{{user.email}}"
+          }
+        }
+      }
+    },
+    "update": {
+      "sender_email": "{{user.email}}"
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "sender_email": "{{user.email}}"
+        }
+      ]
+    }
+  }
+}
