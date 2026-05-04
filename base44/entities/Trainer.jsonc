@@ -1,0 +1,52 @@
+{
+  "name": "Trainer",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Volledige naam van de trainer"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Profielfoto URL"
+    },
+    "role_title": {
+      "type": "string",
+      "description": "Functietitel (bijv. Hoofdtrainer, Assistent)"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefoonnummer"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-mailadres"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Of de trainer actief is"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
