@@ -1,0 +1,65 @@
+{
+  "name": "Feedback",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email van de user die feedback geeft"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Naam van de user"
+    },
+    "message": {
+      "type": "string",
+      "description": "Het feedback bericht"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "vraag",
+        "tip",
+        "opmerking"
+      ],
+      "description": "Type feedback"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of het feedback bericht is gelezen door admin"
+    }
+  },
+  "required": [
+    "user_email",
+    "user_name",
+    "message",
+    "type"
+  ],
+  "rls": {
+    "create": {
+      "user_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
