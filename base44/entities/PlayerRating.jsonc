@@ -1,0 +1,118 @@
+{
+  "name": "PlayerRating",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Reference to Player"
+    },
+    "meting": {
+      "type": "string",
+      "enum": [
+        "Meting 1",
+        "Meting 2",
+        "Meting 3"
+      ],
+      "description": "Measurement moment"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "pass_kort": {
+      "type": "number"
+    },
+    "pass_lang": {
+      "type": "number"
+    },
+    "koppen": {
+      "type": "number"
+    },
+    "scorend_vermogen": {
+      "type": "number"
+    },
+    "duel_aanvallend": {
+      "type": "number"
+    },
+    "duel_verdedigend": {
+      "type": "number"
+    },
+    "balaanname": {
+      "type": "number"
+    },
+    "speelveld_groot": {
+      "type": "number"
+    },
+    "omschakeling_balverlies": {
+      "type": "number"
+    },
+    "speelveld_klein": {
+      "type": "number"
+    },
+    "omschakeling_balbezit": {
+      "type": "number"
+    },
+    "kijkgedrag": {
+      "type": "number"
+    },
+    "winnaarsmentaliteit": {
+      "type": "number"
+    },
+    "leergierig": {
+      "type": "number"
+    },
+    "opkomst_trainingen": {
+      "type": "number"
+    },
+    "komt_afspraken_na": {
+      "type": "number"
+    },
+    "doorzetter": {
+      "type": "number"
+    },
+    "startsnelheid": {
+      "type": "number"
+    },
+    "snelheid_lang": {
+      "type": "number"
+    },
+    "postuur": {
+      "type": "number"
+    },
+    "blessuregevoeligheid": {
+      "type": "number"
+    },
+    "duelkracht": {
+      "type": "number"
+    },
+    "motorische_vaardigheden": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "player_id",
+    "meting",
+    "date"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "player_id": "{{user.player_id}}"
+        }
+      ]
+    },
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
