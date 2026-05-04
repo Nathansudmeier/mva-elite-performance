@@ -1,0 +1,68 @@
+{
+  "name": "TrainerReflection",
+  "type": "object",
+  "properties": {
+    "trainer_email": {
+      "type": "string",
+      "description": "Email van de trainer (created_by)"
+    },
+    "trainer_name": {
+      "type": "string",
+      "description": "Naam van de trainer"
+    },
+    "week_number": {
+      "type": "number",
+      "description": "ISO weeknummer"
+    },
+    "year": {
+      "type": "number",
+      "description": "Jaar"
+    },
+    "week_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Maandag van de week"
+    },
+    "week_end": {
+      "type": "string",
+      "format": "date",
+      "description": "Zaterdag van de week"
+    },
+    "content": {
+      "type": "string",
+      "description": "Reflectietekst"
+    }
+  },
+  "required": [
+    "week_number",
+    "year",
+    "week_start",
+    "week_end",
+    "content"
+  ],
+  "rls": {
+    "create": {
+      "trainer_email": "{{user.email}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "trainer_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "trainer_email": "{{user.email}}"
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
