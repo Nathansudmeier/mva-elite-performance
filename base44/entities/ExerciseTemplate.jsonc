@@ -1,0 +1,80 @@
+{
+  "name": "ExerciseTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Naam van de oefenvorm"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Tactisch",
+        "Fysiek",
+        "Positiespel",
+        "Afwerking",
+        "Spelprincipes",
+        "Techniek",
+        "Conditioneel"
+      ],
+      "description": "Categorie van de oefenvorm"
+    },
+    "description": {
+      "type": "string",
+      "description": "Beschrijving van de oefenvorm"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "description": "Standaard duur in minuten"
+    },
+    "coaching_points": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Coaching points"
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "player_count": {
+            "type": "number"
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "oranje",
+              "blauw",
+              "groen",
+              "rood",
+              "paars",
+              "geel"
+            ]
+          }
+        }
+      },
+      "description": "Groepen voor de oefenvorm"
+    },
+    "group_transition_description": {
+      "type": "string",
+      "description": "Beschrijving van de groepswisseling"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Foto URL van het velddiagram"
+    },
+    "youtube_url": {
+      "type": "string",
+      "description": "YouTube URL met trainings video"
+    }
+  },
+  "required": [
+    "name",
+    "category"
+  ]
+}
