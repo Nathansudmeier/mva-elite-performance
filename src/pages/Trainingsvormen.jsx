@@ -11,9 +11,11 @@ const CATEGORY_COLORS = {
   Positiespel:   { bg: "#9B5CFF", text: "#ffffff" },
   Afwerking:     { bg: "#FF6800", text: "#ffffff" },
   Spelprincipes: { bg: "#FFD600", text: "#1a1a1a" },
+  Techniek:      { bg: "#FF3DA8", text: "#ffffff" },
+  Conditioneel:  { bg: "#1a1a1a", text: "#ffffff" },
 };
 
-const CATEGORIES = ["Alle", "Tactisch", "Fysiek", "Positiespel", "Afwerking", "Spelprincipes"];
+const CATEGORIES = ["Alle", "Tactisch", "Fysiek", "Positiespel", "Afwerking", "Spelprincipes", "Techniek", "Conditioneel"];
 
 export default function Trainingsvormen() {
   const { isTrainer } = useCurrentUser();
