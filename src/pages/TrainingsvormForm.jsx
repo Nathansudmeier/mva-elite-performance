@@ -9,10 +9,10 @@ const GROUP_COLOR_MAP = {
   oranje: "#FF6800", blauw: "#00C2FF", groen: "#08D068",
   rood: "#FF3DA8", paars: "#9B5CFF", geel: "#FFD600",
 };
-const CATEGORIES = ["Tactisch", "Fysiek", "Positiespel", "Afwerking", "Spelprincipes"];
+const CATEGORIES = ["Tactisch", "Fysiek", "Positiespel", "Afwerking", "Spelprincipes", "Techniek", "Conditioneel"];
 const CATEGORY_COLORS = {
   Tactisch: "#00C2FF", Fysiek: "#08D068", Positiespel: "#9B5CFF",
-  Afwerking: "#FF6800", Spelprincipes: "#FFD600",
+  Afwerking: "#FF6800", Spelprincipes: "#FFD600", Techniek: "#FF3DA8", Conditioneel: "#1a1a1a",
 };
 
 const inputStyle = {
