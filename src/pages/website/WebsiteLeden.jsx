@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import WebsiteLayout from "@/components/website/WebsiteLayout";
 import { base44 } from "@/api/base44Client";
+import { useWebsiteData } from "@/hooks/useWebsiteData";
 import {
   CurrencyEur, TShirt, Cards, SignOut, HandHeart,
   ShieldCheck, FilePdf
@@ -61,7 +62,8 @@ function InfoKaart({ accent, icon, titel, children }) {
 export default function WebsiteLeden() {
   const [personen, setPersonen] = useState([]);
   const [documenten, setDocumenten] = useState([]);
-  const [heroUrl, setHeroUrl] = useState("");
+  const { data: websiteData } = useWebsiteData();
+  const heroUrl = websiteData?.instellingen?.leden_image_url || "";
 
   useEffect(() => {
     document.title = "Ledeninformatie — MV Artemis";
@@ -69,9 +71,6 @@ export default function WebsiteLeden() {
     base44.entities.ClubDocument.filter({ actief: true }).then(d =>
       setDocumenten((d || []).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0)))
     );
-    base44.entities.WebsiteInstellingen.list().then(list => {
-      if (list && list.length > 0) setHeroUrl(list[0].leden_image_url || "");
-    });
   }, []);
 
   return (
