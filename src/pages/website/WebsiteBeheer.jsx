@@ -244,6 +244,17 @@ export default function WebsiteBeheer() {
               <div key={field} style={{ marginBottom: "14px" }}>
                 <div style={sectionLabel}>{label}</div>
                 <input style={inputCls} value={instellingen[field] || ""} placeholder="https://..." onChange={e => setInstellingen({ ...instellingen, [field]: e.target.value })} />
+                <div style={{ marginTop: "6px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <label style={{ cursor: "pointer", padding: "5px 12px", borderRadius: "7px", border: "1.5px solid #1a1a1a", fontSize: "11px", fontWeight: 700, background: "#fff", display: "inline-block" }}>
+                    📁 Uploaden
+                    <input type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
+                      const file = e.target.files[0];
+                      if (!file) return;
+                      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                      setInstellingen(prev => ({ ...prev, [field]: file_url }));
+                    }} />
+                  </label>
+                </div>
                 {instellingen[field] && <img src={instellingen[field]} alt="" style={{ width: "100%", height: "80px", objectFit: "cover", borderRadius: "6px", marginTop: "4px" }} />}
               </div>
             ))}
