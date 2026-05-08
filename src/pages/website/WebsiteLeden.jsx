@@ -77,16 +77,25 @@ export default function WebsiteLeden() {
     <WebsiteLayout>
       {/* HERO */}
       <section style={{
+        position: "relative",
         background: "linear-gradient(135deg, #0F1630, #1B2A5E)",
-        backgroundImage: heroUrl ? `linear-gradient(135deg, rgba(15,22,48,0.82), rgba(27,42,94,0.75)), url(${heroUrl})` : undefined,
+        backgroundImage: heroUrl ? `url(${heroUrl})` : undefined,
         backgroundSize: "cover",
-        backgroundPosition: "top",
-        height: "380px",
+        backgroundPosition: "center",
+        height: "520px",
         display: "flex",
         alignItems: "flex-end",
-        padding: "0 28px 40px",
+        padding: "0 28px 48px",
+        overflow: "hidden",
       }}>
-        <div style={{ maxWidth: "900px", width: "100%" }}>
+        {/* Donkere fade van onder naar boven */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to top, rgba(10,16,40,0.95) 0%, rgba(10,16,40,0.55) 50%, rgba(10,16,40,0.20) 100%)",
+          pointerEvents: "none",
+        }} />
+        <div style={{ maxWidth: "900px", width: "100%", position: "relative", zIndex: 1 }}>
           <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "11px", fontWeight: 700, letterSpacing: "3px", textTransform: "uppercase", color: "#FF6800", marginBottom: "12px" }}>
             VOOR LEDEN
           </div>
