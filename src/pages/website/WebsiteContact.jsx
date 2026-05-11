@@ -37,9 +37,15 @@ export default function WebsiteContact() {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
-    await base44.entities.ContactBericht.create({ ...form, datum: new Date().toISOString(), status: "nieuw" });
-    setSubmitted(true);
-    setLoading(false);
+    try {
+      await base44.entities.ContactBericht.create({ ...form, datum: new Date().toISOString(), status: "nieuw" });
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Fout bij versturen bericht:", err);
+      alert("Er is iets misgegaan bij het verzenden. Probeer het opnieuw of mail ons direct.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fs = (name) => ({
