@@ -144,10 +144,10 @@ function MatchCard({ agendaItem, match, players, navigate }) {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ fontSize: "18px", fontWeight: 900, color: "#ffffff", lineHeight: 1.1, letterSpacing: "-0.5px" }}>
-            {agendaItem.home_away === "Thuis" ? "AFC" : agendaItem.opponent || match?.opponent || "–"}
+            {agendaItem.home_away === "Thuis" ? (agendaItem.team || "Artemis") : agendaItem.opponent || match?.opponent || "–"}
           </p>
           <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.70)", marginTop: "3px", fontWeight: 600 }}>
-            vs {agendaItem.home_away === "Thuis" ? (agendaItem.opponent || match?.opponent || "–") : "AFC"}
+            vs {agendaItem.home_away === "Thuis" ? (agendaItem.opponent || match?.opponent || "–") : (agendaItem.team || "Artemis")}
           </p>
           <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.60)", marginTop: "2px" }}>
             {agendaItem.start_time && `🕐 ${agendaItem.start_time}`}
