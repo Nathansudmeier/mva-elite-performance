@@ -189,7 +189,8 @@ export default function PlanningToernooiDetail() {
         </div>
         {isTrainer && (
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => setShowEdit(true)} className="glass"
+            <button onClick={() => { setActiveTab(1); setEditingInfo(true); setWedstrijden(item.tournament_matches || []); setInfoText(item.notes || ""); }}
+              className="glass"
               style={{ width: 40, height: 40, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <Pencil size={15} color="#1a1a1a" />
             </button>
@@ -372,7 +373,7 @@ export default function PlanningToernooiDetail() {
                     </button>
                   </div>
                 ) : (
-                  <button onClick={() => { setEditingInfo(true); setWedstrijden(item.tournament_matches || []); setInfoText(item.notes || ""); }}
+                  <button onClick={() => { setActiveTab(1); setEditingInfo(true); setWedstrijden(item.tournament_matches || []); setInfoText(item.notes || ""); }}
                     style={{ width: 32, height: 32, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "#ffffff", border: "2px solid #1a1a1a", boxShadow: "1px 1px 0 #1a1a1a", cursor: "pointer" }}>
                     <Pencil size={13} color="#1a1a1a" />
                   </button>
