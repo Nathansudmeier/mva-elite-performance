@@ -8,7 +8,9 @@ import MatchdayTab from "@/components/website/beheer/MatchdayTab";
 import ChatbotTab from "@/components/website/beheer/ChatbotTab";
 import DocumentenTab from "@/components/website/beheer/DocumentenTab";
 
-const TABS = ["Algemeen", "Prestaties", "Routekaart", "Nieuws", "Proeftraining aanvragen", "Berichten", "Sponsors", "Mensen", "Uitgelicht", "Nieuwsbrief", "Matchday", "Chatbot", "Documenten"];
+const WEBSITE_SECTIONS = ["Instellingen", "Hero's", "Nieuws", "Sponsors", "Mensen", "Documenten", "Prestaties", "Routekaart", "Aanvragen"];
+const APP_SECTIONS = ["Nieuwsbrief", "Matchday", "Uitgelicht", "Chatbot"];
+const INSTELLING_SUBTABS = ["Club", "Stats balk", "Logo", "Hero's"];
 
 const FASE_DEFAULTS = {
   fase1: { label: "FASE 1 · NU BEZIG", jaar: "2025-26", items: ["V1 consolideert in 3e klasse", "MO17 handhaaft koploperspositie", "Financiële basis staat", "Naamswijziging naar MV Artemis"] },
@@ -35,7 +37,8 @@ const sectionLabel = {
 
 export default function WebsiteBeheer() {
   const { isTrainer } = useCurrentUser();
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeSection, setActiveSection] = useState('Instellingen');
+  const [activeSubTab, setActiveSubTab] = useState('Club');
   const [instellingen, setInstellingen] = useState(null);
   const [instId, setInstId] = useState(null);
   const [prestaties, setPrestaties] = useState([]);
@@ -204,40 +207,174 @@ export default function WebsiteBeheer() {
     setUitgelicht(prev => prev.map(u => u.id === id ? { ...u, actief: !u.actief } : u));
   };
 
-  return (
-    <div>
-      <div className="t-page-title" style={{ marginBottom: "20px" }}>Website Beheer</div>
+  const handleSectionChange = (section) => {
+    setActiveSection(section);
+    setActiveSubTab('Club');
+  };
 
-      <div style={{ display: "flex", gap: "6px", marginBottom: "24px", flexWrap: "wrap" }}>
-        {TABS.map((t, i) => (
-          <button key={t} onClick={() => setActiveTab(i)} style={{ padding: "8px 16px", borderRadius: "10px", border: "2px solid #1a1a1a", fontWeight: 700, fontSize: "13px", cursor: "pointer", background: activeTab === i ? "#FF6800" : "#fff", color: activeTab === i ? "#fff" : "#1a1a1a", boxShadow: activeTab === i ? "2px 2px 0 #1a1a1a" : "none" }}>{t}</button>
-        ))}
+  const SidebarItem = ({ label }) => {
+    const isActive = activeSection === label;
+    return (
+      <div
+        onClick={() => handleSectionChange(label)}
+        style={{
+          display: "flex", alignItems: "center", gap: "8px",
+          padding: "7px 14px", fontSize: "13px", cursor: "pointer",
+          color: isActive ? "#FF6800" : "rgba(255,255,255,0.65)",
+          fontWeight: isActive ? 500 : 400,
+          background: isActive ? "rgba(255,104,0,0.2)" : "transparent",
+          transition: "background 0.15s, color 0.15s",
+        }}
+        onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.color = "rgba(255,255,255,0.9)"; } }}
+        onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.65)"; } }}
+      >
+        <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: isActive ? "#FF6800" : "rgba(255,255,255,0.25)", flexShrink: 0 }} />
+        {label}
+      </div>
+    );
+  };
+
+  const sectionGroupLabel = (text) => (
+    <div style={{ fontSize: "10px", fontWeight: 500, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", padding: "10px 14px 4px" }}>
+      {text}
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", minHeight: "100vh", margin: "-32px", marginTop: "-32px" }}>
+      {/* Sidebar */}
+      <div style={{ width: "240px", flexShrink: 0, background: "#1B2A5E", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
+        {/* Topbalk */}
+        <div style={{ height: "44px", background: "#FF6800", display: "flex", alignItems: "center", gap: "8px", padding: "0 14px" }}>
+          <i className="ti ti-settings" style={{ fontSize: "16px", color: "#fff" }} />
+          <span style={{ color: "#fff", fontSize: "13px", fontWeight: 500 }}>Beheer</span>
+        </div>
+        {/* Nav */}
+        <div style={{ padding: "8px 0" }}>
+          {sectionGroupLabel("WEBSITE")}
+          {WEBSITE_SECTIONS.map(s => <SidebarItem key={s} label={s} />)}
+          <div style={{ height: "0.5px", background: "rgba(255,255,255,0.1)", margin: "8px 14px" }} />
+          {sectionGroupLabel("APP")}
+          {APP_SECTIONS.map(s => <SidebarItem key={s} label={s} />)}
+        </div>
       </div>
 
-      {/* TAB 0: ALGEMEEN */}
-      {activeTab === 0 && instellingen !== null && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "700px" }}>
-          <div className="glass" style={{ padding: "20px" }}>
-            <div className="t-section-title" style={{ marginBottom: "16px" }}>Club logo</div>
-            <div style={{ marginBottom: "14px" }}>
-              <div style={sectionLabel}>Logo URL</div>
-              <input style={inputCls} value={instellingen.logo_url || ""} placeholder="https://..." onChange={e => setInstellingen({ ...instellingen, logo_url: e.target.value })} />
-              <div style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "10px" }}>
-                <label style={{ cursor: "pointer", padding: "6px 14px", borderRadius: "8px", border: "1.5px solid #1a1a1a", fontSize: "12px", fontWeight: 700, background: "#fff", display: "inline-block" }}>
-                  📁 Afbeelding uploaden
-                  <input type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-                    setInstellingen(prev => ({ ...prev, logo_url: file_url }));
-                  }} />
-                </label>
-                {instellingen.logo_url && <img src={instellingen.logo_url} alt="logo" style={{ height: "48px", objectFit: "contain", background: "#1B2A5E", borderRadius: "6px", padding: "6px" }} />}
-              </div>
+      {/* Content */}
+      <div style={{ flex: 1, minWidth: 0, background: "#fff" }}>
+        {/* Content header */}
+        <div style={{ padding: "16px 20px 0", borderBottom: "0.5px solid rgba(0,0,0,0.08)" }}>
+          <div style={{ fontSize: "15px", fontWeight: 500, color: "#1a1a1a", marginBottom: activeSection === "Instellingen" ? "12px" : "16px" }}>{activeSection}</div>
+          {activeSection === "Instellingen" && (
+            <div style={{ display: "flex", gap: "0" }}>
+              {INSTELLING_SUBTABS.map(tab => (
+                <button key={tab} onClick={() => setActiveSubTab(tab)} style={{
+                  padding: "6px 12px", fontSize: "12px", fontWeight: activeSubTab === tab ? 500 : 400,
+                  color: activeSubTab === tab ? "#FF6800" : "rgba(26,26,26,0.55)",
+                  borderBottom: `2px solid ${activeSubTab === tab ? "#FF6800" : "transparent"}`,
+                  background: "none", border: "none", borderBottom: `2px solid ${activeSubTab === tab ? "#FF6800" : "transparent"}`,
+                  cursor: "pointer", transition: "color 0.15s",
+                }}>{tab}</button>
+              ))}
             </div>
-            <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
-          </div>
+          )}
+        </div>
 
+        {/* Content body */}
+        <div style={{ padding: "24px 20px" }}>
+
+      {/* INSTELLINGEN */}
+      {activeSection === "Instellingen" && instellingen !== null && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "700px" }}>
+
+          {/* Club subtab */}
+          {activeSubTab === "Club" && (
+            <div className="glass" style={{ padding: "20px" }}>
+              <div className="t-section-title" style={{ marginBottom: "16px" }}>Clubgegevens</div>
+              {[["Club email","club_email"],["Club locatie","club_locatie"],["Instagram URL","instagram_url"],["TikTok URL","tiktok_url"],["Facebook URL","facebook_url"],["KVK nummer","kvk_nummer"]].map(([label, field]) => (
+                <div key={field} style={{ marginBottom: "14px" }}>
+                  <div style={sectionLabel}>{label}</div>
+                  <input style={inputCls} value={instellingen[field] || ""} onChange={e => setInstellingen({ ...instellingen, [field]: e.target.value })} />
+                </div>
+              ))}
+              <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
+            </div>
+          )}
+
+          {/* Stats balk subtab */}
+          {activeSubTab === "Stats balk" && (
+            <div className="glass" style={{ padding: "20px" }}>
+              <div className="t-section-title" style={{ marginBottom: "16px" }}>Stats balk</div>
+              {[1,2,3,4].map(n => (
+                <div key={n} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "12px" }}>
+                  <div>
+                    <div style={sectionLabel}>Stat {n} waarde</div>
+                    <input style={inputCls} value={instellingen[`stat${n}_waarde`] || ""} onChange={e => setInstellingen({ ...instellingen, [`stat${n}_waarde`]: e.target.value })} />
+                  </div>
+                  <div>
+                    <div style={sectionLabel}>Stat {n} label</div>
+                    <input style={inputCls} value={instellingen[`stat${n}_label`] || ""} onChange={e => setInstellingen({ ...instellingen, [`stat${n}_label`]: e.target.value })} />
+                  </div>
+                </div>
+              ))}
+              <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
+            </div>
+          )}
+
+          {/* Logo subtab */}
+          {activeSubTab === "Logo" && (
+            <div className="glass" style={{ padding: "20px" }}>
+              <div className="t-section-title" style={{ marginBottom: "16px" }}>Club logo</div>
+              <div style={{ marginBottom: "14px" }}>
+                <div style={sectionLabel}>Logo URL</div>
+                <input style={inputCls} value={instellingen.logo_url || ""} placeholder="https://..." onChange={e => setInstellingen({ ...instellingen, logo_url: e.target.value })} />
+                <div style={{ marginTop: "8px", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <label style={{ cursor: "pointer", padding: "6px 14px", borderRadius: "8px", border: "1.5px solid #1a1a1a", fontSize: "12px", fontWeight: 700, background: "#fff", display: "inline-block" }}>
+                    📁 Afbeelding uploaden
+                    <input type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
+                      const file = e.target.files[0];
+                      if (!file) return;
+                      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                      setInstellingen(prev => ({ ...prev, logo_url: file_url }));
+                    }} />
+                  </label>
+                  {instellingen.logo_url && <img src={instellingen.logo_url} alt="logo" style={{ height: "48px", objectFit: "contain", background: "#1B2A5E", borderRadius: "6px", padding: "6px" }} />}
+                </div>
+              </div>
+              <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
+            </div>
+          )}
+
+          {/* Hero's subtab */}
+          {activeSubTab === "Hero's" && (
+            <div className="glass" style={{ padding: "20px" }}>
+              <div className="t-section-title" style={{ marginBottom: "16px" }}>Hero afbeeldingen</div>
+              {[["Homepage hero","hero_image_url"],["Selecties hero","selecties_image_url"],["MO17 hero","mo17_image_url"],["MO20 hero","mo20_image_url"],["Vrouwen 1 hero","vrouwen1_image_url"],["De Club hero","declub_image_url"],["Wedstrijden hero","wedstrijden_image_url"],["Contact hero","contact_image_url"],["Ledeninformatie hero","leden_image_url"]].map(([label, field]) => (
+                <div key={field} style={{ marginBottom: "14px" }}>
+                  <div style={sectionLabel}>{label}</div>
+                  <input style={inputCls} value={instellingen[field] || ""} placeholder="https://..." onChange={e => setInstellingen({ ...instellingen, [field]: e.target.value })} />
+                  <div style={{ marginTop: "6px", display: "flex", alignItems: "center", gap: "10px" }}>
+                    <label style={{ cursor: "pointer", padding: "5px 12px", borderRadius: "7px", border: "1.5px solid #1a1a1a", fontSize: "11px", fontWeight: 700, background: "#fff", display: "inline-block" }}>
+                      📁 Uploaden
+                      <input type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                        setInstellingen(prev => ({ ...prev, [field]: file_url }));
+                      }} />
+                    </label>
+                  </div>
+                  {instellingen[field] && <img src={instellingen[field]} alt="" style={{ width: "100%", height: "80px", objectFit: "cover", borderRadius: "6px", marginTop: "4px" }} />}
+                </div>
+              ))}
+              <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* HERO'S (sidebar item) — leidt naar Hero's subtab van Instellingen, hier apart als alias */}
+      {activeSection === "Hero's" && instellingen !== null && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "700px" }}>
           <div className="glass" style={{ padding: "20px" }}>
             <div className="t-section-title" style={{ marginBottom: "16px" }}>Hero afbeeldingen</div>
             {[["Homepage hero","hero_image_url"],["Selecties hero","selecties_image_url"],["MO17 hero","mo17_image_url"],["MO20 hero","mo20_image_url"],["Vrouwen 1 hero","vrouwen1_image_url"],["De Club hero","declub_image_url"],["Wedstrijden hero","wedstrijden_image_url"],["Contact hero","contact_image_url"],["Ledeninformatie hero","leden_image_url"]].map(([label, field]) => (
@@ -260,39 +397,11 @@ export default function WebsiteBeheer() {
             ))}
             <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
           </div>
-
-          <div className="glass" style={{ padding: "20px" }}>
-            <div className="t-section-title" style={{ marginBottom: "16px" }}>Clubgegevens</div>
-            {[["Club email","club_email"],["Club locatie","club_locatie"],["Instagram URL","instagram_url"],["TikTok URL","tiktok_url"],["Facebook URL","facebook_url"],["KVK nummer","kvk_nummer"]].map(([label, field]) => (
-              <div key={field} style={{ marginBottom: "14px" }}>
-                <div style={sectionLabel}>{label}</div>
-                <input style={inputCls} value={instellingen[field] || ""} onChange={e => setInstellingen({ ...instellingen, [field]: e.target.value })} />
-              </div>
-            ))}
-            <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
-          </div>
-
-          <div className="glass" style={{ padding: "20px" }}>
-            <div className="t-section-title" style={{ marginBottom: "16px" }}>Stats balk</div>
-            {[1,2,3,4].map(n => (
-              <div key={n} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "12px" }}>
-                <div>
-                  <div style={sectionLabel}>Stat {n} waarde</div>
-                  <input style={inputCls} value={instellingen[`stat${n}_waarde`] || ""} onChange={e => setInstellingen({ ...instellingen, [`stat${n}_waarde`]: e.target.value })} />
-                </div>
-                <div>
-                  <div style={sectionLabel}>Stat {n} label</div>
-                  <input style={inputCls} value={instellingen[`stat${n}_label`] || ""} onChange={e => setInstellingen({ ...instellingen, [`stat${n}_label`]: e.target.value })} />
-                </div>
-              </div>
-            ))}
-            <button className="btn-primary" onClick={() => saveInstellingen()} disabled={saving}>{saving ? "Opslaan..." : "Opslaan"}</button>
-          </div>
         </div>
       )}
 
-      {/* TAB 1: PRESTATIES */}
-      {activeTab === 1 && (
+      {/* PRESTATIES */}
+      {activeSection === "Prestaties" && (
         <div style={{ maxWidth: "700px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
             <div className="t-section-title">Prestaties (max 4 zichtbaar)</div>
@@ -333,8 +442,8 @@ export default function WebsiteBeheer() {
         </div>
       )}
 
-      {/* TAB 2: ROUTEKAART */}
-      {activeTab === 2 && (
+      {/* ROUTEKAART */}
+      {activeSection === "Routekaart" && (
         <div style={{ maxWidth: "700px" }}>
           {[{data:fase1, set:setFase1, label:"Fase 1"},{data:fase2, set:setFase2, label:"Fase 2"},{data:fase3, set:setFase3, label:"Fase 3"}].map(({ data, set, label }) => (
             <div key={label} className="glass" style={{ padding: "20px", marginBottom: "16px" }}>
@@ -359,8 +468,8 @@ export default function WebsiteBeheer() {
         </div>
       )}
 
-      {/* TAB 3: NIEUWS */}
-      {activeTab === 3 && (
+      {/* NIEUWS */}
+      {activeSection === "Nieuws" && (
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
             <div className="t-section-title">Nieuwsberichten</div>
@@ -418,9 +527,12 @@ export default function WebsiteBeheer() {
         </div>
       )}
 
-      {/* TAB 4: AANVRAGEN */}
-      {activeTab === 4 && (
-        <div>
+      {/* AANVRAGEN */}
+      {activeSection === "Aanvragen" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+          {/* Proeftraining aanvragen */}
+          <div>
+          <div className="t-section-title" style={{ marginBottom: "14px" }}>Proeftraining aanvragen</div>
           <div style={{ display: "flex", gap: "10px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ display: "flex", gap: "6px" }}>
               {["alle","nieuw","bekeken","gecontacteerd"].map(s => (
@@ -479,12 +591,11 @@ export default function WebsiteBeheer() {
               </div>
             )}
           </div>
-        </div>
-      )}
+          </div>
 
-      {/* TAB 5: BERICHTEN */}
-      {activeTab === 5 && (
-        <div>
+          {/* Contactberichten */}
+          <div>
+          <div className="t-section-title" style={{ marginBottom: "14px" }}>Contactberichten</div>
           <div style={{ display: "flex", gap: "10px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ display: "flex", gap: "6px" }}>
               {["alle","nieuw","gelezen","beantwoord"].map(s => (
@@ -540,26 +651,27 @@ export default function WebsiteBeheer() {
               </div>
             )}
           </div>
+          </div>
         </div>
       )}
 
-      {/* TAB 7: MENSEN */}
-      {activeTab === 7 && <MensenTab />}
+      {/* MENSEN */}
+      {activeSection === "Mensen" && <MensenTab />}
 
-      {/* TAB 9: NIEUWSBRIEF */}
-      {activeTab === 9 && <NieuwsbriefTab />}
+      {/* NIEUWSBRIEF */}
+      {activeSection === "Nieuwsbrief" && <NieuwsbriefTab />}
 
-      {/* TAB 10: MATCHDAY */}
-      {activeTab === 10 && <MatchdayTab />}
+      {/* MATCHDAY */}
+      {activeSection === "Matchday" && <MatchdayTab />}
 
-      {/* TAB 11: CHATBOT */}
-      {activeTab === 11 && <ChatbotTab />}
+      {/* CHATBOT */}
+      {activeSection === "Chatbot" && <ChatbotTab />}
 
-      {/* TAB 12: DOCUMENTEN */}
-      {activeTab === 12 && <DocumentenTab />}
+      {/* DOCUMENTEN */}
+      {activeSection === "Documenten" && <DocumentenTab />}
 
-      {/* TAB 8: UITGELICHTE WEDSTRIJDEN */}
-      {activeTab === 8 && (
+      {/* UITGELICHT */}
+      {activeSection === "Uitgelicht" && (
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
             <div className="t-section-title">Uitgelichte wedstrijden</div>
@@ -608,8 +720,8 @@ export default function WebsiteBeheer() {
         </div>
       )}
 
-      {/* TAB 6: SPONSORS */}
-      {activeTab === 6 && (
+      {/* SPONSORS */}
+      {activeSection === "Sponsors" && (
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
             <div className="t-section-title">Sponsors beheren</div>
@@ -653,6 +765,9 @@ export default function WebsiteBeheer() {
           </div>
         </div>
       )}
+
+        </div>
+      </div>
     </div>
   );
 }
