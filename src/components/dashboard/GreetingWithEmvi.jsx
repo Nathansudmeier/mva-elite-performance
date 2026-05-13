@@ -72,10 +72,10 @@ export default function GreetingWithEmvi() {
       }),
   });
 
-  // Determine day type
+  // Determine day type (ignore cancelled items)
   let dayType = "rest";
-  const hasMatch = matches.length > 0 || agendaItems.some((a) => a.type === "Wedstrijd" || a.type === "Toernooi");
-  const hasTraining = trainingSessions.length > 0 || agendaItems.some((a) => a.type === "Training");
+  const hasMatch = agendaItems.some((a) => (a.type === "Wedstrijd" || a.type === "Toernooi") && !a.cancelled);
+  const hasTraining = agendaItems.some((a) => a.type === "Training" && !a.cancelled);
 
   if (hasMatch) dayType = "matchday";
   else if (hasTraining) dayType = "training";
