@@ -15,12 +15,24 @@ Deno.serve(async (req) => {
   }
 
   if (action === 'archive') {
-    await base44.asServiceRole.entities.User.update(userId, { archived: true });
+    const targetUser = await base44.asServiceRole.entities.User.get(userId);
+    // Save original role before overwriting
+    await base44.asServiceRole.entities.User.update(userId, {
+      archived: true,
+      role_before_archive: targetUser.role || 'user',
+      role: 'archived'
+    });
     return Response.json({ success: true });
   }
 
   if (action === 'unarchive') {
-    await base44.asServiceRole.entities.User.update(userId, { archived: false });
+    const targetUser = await base44.asServiceRole.entities.User.get(userId);
+    const originalRole = targetUser.role_before_archive || 'user';
+    await base44.asServiceRole.entities.User.update(userId, {
+      archived: false,
+      role: originalRole,
+      role_before_archive: null
+    });
     return Response.json({ success: true });
   }
 
