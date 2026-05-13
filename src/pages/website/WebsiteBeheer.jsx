@@ -785,9 +785,26 @@ function BerichtForm({ bericht, onSave, onCancel }) {
         <input style={inputCls} value={data.slug} onChange={e => setData({ ...data, slug: e.target.value })} placeholder="artikel-slug" />
       </div>
       <div>
-        <div style={sectionLabel}>Afbeelding URL</div>
-        <input style={inputCls} value={data.afbeelding_url || ""} onChange={e => setData({ ...data, afbeelding_url: e.target.value })} placeholder="https://..." />
-        {data.afbeelding_url && <img src={data.afbeelding_url} alt="preview" style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "6px", marginTop: "8px" }} />}
+        <div style={sectionLabel}>Afbeelding</div>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+          <label style={{ cursor: "pointer", padding: "6px 14px", borderRadius: "8px", border: "1.5px solid #1a1a1a", fontSize: "12px", fontWeight: 700, background: "#fff", display: "inline-block", flexShrink: 0 }}>
+            📁 Afbeelding uploaden
+            <input type="file" accept="image/*" style={{ display: "none" }} onChange={async e => {
+              const file = e.target.files[0];
+              if (!file) return;
+              const res = await base44.functions.invoke('cloudinaryUpload', {});
+              const { cloudName, uploadPreset } = res.data;
+              const formData = new FormData();
+              formData.append("file", file);
+              formData.append("upload_preset", uploadPreset);
+              const r = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, { method: "POST", body: formData });
+              const json = await r.json();
+              setData(prev => ({ ...prev, afbeelding_url: json.secure_url }));
+            }} />
+          </label>
+          <input style={{ ...inputCls, flex: 1 }} value={data.afbeelding_url || ""} onChange={e => setData({ ...data, afbeelding_url: e.target.value })} placeholder="of plak een URL..." />
+        </div>
+        {data.afbeelding_url && <img src={data.afbeelding_url} alt="preview" style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "6px", marginTop: "4px" }} />}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
         <div>
