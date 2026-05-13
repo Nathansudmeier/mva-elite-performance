@@ -3,13 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { addDays } from "date-fns";
 
-function getDayType(sessions, matches) {
+function getDayType(agendaItems) {
   const today = new Date().toISOString().split("T")[0];
   const tomorrow = addDays(new Date(), 1).toISOString().split("T")[0];
 
-  const isMatchToday = matches.some(m => m.date === today);
-  const isTrainingToday = sessions.some(s => s.date === today && s.type === "Training");
-  const isMatchTomorrow = matches.some(m => m.date === tomorrow);
+  const isMatchToday = agendaItems.some(ai => ai.date === today && (ai.type === "Wedstrijd" || ai.type === "Toernooi") && !ai.cancelled);
+  const isTrainingToday = agendaItems.some(ai => ai.date === today && ai.type === "Training" && !ai.cancelled);
+  const isMatchTomorrow = agendaItems.some(ai => ai.date === tomorrow && (ai.type === "Wedstrijd" || ai.type === "Toernooi") && !ai.cancelled);
 
   if (isMatchToday) return "match";
   if (isTrainingToday) return "training";
@@ -18,16 +18,12 @@ function getDayType(sessions, matches) {
 }
 
 export default function TrainerGreetingPill() {
-  const { data: sessions = [] } = useQuery({
-    queryKey: ["trainingSessions"],
-    queryFn: () => base44.entities.TrainingSession.list(),
-  });
-  const { data: matches = [] } = useQuery({
-    queryKey: ["matches"],
-    queryFn: () => base44.entities.Match.list(),
+  const { data: agendaItems = [] } = useQuery({
+    queryKey: ["agenda-items"],
+    queryFn: () => base44.entities.AgendaItem.list(),
   });
 
-  const dayType = getDayType(sessions, matches);
+  const dayType = getDayType(agendaItems);
 
   const configs = {
     training: {
