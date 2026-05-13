@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useCurrentUser } from "@/components/auth/useCurrentUser";
-import { Plus, Link as LinkIcon, Upload, Users, UserCheck, AlertCircle } from "lucide-react";
+import { Plus, Link as LinkIcon, Upload, Users, UserCheck, AlertCircle, Archive, Trash2, RotateCcw } from "lucide-react";
 
 export default function AccountBeheer() {
   return (
@@ -54,12 +54,13 @@ function Avatar({ user, linked }) {
   );
 }
 
-function UserRow({ u, linked, onLink, linkLabel }) {
+function UserRow({ u, linked, onLink, linkLabel, onArchive, onUnarchive, onDelete, isArchived }) {
   return (
     <div style={{
       display: "flex", alignItems: "center", gap: "12px",
       padding: "12px 0",
       borderBottom: "1.5px solid rgba(26,26,26,0.07)",
+      opacity: isArchived ? 0.65 : 1,
     }}>
       <Avatar user={u} linked={linked} />
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -69,7 +70,12 @@ function UserRow({ u, linked, onLink, linkLabel }) {
         <p style={{ fontSize: "11px", color: "rgba(26,26,26,0.45)", fontWeight: 600, marginBottom: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {u.email}
         </p>
-        {linked ? (
+        {isArchived ? (
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Archive size={10} style={{ color: "#888" }} />
+            <span style={{ fontSize: "11px", fontWeight: 700, color: "#888" }}>Gearchiveerd</span>
+          </div>
+        ) : linked ? (
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
             <UserCheck size={10} style={{ color: "#08D068" }} />
             <span style={{ fontSize: "11px", fontWeight: 700, color: "#08D068" }}>{linkLabel}</span>
@@ -81,23 +87,64 @@ function UserRow({ u, linked, onLink, linkLabel }) {
           </div>
         )}
       </div>
-      <button
-        onClick={() => onLink(u)}
-        style={{
-          display: "flex", alignItems: "center", gap: "5px",
-          padding: "6px 14px", borderRadius: "20px",
-          background: "#ffffff", border: "2px solid #1a1a1a",
-          fontSize: "11px", fontWeight: 800, color: "#1a1a1a",
-          cursor: "pointer", boxShadow: "2px 2px 0 #1a1a1a",
-          flexShrink: 0,
-          transition: "box-shadow 0.1s, transform 0.1s",
-        }}
-        onMouseDown={e => { e.currentTarget.style.boxShadow = "0px 0px 0 #1a1a1a"; e.currentTarget.style.transform = "translate(2px,2px)"; }}
-        onMouseUp={e => { e.currentTarget.style.boxShadow = "2px 2px 0 #1a1a1a"; e.currentTarget.style.transform = ""; }}
-        onMouseLeave={e => { e.currentTarget.style.boxShadow = "2px 2px 0 #1a1a1a"; e.currentTarget.style.transform = ""; }}
-      >
-        <LinkIcon size={10} /> Bewerk
-      </button>
+      <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
+        {isArchived ? (
+          <>
+            <button
+              onClick={() => onUnarchive(u)}
+              title="Herstellen"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: "32px", height: "32px", borderRadius: "10px",
+                background: "#ffffff", border: "2px solid #1a1a1a",
+                cursor: "pointer", boxShadow: "2px 2px 0 #1a1a1a",
+              }}
+            >
+              <RotateCcw size={13} />
+            </button>
+            <button
+              onClick={() => onDelete(u)}
+              title="Verwijderen"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: "32px", height: "32px", borderRadius: "10px",
+                background: "#FF3DA8", border: "2px solid #1a1a1a",
+                cursor: "pointer", boxShadow: "2px 2px 0 #1a1a1a",
+              }}
+            >
+              <Trash2 size={13} color="#fff" />
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => onLink(u)}
+              style={{
+                display: "flex", alignItems: "center", gap: "5px",
+                padding: "6px 12px", borderRadius: "20px",
+                background: "#ffffff", border: "2px solid #1a1a1a",
+                fontSize: "11px", fontWeight: 800, color: "#1a1a1a",
+                cursor: "pointer", boxShadow: "2px 2px 0 #1a1a1a",
+                transition: "box-shadow 0.1s, transform 0.1s",
+              }}
+            >
+              <LinkIcon size={10} /> Bewerk
+            </button>
+            <button
+              onClick={() => onArchive(u)}
+              title="Archiveren"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: "32px", height: "32px", borderRadius: "10px",
+                background: "#ffffff", border: "2px solid #1a1a1a",
+                cursor: "pointer", boxShadow: "2px 2px 0 #1a1a1a",
+              }}
+            >
+              <Archive size={13} />
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -155,6 +202,7 @@ function AccountBeheerContent() {
   const [linkTrainerId, setLinkTrainerId] = useState("");
   const [linkRole, setLinkRole] = useState("");
 
+  const [confirmDelete, setConfirmDelete] = useState(null); // user to delete
   const [newTrainerOpen, setNewTrainerOpen] = useState(false);
   const [newTrainerName, setNewTrainerName] = useState("");
   const [newTrainerTitle, setNewTrainerTitle] = useState("");
@@ -180,6 +228,24 @@ function AccountBeheerContent() {
     queryKey: ["trainers"],
     queryFn: () => base44.entities.Trainer.list(),
   });
+
+  const isArchived = (u) => !!(u.data?.archived || u.archived);
+
+  const handleArchive = async (u) => {
+    await base44.functions.invoke("archiveUser", { userId: u.id, action: "archive" });
+    queryClient.invalidateQueries({ queryKey: ["users"] });
+  };
+
+  const handleUnarchive = async (u) => {
+    await base44.functions.invoke("archiveUser", { userId: u.id, action: "unarchive" });
+    queryClient.invalidateQueries({ queryKey: ["users"] });
+  };
+
+  const handleDelete = async (u) => {
+    await base44.functions.invoke("archiveUser", { userId: u.id, action: "delete" });
+    setConfirmDelete(null);
+    queryClient.invalidateQueries({ queryKey: ["users"] });
+  };
 
   const getRole = (u) => u.data?.role || u.role;
   const getPlayerId = (u) => u.data?.player_id || u.player_id || "";
@@ -254,10 +320,13 @@ function AccountBeheerContent() {
     if (linkOpen && created?.id) setLinkTrainerId(created.id);
   };
 
-  const speelsters = users.filter(u => getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin" && getRole(u) !== "ouder");
-  const ouders = users.filter(u => getRole(u) === "ouder");
-  const trainerUsers = users.filter(u => getTrainerId(u) && getRole(u) !== "admin");
-  const ongekoppeld = users.filter(u => !getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin" && getRole(u) !== "ouder");
+  const activeUsers = users.filter(u => !isArchived(u));
+  const archivedUsers = users.filter(u => isArchived(u));
+
+  const speelsters = activeUsers.filter(u => getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin" && getRole(u) !== "ouder");
+  const ouders = activeUsers.filter(u => getRole(u) === "ouder");
+  const trainerUsers = activeUsers.filter(u => getTrainerId(u) && getRole(u) !== "admin");
+  const ongekoppeld = activeUsers.filter(u => !getPlayerId(u) && !getTrainerId(u) && getRole(u) !== "admin" && getRole(u) !== "ouder");
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px", paddingBottom: "80px" }}>
@@ -319,7 +388,7 @@ function AccountBeheerContent() {
             const linked = getLinkedTrainer(u);
             return (
               <div key={u.id} style={{ borderBottom: i < trainerUsers.length - 1 ? "none" : "none" }}>
-                <UserRow u={u} linked={linked} onLink={openLink} linkLabel={`${linked?.name}${linked?.role_title ? ` · ${linked.role_title}` : ""}`} />
+                <UserRow u={u} linked={linked} onLink={openLink} linkLabel={`${linked?.name}${linked?.role_title ? ` · ${linked.role_title}` : ""}`} onArchive={handleArchive} onUnarchive={handleUnarchive} onDelete={setConfirmDelete} />
               </div>
             );
           })}
@@ -331,13 +400,13 @@ function AccountBeheerContent() {
       {/* ── SPEELSTERS ── */}
       <SectionCard title="Speelsters" count={speelsters.length} color="#00C2FF">
         {speelsters.length === 0 ? (
-          <div style={{ padding: "24px 0", textAlign: "center" }}>
-            <Users size={28} style={{ color: "rgba(26,26,26,0.15)", margin: "0 auto 8px" }} />
-            <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.35)", fontWeight: 600 }}>Nog geen speelster-accounts aangemaakt.</p>
-          </div>
-        ) : speelsters.map((u, i) => {
-          const linked = getLinkedPlayer(u);
-          return <UserRow key={u.id} u={u} linked={linked} onLink={openLink} linkLabel={linked ? `Gekoppeld aan ${linked.name}` : ""} />;
+        <div style={{ padding: "24px 0", textAlign: "center" }}>
+          <Users size={28} style={{ color: "rgba(26,26,26,0.15)", margin: "0 auto 8px" }} />
+          <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.35)", fontWeight: 600 }}>Nog geen speelster-accounts aangemaakt.</p>
+        </div>
+        ) : speelsters.map((u) => {
+        const linked = getLinkedPlayer(u);
+        return <UserRow key={u.id} u={u} linked={linked} onLink={openLink} linkLabel={linked ? `Gekoppeld aan ${linked.name}` : ""} onArchive={handleArchive} onUnarchive={handleUnarchive} onDelete={setConfirmDelete} />;
         })}
       </SectionCard>
 
@@ -346,7 +415,7 @@ function AccountBeheerContent() {
         <SectionCard title="Ouders" count={ouders.length} color="#9B5CFF">
           {ouders.map(u => {
             const linked = getLinkedPlayer(u);
-            return <UserRow key={u.id} u={u} linked={linked} onLink={openLink} linkLabel={linked ? `Gekoppeld aan ${linked.name}` : ""} />;
+            return <UserRow key={u.id} u={u} linked={linked} onLink={openLink} linkLabel={linked ? `Gekoppeld aan ${linked.name}` : ""} onArchive={handleArchive} onUnarchive={handleUnarchive} onDelete={setConfirmDelete} />;
           })}
         </SectionCard>
       )}
@@ -355,7 +424,17 @@ function AccountBeheerContent() {
       {ongekoppeld.length > 0 && (
         <SectionCard title="Ongekoppeld" count={ongekoppeld.length} color="#FF3DA8">
           {ongekoppeld.map(u => (
-            <UserRow key={u.id} u={u} linked={null} onLink={openLink} linkLabel="" />
+            <UserRow key={u.id} u={u} linked={null} onLink={openLink} linkLabel="" onArchive={handleArchive} onUnarchive={handleUnarchive} onDelete={setConfirmDelete} />
+          ))}
+        </SectionCard>
+      )}
+
+      {/* ── GEARCHIVEERD ── */}
+      {archivedUsers.length > 0 && (
+        <SectionCard title="Gearchiveerd" count={archivedUsers.length} color="#888888">
+          {archivedUsers.map(u => (
+            <UserRow key={u.id} u={u} linked={null} onLink={() => {}} linkLabel="" isArchived
+              onArchive={handleArchive} onUnarchive={handleUnarchive} onDelete={setConfirmDelete} />
           ))}
         </SectionCard>
       )}
@@ -482,6 +561,41 @@ function AccountBeheerContent() {
             >
               {linkMutation.isPending ? "Opslaan..." : "Opslaan"}
             </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Verwijder bevestiging */}
+      <Dialog open={!!confirmDelete} onOpenChange={() => setConfirmDelete(null)}>
+        <DialogContent className="max-w-sm" style={DIALOG_STYLE}>
+          <DialogHeader>
+            <DialogTitle style={{ fontSize: "18px", fontWeight: 900, color: "#1a1a1a" }}>Account verwijderen?</DialogTitle>
+          </DialogHeader>
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            <p style={{ fontSize: "13px", color: "rgba(26,26,26,0.65)", lineHeight: 1.5 }}>
+              Je staat op het punt <strong>{confirmDelete?.full_name || confirmDelete?.email}</strong> definitief te verwijderen. Dit kan niet ongedaan worden gemaakt.
+            </p>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="btn-secondary"
+                style={{ flex: 1, height: "44px", fontSize: "13px" }}
+              >
+                Annuleren
+              </button>
+              <button
+                onClick={() => handleDelete(confirmDelete)}
+                style={{
+                  flex: 1, height: "44px", borderRadius: "14px",
+                  background: "#FF3DA8", border: "2.5px solid #1a1a1a",
+                  color: "#fff", fontSize: "13px", fontWeight: 800,
+                  cursor: "pointer", boxShadow: "3px 3px 0 #1a1a1a",
+                  display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
+                }}
+              >
+                <Trash2 size={14} /> Definitief verwijderen
+              </button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
