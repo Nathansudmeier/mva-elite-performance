@@ -227,9 +227,9 @@ export default function TodayActivityCard({ agendaItems = [], matches = [], play
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0];
 
-  // Find today's training or match agenda item
-  const todayTraining = agendaItems.find(ai => ai.date === today && ai.type === "Training");
-  const todayWedstrijd = agendaItems.find(ai => ai.date === today && (ai.type === "Wedstrijd" || ai.type === "Toernooi"));
+  // Find today's training or match agenda item (skip cancelled)
+  const todayTraining = agendaItems.find(ai => ai.date === today && ai.type === "Training" && !ai.cancelled);
+  const todayWedstrijd = agendaItems.find(ai => ai.date === today && (ai.type === "Wedstrijd" || ai.type === "Toernooi") && !ai.cancelled);
 
   // Fetch training plan for today if there's a training
   const { data: trainingPlans = [] } = useQuery({
