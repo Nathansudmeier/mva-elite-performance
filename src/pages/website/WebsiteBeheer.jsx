@@ -37,6 +37,7 @@ const sectionLabel = {
 
 export default function WebsiteBeheer() {
   const { isTrainer } = useCurrentUser();
+  const [activeCategory, setActiveCategory] = useState('Website');
   const [activeSection, setActiveSection] = useState('Instellingen');
   const [activeSubTab, setActiveSubTab] = useState('Club');
   const [instellingen, setInstellingen] = useState(null);
@@ -207,80 +208,60 @@ export default function WebsiteBeheer() {
     setUitgelicht(prev => prev.map(u => u.id === id ? { ...u, actief: !u.actief } : u));
   };
 
+  const handleCategoryChange = (cat) => {
+    setActiveCategory(cat);
+    setActiveSection(cat === 'Website' ? WEBSITE_SECTIONS[0] : APP_SECTIONS[0]);
+    setActiveSubTab('Club');
+  };
+
   const handleSectionChange = (section) => {
     setActiveSection(section);
     setActiveSubTab('Club');
   };
 
-  const SidebarItem = ({ label }) => {
-    const isActive = activeSection === label;
-    return (
-      <div
-        onClick={() => handleSectionChange(label)}
-        style={{
-          display: "flex", alignItems: "center", gap: "8px",
-          padding: "7px 14px", fontSize: "13px", cursor: "pointer",
-          color: isActive ? "#FF6800" : "rgba(255,255,255,0.65)",
-          fontWeight: isActive ? 500 : 400,
-          background: isActive ? "rgba(255,104,0,0.2)" : "transparent",
-          transition: "background 0.15s, color 0.15s",
-        }}
-        onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.color = "rgba(255,255,255,0.9)"; } }}
-        onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.65)"; } }}
-      >
-        <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: isActive ? "#FF6800" : "rgba(255,255,255,0.25)", flexShrink: 0 }} />
-        {label}
-      </div>
-    );
-  };
+  const currentSections = activeCategory === 'Website' ? WEBSITE_SECTIONS : APP_SECTIONS;
 
-  const sectionGroupLabel = (text) => (
-    <div style={{ fontSize: "10px", fontWeight: 500, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", padding: "10px 14px 4px" }}>
-      {text}
+  const TabRow = ({ tabs, active, onSelect, fontSize = 14, bg = "transparent" }) => (
+    <div style={{ display: "flex", gap: 0, background: bg, overflowX: "auto" }}>
+      {tabs.map(tab => (
+        <button key={tab} onClick={() => onSelect(tab)} style={{
+          padding: `8px 14px`, fontSize, fontWeight: active === tab ? 500 : 400,
+          color: active === tab ? "#FF6800" : "rgba(26,26,26,0.50)",
+          borderBottom: `2.5px solid ${active === tab ? "#FF6800" : "transparent"}`,
+          background: "none", border: "none",
+          borderBottom: `2.5px solid ${active === tab ? "#FF6800" : "transparent"}`,
+          cursor: "pointer", whiteSpace: "nowrap", transition: "color 0.15s",
+        }}>{tab}</button>
+      ))}
     </div>
   );
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", margin: "-32px", marginTop: "-32px" }}>
-      {/* Sidebar */}
-      <div style={{ width: "240px", flexShrink: 0, background: "#1B2A5E", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
-        {/* Topbalk */}
-        <div style={{ height: "44px", background: "#FF6800", display: "flex", alignItems: "center", gap: "8px", padding: "0 14px" }}>
-          <i className="ti ti-settings" style={{ fontSize: "16px", color: "#fff" }} />
-          <span style={{ color: "#fff", fontSize: "13px", fontWeight: 500 }}>Beheer</span>
+    <div style={{ minHeight: "100vh" }}>
+      {/* Paginatitel */}
+      <div style={{ marginBottom: "0" }}>
+        <div className="t-page-title" style={{ marginBottom: "12px" }}>Website Beheer</div>
+
+        {/* Rij 1: Categorietabs */}
+        <div style={{ borderBottom: "2px solid rgba(26,26,26,0.10)" }}>
+          <TabRow tabs={["Website", "App"]} active={activeCategory} onSelect={handleCategoryChange} fontSize={14} />
         </div>
-        {/* Nav */}
-        <div style={{ padding: "8px 0" }}>
-          {sectionGroupLabel("WEBSITE")}
-          {WEBSITE_SECTIONS.map(s => <SidebarItem key={s} label={s} />)}
-          <div style={{ height: "0.5px", background: "rgba(255,255,255,0.1)", margin: "8px 14px" }} />
-          {sectionGroupLabel("APP")}
-          {APP_SECTIONS.map(s => <SidebarItem key={s} label={s} />)}
+
+        {/* Rij 2: Sectietabs */}
+        <div style={{ borderBottom: "1.5px solid rgba(26,26,26,0.08)", background: "#F8F8F8" }}>
+          <TabRow tabs={currentSections} active={activeSection} onSelect={handleSectionChange} fontSize={12} bg="#F8F8F8" />
         </div>
+
+        {/* Rij 3: Subtabs (alleen bij Instellingen) */}
+        {activeSection === "Instellingen" && (
+          <div style={{ borderBottom: "1px solid rgba(26,26,26,0.07)", background: "#F2F2F2" }}>
+            <TabRow tabs={INSTELLING_SUBTABS} active={activeSubTab} onSelect={setActiveSubTab} fontSize={11} bg="#F2F2F2" />
+          </div>
+        )}
       </div>
 
-      {/* Content */}
-      <div style={{ flex: 1, minWidth: 0, background: "#fff" }}>
-        {/* Content header */}
-        <div style={{ padding: "16px 20px 0", borderBottom: "0.5px solid rgba(0,0,0,0.08)" }}>
-          <div style={{ fontSize: "15px", fontWeight: 500, color: "#1a1a1a", marginBottom: activeSection === "Instellingen" ? "12px" : "16px" }}>{activeSection}</div>
-          {activeSection === "Instellingen" && (
-            <div style={{ display: "flex", gap: "0" }}>
-              {INSTELLING_SUBTABS.map(tab => (
-                <button key={tab} onClick={() => setActiveSubTab(tab)} style={{
-                  padding: "6px 12px", fontSize: "12px", fontWeight: activeSubTab === tab ? 500 : 400,
-                  color: activeSubTab === tab ? "#FF6800" : "rgba(26,26,26,0.55)",
-                  borderBottom: `2px solid ${activeSubTab === tab ? "#FF6800" : "transparent"}`,
-                  background: "none", border: "none", borderBottom: `2px solid ${activeSubTab === tab ? "#FF6800" : "transparent"}`,
-                  cursor: "pointer", transition: "color 0.15s",
-                }}>{tab}</button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Content body */}
-        <div style={{ padding: "24px 20px" }}>
+      {/* Content body */}
+      <div style={{ padding: "24px 0" }}>
 
       {/* INSTELLINGEN */}
       {activeSection === "Instellingen" && instellingen !== null && (
@@ -766,7 +747,6 @@ export default function WebsiteBeheer() {
         </div>
       )}
 
-        </div>
       </div>
     </div>
   );
