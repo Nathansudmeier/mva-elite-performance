@@ -38,7 +38,7 @@ export default function WebsiteContact() {
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
     try {
-      await base44.entities.ContactBericht.create({ ...form, datum: new Date().toISOString(), status: "nieuw" });
+      await base44.functions.invoke('submitContactBericht', { ...form });
       setSubmitted(true);
     } catch (err) {
       console.error("Fout bij versturen bericht:", err);
