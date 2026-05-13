@@ -30,7 +30,7 @@ export default function WebsiteProeftraining() {
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
     try {
-      await base44.entities.ProeftrainingAanvraag.create({ ...form, leeftijd: Number(form.leeftijd), datum: new Date().toISOString(), status: "nieuw" });
+      await base44.functions.invoke('submitProeftraining', { ...form, leeftijd: Number(form.leeftijd) });
       setSubmitted(true);
     } catch (err) {
       console.error("Fout bij versturen aanvraag:", err);
