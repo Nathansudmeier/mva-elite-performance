@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plus, Edit2, Upload, Target, User, Camera, Download } from "lucide-react";
+import { Plus, Edit2, Upload, Target, User, Camera, Download, Archive, ArchiveRestore, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { resizeImage } from "@/components/utils/imageResize";
@@ -27,6 +27,8 @@ function PlayersContent() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: "", position: "", shirt_number: "", iop_goal_1: "", iop_goal_2: "", iop_goal_3: "" });
   const [photoFile, setPhotoFile] = useState(null);
+  const [showArchived, setShowArchived] = useState(false);
+  const [archiveConfirm, setArchiveConfirm] = useState(null); // player to archive
 
   const { data: players = [] } = useQuery({
     queryKey: ["players"],
@@ -81,7 +83,22 @@ function PlayersContent() {
     URL.revokeObjectURL(url);
   };
 
+  const archiveMutation = useMutation({
+    mutationFn: (player) => base44.entities.Player.update(player.id, { active: false }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["players"] });
+      setArchiveConfirm(null);
+      setDialogOpen(false);
+    },
+  });
+
+  const restoreMutation = useMutation({
+    mutationFn: (player) => base44.entities.Player.update(player.id, { active: true }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["players"] }),
+  });
+
   const activePlayers = players.filter((p) => p.active !== false);
+  const archivedPlayers = players.filter((p) => p.active === false);
   const displayPlayers = isTrainer ? activePlayers : activePlayers.filter(p => p.id === playerId);
 
   const handleQuickPhoto = async (e, player) => {
@@ -166,6 +183,64 @@ function PlayersContent() {
       </div>
       )}
 
+      {/* Gearchiveerde spelers */}
+      {isTrainer && archivedPlayers.length > 0 && (
+        <div style={{ marginTop: 8 }}>
+          <button
+            onClick={() => setShowArchived(v => !v)}
+            style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", cursor: "pointer", padding: "4px 0" }}>
+            <Archive size={14} style={{ color: "rgba(26,26,26,0.40)" }} />
+            <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(26,26,26,0.45)" }}>
+              Gearchiveerd ({archivedPlayers.length})
+            </span>
+            <ChevronDown size={13} style={{ color: "rgba(26,26,26,0.35)", transform: showArchived ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
+          </button>
+          {showArchived && (
+            <div className="glass" style={{ marginTop: 8, overflow: "hidden" }}>
+              {archivedPlayers.map((player, i) => (
+                <div key={player.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", borderBottom: i < archivedPlayers.length - 1 ? "1.5px solid rgba(26,26,26,0.08)" : "none" }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", overflow: "hidden", flexShrink: 0, border: "1.5px solid rgba(26,26,26,0.20)", opacity: 0.6 }}>
+                    <img src={player.photo_url || PLAYER_FALLBACK_PHOTO} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: "rgba(26,26,26,0.50)", margin: 0 }}>{player.name}</p>
+                    <p style={{ fontSize: 11, color: "rgba(26,26,26,0.35)", margin: 0 }}>{player.position || "Geen positie"}</p>
+                  </div>
+                  <button
+                    onClick={() => restoreMutation.mutate(player)}
+                    disabled={restoreMutation.isPending}
+                    style={{ display: "flex", alignItems: "center", gap: 5, padding: "6px 12px", borderRadius: 10, background: "rgba(8,208,104,0.10)", border: "1.5px solid #08D068", color: "#05a050", fontSize: 11, fontWeight: 800, cursor: "pointer" }}>
+                    <ArchiveRestore size={12} /> Herstellen
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Archiveer bevestiging */}
+      {archiveConfirm && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 300, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+          <div onClick={() => setArchiveConfirm(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 200 }} />
+          <div style={{ position: "relative", zIndex: 301, background: "#1a1a1a", border: "2.5px solid #1a1a1a", borderRadius: "20px 20px 0 0", padding: "24px", paddingBottom: "max(24px, calc(24px + env(safe-area-inset-bottom)))", width: "100%", maxWidth: "500px" }}>
+            <div style={{ fontSize: "32px", textAlign: "center", marginBottom: "12px" }}>👋</div>
+            <div style={{ fontSize: "16px", fontWeight: 800, color: "white", textAlign: "center", marginBottom: "8px" }}>Afscheid nemen van {archiveConfirm.name}?</div>
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", textAlign: "center", marginBottom: "20px" }}>De speelster wordt gearchiveerd en verdwijnt uit de selectie. Je kunt haar later altijd herstellen.</p>
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button onClick={() => setArchiveConfirm(null)}
+                style={{ flex: 1, height: "48px", background: "rgba(255,255,255,0.08)", border: "0.5px solid rgba(255,255,255,0.12)", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: "pointer" }}>
+                Annuleren
+              </button>
+              <button onClick={() => archiveMutation.mutate(archiveConfirm)} disabled={archiveMutation.isPending}
+                style={{ flex: 1, height: "48px", background: "#FF3DA8", border: "none", borderRadius: "14px", fontSize: "14px", fontWeight: 700, color: "white", cursor: "pointer", opacity: archiveMutation.isPending ? 0.6 : 1 }}>
+                {archiveMutation.isPending ? "Bezig..." : "Ja, archiveer"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isTrainer && (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-md" style={{ background: "#ffffff", border: "2.5px solid #1a1a1a", borderRadius: 20 }}>
@@ -199,6 +274,13 @@ function PlayersContent() {
             <button onClick={() => saveMutation.mutate(form)} disabled={saveMutation.isPending || !form.name} className="btn-primary">
               {saveMutation.isPending ? "Opslaan..." : "Opslaan"}
             </button>
+            {editing && (
+              <button
+                onClick={() => { setDialogOpen(false); setArchiveConfirm(editing); }}
+                style={{ width: "100%", height: 44, borderRadius: 12, background: "rgba(255,61,168,0.08)", border: "2px solid #FF3DA8", color: "#FF3DA8", fontSize: 13, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                <Archive size={14} /> Speelster archiveren
+              </button>
+            )}
           </div>
         </DialogContent>
       </Dialog>
