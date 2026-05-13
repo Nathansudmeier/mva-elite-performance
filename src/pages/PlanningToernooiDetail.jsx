@@ -78,13 +78,18 @@ export default function PlanningToernooiDetail() {
   const nognietList = players.filter(p => !respondedIds.has(p.id));
 
   const rsvpMutation = useMutation({
-    mutationFn: async ({ status, reason }) => {
-      if (myAttendance) {
-        await base44.entities.AgendaAttendance.update(myAttendance.id, { status, notes: reason || myAttendance.notes });
-      } else if (myPlayer) {
-        await base44.entities.AgendaAttendance.create({ agenda_item_id: itemId, player_id: myPlayer.id, status, notes: reason || "" });
+    mutationFn: async ({ status, reason, playerId: overridePlayerId, attendanceId: overrideAttendanceId }) => {
+      const targetPlayerId = overridePlayerId || myPlayer?.id;
+      const targetAttendance = overrideAttendanceId
+        ? attendance.find(a => a.id === overrideAttendanceId)
+        : myAttendance;
+
+      if (targetAttendance) {
+        await base44.entities.AgendaAttendance.update(targetAttendance.id, { status, notes: reason || targetAttendance.notes });
+      } else if (targetPlayerId) {
+        await base44.entities.AgendaAttendance.create({ agenda_item_id: itemId, player_id: targetPlayerId, status, notes: reason || "" });
       }
-      if (status === "afwezig" && myPlayer) {
+      if (status === "afwezig" && !overridePlayerId && myPlayer) {
         await base44.functions.invoke("agendaNotifications", {
           action: "send_absentee_notification",
           player_name: myPlayer.name,
@@ -313,9 +318,9 @@ export default function PlanningToernooiDetail() {
       {activeTab === 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {[
-            { label: "Aanwezig", list: aanwezigList, dot: "#08D068", emptyMsg: "Nog niemand aangemeld", showNote: false },
-            { label: "Afwezig", list: afwezigList, dot: "#FF3DA8", emptyMsg: "Niemand afgemeld", showNote: true },
-            { label: "Nog niet gereageerd", list: nognietList.map(p => ({ player: p })), dot: "#FFD600", emptyMsg: "Iedereen heeft gereageerd 🎉", showNote: false },
+            { label: "Aanwezig", list: aanwezigList, dot: "#08D068", emptyMsg: "Nog niemand aangemeld", showNote: false, status: "aanwezig" },
+            { label: "Afwezig", list: afwezigList, dot: "#FF3DA8", emptyMsg: "Niemand afgemeld", showNote: true, status: "afwezig" },
+            { label: "Nog niet gereageerd", list: nognietList.map(p => ({ player: p })), dot: "#FFD600", emptyMsg: "Iedereen heeft gereageerd 🎉", showNote: false, status: null },
           ].map(({ label, list, dot, emptyMsg, showNote }) => (
             <div key={label} className="glass" style={{ overflow: "hidden" }}>
               <div style={{ padding: "12px 16px", borderBottom: "2px solid rgba(26,26,26,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -335,6 +340,14 @@ export default function PlanningToernooiDetail() {
                     player={player}
                     note={showNote && isTrainer && record?.notes ? record.notes : null}
                     last={i === list.length - 1}
+                    isTrainer={isTrainer}
+                    currentStatus={record?.status || null}
+                    attendanceId={record?.id || null}
+                    playerId={player.id}
+                    onSetStatus={({ status, playerId, attendanceId }) =>
+                      rsvpMutation.mutate({ status, playerId, attendanceId })
+                    }
+                    loading={rsvpMutation.isPending}
                   />
                 ))}
               {/* Herinnering knop — alleen bij "Nog niet gereageerd" */}
@@ -570,7 +583,7 @@ export default function PlanningToernooiDetail() {
   );
 }
 
-function PlayerRow({ player, note, last }) {
+function PlayerRow({ player, note, last, isTrainer, currentStatus, attendanceId, playerId, onSetStatus, loading }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", borderBottom: last ? "none" : "1.5px solid rgba(26,26,26,0.08)" }}>
       <div style={{ width: 36, height: 36, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "rgba(255,104,0,0.10)", border: "1.5px solid #1a1a1a" }}>
@@ -582,6 +595,30 @@ function PlayerRow({ player, note, last }) {
         <p className="t-card-title" style={{ margin: 0 }}>{player.name}</p>
         {note && <p style={{ fontSize: 11, color: "#FF3DA8", margin: 0 }}>{note}</p>}
       </div>
+      {isTrainer && (
+        <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
+          <button
+            onClick={() => onSetStatus({ status: "aanwezig", playerId, attendanceId })}
+            disabled={loading || currentStatus === "aanwezig"}
+            style={{
+              width: 30, height: 30, borderRadius: 8, border: "1.5px solid #1a1a1a", cursor: currentStatus === "aanwezig" ? "default" : "pointer",
+              background: currentStatus === "aanwezig" ? "#08D068" : "rgba(8,208,104,0.10)",
+              display: "flex", alignItems: "center", justifyContent: "center", opacity: loading ? 0.5 : 1,
+            }}>
+            <Check size={13} color={currentStatus === "aanwezig" ? "#ffffff" : "#08D068"} />
+          </button>
+          <button
+            onClick={() => onSetStatus({ status: "afwezig", playerId, attendanceId })}
+            disabled={loading || currentStatus === "afwezig"}
+            style={{
+              width: 30, height: 30, borderRadius: 8, border: "1.5px solid #1a1a1a", cursor: currentStatus === "afwezig" ? "default" : "pointer",
+              background: currentStatus === "afwezig" ? "#FF3DA8" : "rgba(255,61,168,0.10)",
+              display: "flex", alignItems: "center", justifyContent: "center", opacity: loading ? 0.5 : 1,
+            }}>
+            <X size={13} color={currentStatus === "afwezig" ? "#ffffff" : "#FF3DA8"} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
