@@ -7,9 +7,10 @@ import NieuwsbriefTab from "@/components/website/beheer/NieuwsbriefTab";
 import MatchdayTab from "@/components/website/beheer/MatchdayTab";
 import ChatbotTab from "@/components/website/beheer/ChatbotTab";
 import DocumentenTab from "@/components/website/beheer/DocumentenTab";
+import BackupTab from "@/components/website/beheer/BackupTab";
 
 const WEBSITE_SECTIONS = ["Instellingen", "Hero's", "Nieuws", "Sponsors", "Mensen", "Documenten", "Prestaties", "Routekaart", "Aanvragen"];
-const APP_SECTIONS = ["Nieuwsbrief", "Matchday", "Uitgelicht", "Chatbot"];
+const APP_SECTIONS = ["Nieuwsbrief", "Matchday", "Uitgelicht", "Chatbot", "Backup"];
 const INSTELLING_SUBTABS = ["Club", "Stats balk", "Logo", "Hero's"];
 
 const FASE_DEFAULTS = {
@@ -650,6 +651,9 @@ export default function WebsiteBeheer() {
 
       {/* DOCUMENTEN */}
       {activeSection === "Documenten" && <DocumentenTab />}
+
+      {/* BACKUP */}
+      {activeSection === "Backup" && <BackupTab />}
 
       {/* UITGELICHT */}
       {activeSection === "Uitgelicht" && (
