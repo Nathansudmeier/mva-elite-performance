@@ -28,6 +28,7 @@ import RobotsTxt from './pages/website/RobotsTxt';
 import ScrollToTop from './components/website/ScrollToTop';
 import WebsiteNieuwsbriefBevestig from './pages/website/WebsiteNieuwsbriefBevestig';
 import WebsiteNieuwsbriefAfmelden from './pages/website/WebsiteNieuwsbriefAfmelden';
+import WebsiteInschrijven from './pages/website/WebsiteInschrijven';
 import PlayerRatingForm from './pages/PlayerRatingForm';
 import PlayerDetail from './pages/PlayerDetail.jsx';
 import PlayerDashboard from './pages/PlayerDashboard.jsx';
@@ -186,6 +187,7 @@ const WebsiteApp = () => (
         <Route path="/privacy" element={<WebsitePrivacy />} />
         <Route path="/live/:matchId" element={<LiveMatchViewer />} />
         <Route path="/leden" element={<WebsiteLeden />} />
+        <Route path="/inschrijven" element={<WebsiteInschrijven />} />
         <Route path="*" element={<WebsiteNotFound />} />
       </Routes>
     </Router>

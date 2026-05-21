@@ -260,6 +260,7 @@ export default function WebsiteLayout({ children }) {
             {navLinks.map(l => <div key={l.href} style={{ marginBottom: "8px" }}><Link to={l.href} style={{ textDecoration: "none", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>{l.label}</Link></div>)}
             <div style={{ marginBottom: "8px" }}><Link to="/nieuws" style={{ textDecoration: "none", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>Nieuws</Link></div>
             <div style={{ marginBottom: "8px" }}><Link to="/leden" style={{ textDecoration: "none", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>Ledeninformatie</Link></div>
+            <div style={{ marginBottom: "8px" }}><Link to="/inschrijven" style={{ textDecoration: "none", fontSize: "13px", color: "#FF6800", fontWeight: 700 }}>Lid worden ↗</Link></div>
           </div>
           <div>
             <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", color: "#FF6800", marginBottom: "12px" }}>CONTACT</div>
