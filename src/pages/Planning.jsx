@@ -74,6 +74,15 @@ export default function Planning() {
     return attendance.filter(a => a.agenda_item_id === itemId);
   }
 
+  function getPlayerCountFor(item) {
+    if (!item.team || item.team === "Beide") return players.length;
+    // Vertaal agenda team-label naar Player.team waarden
+    const teamMap = { "MO17": "MO17", "Dames 1": "Dames 1", "MO20": "MO20", "VR1": "VR1" };
+    const teamKey = teamMap[item.team];
+    if (!teamKey) return players.length;
+    return players.filter(p => p.team === teamKey).length;
+  }
+
   async function handleSave() {
     await qc.invalidateQueries({ queryKey: ["agenda-items"] });
     setShowForm(false);
@@ -166,7 +175,7 @@ export default function Planning() {
                   {selectedDay.dayItems.map(item => (
                     <AgendaItemCard key={item.id} item={item}
                       attendance={getAttendanceFor(item.id)}
-                      playerCount={players.length}
+                      playerCount={getPlayerCountFor(item)}
                       onClick={() => openDetail(item)} />
                   ))}
                 </div>
@@ -209,7 +218,7 @@ export default function Planning() {
           {upcoming.map(item => (
             <AgendaItemCard key={item.id} item={item}
               attendance={getAttendanceFor(item.id)}
-              playerCount={players.length}
+              playerCount={getPlayerCountFor(item)}
               onClick={() => openDetail(item)} />
           ))}
 
@@ -225,7 +234,7 @@ export default function Planning() {
                   {past.map(item => (
                     <AgendaItemCard key={item.id} item={item}
                       attendance={getAttendanceFor(item.id)}
-                      playerCount={players.length}
+                      playerCount={getPlayerCountFor(item)}
                       onClick={() => openDetail(item)} />
                   ))}
                 </div>
