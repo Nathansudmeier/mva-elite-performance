@@ -54,6 +54,9 @@ export default function WebsiteBeheer() {
   const [berichten, setBerichten] = useState([]);
   const [selectedBericht, setSelectedBericht] = useState(null);
   const [berichtStatusFilter, setBerichtStatusFilter] = useState("alle");
+  const [inschrijvingen, setInschrijvingen] = useState([]);
+  const [selectedInschrijving, setSelectedInschrijving] = useState(null);
+  const [inschrijvingStatusFilter, setInschrijvingStatusFilter] = useState("alle");
   const [sponsors, setSponsors] = useState([]);
   const [editingSponsor, setEditingSponsor] = useState(null);
   const [showSponsorForm, setShowSponsorForm] = useState(false);
@@ -82,6 +85,7 @@ export default function WebsiteBeheer() {
     base44.entities.Sponsor.list().then(s => setSponsors((s || []).sort((a, b) => a.tier - b.tier || a.volgorde - b.volgorde)));
     base44.entities.Nieuwsbericht.list("-datum").then(n => setNieuwsberichten(n || []));
     base44.entities.UitgelichtWedstrijd.list().then(u => setUitgelicht((u || []).sort((a, b) => (a.volgorde || 0) - (b.volgorde || 0))));
+    base44.entities.Inschrijving.list("-datum").then(i => setInschrijvingen(i || []));
   }, []);
 
   if (!isTrainer) {
@@ -158,6 +162,22 @@ export default function WebsiteBeheer() {
   };
 
   const filteredBerichten = berichtStatusFilter === "alle" ? berichten : berichten.filter(b => b.status === berichtStatusFilter);
+
+  const updateInschrijvingStatus = async (id, status) => {
+    await base44.entities.Inschrijving.update(id, { status });
+    setInschrijvingen(prev => prev.map(i => i.id === id ? { ...i, status } : i));
+    if (selectedInschrijving?.id === id) setSelectedInschrijving(prev => ({ ...prev, status }));
+  };
+
+  const exportInschrijvingenCSV = () => {
+    const headers = ["datum","naam","adres","woonplaats","geboortedatum","knvb_nummer","bankrekening","huidige_club","huidig_team","gewenst_team","status"];
+    const rows = inschrijvingen.map(i => headers.map(h => `"${(i[h] || "").toString().replace(/"/g, '""')}"`).join(","));
+    const blob = new Blob([[headers.join(","), ...rows].join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const el = document.createElement("a"); el.href = url; el.download = "inschrijvingen.csv"; el.click();
+  };
+
+  const filteredInschrijvingen = inschrijvingStatusFilter === "alle" ? inschrijvingen : inschrijvingen.filter(i => i.status === inschrijvingStatusFilter);
 
   const saveSponsor = async (data) => {
     if (editingSponsor) {
@@ -570,6 +590,75 @@ export default function WebsiteBeheer() {
                   </div>
                 ))}
                 {selectedAanvraag.bericht && <div style={{ marginTop: "12px", padding: "12px", background: "rgba(26,26,26,0.04)", borderRadius: "8px", fontSize: "13px", lineHeight: 1.5 }}>{selectedAanvraag.bericht}</div>}
+              </div>
+            )}
+          </div>
+          </div>
+
+          {/* Inschrijvingen */}
+          <div>
+          <div className="t-section-title" style={{ marginBottom: "14px" }}>Inschrijvingen ({inschrijvingen.length})</div>
+          <div style={{ display: "flex", gap: "10px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
+            <div style={{ display: "flex", gap: "6px" }}>
+              {["alle","nieuw","bekeken","verwerkt"].map(s => (
+                <button key={s} onClick={() => setInschrijvingStatusFilter(s)} style={{ padding: "6px 14px", borderRadius: "8px", border: "1.5px solid #1a1a1a", fontWeight: 700, fontSize: "12px", cursor: "pointer", background: inschrijvingStatusFilter === s ? "#1a1a1a" : "#fff", color: inschrijvingStatusFilter === s ? "#fff" : "#1a1a1a" }}>{s}</button>
+              ))}
+            </div>
+            <button className="btn-secondary" onClick={exportInschrijvingenCSV}>↓ CSV exporteren</button>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: selectedInschrijving ? "1fr 340px" : "1fr", gap: "16px" }}>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+                <thead>
+                  <tr style={{ borderBottom: "2px solid rgba(26,26,26,0.12)" }}>
+                    {["Datum","Naam","Geboortedatum","Gewenst team","Status"].map(h => (
+                      <th key={h} style={{ padding: "8px 12px", textAlign: "left", fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "rgba(26,26,26,0.45)", whiteSpace: "nowrap" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredInschrijvingen.map(i => (
+                    <tr key={i.id} onClick={() => setSelectedInschrijving(i)} style={{ borderBottom: "1px solid rgba(26,26,26,0.07)", cursor: "pointer", background: selectedInschrijving?.id === i.id ? "rgba(255,104,0,0.05)" : "transparent" }}>
+                      <td style={{ padding: "10px 12px", whiteSpace: "nowrap" }}>{i.datum ? new Date(i.datum).toLocaleDateString("nl-NL") : "—"}</td>
+                      <td style={{ padding: "10px 12px", fontWeight: 700 }}>{i.naam}</td>
+                      <td style={{ padding: "10px 12px" }}>{i.geboortedatum ? new Date(i.geboortedatum).toLocaleDateString("nl-NL") : "—"}</td>
+                      <td style={{ padding: "10px 12px" }}>{i.gewenst_team}</td>
+                      <td style={{ padding: "10px 12px" }}>
+                        <select value={i.status || "nieuw"} onClick={e => e.stopPropagation()} onChange={e => updateInschrijvingStatus(i.id, e.target.value)}
+                          style={{ padding: "3px 8px", borderRadius: "8px", fontSize: "11px", fontWeight: 700, border: "none", cursor: "pointer", background: STATUS_COLORS[i.status || "nieuw"]?.bg || "rgba(255,104,0,0.15)", color: STATUS_COLORS[i.status || "nieuw"]?.color || "#FF6800" }}>
+                          <option value="nieuw">Nieuw</option>
+                          <option value="bekeken">Bekeken</option>
+                          <option value="verwerkt">Verwerkt</option>
+                        </select>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {filteredInschrijvingen.length === 0 && <div style={{ padding: "32px", textAlign: "center", color: "rgba(26,26,26,0.35)", fontSize: "13px" }}>Geen inschrijvingen gevonden.</div>}
+            </div>
+            {selectedInschrijving && (
+              <div className="glass" style={{ padding: "20px", position: "sticky", top: "80px", alignSelf: "start" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                  <div className="t-card-title">{selectedInschrijving.naam}</div>
+                  <button onClick={() => setSelectedInschrijving(null)} style={{ background: "none", border: "none", fontSize: "18px", cursor: "pointer" }}>✕</button>
+                </div>
+                {[
+                  ["Geboortedatum", selectedInschrijving.geboortedatum ? new Date(selectedInschrijving.geboortedatum).toLocaleDateString("nl-NL") : "—"],
+                  ["Adres", selectedInschrijving.adres],
+                  ["Woonplaats", selectedInschrijving.woonplaats],
+                  ["KNVB nr.", selectedInschrijving.knvb_nummer || "—"],
+                  ["Bankrekening", selectedInschrijving.bankrekening],
+                  ["Huidige club", selectedInschrijving.huidige_club],
+                  ["Huidig team", selectedInschrijving.huidig_team],
+                  ["Gewenst team", selectedInschrijving.gewenst_team],
+                  ["Datum", selectedInschrijving.datum ? new Date(selectedInschrijving.datum).toLocaleDateString("nl-NL") : "—"],
+                ].map(([l,v]) => (
+                  <div key={l} style={{ marginBottom: "10px" }}>
+                    <div style={{ fontSize: "10px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "rgba(26,26,26,0.45)", marginBottom: "2px" }}>{l}</div>
+                    <div style={{ fontSize: "13px" }}>{v}</div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

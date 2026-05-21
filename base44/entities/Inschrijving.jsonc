@@ -1,0 +1,87 @@
+{
+  "name": "Inschrijving",
+  "type": "object",
+  "properties": {
+    "naam": {
+      "type": "string",
+      "description": "Volledige naam"
+    },
+    "adres": {
+      "type": "string",
+      "description": "Adres"
+    },
+    "woonplaats": {
+      "type": "string",
+      "description": "Woonplaats"
+    },
+    "geboortedatum": {
+      "type": "string",
+      "description": "Geboortedatum"
+    },
+    "knvb_nummer": {
+      "type": "string",
+      "description": "KNVB relatienummer (optioneel)"
+    },
+    "bankrekening": {
+      "type": "string",
+      "description": "IBAN bankrekening"
+    },
+    "huidige_club": {
+      "type": "string",
+      "description": "Huidige club"
+    },
+    "huidig_team": {
+      "type": "string",
+      "description": "Huidig team"
+    },
+    "gewenst_team": {
+      "type": "string",
+      "enum": [
+        "MO15",
+        "MO17",
+        "MO20",
+        "Vrouwen 1"
+      ],
+      "description": "Gewenst team bij Artemis"
+    },
+    "datum": {
+      "type": "string",
+      "description": "Datum van inschrijving (ISO string)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "nieuw",
+        "bekeken",
+        "verwerkt"
+      ],
+      "default": "nieuw",
+      "description": "Status van de inschrijving"
+    }
+  },
+  "required": [
+    "naam",
+    "geboortedatum",
+    "bankrekening",
+    "huidige_club",
+    "gewenst_team"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

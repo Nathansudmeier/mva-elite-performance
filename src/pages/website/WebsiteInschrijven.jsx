@@ -161,11 +161,18 @@ Gewenst team:      ${form.gewenst_team}
     `.trim();
 
     try {
-      await base44.integrations.Core.SendEmail({
-        to: "info@mv-artemis.nl",
-        subject: `Nieuwe inschrijving: ${form.naam}`,
-        body,
-      });
+      await Promise.all([
+        base44.integrations.Core.SendEmail({
+          to: "info@mv-artemis.nl",
+          subject: `Nieuwe inschrijving: ${form.naam}`,
+          body,
+        }),
+        base44.entities.Inschrijving.create({
+          ...form,
+          datum: new Date().toISOString(),
+          status: "nieuw",
+        }),
+      ]);
       setSent(true);
     } catch (err) {
       setError("Er is iets misgegaan bij het verzenden. Probeer het opnieuw of neem direct contact op via info@mv-artemis.nl.");
