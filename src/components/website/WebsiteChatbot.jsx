@@ -39,7 +39,7 @@ export default function WebsiteChatbot() {
   const berichtenEindRef = useRef(null);
   const textareaRef = useRef(null);
 
-  const slaConversatieOp = async (allesBerichten) => {
+  const slaConversatieOp = async (allesBerichten, afgerond = false) => {
     try {
       const gebruikersBerichten = allesBerichten.filter(b => b.rol === 'user');
       if (gebruikersBerichten.length === 0) return;
@@ -50,9 +50,7 @@ export default function WebsiteChatbot() {
       else if (alleInhoud.includes('contact') || alleInhoud.includes('mail')) doorverwezen = 'contact';
       else if (alleInhoud.includes('nieuws')) doorverwezen = 'nieuws';
 
-      // Zoek bestaand record op sessie_id
-      const bestaand = await base44.entities.ChatbotConversatie.filter({ sessie_id: sessieId });
-      const payload = {
+      await base44.functions.invoke('slaConversatieOp', {
         sessie_id: sessieId,
         berichten: JSON.stringify(allesBerichten),
         eerste_bericht: gebruikersBerichten[0]?.inhoud || '',
@@ -60,13 +58,8 @@ export default function WebsiteChatbot() {
         pagina: window.location.pathname,
         datum: new Date().toISOString(),
         doorverwezen_naar: doorverwezen,
-        afgerond: false,
-      };
-      if (bestaand && bestaand.length > 0) {
-        await base44.entities.ChatbotConversatie.update(bestaand[0].id, payload);
-      } else {
-        await base44.entities.ChatbotConversatie.create(payload);
-      }
+        afgerond,
+      });
     } catch (e) {
       console.log('Logging fout:', e);
     }
@@ -108,12 +101,7 @@ export default function WebsiteChatbot() {
     setOpen(false);
     try { localStorage.setItem('mv_artemis_chat_open', 'false'); } catch {}
     // Markeer als afgerond
-    try {
-      const bestaand = await base44.entities.ChatbotConversatie.filter({ sessie_id: sessieId });
-      if (bestaand && bestaand.length > 0) {
-        await base44.entities.ChatbotConversatie.update(bestaand[0].id, { afgerond: true });
-      }
-    } catch {}
+    await slaConversatieOp(berichten, true);
   };
 
   const stuurBericht = async (tekst) => {
