@@ -71,7 +71,7 @@ function PlayersContent() {
   const handleExportCSV = () => {
     const rows = [["Nummer", "Naam", "Positie", "Geboortedatum"]];
     activePlayers.forEach((p) => {
-      rows.push([p.shirt_number || "", p.name || "", p.position || "", p.birth_date || ""]);
+      rows.push([p.shirt_number || "", p.name || "", p.position || "", p.geboortedatum || ""]);
     });
     const csv = rows.map((r) => r.map((v) => `"${v}"`).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
