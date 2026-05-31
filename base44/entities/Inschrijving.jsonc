@@ -6,6 +6,10 @@
       "type": "string",
       "description": "Volledige naam"
     },
+    "email": {
+      "type": "string",
+      "description": "E-mailadres"
+    },
     "adres": {
       "type": "string",
       "description": "Adres"
@@ -61,6 +65,7 @@
   },
   "required": [
     "naam",
+    "email",
     "geboortedatum",
     "bankrekening",
     "huidige_club",

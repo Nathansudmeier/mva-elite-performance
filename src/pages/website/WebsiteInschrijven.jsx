@@ -119,6 +119,7 @@ export default function WebsiteInschrijven() {
 
   const [form, setForm] = useState({
     naam: "",
+    email: "",
     adres: "",
     woonplaats: "",
     geboortedatum: "",
@@ -216,6 +217,11 @@ Gewenst team:      ${form.gewenst_team}
             <div style={s.fieldGroup}>
               <label style={s.label}>Volledige naam *</label>
               <input required style={s.input} value={form.naam} onChange={e => set("naam", e.target.value)} placeholder="Voor- en achternaam" />
+            </div>
+
+            <div style={s.fieldGroup}>
+              <label style={s.label}>E-mailadres *</label>
+              <input required type="email" style={s.input} value={form.email} onChange={e => set("email", e.target.value)} placeholder="jouw@emailadres.nl" />
             </div>
 
             <div style={{ ...s.fieldGroup }}>
