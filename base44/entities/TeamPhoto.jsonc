@@ -1,0 +1,45 @@
+{
+  "name": "TeamPhoto",
+  "type": "object",
+  "properties": {
+    "photo_url": {
+      "type": "string",
+      "description": "URL van de ge\u00fcploade foto"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum van de training of wedstrijd"
+    },
+    "label": {
+      "type": "string",
+      "description": "Label, bijv. 'Training' of 'Wedstrijd \u2014 AFC'"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Training",
+        "Wedstrijd"
+      ],
+      "default": "Training",
+      "description": "Type sessie"
+    },
+    "team": {
+      "type": "string",
+      "enum": [
+        "MO17",
+        "Dames 1"
+      ],
+      "description": "Team"
+    },
+    "uploaded_by": {
+      "type": "string",
+      "description": "Email van de trainer die heeft ge\u00fcpload"
+    }
+  },
+  "required": [
+    "photo_url",
+    "date",
+    "type"
+  ]
+}

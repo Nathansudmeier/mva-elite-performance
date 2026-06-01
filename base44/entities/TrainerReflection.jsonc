@@ -39,30 +39,5 @@
     "week_start",
     "week_end",
     "content"
-  ],
-  "rls": {
-    "create": {
-      "trainer_email": "{{user.email}}"
-    },
-    "read": {
-      "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "trainer_email": "{{user.email}}"
-        }
-      ]
-    },
-    "update": {
-      "trainer_email": "{{user.email}}"
-    },
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
-  }
+  ]
 }

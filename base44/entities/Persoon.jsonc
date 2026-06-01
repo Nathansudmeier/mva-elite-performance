@@ -1,0 +1,70 @@
+{
+  "name": "Persoon",
+  "type": "object",
+  "properties": {
+    "naam": {
+      "type": "string",
+      "description": "Volledige naam"
+    },
+    "functie": {
+      "type": "string",
+      "description": "Functie binnen de club"
+    },
+    "afdeling": {
+      "type": "string",
+      "enum": [
+        "Bestuur",
+        "Technische Commissie",
+        "Vrijwilliger",
+        "Vertrouwenspersoon"
+      ],
+      "description": "Afdeling waar de persoon onder valt"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Korte biografie (optioneel)"
+    },
+    "foto_url": {
+      "type": "string",
+      "description": "URL naar profielfoto (optioneel)"
+    },
+    "email": {
+      "type": "string",
+      "description": "E-mailadres (optioneel, niet publiek zichtbaar)"
+    },
+    "volgorde": {
+      "type": "number",
+      "default": 1,
+      "description": "Sorteervolgorde binnen afdeling"
+    },
+    "actief": {
+      "type": "boolean",
+      "default": true,
+      "description": "Of de persoon zichtbaar is op de website"
+    }
+  },
+  "required": [
+    "naam",
+    "functie",
+    "afdeling"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "actief": true
+        }
+      ]
+    },
+    "write": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

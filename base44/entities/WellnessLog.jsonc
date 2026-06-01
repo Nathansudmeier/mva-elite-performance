@@ -1,0 +1,35 @@
+{
+  "name": "WellnessLog",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Reference to Player"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Log date"
+    },
+    "sleep": {
+      "type": "number",
+      "description": "Sleep quality 1-5"
+    },
+    "fatigue": {
+      "type": "number",
+      "description": "Fatigue level 1-5"
+    },
+    "muscle_pain": {
+      "type": "number",
+      "description": "Muscle pain level 1-5"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
+    }
+  },
+  "required": [
+    "player_id",
+    "date"
+  ]
+}

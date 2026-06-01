@@ -176,7 +176,7 @@ export default function MatchdayCard({ match, item, onClose }) {
     ctx.fillText(headerTekst, BREEDTE / 2, headerY + 45);
 
     // VS blok — logo's groot met namen eronder, gecentreerd dicht bij elkaar
-    const thuisUit = match.home_away || 'Thuis';
+    const thuisUit = item?.home_away || match.home_away || 'Thuis';
     const isUit = thuisUit === 'Uit';
     const vsY = 400;
     const logoMaat = 200;
@@ -230,8 +230,8 @@ export default function MatchdayCard({ match, item, onClose }) {
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(datumTekst, 56, datumStartY);
 
-    // Locatie
-    const locatie = match.location || (match.home_away === 'Thuis' ? 'Sportpark Douwekamp, Opeinde' : '');
+    // Locatie — gebruik AgendaItem als primaire bron (zelfde als datum/tijd)
+    const locatie = item?.location || match.location || '';
     if (locatie) {
       ctx.font = 'bold 34px Arial';
       ctx.fillStyle = 'rgba(255,255,255,0.75)';

@@ -1,0 +1,36 @@
+{
+  "name": "Chat",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Chat naam"
+    },
+    "is_group": {
+      "type": "boolean",
+      "default": true,
+      "description": "Of dit een groepschat is"
+    },
+    "is_permanent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of dit een permanente groepschat is die niet verwijderd kan worden"
+    },
+    "icon_url": {
+      "type": "string",
+      "description": "Chat icoon URL"
+    },
+    "last_message_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Tijdstip laatste bericht"
+    },
+    "last_message_preview": {
+      "type": "string",
+      "description": "Preview van laatste bericht"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

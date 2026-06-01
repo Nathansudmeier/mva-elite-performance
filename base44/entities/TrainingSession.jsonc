@@ -1,0 +1,28 @@
+{
+  "name": "TrainingSession",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the training session"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Training",
+        "Wedstrijd",
+        "Fysieke Test"
+      ],
+      "default": "Training",
+      "description": "Type of session"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Session notes"
+    }
+  },
+  "required": [
+    "date"
+  ]
+}

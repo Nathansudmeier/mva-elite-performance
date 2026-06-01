@@ -1,0 +1,28 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "trainer",
+        "speelster",
+        "ouder",
+        "tc",
+        "user"
+      ],
+      "default": "user",
+      "description": "Rol van de gebruiker"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Gekoppeld spelersprofiel ID"
+    },
+    "trainer_id": {
+      "type": "string",
+      "description": "Gekoppeld trainersprofiel ID"
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,27 @@
+{
+  "name": "PlayerMatchTime",
+  "type": "object",
+  "properties": {
+    "match_id": {
+      "type": "string",
+      "description": "Koppeling aan Match"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Koppeling aan Player"
+    },
+    "start_minute": {
+      "type": "number",
+      "description": "Minuut waarop speler het veld in ging"
+    },
+    "end_minute": {
+      "type": "number",
+      "description": "Minuut waarop speler het veld verliet (null = nog op het veld)"
+    }
+  },
+  "required": [
+    "match_id",
+    "player_id",
+    "start_minute"
+  ]
+}

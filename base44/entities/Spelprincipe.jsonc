@@ -1,0 +1,43 @@
+{
+  "name": "Spelprincipe",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Titel van het spelprincipe"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Balbezit",
+        "Verdediging",
+        "Omschakeling",
+        "Standaardsituaties",
+        "Algemeen"
+      ],
+      "default": "Algemeen",
+      "description": "Categorie"
+    },
+    "content": {
+      "type": "string",
+      "description": "Inhoud / artikel tekst"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "Ge\u00fcploade video URL"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Ge\u00fcploade afbeelding URL"
+    },
+    "published": {
+      "type": "boolean",
+      "default": true,
+      "description": "Zichtbaar voor spelers"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}

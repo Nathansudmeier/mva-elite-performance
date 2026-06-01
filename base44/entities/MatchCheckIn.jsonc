@@ -1,0 +1,55 @@
+{
+  "name": "MatchCheckIn",
+  "type": "object",
+  "properties": {
+    "match_id": {
+      "type": "string",
+      "description": "Reference to Match"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Reference to Player"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "pre",
+        "post"
+      ],
+      "description": "Pre-game or post-game check-in"
+    },
+    "physical_score": {
+      "type": "number",
+      "description": "Physical feeling score 1-5 (pre-game only)"
+    },
+    "mental_score": {
+      "type": "number",
+      "description": "Mental feeling score 1-5 (pre-game only)"
+    },
+    "focus_point": {
+      "type": "string",
+      "description": "Focus point for today (pre-game only)"
+    },
+    "performance_score": {
+      "type": "number",
+      "description": "Performance satisfaction score 1-5 (post-game only)"
+    },
+    "focus_execution_score": {
+      "type": "number",
+      "description": "Focus point execution score 1-5 (post-game only)"
+    },
+    "what_went_well": {
+      "type": "string",
+      "description": "What went well today (post-game only)"
+    },
+    "what_to_improve": {
+      "type": "string",
+      "description": "What to improve next time (post-game only)"
+    }
+  },
+  "required": [
+    "match_id",
+    "player_id",
+    "type"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "WinningTeam",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "Reference to TrainingSession"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the training"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Photo of the winning team"
+    },
+    "winning_player_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of player IDs who were in the winning team"
+    }
+  },
+  "required": [
+    "date",
+    "winning_player_ids"
+  ]
+}

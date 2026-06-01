@@ -1,0 +1,66 @@
+{
+  "name": "TacticalPlan",
+  "type": "object",
+  "properties": {
+    "match_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Match date"
+    },
+    "opponent": {
+      "type": "string",
+      "description": "Opponent name"
+    },
+    "formation": {
+      "type": "string",
+      "enum": [
+        "4-3-3",
+        "4-4-2",
+        "3-5-2",
+        "4-2-3-1",
+        "3-4-3"
+      ],
+      "default": "4-3-3",
+      "description": "Formation"
+    },
+    "lineup": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "string"
+          },
+          "player_id": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Starting lineup"
+    },
+    "ball_possession": {
+      "type": "string",
+      "description": "Tactical plan for ball possession (BB)"
+    },
+    "pressing": {
+      "type": "string",
+      "description": "Tactical plan for pressing/VB"
+    },
+    "transition": {
+      "type": "string",
+      "description": "Transition play notes"
+    },
+    "set_pieces": {
+      "type": "string",
+      "description": "Set piece plans"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional tactical notes"
+    }
+  },
+  "required": [
+    "match_date",
+    "opponent"
+  ]
+}

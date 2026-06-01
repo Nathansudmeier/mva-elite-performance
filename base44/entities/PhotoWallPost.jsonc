@@ -1,0 +1,49 @@
+{
+  "name": "PhotoWallPost",
+  "type": "object",
+  "properties": {
+    "photo_url": {
+      "type": "string",
+      "description": "URL van de ge\u00fcploade foto"
+    },
+    "thumbnail_url": {
+      "type": "string",
+      "description": "URL van de thumbnail"
+    },
+    "uploader_email": {
+      "type": "string",
+      "description": "Email van de uploader"
+    },
+    "uploader_name": {
+      "type": "string",
+      "description": "Naam van de uploader"
+    },
+    "uploader_photo_url": {
+      "type": "string",
+      "description": "Profielfoto van de uploader"
+    },
+    "caption": {
+      "type": "string",
+      "description": "Bijschrift bij de foto"
+    },
+    "likes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array van user emails die de foto geliket hebben"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Aanmaakdatum en tijd"
+    }
+  },
+  "required": [
+    "photo_url",
+    "thumbnail_url",
+    "uploader_email",
+    "uploader_name",
+    "created_date"
+  ]
+}

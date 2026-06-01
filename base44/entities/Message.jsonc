@@ -1,0 +1,35 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "trainer_id": {
+      "type": "string",
+      "description": "Reference to Trainer"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Name of the sender"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email of the sender"
+    },
+    "text": {
+      "type": "string",
+      "description": "Message content"
+    },
+    "is_reply": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a reply from the trainer"
+    },
+    "reply_to_id": {
+      "type": "string",
+      "description": "ID of the original message this replies to"
+    }
+  },
+  "required": [
+    "trainer_id",
+    "text"
+  ]
+}

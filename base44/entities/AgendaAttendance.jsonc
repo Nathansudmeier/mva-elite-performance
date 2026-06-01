@@ -28,26 +28,5 @@
   "required": [
     "agenda_item_id",
     "player_id"
-  ],
-  "rls": {
-    "create": {},
-    "read": {
-      "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "player_id": "{{user.player_id}}"
-        }
-      ]
-    },
-    "update": {},
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
-  }
+  ]
 }

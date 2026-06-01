@@ -1,5 +1,5 @@
 {
-  "name": "DailyFeeling",
+  "name": "PhysicalTest",
   "type": "object",
   "properties": {
     "player_id": {
@@ -9,16 +9,19 @@
     "date": {
       "type": "string",
       "format": "date",
-      "description": "Date of the feeling check"
+      "description": "Test date"
     },
-    "rating": {
+    "sprint_30m": {
       "type": "number",
-      "description": "Rating from 1 to 5 stars"
+      "description": "30m sprint time in seconds"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes"
     }
   },
   "required": [
     "player_id",
-    "date",
-    "rating"
+    "date"
   ]
 }

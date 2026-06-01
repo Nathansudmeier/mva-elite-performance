@@ -1,0 +1,42 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email van de ontvanger"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "activiteit",
+        "afmelding",
+        "herinnering",
+        "opstelling"
+      ],
+      "description": "Type notificatie"
+    },
+    "title": {
+      "type": "string",
+      "description": "Titel van de notificatie"
+    },
+    "body": {
+      "type": "string",
+      "description": "Berichttekst"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Of de notificatie gelezen is"
+    },
+    "link": {
+      "type": "string",
+      "description": "Optionele navigatie URL"
+    }
+  },
+  "required": [
+    "user_email",
+    "type",
+    "title"
+  ]
+}

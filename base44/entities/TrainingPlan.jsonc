@@ -95,15 +95,5 @@
   },
   "required": [
     "date"
-  ],
-  "rls": {
-    "create": {},
-    "read": {},
-    "update": {},
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
-  }
+  ]
 }

@@ -1,0 +1,34 @@
+{
+  "name": "VideoAnalysis",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Video title"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "YouTube or VEO link"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the analysis"
+    },
+    "analysis": {
+      "type": "string",
+      "description": "Tactical analysis text"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for categorization"
+    }
+  },
+  "required": [
+    "title",
+    "video_url"
+  ]
+}

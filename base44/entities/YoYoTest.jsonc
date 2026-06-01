@@ -1,5 +1,5 @@
 {
-  "name": "DailyFeeling",
+  "name": "YoYoTest",
   "type": "object",
   "properties": {
     "player_id": {
@@ -9,16 +9,20 @@
     "date": {
       "type": "string",
       "format": "date",
-      "description": "Date of the feeling check"
+      "description": "Test date"
     },
-    "rating": {
+    "level": {
+      "type": "string",
+      "description": "Yo-Yo level achieved (e.g. 16.2)"
+    },
+    "distance": {
       "type": "number",
-      "description": "Rating from 1 to 5 stars"
+      "description": "Distance covered in meters"
     }
   },
   "required": [
     "player_id",
     "date",
-    "rating"
+    "level"
   ]
 }

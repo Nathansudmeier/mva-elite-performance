@@ -35,37 +35,5 @@
   "required": [
     "chat_id",
     "text"
-  ],
-  "rls": {
-    "create": {
-      "sender_email": "{{user.email}}"
-    },
-    "read": {
-      "chat_id": {
-        "$in": {
-          "__type": "entity_ids",
-          "entity": "ChatMember",
-          "field": "chat_id",
-          "query": {
-            "user_email": "{{user.email}}"
-          }
-        }
-      }
-    },
-    "update": {
-      "sender_email": "{{user.email}}"
-    },
-    "delete": {
-      "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "sender_email": "{{user.email}}"
-        }
-      ]
-    }
-  }
+  ]
 }
