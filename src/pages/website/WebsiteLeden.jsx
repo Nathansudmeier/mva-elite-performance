@@ -119,13 +119,15 @@ export default function WebsiteLeden() {
 
         {/* CLUBKLEDING */}
         <InfoKaart accent="#FFD600" icon={<TShirt weight="bold" size={18} color="#FFD600" />} titel="Clubkleding">
-          Bij MV Artemis hoor je er direct bij — letterlijk. Elke speler krijgt bij aanvang een presentatiepak en tas van de club.
+          Bij MV Artemis hoor je er direct bij — letterlijk. Elke speler krijgt bij aanvang een presentatiepak van de club.
+          <br /><br />
+          Daarnaast ontvang je bij aanvang een set trainingskleding: een shirt, korte broek en sokken.
           <br /><br />
           Voor trainingen geldt: clubkleding is verplicht. Die schaf je zelf aan. Wedstrijdkleding wordt door de club beheerd en verzorgd.
           <br /><br />
           Onze kledingleverancier is <strong style={{ color: "#fff" }}>Muta Sport</strong>.
           <br /><br />
-          <a href="https://mutasport.nl" target="_blank" rel="noopener noreferrer" style={{
+          <a href="https://fcmvanoord.teamshop.club/products/club" target="_blank" rel="noopener noreferrer" style={{
             display: "inline-block",
             border: "1px solid #FF6800",
             color: "#FF6800",
