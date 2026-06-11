@@ -87,7 +87,13 @@ export default function PlanningToernooiDetail() {
       if (targetAttendance) {
         await base44.entities.AgendaAttendance.update(targetAttendance.id, { status, notes: reason || targetAttendance.notes });
       } else if (targetPlayerId) {
-        await base44.entities.AgendaAttendance.create({ agenda_item_id: itemId, player_id: targetPlayerId, status, notes: reason || "" });
+        // Controleer opnieuw of er al een record bestaat (race condition preventie)
+        const existing = await base44.entities.AgendaAttendance.filter({ agenda_item_id: itemId, player_id: targetPlayerId });
+        if (existing && existing.length > 0) {
+          await base44.entities.AgendaAttendance.update(existing[0].id, { status, notes: reason || "" });
+        } else {
+          await base44.entities.AgendaAttendance.create({ agenda_item_id: itemId, player_id: targetPlayerId, status, notes: reason || "" });
+        }
       }
       if (status === "afwezig" && !overridePlayerId && myPlayer) {
         await base44.functions.invoke("agendaNotifications", {
